@@ -13,10 +13,13 @@ The dropdown should correspond to a `SELECT DISTINCT user_name FROM public.users
 ### DRAW GEOMETRY 
 This button should trigger the ability to add, edit, or remove geometries to the map. Ideally, this should make `INSERTS` or `UPDATES` to a single [public.features](#publicfeatures-table) table in the underlying database, but it is likely that we will have to have multiple tables for different classes of geometry - e.g., point, line, polygon - because 'feature classess' are generally enforced by ESRI workflows. In this latter, more likely case, there would be separate public.points, public.polys, and public.lines tables.
 
-### ADD, EDIT, DELETE ATTRIBUTE 
-This button should trigger the ability to add, edit, or remove attributes to the database that might want to be added to geometries. Examples of frequently used attributes by AZGS are `citation`, `line_type`, `geologic_age`, `stratigraphic_name`.
+### ADD, EDIT, DELETE FEATURE SUBCLASS
+This button should trigger the ability to add, edit, or remove a "feature subclasses" to the map. A "feature subclass" is a subset of a feature class such as "points". For example, some points on the map may represents "wells" others may represent "outcrops", each of the different types of point is a "subclass"
 
-The form will need to both display existing attributes and have entry for new attributes. Therefore, we should expect support for `SELECT`, `INSERTS` and `UPDATES` to the [public.attributes](#publicattributes-table) table. 
+### ADD, EDIT, DELETE FIELD 
+This button should trigger the ability to add, edit, or remove attributes to the database that might want to be added to a subclass. Examples of frequently used attributes by AZGS are `citation`, `line_type`, `geologic_age`, `stratigraphic_name`.
+
+The form will need to both display existing attributes and have entry for new fields. Therefore, we should expect support for `SELECT`, `INSERTS` and `UPDATES` to the [public.attributes](#publicfields-table) table. 
 
 ### ADD, EDIT, DELETE VOCABULARY 
 This button should initiate a form with a dropdown menu of existing attributes to choose from - i.e., `SELECT DISTINCT attribute_name FROM public.attributes`. Once selected it should offer a form/textbox for adding or editing vocabularies to the new attribute - i.e., an `INSERT` into the [public.vocabularies](#publicvocabularies-table) table.
@@ -60,12 +63,23 @@ CREATE TABLE public.features (
         )
 ````
 
-### public.attributes table
+### public.subclass table
 ````SQL
-CREATE TABLE public.attributes (
-        attribute_id serial PRIMARY KEY,
+CREATE TABLE public.subclass (
+        subclass_id serial PRIMARY KEY,
         user_id integer REFRENCES public.users(user_id),
-        attribute_name text,
+        subclass_name text,
+        notes text
+        )
+ ````
+
+### public.fields table
+````SQL
+CREATE TABLE public.fields (
+        field_id serial PRIMARY KEY,
+        user_id integer REFRENCES public.users(user_id),
+        subclass_id integer REFERENCES public.subclass(subclass_id),
+        field_name text,
         data_type text, -- any constraints assumed for the field... for example should it only be integers only or is a long text string expected field
         notes text
         )
@@ -98,8 +112,7 @@ Buttons for more complex views of our tables will also (i.e., denormalizations o
 
 ### GEMS EXPORT
 
-### CLASSIC ATTRIBUTE TABLE
-
 ## ADDITIONAL CONSIDERATIONS
 1. It is unknown how style/symbology - e.g., polygon color, line dashes - information should be stored in the database.
 2. It may be best to work in SQLlite rather than Postgres as PostGIS functionality is not really necessary.
+3. We will want to track - probably in the geometry table, but possibly across all tables - either timestamps or some form of version tracking.
