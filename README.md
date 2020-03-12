@@ -10,27 +10,27 @@ This button will open a login window. The window should have a dropdown selectio
 The textbar should correspond to a `INSERT` to the [public.users](#publicusers-table) table.
 The dropdown should correspond to a `SELECT DISTINCT user_name FROM public.users`.
 
-### DRAW GEOMETRY 
-This button should trigger the ability to add, edit, or remove geometries to the map. Ideally, this should make `INSERTS` or `UPDATES` to a single [public.features](#publicfeatures-table) table in the underlying database, but it is likely that we will have to have multiple tables for different classes of geometry - e.g., point, line, polygon - because 'feature classess' are generally enforced by ESRI workflows. In this latter, more likely case, there would be separate public.points, public.polys, and public.lines tables.
+### DRAW FEATURE 
+This button should trigger the ability to add, edit, or remove features to the map. Ideally, this should make `INSERTS` or `UPDATES` to a single [public.features](#publicfeatures-table) table in the underlying database, but it is possible that we will have to have multiple tables for different classes of geometry - e.g., point, line, polygon - because these 'feature classes' are generally enforced by ESRI workflows. In this latter, more likely case, there would be separate public.point_features, public.poly_features, and public.line_features tables.
 
-### ADD, EDIT, DELETE FEATURE SUBCLASS
-This button should trigger the ability to add, edit, or remove a "feature subclasses" to the map. A "feature subclass" is a subset of a feature class such as "points". For example, some points on the map may represents "wells" others may represent "outcrops", each of the different types of point is a "subclass"
+### ADD, EDIT, DELETE FEATURE TYPE
+This button should trigger the ability to add, edit, or remove a "feature type". A "feature type" is a subset of a feature class such as "points". For example, some points on the map may represents "wells" others may represent "outcrops", each of the different types of point is a "feature type"
 
-### ADD, EDIT, DELETE FIELD 
-This button should trigger the ability to add, edit, or remove attributes to the database that might want to be added to a subclass. Examples of frequently used attributes by AZGS are `citation`, `line_type`, `geologic_age`, `stratigraphic_name`.
+### ADD, EDIT, DELETE ATTRIBUTE 
+This button should trigger the ability to add, edit, or remove attributes to the database that might want to be added to a feature_type. Examples of frequently used attributes by AZGS are `citation`, `line_type`, `geologic_age`, `stratigraphic_name`.
 
-The form will need to both display existing attributes and have entry for new fields. Therefore, we should expect support for `SELECT`, `INSERTS` and `UPDATES` to the [public.attributes](#publicfields-table) table. 
+The form will need to both display existing attributes and have entry for new fields. Therefore, we should expect support for `SELECT`, `INSERTS` and `UPDATES` to the [public.attributes](#publicattributes-table) table. 
 
-### ADD, EDIT, DELETE VOCABULARY 
-This button should initiate a form with a dropdown menu of existing attributes to choose from - i.e., `SELECT DISTINCT attribute_name FROM public.attributes`. Once selected it should offer a form/textbox for adding or editing vocabularies to the new attribute - i.e., an `INSERT` into the [public.vocabularies](#publicvocabularies-table) table.
+### ADD, EDIT, DELETE POSSIBLE VALUES 
+This button should initiate a form with a dropdown menu of existing attributes to choose from - i.e., `SELECT DISTINCT attribute_name FROM public.attributes`. Once selected it should offer a form/textbox for adding or editing possible values for the new attribute - i.e., an `INSERT` into the [public.possible_values](#publicpossible_values-table) table.
 
 We can expect that there may be many existing attributes and vocabularies that a user will have to browse against to see if what they wish to enter already exists. We will need to make sure that the various UI options handle this browse correctly.
 
-### ASSIGN VOCABULARY TO GEOMETRY
-[insert into public.lookup]
+### ASSIGN VALUE TO GEOMETRY
+[insert into public.feature_value_links]
 
 ### INHERIT ATTRIBUTES FROM GEOMETRY
-[insert into public.lookup]
+[insert into public.feature_value_links]
 relations of geom A are now copied for geom B
 
 ### DISASSEMBLE ESRI/OPEN FILE GEODATABASE
@@ -45,66 +45,66 @@ The following outlines the expected structure of each table and implicitly serve
 ### public.users table
 ````SQL
 CREATE TABLE public.users (
-        user_id serial PRIMARY KEY, 
-        user_name text UNIQUE NOT NULL, 
-        user_notes text
-        )
+        id serial PRIMARY KEY, 
+        name text UNIQUE NOT NULL, 
+        notes text
+);
 ````
 
 ### public.features table
 ````SQL
 CREATE TABLE public.features (
-        geom_id serial PRIMARY KEY, 
-        user_id integer REFERENCES public.users(user_id), 
+        id serial PRIMARY KEY, 
         geom geometry, 
-        preceded_by integer REFERENCES public.features(geom_id), 
-        superceded_by integer REFERENCES public.features(geom_id), 
-        removed boolean REFERENCES public.features(geom_id)
-        )
+        removed boolean, 
+        preceded_by integer REFERENCES public.features(id), 
+        superceded_by integer REFERENCES public.features(id), 
+        user_id integer REFERENCES public.users(id)
+);
 ````
 
-### public.subclass table
+### public.feature_types table
 ````SQL
-CREATE TABLE public.subclass (
-        subclass_id serial PRIMARY KEY,
-        user_id integer REFRENCES public.users(user_id),
-        subclass_name text,
-        notes text
-        )
+CREATE TABLE public.feature_types (
+        id serial PRIMARY KEY,
+        name text,
+        notes text,
+        user_id integer REFERENCES public.users(id)
+);
  ````
 
-### public.fields table
+### public.attributes table
 ````SQL
-CREATE TABLE public.fields (
-        field_id serial PRIMARY KEY,
-        user_id integer REFRENCES public.users(user_id),
-        subclass_id integer REFERENCES public.subclass(subclass_id),
-        field_name text,
+CREATE TABLE public.attributes (
+        id serial PRIMARY KEY,
+        name text,
         data_type text, -- any constraints assumed for the field... for example should it only be integers only or is a long text string expected field
-        notes text
-        )
+        notes text,
+        feature_type_id integer REFERENCES public.feature_types(id),
+        user_id integer REFERENCES public.users(id)
+);
  ````
  
- ### public.vocabularies table
+ ### public.possible_values table
 ````SQL
-CREATE TABLE public.vocabularies (
-        vocabulary_id serial PRIMARY KEY,
-        attribute_id integer REFERENCES public.attributes(attribute_id) NOT NULL
-        user_id integer REFRENCES public.users(user_id),
-        vocabulary_name text,
+CREATE TABLE public.possible_values (
+        id serial PRIMARY KEY,
+        name text,
         definition text,
-        notes text
-        )
+        notes text,
+        attribute_id integer REFERENCES public.attributes(id) NOT NULL
+        user_id integer REFERENCES public.users(id)
+);
  ````
  
- ### public.lookup table
+ ### public.feature_value_links table
  ````SQL
-CREATE TABLE public.lookup (
-        lookup_id series PRIMARY KEY,
-        user_id integer REFRENCES public.users(user_id),
-        geom_id integer REFERENCES public.features(geom_id), 
-        vocab_id integer REFERENCES public.vocabularies(vocabulary_id)
-        )
+CREATE TABLE public.feature_value_links (
+       id serial PRIMARY KEY,
+       feature_id integer REFERENCES public.features(id), 
+       possible_value_id integer REFERENCES public.possible_values(id),
+       user_id integer REFERENCES public.users(id)
+);
 ````
 
 ## CLIENT/VIEWS
