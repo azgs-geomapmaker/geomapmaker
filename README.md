@@ -26,89 +26,15 @@ This button should initiate a form with a dropdown menu of existing attributes t
 
 We can expect that there may be many existing attributes and vocabularies that a user will have to browse against to see if what they wish to enter already exists. We will need to make sure that the various UI options handle this browse correctly.
 
-### ASSIGN VALUE TO GEOMETRY
-[insert into public.feature_value_links]
+### ASSIGN ATTRIBUTE TO GEOMETRY
 
-### INHERIT ATTRIBUTES FROM GEOMETRY
+
+### INHERIT ATTRIBUTES FROM OTHER GEOMETRY
 [insert into public.feature_value_links]
 relations of geom A are now copied for geom B
 
-### DISASSEMBLE ESRI/OPEN FILE GEODATABASE
-[deconstruct (normalize or denormalize, depending) an existing file geodatabase into our schema]
-
 ### CREATE NEW TOOLBAR-COMPLIANT DATABASE
 [create a new, blank database following our schema AND potentially pre-populate elements of the public.users, public.attributes, and public.vocabularies table based on some additional configuration file].
-
-## DATABASE SCHEMA
-The following outlines the expected structure of each table and implicitly serves as the ER model description becuase I have stated the primary key and foreign key relationships. Note that I was very lax about `NOT NULL`, `UNIQUE`, and other constraints that may need to be added. 
-
-### public.users table
-````SQL
-CREATE TABLE public.users (
-        id serial PRIMARY KEY, 
-        name text UNIQUE NOT NULL, 
-        notes text
-);
-````
-
-### public.features table
-````SQL
-CREATE TABLE public.features (
-        id serial PRIMARY KEY, 
-        geom geometry, 
-        removed boolean, 
-        preceded_by integer REFERENCES public.features(id), 
-        superceded_by integer REFERENCES public.features(id), 
-        user_id integer REFERENCES public.users(id)
-);
-````
-
-### public.feature_types table
-````SQL
-CREATE TABLE public.feature_types (
-        id serial PRIMARY KEY,
-        name text,
-        notes text,
-        user_id integer REFERENCES public.users(id)
-);
- ````
-
-### public.attributes table
-````SQL
-CREATE TABLE public.attributes (
-        id serial PRIMARY KEY,
-        name text,
-        data_type text, -- any constraints assumed for the field... for example should it only be integers only or is a long text string expected field
-        notes text,
-        feature_type_id integer REFERENCES public.feature_types(id),
-        user_id integer REFERENCES public.users(id)
-);
- ````
- 
- ### public.possible_values table
-````SQL
-CREATE TABLE public.possible_values (
-        id serial PRIMARY KEY,
-        name text,
-        definition text,
-        notes text,
-        attribute_id integer REFERENCES public.attributes(id) NOT NULL
-        user_id integer REFERENCES public.users(id)
-);
- ````
- 
- ### public.feature_value_links table
- ````SQL
-CREATE TABLE public.feature_value_links (
-       id serial PRIMARY KEY,
-       feature_id integer REFERENCES public.features(id), 
-       possible_value_id integer REFERENCES public.possible_values(id),
-       user_id integer REFERENCES public.users(id)
-);
-````
-
-## CLIENT/VIEWS
-Buttons for more complex views of our tables will also (i.e., denormalizations of our database) need to be supported both for users and for export purposes.
 
 ### GEMS EXPORT
 
