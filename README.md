@@ -42,7 +42,7 @@ This should trigger a form that corresponds directly to the fields and options i
 ### Add/Edit ContactsAndFault
 This should trigger a form that corresponds directly to the fields and options in the [ContactsAndFaults table](#contacts-and-faults). Note that most fields have constraints of some kind that need to be made explicit and be enforced by the form - e.g., unique, not null, or some reference to another table. 
 
-This is one of the trickiest forms that will require quite a few special considerations.
+This is one of the trickiest forms that will require two special considerations.
 
 Scenario | Type | IsConcealed | LocationConfidenceMeters | Symbol
 ---- | ---- | ---- | ---- | ---- |
@@ -142,8 +142,27 @@ The GeMS specification asks that the [DescriptionOfMapUnits](#description-of-map
 2. The current Ages is just an open textbox and tends to have inconsistent formatting. This causes a huge number of headaches. Instead, we want to enforce a consistent structure of "Older Interval - Younger Interval" always. This should probably be handled at the form level, where we will prompt them with two separate boxes `older interval` and `younger interval` and the form will past them together into OI - YI format within the data table.
 
 #### Foreign Keys versus a Check Constraint
+
 #### Symbology and Styles
+The old toolbar and ArcMap system was dependent on [Cartographic Representations](https://desktop.arcgis.com/en/arcmap/latest/map/working-with-layers/introduction-to-the-cartographic-representations-tutorial.htm) for handling styling information.
+
+CartoReps are no longer supported in ArcPro, which means we need a different way to handle styling information. The most promising route will be for us to have a .stlyex file (see [stylex files](#stylex-files) in the appendix for a description of how these work). This would probably be the most ESRI way to do things, and I like it for that reason. The Alaska Geological Survey has made a .style file of the FGDC symbology (can be found [here](https://ngmdb.usgs.gov/Info/standards/GeMS/docs/AKDGGS-style_10-2013.zip) which can be converted into a .stylex in ArcPro.
+
+One downside of this, however, is that the .stylex has to be loaded separately from the database. Perhaps we can think of a way to embed the .stylex as part of the toolbar or the database. Otherwise this will potentially be a nightmare for data transfer and updating.
+
 #### Support for non-core tables
 
+## Appendix Information
+#### Stylex Files
+“Styles” are databases that hold symbols, symbol primitives (like colors), and layout elements like north arrows and scale bars. (from the Esri Cartography MOOC)
 
+A .stylx file is a SQLite database containing symbols etc., described in JSON (JavaScript Object Notation). Stylx is an open spec documented in the open Cartographic Information Model (CIM) specification (https://github.com/Esri/cim-spec). You can view a .stylex by just changing its extension to sqlite. Theoretically we might be able to do some sort of PostgreSQL implementation.
+
+Examples of point symbols defined in JSON: https://github.com/cmrRose/cim-spec/blob/master/docs/v2/Example-Symbols.md 
+
+Overview of the symbols in a style: https://github.com/Esri/cim-spec/blob/master/docs/v2/Overview-Symbols.md 
+
+Full set of notes from [Caroline Rose](https://docs.google.com/document/d/1m3EpqVClDAa6Lyd14uZ_FX20gTbT730n3fDfQLBbhw4/edit#heading=h.4q5u3xtlwbbg) in a google doc. Includes an outline of how to make our own styles.
+
+#### Existing GeMS tools
 https://github.com/usgs/gems-tools-pro
