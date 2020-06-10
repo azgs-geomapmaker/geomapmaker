@@ -148,7 +148,7 @@ The old toolbar and ArcMap system was dependent on [Cartographic Representations
 
 CartoReps are no longer supported in ArcPro, which means we need a different way to handle styling information. The most promising route will be for us to have a .stlyex file (see [stylex files](#stylex-files) in the appendix for a description of how these work). This would probably be the most ESRI way to do things, and I like it for that reason. The Alaska Geological Survey has made a .style file of the FGDC symbology (can be found [here](https://ngmdb.usgs.gov/Info/standards/GeMS/docs/AKDGGS-style_10-2013.zip) which can be converted into a .stylex in ArcPro.
 
-One downside of this, however, is that the .stylex has to be loaded separately from the database. Perhaps we can think of a way to embed the .stylex as part of the toolbar or the database. Otherwise this will potentially be a nightmare for data transfer and updating.
+One downside of this, however, is that the .stylex has to be loaded separately from the database. Perhaps we can think of a way to embed the .stylex as part of the toolbar or the database. Otherwise this will potentially be a nightmare for data transfer and updating. You can also only symbolize by matching a stylex to an attribute in arcpro versions >2.5
 
 #### Support for non-core tables
 
