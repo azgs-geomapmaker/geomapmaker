@@ -99,9 +99,8 @@ DescriptionOfMapUnits_ID serial PRIMARY KEY
 MapUnit text UNIQUE NOT NULL
 Name text UNIQUE NOT NULL -- This needs to be compared against geolex and macrostrt, see "NAME CHECK BUTTON" section.
 FullName text UNIQUE
-OldAge text NOT NULL -- This needs to be handled in a special way, see "special considerations"
-YoungAge text NOT NULL -- This needs to be handled in a special way, see "special considerations"
-RelativeAge text -- Off specification
+Age text NOT NULL -- This needs to be handled in a special way, see "special considerations, Ages"
+RelativeAge text -- Off specification, see special considerations Ages
 Description text
 HierarchyKey text NOT NULL -- I'm not actually clear what this is. I will have to look at some practical examples.
 ParagraphStyle  CREATE TYPE headings (heading1 text, heading2 text, etc.) NOT NULL
@@ -136,6 +135,12 @@ DataSourceID text REFERENCES DataSources(DataSources_ID)
 
 ## Special Considerations
 #### Ages
+The GeMS specification asks that the [DescriptionOfMapUnits](#description-of-map-units) table have a field `Age`. There are two problems with the way that this is currently specified.
+
+1. The surficial geologists (Ann Youberg, Joe Cook, Phil Pearthree, Brian Gootee, and Jeri Young) generally do not have precise/absolute ages. They often only know that a particular rock body is <10,000 yrs old or that it is older that Unit A, but younger than Unit B. It is very hard to convey this type of qualitative information in the Ages field as it should be properly defined. Therefore, I have added another field, tentatively titled `RelativeAge`. GeMS does not forbid the inclusion of additional fields, though this field will need to be explained in the [Glossary](#glossary).
+
+2. The current Ages is just an open textbox and tends to have inconsistent formatting. This causes a huge number of headaches. Instead, we want to enforce a consistent structure of "Older Interval - Younger Interval" always. This should probably be handled at the form level, where we will prompt them with two separate boxes `older interval` and `younger interval` and the form will past them together into OI - YI format within the data table.
+
 #### Foreign Keys versus a Check Constraint
 #### Symbology and Styles
 #### Support for non-core tables
