@@ -10,10 +10,10 @@ We breakup the description of functionality into a list of specific [buttons and
 1. Multiple users must be able to simultaneously edit a geologic map project with versioning
 2. Toolbar should be compatible with PostgreSQL ArcSDE
 3. Maps must be exportable as a GeMs compliant ESRI File Geodatabase
-4. Ability to transfer, select, and view from a list of symbologies, possibly a style file.
 
 ### Optional 
 1. Must be able to connect over the internet to REST services with relevant dictionaries or configuration files
+2. Ability to transfer, select, and view from a list of symbologies, possibly a style file.
 
 ## Buttons and Actions
 
