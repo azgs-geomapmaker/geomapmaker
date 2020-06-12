@@ -14,6 +14,7 @@ We breakup the description of functionality into a list of specific [buttons and
 ### Optional 
 1. Must be able to connect over the internet to REST services with relevant dictionaries or configuration files
 2. Ability to transfer, select, and view from a list of symbologies, possibly a style file.
+3. The most fundamental GeMS requirement are certain topology rules (no overlapping polygons). However, it is unclear if we should build checks for this into the toolbar or treat this as a separate problem. 
 
 ## Buttons and Actions
 
@@ -57,7 +58,7 @@ B | contact | Y | 50 | 1.0.1
 2. We need some way of recording styling information for the lines in the `Symbol` field - see [Symbology And Styles](#symbology-and-styles) in [special considerations](#special-considerations). It would be great if the form could actually display the symbols as images to make choosing the best symbol easier, but I don't know if that sort of display can be handled in an ESRI form. The alternative is to refer to the items by name in the form (i.e., values in the `Category` field of the .stylex); however, values in the `Key` field will still have to be what is actually recored in the `Symbol` field of the geodatabase. 
 
 ## GeMS feature class and non-spatial table definitions
-I have tentatively described these using PostgreSQL data types and not ARC data types, but we should convert or update this as soon as possible to Arc language for consistency.
+I have tentatively described these using PostgreSQL data types and not ARC data types, but we should convert or **update this as soon as possible to Arc types**.
 
 #### Map Unit Polys
 > Note that GeMS specification is case-sensitive, ugh. Also note that the MapUnitPolys feature class must be part of the GeologicMaps 'feature dataset'
@@ -70,6 +71,7 @@ Label text -- This is a duplicate of the MapUnit field, not sure why it exists, 
 Symbol text REFERENCES DescriptionOfMapUnits(AreaFillRGB) -- redundant with DMU, but required by spec
 Notes text
 DataSourceID text REFERENCES DataSources(DataSources_ID) NOT NULL
+geom geometry -- Polygon only (multi-polygon not allowed), other checks constraints may be appropriate, see special considerations
 ````
 
 #### Contacts And Faults
@@ -86,6 +88,7 @@ Label text
 Symbol text NOT NULL -- This will have to be handled in a special way, see "special considerations section"
 DataSourceID text REFERENCES DataSources(DataSources_ID) NOT NULL
 Notes text
+geom geometry -- line only (multi-line not allowed), other checks constraints may be appropriate, see special considerations
 ````
 
 #### Description Of Map Units
@@ -141,7 +144,13 @@ The GeMS specification asks that the [DescriptionOfMapUnits](#description-of-map
 #### Foreign Keys versus a Check Constraint versus Application Logic
 If you look at the structure of the [tables](#gems-feature-class-and-non-spatial-table-definitions) there are a number of fields where I specified a foreign key constraint. However, in some cases, these are not truly foreign keys because the table.field being referenced does not necessarily need to obey a `UNIQUE` constraint, in which case it cannot be used as a foreign key. These scenarios would be better described by using a `CHECK` constraint. 
 
-Even better, we would not mess around in the GeoDatabase with either a `CHECK` or `FOREIGN KEY` constraint, but rather enforced these relations through form with application logic.
+An obvious altnerative would be not to mess around in the GeoDatabase with either a `CHECK` or `FOREIGN KEY` constraint, but rather enforced these relations through form with application logic. This is probably the way to go, because Arc is probably not going to play nice with a lot of PostgreSQL driven constraints (we've more or less learned that the hard way already). However, it would be AWESOME to be able to add certain topology constraints for example:
+
+````PLpgSQL
+ALTER TABLE "MapUnitPolys"
+  ADD CONSTRAINT geometry_valid_check
+	CHECK (ST_IsValid(geom));
+````
 
 #### Symbology and Styles
 The old toolbar and ArcMap system was dependent on [Cartographic Representations](https://desktop.arcgis.com/en/arcmap/latest/map/working-with-layers/introduction-to-the-cartographic-representations-tutorial.htm) for handling styling information.
