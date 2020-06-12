@@ -170,6 +170,9 @@ There are four tables that the AZGS does sometimes, but not always, use. The que
 
 More research will need to be done with the geologists to see which of these they truly need help with. I am also unclear on this time exactly how the cross sectiona and correlation of map units table will need to be implemented.
 
+#### SQL Server vs. PostgreSQL
+One of the main goals is to switch to PSQL to save on licensing fees and to gain access to backend PostGIS capabilities, but it might be less performant than SQL Server. If the performance benefits are big enough, it would worth the licensing fees. We can think about a test case using tablet upload case of Brian/Joe.
+
 ## Appendix Information
 #### Stylex Files
 “Styles” are databases that hold symbols, symbol primitives (like colors), and layout elements like north arrows and scale bars. (from the Esri Cartography MOOC)
