@@ -3,7 +3,7 @@
 import arcpy
 import xml.etree.ElementTree as ET
 import os
-import os.path as path
+import os.path as path 
 
 #I was hoping to use xpath on gdb in an xml file, but it does not work properly.
 #This is unused.

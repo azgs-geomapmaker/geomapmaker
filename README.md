@@ -1,7 +1,7 @@
 # AZGS GEOMAPMAKER SPECIFICATION 2.0
 This is a new design specification for the AZGS toolbar. The desired functionality of this toolbar is now completely reworked to be entirely oriented around supproting compliance with the Geologic Map Schema ([draft version](https://ngmdb.usgs.gov/Info/standards/GeMS/docs/GeMSv2_draft7g_ProvisionalRelease.pdf).
 
-## Required Functionality
+## Required Functionality 
 We breakup the description of functionality into a list of specific [buttons and actions](#buttons) for the toolbar and general [broad-strokes requirements](#broad-strokes-requirements).
 
 ## Broad-Strokes Requirements
