@@ -64,7 +64,7 @@ namespace Geomapmaker {
                 DataTable dT = new DataTable();
                 dT.Load(dr);
 
-                Add(new ComboBoxItem("<choose>")); //TODO: This is only here because I'm not sure how to have a combobox without an initial selection
+                //Add(new ComboBoxItem("<choose>")); //TODO: This is only here because I'm not sure how to have a combobox without an initial selection
                 foreach (DataRow row in dT.Rows) {
                     //Debug.Write("Hi there \n");
                     //Debug.Write("{0} \n", row["name"].ToString());
@@ -76,7 +76,7 @@ namespace Geomapmaker {
             }
 
             Enabled = true; //enables the ComboBox
-            SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
+            //SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
 
         }
 
@@ -86,6 +86,8 @@ namespace Geomapmaker {
         /// </summary>
         /// <param name="item">The newly selected combo box item</param>
         protected override void OnSelectionChange(ComboBoxItem item) {
+            FrameworkApplication.State.Activate("project_selected");
+
             //Debug.WriteLine("item type = " + item.GetType());
             if (item == null)
                 return;
@@ -95,7 +97,6 @@ namespace Geomapmaker {
 
             // TODO  Code behavior when selection changes.
             if (item is ProjectComboBoxItem) { //TODO: This is only here because I'm not sure how to have a combobox without an initial selection
-            
                 var collProps = JObject.Parse(((ProjectComboBoxItem)item).connectionProperties);
                 //ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"connection properties: " + ((ProjectComboBoxItem)item).connectionProperties);
                 //ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"connection properties: " + collProps["database"]);
@@ -140,6 +141,7 @@ namespace Geomapmaker {
                     Password = props["password"].ToString(),
                     //Version = "dbo.DEFAULT"
                 };
+                DataHelper.connectionProperties = connectionProperties;
 
                 using (Geodatabase geodatabase = new Geodatabase(connectionProperties)) {
                     DataHelper.connectionString = geodatabase.GetConnectionString();
@@ -178,6 +180,7 @@ namespace Geomapmaker {
                     }
 
                 }
+                DataHelper.ProjectSelected();
             });
         }
         

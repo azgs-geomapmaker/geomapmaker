@@ -1,12 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ArcGIS defaultAssembly="Geomapmaker.dll"
-        defaultNamespace="Geomapmaker"
-        xmlns="http://schemas.esri.com/DADF/Registry"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-
+﻿<ArcGIS defaultAssembly="Geomapmaker.dll" defaultNamespace="Geomapmaker" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
   <AddInInfo id="{d2f8a816-8ba3-469e-914b-03839626077b}" version="1.0" desktopVersion="2.6.24783">
-    <Name>Geomapmaker</Name>   
+    <Name>Geomapmaker</Name>
     <Description>Geomapmaker description</Description>
     <Image>Images\AddinDesktop32.png</Image>
     <Author>Douglas</Author>
@@ -16,20 +10,18 @@
     <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
   </AddInInfo>
-  
   <Configuration appName="Geomapmaker">
     <ConfigurationManager className="GeomapmakerConfiguration" />
   </Configuration>
-
   <modules>
     <insertModule id="Geomapmaker_Module" className="GeomapmakerModule" autoLoad="false" caption="GeomapmakerModule">
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
         <tab id="AZGS_Tab" caption="AZGS">
           <group refID="Geomapmaker_Admin" />
+          <group refID="Geomapmaker_Project" />
         </tab>
       </tabs>
-
       <groups>
         <!-- comment this out if you have no controls on the Addin tab to avoid
               an empty group-->
@@ -37,22 +29,24 @@
           <button refID="Geomapmaker_LoginButton" size="large" />
           <comboBox refID="Geomapmaker_ProjectsComboBox" />
         </group>
+        <group id="Geomapmaker_Project" caption="Project">
+            <comboBox refID="Geomapmaker_MapUnitsComboBox" />
+        </group>
       </groups>
-      
       <controls>
         <!-- add your controls here -->
         <button id="Geomapmaker_LoginButton" caption="Login" className="LoginButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png">
           <tooltip heading="Tooltip Heading">
-            Tooltip text<disabledText />
-          </tooltip>
+            Tooltip text<disabledText /></tooltip>
         </button>
         <comboBox id="Geomapmaker_ProjectsComboBox" caption="Projects" className="ProjectsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" condition="userLoginCondition">
           <tooltip heading="Tooltip Heading">
-            Select a project to work on<disabledText />
-          </tooltip>
+            Select a project to work on<disabledText /></tooltip>
         </comboBox>
-      </controls> 
-      
+        <comboBox id="Geomapmaker_MapUnitsComboBox" caption="Map Units" className="MapUnitsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="true" isReadOnly="false" resizable="true" condition="projectSelectedCondition">
+          <tooltip heading="Tooltip Heading">Add/Edit Map Units<disabledText /></tooltip>
+        </comboBox>
+      </controls>
     </insertModule>
   </modules>
   <conditions>
@@ -63,6 +57,13 @@
         <state id="esri_mapping_mapPane" />
       </and>
     </insertCondition>
+    <insertCondition id="projectSelectedCondition">
+      <!-- TODO: should change this to something like userLoggedInAndMapLoaded-->
+      <and>
+        <state id="user_logged_in" />
+        <state id="esri_mapping_mapPane" />
+        <state id="project_selected" />
+      </and>
+    </insertCondition>
   </conditions>
-
 </ArcGIS>
