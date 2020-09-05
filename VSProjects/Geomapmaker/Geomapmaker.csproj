@@ -148,6 +148,10 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddEditMapUnitsDockPane.xaml.cs">
+      <DependentUpon>AddEditMapUnitsDockPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddEditMapUnitsDockPaneViewModel.cs" />
     <Compile Include="DarkImages\GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
     <Compile Include="LoginButton.cs" />
@@ -163,6 +167,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AddEditMapUnitsDockPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginDialogProWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

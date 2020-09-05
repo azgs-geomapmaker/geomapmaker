@@ -80,6 +80,7 @@ namespace Geomapmaker {
 		/// </summary>
 		/// <param name="item">The newly selected combo box item</param>
 		protected override void OnSelectionChange(ComboBoxItem item) {
+			Debug.WriteLine("OnSelectionChange enter, SelectedIndex = " + SelectedIndex);
 
 			if (item == null)
 				return;
@@ -89,9 +90,13 @@ namespace Geomapmaker {
 
 			// TODO  Code behavior when selection changes.  
 			if (SelectedIndex == -1) {
-				MessageBox.Show("Add Map Unit not yet implemented");
+				//MessageBox.Show("Add Map Unit not yet implemented");
+				AddEditMapUnitsDockPaneViewModel.Show();
 			} else {
-				MessageBox.Show("Edit Map Unit not yet implemented");
+				//MessageBox.Show("Edit Map Unit not yet implemented");
+				Debug.WriteLine("existing map unit: " + Text);
+				DataHelper.MapUnitName = Text;
+				AddEditMapUnitsDockPaneViewModel.Show();
 			}
 		}
 
@@ -99,9 +104,20 @@ namespace Geomapmaker {
 		//for each character. Or there is this. It's clunky and sometimes causes ghost events. I'm not too worried about this though, 
 		//because we intend to move this combobox into the add/edit dialog, at which point I can switch to a vanilla Windows combobox,
 		//which registers an Enter as a selection change.
-		protected override void OnLostKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventArgs e) {
-			MessageBox.Show("Add Map Unit not yet implemented");
+		
+		protected override void OnEnter() {
+			Debug.WriteLine("OnEnter enter, SelectedIndex = " + SelectedIndex);
+			if (SelectedIndex == -1) {
+				//MessageBox.Show("Add Map Unit not yet implemented");
+				Debug.WriteLine("new map unit: " + Text);
+				DataHelper.MapUnitName = Text;
+				AddEditMapUnitsDockPaneViewModel.Show();
+			} else {
+				//MessageBox.Show("Edit Map Unit not yet implemented");
+				AddEditMapUnitsDockPaneViewModel.Show();
+			}
 		}
+
 		/*
 		protected override void OnTextChange(String text) {
 			if (text == null)

@@ -16,6 +16,16 @@ namespace Geomapmaker {
 		public static List<FeatureLayer> currentLayers = new List<FeatureLayer>();
 		public static List<StandaloneTable> currentTables = new List<StandaloneTable>();
 
+		//public static String mapUnitName { get; set; } = "Play A";
+		public static event EventHandler MapUnitNameChanged;
+		private static string mapUnitName;
+		public static string MapUnitName {
+			get => mapUnitName; 
+			set {
+				mapUnitName = value;
+				MapUnitNameChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
 
 		public delegate void UserLoginDelegate();
 		public static event UserLoginDelegate UserLoginHandler;

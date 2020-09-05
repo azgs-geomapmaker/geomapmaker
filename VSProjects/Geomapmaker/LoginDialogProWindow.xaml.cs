@@ -88,6 +88,7 @@ namespace Geomapmaker
         {
             Debug.WriteLine("selected index = " + UserCombo.SelectedIndex);
 
+            //Clean up map and other stuff from old user
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
                 var map = MapView.Active.Map;
@@ -96,6 +97,11 @@ namespace Geomapmaker
                 DataHelper.currentLayers.Clear();
                 DataHelper.currentTables.Clear();
             });
+            FrameworkApplication.State.Deactivate("project_selected");
+            ArcGIS.Desktop.Framework.Contracts.DockPane dockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_AddEditMapUnitsDockPane");
+            if (dockPane != null) {
+                dockPane.IsVisible = false;
+            }
 
             conn.Open();
             NpgsqlCommand command;

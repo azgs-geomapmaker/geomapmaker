@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="Geomapmaker.AddEditMapUnitsDockPaneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"   
+             xmlns:ui="clr-namespace:Geomapmaker"
+             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+             mc:Ignorable="d" d:DesignWidth="300"
+             d:DataContext="{Binding Path=ui.AddEditMapUnitsDockPaneViewModel}" Height="1336.015">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<ScrollViewer>
+		<Grid Width="350">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<DockPanel Grid.Row="0" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
+				<TextBlock Grid.Column="1" Text="{Binding Heading}" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+					<TextBlock.ToolTip>
+						<WrapPanel Orientation="Vertical" MaxWidth="300">
+							<TextBlock Text="{Binding Heading}" TextWrapping="Wrap"/>
+						</WrapPanel>
+					</TextBlock.ToolTip>
+            </TextBlock>
+			</DockPanel>
+			<Label x:Name="MapUnitLabel" Content="Map Unit" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147"/>
+			<TextBox x:Name="MapUnitTextBox" Text="{Binding Path=(ui:DataHelper.MapUnitName)}" HorizontalAlignment="Left" Height="36" Margin="0,30,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="NameLabel" Content="Name" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,88,0,0"/>
+			<TextBox x:Name="NameTextBox" Text="{Binding Path=(ui:DataHelper.MapUnitName)}" HorizontalAlignment="Left" Height="36" Margin="0,118,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="FullNameLabel" Content="Full Name" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,176,0,0"/>
+			<TextBox x:Name="FullNameTextBox" Text="{Binding Path=(ui:DataHelper.MapUnitName)}" HorizontalAlignment="Left" Height="36" Margin="0,206,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="AgeLabel" Content="Age" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,262,0,-22"/>
+			<TextBox x:Name="AgeTextBox" HorizontalAlignment="Left" Height="36" Margin="0,292,0,-58" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="RelativeAgeLabel" Content="Relative Age" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,344,0,-104"/>
+			<TextBox x:Name="RelativeAgeTextBox" HorizontalAlignment="Left" Height="36" Margin="0,374,0,-140" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="DescriptionLabel" Content="Description" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,435,0,-195"/>
+			<TextBox x:Name="DescriptionTextBox" HorizontalAlignment="Left" Height="36" Margin="0,465,0,-231" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="HierarchyKeyLabel" Content="Hierarchy Key" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,524,0,-284"/>
+			<TextBox x:Name="HierarchyKeyTextBox" HorizontalAlignment="Left" Height="36" Margin="0,554,0,-320" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="ParagraphStyleLabel" Content="Paragraph Style" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,608,0,-368"/>
+			<TextBox x:Name="ParagraphStyleTextBox" HorizontalAlignment="Left" Height="36" Margin="0,638,0,-404" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="LabelLabel" Content="Label" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,695,0,-455"/>
+			<TextBox x:Name="LabelTextBox" HorizontalAlignment="Left" Height="36" Margin="0,725,0,-491" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="SymbolLabel" Content="Symbol" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,785,0,-545"/>
+			<TextBox x:Name="SymbolTextBox" HorizontalAlignment="Left" Height="36" Margin="0,815,0,-581" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="AreaFillRGBLabel" Content="Area Fill RGB" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,873,0,-633"/>
+			<TextBox x:Name="AreaFillRGBTextBox" HorizontalAlignment="Left" Height="36" Margin="0,903,0,-669" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="HexColorLabel" Content="Hex Color" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,962,0,-722"/>
+			<TextBox x:Name="HexColorTextBox" HorizontalAlignment="Left" Height="36" Margin="0,992,0,-758" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="DescriptionSourceLabel" Content="Description Source" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,1046,0,-806"/>
+			<TextBox x:Name="DescriptionSourceTextBox" HorizontalAlignment="Left" Height="36" Margin="0,1076,0,-842" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="GeoMaterialLabel" Content="GeoMaterial " HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,1133,0,-893"/>
+			<TextBox x:Name="GeoMaterialTextBox" HorizontalAlignment="Left" Height="36" Margin="0,1163,0,-929" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<Label x:Name="GeoMaterialConfidenceLabel" Content="GeoMaterial Confidence" HorizontalAlignment="Left" Height="30" Grid.Row="1" VerticalAlignment="Top" Width="147" Margin="0,1223,0,-983"/>
+			<TextBox x:Name="GeoMaterialConfidenceTextBox" HorizontalAlignment="Left" Height="36" Margin="0,1253,0,-1019" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" RenderTransformOrigin="1.027,0.111"/>
+			<!--
+			<Label x:Name="MapUnitNameLabel" Content="{Binding Path=(ui:DataHelper.MapUnitName)}" HorizontalAlignment="Left" Height="33" Margin="0,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="300"/>
+			-->
+		</Grid>
+	</ScrollViewer>
+
+</UserControl>

@@ -41,10 +41,15 @@ namespace Geomapmaker {
         {
             //TODO - add your business logic
             //return false to ~cancel~ Application close
+
+            //When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
+            DockPane dockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_AddEditMapUnitsDockPane");
+            if (dockPane != null) {
+                dockPane.IsVisible = false;
+            }
             return true;
         }
 
         #endregion Overrides
-
     }
 }

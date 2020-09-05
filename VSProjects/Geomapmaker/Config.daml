@@ -28,9 +28,10 @@
         <group id="Geomapmaker_Admin" caption="Admin">
           <button refID="Geomapmaker_LoginButton" size="large" />
           <comboBox refID="Geomapmaker_ProjectsComboBox" />
+          <button refID="Geomapmaker_AddEditMapUnitsDockPane_ShowButton" size="large" />
         </group>
         <group id="Geomapmaker_Project" caption="Project">
-            <comboBox refID="Geomapmaker_MapUnitsComboBox" />
+          <comboBox refID="Geomapmaker_MapUnitsComboBox" />
         </group>
       </groups>
       <controls>
@@ -46,7 +47,18 @@
         <comboBox id="Geomapmaker_MapUnitsComboBox" caption="Map Units" className="MapUnitsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="true" isReadOnly="false" resizable="true" condition="projectSelectedCondition">
           <tooltip heading="Tooltip Heading">Add/Edit Map Units<disabledText /></tooltip>
         </comboBox>
+        <!--
+        Now triggering this from Geomapmaker_MapUnitsComboBox
+        <button id="Geomapmaker_AddEditMapUnitsDockPane_ShowButton" caption="Show AddEditMapUnitsDockPane" className="AddEditMapUnitsDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="projectSelectedCondition">
+          <tooltip heading="Show Dockpane">Show Dockpane<disabledText /></tooltip>
+        </button>
+        -->
       </controls>
+      <dockPanes>
+        <dockPane id="Geomapmaker_AddEditMapUnitsDockPane" caption="Add/Edit Map Units" className="AddEditMapUnitsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
+          <content className="AddEditMapUnitsDockPaneView" />
+        </dockPane>
+      </dockPanes>
     </insertModule>
   </modules>
   <conditions>
