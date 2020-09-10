@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Geomapmaker {
 	internal class AddEditMapUnitsDockPaneViewModel : DockPane {
 		private const string _dockPaneID = "Geomapmaker_AddEditMapUnitsDockPane";
 
-		protected AddEditMapUnitsDockPaneViewModel() { }
+		protected  AddEditMapUnitsDockPaneViewModel() {  }
 
 		/// <summary>
 		/// Show the DockPane.
@@ -59,6 +60,7 @@ namespace Geomapmaker {
 			}
 		}
 		*/
+
 
 	}
 
