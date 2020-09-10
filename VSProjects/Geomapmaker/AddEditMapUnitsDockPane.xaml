@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"   
              xmlns:ui="clr-namespace:Geomapmaker"
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+			 xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" d:DesignWidth="300"
              d:DataContext="{Binding Path=ui.AddEditMapUnitsDockPaneViewModel}">
 	<UserControl.Resources>
@@ -54,7 +55,10 @@
 				<Label x:Name="SymbolLabel" Content="Symbol" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
 				<TextBox x:Name="SymbolTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 				<Label x:Name="AreaFillRGBLabel" Content="Area Fill RGB" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<!--
 				<TextBox x:Name="AreaFillRGBTextBox" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				-->
+				<wpftk:ColorPicker Name="ColorPicker1" Height="25" DisplayColorAndName="True"  />
 				<Label x:Name="HexColorLabel" Content="Hex Color" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 				<TextBox x:Name="HexColorTextBox" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 				<Label x:Name="DescriptionSourceLabel" Content="Description Source" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
