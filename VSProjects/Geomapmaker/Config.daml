@@ -44,9 +44,11 @@
           <tooltip heading="Tooltip Heading">
             Select a project to work on<disabledText /></tooltip>
         </comboBox>
+        <!-- moved to DockPane
         <comboBox id="Geomapmaker_MapUnitsComboBox" caption="Map Units" className="MapUnitsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="true" isReadOnly="false" resizable="true" condition="projectSelectedCondition">
           <tooltip heading="Tooltip Heading">Add/Edit Map Units<disabledText /></tooltip>
         </comboBox>
+        -->
         <!--
         Now triggering this from Geomapmaker_MapUnitsComboBox
         <button id="Geomapmaker_AddEditMapUnitsDockPane_ShowButton" caption="Show AddEditMapUnitsDockPane" className="AddEditMapUnitsDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="projectSelectedCondition">

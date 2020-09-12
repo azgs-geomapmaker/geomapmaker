@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Geomapmaker {
-	public class DataHelper {
+	public static class DataHelper {
 		public static int userID;
 		public static String userName;
 
@@ -30,6 +30,62 @@ namespace Geomapmaker {
 				MapUnitNameChanged?.Invoke(null, EventArgs.Empty);
 			}
 		}
+
+		public static event EventHandler MapUnitsChanged;
+		private static ObservableCollection<ComboBoxItem> mapUnits = new ObservableCollection<ComboBoxItem>();
+		public static ObservableCollection<ComboBoxItem> MapUnits { 
+			get => mapUnits;
+			set {
+				mapUnits = value;
+				MapUnitsChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
+
+		public static async Task populateMapUnits() {
+			Debug.WriteLine("populateMapUnits enter");
+
+			var mapUnits = new ObservableCollection<ComboBoxItem>();
+
+			if (DataHelper.connectionProperties == null) {
+				return;
+			}
+
+			await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
+
+				using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
+
+					//Table t = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits");
+					QueryDef mapUnitsQDef = new QueryDef {
+						Tables = "DescriptionOfMapUnits",
+						//WhereClause = "ADACOMPLY = 'Yes'",
+					};
+
+					using (RowCursor rowCursor = geodatabase.Evaluate(mapUnitsQDef, false)) {
+						while (rowCursor.MoveNext()) {
+							using (Row row = rowCursor.Current) {
+								Debug.WriteLine(row["Name"].ToString());
+								mapUnits.Add(new ComboBoxItem(row["Name"].ToString()));
+							}
+						}
+					}
+
+				}
+			});
+			DataHelper.MapUnits = mapUnits;
+		}
+
+		/*
+		public static event EventHandler SelectedMapUnitChanged;
+		private static string selectedMapUnit;
+		public static string SelectedMapUnit {
+			get  => selectedMapUnit; 
+			set {
+				// populate form
+				selectedMapUnit = value;
+				SelectedMapUnitChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
+		*/
 
 		public delegate void UserLoginDelegate();
 		public static event UserLoginDelegate UserLoginHandler;

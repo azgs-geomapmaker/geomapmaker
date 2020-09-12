@@ -85,7 +85,7 @@ namespace Geomapmaker {
         /// The on comboBox selection change event. 
         /// </summary>
         /// <param name="item">The newly selected combo box item</param>
-        protected override void OnSelectionChange(ComboBoxItem item) {
+        protected override async void OnSelectionChange(ComboBoxItem item) {
             FrameworkApplication.State.Activate("project_selected");
 
             //Debug.WriteLine("item type = " + item.GetType());
@@ -101,7 +101,10 @@ namespace Geomapmaker {
                 //ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"connection properties: " + ((ProjectComboBoxItem)item).connectionProperties);
                 //ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"connection properties: " + collProps["database"]);
                 //Debug.WriteLine("type of collProps = " + collProps.GetType());
-                openDatabase(collProps);
+                AddEditMapUnitsDockPaneViewModel.Hide();
+                await openDatabase(collProps);
+                await DataHelper.populateMapUnits(); //TODO: maybe move this into openDatabase?
+                AddEditMapUnitsDockPaneViewModel.Show();
             }
         }
 

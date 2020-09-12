@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,5 +23,11 @@ namespace Geomapmaker {
 		public AddEditMapUnitsDockPaneView() {
 			InitializeComponent();
 		}
+
+		/*
+		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			Debug.WriteLine("ComboBox_SelectionChanged enter, " + e.ToString());
+		}
+		*/
 	}
 }
