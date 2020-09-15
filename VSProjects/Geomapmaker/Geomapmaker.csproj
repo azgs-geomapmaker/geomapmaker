@@ -173,6 +173,7 @@
     <Compile Include="LoginDialogProWindow.xaml.cs" />
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="MapUnitsComboBox.cs" />
+    <Compile Include="Models\MapUnit.cs" />
     <Compile Include="ProjectComboBoxItem.cs" />
     <Compile Include="ProjectsComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

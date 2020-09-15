@@ -17,7 +17,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
-
+using Geomapmaker.Models;
 
 namespace Geomapmaker {
 	internal class AddEditMapUnitsDockPaneViewModel : DockPane {
@@ -66,24 +66,28 @@ namespace Geomapmaker {
 			}
 		}
 
-		//public event EventHandler SelectedMapUnitChanged;
-		private string selectedMapUnit;
-		public string SelectedMapUnit {
+		private MapUnit selectedMapUnit;
+		public MapUnit SelectedMapUnit {
 			get => selectedMapUnit;
 			set {
 				if (value == null) return;
-				// populate form
 				//selectedMapUnit = value;
-				SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit);
-				if (!DataHelper.MapUnits.Any(p => p.Text == value)) {
+				SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
+
+				//Set heading and populate form, depending on whether this is a new map unit or not 
+				//if (!DataHelper.MapUnits.Any(p => p.Text == value)) {
+				if (!DataHelper.MapUnits.Any(mu => mu.MU == value.MU)) {
 					SubHeading = ADD_HEADING;
+					//populate form with defaults
 				} else {
 					SubHeading = EDIT_HEADING;
+					// populate form from db
+
 				}
-				//SelectedMapUnitChanged?.Invoke(null, EventArgs.Empty);
 			}
 		}
 
+		//This is to capture the user entering a new map unit (not in the list)
 		private string userEnteredMapUnit;
 		public string UserEnteredMapUnit {
 			get {
@@ -92,7 +96,9 @@ namespace Geomapmaker {
 			set {
 				if (userEnteredMapUnit != value) {
 					userEnteredMapUnit = value;
-					/*DataHelper.*/SelectedMapUnit = userEnteredMapUnit;
+					var mapUnit = new MapUnit();
+					mapUnit.MU = userEnteredMapUnit;
+					SelectedMapUnit = mapUnit;
 				}
 			}
 		}

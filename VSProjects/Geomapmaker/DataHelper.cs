@@ -1,6 +1,8 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,8 +34,9 @@ namespace Geomapmaker {
 		}
 
 		public static event EventHandler MapUnitsChanged;
-		private static ObservableCollection<ComboBoxItem> mapUnits = new ObservableCollection<ComboBoxItem>();
-		public static ObservableCollection<ComboBoxItem> MapUnits { 
+		//private static ObservableCollection<ComboBoxItem> mapUnits = new ObservableCollection<ComboBoxItem>();
+		private static ObservableCollection<MapUnit> mapUnits = new ObservableCollection<MapUnit>();
+		public static ObservableCollection<MapUnit> MapUnits { 
 			get => mapUnits;
 			set {
 				mapUnits = value;
@@ -44,7 +47,8 @@ namespace Geomapmaker {
 		public static async Task populateMapUnits() {
 			Debug.WriteLine("populateMapUnits enter");
 
-			var mapUnits = new ObservableCollection<ComboBoxItem>();
+			//var mapUnits = new ObservableCollection<ComboBoxItem>();
+			var mapUnits = new ObservableCollection<MapUnit>();
 
 			if (DataHelper.connectionProperties == null) {
 				return;
@@ -64,7 +68,28 @@ namespace Geomapmaker {
 						while (rowCursor.MoveNext()) {
 							using (Row row = rowCursor.Current) {
 								Debug.WriteLine(row["Name"].ToString());
-								mapUnits.Add(new ComboBoxItem(row["Name"].ToString()));
+								//mapUnits.Add(new ComboBoxItem(row["Name"].ToString()));
+
+								var mapUnit = new MapUnit();
+								
+								//mapUnit.ID = int.Parse(row["DescriptionOfMapUnits_ID"].ToString());
+								mapUnit.MU = row["MapUnit"].ToString();
+								mapUnit.Name = row["Name"].ToString();
+								mapUnit.FullName = row["FullName"].ToString();
+								mapUnit.Age = row["Age"].ToString(); //TODO: more formatting here
+								//mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
+								mapUnit.Description = row["Description"].ToString();
+								mapUnit.HierarchyKey = row["HierarchyKey"].ToString();
+								mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
+								//mapUnit.Label = row["Label"].ToString();
+								//mapUnit.Symbol = row["Symbol"].ToString();
+								//mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
+								//mapUnit.hexcolor = row["hexcolor"].ToString();
+								//mapUnit.DescriptionSourceID = row["DescriptionSourceID"].ToString();
+								mapUnit.GeoMaterial = row["GeoMaterial"].ToString();
+								mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"].ToString();
+
+								mapUnits.Add(mapUnit);
 							}
 						}
 					}
