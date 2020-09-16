@@ -72,21 +72,21 @@ namespace Geomapmaker {
 
 								var mapUnit = new MapUnit();
 								
-								//mapUnit.ID = int.Parse(row["DescriptionOfMapUnits_ID"].ToString());
+								mapUnit.ID = int.Parse(row["ObjectID"].ToString());
 								mapUnit.MU = row["MapUnit"].ToString();
 								mapUnit.Name = row["Name"].ToString();
 								mapUnit.FullName = row["FullName"].ToString();
-								mapUnit.Age = row["Age"].ToString(); //TODO: more formatting here
+								//mapUnit.Age = row["Age"].ToString(); //TODO: more formatting here
 								//mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
 								mapUnit.Description = row["Description"].ToString();
 								mapUnit.HierarchyKey = row["HierarchyKey"].ToString();
-								mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
+								//mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
 								//mapUnit.Label = row["Label"].ToString();
 								//mapUnit.Symbol = row["Symbol"].ToString();
 								//mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
 								//mapUnit.hexcolor = row["hexcolor"].ToString();
 								//mapUnit.DescriptionSourceID = row["DescriptionSourceID"].ToString();
-								mapUnit.GeoMaterial = row["GeoMaterial"].ToString();
+								//mapUnit.GeoMaterial = row["GeoMaterial"].ToString();
 								mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"].ToString();
 
 								mapUnits.Add(mapUnit);

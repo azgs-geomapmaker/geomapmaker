@@ -35,8 +35,24 @@
 			<ScrollViewer Grid.Row="1" >
 				<StackPanel>
 					<Label x:Name="MapUnitLabel" Content="Map Unit" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+					<!--
 					<ComboBox x:Name="MapUnitTextBox" Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" DisplayMemberPath="MU" SelectedItem ="{Binding SelectedMapUnit}" Margin="0,0,0,5"  IsReadOnly="False" IsEditable="True"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<!--	
+					-->
+					<ComboBox 
+							x:Name="MapUnitTextBox" 
+							Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  
+							ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" 
+							DisplayMemberPath="MU" 
+							SelectedItem ="{Binding SelectedMapUnit}" 
+							Margin="0,0,0,5"  
+							IsReadOnly="False" 
+							IsEditable="True"  
+							HorizontalAlignment="Left" 
+							Height="25"  
+							VerticalAlignment="Top" 
+							Width="200" 
+							RenderTransformOrigin="1.027,0.111"/>
+				<!--	
 					<ComboBox x:Name="MUTestComboBox" Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}"  SelectedItem ="{Binding SelectedMapUnit}" Margin="0,0,0,5"  IsReadOnly="False" IsEditable="True"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111">
 					<ComboBox.ItemTemplate>
 							<DataTemplate>
@@ -46,10 +62,6 @@
 							</DataTemplate>
 						</ComboBox.ItemTemplate>
 					</ComboBox>
-					-->
-					<!--
-					<Label x:Name="MapUnitLabel" Content="Map Unit" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147"/>
-					<TextBox x:Name="MapUnitTextBox" Margin="0,0,0,5" Text="{Binding SelectedMapUnit}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 					-->
 					<Label x:Name="NameLabel"  Content="Name" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
 					<TextBox x:Name="NameTextBox" Margin="0,0,0,5" Text="{Binding SelectedMapUnit.Name}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
@@ -91,6 +103,10 @@
 					<ComboBox x:Name="GeoMaterialComboBox" Margin="0,0,0,5"  IsReadOnly="True" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 					<Label x:Name="GeoMaterialConfidenceLabel" Content="GeoMaterial Confidence" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 					<TextBox x:Name="GeoMaterialConfidenceTextBox" Text="{Binding SelectedMapUnit.GeoMaterialConfidence}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+						<Button Padding="5" Click="ResetButton_Click">Reset</Button>
+						<Button Padding="5" Margin="20,0,0,0" Click="SubmitButton_Click">Submit</Button>
+					</StackPanel>
 			</StackPanel>
 			</ScrollViewer>
 		</Grid>

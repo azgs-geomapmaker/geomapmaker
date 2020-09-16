@@ -70,7 +70,11 @@ namespace Geomapmaker {
 		public MapUnit SelectedMapUnit {
 			get => selectedMapUnit;
 			set {
-				if (value == null) return;
+				if (value == null) {
+					SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit);
+					SubHeading = GENERIC_HEADING;
+					return;
+				}
 				//selectedMapUnit = value;
 				SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
 
@@ -94,20 +98,136 @@ namespace Geomapmaker {
 				return userEnteredMapUnit;
 			}
 			set {
-				if (userEnteredMapUnit != value) {
-					userEnteredMapUnit = value;
+				//if (userEnteredMapUnit != value) {
+				userEnteredMapUnit = value;
+				if (value == null) {
+					SelectedMapUnit = null;
+				} else if (!DataHelper.MapUnits.Any(mu => mu.MU == value)) {
+					//userEnteredMapUnit = value;
 					var mapUnit = new MapUnit();
 					mapUnit.MU = userEnteredMapUnit;
 					SelectedMapUnit = mapUnit;
 				}
 			}
 		}
+
+		public  async Task saveMapUnit(MapUnit mapUnit) {
+			Debug.WriteLine("saveMapUnit enter");
+
+			//var mapUnits = new ObservableCollection<ComboBoxItem>();
+			var mapUnits = new ObservableCollection<MapUnit>();
+
+			if (DataHelper.connectionProperties == null) {
+				return;
+			}
+
+			await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
+				string message = String.Empty;
+				bool result = false;
+				EditOperation editOperation = new EditOperation();
+
+				using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
+					using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits")) {
+
+						if (DataHelper.MapUnits.Any(mu => mu.MU == mapUnit.MU)) {
+							Debug.WriteLine("editting");
+
+							editOperation.Callback(context => {
+								QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + mapUnit.ID };
+
+								using (RowCursor rowCursor = enterpriseTable.Search(filter, false)) {
+									TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+									int subtypeFieldIndex = tableDefinition.FindField(tableDefinition.GetSubtypeField());
+
+									while (rowCursor.MoveNext()) { //TODO: Anything? Should be only one
+										using (Row row = rowCursor.Current) {
+											// In order to update the Map and/or the attribute table.
+											// Has to be called before any changes are made to the row.
+											context.Invalidate(row);
+
+											row["MapUnit"] = mapUnit.MU;
+											row["Name"] = mapUnit.Name;
+											row["FullName"] = mapUnit.FullName;
+											row["Age"] = mapUnit.Age;
+											//row["RelativeAge"] = mapUnit.RelativeAge;
+											row["Description"] = mapUnit.Description;
+											row["HierarchyKey"] = mapUnit.HierarchyKey;
+											row["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
+											row["Label"] = mapUnit.Label;
+											row["Symbol"] = mapUnit.Symbol;
+											row["AreaFillRGB"] = mapUnit.AreaFillRGB;
+											//row["hexcolor"] = mapUnit.hexcolor;
+											row["DescriptionSourceID"] = mapUnit.DescriptionSourceID;
+											row["GeoMaterial"] = mapUnit.GeoMaterial;
+											row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
+
+											//After all the changes are done, persist it.
+											row.Store();
+
+											// Has to be called after the store too.
+											context.Invalidate(row);
+										}
+									}
+								}
+							}, enterpriseTable);
+
+						} else {
+							Debug.WriteLine("adding");
+
+							editOperation.Callback(context => {
+								TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+								using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer()) {
+									// Either the field index or the field name can be used in the indexer.
+									rowBuffer["MapUnit"] = mapUnit.MU;
+									rowBuffer["Name"] = mapUnit.Name;
+									rowBuffer["FullName"] = mapUnit.FullName;
+									rowBuffer["Age"] = mapUnit.Age;
+									//rowBuffer["RelativeAge"] = mapUnit.RelativeAge;
+									rowBuffer["Description"] = mapUnit.Description;
+									rowBuffer["HierarchyKey"] = mapUnit.HierarchyKey;
+									rowBuffer["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
+									rowBuffer["Label"] = mapUnit.Label;
+									rowBuffer["Symbol"] = mapUnit.Symbol;
+									rowBuffer["AreaFillRGB"] = mapUnit.AreaFillRGB;
+									//rowBuffer["hexcolor"] = mapUnit.hexcolor;
+									rowBuffer["DescriptionSourceID"] = mapUnit.DescriptionSourceID;
+									rowBuffer["GeoMaterial"] = mapUnit.GeoMaterial;
+									rowBuffer["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
+
+									using (Row row = enterpriseTable.CreateRow(rowBuffer)) {
+										// To Indicate that the attribute table has to be updated.
+										context.Invalidate(row);
+									}
+								}
+							}, enterpriseTable);
+						}
+
+						try {
+							result = editOperation.Execute();
+							if (!result) message = editOperation.ErrorMessage;
+						} catch (GeodatabaseException exObj) {
+							message = exObj.Message;
+						}
+					}
+				}
+
+				if (!string.IsNullOrEmpty(message))
+					MessageBox.Show(message);
+				else {
+					UserEnteredMapUnit = null;
+				}
+			});
+
+			await DataHelper.populateMapUnits();
+
+		}
+
 	}
 
-		/// <summary>
-		/// Button implementation to show the DockPane.
-		/// </summary>
-		internal class AddEditMapUnitsDockPane_ShowButton : Button {
+	/// <summary>
+	/// Button implementation to show the DockPane.
+	/// </summary>
+	internal class AddEditMapUnitsDockPane_ShowButton : Button {
 		protected override void OnClick() {
 			AddEditMapUnitsDockPaneViewModel.Show();
 		}
