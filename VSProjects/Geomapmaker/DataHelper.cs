@@ -26,7 +26,7 @@ namespace Geomapmaker {
 		public static event EventHandler MapUnitNameChanged;
 		private static string mapUnitName;
 		public static string MapUnitName {
-			get => mapUnitName; 
+			get => mapUnitName;
 			set {
 				mapUnitName = value;
 				MapUnitNameChanged?.Invoke(null, EventArgs.Empty);
@@ -36,7 +36,7 @@ namespace Geomapmaker {
 		public static event EventHandler MapUnitsChanged;
 		//private static ObservableCollection<ComboBoxItem> mapUnits = new ObservableCollection<ComboBoxItem>();
 		private static ObservableCollection<MapUnit> mapUnits = new ObservableCollection<MapUnit>();
-		public static ObservableCollection<MapUnit> MapUnits { 
+		public static ObservableCollection<MapUnit> MapUnits {
 			get => mapUnits;
 			set {
 				mapUnits = value;
@@ -71,23 +71,24 @@ namespace Geomapmaker {
 								//mapUnits.Add(new ComboBoxItem(row["Name"].ToString()));
 
 								var mapUnit = new MapUnit();
-								
+
 								mapUnit.ID = int.Parse(row["ObjectID"].ToString());
 								mapUnit.MU = row["MapUnit"].ToString();
 								mapUnit.Name = row["Name"].ToString();
-								mapUnit.FullName = row["FullName"].ToString();
-								//mapUnit.Age = row["Age"].ToString(); //TODO: more formatting here
+								mapUnit.FullName = row["FullName"] == null ? null : row["FullName"].ToString();
+								mapUnit.Age = row["Age"] == null ? null : row["Age"].ToString(); //TODO: more formatting here
 								//mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
-								mapUnit.Description = row["Description"].ToString();
+								mapUnit.Description = row["Description"] == null ? null : row["Description"].ToString();
 								mapUnit.HierarchyKey = row["HierarchyKey"].ToString();
 								//mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
 								//mapUnit.Label = row["Label"].ToString();
 								//mapUnit.Symbol = row["Symbol"].ToString();
 								//mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
-								//mapUnit.hexcolor = row["hexcolor"].ToString();
+								mapUnit.hexcolor = row["hexcolor"] == null ? null : row["hexcolor"].ToString();
+								//mapUnit.Color = row["hexcolor"];
 								//mapUnit.DescriptionSourceID = row["DescriptionSourceID"].ToString();
 								//mapUnit.GeoMaterial = row["GeoMaterial"].ToString();
-								mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"].ToString();
+								mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"] == null ? null : row["GeoMaterialConfidence"].ToString();
 
 								mapUnits.Add(mapUnit);
 							}
@@ -126,5 +127,272 @@ namespace Geomapmaker {
 			ProjectSelectedHandler?.Invoke();
 		}
 
+
+		private static ObservableCollection<string> ages = new ObservableCollection<string>() {
+			"Cenozoic",
+			"Holocene",
+			"Quaternary",
+			"Pleistocene",
+			"Late Pleistocene",
+			"Middle Pleistocene",
+			"Calabrian",
+			"Gelasian",
+			"Neogene",
+			"Pliocene",
+			"Piacenzian",
+			"Zanclean",
+			"Miocene",
+			"Messinian",
+			"Tortonian",
+			"Serravallian",
+			"Langhian",
+			"Burdigalian",
+			"Aquitanian",
+			"Paleogene",
+			"Oligocene",
+			"Chattian",
+			"Rupelian",
+			"Eocene",
+			"Priabonian",
+			"Bartonian",
+			"Lutetian",
+			"Ypresian",
+			"Paleocene",
+			"Thanetian",
+			"Selandian",
+			"Danian",
+			"Mesozoic",
+			"Cretaceous",
+			"Late Cretaceous",
+			"Maastrichtian",
+			"Campanian",
+			"Santonian",
+			"Coniacian",
+			"Turonian",
+			"Cenomanian",
+			"Early Cretaceous",
+			"Albian",
+			"Aptian",
+			"Barremian",
+			"Hauterivian",
+			"Valanginian",
+			"Berriasian",
+			"Jurassic",
+			"Late Jurassic",
+			"Tithonian",
+			"Kimmeridgian",
+			"Oxfordian",
+			"Middle Jurassic",
+			"Callovian",
+			"Bathonian",
+			"Bajocian",
+			"Aalenian",
+			"Early Jurassic",
+			"Toarcian",
+			"Pliensbachian",
+			"Sinemurian",
+			"Hettangian",
+			"Triassic",
+			"Late Triassic",
+			"Rhaetian",
+			"Norian",
+			"Carnian",
+			"Middle Triassic",
+			"Ladinian",
+			"Anisian",
+			"Olenekian",
+			"Early Triassic",
+			"Induan",
+			"Paleozoic",
+			"Permian",
+			"Changhsingian",
+			"Lopingian",
+			"Wuchiapingian",
+			"Guadalupian",
+			"Capitanian",
+			"Wordian",
+			"Roadian",
+			"Kungurian",
+			"Cisuralian",
+			"Artinskian",
+			"Sakmarian",
+			"Asselian",
+			"Carboniferous",
+			"Pennsylvanian",
+			"Gzhelian",
+			"Kasimovian",
+			"Moscovian",
+			"Bashkirian",
+			"Mississippian",
+			"Serpukhovian",
+			"Visean",
+			"Tournaisian",
+			"Devonian",
+			"Late Devonian",
+			"Famennian",
+			"Frasnian",
+			"Middle Devonian",
+			"Givetian",
+			"Eifelian",
+			"Early Devonian",
+			"Emsian",
+			"Pragian",
+			"Lochkovian",
+			"Silurian",
+			"Pridoli",
+			"Ludlow",
+			"Ludfordian",
+			"Gorstian",
+			"Wenlock",
+			"Homerian",
+			"Sheinwoodian",
+			"Llandovery",
+			"Telychian",
+			"Aeronian",
+			"Rhuddanian",
+			"Ordovician",
+			"Late Ordovician",
+			"Hirnantian",
+			"Katian",
+			"Sandbian",
+			"Middle Ordovician",
+			"Darriwilian",
+			"Dapingian",
+			"Early Ordovician",
+			"Floian",
+			"Tremadocian",
+			"Cambrian",
+			"Furongian",
+			"Stage 10",
+			"Jiangshanian",
+			"Paibian",
+			"Guzhangian",
+			"Miaolingian",
+			"Drumian",
+			"Wuliuan",
+			"Stage 4",
+			"Series 2",
+			"Stage 3",
+			"Terreneuvian",
+			"Stage 2",
+			"Fortunian",
+			"Neoproterozoic",
+			"Ediacaran",
+			"Cryogenian",
+			"Tonian",
+			"Mesoproterozoic",
+			"Stenian",
+			"Ectasian",
+			"Calymmian",
+			"Paleoproterozoic",
+			"Statherian",
+			"Orosirian",
+			"Rhyacian",
+			"Siderian",
+			"Neoarchean",
+			"Mesoarchean",
+			"Paleoarchean",
+			"Eoarchean",
+			"Rancholabrean",
+			"Irvingtonian",
+			"Blancan",
+			"Hemphillian",
+			"Clarendonian",
+			"Barstovian",
+			"Hemingfordian",
+			"Arikareean",
+			"Whitneyan",
+			"Orellan",
+			"Chadronian",
+			"Duchesnean",
+			"Uintan",
+			"Bridgerian",
+			"Wasatchian",
+			"Clarkforkian",
+			"Tiffanian",
+			"Torrejonian",
+			"Puercan",
+			"Maastrichtian",
+			"Campanian",
+			"Santonian",
+			"Coniacian",
+			"Turonian",
+			"Cenomanian",
+			"Albian",
+			"Aptian",
+			"Barremian",
+			"Hauterivian",
+			"Valanginian",
+			"Berriasian",
+			"Tithonian",
+			"Kimmeridgian",
+			"Oxfordian",
+			"Callovian",
+			"Bathonian",
+			"Bajocian",
+			"Aalenian",
+			"Toarcian",
+			"Pliensbachian",
+			"Sinemurian",
+			"Hettangian",
+			"Rhaetian",
+			"Sevatian",
+			"Alaunian",
+			"Lacian",
+			"Tuvalian",
+			"Julian",
+			"Ladinian",
+			"Anisian",
+			"Spathian",
+			"Smithian",
+			"Dienerian",
+			"Griesbachian",
+			"Ochoan",
+			"Capitanian",
+			"Wordian",
+			"Roadian",
+			"Leonardian",
+			"Wolfcampian",
+			"Virgilian",
+			"Missourian",
+			"Desmoinesian",
+			"Atokan",
+			"Morrowan",
+			"Chesterian",
+			"Meramecian",
+			"Osagean",
+			"Kinderhookian",
+			"Chatauquan",
+			"Senecan",
+			"Erian",
+			"Ulsterian",
+			"Cayugan",
+			"Niagaran",
+			"Alexandrian",
+			"Gamachian",
+			"Richmondian",
+			"Maysvillian",
+			"Edenian",
+			"Mohawkian",
+			"Whiterock",
+			"Blackhillsian",
+			"Tulean",
+			"Stairsian",
+			"Skullrockian",
+			"Sunwaptan",
+			"Steptoean",
+			"Marjuman",
+			"Topazan",
+			"Delamaran",
+			"Dyeran",
+			"Montezuman",
+			"Begadean",
+			"Hadrynian"
+		 };
+		public static ObservableCollection<string> Ages {
+			get {
+				return ages;
+			}
+		}
 	}
 }

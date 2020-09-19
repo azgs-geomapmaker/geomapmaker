@@ -34,10 +34,30 @@ namespace Geomapmaker.Models {
 
 		public string Symbol { get; set; }
 
-		public string AreaFillRGB { get; set; }
+		public string AreaFillRGB {
+			//hexcolor is the primary color holder, and is bound to the view. AreaFilleRGB just reformats that into xxx;xxx;xxx.
+			get {
+				int r = Convert.ToInt32(hexcolor.Substring(1, 2), 16);
+				int g = Convert.ToInt32(hexcolor.Substring(3, 2), 16);
+				int b = Convert.ToInt32(hexcolor.Substring(5, 2), 16);
+				return r + ";" + g + ";" + b;
+			}
+		}
 
-		public string hexcolor { get; set; }
-
+		private string _hexcolor;
+		public string hexcolor { 
+			//Depending on whether hexcolor is assigned from the database or from the view, it may have an alpha channel.
+			//We don't want that. So, if it exists, we get rid of it in the get.
+			get {
+				return _hexcolor == null ? null :
+					_hexcolor.Length == 9 ? "#" + _hexcolor.Substring(3, 6) :
+											"#" + _hexcolor.Substring(1, 6);
+			}
+			set {
+				_hexcolor = value;
+			}
+		}
+		
 		public string DescriptionSourceID { get; set; }
 
 		public string GeoMaterial { get; set; }

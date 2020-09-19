@@ -71,11 +71,13 @@
 					<StackPanel Orientation="Horizontal" Margin="10,-8,0,5">
 						<StackPanel>
 							<Label x:Name="OlderIntervalLabel" Margin="-4,0,0,0" Content="Older Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
-							<TextBox x:Name="OlderIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />
+							<!--<TextBox x:Name="OlderIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
+							<ComboBox x:Name="OlderIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectOlderInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
 						</StackPanel>
 						<StackPanel>
 							<Label x:Name="YoungerIntervalLabel" Margin="-4,0,0,0" Content="Younger Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
-							<TextBox x:Name="YoungerIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />
+							<!--<TextBox x:Name="YoungerIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
+							<ComboBox x:Name="YoungerIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectYoungerInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
 						</StackPanel>
 					</StackPanel>
 					<Label x:Name="RelativeAgeLabel" Content="Relative Age" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
@@ -90,13 +92,15 @@
 					<TextBox x:Name="LabelTextBox" Text="{Binding SelectedMapUnit.Label}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 					<Label x:Name="SymbolLabel" Content="Symbol" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
 					<TextBox x:Name="SymbolTextBox" Text="{Binding SelectedMapUnit.Symbol}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="AreaFillRGBLabel" Content="Area Fill RGB" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+					<Label x:Name="ColorLabel" Content="Color" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 					<!--
 					<TextBox x:Name="AreaFillRGBTextBox" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 					-->
-					<wpftk:ColorPicker Name="ColorPicker1" Margin="0,0,0,5" Height="25" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" DisplayColorAndName="True"  ShowDropDownButton="False"/>
+					<wpftk:ColorPicker Name="ColorPicker1" Margin="0,0,0,5" Height="25" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColor="{Binding SelectedMapUnit.hexcolor}" DisplayColorAndName="True"  ShowDropDownButton="False" UsingAlphaChannel="False"/>
+					<!--
 					<Label x:Name="HexColorLabel" Content="Hex Color" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 					<TextBox x:Name="HexColorTextBox" Text="{Binding SelectedMapUnit.HexColor}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+					-->
 					<Label x:Name="DescriptionSourceLabel" Content="Description Source" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 					<TextBox x:Name="DescriptionSourceTextBox" Text="{Binding SelectedMapUnit.DescriptionSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 					<Label x:Name="GeoMaterialLabel" Content="GeoMaterial " HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
@@ -105,7 +109,7 @@
 					<TextBox x:Name="GeoMaterialConfidenceTextBox" Text="{Binding SelectedMapUnit.GeoMaterialConfidence}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
 						<Button Padding="5" Click="ResetButton_Click">Reset</Button>
-						<Button Padding="5" Margin="20,0,0,0" Click="SubmitButton_Click">Submit</Button>
+						<Button Padding="5" Margin="20,0,0,0" Click="SubmitButton_Click" IsEnabled="{Binding IsValid}">Submit</Button>
 					</StackPanel>
 			</StackPanel>
 			</ScrollViewer>

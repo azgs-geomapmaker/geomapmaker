@@ -45,6 +45,23 @@ namespace Geomapmaker {
 			pane.Hide();
 		}
 
+		public Boolean IsValid {
+			get {
+				return true;
+				/*
+					SelectedMapUnit != null &&
+					SelectedMapUnit.MU != null && SelectedMapUnit.MU.Trim() != "" &&
+					SelectedMapUnit.Name != null && SelectedMapUnit.Name.Trim() != "";// &&
+					//SelectedMapUnit.Age != null && SelectedMapUnit.Age.Trim() != "";//&&
+					//SelectedMapUnit.HierarchyKey != null && SelectedMapUnit.HierarchyKey.Trim() != "" &&
+					//SelectedMapUnit.ParagraphStyle != null && SelectedMapUnit.ParagraphStyle.Trim() != "" &&
+					//SelectedMapUnit.Symbol != null && SelectedMapUnit.Symbol.Trim() != "" &&
+					//SelectedMapUnit.DescriptionSourceID != null && SelectedMapUnit.DescriptionSourceID.Trim() != "" &&
+				*/
+			}
+		}
+
+
 		/// <summary>
 		/// Text shown near the top of the DockPane.
 		/// </summary>
@@ -90,6 +107,9 @@ namespace Geomapmaker {
 				}
 			}
 		}
+
+		public string SelectedOlderInterval { get; set; }
+		public string SelectedYoungerInterval { get; set; }
 
 		//This is to capture the user entering a new map unit (not in the list)
 		private string userEnteredMapUnit;
@@ -156,7 +176,7 @@ namespace Geomapmaker {
 											row["Label"] = mapUnit.Label;
 											row["Symbol"] = mapUnit.Symbol;
 											row["AreaFillRGB"] = mapUnit.AreaFillRGB;
-											//row["hexcolor"] = mapUnit.hexcolor;
+											row["hexcolor"] = mapUnit.hexcolor;
 											row["DescriptionSourceID"] = mapUnit.DescriptionSourceID;
 											row["GeoMaterial"] = mapUnit.GeoMaterial;
 											row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
@@ -189,7 +209,7 @@ namespace Geomapmaker {
 									rowBuffer["Label"] = mapUnit.Label;
 									rowBuffer["Symbol"] = mapUnit.Symbol;
 									rowBuffer["AreaFillRGB"] = mapUnit.AreaFillRGB;
-									//rowBuffer["hexcolor"] = mapUnit.hexcolor;
+									rowBuffer["hexcolor"] = mapUnit.hexcolor;
 									rowBuffer["DescriptionSourceID"] = mapUnit.DescriptionSourceID;
 									rowBuffer["GeoMaterial"] = mapUnit.GeoMaterial;
 									rowBuffer["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
