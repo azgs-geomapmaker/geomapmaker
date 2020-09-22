@@ -15,104 +15,118 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-		<Grid>
+	<UserControl.CommandBindings>
+		<CommandBinding 
+			Command="ApplicationCommands.Save"
+			Executed="SaveCommandHandler"
+			CanExecute="SaveCanExecuteHandler"
+        />
+		<CommandBinding 
+			Command="ApplicationCommands.New"
+			Executed="NewCommandHandler"
+        />
+	</UserControl.CommandBindings>
+
+	<Grid>
 		
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-			<DockPanel Grid.Row="0" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-				<TextBlock Grid.Column="1" Text="{Binding SubHeading}" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
-					<TextBlock.ToolTip>
-						<WrapPanel Orientation="Vertical" MaxWidth="300">
-							<TextBlock Text="{Binding SubHeading}" TextWrapping="Wrap"/>
-						</WrapPanel>
-					</TextBlock.ToolTip>
-				</TextBlock>
-			</DockPanel>
+		<DockPanel Grid.Row="0" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
+			<TextBlock Grid.Column="1" Text="{Binding SubHeading}" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+				<TextBlock.ToolTip>
+					<WrapPanel Orientation="Vertical" MaxWidth="300">
+						<TextBlock Text="{Binding SubHeading}" TextWrapping="Wrap"/>
+					</WrapPanel>
+				</TextBlock.ToolTip>
+			</TextBlock>
+		</DockPanel>
 
-			<ScrollViewer Grid.Row="1" >
-				<StackPanel>
-					<Label x:Name="MapUnitLabel" Content="Map Unit" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-					<!--
-					<ComboBox x:Name="MapUnitTextBox" Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" DisplayMemberPath="MU" SelectedItem ="{Binding SelectedMapUnit}" Margin="0,0,0,5"  IsReadOnly="False" IsEditable="True"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					-->
-					<ComboBox 
-							x:Name="MapUnitTextBox" 
-							Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  
-							ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" 
-							DisplayMemberPath="MU" 
-							SelectedItem ="{Binding SelectedMapUnit}" 
-							Margin="0,0,0,5"  
-							IsReadOnly="False" 
-							IsEditable="True"  
-							HorizontalAlignment="Left" 
-							Height="25"  
-							VerticalAlignment="Top" 
-							Width="200" 
-							RenderTransformOrigin="1.027,0.111"/>
-				<!--	
-					<ComboBox x:Name="MUTestComboBox" Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}"  SelectedItem ="{Binding SelectedMapUnit}" Margin="0,0,0,5"  IsReadOnly="False" IsEditable="True"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111">
-					<ComboBox.ItemTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal">
-									<TextBlock Text="{Binding MU}" />
-								</StackPanel>
-							</DataTemplate>
-						</ComboBox.ItemTemplate>
-					</ComboBox>
-					-->
-					<Label x:Name="NameLabel"  Content="Name" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="NameTextBox" Margin="0,0,0,5" Text="{Binding SelectedMapUnit.Name}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="FullNameLabel" Content="Full Name" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="FullNameTextBox" Margin="0,0,0,5"  Text="{Binding SelectedMapUnit.FullName}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="AgeLabel" Content="Age" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<StackPanel Orientation="Horizontal" Margin="10,-8,0,5">
-						<StackPanel>
-							<Label x:Name="OlderIntervalLabel" Margin="-4,0,0,0" Content="Older Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
-							<!--<TextBox x:Name="OlderIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
-							<ComboBox x:Name="OlderIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectOlderInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
-						</StackPanel>
-						<StackPanel>
-							<Label x:Name="YoungerIntervalLabel" Margin="-4,0,0,0" Content="Younger Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
-							<!--<TextBox x:Name="YoungerIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
-							<ComboBox x:Name="YoungerIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectYoungerInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
-						</StackPanel>
+		<ScrollViewer Grid.Row="1" >
+			<StackPanel>
+				<Label x:Name="MapUnitLabel" Content="Map Unit" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<!--
+				<ComboBox x:Name="MapUnitTextBox" Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" DisplayMemberPath="MU" SelectedItem ="{Binding SelectedMapUnit}" Margin="0,0,0,5"  IsReadOnly="False" IsEditable="True"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				-->
+				<ComboBox 
+						x:Name="MapUnitTextBox" 
+						Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  
+						ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" 
+						DisplayMemberPath="MU" 
+						SelectedItem ="{Binding SelectedMapUnit}" 
+						Margin="0,0,0,5"  
+						IsReadOnly="False" 
+						IsEditable="True"  
+						HorizontalAlignment="Left" 
+						Height="25"  
+						VerticalAlignment="Top" 
+						Width="200" 
+						RenderTransformOrigin="1.027,0.111"/>
+			<!--	
+				<ComboBox x:Name="MUTestComboBox" Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}"  SelectedItem ="{Binding SelectedMapUnit}" Margin="0,0,0,5"  IsReadOnly="False" IsEditable="True"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111">
+				<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding MU}" />
+							</StackPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+				-->
+				<Label x:Name="NameLabel"  Content="Name" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="NameTextBox" Margin="0,0,0,5" Text="{Binding SelectedMapUnit.Name}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="FullNameLabel" Content="Full Name" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="FullNameTextBox" Margin="0,0,0,5"  Text="{Binding SelectedMapUnit.FullName}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="AgeLabel" Content="Age" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<StackPanel Orientation="Horizontal" Margin="10,-8,0,5">
+					<StackPanel>
+						<Label x:Name="OlderIntervalLabel" Margin="-4,0,0,0" Content="Older Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
+						<!--<TextBox x:Name="OlderIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
+						<ComboBox x:Name="OlderIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectOlderInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
 					</StackPanel>
-					<Label x:Name="RelativeAgeLabel" Content="Relative Age" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="RelativeAgeTextBox" Text="{Binding SelectedMapUnit.RelativeAge}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="DescriptionLabel"  Content="Description" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="DescriptionTextBox" Text="{Binding SelectedMapUnit.Description}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="HierarchyKeyLabel" Content="Hierarchy Key" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="HierarchyKeyTextBox" Text="{Binding SelectedMapUnit.HierarchyKey}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="ParagraphStyleLabel" Content="Paragraph Style" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="ParagraphStyleTextBox" Text="{Binding SelectedMapUnit.ParagraphStyle}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="LabelLabel" Content="Label" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="LabelTextBox" Text="{Binding SelectedMapUnit.Label}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="SymbolLabel" Content="Symbol" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="SymbolTextBox" Text="{Binding SelectedMapUnit.Symbol}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="ColorLabel" Content="Color" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-					<!--
-					<TextBox x:Name="AreaFillRGBTextBox" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					-->
-					<wpftk:ColorPicker Name="ColorPicker1" Margin="0,0,0,5" Height="25" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColor="{Binding SelectedMapUnit.hexcolor}" DisplayColorAndName="True"  ShowDropDownButton="False" UsingAlphaChannel="False"/>
-					<!--
-					<Label x:Name="HexColorLabel" Content="Hex Color" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="HexColorTextBox" Text="{Binding SelectedMapUnit.HexColor}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					-->
-					<Label x:Name="DescriptionSourceLabel" Content="Description Source" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="DescriptionSourceTextBox" Text="{Binding SelectedMapUnit.DescriptionSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="GeoMaterialLabel" Content="GeoMaterial " HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-					<ComboBox x:Name="GeoMaterialComboBox" Margin="0,0,0,5"  IsReadOnly="True" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<Label x:Name="GeoMaterialConfidenceLabel" Content="GeoMaterial Confidence" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-					<TextBox x:Name="GeoMaterialConfidenceTextBox" Text="{Binding SelectedMapUnit.GeoMaterialConfidence}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
-						<Button Padding="5" Click="ResetButton_Click">Reset</Button>
-						<Button Padding="5" Margin="20,0,0,0" Click="SubmitButton_Click" IsEnabled="{Binding IsValid}">Submit</Button>
+					<StackPanel>
+						<Label x:Name="YoungerIntervalLabel" Margin="-4,0,0,0" Content="Younger Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
+						<!--<TextBox x:Name="YoungerIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
+						<ComboBox x:Name="YoungerIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectYoungerInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
 					</StackPanel>
-			</StackPanel>
-			</ScrollViewer>
-		</Grid>
+				</StackPanel>
+				<Label x:Name="RelativeAgeLabel" Content="Relative Age" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="RelativeAgeTextBox" Text="{Binding SelectedMapUnit.RelativeAge}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="DescriptionLabel"  Content="Description" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="DescriptionTextBox" Text="{Binding SelectedMapUnit.Description}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="HierarchyKeyLabel" Content="Hierarchy Key" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="HierarchyKeyTextBox" Text="{Binding SelectedMapUnit.HierarchyKey}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="ParagraphStyleLabel" Content="Paragraph Style" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="ParagraphStyleTextBox" Text="{Binding SelectedMapUnit.ParagraphStyle}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="LabelLabel" Content="Label" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="LabelTextBox" Text="{Binding SelectedMapUnit.Label}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="SymbolLabel" Content="Symbol" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="SymbolTextBox" Text="{Binding SelectedMapUnit.Symbol}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="ColorLabel" Content="Color" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<!--
+				<TextBox x:Name="AreaFillRGBTextBox" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				-->
+				<wpftk:ColorPicker Name="ColorPicker1" Margin="0,0,0,5" Height="25" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColor="{Binding SelectedMapUnit.hexcolor}" DisplayColorAndName="True"  ShowDropDownButton="False" UsingAlphaChannel="False"/>
+				<!--
+				<Label x:Name="HexColorLabel" Content="Hex Color" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="HexColorTextBox" Text="{Binding SelectedMapUnit.HexColor}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				-->
+				<Label x:Name="DescriptionSourceLabel" Content="Description Source" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="DescriptionSourceTextBox" Text="{Binding SelectedMapUnit.DescriptionSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="GeoMaterialLabel" Content="GeoMaterial " HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<ComboBox x:Name="GeoMaterialComboBox" Margin="0,0,0,5"  IsReadOnly="True" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="GeoMaterialConfidenceLabel" Content="GeoMaterial Confidence" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="GeoMaterialConfidenceTextBox" Text="{Binding SelectedMapUnit.GeoMaterialConfidence}" Margin="0,0,0,5"  HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+					<!--<Button Padding="5" Click="ResetButton_Click">Reset</Button>
+					<Button Padding="5" Margin="20,0,0,0" Click="SubmitButton_Click" IsEnabled="{Binding IsValid}">Submit</Button>-->
+					<Button Padding="5" Command="ApplicationCommands.New">Reset</Button>
+					<Button Padding="5" Margin="20,0,0,0" Command="ApplicationCommands.Save">Submit</Button>
+				</StackPanel>
+		</StackPanel>
+		</ScrollViewer>
+	</Grid>
 
 </UserControl>

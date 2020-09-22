@@ -62,6 +62,7 @@ namespace Geomapmaker {
 					QueryDef mapUnitsQDef = new QueryDef {
 						Tables = "DescriptionOfMapUnits",
 						//WhereClause = "ADACOMPLY = 'Yes'",
+						PostfixClause = "order by objectid"
 					};
 
 					using (RowCursor rowCursor = geodatabase.Evaluate(mapUnitsQDef, false)) {

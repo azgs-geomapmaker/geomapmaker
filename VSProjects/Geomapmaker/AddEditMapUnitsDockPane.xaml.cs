@@ -31,6 +31,7 @@ namespace Geomapmaker {
 		 * Someday, take a look at https://docs.microsoft.com/en-us/archive/msdn-magazine/2013/may/mvvm-commands-relaycommands-and-eventtocommand
 		 * for a start. In the meantime, I'm grabbing a handle on the view model here when I need it (gasp!) and going for it.
 		 **/
+		/*
 		private void ResetButton_Click(object sender, RoutedEventArgs e) {
 			MessageBox.Show("Reset");
 			var vm = (AddEditMapUnitsDockPaneViewModel)this.DataContext;
@@ -44,6 +45,32 @@ namespace Geomapmaker {
 			await vm.saveMapUnit(vm.SelectedMapUnit);
 			MapUnitTextBox.SelectedIndex = -1;
 			MapUnitTextBox.Text = null;
+		}
+		*/
+
+		private async void NewCommandHandler(object sender, ExecutedRoutedEventArgs e) {
+			// Calls a method to close the file and release resources.
+			var vm = (AddEditMapUnitsDockPaneViewModel)this.DataContext;
+			vm.SelectedMapUnit = null;
+		}
+
+		private async void SaveCommandHandler(object sender, ExecutedRoutedEventArgs e) {
+			// Calls a method to close the file and release resources.
+			var vm = (AddEditMapUnitsDockPaneViewModel)this.DataContext;
+			await vm.saveMapUnit(vm.SelectedMapUnit);
+		}
+
+		private void SaveCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
+			// Call a method to determine if there is a file open.
+			// If there is a file open, then set CanExecute to true.
+			var vm = (AddEditMapUnitsDockPaneViewModel)this.DataContext;
+			if (vm != null && vm.IsValid) {
+				e.CanExecute = true;
+			}
+			// if there is not a file open, then set CanExecute to false.
+			else {
+				e.CanExecute = false;
+			}
 		}
 
 		/*

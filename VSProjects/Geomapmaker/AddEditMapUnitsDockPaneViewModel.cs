@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
@@ -46,9 +47,11 @@ namespace Geomapmaker {
 		}
 
 		public Boolean IsValid {
+		//TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
+		//each of the properties used below. There must be a better way.
 			get {
-				return true;
-				/*
+				//return true;
+				return
 					SelectedMapUnit != null &&
 					SelectedMapUnit.MU != null && SelectedMapUnit.MU.Trim() != "" &&
 					SelectedMapUnit.Name != null && SelectedMapUnit.Name.Trim() != "";// &&
@@ -57,7 +60,7 @@ namespace Geomapmaker {
 					//SelectedMapUnit.ParagraphStyle != null && SelectedMapUnit.ParagraphStyle.Trim() != "" &&
 					//SelectedMapUnit.Symbol != null && SelectedMapUnit.Symbol.Trim() != "" &&
 					//SelectedMapUnit.DescriptionSourceID != null && SelectedMapUnit.DescriptionSourceID.Trim() != "" &&
-				*/
+				
 			}
 		}
 
