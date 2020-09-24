@@ -19,7 +19,26 @@ namespace Geomapmaker.Models {
 		//public string fullName;
 		public string FullName { get; set; }
 
-		public string Age { get; set; }
+		//TODO: This age logic, and the older/younger properties that drive it, should probably be moved into the 
+		//view model. 
+		public string Age { 
+			get {
+				var older = OlderInterval == null ? "" : OlderInterval;
+				var younger = YoungerInterval == null ? "" : YoungerInterval;
+				return older != "" || younger != "" ? older + "-" + younger : null;
+			} 
+			set {
+				if (value != null) {
+					var intervals = value.Split('-');
+					OlderInterval = intervals.Length > 0 ? intervals[0] : null;
+					YoungerInterval = intervals.Length > 1 ? intervals[1] : null;
+				}
+			}
+		}
+
+		public string OlderInterval { get; set; }
+
+		public string YoungerInterval { get; set; }
 
 		public string RelativeAge { get; set; }
 
