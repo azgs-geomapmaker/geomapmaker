@@ -20,7 +20,7 @@ namespace Geomapmaker.Models {
 		public string FullName { get; set; }
 
 		//TODO: This age logic, and the older/younger properties that drive it, should probably be moved into the 
-		//view model. 
+		//view model. Addendum: I tried this and got it working. But it felt messy to me. I think Imma leave it here afterall.
 		public string Age { 
 			get {
 				var older = OlderInterval == null ? "" : OlderInterval;

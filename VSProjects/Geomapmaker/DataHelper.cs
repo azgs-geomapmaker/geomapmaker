@@ -78,7 +78,7 @@ namespace Geomapmaker {
 								mapUnit.Name = row["Name"].ToString();
 								mapUnit.FullName = row["FullName"] == null ? null : row["FullName"].ToString();
 								mapUnit.Age = row["Age"] == null ? null : row["Age"].ToString(); //TODO: more formatting here
-								//mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
+																								 //mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
 								mapUnit.Description = row["Description"] == null ? null : row["Description"].ToString();
 								mapUnit.HierarchyKey = row["HierarchyKey"].ToString();
 								//mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
@@ -88,7 +88,7 @@ namespace Geomapmaker {
 								mapUnit.hexcolor = row["hexcolor"] == null ? null : row["hexcolor"].ToString();
 								//mapUnit.Color = row["hexcolor"];
 								//mapUnit.DescriptionSourceID = row["DescriptionSourceID"].ToString();
-								//mapUnit.GeoMaterial = row["GeoMaterial"].ToString();
+								mapUnit.GeoMaterial = row["GeoMaterial"] == null ? null : row["GeoMaterial"].ToString();
 								mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"] == null ? null : row["GeoMaterialConfidence"].ToString();
 
 								mapUnits.Add(mapUnit);
@@ -128,7 +128,7 @@ namespace Geomapmaker {
 			ProjectSelectedHandler?.Invoke();
 		}
 
-
+		//TODO: Might be nice to load this from a table in geomapmaker.public
 		private static ObservableCollection<string> ages = new ObservableCollection<string>() {
 			"Cenozoic",
 			"Holocene",
@@ -395,5 +395,126 @@ namespace Geomapmaker {
 				return ages;
 			}
 		}
+
+		private static ObservableCollection<string> geoMaterials = new ObservableCollection<string>() {
+			"Sedimentary material",
+			"Sediment",
+			"Clastic sediment",
+			"Sand and gravel of unspecified origin",
+			"Silt and clay of unspecified origin",
+			"Alluvial sediment",
+			"Alluvial sediment, mostly coarse-grained",
+			"Alluvial sediment, mostly fine-grained",
+			"Glacial till",
+			"Glacial till, mostly sandy",
+			"Glacial till, mostly silty",
+			"Glacial till, mostly clayey",
+			"Ice-contact and ice-marginal sediment",
+			"Ice-contact and ice-marginal sediment, mostly coarse-grained",
+			"Ice-contact and ice-marginal sediment, mostly fine-grained",
+			"Eolian sediment",
+			"Dune sand",
+			"Loess",
+			"Lacustrine sediment",
+			"Lacustrine sediment, mostly coarse-grained",
+			"Lacustrine sediment, mostly fine-grained",
+			"Playa sediment",
+			"Coastal zone sediment",
+			"Coastal zone sediment, mostly coarse-grained",
+			"Coastal zone sediment, mostly fine-grained",
+			"Marine sediment",
+			"Marine sediment, mostly coarse-grained",
+			"Marine sediment, mostly fine-grained",
+			"Mass movement sediment",
+			"Colluvium and other widespread mass-movement sediment",
+			"Debris flows, landslides, and other localized mass-movement sediment",
+			"Residual material",
+			"Carbonate sediment",
+			"Peat and muck",
+			"Sedimentary rock",
+			"Clastic sedimentary rock",
+			"Conglomerate",
+			"Sandstone",
+			"Mostly sandstone",
+			"Sandstone and mudstone",
+			"Mudstone",
+			"Mostly mudstone",
+			"Carbonate rock",
+			"Limestone",
+			"Dolomite",
+			"Mostly carbonate rock",
+			"Chert",
+			"Evaporitic rock",
+			"Iron-rich sedimentary rock",
+			"Coal and lignite",
+			"Sedimentary and extrusive igneous material",
+			"Igneous rock",
+			"Extrusive igneous material",
+			"Volcaniclastic (fragmental) material",
+			"Pyroclastic flows",
+			"Felsic-composition pyroclastic flows",
+			"Intermediate-composition pyroclastic flows",
+			"Mafic-composition pyroclastic flows",
+			"Air-fall tephra",
+			"Felsic-composition air-fall tephra",
+			"Intermediate-composition air-fall tephra",
+			"Mafic-composition air-fall tephra",
+			"Lava flows",
+			"Felsic-composition lava flows",
+			"Intermediate-composition lava flows",
+			"Mafic-composition lava flows",
+			"Volcanic mass flow",
+			"Intrusive igneous rock",
+			"Coarse-grained intrusive igneous rock",
+			"Coarse-grained, felsic-composition intrusive igneous rock",
+			"Coarse-grained, intermediate-composition intrusive igneous rock",
+			"Coarse-grained, mafic-composition intrusive igneous rock",
+			"Ultramafic intrusive igneous rock",
+			"Fine-grained intrusive igneous rock",
+			"Fine-grained, felsic-composition intrusive igneous rock",
+			"Fine-grained, intermediate-composition intrusive igneous rock",
+			"Fine-grained, mafic-composition intrusive igneous rock",
+			"Exotic-composition intrusive igneous rock",
+			"Igneous and metamorphic rock",
+			"Metamorphic rock",
+			"Regional metamorphic rock, of unspecified origin",
+			"Lower-grade metamorphic rock, of unspecified origin",
+			"Medium and high-grade regional metamorphic rock, of unspecified origin",
+			"Contact-metamorphic rock",
+			"Deformation-related metamorphic rock",
+			"Metasedimentary rock",
+			"Slate and phyllite, of sedimentary-rock origin",
+			"Schist and gneiss, of sedimentary-rock origin",
+			"Meta-carbonate rock",
+			"Quartzite",
+			"Metaigneous rock",
+			"Meta-ultramafic rock",
+			"Meta-mafic rock",
+			"Meta-felsic and intermediate rock",
+			"Meta-volcaniclastic rock",
+			"Other materials",
+			"Rock and sediment",
+			"Rock",
+			"“Made” or human-engineered land",
+			"Water or ice",
+			"Unmapped area"
+		};
+		public static ObservableCollection<string> GeoMaterials {
+			get {
+				return geoMaterials;
+			}
+		}
+
+		private static ObservableCollection<string> geoMaterialConfidences = new ObservableCollection<string>() {
+			"High",
+			"Medium",
+			"Low"
+		};
+		public static ObservableCollection<string> GeoMaterialConfidences {
+			get {
+				return geoMaterialConfidences;
+			}
+		}
+
 	}
 }
