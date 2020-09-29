@@ -163,14 +163,17 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddEditMapUnitsDockPane.xaml.cs">
+    <Compile Include="Views\AddEditMapUnitsDockPane.xaml.cs">
       <DependentUpon>AddEditMapUnitsDockPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddEditMapUnitsDockPaneViewModel.cs" />
+    <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
     <Compile Include="DarkImages\GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
     <Compile Include="LoginButton.cs" />
-    <Compile Include="LoginDialogProWindow.xaml.cs" />
+    <!--<Compile Include="Views\LoginDialogProWindow.xaml.cs" />-->
+    <Compile Include="Views\LoginDialogProWindow.xaml.cs">
+		<DependentUpon>LoginDialogProWindow.xaml</DependentUpon>
+	</Compile>
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="MapUnitsComboBox.cs" />
     <Compile Include="Models\MapUnit.cs" />
@@ -183,11 +186,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AddEditMapUnitsDockPane.xaml">
+    <Page Include="Views\AddEditMapUnitsDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginDialogProWindow.xaml">
+    <Page Include="Views\LoginDialogProWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
