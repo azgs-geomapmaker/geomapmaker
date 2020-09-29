@@ -169,16 +169,15 @@
     <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
     <Compile Include="DarkImages\GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
-    <Compile Include="LoginButton.cs" />
+    <Compile Include="RibbonElements\LoginButton.cs" />
     <!--<Compile Include="Views\LoginDialogProWindow.xaml.cs" />-->
     <Compile Include="Views\LoginDialogProWindow.xaml.cs">
-		<DependentUpon>LoginDialogProWindow.xaml</DependentUpon>
-	</Compile>
+      <DependentUpon>LoginDialogProWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GeomapmakerModule.cs" />
-    <Compile Include="MapUnitsComboBox.cs" />
     <Compile Include="Models\MapUnit.cs" />
-    <Compile Include="ProjectComboBoxItem.cs" />
-    <Compile Include="ProjectsComboBox.cs" />
+    <Compile Include="RibbonElements\ProjectComboBoxItem.cs" />
+    <Compile Include="RibbonElements\ProjectsComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

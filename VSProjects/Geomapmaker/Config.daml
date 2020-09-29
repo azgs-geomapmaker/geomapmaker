@@ -30,9 +30,11 @@
           <comboBox refID="Geomapmaker_ProjectsComboBox" />
           <button refID="Geomapmaker_AddEditMapUnitsDockPane_ShowButton" size="large" />
         </group>
+        <!--
         <group id="Geomapmaker_Project" caption="Project">
           <comboBox refID="Geomapmaker_MapUnitsComboBox" />
         </group>
+        -->
       </groups>
       <controls>
         <!-- add your controls here -->
