@@ -1,109 +1,116 @@
 ﻿<ArcGIS defaultAssembly="Geomapmaker.dll" defaultNamespace="Geomapmaker" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-    <AddInInfo id="{d2f8a816-8ba3-469e-914b-03839626077b}" version="1.0" desktopVersion="2.6.24783">
-        <Name>Geomapmaker</Name>
-        <Description>Geomapmaker description</Description>
-        <Image>Images\AddinDesktop32.png</Image>
-        <Author>Douglas</Author>
-        <Company>AZGS</Company>
-        <Date>8/10/2020 4:07:25 PM</Date>
-        <Subject>Framework</Subject>
-        <!-- Note subject can be one or more of these topics:
+  <AddInInfo id="{d2f8a816-8ba3-469e-914b-03839626077b}" version="1.0" desktopVersion="2.6.24783">
+    <Name>Geomapmaker</Name>
+    <Description>Geomapmaker description</Description>
+    <Image>Images\AddinDesktop32.png</Image>
+    <Author>Douglas</Author>
+    <Company>AZGS</Company>
+    <Date>8/10/2020 4:07:25 PM</Date>
+    <Subject>Framework</Subject>
+    <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
-    </AddInInfo>
-    <Configuration appName="Geomapmaker">
-        <ConfigurationManager className="GeomapmakerConfiguration" />
-    </Configuration>
-    <modules>
-        <insertModule id="Geomapmaker_Module" className="GeomapmakerModule" autoLoad="false" caption="GeomapmakerModule">
-            <!-- uncomment to have the control hosted on a separate tab-->
-            <tabs>
-                <tab id="AZGS_Tab" caption="AZGS">
-                    <group refID="Geomapmaker_Admin" />
-                    <group refID="Geomapmaker_Project" />
-                </tab>
-            </tabs>
-            <groups>
-                <!-- comment this out if you have no controls on the Addin tab to avoid
+  </AddInInfo>
+  <Configuration appName="Geomapmaker">
+    <ConfigurationManager className="GeomapmakerConfiguration" />
+  </Configuration>
+  <modules>
+    <insertModule id="Geomapmaker_Module" className="GeomapmakerModule" autoLoad="false" caption="GeomapmakerModule">
+      <!-- uncomment to have the control hosted on a separate tab-->
+      <tabs>
+        <tab id="AZGS_Tab" caption="AZGS">
+          <group refID="Geomapmaker_Admin" />
+          <group refID="Geomapmaker_Project" />
+        </tab>
+      </tabs>
+      <groups>
+        <!-- comment this out if you have no controls on the Addin tab to avoid
                       an empty group-->
-                <group id="Geomapmaker_Admin" caption="Admin">
-                    <button refID="Geomapmaker_LoginButton" size="large" />
-                    <comboBox refID="Geomapmaker_ProjectsComboBox" />
-                </group>
-                <group id="Geomapmaker_Project" caption="Project">
-                        <!--<tool refID="Geomapmaker_MapUnitPolyAddTool" size="large" />-->
-                        <!--<button refID="Geomapmaker_Button1" size="large" />-->
-			            <buttonPalette refID="MapUnitPalette" size="large"/>
-                        <toolPalette refID="MapUnitPolyToolPalette" size="large" />
-                </group>
-            </groups>
-            <controls>
-                <!-- add your controls here -->
-                <button id="Geomapmaker_LoginButton" caption="Login" className="LoginButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png">
-                    <tooltip heading="Tooltip Heading">
+        <group id="Geomapmaker_Admin" caption="Admin">
+          <button refID="Geomapmaker_LoginButton" size="large" />
+          <comboBox refID="Geomapmaker_ProjectsComboBox" />
+          <!--<button refID="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" size="large" />-->
+        </group>
+        <group id="Geomapmaker_Project" caption="Project">
+          <!--<tool refID="Geomapmaker_MapUnitPolyAddTool" size="large" />-->
+          <!--<button refID="Geomapmaker_Button1" size="large" />-->
+          <buttonPalette refID="MapUnitPalette" size="large" />
+          <toolPalette refID="MapUnitPolyToolPalette" size="large" />
+        </group>
+      </groups>
+      <controls>
+        <!-- add your controls here -->
+        <button id="Geomapmaker_LoginButton" caption="Login" className="LoginButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png">
+          <tooltip heading="Tooltip Heading">
                     Tooltip text<disabledText /></tooltip>
-                </button>
-                <comboBox id="Geomapmaker_ProjectsComboBox" caption="Projects" className="ProjectsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" condition="userLoginCondition">
-                    <tooltip heading="Tooltip Heading">
+        </button>
+        <comboBox id="Geomapmaker_ProjectsComboBox" caption="Projects" className="ProjectsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" condition="userLoginCondition">
+          <tooltip heading="Tooltip Heading">
                     Select a project to work on<disabledText /></tooltip>
-                </comboBox>
-                <!-- moved to DockPane
+        </comboBox>
+        <!-- moved to DockPane
                 <comboBox id="Geomapmaker_MapUnitsComboBox" caption="Map Units" className="MapUnitsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="true" isReadOnly="false" resizable="true" condition="projectSelectedCondition">
                     <tooltip heading="Tooltip Heading">Add/Edit Map Units<disabledText /></tooltip>
                 </comboBox>
                 -->
-                <!--
+        <!--
                 Now triggering this from Geomapmaker_MapUnitsComboBox
                 <button id="Geomapmaker_AddEditMapUnitsDockPane_ShowButton" caption="Show AddEditMapUnitsDockPane" className="AddEditMapUnitsDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="projectSelectedCondition">
                     <tooltip heading="Show Dockpane">Show Dockpane<disabledText /></tooltip>
                 </button>
                 -->
-                <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
-                    <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
-                    <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
-                    <content guid="17a27ef5-1084-4d46-abc8-11641bc5b871" />
-                </tool>
-                <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
-                    <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
-                </tool>
-                <button id="Geomapmaker_AddMapUnitsButton" caption="Add Map Units" className="AddMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="projectSelectedCondition">
-                    <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
-                </button>
-                <button id="Geomapmaker_EditMapUnitsButton" caption="Edit Map Units" className="EditMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="projectSelectedCondition">
-                    <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
-                </button>
-            </controls>
-            <palettes>
-	            <buttonPalette id="MapUnitPalette" caption="Map Units" extendedCaption="Add/Edit Map Units" itemsInRow="1" showItemCaption="true" keytip="WTF">
-		            <button refID="Geomapmaker_AddMapUnitsButton" />
-		            <button refID="Geomapmaker_EditMapUnitsButton" />
-	            </buttonPalette>
-	            <toolPalette id="MapUnitPolyToolPalette" caption="Map Unit Polys" showItemCaption="true" itemsInRow="1">
-                    <tool refID="Geomapmaker_MapUnitPolyAddTool" />
-                    <tool refID="Geomapmaker_MapUnitPolyEditTool" />
-                </toolPalette>
-            </palettes>
-            <dockPanes>
-                <dockPane id="Geomapmaker_AddEditMapUnitsDockPane" caption="Map Units" className="AddEditMapUnitsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
-                    <content className="AddEditMapUnitsDockPaneView" />
-                </dockPane>
-            </dockPanes>
-        </insertModule>
-    </modules>
-    <conditions>
-        <insertCondition id="userLoginCondition">
-        <!-- TODO: should change this to something like userLoggedInAndMapLoaded-->
-            <and>
-                <state id="user_logged_in" />
-                <state id="esri_mapping_mapPane" />
-            </and>
-        </insertCondition>
-        <insertCondition id="projectSelectedCondition">
-            <!-- TODO: should change this to something like userLoggedInAndMapLoaded-->
-            <and>
-                <state id="user_logged_in" />
-                <state id="esri_mapping_mapPane" />
-                <state id="project_selected" />
-            </and>
-        </insertCondition>
-    </conditions>
+        <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
+          <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+          <content guid="17a27ef5-1084-4d46-abc8-11641bc5b871" />
+        </tool>
+        <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </tool>
+        <button id="Geomapmaker_AddMapUnitsButton" caption="Add Map Units" className="AddMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="projectSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_EditMapUnitsButton" caption="Edit Map Units" className="EditMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="projectSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
+          <tooltip heading="Show Dockpane">Show Dockpane<disabledText /></tooltip>
+        </button>
+      </controls>
+      <palettes>
+        <buttonPalette id="MapUnitPalette" caption="Map Units" extendedCaption="Add/Edit Map Units" itemsInRow="1" showItemCaption="true" keytip="WTF">
+          <button refID="Geomapmaker_AddMapUnitsButton" />
+          <button refID="Geomapmaker_EditMapUnitsButton" />
+        </buttonPalette>
+        <toolPalette id="MapUnitPolyToolPalette" caption="Map Unit Polys" showItemCaption="true" itemsInRow="1">
+          <tool refID="Geomapmaker_MapUnitPolyAddTool" />
+          <tool refID="Geomapmaker_MapUnitPolyEditTool" />
+        </toolPalette>
+      </palettes>
+      <dockPanes>
+        <dockPane id="Geomapmaker_AddEditMapUnitsDockPane" caption="Map Units" className="AddEditMapUnitsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
+          <content className="AddEditMapUnitsDockPaneView" />
+        </dockPane>
+        <dockPane id="Geomapmaker_AddEditMapUnitPolysDockPane" caption="Map Unit Polys" className="AddEditMapUnitPolysDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
+          <content className="AddEditMapUnitPolysDockPaneView" />
+        </dockPane>
+      </dockPanes>
+    </insertModule>
+  </modules>
+  <conditions>
+    <insertCondition id="userLoginCondition">
+      <!-- TODO: should change this to something like userLoggedInAndMapLoaded-->
+      <and>
+        <state id="user_logged_in" />
+        <state id="esri_mapping_mapPane" />
+      </and>
+    </insertCondition>
+    <insertCondition id="projectSelectedCondition">
+      <!-- TODO: should change this to something like userLoggedInAndMapLoaded-->
+      <and>
+        <state id="user_logged_in" />
+        <state id="esri_mapping_mapPane" />
+        <state id="project_selected" />
+      </and>
+    </insertCondition>
+  </conditions>
 </ArcGIS>

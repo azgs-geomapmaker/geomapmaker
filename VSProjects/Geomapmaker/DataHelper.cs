@@ -516,5 +516,16 @@ namespace Geomapmaker {
 			}
 		}
 
+		private static ObservableCollection<string> identityConfidences = new ObservableCollection<string>() {
+			"High",
+			"Medium",
+			"Low"
+		};
+		public static ObservableCollection<string> IdentityConfidences {
+			get {
+				return identityConfidences;
+			}
+		}
+
 	}
 }

@@ -1,0 +1,102 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Catalog;
+using ArcGIS.Desktop.Core;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Extensions;
+using ArcGIS.Desktop.Framework;
+using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Dialogs;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
+
+namespace Geomapmaker {
+	internal class AddEditMapUnitPolysDockPaneViewModel : DockPane {
+		private const string _dockPaneID = "Geomapmaker_AddEditMapUnitPolysDockPane";
+
+		protected AddEditMapUnitPolysDockPaneViewModel() { }
+
+		/// <summary>
+		/// Show the DockPane.
+		/// </summary>
+		internal static void Show() {
+			DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
+			if (pane == null)
+				return;
+			pane.Activate();
+		}
+
+		internal static void Hide() {
+			DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
+			if (pane == null)
+				return;
+			pane.Hide();
+		}
+
+		public Boolean IsValid {
+			//TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
+			//each of the properties used below. There must be a better way.
+			get {
+				//return true;
+
+				return
+					SelectedMapUnit != null &&
+					SelectedMapUnitPoly != null &&
+					SelectedMapUnitPoly.IdentityConfidence != null && SelectedMapUnitPoly.IdentityConfidence.Trim() != "";// &&
+					//SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
+			}
+		}
+
+		/// <summary>
+		/// Text shown near the top of the DockPane.
+		/// </summary>
+		private string _heading = "Map Unit Polys";
+		public string Heading {
+			get { return _heading; }
+			set {
+				SetProperty(ref _heading, value, () => Heading);
+			}
+		}
+
+		//public string SelectedMapUnit { get; set; }
+		private MapUnit selectedMapUnit;
+		public MapUnit SelectedMapUnit {
+			get => selectedMapUnit;
+			set {
+				SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
+			}
+		}
+
+
+		private MapUnitPoly selectedMapUnitPoly;
+		public MapUnitPoly SelectedMapUnitPoly {
+			get => selectedMapUnitPoly;
+			set {
+				//selectedMapUnit = value;
+				SetProperty(ref selectedMapUnitPoly, value, () => SelectedMapUnitPoly); //Have to do this to trigger stuff, I guess.
+			}
+		}
+
+		public async Task saveMapUnitPoly(/*MapUnitPoly mapUnitPoly*/) {
+			Debug.WriteLine("saveMapUnitPoly enter");
+			MessageBox.Show("Saving");
+		}
+
+		/// <summary>
+		/// Button implementation to show the DockPane.
+		/// </summary>
+		internal class AddEditMapUnitPolysDockPane_ShowButton : Button {
+			protected override void OnClick() {
+				AddEditMapUnitPolysDockPaneViewModel.Show();
+			}
+		}
+	}
+}

@@ -25,7 +25,12 @@ namespace Geomapmaker {
 		}
 
 		protected override Task OnToolActivateAsync(bool active) {
+			AddEditMapUnitPolysDockPaneViewModel.Show();
 			return base.OnToolActivateAsync(active);
+		}
+		protected override Task OnToolDeactivateAsync(bool hasMapViewChanged) {
+			AddEditMapUnitPolysDockPaneViewModel.Hide();
+			return base.OnToolDeactivateAsync(hasMapViewChanged);
 		}
 
 		protected override Task<bool> OnSketchCompleteAsync(Geometry geometry) {

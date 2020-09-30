@@ -163,6 +163,11 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\AddEditMapUnitPolysDockPane.xaml.cs">
+      <DependentUpon>AddEditMapUnitPolysDockPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AddEditMapUnitPolysDockPaneViewModel.cs" />
+    <Compile Include="Models\MapUnitPoly.cs" />
     <Compile Include="RibbonElements\AddMapUnitsButton.cs" />
     <Compile Include="Button1.cs" />
     <Compile Include="ButtonPalette1.cs" />
@@ -191,6 +196,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AddEditMapUnitPolysDockPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddEditMapUnitsDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
