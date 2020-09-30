@@ -20,6 +20,8 @@ using ArcGIS.Desktop.Mapping;
 namespace Geomapmaker {
 	internal class Button1 : Button {
 		protected override void OnClick() {
+            //AddEditMapUnitsDockPaneViewModel.Show();
+            /*
             //Testing how to activate map tool on button click. Looks like the ICommand route is the one
             var plugin = FrameworkApplication.GetPlugInWrapper("Geomapmaker_MapUnitPolyConstructionTool");
             if (plugin.Enabled) {
@@ -34,6 +36,7 @@ namespace Geomapmaker {
                     ((ICommand)plugin).Execute(null);
                 }
             }
+            */
         }
 	}
 }

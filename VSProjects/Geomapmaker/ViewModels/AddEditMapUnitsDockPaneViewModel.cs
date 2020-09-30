@@ -28,6 +28,7 @@ namespace Geomapmaker {
 			Debug.WriteLine("AddEditMapUnitsDockPaneViewModel constructor enter");
 		}
 
+
 		/// <summary>
 		/// Show the DockPane.
 		/// </summary>
@@ -247,6 +248,7 @@ namespace Geomapmaker {
 
 	}
 
+	/*
 	/// <summary>
 	/// Button implementation to show the DockPane.
 	/// </summary>
@@ -255,4 +257,5 @@ namespace Geomapmaker {
 			AddEditMapUnitsDockPaneViewModel.Show();
 		}
 	}
+	*/
 }

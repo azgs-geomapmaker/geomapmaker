@@ -104,7 +104,7 @@ namespace Geomapmaker {
                 AddEditMapUnitsDockPaneViewModel.Hide();
                 await openDatabase(collProps);
                 await DataHelper.populateMapUnits(); //TODO: maybe move this into openDatabase?
-                AddEditMapUnitsDockPaneViewModel.Show();
+                //AddEditMapUnitsDockPaneViewModel.Show();
             }
         }
 
