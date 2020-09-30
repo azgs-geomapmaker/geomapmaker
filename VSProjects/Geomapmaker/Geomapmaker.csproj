@@ -163,6 +163,10 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Button1.cs" />
+    <Compile Include="ButtonPalette1.cs" />
+    <Compile Include="MapUnitPolyAddTool.cs" />
+    <Compile Include="MapUnitPolyEditTool.cs" />
     <Compile Include="Views\AddEditMapUnitsDockPane.xaml.cs">
       <DependentUpon>AddEditMapUnitsDockPane.xaml</DependentUpon>
     </Compile>
