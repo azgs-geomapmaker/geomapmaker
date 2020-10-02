@@ -22,7 +22,10 @@ namespace Geomapmaker {
 	internal class AddEditMapUnitPolysDockPaneViewModel : DockPane {
 		private const string _dockPaneID = "Geomapmaker_AddEditMapUnitPolysDockPane";
 
-		protected AddEditMapUnitPolysDockPaneViewModel() { }
+		protected AddEditMapUnitPolysDockPaneViewModel() {
+			SelectedMapUnitPoly = new MapUnitPoly();
+			GeomapmakerModule.MapUnitPolysVM = this;
+		}
 
 		/// <summary>
 		/// Show the DockPane.
@@ -50,8 +53,10 @@ namespace Geomapmaker {
 				return
 					SelectedMapUnit != null &&
 					SelectedMapUnitPoly != null &&
-					SelectedMapUnitPoly.IdentityConfidence != null && SelectedMapUnitPoly.IdentityConfidence.Trim() != "";// &&
-					//SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
+					SelectedMapUnitPoly.IdentityConfidence != null && SelectedMapUnitPoly.IdentityConfidence.Trim() != "" &&
+					SelectedMapUnitPoly.Shape != null;// &&
+					//Shape != null;// &&
+												  //SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
 			}
 		}
 
@@ -80,7 +85,6 @@ namespace Geomapmaker {
 		public MapUnitPoly SelectedMapUnitPoly {
 			get => selectedMapUnitPoly;
 			set {
-				//selectedMapUnit = value;
 				SetProperty(ref selectedMapUnitPoly, value, () => SelectedMapUnitPoly); //Have to do this to trigger stuff, I guess.
 			}
 		}
@@ -88,6 +92,32 @@ namespace Geomapmaker {
 		public async Task saveMapUnitPoly(/*MapUnitPoly mapUnitPoly*/) {
 			Debug.WriteLine("saveMapUnitPoly enter");
 			MessageBox.Show("Saving");
+
+			//return ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
+
+				var polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+
+				//Define some default attribute values
+				Dictionary<string, object> attributes = new Dictionary<string, object>();
+
+				attributes["SHAPE"] = SelectedMapUnitPoly.Shape;//Geometry
+
+				attributes["MapUnit"] = SelectedMapUnit.MU;
+				attributes["IdentityConfidence"] = SelectedMapUnitPoly.IdentityConfidence;
+				attributes["Notes"] = SelectedMapUnitPoly.Notes;
+				//TODO: other fields
+
+				//Create the new feature
+				var op = new EditOperation();
+				op.Name = string.Format("Create {0}", "MapUnitPolys");
+				op.Create(polyLayer, attributes);
+				await op.ExecuteAsync();
+
+				if (!op.IsSucceeded) {
+					MessageBox.Show("Hogan's goat!");
+				}
+			//});
+
 		}
 
 		/// <summary>

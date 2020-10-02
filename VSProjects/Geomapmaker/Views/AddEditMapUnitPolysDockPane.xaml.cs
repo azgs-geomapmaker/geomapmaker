@@ -29,6 +29,7 @@ namespace Geomapmaker {
 			var vm = (AddEditMapUnitPolysDockPaneViewModel)this.DataContext;
 			vm.SelectedMapUnitPoly = new MapUnitPoly();
 			vm.SelectedMapUnit = null;
+			vm.SelectedMapUnitPoly.Shape = null;
 		}
 
 		private async void SaveCommandHandler(object sender, ExecutedRoutedEventArgs e) {

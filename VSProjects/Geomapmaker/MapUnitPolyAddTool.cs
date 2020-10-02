@@ -49,6 +49,15 @@ namespace Geomapmaker {
 		/// <param name="geometry">The geometry created by the sketch.</param>
 		/// <returns>A Task returning a Boolean indicating if the sketch complete event was successfully handled.</returns>
 		protected override Task<bool> OnSketchCompleteAsync(Geometry geometry) {
+			if (geometry == null) {
+				return Task.FromResult(false);
+			}
+
+			//TODO: This sets the geom. Need to implement save. Then refresh map
+			GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly.Shape = geometry;
+
+			return Task.FromResult(false);
+			/*
 			if (CurrentTemplate == null || geometry == null)
 				return Task.FromResult(false);
 
@@ -62,6 +71,7 @@ namespace Geomapmaker {
 
 			// Execute the operation
 			return createOperation.ExecuteAsync();
+			*/
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArcGIS.Core.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace Geomapmaker.Models {
 		public string Symbol { get; set; }
 		public string Notes { get; set; }
 		public string DataSource { get; set; }
+		public Geometry Shape { get; set; }
+
 	}
 }
