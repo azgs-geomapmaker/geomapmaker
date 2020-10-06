@@ -54,7 +54,8 @@ namespace Geomapmaker {
 			}
 
 			//TODO: This sets the geom. Need to implement save. Then refresh map
-			GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly.Shape = geometry;
+			//GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly.Shape = geometry;
+			GeomapmakerModule.MapUnitPolysVM.Shape = geometry;
 
 			return Task.FromResult(false);
 			/*

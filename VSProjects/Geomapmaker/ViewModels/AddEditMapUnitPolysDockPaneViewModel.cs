@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using System.Windows;
+using System.Windows.Input;
 using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
@@ -54,8 +56,8 @@ namespace Geomapmaker {
 					SelectedMapUnit != null &&
 					SelectedMapUnitPoly != null &&
 					SelectedMapUnitPoly.IdentityConfidence != null && SelectedMapUnitPoly.IdentityConfidence.Trim() != "" &&
-					SelectedMapUnitPoly.Shape != null;// &&
-					//Shape != null;// &&
+					//SelectedMapUnitPoly.Shape != null;// &&
+					Shape != null;// &&
 												  //SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
 			}
 		}
@@ -89,9 +91,28 @@ namespace Geomapmaker {
 			}
 		}
 
+		//private Geometry shape = null;
+		public Geometry Shape {
+			get => SelectedMapUnitPoly.Shape; //shape;
+			set {
+				//SetProperty(ref shape, value, () => Shape);
+				SelectedMapUnitPoly.Shape = value;
+				ShapeJson = value.ToJson();
+				CommandManager.InvalidateRequerySuggested(); //Force update of submit button
+			}
+		}
+
+		private string shapeJson = null;
+		public string ShapeJson {
+			get => shapeJson; 
+			set {
+				SetProperty(ref shapeJson, value, () => ShapeJson);
+			}
+		}
+
 		public async Task saveMapUnitPoly(/*MapUnitPoly mapUnitPoly*/) {
 			Debug.WriteLine("saveMapUnitPoly enter");
-			MessageBox.Show("Saving");
+			//MessageBox.Show("Saving");
 
 			//return ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
 

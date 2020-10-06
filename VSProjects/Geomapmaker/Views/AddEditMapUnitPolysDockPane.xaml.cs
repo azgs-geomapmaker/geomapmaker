@@ -36,6 +36,9 @@ namespace Geomapmaker {
 			// Calls a method to close the file and release resources.
 			var vm = (AddEditMapUnitPolysDockPaneViewModel)this.DataContext;
 			await vm.saveMapUnitPoly(/*vm.SelectedMapUnit*/);
+			vm.SelectedMapUnitPoly = new MapUnitPoly();
+			vm.SelectedMapUnit = null;
+			vm.SelectedMapUnitPoly.Shape = null;
 		}
 
 		private void SaveCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
