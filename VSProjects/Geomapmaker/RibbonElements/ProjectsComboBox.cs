@@ -150,6 +150,42 @@ namespace Geomapmaker {
                     DataHelper.connectionString = geodatabase.GetConnectionString();
                     Debug.WriteLine("DataHelper.connectionString set to " + DataHelper.connectionString);
 
+
+                    UniqueValueRendererDefinition renderer = new UniqueValueRendererDefinition();
+                    using (Table table = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits")) {
+
+                        QueryFilter queryFilter = new QueryFilter {
+                            //WhereClause = "COSTCTRN = 'Information Technology'",
+                            SubFields = "MapUnit, AreaFillRGB",
+                            //PostfixClause = "ORDER BY OFFICE"
+                        };
+
+                        List<CIMColor> colors = new List<CIMColor>();
+                        List<String> mapUnits = new List<String>();
+                        using (RowCursor rowCursor = table.Search(queryFilter, false)) {
+                            while (rowCursor.MoveNext()) {
+                                using (Row row = rowCursor.Current) {
+                                    string mu = Convert.ToString(row["MapUnit"]);
+                                    string colorString = Convert.ToString(row["AreaFillRGB"]);
+                                    string[] strVals = colorString.Split(';');
+                                    double[] values = new double[] { 49, 237, 28, 1 }; //default ugly green
+                                    if (strVals.Length ==3) {
+                                        values = new double[] { Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]), 1};
+                                    } 
+                                    CIMRGBColor color = new CIMRGBColor();
+                                    color.Values = values;
+                                    colors.Add(color);
+                                    mapUnits.Add(mu);
+                                }
+                            }
+                        }
+
+                        CIMFixedColorRamp ramp = new CIMFixedColorRamp();
+                        ramp.Colors = colors.ToArray();
+                        renderer.ColorRamp = ramp;
+                        renderer.ValueFields = mapUnits.ToArray();
+                    }
+
                     // Use the geodatabase
                     /*
                     CIMSqlQueryDataConnection sqldc = new CIMSqlQueryDataConnection()
@@ -165,12 +201,14 @@ namespace Geomapmaker {
                     */
                     //FeatureClass fC = geodatabase.OpenDataset<FeatureClass>("somepoints");
                     //FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
+
                     var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
                     foreach(FeatureClassDefinition fCD in featureClasses)
                     {
                         FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
                         //FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
-                        DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map));
+                        //DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map));
+                        DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map, 1, null, renderer));
                     }
 
                     var tables = geodatabase.GetDefinitions<TableDefinition>();
