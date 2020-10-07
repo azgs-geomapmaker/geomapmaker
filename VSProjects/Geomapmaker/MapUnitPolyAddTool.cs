@@ -31,6 +31,7 @@ namespace Geomapmaker {
 			//SketchOutputMode = SketchOutputMode.Screen;
 			//Gets or sets whether the sketch is for creating a feature and should use the CurrentTemplate.
 			//UsesCurrentTemplate = true;
+			ContextToolbarID = "";
 		}
 
 		protected override Task OnToolActivateAsync(bool active) {
@@ -57,7 +58,14 @@ namespace Geomapmaker {
 			//GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly.Shape = geometry;
 			GeomapmakerModule.MapUnitPolysVM.Shape = geometry;
 
+			//This is a little janky, but it's the only way I have found to persist the poly and keep it editable
+			//until the whole map unit is saved.
+			//TODO: Is there a better way?
+			//StartSketchAsync(); //Looks like setting current is enough
+			SetCurrentSketchAsync(geometry);
+
 			return Task.FromResult(false);
+
 			/*
 			if (CurrentTemplate == null || geometry == null)
 				return Task.FromResult(false);
