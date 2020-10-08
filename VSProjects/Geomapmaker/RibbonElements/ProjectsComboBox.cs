@@ -157,7 +157,7 @@ namespace Geomapmaker {
                         QueryFilter queryFilter = new QueryFilter {
                             //WhereClause = "COSTCTRN = 'Information Technology'",
                             SubFields = "MapUnit, AreaFillRGB",
-                            //PostfixClause = "ORDER BY OFFICE"
+                            PostfixClause = "ORDER BY objectid"
                         };
 
                         List<CIMColor> colors = new List<CIMColor>();
@@ -168,7 +168,7 @@ namespace Geomapmaker {
                                     string mu = Convert.ToString(row["MapUnit"]);
                                     string colorString = Convert.ToString(row["AreaFillRGB"]);
                                     string[] strVals = colorString.Split(';');
-                                    double[] values = new double[] { 49, 237, 28, 1 }; //default ugly green
+                                    double[] values = new double[] { 49, 237, 28, 255 }; //default ugly green
                                     if (strVals.Length ==3) {
                                         values = new double[] { Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]), 1};
                                     } 
@@ -185,6 +185,7 @@ namespace Geomapmaker {
                         renderer.ColorRamp = ramp;
                         renderer.ValueFields = mapUnits.ToArray();
                     }
+                    //renderer.ValueFields = new string[] {"MapUnit"};
 
                     // Use the geodatabase
                     /*
@@ -203,12 +204,15 @@ namespace Geomapmaker {
                     //FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
 
                     var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
-                    foreach(FeatureClassDefinition fCD in featureClasses)
-                    {
+                    foreach (FeatureClassDefinition fCD in featureClasses) {
                         FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
                         //FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
                         //DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map));
-                        DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map, 1, null, renderer));
+                        if (fC.GetName().Contains("MapUnitPolys")) {
+                            DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map, 1, null, renderer));
+                        } else {
+                            DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map));
+                        }
                     }
 
                     var tables = geodatabase.GetDefinitions<TableDefinition>();
