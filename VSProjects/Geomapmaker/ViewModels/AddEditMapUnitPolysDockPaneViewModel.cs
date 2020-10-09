@@ -79,6 +79,13 @@ namespace Geomapmaker {
 			get => selectedMapUnit;
 			set {
 				SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
+
+				//Echo the color from the MapUnit to the Symbol field in the poly.
+				//TODO: I really don't like this. What if user changes color in MapUnit? Need to handle this.
+				if (value != null) {
+					var mapUnit = Array.Find<MapUnit>(DataHelper.MapUnits.ToArray(), mu => mu.MU == value.MU);
+					SelectedMapUnitPoly.Symbol = mapUnit.hexcolor;
+				}
 			}
 		}
 
@@ -122,7 +129,7 @@ namespace Geomapmaker {
 				Dictionary<string, object> attributes = new Dictionary<string, object>();
 
 				attributes["SHAPE"] = SelectedMapUnitPoly.Shape;//Geometry
-
+				attributes["Symbol"] = SelectedMapUnitPoly.Symbol;
 				attributes["MapUnit"] = SelectedMapUnit.MU;
 				attributes["IdentityConfidence"] = SelectedMapUnitPoly.IdentityConfidence;
 				attributes["Notes"] = SelectedMapUnitPoly.Notes;
