@@ -150,7 +150,7 @@ namespace Geomapmaker {
                     DataHelper.connectionString = geodatabase.GetConnectionString();
                     Debug.WriteLine("DataHelper.connectionString set to " + DataHelper.connectionString);
 
-
+                    /*
                     UniqueValueRendererDefinition renderer = new UniqueValueRendererDefinition();
                     using (Table table = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits")) {
 
@@ -186,33 +186,47 @@ namespace Geomapmaker {
                         renderer.ValueFields = mapUnits.ToArray();
                     }
                     //renderer.ValueFields = new string[] {"MapUnit"};
-
-                    // Use the geodatabase
-                    /*
-                    CIMSqlQueryDataConnection sqldc = new CIMSqlQueryDataConnection()
-                    {
-                        WorkspaceConnectionString = geodatabase.GetConnectionString(),
-                        GeometryType = esriGeometryType.esriGeometryPoint,
-                        OIDFields = "OBJECTID",
-                        Srid = "4326",
-                        //SqlQuery = "select * from geomapmaker2.features where id = " + DataHelper.userID + " and ST_GeometryType(geom)='ST_Point'",
-                        Dataset = "somepoints"
-                    };
-                    FeatureLayer flyr = (FeatureLayer)LayerFactory.Instance.CreateLayer(sqldc, MapView.Active.Map, layerName: DataHelper.userName + "'s points");
                     */
-                    //FeatureClass fC = geodatabase.OpenDataset<FeatureClass>("somepoints");
-                    //FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
 
                     var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
                     foreach (FeatureClassDefinition fCD in featureClasses) {
                         FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
-                        //FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
-                        //DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map));
+                        FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
+                        DataHelper.currentLayers.Add(flyr); 
+                        
+                        //This sets the color to what is in the Symbol field of the MapUnitPolys record
+                        //Colors there must be either color names (Red, Green, etc.) or hex encoded (#RRGGBB).
+                        //Using this Symbol field is not ideal. I'd prefer to use the color from DescriptionOfMapUnitPolys.
+                        //Not sure how to do that yet.
                         if (fC.GetName().Contains("MapUnitPolys")) {
-                            DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map, 1, null, renderer));
-                        } else {
-                            DataHelper.currentLayers.Add(LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map));
+                            var renderer = flyr.GetRenderer() as CIMSimpleRenderer;
+                            var primitiveName = Guid.NewGuid().ToString();
+
+                            var cimPO = new CIMPrimitiveOverride() {
+                                PrimitiveName = primitiveName,
+                                PropertyName = @"Color",
+                                Expression = null,
+                                ValueExpressionInfo = new CIMExpressionInfo() {
+                                    Title = "Custom",
+                                    Expression = @"$feature.Symbol",
+                                    ReturnType = ExpressionReturnType.Default
+                                }
+                            };
+
+                            //TODO: Probably better to iterate the SymbolLayers looking for CIMSolidFill explicitly 
+                            //rather than relying on position.
+                            (renderer.Symbol.Symbol as CIMPolygonSymbol).SymbolLayers[1].PrimitiveName = primitiveName;
+
+                            var overrideList = new CIMPrimitiveOverride[1];
+                            overrideList[0] = cimPO;
+
+                            //Apply symbol overrides
+                            renderer.Symbol.PrimitiveOverrides = overrideList;
+
+                            //Apply the renderer to the feature layer
+                            flyr.SetRenderer(renderer);
                         }
+                        
                     }
 
                     var tables = geodatabase.GetDefinitions<TableDefinition>();
