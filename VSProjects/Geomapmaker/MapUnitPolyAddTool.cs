@@ -21,6 +21,7 @@ using ArcGIS.Desktop.Mapping;
 namespace Geomapmaker {
 	internal class MapUnitPolyAddTool : MapTool {
 		public MapUnitPolyAddTool() {
+			GeomapmakerModule.AddMapUnitPolyTool = this;
 			IsSketchTool = true;
 			UseSnapping = true;
 			// Select the type of construction tool you wish to implement.  
@@ -32,6 +33,10 @@ namespace Geomapmaker {
 			//Gets or sets whether the sketch is for creating a feature and should use the CurrentTemplate.
 			//UsesCurrentTemplate = true;
 			ContextToolbarID = "";
+		}
+
+		public void Clear() {
+			ClearSketchAsync();
 		}
 
 		protected override Task OnToolActivateAsync(bool active) {
