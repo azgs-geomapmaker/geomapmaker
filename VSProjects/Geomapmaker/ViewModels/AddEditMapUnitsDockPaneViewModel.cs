@@ -195,6 +195,25 @@ namespace Geomapmaker {
 								}
 							}, enterpriseTable);
 
+							//The following mess refreshes the map units layer in case color was changed during edit
+							List<CIMUniqueValueClass> classes = DataHelper.mapUnitRenderer.Groups[0].Classes.ToList();
+							CIMUniqueValueClass muClass = classes.Find(x => x.Label == mapUnit.MU);
+							string[] strVals = mapUnit.AreaFillRGB.Split(';');
+							var cF = ColorFactory.Instance;
+							muClass.Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference();
+							classes[classes.FindIndex(x => x.Label == mapUnit.MU)] = muClass;
+							DataHelper.mapUnitRenderer.Groups[0].Classes = classes.ToArray();
+							var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
+							foreach (FeatureClassDefinition fCD in featureClasses) {
+								FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
+								FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
+								DataHelper.currentLayers.Add(flyr);
+
+								if (fC.GetName().Contains("MapUnitPolys")) {
+									flyr.SetRenderer(DataHelper.mapUnitRenderer);
+								}
+							}
+
 						} else {
 							Debug.WriteLine("adding");
 

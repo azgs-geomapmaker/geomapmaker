@@ -1,4 +1,5 @@
-﻿using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -21,6 +22,8 @@ namespace Geomapmaker {
 
 		public static List<FeatureLayer> currentLayers = new List<FeatureLayer>();
 		public static List<StandaloneTable> currentTables = new List<StandaloneTable>();
+
+		public static CIMUniqueValueRenderer mapUnitRenderer;
 
 		//public static String mapUnitName { get; set; } = "Play A";
 		public static event EventHandler MapUnitNameChanged;

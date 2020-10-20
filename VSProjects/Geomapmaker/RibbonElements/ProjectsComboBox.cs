@@ -150,8 +150,7 @@ namespace Geomapmaker {
                     DataHelper.connectionString = geodatabase.GetConnectionString();
                     Debug.WriteLine("DataHelper.connectionString set to " + DataHelper.connectionString);
 
-                    /*
-                    UniqueValueRendererDefinition renderer = new UniqueValueRendererDefinition();
+
                     using (Table table = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits")) {
 
                         QueryFilter queryFilter = new QueryFilter {
@@ -163,73 +162,160 @@ namespace Geomapmaker {
                         List<CIMColor> colors = new List<CIMColor>();
                         List<String> mapUnits = new List<String>();
                         using (RowCursor rowCursor = table.Search(queryFilter, false)) {
+                            List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
                             while (rowCursor.MoveNext()) {
                                 using (Row row = rowCursor.Current) {
                                     string mu = Convert.ToString(row["MapUnit"]);
                                     string colorString = Convert.ToString(row["AreaFillRGB"]);
                                     string[] strVals = colorString.Split(';');
-                                    double[] values = new double[] { 49, 237, 28, 255 }; //default ugly green
-                                    if (strVals.Length ==3) {
-                                        values = new double[] { Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]), 1};
-                                    } 
-                                    CIMRGBColor color = new CIMRGBColor();
-                                    color.Values = values;
-                                    colors.Add(color);
-                                    mapUnits.Add(mu);
+
+                                    // Create a "CIMUniqueValueClass" for the map unit.
+                                    List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
+                                        new CIMUniqueValue {
+                                            FieldValues = new string[] { mu }
+                                        }
+                                    };
+                                    var cF = ColorFactory.Instance;
+                                    CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
+                                        Editable = true,
+                                        Label = mu,
+                                        Patch = PatchShape.AreaPolygon, //PatchShape.Default,
+                                        //Symbol = SymbolFactory.Instance.ConstructPointSymbol(ColorFactory.Instance.RedRGB).MakeSymbolReference(),
+                                        Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference(),
+                                        Visible = true,
+                                        Values = listUniqueValues.ToArray()
+                                    };
+
+                                    listUniqueValueClasses.Add(uniqueValueClass);
                                 }
                             }
-                        }
 
-                        CIMFixedColorRamp ramp = new CIMFixedColorRamp();
-                        ramp.Colors = colors.ToArray();
-                        renderer.ColorRamp = ramp;
-                        renderer.ValueFields = mapUnits.ToArray();
+                            //Create a list of CIMUniqueValueGroup
+                            CIMUniqueValueGroup uvg = new CIMUniqueValueGroup {
+                                Classes = listUniqueValueClasses.ToArray(),
+                            };
+                            List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
+
+                            //Create the CIMUniqueValueRenderer
+                             DataHelper.mapUnitRenderer = new CIMUniqueValueRenderer {
+                                UseDefaultSymbol = true,
+                                DefaultLabel = "all other values",
+                                DefaultSymbol = SymbolFactory.Instance.ConstructPolygonSymbol(ColorFactory.Instance.GreyRGB).MakeSymbolReference(),
+                                Groups = listUniqueValueGroups.ToArray(),
+                                Fields = new string[] { "mapunit" }
+                            };
+
+                        }
                     }
-                    //renderer.ValueFields = new string[] {"MapUnit"};
-                    */
 
                     var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
                     foreach (FeatureClassDefinition fCD in featureClasses) {
                         FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
                         FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
-                        DataHelper.currentLayers.Add(flyr); 
-                        
-                        //This sets the color to what is in the Symbol field of the MapUnitPolys record
-                        //Colors there must be either color names (Red, Green, etc.) or hex encoded (#RRGGBB).
-                        //Using this Symbol field is not ideal. I'd prefer to use the color from DescriptionOfMapUnitPolys.
-                        //Not sure how to do that yet.
+                        DataHelper.currentLayers.Add(flyr);
+
                         if (fC.GetName().Contains("MapUnitPolys")) {
-                            var renderer = flyr.GetRenderer() as CIMSimpleRenderer;
-                            var primitiveName = Guid.NewGuid().ToString();
-
-                            var cimPO = new CIMPrimitiveOverride() {
-                                PrimitiveName = primitiveName,
-                                PropertyName = @"Color",
-                                Expression = null,
-                                ValueExpressionInfo = new CIMExpressionInfo() {
-                                    Title = "Custom",
-                                    Expression = @"$feature.Symbol",
-                                    ReturnType = ExpressionReturnType.Default
-                                }
-                            };
-
-                            //TODO: Probably better to iterate the SymbolLayers looking for CIMSolidFill explicitly 
-                            //rather than relying on position.
-                            (renderer.Symbol.Symbol as CIMPolygonSymbol).SymbolLayers[1].PrimitiveName = primitiveName;
-
-                            var overrideList = new CIMPrimitiveOverride[1];
-                            overrideList[0] = cimPO;
-
-                            //Apply symbol overrides
-                            renderer.Symbol.PrimitiveOverrides = overrideList;
-
-                            //Apply the renderer to the feature layer
-                            flyr.SetRenderer(renderer);
+                            flyr.SetRenderer(DataHelper.mapUnitRenderer);
                         }
-                        
                     }
 
-                    var tables = geodatabase.GetDefinitions<TableDefinition>();
+
+                        /*
+                        UniqueValueRendererDefinition renderDef = new UniqueValueRendererDefinition();
+                        using (Table table = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits")) {
+
+                            QueryFilter queryFilter = new QueryFilter {
+                                //WhereClause = "COSTCTRN = 'Information Technology'",
+                                SubFields = "MapUnit, AreaFillRGB",
+                                PostfixClause = "ORDER BY objectid"
+                            };
+
+                            List<CIMColor> colors = new List<CIMColor>();
+                            List<String> mapUnits = new List<String>();
+                            using (RowCursor rowCursor = table.Search(queryFilter, false)) {
+                                while (rowCursor.MoveNext()) {
+                                    using (Row row = rowCursor.Current) {
+                                        string mu = Convert.ToString(row["MapUnit"]);
+                                        string colorString = Convert.ToString(row["AreaFillRGB"]);
+                                        string[] strVals = colorString.Split(';');
+                                        double[] values = new double[] { 49, 237, 28, 255 }; //default ugly green
+                                        if (strVals.Length ==3) {
+                                            values = new double[] { Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]), 1};
+                                        } 
+                                        CIMRGBColor color = new CIMRGBColor();
+                                        color.Values = values;
+                                        //colors.Add(color);
+                                        var cF = ColorFactory.Instance;
+                                        colors.Add(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2])));
+                                        mapUnits.Add(mu);
+                                    }
+                                }
+                            }
+
+                            CIMFixedColorRamp ramp = new CIMFixedColorRamp();
+                            ramp.Colors = colors.ToArray();
+                            renderDef.ColorRamp = ramp;
+                            //renderDef.ValueFields = mapUnits.ToArray();
+                            renderDef.ValueFields = new string[] { "mapunit" };
+                        }
+                        //renderDef.ValueFields = new string[] {"MapUnit"};
+                        var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
+                        foreach (FeatureClassDefinition fCD in featureClasses) {
+                            FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
+                            FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
+                            DataHelper.currentLayers.Add(flyr);
+
+                            if (fC.GetName().Contains("MapUnitPolys")) {
+                                var renderer = flyr.CreateRenderer(renderDef);
+                                flyr.SetRenderer(renderer);
+                            }
+                        }
+                        */
+
+                        /* This works, but uses symbol field in mapunitpolys
+                        var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
+                        foreach (FeatureClassDefinition fCD in featureClasses) {
+                            FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
+                            FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
+                            DataHelper.currentLayers.Add(flyr); 
+
+                            //This sets the color to what is in the Symbol field of the MapUnitPolys record
+                            //Colors there must be either color names (Red, Green, etc.) or hex encoded (#RRGGBB).
+                            //Using this Symbol field is not ideal. I'd prefer to use the color from DescriptionOfMapUnitPolys.
+                            //Not sure how to do that yet.
+                            if (fC.GetName().Contains("MapUnitPolys")) {
+                                var renderer = flyr.GetRenderer() as CIMSimpleRenderer;
+                                var primitiveName = Guid.NewGuid().ToString();
+
+                                var cimPO = new CIMPrimitiveOverride() {
+                                    PrimitiveName = primitiveName,
+                                    PropertyName = @"Color",
+                                    Expression = null,
+                                    ValueExpressionInfo = new CIMExpressionInfo() {
+                                        Title = "Custom",
+                                        Expression = @"$feature.Symbol",
+                                        ReturnType = ExpressionReturnType.Default
+                                    }
+                                };
+
+                                //TODO: Probably better to iterate the SymbolLayers looking for CIMSolidFill explicitly 
+                                //rather than relying on position.
+                                (renderer.Symbol.Symbol as CIMPolygonSymbol).SymbolLayers[1].PrimitiveName = primitiveName;
+
+                                var overrideList = new CIMPrimitiveOverride[1];
+                                overrideList[0] = cimPO;
+
+                                //Apply symbol overrides
+                                renderer.Symbol.PrimitiveOverrides = overrideList;
+
+                                //Apply the renderer to the feature layer
+                                flyr.SetRenderer(renderer);
+                            }
+
+                        }
+                        */
+
+                        var tables = geodatabase.GetDefinitions<TableDefinition>();
                     IStandaloneTableFactory tableFactory = StandaloneTableFactory.Instance;
                     foreach (TableDefinition tD in tables)
                     {
