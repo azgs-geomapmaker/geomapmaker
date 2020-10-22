@@ -198,17 +198,6 @@ namespace Geomapmaker {
 								}
 							}, enterpriseTable);
 
-							//The following mess refreshes the map units layer in case color was changed during edit
-							List<CIMUniqueValueClass> classes = DataHelper.mapUnitRenderer.Groups[0].Classes.ToList();
-							CIMUniqueValueClass muClass = classes.Find(x => x.Label == mapUnit.MU);
-							string[] strVals = mapUnit.AreaFillRGB.Split(';');
-							var cF = ColorFactory.Instance;
-							muClass.Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference();
-							classes[classes.FindIndex(x => x.Label == mapUnit.MU)] = muClass;
-							DataHelper.mapUnitRenderer.Groups[0].Classes = classes.ToArray();
-							var muLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
-							muLayer.SetRenderer(DataHelper.mapUnitRenderer);
-
 						} else {
 							Debug.WriteLine("adding");
 
@@ -238,31 +227,6 @@ namespace Geomapmaker {
 									}
 								}
 							}, enterpriseTable);
-
-							//Update renderer with new map unit
-							List<CIMUniqueValueClass> classes = DataHelper.mapUnitRenderer.Groups[0].Classes.ToList();
-							string[] strVals = mapUnit.AreaFillRGB.Split(';');
-							// Create a "CIMUniqueValueClass" for the map unit.
-							List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
-										new CIMUniqueValue {
-											FieldValues = new string[] { mapUnit.MU }
-										}
-									};
-							var cF = ColorFactory.Instance;
-							CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
-								Editable = true,
-								Label = mapUnit.MU,
-								//Patch = PatchShape.Default,
-								Patch = PatchShape.AreaPolygon,
-								//Symbol = SymbolFactory.Instance.ConstructPointSymbol(ColorFactory.Instance.RedRGB).MakeSymbolReference(),
-								Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference(),
-								Visible = true,
-								Values = listUniqueValues.ToArray()
-							};
-							classes.Add(uniqueValueClass);
-							DataHelper.mapUnitRenderer.Groups[0].Classes = classes.ToArray();
-							var muLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
-							muLayer.SetRenderer(DataHelper.mapUnitRenderer);
 
 						}
 

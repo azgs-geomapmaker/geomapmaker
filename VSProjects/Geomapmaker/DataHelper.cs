@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,8 +18,16 @@ namespace Geomapmaker {
 		public static int userID;
 		public static String userName;
 
-		public static string connectionString;
 		public static ArcGIS.Core.Data.DatabaseConnectionProperties connectionProperties;
+		public static void setConnectionProperties(JObject props) {
+			connectionProperties = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL) {
+				AuthenticationMode = AuthenticationMode.DBMS,
+				Instance = props["instance"].ToString(),
+				Database = props["database"].ToString(),
+				User = props["user"].ToString(),
+				Password = props["password"].ToString(),
+			};
+		}
 
 		public static List<FeatureLayer> currentLayers = new List<FeatureLayer>();
 		public static List<StandaloneTable> currentTables = new List<StandaloneTable>();
@@ -37,7 +46,7 @@ namespace Geomapmaker {
 		}
 
 		public static event EventHandler MapUnitsChanged;
-		//private static ObservableCollection<ComboBoxItem> mapUnits = new ObservableCollection<ComboBoxItem>();
+
 		private static ObservableCollection<MapUnit> mapUnits = new ObservableCollection<MapUnit>();
 		public static ObservableCollection<MapUnit> MapUnits {
 			get => mapUnits;
@@ -47,6 +56,11 @@ namespace Geomapmaker {
 			}
 		}
 
+
+		//Populate our map units list from the database and create unique value renderer for mapunitpolys featureclass 
+		//using colors from the descriptionofmapunits table. This uses a variation of the technique presented here: 
+		//https://community.esri.com/message/960006-how-to-render-color-of-individual-features-based-on-field-in-another-table
+		//and here: https://community.esri.com/thread/217968-unique-value-renderer-specifying-values
 		public static async Task populateMapUnits() {
 			Debug.WriteLine("populateMapUnits enter");
 
@@ -64,18 +78,17 @@ namespace Geomapmaker {
 					//Table t = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits");
 					QueryDef mapUnitsQDef = new QueryDef {
 						Tables = "DescriptionOfMapUnits",
-						//WhereClause = "ADACOMPLY = 'Yes'",
 						PostfixClause = "order by objectid"
 					};
 
 					using (RowCursor rowCursor = geodatabase.Evaluate(mapUnitsQDef, false)) {
+						List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
 						while (rowCursor.MoveNext()) {
 							using (Row row = rowCursor.Current) {
 								Debug.WriteLine(row["Name"].ToString());
-								//mapUnits.Add(new ComboBoxItem(row["Name"].ToString()));
 
+								//create and load map unit
 								var mapUnit = new MapUnit();
-
 								mapUnit.ID = int.Parse(row["ObjectID"].ToString());
 								mapUnit.MU = row["MapUnit"].ToString();
 								mapUnit.Name = row["Name"].ToString();
@@ -94,15 +107,63 @@ namespace Geomapmaker {
 								mapUnit.GeoMaterial = row["GeoMaterial"] == null ? null : row["GeoMaterial"].ToString();
 								mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"] == null ? null : row["GeoMaterialConfidence"].ToString();
 
+								//add it to our list
 								mapUnits.Add(mapUnit);
+
+								//Create a "CIMUniqueValueClass" for the map unit and add it to the list of unique values.
+								//This is what creates the mapping from map unit to color
+								List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
+										new CIMUniqueValue {
+											FieldValues = new string[] { mapUnit.MU }
+										}
+									};
+								string colorString = mapUnit.AreaFillRGB;
+								string[] strVals = colorString.Split(';');
+								var cF = ColorFactory.Instance;
+								CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
+									Editable = true,
+									Label = mapUnit.MU,
+									//Patch = PatchShape.Default,
+									Patch = PatchShape.AreaPolygon,
+									Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference(),
+									Visible = true,
+									Values = listUniqueValues.ToArray()
+								};
+								listUniqueValueClasses.Add(uniqueValueClass);
+
 							}
 						}
+
+						//Create a list of CIMUniqueValueGroup
+						CIMUniqueValueGroup uvg = new CIMUniqueValueGroup {
+							Classes = listUniqueValueClasses.ToArray(),
+						};
+						List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
+
+						//Use the list to create the CIMUniqueValueRenderer
+						DataHelper.mapUnitRenderer = new CIMUniqueValueRenderer {
+							UseDefaultSymbol = false,
+							//DefaultLabel = "all other values",
+							//DefaultSymbolPatch = PatchShape.AreaPolygon,
+							//DefaultSymbol = SymbolFactory.Instance.ConstructPolygonSymbol(ColorFactory.Instance.GreyRGB).MakeSymbolReference(),
+							Groups = listUniqueValueGroups.ToArray(),
+							Fields = new string[] { "mapunit" }
+						};
+
+						//Set renderer in mapunit. The try/catch is there because the first time through, this is called 
+						//before the layer has been added to the map. We just ignore the error in that case.
+						try {
+							var muLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+							muLayer.SetRenderer(DataHelper.mapUnitRenderer);
+						} catch { }
+
 					}
 
 				}
 			});
 			DataHelper.MapUnits = mapUnits;
 		}
+
 
 		/*
 		public static event EventHandler SelectedMapUnitChanged;
