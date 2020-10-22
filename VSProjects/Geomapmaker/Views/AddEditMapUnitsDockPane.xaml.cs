@@ -64,7 +64,7 @@ namespace Geomapmaker {
 			vm.SelectedMapUnit = null;
 			vm.UserEnteredMapUnit = null;
 			this.MapUnitTextBox.SelectedIndex = -1;
-			this.MapUnitTextBox.Text = "";
+			this.MapUnitTextBox.Text = ""; 
 		}
 
 		private void SaveCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
