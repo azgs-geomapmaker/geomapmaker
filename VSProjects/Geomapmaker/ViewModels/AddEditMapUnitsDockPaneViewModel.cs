@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ArcGIS.Core;
 using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
@@ -56,6 +57,7 @@ namespace Geomapmaker {
 					SelectedMapUnit != null &&
 					SelectedMapUnit.MU != null && SelectedMapUnit.MU.Trim() != "" &&
 					SelectedMapUnit.Name != null && SelectedMapUnit.Name.Trim() != "";// &&
+
 					//SelectedMapUnit.Age != null && SelectedMapUnit.Age.Trim() != "";//&&
 					//SelectedMapUnit.HierarchyKey != null && SelectedMapUnit.HierarchyKey.Trim() != "" &&
 					//SelectedMapUnit.ParagraphStyle != null && SelectedMapUnit.ParagraphStyle.Trim() != "" &&
@@ -135,6 +137,7 @@ namespace Geomapmaker {
 			}
 		}
 
+
 		public  async Task saveMapUnit(MapUnit mapUnit) {
 			Debug.WriteLine("saveMapUnit enter");
 
@@ -175,13 +178,13 @@ namespace Geomapmaker {
 											row["Age"] = mapUnit.Age;
 											//row["RelativeAge"] = mapUnit.RelativeAge;
 											row["Description"] = mapUnit.Description;
-											row["HierarchyKey"] = mapUnit.HierarchyKey;
+											row["HierarchyKey"] = 5; // mapUnit.HierarchyKey;
 											row["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
 											row["Label"] = mapUnit.Label;
 											row["Symbol"] = mapUnit.Symbol;
 											row["AreaFillRGB"] = mapUnit.AreaFillRGB;
 											row["hexcolor"] = mapUnit.hexcolor;
-											row["DescriptionSourceID"] = mapUnit.DescriptionSourceID;
+											row["DescriptionSourceID"] = 5; // mapUnit.DescriptionSourceID;
 											row["GeoMaterial"] = mapUnit.GeoMaterial;
 											row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
 
@@ -203,16 +206,8 @@ namespace Geomapmaker {
 							muClass.Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference();
 							classes[classes.FindIndex(x => x.Label == mapUnit.MU)] = muClass;
 							DataHelper.mapUnitRenderer.Groups[0].Classes = classes.ToArray();
-							var featureClasses = geodatabase.GetDefinitions<FeatureClassDefinition>();
-							foreach (FeatureClassDefinition fCD in featureClasses) {
-								FeatureClass fC = geodatabase.OpenDataset<FeatureClass>(fCD.GetName());
-								FeatureLayer flyr = LayerFactory.Instance.CreateFeatureLayer(fC, MapView.Active.Map);
-								DataHelper.currentLayers.Add(flyr);
-
-								if (fC.GetName().Contains("MapUnitPolys")) {
-									flyr.SetRenderer(DataHelper.mapUnitRenderer);
-								}
-							}
+							var muLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+							muLayer.SetRenderer(DataHelper.mapUnitRenderer);
 
 						} else {
 							Debug.WriteLine("adding");
@@ -227,13 +222,13 @@ namespace Geomapmaker {
 									rowBuffer["Age"] = mapUnit.Age;
 									//rowBuffer["RelativeAge"] = mapUnit.RelativeAge;
 									rowBuffer["Description"] = mapUnit.Description;
-									rowBuffer["HierarchyKey"] = mapUnit.HierarchyKey;
+									rowBuffer["HierarchyKey"] = 5; // mapUnit.HierarchyKey;
 									rowBuffer["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
 									rowBuffer["Label"] = mapUnit.Label;
 									rowBuffer["Symbol"] = mapUnit.Symbol;
 									rowBuffer["AreaFillRGB"] = mapUnit.AreaFillRGB;
 									rowBuffer["hexcolor"] = mapUnit.hexcolor;
-									rowBuffer["DescriptionSourceID"] = mapUnit.DescriptionSourceID;
+									rowBuffer["DescriptionSourceID"] = 5; // mapUnit.DescriptionSourceID;
 									rowBuffer["GeoMaterial"] = mapUnit.GeoMaterial;
 									rowBuffer["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
 
@@ -243,6 +238,32 @@ namespace Geomapmaker {
 									}
 								}
 							}, enterpriseTable);
+
+							//Update renderer with new map unit
+							List<CIMUniqueValueClass> classes = DataHelper.mapUnitRenderer.Groups[0].Classes.ToList();
+							string[] strVals = mapUnit.AreaFillRGB.Split(';');
+							// Create a "CIMUniqueValueClass" for the map unit.
+							List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
+										new CIMUniqueValue {
+											FieldValues = new string[] { mapUnit.MU }
+										}
+									};
+							var cF = ColorFactory.Instance;
+							CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
+								Editable = true,
+								Label = mapUnit.MU,
+								//Patch = PatchShape.Default,
+								Patch = PatchShape.AreaPolygon,
+								//Symbol = SymbolFactory.Instance.ConstructPointSymbol(ColorFactory.Instance.RedRGB).MakeSymbolReference(),
+								Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference(),
+								Visible = true,
+								Values = listUniqueValues.ToArray()
+							};
+							classes.Add(uniqueValueClass);
+							DataHelper.mapUnitRenderer.Groups[0].Classes = classes.ToArray();
+							var muLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+							muLayer.SetRenderer(DataHelper.mapUnitRenderer);
+
 						}
 
 						try {

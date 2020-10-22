@@ -52,12 +52,19 @@ namespace Geomapmaker {
 			// Calls a method to close the file and release resources.
 			var vm = (AddEditMapUnitsDockPaneViewModel)this.DataContext;
 			vm.SelectedMapUnit = null;
+			vm.UserEnteredMapUnit = null;
+			this.MapUnitTextBox.SelectedIndex = -1;
+			this.MapUnitTextBox.Text = "";
 		}
 
 		private async void SaveCommandHandler(object sender, ExecutedRoutedEventArgs e) {
 			// Calls a method to close the file and release resources.
 			var vm = (AddEditMapUnitsDockPaneViewModel)this.DataContext;
 			await vm.saveMapUnit(vm.SelectedMapUnit);
+			vm.SelectedMapUnit = null;
+			vm.UserEnteredMapUnit = null;
+			this.MapUnitTextBox.SelectedIndex = -1;
+			this.MapUnitTextBox.Text = "";
 		}
 
 		private void SaveCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
