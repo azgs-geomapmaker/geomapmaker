@@ -62,6 +62,14 @@ namespace Geomapmaker {
 			}
 		}
 
+		public void Reset() {
+			GeomapmakerModule.AddMapUnitPolyTool.Clear();
+			SelectedMapUnitPoly = new MapUnitPoly();
+			SelectedMapUnit = null;
+			SelectedMapUnitPoly.Shape = null;
+			ShapeJson = null;
+		}
+
 		/// <summary>
 		/// Text shown near the top of the DockPane.
 		/// </summary>

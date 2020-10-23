@@ -27,24 +27,14 @@ namespace Geomapmaker {
 		private async void NewCommandHandler(object sender, ExecutedRoutedEventArgs e) {
 			// Calls a method to close the file and release resources.
 			var vm = (AddEditMapUnitPolysDockPaneViewModel)this.DataContext;
-
-			//TODO: Collect all these in a VM reset routine
-			GeomapmakerModule.AddMapUnitPolyTool.Clear();
-			vm.SelectedMapUnitPoly = new MapUnitPoly();
-			vm.SelectedMapUnit = null;
-			vm.SelectedMapUnitPoly.Shape = null;
-			vm.ShapeJson = null;
+			vm.Reset();
 		}
 
 		private async void SaveCommandHandler(object sender, ExecutedRoutedEventArgs e) {
 			// Calls a method to close the file and release resources.
 			var vm = (AddEditMapUnitPolysDockPaneViewModel)this.DataContext;
 			await vm.saveMapUnitPoly(/*vm.SelectedMapUnit*/);
-			GeomapmakerModule.AddMapUnitPolyTool.Clear();
-			vm.SelectedMapUnitPoly = new MapUnitPoly();
-			vm.SelectedMapUnit = null;
-			vm.SelectedMapUnitPoly.Shape = null;
-			vm.ShapeJson = null;
+			vm.Reset();
 		}
 
 		private void SaveCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {

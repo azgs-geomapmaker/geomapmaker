@@ -46,6 +46,7 @@ namespace Geomapmaker {
 
 		protected override Task OnToolDeactivateAsync(bool hasMapViewChanged) {
 			AddEditMapUnitPolysDockPaneViewModel.Hide();
+			GeomapmakerModule.MapUnitPolysVM.Reset();
 			return base.OnToolDeactivateAsync(hasMapViewChanged);
 		}
 
