@@ -15,6 +15,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
 
 namespace Geomapmaker {
 	internal class MapUnitPolyEditTool : MapTool {
@@ -35,23 +36,53 @@ namespace Geomapmaker {
 
 		protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry) {
 			var mv = MapView.Active;
-			var identifyResult = await QueuedTask.Run(() =>
-			{
-				var sb = new StringBuilder();
+			var identifyResult = await QueuedTask.Run(() => {
 
 				// Get the features that intersect the sketch geometry.
 				var features = mv.GetFeatures(geometry);
-				var feature = features.First(); //TODO: this appears to be a list of objectid's to features. Need to get feature and populate form.
+				//Only interested in MapUnitPolys
+				var mapUnitFeatures = features.Where(x => x.Key.Name == "MapUnitPolys");
+				if (mapUnitFeatures != null) {
+					//Get map unit objectid
+					//TODO: I am only pulling the first from the list. Might need to present some sort of selector to the user. 
+					var mapUnitPolyID = mapUnitFeatures.First().Value.First();
 
-				// Get all layer definitions.
-				var lyrs = mv.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>();
-				foreach (var lyr in lyrs) {
-					var fCnt = features.ContainsKey(lyr) ? features[lyr].Count : 0;
-					sb.AppendLine($@"{fCnt} {(fCnt == 1 ? "record" : "records")} for {lyr.Name}");
+					//Using the objectid, get the map unit record from the database
+					using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
+						using (Table mapUnitPolysTable = geodatabase.OpenDataset<Table>("MapUnitPolys")) {
+							QueryFilter queryFilter = new QueryFilter {
+								WhereClause = "objectid = " + mapUnitPolyID
+							};
+							var mapUnitPoly = new MapUnitPoly();
+							using (RowCursor rowCursor = mapUnitPolysTable.Search(queryFilter, false)) {
+								if (rowCursor.MoveNext()) {
+									using (Row row = rowCursor.Current) {
+										mapUnitPoly.ID = Int32.Parse(Convert.ToString(row["objectid"]));
+										mapUnitPoly.MapUnit = DataHelper.MapUnits.Where(x => x.MU == Convert.ToString(row["mapunit"])).First();
+										mapUnitPoly.Label = Convert.ToString(row["label"]);
+										mapUnitPoly.Notes = Convert.ToString(row["notes"]);
+										mapUnitPoly.Symbol = Convert.ToString(row["symbol"]);
+										mapUnitPoly.IdentityConfidence = Convert.ToString(row["identityconfidence"]);
+										mapUnitPoly.DataSource = Convert.ToString(row["datasourceid"]);
+										mapUnitPoly.Shape = (Geometry)row["shape"]; //TODO: no idea
+									}
+								}
+
+							}
+
+							// Use the map unit to populate the view model for the form
+							GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly = mapUnitPoly;
+							GeomapmakerModule.MapUnitPolysVM.SelectedMapUnit = mapUnitPoly.MapUnit;
+							//TODO: The line below forces a refresh on the object the UI is bound to for shape. But other than that,
+							//it's redundant. There should be a better way to handle this.
+							GeomapmakerModule.MapUnitPolysVM.Shape = GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly.Shape;
+
+						}
+					}
 				}
-				return sb.ToString();
+				return true;
 			});
-			MessageBox.Show(identifyResult);
+			//MessageBox.Show(identifyResult);
 			return true;
 		}
 	}
