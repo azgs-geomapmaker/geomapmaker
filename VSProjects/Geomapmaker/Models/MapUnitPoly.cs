@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Models {
 	class MapUnitPoly {
-		public int ID { get; set; }
+		public Int64? ID { get; set; }
 		public MapUnit MapUnit { get; set; }
 		public string IdentityConfidence { get; set; }
 		public string Label { get; set; }
