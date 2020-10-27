@@ -24,6 +24,7 @@ namespace Geomapmaker {
         //public DataHelper helper = new DataHelper();
         internal static AddEditMapUnitPolysDockPaneViewModel MapUnitPolysVM { get; set; }
         internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
+        internal static MapUnitPolyEditTool EditMapUnitPolyTool { get; set; }
 
         /// <summary>
         /// Retrieve the singleton instance to this module here
