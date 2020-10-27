@@ -41,6 +41,7 @@ namespace Geomapmaker {
 
 		protected override Task OnToolActivateAsync(bool active) {
 			AddEditMapUnitPolysDockPaneViewModel.Show();
+			GeomapmakerModule.MapUnitPolysVM.Heading = "Add Map Unit Poly";
 			return base.OnToolActivateAsync(active);
 		}
 
