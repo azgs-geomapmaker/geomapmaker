@@ -63,7 +63,14 @@ namespace Geomapmaker {
 		}
 
 		public void Reset() {
-			GeomapmakerModule.AddMapUnitPolyTool.Clear();
+			//Just clear whichever and ignore the other error
+			try {
+				GeomapmakerModule.AddMapUnitPolyTool.Clear();
+			}  catch (Exception e) { }
+			try {
+				GeomapmakerModule.EditMapUnitPolyTool.Clear();
+			}  catch (Exception e) { }
+
 			SelectedMapUnitPoly = new MapUnitPoly();
 			SelectedMapUnit = null;
 			SelectedMapUnitPoly.Shape = null;
@@ -145,8 +152,13 @@ namespace Geomapmaker {
 
 				//Create the new feature
 				var op = new EditOperation();
-				op.Name = string.Format("Create {0}", "MapUnitPolys");
-				op.Create(polyLayer, attributes);
+				if (SelectedMapUnitPoly.ID == null) {
+					op.Name = string.Format("Create {0}", "MapUnitPolys");
+					op.Create(polyLayer, attributes);
+				} else {
+					op.Name = string.Format("Modify {0}", "MapUnitPolys");
+					op.Modify(polyLayer, (Int64)SelectedMapUnitPoly.ID, SelectedMapUnitPoly.Shape, attributes);
+				}
 				await op.ExecuteAsync();
 
 				if (!op.IsSucceeded) {
