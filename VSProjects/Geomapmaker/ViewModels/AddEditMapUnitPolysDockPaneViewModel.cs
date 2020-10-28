@@ -58,7 +58,7 @@ namespace Geomapmaker {
 					SelectedMapUnitPoly.IdentityConfidence != null && SelectedMapUnitPoly.IdentityConfidence.Trim() != "" &&
 					//SelectedMapUnitPoly.Shape != null;// &&
 					Shape != null;// &&
-												  //SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
+					//SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
 			}
 		}
 
@@ -121,6 +121,7 @@ namespace Geomapmaker {
 				SelectedMapUnitPoly.Shape = value;
 				ShapeJson = value.ToJson();
 				CommandManager.InvalidateRequerySuggested(); //Force update of submit button
+				//TODO: The previous line is not enabling Submit when geometry is changed during editing
 			}
 		}
 
