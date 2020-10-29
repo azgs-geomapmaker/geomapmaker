@@ -46,19 +46,30 @@
 		<ScrollViewer Grid.Row="1" >
 			<StackPanel>
 				<Label x:Name="MapUnitLabel" Content="Map Unit" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+
 				<ComboBox 
 						x:Name="MapUnitComboBox" 
-						Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  
+						IsTextSearchEnabled="True"
+						TextSearch.TextPath="MU"
 						ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" 
-						DisplayMemberPath="MU" 
 						SelectedItem ="{Binding SelectedMapUnit}" 
 						Margin="0,0,0,5"  
 						IsReadOnly="False" 
-						IsEditable="True"  
+						IsEditable="False"  
 						HorizontalAlignment="Left" 
 						Height="25"  
 						VerticalAlignment="Top" 
-						Width="200"/>
+						Width="200">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<Rectangle Fill="{Binding hexcolor}" Width="16" Height="16" Margin="0,2,5,2" />
+								<TextBlock Text="{Binding MU}" />
+							</StackPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+
 				<Label x:Name="IdentityConfidence" Content="Identity Confidence" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 				<ComboBox x:Name="IdentityConfidenceComboBox" Margin="0,0,0,5" ItemsSource="{Binding Path=(ui:DataHelper.IdentityConfidences)}"  SelectedItem ="{Binding SelectedMapUnitPoly.IdentityConfidence}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 				<Label x:Name="NotesLabel"  Content="Notes" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
