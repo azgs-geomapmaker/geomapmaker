@@ -173,11 +173,9 @@
     <Compile Include="ViewModels\AddEditMapUnitPolysDockPaneViewModel.cs" />
     <Compile Include="Models\MapUnitPoly.cs" />
     <Compile Include="RibbonElements\AddMapUnitsButton.cs" />
-    <Compile Include="Button1.cs" />
-    <Compile Include="ButtonPalette1.cs" />
     <Compile Include="RibbonElements\EditMapUnitsButton.cs" />
-    <Compile Include="MapUnitPolyAddTool.cs" />
-    <Compile Include="MapUnitPolyEditTool.cs" />
+    <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
+    <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
     <Compile Include="Views\AddEditMapUnitsDockPane.xaml.cs">
       <DependentUpon>AddEditMapUnitsDockPane.xaml</DependentUpon>
     </Compile>
