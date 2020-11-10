@@ -205,3 +205,6 @@ We do not yet have the finalized version of this table, but I will add a link to
 
 #### Existing GeMS tools
 https://github.com/usgs/gems-tools-pro
+https://pubs.usgs.gov/tm/2006/11A02/ -- FGDC symbology (PDF and Adobe Illustrator Files)
+https://ngmdb.usgs.gov/Info/standards/GeMS/docs/FGDCGeoSym_fonts.zip -- Fonts required for the stylex below
+https://ngmdb.usgs.gov/Info/standards/GeMS/docs/DGGS_Map_Symbolization_ver3_ArcGISPro.zip -- Stylex file
