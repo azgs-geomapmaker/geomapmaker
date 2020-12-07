@@ -221,7 +221,6 @@ namespace Geomapmaker {
 											FieldValues = new string[] { cf.key }
 										}
 								};
-								CIMSymbolReference.FromJson(cf.symbol);
 								CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
 									Editable = true,
 									Label = cf.key,
