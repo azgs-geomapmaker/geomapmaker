@@ -33,6 +33,7 @@ namespace Geomapmaker {
 		public static List<StandaloneTable> currentTables = new List<StandaloneTable>();
 
 		public static CIMUniqueValueRenderer mapUnitRenderer;
+		public static CIMUniqueValueRenderer cfRenderer;
 
 		//public static String mapUnitName { get; set; } = "Play A";
 		public static event EventHandler MapUnitNameChanged;
@@ -56,6 +57,15 @@ namespace Geomapmaker {
 			}
 		}
 
+		public static event EventHandler CFChanged;
+		private static ObservableCollection<CF> cfs = new ObservableCollection<CF>();
+		public static ObservableCollection<CF> CFs {
+			get => cfs;
+			set {
+				cfs = value;
+				CFChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
 
 		//Populate our map units list from the database and create unique value renderer for mapunitpolys featureclass 
 		//using colors from the descriptionofmapunits table. This uses a variation of the technique presented here: 
@@ -162,6 +172,103 @@ namespace Geomapmaker {
 				}
 			});
 			DataHelper.MapUnits = mapUnits;
+		}
+
+
+		public class CF {
+			public string key { get; set; }
+			public string symbol { get; set; }
+		}
+
+		public static async Task populateContactsAndFaults() {
+			Debug.WriteLine("populateContactsAndFaults enter");
+
+			var cfs = new ObservableCollection<CF>();
+
+			if (DataHelper.connectionProperties == null) {
+				return;
+			}
+
+			await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
+
+				using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
+
+					QueryDef cfQDef = new QueryDef {
+						Tables = "CFSymbology",
+						PostfixClause = "order by key"
+					};
+
+					using (RowCursor rowCursor = geodatabase.Evaluate(cfQDef, false)) {
+						List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
+						while (rowCursor.MoveNext()) {
+							using (Row row = rowCursor.Current) {
+								Debug.WriteLine(row["key"].ToString());
+
+								//create and load map unit
+								var cf = new CF();
+								cf.key = row["key"].ToString();
+								cf.symbol = row["symbol"].ToString();
+								cf.symbol = cf.symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
+								cf.symbol = cf.symbol.Insert(cf.symbol.Length, "}");
+
+								//add it to our list
+								cfs.Add(cf);
+
+								//Create a "CIMUniqueValueClass" for the cf and add it to the list of unique values.
+								//This is what creates the mapping from cf derived attribute to symbol
+								List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
+										new CIMUniqueValue {
+											FieldValues = new string[] { cf.key }
+										}
+								};
+								CIMSymbolReference.FromJson(cf.symbol);
+								CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
+									Editable = true,
+									Label = cf.key,
+									//Patch = PatchShape.Default,
+									Patch = PatchShape.AreaPolygon,
+									Symbol = CIMSymbolReference.FromJson(cf.symbol, null),
+									Visible = true,
+									Values = listUniqueValues.ToArray()
+								};
+								listUniqueValueClasses.Add(uniqueValueClass);
+
+							}
+						}
+
+						//Create a list of CIMUniqueValueGroup
+						CIMUniqueValueGroup uvg = new CIMUniqueValueGroup {
+							Classes = listUniqueValueClasses.ToArray(),
+						};
+						List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
+
+						//This specifies the derived attribute. 
+						//TODO: Currently using the wrong attributes here simply because they were convenient.
+						//Final version will use Type, Subtype, Symbol.
+						CIMExpressionInfo cEI = new CIMExpressionInfo() {
+							Expression = "Concatenate([$feature.Symbol, $feature.Label], '.')"
+						};
+
+						//Use the list to create the CIMUniqueValueRenderer
+						DataHelper.cfRenderer = new CIMUniqueValueRenderer {
+							UseDefaultSymbol = false,
+							Groups = listUniqueValueGroups.ToArray(),
+							//Fields = new string[] { "type" }
+							ValueExpressionInfo = cEI //fields used for testing
+						};
+
+						//Set renderer in mapunit. The try/catch is there because the first time through, this is called 
+						//before the layer has been added to the map. We just ignore the error in that case.
+						try {
+							var cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
+							cfLayer.SetRenderer(DataHelper.cfRenderer);
+						} catch { }
+
+					}
+
+				}
+			});
+			DataHelper.CFs = cfs;
 		}
 
 

@@ -106,6 +106,7 @@ namespace Geomapmaker {
 
         private async Task loadGeodatabase() {
             await DataHelper.populateMapUnits();
+            await DataHelper.populateContactsAndFaults();
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
                 var map = MapView.Active.Map;
                 map.RemoveLayers(DataHelper.currentLayers);
@@ -124,6 +125,9 @@ namespace Geomapmaker {
 
                         if (fC.GetName().Contains("MapUnitPolys")) {
                             flyr.SetRenderer(DataHelper.mapUnitRenderer);
+                        }
+                        if (fC.GetName().Contains("ContactsAndFaults")) {
+                            flyr.SetRenderer(DataHelper.cfRenderer);
                         }
                     }
 
