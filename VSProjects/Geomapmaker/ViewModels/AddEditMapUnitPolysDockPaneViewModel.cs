@@ -165,6 +165,10 @@ namespace Geomapmaker {
 				if (!op.IsSucceeded) {
 					MessageBox.Show("Hogan's goat!");
 				}
+
+				//Moved this here from AddEditMapUnitsViewModel to accommodate keeping only active mu's in renderer.
+				await DataHelper.populateMapUnits();
+
 			//});
 
 		}

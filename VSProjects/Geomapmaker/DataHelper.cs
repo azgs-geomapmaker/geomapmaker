@@ -85,6 +85,19 @@ namespace Geomapmaker {
 
 				using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
 
+					//Get list of map units currently in feature class
+					List<string> muInFeatureClass = new List<string>();
+					QueryDef cfQDef = new QueryDef {
+						Tables = "MapUnitPolys"
+					};
+					using (RowCursor rowCursor = geodatabase.Evaluate(cfQDef, false)) {
+						while (rowCursor.MoveNext()) {
+							using (Row row = rowCursor.Current) {
+							muInFeatureClass.Add(row["MapUnit"].ToString());
+							}
+						}
+					}
+
 					//Table t = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits");
 					QueryDef mapUnitsQDef = new QueryDef {
 						Tables = "DescriptionOfMapUnits",
@@ -120,26 +133,29 @@ namespace Geomapmaker {
 								//add it to our list
 								mapUnits.Add(mapUnit);
 
-								//Create a "CIMUniqueValueClass" for the map unit and add it to the list of unique values.
-								//This is what creates the mapping from map unit to color
-								List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
-										new CIMUniqueValue {
-											FieldValues = new string[] { mapUnit.MU }
-										}
+								//Only add to renderer if map unit is in the feature class
+								if (muInFeatureClass.Contains(row["MapUnit"].ToString())) {
+									//Create a "CIMUniqueValueClass" for the map unit and add it to the list of unique values.
+									//This is what creates the mapping from map unit to color
+									List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
+											new CIMUniqueValue {
+												FieldValues = new string[] { mapUnit.MU }
+											}
+										};
+									string colorString = mapUnit.AreaFillRGB;
+									string[] strVals = colorString.Split(';');
+									var cF = ColorFactory.Instance;
+									CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
+										Editable = true,
+										Label = mapUnit.MU,
+										//Patch = PatchShape.Default,
+										Patch = PatchShape.AreaPolygon,
+										Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference(),
+										Visible = true,
+										Values = listUniqueValues.ToArray()
 									};
-								string colorString = mapUnit.AreaFillRGB;
-								string[] strVals = colorString.Split(';');
-								var cF = ColorFactory.Instance;
-								CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
-									Editable = true,
-									Label = mapUnit.MU,
-									//Patch = PatchShape.Default,
-									Patch = PatchShape.AreaPolygon,
-									Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference(),
-									Visible = true,
-									Values = listUniqueValues.ToArray()
-								};
-								listUniqueValueClasses.Add(uniqueValueClass);
+									listUniqueValueClasses.Add(uniqueValueClass);
+								}
 
 							}
 						}
@@ -193,12 +209,24 @@ namespace Geomapmaker {
 
 				using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
 
+					List<string> cfInFeatureClass = new List<string>();
 					QueryDef cfQDef = new QueryDef {
+						Tables = "ContactsAndFaults"
+					};
+					using (RowCursor rowCursor = geodatabase.Evaluate(cfQDef, false)) {
+						while (rowCursor.MoveNext()) {
+							using (Row row = rowCursor.Current) {
+								cfInFeatureClass.Add(row["symbol"] + "." + row["label"]);
+							}
+						}
+					}
+
+					QueryDef cfSymbolQDef = new QueryDef {
 						Tables = "CFSymbology",
 						PostfixClause = "order by key"
 					};
 
-					using (RowCursor rowCursor = geodatabase.Evaluate(cfQDef, false)) {
+					using (RowCursor rowCursor = geodatabase.Evaluate(cfSymbolQDef, false)) {
 						List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
 						while (rowCursor.MoveNext()) {
 							using (Row row = rowCursor.Current) {
@@ -214,24 +242,27 @@ namespace Geomapmaker {
 								//add it to our list
 								cfs.Add(cf);
 
-								//Create a "CIMUniqueValueClass" for the cf and add it to the list of unique values.
-								//This is what creates the mapping from cf derived attribute to symbol
-								List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
+								//Only add to renderer if present in the feature class
+								if (cfInFeatureClass.Contains(cf.key)) {
+									//Create a "CIMUniqueValueClass" for the cf and add it to the list of unique values.
+									//This is what creates the mapping from cf derived attribute to symbol
+									List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
 										new CIMUniqueValue {
 											FieldValues = new string[] { cf.key }
 										}
-								};
-								CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
-									Editable = true,
-									Label = cf.key,
-									//Patch = PatchShape.Default,
-									Patch = PatchShape.AreaPolygon,
-									Symbol = CIMSymbolReference.FromJson(cf.symbol, null),
-									Visible = true,
-									Values = listUniqueValues.ToArray()
-								};
-								listUniqueValueClasses.Add(uniqueValueClass);
+									};
 
+									CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
+										Editable = true,
+										Label = cf.key,
+										//Patch = PatchShape.Default,
+										Patch = PatchShape.AreaPolygon,
+										Symbol = CIMSymbolReference.FromJson(cf.symbol, null),
+										Visible = true,
+										Values = listUniqueValues.ToArray()
+									};
+									listUniqueValueClasses.Add(uniqueValueClass);
+								}
 							}
 						}
 

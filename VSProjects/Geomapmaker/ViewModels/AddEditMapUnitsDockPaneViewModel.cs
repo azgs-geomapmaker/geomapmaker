@@ -246,7 +246,7 @@ namespace Geomapmaker {
 				}
 			});
 
-			await DataHelper.populateMapUnits();
+			//await DataHelper.populateMapUnits();
 
 		}
 
