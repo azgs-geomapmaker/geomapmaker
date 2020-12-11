@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Geomapmaker {
 	public static class DataHelper {
@@ -191,11 +192,6 @@ namespace Geomapmaker {
 		}
 
 
-		public class CF {
-			public string key { get; set; }
-			public string symbol { get; set; }
-		}
-
 		public static async Task populateContactsAndFaults() {
 			Debug.WriteLine("populateContactsAndFaults enter");
 
@@ -216,7 +212,8 @@ namespace Geomapmaker {
 					using (RowCursor rowCursor = geodatabase.Evaluate(cfQDef, false)) {
 						while (rowCursor.MoveNext()) {
 							using (Row row = rowCursor.Current) {
-								cfInFeatureClass.Add(row["symbol"] + "." + row["label"]);
+								//cfInFeatureClass.Add(row["symbol"] + "." + row["label"]);
+								cfInFeatureClass.Add(row["symbol"].ToString());
 							}
 						}
 					}
@@ -236,8 +233,17 @@ namespace Geomapmaker {
 								var cf = new CF();
 								cf.key = row["key"].ToString();
 								cf.symbol = row["symbol"].ToString();
+								//Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
 								cf.symbol = cf.symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
 								cf.symbol = cf.symbol.Insert(cf.symbol.Length, "}");
+
+								//Create the preview image used in the ComboBox
+								SymbolStyleItem sSI = new SymbolStyleItem() {
+									Symbol = CIMSymbolReference.FromJson(cf.symbol).Symbol,
+									PatchWidth = 50,
+									PatchHeight = 25
+								};
+								cf.preview = sSI.PreviewImage;
 
 								//add it to our list
 								cfs.Add(cf);
@@ -275,16 +281,18 @@ namespace Geomapmaker {
 						//This specifies the derived attribute. 
 						//TODO: Currently using the wrong attributes here simply because they were convenient.
 						//Final version will use Type, Subtype, Symbol.
+						/*
 						CIMExpressionInfo cEI = new CIMExpressionInfo() {
 							Expression = "Concatenate([$feature.Symbol, $feature.Label], '.')"
 						};
+						*/
 
 						//Use the list to create the CIMUniqueValueRenderer
 						DataHelper.cfRenderer = new CIMUniqueValueRenderer {
 							UseDefaultSymbol = false,
 							Groups = listUniqueValueGroups.ToArray(),
-							//Fields = new string[] { "type" }
-							ValueExpressionInfo = cEI //fields used for testing
+							Fields = new string[] { "symbol" }
+							//ValueExpressionInfo = cEI //fields used for testing
 						};
 
 						//Set renderer in mapunit. The try/catch is there because the first time through, this is called 
@@ -725,6 +733,40 @@ namespace Geomapmaker {
 		public static ObservableCollection<string> IdentityConfidences {
 			get {
 				return identityConfidences;
+			}
+		}
+
+		private static ObservableCollection<string> existenceConfidences = new ObservableCollection<string>() {
+			"High",
+			"Medium",
+			"Low"
+		};
+		public static ObservableCollection<string> ExistenceConfidences {
+			get {
+				return existenceConfidences;
+			}
+		}
+
+		private static ObservableCollection<string> locationConfidenceMeters = new ObservableCollection<string>() {
+			"10",
+			"25",
+			"50",
+			"100",
+			"250"
+		};
+		public static ObservableCollection<string> LocationConfidenceMeters {
+			get {
+				return locationConfidenceMeters;
+			}
+		}
+
+		private static ObservableCollection<string> concealedYN = new ObservableCollection<string>() {
+			"Y",
+			"N"
+		};
+		public static ObservableCollection<string> ConcealedYN {
+			get {
+				return concealedYN;
 			}
 		}
 

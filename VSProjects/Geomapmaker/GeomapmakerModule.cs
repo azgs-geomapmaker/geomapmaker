@@ -22,6 +22,9 @@ namespace Geomapmaker {
         private static GeomapmakerModule _this = null;
 
         //public DataHelper helper = new DataHelper();
+        internal static AddEditContactsAndFaultsDockPaneViewModel ContactsAndFaultsVM { get; set; }
+        internal static ContactsAndFaultsAddTool ContactsAndFaultsAddTool { get; set; }
+
         internal static AddEditMapUnitPolysDockPaneViewModel MapUnitPolysVM { get; set; }
         internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
         internal static MapUnitPolyEditTool EditMapUnitPolyTool { get; set; }

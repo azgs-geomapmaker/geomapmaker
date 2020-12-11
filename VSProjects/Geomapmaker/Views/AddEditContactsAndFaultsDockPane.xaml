@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Geomapmaker.AddEditMapUnitPolysDockPaneView"
+﻿<UserControl x:Class="Geomapmaker.AddEditContactsAndFaultsDockPaneView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,8 +7,8 @@
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{Binding Path=ui.AddEditMapUnitPolysDockPaneViewModel}">
-    <UserControl.Resources>
+             d:DataContext="{Binding Path=ui.AddEditContactsAndFaultsDockPaneViewModel}">
+     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
@@ -45,38 +45,44 @@
 
 		<ScrollViewer Grid.Row="1" >
 			<StackPanel>
-				<Label x:Name="MapUnitLabel" Content="Map Unit" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<Label x:Name="ContactsAndFaultsLabel" Content="Type" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 
 				<ComboBox 
-						x:Name="MapUnitComboBox" 
+						x:Name="ContactsAndFaultsComboBox" 
 						IsTextSearchEnabled="True"
-						TextSearch.TextPath="MU"
-						ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" 
-						SelectedItem ="{Binding SelectedMapUnit}" 
+						TextSearch.TextPath="key"
+						ItemsSource="{Binding Path=(ui:DataHelper.CFs)}" 
+						SelectedItem ="{Binding SelectedCF}" 
 						Margin="0,0,0,5"  
 						IsReadOnly="False" 
-						IsEditable="False"  
+						IsEditable="True"  
 						HorizontalAlignment="Left" 
 						Height="25"  
 						VerticalAlignment="Top" 
 						Width="200">
 					<ComboBox.ItemTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<Rectangle Fill="{Binding hexcolor}" Width="16" Height="16" Margin="0,2,5,2" />
-								<TextBlock Text="{Binding MU}" />
+							<StackPanel Orientation="Horizontal" ToolTip="description goes here">
+								<Image Source="{Binding preview}"   />
+								<TextBlock Text="{Binding key}" />
 							</StackPanel>
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
 				</ComboBox>
 
 				<Label x:Name="IdentityConfidence" Content="Identity Confidence" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-				<ComboBox x:Name="IdentityConfidenceComboBox" Margin="0,0,0,5" ItemsSource="{Binding Path=(ui:DataHelper.IdentityConfidences)}"  SelectedItem ="{Binding SelectedMapUnitPoly.IdentityConfidence}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<ComboBox x:Name="IdentityConfidenceComboBox" Margin="0,0,0,5" ItemsSource="{Binding Path=(ui:DataHelper.IdentityConfidences)}"  SelectedItem ="{Binding SelectedCF.IdentityConfidence}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="ExistenceConfidence" Content="Existence Confidence" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<ComboBox x:Name="ExistenceConfidenceComboBox" Margin="0,0,0,5" ItemsSource="{Binding Path=(ui:DataHelper.ExistenceConfidences)}"  SelectedItem ="{Binding SelectedCF.ExistenceConfidence}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="LocationConfidenceMeters" Content="Location Confidence Meters" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<ComboBox x:Name="LocationConfidenceComboBox" Margin="0,0,0,5" ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}"  SelectedItem ="{Binding SelectedCF.LocationConfidenceMeters}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<Label x:Name="IsConcealed" Content="Is Concealed" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<ComboBox x:Name="IsConcealedComboBox" Margin="0,0,0,5" ItemsSource="{Binding Path=(ui:DataHelper.ConcealedYN)}"  SelectedItem ="{Binding SelectedCF.IsConcealed}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 				<Label x:Name="NotesLabel"  Content="Notes" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
-				<TextBox x:Name="NotesTextBlock" Margin="0,0,0,5" Text="{Binding SelectedMapUnitPoly.Notes}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
+				<TextBox x:Name="NotesTextBlock" Margin="0,0,0,5" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
 				<Label x:Name="DataSourceLabel" Content="Data Source" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-				<TextBox x:Name="DataSourceTextBox" Text="{Binding SelectedMapUnitPoly.DataSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
-				<Label x:Name="ShapeLabel" Content="Polygon" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
+				<TextBox x:Name="DataSourceTextBox" Text="{Binding SelectedCF.DataSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
+				<Label x:Name="ShapeLabel" Content="Line" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 				<ScrollViewer Height="100" >
 					<TextBlock x:Name="ShapeTextBlock" Text="{Binding ShapeJson}" Margin="0,0,0,5" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
 				</ScrollViewer>

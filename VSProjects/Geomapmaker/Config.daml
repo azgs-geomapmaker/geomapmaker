@@ -33,9 +33,11 @@
         <group id="Geomapmaker_Project" caption="Project">
           <!--<tool refID="Geomapmaker_MapUnitPolyAddTool" size="large" />-->
           <!--<button refID="Geomapmaker_Button1" size="large" />-->
-          <buttonPalette refID="MapUnitPalette" size="large" />
+	      <tool refID="Geomapmaker_ContactsAndFaultsAddTool" size="large" />
+		  <buttonPalette refID="MapUnitPalette" size="large" />
           <toolPalette refID="MapUnitPolyToolPalette" size="large" />
-        </group>
+		  <!--<toolPalette refID="ContactsAndFaultsToolPalette" size="large" />-->
+		</group>
       </groups>
       <controls>
         <!-- add your controls here -->
@@ -75,6 +77,12 @@
         <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Show Dockpane">Show Dockpane<disabledText /></tooltip>
         </button>
+        <tool id="Geomapmaker_ContactsAndFaultsAddTool" caption="Contacts and Faults" className="ContactsAndFaultsAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </tool>
+        <button id="Geomapmaker_AddEditContactsAndFaults_ShowButton" caption="Show AddEditContactsAndFaults" className="AddEditContactsAndFaults_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
+          <tooltip heading="Show Dockpane">Show Dockpane<disabledText /></tooltip>
+        </button>
       </controls>
       <palettes>
         <buttonPalette id="MapUnitPalette" caption="Map Units" extendedCaption="Add/Edit Map Units" itemsInRow="1" showItemCaption="true" keytip="WTF">
@@ -85,13 +93,21 @@
           <tool refID="Geomapmaker_MapUnitPolyAddTool" />
           <tool refID="Geomapmaker_MapUnitPolyEditTool" />
         </toolPalette>
-      </palettes>
+        <!--
+		  <toolPalette id="ContactAndFaultsToolPalette" caption="Map Unit Polys" showItemCaption="true" itemsInRow="1">
+			  <tool refID="Geomapmaker_ContactsAndFaultsAddTool" />
+		  </toolPalette>
+          -->
+	  </palettes>
       <dockPanes>
         <dockPane id="Geomapmaker_AddEditMapUnitsDockPane" caption="Map Units" className="AddEditMapUnitsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="AddEditMapUnitsDockPaneView" />
         </dockPane>
         <dockPane id="Geomapmaker_AddEditMapUnitPolysDockPane" caption="Map Unit Polys" className="AddEditMapUnitPolysDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="AddEditMapUnitPolysDockPaneView" />
+        </dockPane>
+        <dockPane id="Geomapmaker_AddEditContactsAndFaultsDockPane" caption="Contacts and Faults" className="AddEditContactsAndFaultsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
+          <content className="AddEditContactsAndFaultsDockPaneView" />
         </dockPane>
       </dockPanes>
     </insertModule>

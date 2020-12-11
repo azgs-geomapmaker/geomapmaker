@@ -167,6 +167,12 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\AddEditContactsAndFaultsDockPane.xaml.cs">
+      <DependentUpon>AddEditContactsAndFaultsDockPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AddEditContactsAndFaultsDockPaneViewModel.cs" />
+    <Compile Include="RibbonElements\ContactsAndFaultsAddTool.cs" />
+    <Compile Include="Models\CF.cs" />
     <Compile Include="Views\AddEditMapUnitPolysDockPane.xaml.cs">
       <DependentUpon>AddEditMapUnitPolysDockPane.xaml</DependentUpon>
     </Compile>
@@ -198,6 +204,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AddEditContactsAndFaultsDockPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddEditMapUnitPolysDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
