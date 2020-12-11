@@ -67,15 +67,13 @@ namespace Geomapmaker {
 				//return true;
 
 				return
-					true;
-					/*
-					SelectedMapUnit != null &&
-					SelectedMapUnitPoly != null &&
-					SelectedMapUnitPoly.IdentityConfidence != null && SelectedMapUnitPoly.IdentityConfidence.Trim() != "" &&
-					//SelectedMapUnitPoly.Shape != null;// &&
+					SelectedCF != null &&
+					SelectedCF.IdentityConfidence != null && SelectedCF.IdentityConfidence.Trim() != "" &&
+					SelectedCF.ExistenceConfidence != null && SelectedCF.ExistenceConfidence.Trim() != "" &&
+					SelectedCF.LocationConfidenceMeters != null && SelectedCF.LocationConfidenceMeters.Trim() != "" &&
+					SelectedCF.IsConcealed != null && SelectedCF.IsConcealed.Trim() != "" &&
 					Shape != null;// &&
-								  //SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
-					*/
+					//SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
 			}
 		}
 
@@ -91,6 +89,7 @@ namespace Geomapmaker {
 			}
 		}
 
+		//TODO: Need to separate this from the Type (symbol) combobox. The interaction is not working correctly.
 		private CF selectedCF;
 		public CF SelectedCF {
 			get => selectedCF;
@@ -134,6 +133,7 @@ namespace Geomapmaker {
 			attributes["IdentityConfidence"] = SelectedCF.IdentityConfidence;
 			attributes["ExistenceConfidence"] = SelectedCF.ExistenceConfidence;
 			attributes["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters;
+			attributes["IsConcealed"] = SelectedCF.IsConcealed;
 			attributes["Notes"] = SelectedCF.Notes;
 			//TODO: other fields
 

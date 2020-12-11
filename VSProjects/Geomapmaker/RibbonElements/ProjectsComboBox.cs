@@ -86,7 +86,7 @@ namespace Geomapmaker {
         /// </summary>
         /// <param name="item">The newly selected combo box item</param>
         protected override async void OnSelectionChange(ComboBoxItem item) {
-            FrameworkApplication.State.Activate("project_selected");
+            //FrameworkApplication.State.Activate("project_selected");
 
             //Debug.WriteLine("item type = " + item.GetType());
             if (item == null)
@@ -101,6 +101,7 @@ namespace Geomapmaker {
                 AddEditMapUnitsDockPaneViewModel.Hide();
                 await loadGeodatabase();
             }
+            FrameworkApplication.State.Activate("project_selected");
         }
 
 

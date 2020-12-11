@@ -167,6 +167,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RibbonElements\ContactsAndFaultsEditTool.cs" />
     <Compile Include="Views\AddEditContactsAndFaultsDockPane.xaml.cs">
       <DependentUpon>AddEditContactsAndFaultsDockPane.xaml</DependentUpon>
     </Compile>

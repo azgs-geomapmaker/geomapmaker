@@ -16,6 +16,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.RibbonElements;
 
 namespace Geomapmaker {
     internal /*public*/ class GeomapmakerModule : Module {
@@ -24,6 +25,7 @@ namespace Geomapmaker {
         //public DataHelper helper = new DataHelper();
         internal static AddEditContactsAndFaultsDockPaneViewModel ContactsAndFaultsVM { get; set; }
         internal static ContactsAndFaultsAddTool ContactsAndFaultsAddTool { get; set; }
+        internal static ContactsAndFaultsEditTool ContactsAndFaultsEditTool { get; set; }
 
         internal static AddEditMapUnitPolysDockPaneViewModel MapUnitPolysVM { get; set; }
         internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
