@@ -51,11 +51,11 @@ namespace Geomapmaker {
 			try {
 				GeomapmakerModule.ContactsAndFaultsAddTool.Clear();
 			} catch (Exception e) { }
-			/*
 			try {
-				GeomapmakerModule.EditMapUnitPolyTool.Clear();
+				GeomapmakerModule.ContactsAndFaultsEditTool.Clear();
 			} catch (Exception e) { }
-			*/
+
+			SelectedCFSymbol = null;
 			SelectedCF = new CF();
 			ShapeJson = null;
 		}
@@ -86,6 +86,15 @@ namespace Geomapmaker {
 			get { return _heading; }
 			set {
 				SetProperty(ref _heading, value, () => Heading);
+			}
+		}
+
+		private CFSymbol selectedCFSymbol;
+		public CFSymbol SelectedCFSymbol {
+			get => selectedCFSymbol;
+			set {
+				SetProperty(ref selectedCFSymbol, value, () => SelectedCFSymbol); //Have to do this to trigger stuff, I guess.
+				SelectedCF.symbol = selectedCFSymbol;
 			}
 		}
 
@@ -129,7 +138,7 @@ namespace Geomapmaker {
 			Dictionary<string, object> attributes = new Dictionary<string, object>();
 
 			attributes["SHAPE"] = SelectedCF.Shape;//Geometry
-			attributes["Symbol"] = SelectedCF.key;
+			attributes["Symbol"] = SelectedCF.symbol.key;
 			attributes["IdentityConfidence"] = SelectedCF.IdentityConfidence;
 			attributes["ExistenceConfidence"] = SelectedCF.ExistenceConfidence;
 			attributes["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters;
@@ -155,19 +164,20 @@ namespace Geomapmaker {
 			//Moved this here from AddEditMapUnitsViewModel to accommodate keeping only active mu's in renderer.
 			//TODO: Don't really need to go through the whole symbology, just anything new in the feature class
 			//await DataHelper.populateContactsAndFaults();
+			//TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
 			List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
 			List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
 										new CIMUniqueValue {
-											FieldValues = new string[] { SelectedCF.key }
+											FieldValues = new string[] { SelectedCF.symbol.key }
 										}
 									};
 
 			CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
 				Editable = true,
-				Label = SelectedCF.key,
+				Label = SelectedCF.symbol.key,
 				//Patch = PatchShape.Default,
 				Patch = PatchShape.AreaPolygon,
-				Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol, null),
+				Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.symbol, null),
 				Visible = true,
 				Values = listUniqueValues.ToArray()
 			};

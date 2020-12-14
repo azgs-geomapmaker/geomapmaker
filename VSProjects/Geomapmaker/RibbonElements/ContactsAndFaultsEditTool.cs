@@ -74,7 +74,7 @@ namespace Geomapmaker.RibbonElements {
 										if (rowCursor.MoveNext()) {
 											using (Row row = rowCursor.Current) {
 												cf.ID = Int32.Parse(Convert.ToString(row["objectid"]));
-												cf.key = Convert.ToString(row["symbol"]);
+												cf.symbol = DataHelper.CFSymbols.Where(x => x.key == Convert.ToString(row["symbol"])).First();
 												//cf.description = Convert.ToString(row["description"]);
 												//cf.symbol = Convert.ToString(row["symbol"]);
 												cf.Notes = Convert.ToString(row["notes"]);
@@ -91,12 +91,13 @@ namespace Geomapmaker.RibbonElements {
 
 									// Use the map unit to populate the view model for the form
 									GeomapmakerModule.ContactsAndFaultsVM.SelectedCF = cf;
+									GeomapmakerModule.ContactsAndFaultsVM.SelectedCFSymbol = cf.symbol;
 									//TODO: The line below forces a refresh on the object the UI is bound to for shape. But other than that,
 									//it's redundant. There should be a better way to handle this.
 									GeomapmakerModule.ContactsAndFaultsVM.Shape = GeomapmakerModule.ContactsAndFaultsVM.SelectedCF.Shape;
 
 									UseSelection = true;
-									SketchType = SketchGeometryType.Polygon;
+									SketchType = SketchGeometryType.Line;
 									ContextToolbarID = "";
 									SetCurrentSketchAsync(cf.Shape);
 

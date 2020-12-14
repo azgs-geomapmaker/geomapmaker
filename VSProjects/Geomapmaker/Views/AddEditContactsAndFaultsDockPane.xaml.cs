@@ -34,7 +34,7 @@ namespace Geomapmaker {
 			var vm = (AddEditContactsAndFaultsDockPaneViewModel)this.DataContext;
 			await vm.saveCF();
 			vm.Reset();
-			ContactsAndFaultsComboBox.SelectedIndex = -1;
+			//ContactsAndFaultsComboBox.SelectedIndex = -1;
 		}
 
 		private void SaveCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {

@@ -95,10 +95,10 @@
           <tool refID="Geomapmaker_MapUnitPolyAddTool" />
           <tool refID="Geomapmaker_MapUnitPolyEditTool" />
         </toolPalette>
-		  <toolPalette id="ContactsAndFaultsToolPalette" caption="Contacts and Faults" showItemCaption="true" itemsInRow="1">
-			  <tool refID="Geomapmaker_ContactsAndFaultsAddTool" />
-			  <tool refID="Geomapmaker_ContactsAndFaultsEditTool" />
-		  </toolPalette>
+        <toolPalette id="ContactsAndFaultsToolPalette" caption="Contacts and Faults" showItemCaption="true" itemsInRow="1">
+          <tool refID="Geomapmaker_ContactsAndFaultsAddTool" />
+          <tool refID="Geomapmaker_ContactsAndFaultsEditTool" />
+        </toolPalette>
       </palettes>
       <dockPanes>
         <dockPane id="Geomapmaker_AddEditMapUnitsDockPane" caption="Map Units" className="AddEditMapUnitsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
