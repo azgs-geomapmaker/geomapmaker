@@ -33,9 +33,9 @@
           <!--<tool refID="Geomapmaker_MapUnitPolyAddTool" size="large" />-->
           <!--<button refID="Geomapmaker_Button1" size="large" />-->
           <!--<tool refID="Geomapmaker_ContactsAndFaultsAddTool" size="large" />-->
-          <buttonPalette refID="MapUnitPalette" size="large" />
-          <toolPalette refID="MapUnitPolyToolPalette" size="large" />
-          <toolPalette refID="ContactsAndFaultsToolPalette" size="large" />
+			<toolPalette refID="ContactsAndFaultsToolPalette" size="large" />
+			<buttonPalette refID="MapUnitPalette" size="large" />
+            <toolPalette refID="MapUnitPolyToolPalette" size="large" />
         </group>
       </groups>
       <controls>

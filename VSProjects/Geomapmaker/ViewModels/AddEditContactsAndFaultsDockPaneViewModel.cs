@@ -161,9 +161,7 @@ namespace Geomapmaker {
 				MessageBox.Show("Hogan's goat!");
 			}
 
-			//Moved this here from AddEditMapUnitsViewModel to accommodate keeping only active mu's in renderer.
-			//TODO: Don't really need to go through the whole symbology, just anything new in the feature class
-			//await DataHelper.populateContactsAndFaults();
+			//Update renderer with new symbol
 			//TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
 			List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
 			List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
@@ -194,6 +192,7 @@ namespace Geomapmaker {
 			};
 
 			await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
+				cfLayer.ClearSelection();
 				cfLayer.SetRenderer(DataHelper.cfRenderer);
 			});
 

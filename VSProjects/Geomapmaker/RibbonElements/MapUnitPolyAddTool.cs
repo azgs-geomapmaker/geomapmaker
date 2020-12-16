@@ -23,20 +23,23 @@ namespace Geomapmaker {
 		public MapUnitPolyAddTool() {
 			GeomapmakerModule.AddMapUnitPolyTool = this;
 			IsSketchTool = true;
-			UseSnapping = true;
+			//UseSnapping = true;
 			// Select the type of construction tool you wish to implement.  
 			// Make sure that the tool is correctly registered with the correct component category type in the daml 
-			//SketchType = SketchGeometryType.Point;
+			SketchType = SketchGeometryType.Point;
 			// SketchType = SketchGeometryType.Line;
-			SketchType = SketchGeometryType.Polygon;
-			//SketchOutputMode = SketchOutputMode.Screen;
+			//SketchType = SketchGeometryType.Polygon;
+			SketchOutputMode = SketchOutputMode.Map;
 			//Gets or sets whether the sketch is for creating a feature and should use the CurrentTemplate.
 			//UsesCurrentTemplate = true;
-			ContextToolbarID = "";
+			//ContextToolbarID = "";
+			UseSelection = false;
 		}
 
 		public void Clear() {
 			ClearSketchAsync();
+			UseSelection = false;
+			SketchType = SketchGeometryType.Point;
 		}
 
 		protected override Task OnToolActivateAsync(bool active) {
@@ -56,38 +59,62 @@ namespace Geomapmaker {
 		/// </summary>
 		/// <param name="geometry">The geometry created by the sketch.</param>
 		/// <returns>A Task returning a Boolean indicating if the sketch complete event was successfully handled.</returns>
-		protected override Task<bool> OnSketchCompleteAsync(Geometry geometry) {
-			if (geometry == null) {
-				return Task.FromResult(false);
-			}
+		protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry) {
+			var mv = MapView.Active;
+			var identifyResult = await QueuedTask.Run(() => {
 
-			//TODO: This sets the geom. Need to implement save. Then refresh map
-			//GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly.Shape = geometry;
-			GeomapmakerModule.MapUnitPolysVM.Shape = geometry;
+				//mv.SelectFeatures(geometry);
 
-			//This is a little janky, but it's the only way I have found to persist the poly and keep it editable
-			//until the whole map unit is saved.
-			//TODO: Is there a better way?
-			//StartSketchAsync(); //Looks like setting current is enough
-			SetCurrentSketchAsync(geometry);
+				if (UseSelection == false) {
+					//User just selected a cf to convert. Copy geometry to view model.
 
-			return Task.FromResult(false);
+					// Get the features that intersect the sketch geometry.
+					var features = mv.GetFeatures(geometry);
+					//Only interested in MapUnitPolys
+					var cfFeatures = features.Where(x => x.Key.Name == "ContactsAndFaults");
+					if (cfFeatures.Count() > 0) {
+						//Get cf objectid
+						//TODO: I am only pulling the first from the list. Might need to present some sort of selector to the user. 
+						if (cfFeatures.First().Value.Count() > 0) {
+							var cfID = cfFeatures.First().Value.First();
 
-			/*
-			if (CurrentTemplate == null || geometry == null)
-				return Task.FromResult(false);
+							//Using the objectid, get the cf record from the database
+							using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
+								using (Table cfTable = geodatabase.OpenDataset<Table>("ContactsAndFaults")) {
+									QueryFilter queryFilter = new QueryFilter {
+										WhereClause = "objectid = " + cfID
+									};
+									using (RowCursor rowCursor = cfTable.Search(queryFilter, false)) {
+										if (rowCursor.MoveNext()) {
+											using (Row row = rowCursor.Current) {
+												GeomapmakerModule.MapUnitPolysVM.Shape = PolygonBuilder.CreatePolygon((Polyline)row["shape"]);
+											}
+										}
 
-			// Create an edit operation
-			var createOperation = new EditOperation();
-			createOperation.Name = string.Format("Create {0}", CurrentTemplate.Layer.Name);
-			createOperation.SelectNewFeatures = true;
+									}
 
-			// Queue feature creation
-			createOperation.Create(CurrentTemplate, geometry);
+									UseSelection = true;
+									SketchType = SketchGeometryType.Polygon; 
+									ContextToolbarID = "";
+									SetCurrentSketchAsync(GeomapmakerModule.MapUnitPolysVM.Shape);
 
-			// Execute the operation
-			return createOperation.ExecuteAsync();
-			*/
+								}
+							}
+						}
+					}
+					return true;
+				} else {
+					//User has just modified the geometery, stick it on the form
+					GeomapmakerModule.MapUnitPolysVM.Shape = geometry;
+					SetCurrentSketchAsync(geometry);
+					//UseSelection = false;
+					//SketchType = SketchGeometryType.Point;
+					//TODO: more stuff?
+					return true;
+				}
+			});
+			//MessageBox.Show(identifyResult);
+			return true;
 		}
 	}
 }
