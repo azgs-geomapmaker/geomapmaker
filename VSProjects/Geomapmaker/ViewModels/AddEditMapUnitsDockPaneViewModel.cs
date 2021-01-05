@@ -38,6 +38,10 @@ namespace Geomapmaker {
 			if (pane == null)
 				return;
 			Debug.WriteLine("VM.Show, mapUnitName = " + DataHelper.MapUnitName);
+
+			//We don't want map tool active when editing map unit descriptions
+			//ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync(null);
+
 			pane.Activate(); 
 		}
 

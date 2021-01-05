@@ -35,7 +35,6 @@ namespace Geomapmaker {
 			DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
 			if (pane == null)
 				return;
-
 			pane.Activate();
 		}
 
