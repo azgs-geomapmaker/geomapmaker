@@ -220,6 +220,7 @@ namespace Geomapmaker {
 
 					QueryDef cfSymbolQDef = new QueryDef {
 						Tables = "CFSymbology",
+						SubFields = "key,description,symbol",
 						PostfixClause = "order by key"
 					};
 
@@ -232,6 +233,7 @@ namespace Geomapmaker {
 								//create and load map unit
 								CFSymbol cfS = new CFSymbol();
 								cfS.key = row["key"].ToString();
+								cfS.description = row["description"] == null ? "" : row["description"].ToString();
 								cfS.symbol = row["symbol"].ToString();
 								//Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
 								cfS.symbol = cfS.symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");

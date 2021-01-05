@@ -62,7 +62,7 @@
 						Width="200">
 					<ComboBox.ItemTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Horizontal" ToolTip="description goes here">
+							<StackPanel Orientation="Horizontal" ToolTip="{Binding description}" >
 								<Image Source="{Binding preview}"   />
 								<TextBlock Text="{Binding key}" />
 							</StackPanel>

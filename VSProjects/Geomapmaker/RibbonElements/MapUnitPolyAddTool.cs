@@ -37,8 +37,8 @@ namespace Geomapmaker {
 			//Gets or sets whether the sketch is for creating a feature and should use the CurrentTemplate.
 			//UsesCurrentTemplate = true;
 			//ContextToolbarID = "";
-			//UseSelection = false;
-			UseSelection = true;
+			UseSelection = false;
+			//UseSelection = true;
 		}
 
 		public void Clear() {
