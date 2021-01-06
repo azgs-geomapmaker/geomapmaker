@@ -220,7 +220,7 @@ namespace Geomapmaker {
 
 					QueryDef cfSymbolQDef = new QueryDef {
 						Tables = "CFSymbology",
-						SubFields = "key,description,symbol",
+						SubFields = "key,description,symbol", //TODO: I'm not sure why I have to explicitly list these to get description, but it seems I do
 						PostfixClause = "order by key"
 					};
 
