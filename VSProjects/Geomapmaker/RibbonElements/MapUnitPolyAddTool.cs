@@ -119,8 +119,7 @@ namespace Geomapmaker {
 									//SketchType = modifySketchType;
 									//SketchMode = SketchMode.Midpoint; 
 									//ContextToolbarID = "";
-									//SetCurrentSketchAsync(GeomapmakerModule.MapUnitPolysVM.Shape);
-									SketchType = selectionSketchType;
+									SetCurrentSketchAsync(GeomapmakerModule.MapUnitPolysVM.Shape);
 								}
 							}
 						}
