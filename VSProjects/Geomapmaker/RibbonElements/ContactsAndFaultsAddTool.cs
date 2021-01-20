@@ -24,6 +24,7 @@ namespace Geomapmaker {
 			SketchType = SketchGeometryType.Line;
 			SketchOutputMode = SketchOutputMode.Map;
 			ContextToolbarID = "";
+			UseSnapping = true;
 		}
 
 		public void Clear() {

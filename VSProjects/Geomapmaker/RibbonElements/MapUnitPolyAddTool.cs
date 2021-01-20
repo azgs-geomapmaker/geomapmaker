@@ -21,8 +21,8 @@ using ArcGIS.Desktop.Mapping;
 namespace Geomapmaker {
 	internal class MapUnitPolyAddTool : MapTool {
 
-		private SketchGeometryType selectionSketchType = SketchGeometryType.Rectangle;
-		private SketchGeometryType modifySketchType = SketchGeometryType.Polygon;
+		private SketchGeometryType selectionSketchType = SketchGeometryType.Point;
+		//private SketchGeometryType modifySketchType = SketchGeometryType.Polygon;
 
 		public MapUnitPolyAddTool() {
 			GeomapmakerModule.AddMapUnitPolyTool = this;
@@ -39,6 +39,8 @@ namespace Geomapmaker {
 			//ContextToolbarID = "";
 			UseSelection = false;
 			//UseSelection = true;
+			//UseSnapping = true;
+			//CompleteSketchOnMouseUp = true;
 		}
 
 		public void Clear() {
@@ -103,16 +105,22 @@ namespace Geomapmaker {
 												polylineBuilder.AddParts(polylineGeometry.Parts);
 											}
 										}
-										GeomapmakerModule.MapUnitPolysVM.Shape = PolygonBuilder.CreatePolygon(polylineBuilder.ToGeometry());
+										//GeomapmakerModule.MapUnitPolysVM.Shape = PolygonBuilder.CreatePolygon(polylineBuilder.ToGeometry());
+										GeomapmakerModule.MapUnitPolysVM.Shape = GeometryEngine.Instance.SimplifyAsFeature(PolygonBuilder.CreatePolygon(polylineBuilder.ToGeometry()));
 
 
 									}
 
 									//UseSelection = true;
-									SketchType = modifySketchType; 
-									ContextToolbarID = "";
-									SetCurrentSketchAsync(GeomapmakerModule.MapUnitPolysVM.Shape);
-
+									//TODO: I'm not sure what we want to be able to do with the polygon at this point.
+									//But I need the outline of the polygon to display on the map.
+									//Using SketchMode.Midpoint at least makes that polygon sketch stay calm 
+									//(omit that line and you'll see what I mean).   
+									//SketchType = modifySketchType;
+									//SketchMode = SketchMode.Midpoint; 
+									//ContextToolbarID = "";
+									//SetCurrentSketchAsync(GeomapmakerModule.MapUnitPolysVM.Shape);
+									SketchType = selectionSketchType;
 								}
 							}
 						}
