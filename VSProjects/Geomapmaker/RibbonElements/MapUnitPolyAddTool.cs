@@ -43,8 +43,12 @@ namespace Geomapmaker {
 			//CompleteSketchOnMouseUp = true;
 		}
 
+		private List<long> cfIDs = new List<long>();
+
 		public void Clear() {
+			overlay.Dispose();
 			ClearSketchAsync();
+			cfIDs.Clear();
 			UseSelection = false;
 			//SketchType = SketchGeometryType.Point;
 			SketchType = selectionSketchType;
@@ -62,6 +66,8 @@ namespace Geomapmaker {
 			return base.OnToolDeactivateAsync(hasMapViewChanged);
 		}
 
+		private IDisposable overlay;
+
 		/// <summary>
 		/// Called when the sketch finishes. This is where we will create the sketch operation and then execute it.
 		/// </summary>
@@ -70,31 +76,55 @@ namespace Geomapmaker {
 		protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry) {
 			var mv = MapView.Active;
 			var identifyResult = await QueuedTask.Run(() => {
+	
+				/*
+				 * This is unused, but I'm keeping it for now to remind me how to do it.
+				var lineStroke = SymbolFactory.Instance.ConstructStroke(ColorFactory.Instance.RedRGB, 4.0);
+				var marker = SymbolFactory.Instance.ConstructMarker(ColorFactory.Instance.RedRGB, 12, SimpleMarkerStyle.Circle);
+				marker.MarkerPlacement = new CIMMarkerPlacementOnVertices() {
+					AngleToLine = true,
+					PlaceOnEndPoints = true,
+					Offset = 0
+				};
+				var lineSymbol = new CIMLineSymbol() {
+					SymbolLayers = new CIMSymbolLayer[2] { marker, lineStroke }
+				};
+				*/
 
-				//mv.SelectFeatures(geometry);
+				//set up poly symbol for use in previewing poly that will result from CF selection
+				var fill = SymbolFactory.Instance.ConstructSolidFill(ColorFactory.Instance.CreateRGBColor(55,55,55,20));
+				var polySymbol = new CIMPolygonSymbol() {
+					SymbolLayers = new CIMSymbolLayer[1] { fill }
+				};
 
+				//TODO: The intent here was to allow the user to tweak the poly after selecting CF's. But I'm no longer doing that,
+				//so this control flow logic can probably go away.
 				if (SketchType == selectionSketchType) {
-					//User just selected a cf to convert. Copy geometry to view model.
 
 					// Get the features that intersect the sketch geometry.
 					var features = mv.GetFeatures(geometry);
-					//Only interested in MapUnitPolys
+					//Only interested in ContactsAndFaults
 					var cfFeatures = features.Where(x => x.Key.Name == "ContactsAndFaults");
 					if (cfFeatures.Count() > 0) {
 						//Get cf objectid
 						//TODO: I am only pulling the first from the list. Might need to present some sort of selector to the user. 
 						if (cfFeatures.First().Value.Count() > 0) {
-							//var cfID = cfFeatures.First().Value.First();
-							String cfIDs = "";
-							cfFeatures.First().Value.ForEach(cfID => {
-								cfIDs += cfIDs == "" ? "" + cfID : ", " + cfID;
+							var cfID = cfFeatures.First().Value.First();
+							if (!cfIDs.Contains(cfID)) {
+								cfIDs.Add(cfID);
+							}
+
+							//Build string for use in query where clause
+							String cfIDstring = "";
+							cfIDs.ForEach(cf => {
+								cfIDstring += cfIDstring == "" ? "" + cf : ", " + cf;
 							});
 
-							//Using the objectid, get the cf records from the database
+							//Using the objectids, get the cf records from the database, and build a poly out of them
 							using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
 								using (Table cfTable = geodatabase.OpenDataset<Table>("ContactsAndFaults")) {
 									QueryFilter queryFilter = new QueryFilter {
-										WhereClause = "objectid in (" + cfIDs + ")"
+										WhereClause = "objectid in (" + cfIDstring + ")"
 									};
 									using (RowCursor rowCursor = cfTable.Search(queryFilter, false)) {
 										PolylineBuilder polylineBuilder = new PolylineBuilder(); //TODO: spatial ref?
@@ -105,27 +135,21 @@ namespace Geomapmaker {
 												polylineBuilder.AddParts(polylineGeometry.Parts);
 											}
 										}
-										//GeomapmakerModule.MapUnitPolysVM.Shape = PolygonBuilder.CreatePolygon(polylineBuilder.ToGeometry());
-										GeomapmakerModule.MapUnitPolysVM.Shape = GeometryEngine.Instance.SimplifyAsFeature(PolygonBuilder.CreatePolygon(polylineBuilder.ToGeometry()));
-
+										Polyline polyline = GeometryEngine.Instance.SimplifyPolyline(polylineBuilder.ToGeometry(), SimplifyType.Network, true);
+										GeomapmakerModule.MapUnitPolysVM.Shape = GeometryEngine.Instance.SimplifyAsFeature(PolygonBuilder.CreatePolygon(polyline), true);
 
 									}
 
-									//UseSelection = true;
-									//TODO: I'm not sure what we want to be able to do with the polygon at this point.
-									//But I need the outline of the polygon to display on the map.
-									//Using SketchMode.Midpoint at least makes that polygon sketch stay calm 
-									//(omit that line and you'll see what I mean).   
 									//SketchType = modifySketchType;
-									//SketchMode = SketchMode.Midpoint; 
-									//ContextToolbarID = "";
-									SetCurrentSketchAsync(GeomapmakerModule.MapUnitPolysVM.Shape);
+									//SetCurrentSketchAsync(GeomapmakerModule.MapUnitPolysVM.Shape);
+									if (overlay != null) overlay.Dispose();
+									overlay = this.AddOverlay(GeomapmakerModule.MapUnitPolysVM.Shape, polySymbol.MakeSymbolReference());
 								}
 							}
 						}
 					}
 					return true;
-				} else {
+				} else { //TODO: the rest of the control logic that can probably go away (we never reach this)
 					//User has just modified the geometery, stick it on the form
 					GeomapmakerModule.MapUnitPolysVM.Shape = geometry;
 					SetCurrentSketchAsync(geometry);

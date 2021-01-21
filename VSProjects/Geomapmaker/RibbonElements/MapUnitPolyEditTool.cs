@@ -93,8 +93,13 @@ namespace Geomapmaker {
 									//it's redundant. There should be a better way to handle this.
 									GeomapmakerModule.MapUnitPolysVM.Shape = GeomapmakerModule.MapUnitPolysVM.SelectedMapUnitPoly.Shape;
 
-									UseSelection = true;
+									//UseSelection = true;
+									//TODO: I'm not sure what we want to be able to do with the polygon at this point.
+									//But I need the outline of the polygon to display on the map.
+									//Using SketchMode.Midpoint at least makes that polygon sketch stay calm 
+									//(omit that line and you'll see what I mean).   
 									SketchType = SketchGeometryType.Polygon;
+									//SketchMode = SketchMode.Midpoint;
 									ContextToolbarID = "";
 									SetCurrentSketchAsync(mapUnitPoly.Shape);
 
