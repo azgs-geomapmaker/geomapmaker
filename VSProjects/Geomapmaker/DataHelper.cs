@@ -297,7 +297,7 @@ namespace Geomapmaker {
 							//ValueExpressionInfo = cEI //fields used for testing
 						};
 
-						//Set renderer in mapunit. The try/catch is there because the first time through, this is called 
+						//Set renderer in cf. The try/catch is there because the first time through, this is called 
 						//before the layer has been added to the map. We just ignore the error in that case.
 						try {
 							var cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;

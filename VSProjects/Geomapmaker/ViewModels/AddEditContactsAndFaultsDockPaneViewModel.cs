@@ -57,11 +57,22 @@ namespace Geomapmaker {
 			SelectedCFSymbol = null;
 			SelectedCF = new CF();
 			ShapeJson = null;
+			Prepopulate = false;
+		}
+
+		private bool prepopulate;
+		public bool Prepopulate {
+			get { return prepopulate; }
+			set {
+				SetProperty(ref prepopulate, value, () => Prepopulate); //Have to do this to trigger stuff, I guess.
+				if (value) {
+					GeomapmakerModule.ContactsAndFaultsAddTool.SetPopulate();
+				}
+			}
 		}
 
 		public Boolean IsValid {
-			//TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
-			//each of the properties used below. There must be a better way.
+			//TODO: It is possible to enter errant values for the Type (symbol key). Need to figure out validation on that.
 			get {
 				//return true;
 
@@ -131,7 +142,7 @@ namespace Geomapmaker {
 
 			//return ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
 
-			var cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
+			var cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;			
 
 			//Define some default attribute values
 			Dictionary<string, object> attributes = new Dictionary<string, object>();
