@@ -1,3 +1,10 @@
+--Unrelated to cfsymbology, but sticking it here for now
+alter table 
+	sde.descriptionofmapunits
+add column if not exists
+	hexcolor text;
+	
+
 drop table if exists sde.cfsymbology;
 create table sde.cfsymbology (
 	key text primary key,
