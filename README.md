@@ -42,6 +42,8 @@ We breakup the description of functionality into a list of specific [buttons and
     5. [EXISTING GEMS TOOLS](#existing-gems-tools)
     6. [TOPOLOGY CHECKS](#topology-checks)
     7. [HIERARCHY KEYS](#hierarchy-keys)
+    8. [AUTOMATED GLOSSARY](#autoamted-glossary)
+    9. [HELP BUTTONS](#help-buttons)
 
 ### Login
 This button opens a login window to select or create a new user option. It includes a free-text field to add user-related notes. All other toolbar functionality is locked until a user has logged in.
@@ -107,7 +109,7 @@ B | contact | Y | 50 | 1.0.1
 
 4. Users can select existing contacts both with a click-select tool (implemented) and from a dropdown (not yet implemented) to 'copy' the attributes of a previous contact. This is a heavily requested feature from the mappers.
 
-5. `Glossary`. Whether definitions should be checked for and/entered when entering a new contact type OR if this process should simply be done at the end of the mapmaking process by running the [USGS validation tool](https://github.com/usgs/gems-tools-pro) has not been resolved. See the [Glossary](#glossary) section in the appendix.
+5. `Glossary`. Whether definitions should be checked for and/entered when entering a new contact type OR if this process should simply be done at the end of the mapmaking process by running the [USGS validation tool](https://github.com/usgs/gems-tools-pro) has not been resolved. See the [Automated Glossary](#automated-glossary) section in the appendix. I am leaning towards the former (and I may havve even promised this in the USGS proposal).
 
 ### Draw Map Unit Polygons
 This button works as a simple form where users select an existing map unit (generated from the [manage map units](#manage-map-units) button) and then select the enclosing lines (contacts) and convert into a polygon. There are very few fields in this form, which are all taken straight from GeMS.
@@ -208,8 +210,8 @@ We have solved both of these problems by creating an ESRI compatible style table
 The [core tables](#project-creation) are just a small portion of all tables that might be found in GeMS database. However, the majority of those other tables are so rarely used that might as well be created manually on a case-by-case basis. 
 
 There are four tables that the AZGS does sometimes, but not always, use. The question is which of these should also be supported:
-1. Stations (should be a fairly straightforward form with no real special considerations)
-2. OrientationPoints (Shares the same special considerations as [ContactsAndFaults](#addedit-contactsandfaults)
+1. Stations
+2. OrientationPoints
 3. Correlation of Map Units tables
 4. Cross Sections
 
@@ -231,6 +233,16 @@ TBD
 
 ### Topology Checks
 TBD
+
+### Automated Glossary
+TBD
+
+### Help Buttons
+It may be desirable to add severall "lookup" buttons to the ribbon.
+
+1. Lookup formation names
+2. Lookup geologic intervals
+3. Lookup FGDC symbology by name rather than number
 
 ### Existing GeMS tools
 https://github.com/usgs/gems-tools-pro
