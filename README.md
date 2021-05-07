@@ -1,5 +1,5 @@
-# AZGS GEOMAPMAKER SPECIFICATION 2.0
-This is a new design specification for the AZGS toolbar. The desired functionality of this toolbar is now completely reworked to be entirely oriented around supproting compliance with the Geologic Map Schema ([draft version](https://ngmdb.usgs.gov/Info/standards/GeMS/docs/GeMSv2_draft7g_ProvisionalRelease.pdf).
+# AZGS GEOMAPMAKER SPECIFICATION v2.1
+This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geologic mapping toolbar for ESRI ArcPro (v2.x). This primary purpose of this toolbar is to seamlessly (and discretely) integrate compliance with the 2020 USGS [Geologic Map Schema](https://pubs.er.usgs.gov/publication/tm11B10) into the map digitization process.
 
 ## Required Functionality 
 We breakup the description of functionality into a list of specific [buttons and actions](#buttons) for the toolbar and general [broad-strokes requirements](#broad-strokes-requirements).
@@ -10,18 +10,52 @@ We breakup the description of functionality into a list of specific [buttons and
 1. Multiple users must be able to simultaneously edit a geologic map project with versioning
 2. Toolbar should be compatible with PostgreSQL ArcSDE
 3. Maps must be exportable as a GeMs compliant ESRI File Geodatabase
-4. That when users fill out a feature through the toolbar form that form is enforcing vocabularies and NOT NULL according to the GeMS.
-
+4. That when users fill out a feature through the toolbar form that form is enforcing vocabularies and `NOT NULL` constraints according to GeMS.
+5. Ability to transfer, select, and view from a pre-made list of symbologies.
 
 ### Optional 
-1. Must be able to connect over the internet to REST services with relevant dictionaries or configuration files
-2. Ability to transfer, select, and view from a list of symbologies, possibly a style file.
-3. The most fundamental GeMS requirement are certain topology rules (no overlapping polygons).
+1. Able to connect over the internet to REST services with relevant dictionaries or configuration files.
+2. The toolbar should fully control the ArcGIS Pro environment to prevent users from using non-toolbar approved functions, which may potentially lead to violations of GeMS or otherwise break the geodatabase.
+3. Integrated topology checks during feature creation (e.g., no overlapping polygons).
 
-## Buttons and Actions
 
-### Create Initial Database
-There are already existing tools for creating databases, and we can also manually create new databases in advance. Therefore, this is not really a needed button. However, I wanted to record the five critical tables that *must* be in the project. Perhaps we could have this button be some sort of limited pre-validate that checks for these tables? Alternatively this could be an autoamtic check by the application that does not require a button.
+## Table of Contents
+1. BUTTONS AND ACTIONS
+    1. [LOGIN](#login)
+    2. PROJECTS
+        1. [PROJECT CREATION](#project-creation)
+        2. [SELECT PROJECT](#select-project)
+    3. [SELECT DATA SOURCE](#select-data-source)
+    4. [MANAGE MAP UNITS](#add-and-edit-a-map-unit)
+    5. [DRAW CONTACTS](#draw-contacts)
+    6. [DRAW MAP UNIT POLYGONS](#draw-map-unit-polygons)
+2. GEMS TABLE DEFINITIONS
+    1. [MAP UNIT POLYS](#map-unit-polys)
+    2. [CONTACTS AND FAULTS](#contacts-and-faults)
+    3. [DESCRIPTION OF MAP UNITS](#description-of-map-units)
+    4. [DATA SOURCES](#datasources)
+    5. [GLOSSARY](#glossary)
+3. APPENDIX
+    1. [AGES](#ages)
+    3. [SYMBOLOGY AND STYLES](#symbology-and-styles)
+    4. [LOCATION CONFIDENCE METERS](#location-confidence-meters)
+    5. [EXISTING GEMS TOOLS](#existing-gems-tools)
+    6. [TOPOLOGY CHECKS](#topology-checks)
+    7. [HIERARCHY KEYS](#hierarchy-keys)
+    8. [AUTOMATED GLOSSARY](#autoamted-glossary)
+    9. [HELP BUTTONS](#help-buttons)
+
+### Login
+This button opens a login window to select or create a new user option. It includes a free-text field to add user-related notes. All other toolbar functionality is locked until a user has logged in.
+
+The 2.0 version of the toolbar did not include any authentication protocol as part of the login (i.e., no passwords), as it was assumed that an honor system would be sufficient for AZGS purposes. However, now that toolbar development is being funded by the USGS, it is possible that other surveys may wish for authentication to be included, and we leave this issue open-ended in v2.1 until feedback from other surveys can be obtained. If authentication is added as a feature in 2.1 then additional logic will likely be necessary to limit [project selection](#select-project) based on user permissions.
+
+Note that login is *distinct* from [data source](#select-data-source) as a user may conceivably enter data from multiple sources and wish to make a distinction.
+
+### Project Creation
+There are [existing tools](https://github.com/usgs/gems-tools-pro) for creating GeMS databases and the v2.x implementation of the AZGS toolbar assumes that new geologic mapping projects are added to the PostgreSQL database [in advance](/SetUp.md#to-create-new-azgsgems-db). 
+
+However, it is important to record the five critical tables that *must* be in any valid GeMS project. A project cannot be selected/loaded into the toolbar if it is missing these tables. 
 
 1. [MapUnitPolys](#map-unit-polys)
 2. [ContactsAndFaults](#contacts-and-faults)
@@ -29,41 +63,61 @@ There are already existing tools for creating databases, and we can also manuall
 4. [DataSources](#datasources)
 5. [Glossary](#glossary)
 
-### Login
-This button will open a login window. The window should have a dropdown selection to pick an existing user or a text box for a create user option. There will be no passwords or other authentication assocaited this is just for record keeping purposes of who is making other successive edits. For this reason, all other toolbar functionality should be locked until a user has logged in. This login will be recorded in the [DataSources table](data-sources).
+Additionally, the toolbar also assumes the following special tables that are not part of the GeMS specification. These tables are not included when exporting a project as an ESRI File Geodatabase, but are used internally by the toolbar to handle styling information.
 
-### Add/Edit Map Unit
-This should trigger a form that corresponds directly to the fields and options in the [DescriptionOfMapUnits table](#description-of-map-units). Note that most fields have constraints of some kind that need to be made explicit and be enforced by the form - e.g., unique, not null, or some reference to another table. This should be mostly straightforward as most fields will just require either a picklist or will be an open text field. 
+1. [Symbology](/sql/CFSymbology.sql)
 
-However, special considerations include:
-1. `AreaFillRGB` and `hexcolor`. I think users would really appreciate having the ability to use some sort of interactive color-picker as part of the form interface, but we can consider this optional if it is too difficult. At worst case, the users will have to use some other tool to pick the color and will enter in the rgb or hexcode values manually in the form as the appropriate text/numeric string.
+### Select Project
+This is a dropdown menu that allows user to select an existing project. Note that there is a known delay between selecting a project and the start of a load indicator that we have not been able to eliminate (issue #27). All other toolbar functionality is locked until a user has logged AND THEN selected a project.
 
-2. `Ages`. See the [Ages](#ages) section in the [special considerations](#special-considerations) section.
+All projects are currenty visible to all users, but this may change if a system of user-based permissions is introduced (see [login](#login))
 
-3. `GeoMaterials`. A new field required by GeMS is the GeoMaterials field, which does not have an analogue in NCGMP09. This is not particularly hard to implement for us, because it is just a picklist from values in a special (pre-defined, static) table called [GeoMaterialsDict](#geomaterialsdict). However, the geologists will probably resent having to fill out this field, so we need to ensure that the form strictly forces them to put this information in.
+### Select Data Source
+This is not yet implemented. However, it is expected to operate in the same manner as the [login button](#login), but with the following differences.
 
-### AddEdit MapUnitPoly
-This should trigger a form that corresponds directly to the fields and options in the [MapUnitPolys table](#map-unit-polys). Note that most fields have constraints of some kind that need to be made explicit and be enforced by the form - e.g., unique, not null, or some reference to another table. However, this is overall a very simple feature class with no special considerations.
+ 1. Authentication will never be a part of the data sources field, regardless of whether it is eventually  added to the main login button.
+ 2. New DataSources will always be written to the GeMS [DataSources](#datasources) table
+ 3. A login does not apply to a specific project, but a datasource is always *project specific*.
+ 4. Once a DataSource is chosen, it should automatically populate to all other database entries (e.g., [adding a new contact](#draw-contacts)).
+ 
+ All other toolbar functionality is locked until a user has logged in AND THEN selected a project AND THEN selected a data source.
 
-### AddEdit ContactsAndFault
-This should trigger a form that corresponds directly to the fields and options in the [ContactsAndFaults table](#contacts-and-faults). Note that most fields have constraints of some kind that need to be made explicit and be enforced by the form - e.g., unique, not null, or some reference to another table. 
+### Manage Map Units
+This trigger a form-pane that corresponds directly to the fields and options in the [DescriptionOfMapUnits table](#description-of-map-units). However, a few special considerations and modifications to the base table that we have made.
 
-This is one of the trickiest forms that will require two special considerations.
+1. `AreaFillRGB` and `hexcolor`. We provide a color-picker rather than requesting a text rgb. We also record both hexcode (better) and rgb in separate columsn on the back end. 
+
+2. `Ages`. See the [Ages](#ages) section in the appendix. To briefly summarize the solution, we now provide an explicit free-text 'relative-age' field AND an explicit picklist of authorized ICS intervals. This includes Eras, Periods, Epochs, and Stages. Substages and regional stages are not included, but could be supported if desired by the community. In addition, we enforce the separation of early age and late age into separate fields (as GeMS should have done!! 🤬)
+
+3. `GeoMaterials`. A new field required by GeMS is the GeoMaterials field, which does not have an analogue in NCGMP09. This is not particularly hard to implement for us, because it is just a picklist from values in a special (pre-defined, static) table called GeoMaterialsDict (latest example from https://github.com/usgs/gems-tools-pro). However, some mappers resent having to fill out this field, so the form forces them to put this information in.
+
+4. `Hierarchy Key`. This issue has not yet been resolved. See the [Hierarchy keys](#hierarchy-keys) section in the appendix.
+
+### Draw Contacts
+This triggers a form that corresponds directly to the fields and options in the [ContactsAndFaults](#contacts-and-faults) table of GeMS. However, a few special considerations and modifications to the base table that we have made are listed below.
 
 Scenario | Type | IsConcealed | LocationConfidenceMeters | Symbol
 ---- | ---- | ---- | ---- | ---- |
 A | approximate contact, concealed | NULL | NULL | 1.0.1
 B | contact | Y | 50 | 1.0.1
 
-1. The geologists are currently used to filling out the attribute data in the manner of A, but we want to design the form specifically to encourage them to fill things out in style B. A recommended table of values for LocationConfidenceMeters can be found in the [Appendix](#location-confidence-meters).
+1. The mappers are currently used to filling out  attribute data in the manner of A, but we have designed the form to require that informaton be filled out in accord with scenario B. A recommended table of values for [LocationConfidenceMeters](#location-confidence-meters) can be found in the appendix.
 
-2. We need some way of recording styling information for the lines in the `Symbol` field - see [Symbology And Styles](#symbology-and-styles) in [special considerations](#special-considerations). It would be great if the form could actually display the symbols as images to make choosing the best symbol easier, but I don't know if that sort of display can be handled in an ESRI form. The alternative is to refer to the items by name in the form (i.e., values in the `Category` field of the .stylex); however, values in the `Key` field will still have to be what is actually recored in the `Symbol` field of the geodatabase. 
+2. The inconsistent (and terrible 🤬) manner in which ESRI has handled styling and symbology information makes it impossible to support symbol selection using base ESRI tools (i.e., stylex). We have resolved this by creating a custom set of symbology tables (modified from the uderlying SQLite design of stylex) that live on the PostgreSQL backend. For more information on how these are handled, see [Symbology And Styles](#symbology-and-styles) in the appendix.
 
-## GeMS feature class and non-spatial table definitions
-I have tentatively described these using PostgreSQL data types and not ARC data types, but we should convert or **update this as soon as possible to Arc types**.
+3. Different surveys handle the relationship between lines and polygons differently, but our toolbar currently enforces that linework be completed before map unit polygons can be added. This is because we create map unit polygons *from* lines (see [Draw Map Unit Polygons](#draw-map-unit-polygons))
+
+4. Users can select existing contacts both with a click-select tool (implemented) and from a dropdown (not yet implemented) to 'copy' the attributes of a previous contact. This is a heavily requested feature from the mappers.
+
+5. `Glossary`. Whether definitions should be checked for and/entered when entering a new contact type OR if this process should simply be done at the end of the mapmaking process by running the [USGS validation tool](https://github.com/usgs/gems-tools-pro) has not been resolved. See the [Automated Glossary](#automated-glossary) section in the appendix. I am leaning towards the former (and I may havve even promised this in the USGS proposal).
+
+### Draw Map Unit Polygons
+This button works as a simple form where users select an existing map unit (generated from the [manage map units](#manage-map-units) button) and then select the enclosing lines (contacts) and convert into a polygon. There are very few fields in this form, which are all taken straight from GeMS.
+
+We have determined that overlapping polygons should be forbidden at this stage, but it has not yet been determined what, if any, topology checks should be included (see [toplogy checks](#topology-checks) in the appendix for further discussion)
 
 #### Map Unit Polys
-> Note that GeMS specification is case-sensitive, ugh. Also note that the MapUnitPolys feature class must be part of the GeologicMaps 'feature dataset'
+> Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
 
 ````SQL
 MapUnitPolys_ID integer PRIMARY KEY -- Not sure how this will conflict witht he arc OBJECTID, ugh
@@ -77,7 +131,7 @@ geom geometry -- Polygon only (multi-polygon not allowed), other checks constrai
 ````
 
 #### Contacts And Faults
-> Note that GeMS specification is case-sensitive, ugh. Also note that the ContactsAndFaults feature class must be part of the GeologicMaps 'feature dataset'
+> Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
 
 ````SQL
 ContactsAndFaults_ID serial PRIMARY KEY
@@ -94,7 +148,7 @@ geom geometry -- line only (multi-line not allowed), other checks constraints ma
 ````
 
 #### Description Of Map Units
-> Note that GeMS specification is case-sensitive, ugh. Non-spatial tables do not belong to a feature dataset
+> Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc. Non-spatial tables do not belong to an Arc feature dataset
 
 ````SQL
 DescriptionOfMapUnits_ID serial PRIMARY KEY
@@ -116,7 +170,7 @@ GeoMaterialConfidence text REFERENCES Glossary(Term)
 ````
 
 #### DataSources
-> Note that GeMS specification is case-sensitive, ugh. Non-spatial tables do not belong to a feature dataset
+> Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc. Non-spatial tables do not belong to an Arc feature dataset
 
 ````SQL
 DataSources_ID serial PRIMARY KEY
@@ -126,7 +180,7 @@ URL text
 ````
 
 #### Glossary
-> Note that GeMS specification is case-sensitive, ugh. Non-spatial tables do not belong to a feature dataset
+> Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
 
 ````SQL
 Glossary_ID serial PRIMARY KEY
@@ -135,62 +189,36 @@ Definition text
 DataSourceID text REFERENCES DataSources(DataSources_ID)
 ````
 
-## Special Considerations
-#### Ages
+### Ages
 The GeMS specification asks that the [DescriptionOfMapUnits](#description-of-map-units) table have a field `Age`. There are two problems with the way that this is currently specified.
 
-1. The surficial geologists (Ann Youberg, Joe Cook, Phil Pearthree, Brian Gootee, and Jeri Young) generally do not have precise/absolute ages. They often only know that a particular rock body is <10,000 yrs old or that it is older that Unit A, but younger than Unit B. It is very hard to convey this type of qualitative information in the Ages field as it should be properly defined. Therefore, I have added another field, tentatively titled `RelativeAge`. GeMS does not forbid the inclusion of additional fields, though this field will need to be explained in the [Glossary](#glossary).
+1. The surficial geologists generally do not have precise/absolute ages. They often only know that a particular rock body is <10,000 yrs old or that it is older that Unit A, but younger than Unit B. It is very hard to convey this type of informal, qualitative information in the Ages field as it should be properly defined. Therefore, I have added another field, tentatively titled `RelativeAge`. GeMS does not forbid the inclusion of additional fields, though this field will need to be explained in the [Glossary](#glossary).
 
-2. The current Ages is just an open textbox and tends to have inconsistent formatting. This causes a huge number of headaches. Instead, we want to enforce a consistent structure of "Older Interval - Younger Interval" always. This should probably be handled at the form level, where we will prompt them with two separate boxes `older interval` and `younger interval` and the form will past them together into OI - YI format within the data table.
+2. The current Ages is just an open textbox and tends to have inconsistent formatting. This causes a huge number of headaches. Instead, we want to enforce a consistent structure of "Older Interval - Younger Interval" always. This is now fixed at the form level, where we prompt them with two separate boxes `older interval` and `younger interval`. These entries are then pasted into the format OI - YI format within the data table.
 
-#### Foreign Keys versus a Check Constraint versus Application Logic
-If you look at the structure of the [tables](#gems-feature-class-and-non-spatial-table-definitions) there are a number of fields where I specified a foreign key constraint. However, in some cases, these are not truly foreign keys because the table.field being referenced does not necessarily need to obey a `UNIQUE` constraint, in which case it cannot be used as a foreign key. These scenarios would be better described by using a `CHECK` constraint. 
+### Symbology and Styles
+The old toolbar and ArcMap system was dependent on [Cartographic Representations](https://desktop.arcgis.com/en/arcmap/latest/map/working-with-layers/introduction-to-the-cartographic-representations-tutorial.htm) for handling styling information. CartoReps are no longer supported in ArcPro and have been superseded by .stylex files (see [stylex files](#stylex-files) in the appendix for a description of how these work). 
 
-An obvious altnerative would be not to mess around in the GeoDatabase with either a `CHECK` or `FOREIGN KEY` constraint, but rather enforced these relations through form with application logic. This is probably the way to go, because Arc is probably not going to play nice with a lot of PostgreSQL driven constraints (we've more or less learned that the hard way already). However, it would be AWESOME to be able to add certain topology constraints for example:
+There are two downsides of .stylex from the perspective of the toolbar.
+1. No robust .stylex exists of FGDC symbology (though several attempts by other surveys can be found at the NGMDB website[(https://ngmdb.usgs.gov).
 
-````PLpgSQL
-ALTER TABLE "MapUnitPolys"
-  ADD CONSTRAINT geometry_valid_check
-	CHECK (ST_IsValid(geom));
-````
+2. A .stylex has to be loaded separately from a geodatabase, which increases the likelihood of data loss.
 
-#### Symbology and Styles
-The old toolbar and ArcMap system was dependent on [Cartographic Representations](https://desktop.arcgis.com/en/arcmap/latest/map/working-with-layers/introduction-to-the-cartographic-representations-tutorial.htm) for handling styling information.
+We have solved both of these problems by creating an ESRI compatible style table for FGDC symbols that lives within the backend ArcSDE PostgreSQL database. 
 
-CartoReps are no longer supported in ArcPro, which means we need a different way to handle styling information. The most promising route will be for us to have a .stlyex file (see [stylex files](#stylex-files) in the appendix for a description of how these work). This would probably be the most ESRI way to do things, and I like it for that reason. The Alaska Geological Survey has made a .style file of the FGDC symbology (can be found [here](https://ngmdb.usgs.gov/Info/standards/GeMS/docs/AKDGGS-style_10-2013.zip) which can be converted into a .stylex in ArcPro.
-
-One downside of this, however, is that the .stylex has to be loaded separately from the database. Perhaps we can think of a way to embed the .stylex as part of the toolbar or the database. Otherwise this will potentially be a nightmare for data transfer and updating. You can also only symbolize by matching a stylex to an attribute in arcpro versions >2.5
-
-#### Support for non-core tables
-The core tables I [described above](#create-initial-database) are just a small portion of all tables that might be found in GeMS database. However, the majority of those other tables are so rarely used that might as well be created manually on a case-by-case basis. 
+### Support for non-core tables
+The [core tables](#project-creation) are just a small portion of all tables that might be found in GeMS database. However, the majority of those other tables are so rarely used that might as well be created manually on a case-by-case basis. 
 
 There are four tables that the AZGS does sometimes, but not always, use. The question is which of these should also be supported:
-1. Stations (should be a fairly straightforward form with no real special considerations)
-2. OrientationPoints (Shares the same special considerations as [ContactsAndFaults](#addedit-contactsandfaults)
+1. Stations
+2. OrientationPoints
 3. Correlation of Map Units tables
 4. Cross Sections
 
-More research will need to be done with the geologists to see which of these they truly need help with. I am also unclear on this time exactly how the cross sectiona and correlation of map units table will need to be implemented.
+We have already determined that Stations and OrientationPoints will be supported via an implementation that is essentially a direct mirror of the [DRAW CONTACTS](#draw-contacts) button. No determination has been made as to how or if correlations and/or cross-sections will be supported by the toolbar.
 
-#### SQL Server vs. PostgreSQL
-One of the main goals is to switch to PSQL to save on licensing fees and to gain access to backend PostGIS capabilities, but it might be less performant than SQL Server. If the performance benefits are big enough, it would worth the licensing fees. We can think about a test case using tablet upload case of Brian/Joe.
-
-## Appendix Information
-#### Stylex Files
-“Styles” are databases that hold symbols, symbol primitives (like colors), and layout elements like north arrows and scale bars. (from the Esri Cartography MOOC)
-
-A .stylx file is a SQLite database containing symbols etc., described in JSON (JavaScript Object Notation). Stylx is an open spec documented in the open Cartographic Information Model (CIM) specification (https://github.com/Esri/cim-spec). You can view a .stylex by just changing its extension to sqlite. Theoretically we might be able to do some sort of PostgreSQL implementation.
-
-Examples of point symbols defined in JSON: https://github.com/cmrRose/cim-spec/blob/master/docs/v2/Example-Symbols.md 
-
-Overview of the symbols in a style: https://github.com/Esri/cim-spec/blob/master/docs/v2/Overview-Symbols.md 
-
-A good starting location if we wanot to build a .stylex: http://dggs.alaska.gov/public_files/Ekberg/FGDC_style_file_fonts/
-
-Full set of notes from [Caroline Rose](https://docs.google.com/document/d/1m3EpqVClDAa6Lyd14uZ_FX20gTbT730n3fDfQLBbhw4/edit#heading=h.4q5u3xtlwbbg) in a google doc. Includes an outline of how to make our own styles.
-
-#### Location Confidence Meters
-This is the recommended table of values for the LocationConfidenceMeters field given in the GeMS specification document. The geologists don't like using the field because they don't know what to put, but we can now point them to this recommendation.
+### Location Confidence Meters
+This is the recommended table of values for the LocationConfidenceMeters field given in the GeMS specification document. The mappers don't like using the field because they don't know what to put, but we can now point them to this recommendation.
 
 Value | Definition
 ---- | ----
@@ -200,12 +228,23 @@ Value | Definition
 100 | Appropriate value for features digitized from 1:100,000 scale paper source maps
 250 | You really don’t know where a feature is! Or you captured its location from a 1:250,000 scale source map
 
-#### GeoMaterialsDict
-The GeMS specification has a static table called GeoMaterialsDict that links into the GeoMaterials field. This is required by GeMS and is one of the most significant changes from NCGMP09. The geologists will not be happy about this change, so we need to make sure that the form strictly enforces their compliance.
+### Hierarchy Keys
+TBD
 
-We do not yet have the finalized version of this table, but I will add a link to it once it is released (presumably in July).
+### Topology Checks
+TBD
 
-#### Existing GeMS tools
+### Automated Glossary
+TBD
+
+### Help Buttons
+It may be desirable to add severall "lookup" buttons to the ribbon.
+
+1. Lookup formation names
+2. Lookup geologic intervals
+3. Lookup FGDC symbology by name rather than number
+
+### Existing GeMS tools
 https://github.com/usgs/gems-tools-pro
 https://pubs.usgs.gov/tm/2006/11A02/ -- FGDC symbology (PDF and Adobe Illustrator Files)
 https://ngmdb.usgs.gov/Info/standards/GeMS/docs/FGDCGeoSym_fonts.zip -- Fonts required for the stylex below
