@@ -118,8 +118,8 @@ namespace Geomapmaker {
 			}
 		}
 
-		public string SelectedOlderInterval { get; set; }
-		public string SelectedYoungerInterval { get; set; }
+		public Interval SelectedOlderInterval { get; set; }
+		public Interval SelectedYoungerInterval { get; set; }
 
 		//This is to capture the user entering a new map unit (not in the list)
 		private string userEnteredMapUnit;

@@ -84,12 +84,28 @@
 					<StackPanel>
 						<Label x:Name="OlderIntervalLabel" Margin="-4,0,0,0" Content="Older Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
 						<!--<TextBox x:Name="OlderIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
-						<ComboBox x:Name="OlderIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectedMapUnit.OlderInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
+						<ComboBox x:Name="OlderIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Intervals)}"  SelectedItem ="{Binding SelectedMapUnit.OlderInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" >
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" ToolTip="{Binding range}">
+										<TextBlock Text="{Binding name}" />
+									</StackPanel>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
 					</StackPanel>
 					<StackPanel>
 						<Label x:Name="YoungerIntervalLabel" Margin="-4,0,0,0" Content="Younger Interval" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="100" />
 						<!--<TextBox x:Name="YoungerIntervalTextBox" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="50" />-->
-						<ComboBox x:Name="YoungerIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Ages)}"  SelectedItem ="{Binding SelectedMapUnit.YoungerInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" />
+						<ComboBox x:Name="YoungerIntervalComboBox"  ItemsSource="{Binding Path=(ui:DataHelper.Intervals)}"  SelectedItem ="{Binding SelectedMapUnit.YoungerInterval}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="50" >
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" ToolTip="{Binding range}">
+										<TextBlock Text="{Binding name}" />
+									</StackPanel>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
 					</StackPanel>
 				</StackPanel>
 				<Label x:Name="RelativeAgeLabel" Content="Relative Age" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />

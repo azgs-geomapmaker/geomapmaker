@@ -23,22 +23,24 @@ namespace Geomapmaker.Models {
 		//view model. Addendum: I tried this and got it working. But it felt messy to me. I think Imma leave it here afterall.
 		public string Age { 
 			get {
-				var older = OlderInterval == null ? "" : OlderInterval;
-				var younger = YoungerInterval == null ? "" : YoungerInterval;
+				var older = OlderInterval.name == null ? "" : OlderInterval.name;
+				var younger = YoungerInterval.name == null ? "" : YoungerInterval.name;
 				return older != "" || younger != "" ? older + "-" + younger : null;
 			} 
 			set {
 				if (value != null) {
 					var intervals = value.Split('-');
-					OlderInterval = intervals.Length > 0 ? intervals[0] : null;
-					YoungerInterval = intervals.Length > 1 ? intervals[1] : null;
+					//OlderInterval.name = intervals.Length > 0 ? intervals[0] : null;
+					//YoungerInterval.name = intervals.Length > 1 ? intervals[1] : null;
+					OlderInterval = intervals.Length > 0 ? DataHelper.Intervals.Single(i => i.name == intervals[0]) : null;
+					YoungerInterval = intervals.Length > 1 ? DataHelper.Intervals.Single(i => i.name == intervals[1]) : null;
 				}
 			}
 		}
 
-		public string OlderInterval { get; set; }
+		public Interval OlderInterval { get; set; }
 
-		public string YoungerInterval { get; set; }
+		public Interval YoungerInterval { get; set; }
 
 		public string RelativeAge { get; set; }
 

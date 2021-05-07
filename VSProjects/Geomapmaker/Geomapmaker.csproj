@@ -167,6 +167,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
     <Compile Include="RibbonElements\ContactsAndFaultsEditTool.cs" />
     <Compile Include="Views\AddEditContactsAndFaultsDockPane.xaml.cs">
