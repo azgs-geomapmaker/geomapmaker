@@ -20,7 +20,8 @@ We breakup the description of functionality into a list of specific [buttons and
 
 
 ## Table of Contents
-1. BUTTONS AND ACTIONS
+1. [Installation](#installation)
+2. BUTTONS AND ACTIONS
     1. [LOGIN](#login)
     2. PROJECTS
         1. [PROJECT CREATION](#project-creation)
@@ -29,13 +30,13 @@ We breakup the description of functionality into a list of specific [buttons and
     4. [MANAGE MAP UNITS](#add-and-edit-a-map-unit)
     5. [DRAW CONTACTS](#draw-contacts)
     6. [DRAW MAP UNIT POLYGONS](#draw-map-unit-polygons)
-2. GEMS TABLE DEFINITIONS
+3. GEMS TABLE DEFINITIONS
     1. [MAP UNIT POLYS](#map-unit-polys)
     2. [CONTACTS AND FAULTS](#contacts-and-faults)
     3. [DESCRIPTION OF MAP UNITS](#description-of-map-units)
     4. [DATA SOURCES](#datasources)
     5. [GLOSSARY](#glossary)
-3. APPENDIX
+4. APPENDIX
     1. [AGES](#ages)
     3. [SYMBOLOGY AND STYLES](#symbology-and-styles)
     4. [LOCATION CONFIDENCE METERS](#location-confidence-meters)
@@ -45,6 +46,9 @@ We breakup the description of functionality into a list of specific [buttons and
     8. [AUTOMATED GLOSSARY](#autoamted-glossary)
     9. [HELP BUTTONS](#help-buttons)
     10. [UNIT IMPORT](#unit-import)
+
+### Installation
+Working documentation for installation can be found in the [SetUp.md](/blob/master/SetUp.md) markdown file in the repository.
 
 ### Login
 This button opens a login window to select or create a new user option. It includes a free-text field to add user-related notes. All other toolbar functionality is locked until a user has logged in.
@@ -254,7 +258,17 @@ id | name
 There are pros and cons to this. In terms of pro is solves the inconsistent constraints issue. The con is that this will break scripts meant to *plot* layout elements strictly from the DMU break.
 
 ### Topology Checks
-> discussion TBD
+It may be prudent to build certain topology checks into toolbar so that invalid features cannot be entered at all. 
+
+There are some downsides to this approach.
+
+1. Some topology rules are not always hard and fast, for example, hanging faults are sometimes permitted. Banning them from the get-go would make it impossible to put a geologically valid data point into the map.
+2. However strict our checks are, the checks that really matter will come from the [USGS validation tool](https://github.com/usgs/gems-tools-pro). This may make our checks redundant or misleading.
+
+The pros to this approach are.
+1. Would be far less likely to have to retroactively correct dozens of topological errors after running [USGS validation tool](https://github.com/usgs/gems-tools-pro).
+
+The latest thinking is overlapping polygons will be forbidded under [draw map unit polygons](#draw-map-unit-polygons) tool, but other topology checks will not be baked into the toolbar, and users will have to correct topologies at the end of the map making process using some other external tool such as the [USGS validation tool](https://github.com/usgs/gems-tools-pro).
 
 ### Automated Glossary
 Whether definitions should be checked for and/entered when entering a new contact type OR if this process should simply be done at the end of the mapmaking process by running the [USGS validation tool](https://github.com/usgs/gems-tools-pro) has not been resolved. 
