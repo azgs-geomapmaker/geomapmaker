@@ -44,6 +44,7 @@ We breakup the description of functionality into a list of specific [buttons and
     7. [HIERARCHY KEYS](#hierarchy-keys)
     8. [AUTOMATED GLOSSARY](#autoamted-glossary)
     9. [HELP BUTTONS](#help-buttons)
+    10. [UNIT IMPORT](#unit-import)
 
 ### Login
 This button opens a login window to select or create a new user option. It includes a free-text field to add user-related notes. All other toolbar functionality is locked until a user has logged in.
@@ -109,7 +110,7 @@ B | contact | Y | 50 | 1.0.1
 
 4. Users can select existing contacts both with a click-select tool (implemented) and from a dropdown (not yet implemented) to 'copy' the attributes of a previous contact. This is a heavily requested feature from the mappers.
 
-5. `Glossary`. Whether definitions should be checked for and/entered when entering a new contact type OR if this process should simply be done at the end of the mapmaking process by running the [USGS validation tool](https://github.com/usgs/gems-tools-pro) has not been resolved. See the [Automated Glossary](#automated-glossary) section in the appendix. I am leaning towards the former (and I may havve even promised this in the USGS proposal).
+5. `Glossary`. Whether definitions should be checked for and/entered when entering a new contact type OR if this process should simply be done at the end of the mapmaking process by running the [USGS validation tool](https://github.com/usgs/gems-tools-pro) has not been resolved. See the [Automated Glossary](#automated-glossary) section in the appendix.
 
 ### Draw Map Unit Polygons
 This button works as a simple form where users select an existing map unit (generated from the [manage map units](#manage-map-units) button) and then select the enclosing lines (contacts) and convert into a polygon. There are very few fields in this form, which are all taken straight from GeMS.
@@ -215,7 +216,7 @@ There are four tables that the AZGS does sometimes, but not always, use. The que
 3. Correlation of Map Units tables
 4. Cross Sections
 
-We have already determined that Stations and OrientationPoints will be supported via an implementation that is essentially a direct mirror of the [DRAW CONTACTS](#draw-contacts) button. No determination has been made as to how or if correlations and/or cross-sections will be supported by the toolbar.
+We have already determined that Stations and OrientationPoints will be supported via an implementation that is essentially a direct mirror of the [draw contacts](#draw-contacts) button. No determination has been made as to how or if correlations and/or cross-sections will be supported by the toolbar.
 
 ### Location Confidence Meters
 This is the recommended table of values for the LocationConfidenceMeters field given in the GeMS specification document. The mappers don't like using the field because they don't know what to put, but we can now point them to this recommendation.
@@ -229,13 +230,36 @@ Value | Definition
 250 | You really don’t know where a feature is! Or you captured its location from a 1:250,000 scale source map
 
 ### Hierarchy Keys
-TBD
+Both the `HierarchyKeys` and `ParagraphStyles` fields (moreso ParagraphStyles) are really legacies of the layout design process and complicate the role of the [DescriptionOfMapUnits](#description-of-map-units) table as the location of primarily geologic information. Most importantly, the DMU as currently envisioned includes both headers (not map units) and map units. This creates headaches regarding field constraints as some *required* fields for map units are not required for headers. 
+
+Our current design solution is to have headings broken out into their own table and use `ParagraphStyles` as an FKEY to said table.
+
+(Truncated DMU)
+Name | HierarchyKey | ParagraphStyles
+---- | ---- | ----
+Hamilton Group | 1 | 10
+Marcellus Shale | 1-4 | 10
+Skaneateles  | 1-3 | 10
+Ludlowville  | 1-2 | 10
+Moscow | 1-1 | 10
+Tully Limestone | 2 | 10
+
+> Note that the convention is that 1-2 is older than 1-1. Also note that older AZGS databases use the 1.1 format, but GeMS demands using `-` instead of `.` as the separator.
+
+(Truncated Header's table)
+id | name
+---- | ----
+10 | Middle Devonian Rocks
+
+There are pros and cons to this. In terms of pro is solves the inconsistent constraints issue. The con is that this will break scripts meant to *plot* layout elements strictly from the DMU break.
 
 ### Topology Checks
-TBD
+> discussion TBD
 
 ### Automated Glossary
-TBD
+Whether definitions should be checked for and/entered when entering a new contact type OR if this process should simply be done at the end of the mapmaking process by running the [USGS validation tool](https://github.com/usgs/gems-tools-pro) has not been resolved. 
+
+> discussion TBD
 
 ### Help Buttons
 It may be desirable to add severall "lookup" buttons to the ribbon.
@@ -243,6 +267,9 @@ It may be desirable to add severall "lookup" buttons to the ribbon.
 1. Lookup formation names
 2. Lookup geologic intervals
 3. Lookup FGDC symbology by name rather than number
+
+### Unit Import
+The former AZGS toolbar has (not sure if it is still working) a button that let users import Map Units from older maps into a new map project. It has not yet been decided if this feature should be included or not, and if it is included, if it should be expanded to include glossaries and other tables besides the DescriptionOfMapUnits. Feedback from the mappers is needed. 
 
 ### Existing GeMS tools
 https://github.com/usgs/gems-tools-pro
