@@ -48,7 +48,7 @@ We breakup the description of functionality into a list of specific [buttons and
     10. [UNIT IMPORT](#unit-import)
 
 ### Installation
-Working documentation for installation can be found in the [SetUp.md](/blob/master/SetUp.md) markdown file in the repository.
+Working documentation for installation can be found in the [SetUp.md](/SetUp.md) markdown file in the repository.
 
 ### Login
 This button opens a login window to select or create a new user option. It includes a free-text field to add user-related notes. All other toolbar functionality is locked until a user has logged in.
