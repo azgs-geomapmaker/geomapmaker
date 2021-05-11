@@ -18,9 +18,10 @@
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
         <tab id="AZGS_Tab" caption="AZGS">
-          <group refID="Geomapmaker_Admin" />
-          <group refID="Geomapmaker_Project" />
-        </tab>
+            <group refID="Geomapmaker_Admin" />
+            <group refID="Geomapmaker_Tables" />
+		    <group refID="Geomapmaker_Features" />
+		</tab>
       </tabs>
       <groups>
         <!-- comment this out if you have no controls on the Addin tab to avoid
@@ -29,24 +30,21 @@
           <button refID="Geomapmaker_LoginButton" size="large" />
           <comboBox refID="Geomapmaker_ProjectsComboBox" />
         </group>
-        <group id="Geomapmaker_Project" caption="Project">
-          <!--<tool refID="Geomapmaker_MapUnitPolyAddTool" size="large" />-->
-          <!--<button refID="Geomapmaker_Button1" size="large" />-->
-          <!--<tool refID="Geomapmaker_ContactsAndFaultsAddTool" size="large" />-->
-			<toolPalette refID="ContactsAndFaultsToolPalette" size="large" />
+		<group id="Geomapmaker_Tables" caption="Tables">
 			<buttonPalette refID="MapUnitPalette" size="large" />
+		</group>
+		<group id="Geomapmaker_Features" caption="Features">
+		    <toolPalette refID="ContactsAndFaultsToolPalette" size="large" />
             <toolPalette refID="MapUnitPolyToolPalette" size="large" />
         </group>
       </groups>
       <controls>
         <!-- add your controls here -->
         <button id="Geomapmaker_LoginButton" caption="Login" className="LoginButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png">
-          <tooltip heading="Tooltip Heading">
-                    Tooltip text<disabledText /></tooltip>
+          <tooltip heading="Login">Choose a user to operate as<disabledText /></tooltip>
         </button>
         <comboBox id="Geomapmaker_ProjectsComboBox" caption="Projects" className="ProjectsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" condition="userLoginCondition">
-          <tooltip heading="Tooltip Heading">
-                    Select a project to work on<disabledText /></tooltip>
+          <tooltip heading="Projects">Select a project to work on<disabledText /></tooltip>
         </comboBox>
         <!-- moved to DockPane
                 <comboBox id="Geomapmaker_MapUnitsComboBox" caption="Map Units" className="MapUnitsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="true" isReadOnly="false" resizable="true" condition="projectSelectedCondition">
@@ -61,29 +59,29 @@
                 -->
         <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
           <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+          <tooltip heading="Map Unit Polys">Add a new map unit poly<disabledText /></tooltip>
           <content guid="17a27ef5-1084-4d46-abc8-11641bc5b871" />
         </tool>
         <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+          <tooltip heading="Map Unit Polys">Edit an existing map unit poly<disabledText /></tooltip>
         </tool>
         <button id="Geomapmaker_AddMapUnitsButton" caption="Add Map Units" className="AddMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="projectSelectedCondition">
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+          <tooltip heading="Map Units">Add a new map unit description<disabledText /></tooltip>
         </button>
         <button id="Geomapmaker_EditMapUnitsButton" caption="Edit Map Units" className="EditMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="projectSelectedCondition">
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+          <tooltip heading="Map Units">Edit an existing map unit description<disabledText /></tooltip>
         </button>
         <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Show Dockpane">Show Dockpane<disabledText /></tooltip>
         </button>
         <tool id="Geomapmaker_ContactsAndFaultsAddTool" caption="Add Contacts and Faults" className="ContactsAndFaultsAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+          <tooltip heading="Contacts and Faults">Add a new contact or fault<disabledText /></tooltip>
         </tool>
         <button id="Geomapmaker_AddEditContactsAndFaults_ShowButton" caption="Show AddEditContactsAndFaults" className="AddEditContactsAndFaults_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Show Dockpane">Show Dockpane<disabledText /></tooltip>
         </button>
         <tool id="Geomapmaker_ContactsAndFaultsEditTool" caption="Edit Contact and Faults" className="Geomapmaker.RibbonElements.ContactsAndFaultsEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="projectSelectedCondition">
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+          <tooltip heading="Contacts and Faults">Edit an existing contact or fault<disabledText /></tooltip>
         </tool>
       </controls>
       <palettes>
