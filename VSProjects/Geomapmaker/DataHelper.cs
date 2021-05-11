@@ -146,12 +146,16 @@ namespace Geomapmaker {
 									string colorString = mapUnit.AreaFillRGB;
 									string[] strVals = colorString.Split(';');
 									var cF = ColorFactory.Instance;
+									var fill = new CIMSolidFill();
+									fill.Color = cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]));
+									var stroke = new CIMSolidStroke();
+									stroke.Color = cF.CreateRGBColor(255, 255, 255, 0);
 									CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass {
 										Editable = true,
 										Label = mapUnit.MU,
 										//Patch = PatchShape.Default,
 										Patch = PatchShape.AreaPolygon,
-										Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]))).MakeSymbolReference(),
+										Symbol = SymbolFactory.Instance.ConstructPolygonSymbol(fill, stroke).MakeSymbolReference(),
 										Visible = true,
 										Values = listUniqueValues.ToArray()
 									};
