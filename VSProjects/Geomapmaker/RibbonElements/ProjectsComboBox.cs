@@ -80,7 +80,6 @@ namespace Geomapmaker {
 
         }
 
-
         /// <summary>
         /// The on comboBox selection change event. 
         /// </summary>
@@ -95,11 +94,18 @@ namespace Geomapmaker {
             if (string.IsNullOrEmpty(item.Text))
                 return;
 
-            if (item is ProjectComboBoxItem) { //TODO: This is only here because I'm not sure how to have a combobox without an initial selection
-                var props = JObject.Parse(((ProjectComboBoxItem)item).connectionProperties);
-                DataHelper.setConnectionProperties(props);
-                AddEditMapUnitsDockPaneViewModel.Hide();
-                await loadGeodatabase();
+            using (var progress = new ProgressDialog("Loading AZGS Project")) {
+                progress.Show();
+                await QueuedTask.Run(async () => {
+
+                    if (item is ProjectComboBoxItem) { //TODO: This is only here because I'm not sure how to have a combobox without an initial selection
+                        var props = JObject.Parse(((ProjectComboBoxItem)item).connectionProperties);
+                        DataHelper.setConnectionProperties(props);
+                        AddEditMapUnitsDockPaneViewModel.Hide();
+                        await loadGeodatabase();
+                    }
+                });
+                progress.Hide();
             }
             FrameworkApplication.State.Activate("project_selected");
         }
