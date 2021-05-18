@@ -1,10 +1,88 @@
---Unrelated to cfsymbology, but sticking it here for now
+---------- descriptionofmapunits ----------
+create sequence sde.descriptionofmapunits_id_seq;
+
+alter table sde.descriptionofmapunits_id_seq owner to sde;
+
+alter sequence sde.descriptionofmapunits_id_seq owned by sde.descriptionofmapunits.descriptionofmapunits_id;
+
+alter table sde.descriptionofmapunits
+   alter column descriptionofmapunits_id set default nextval('descriptionofmapunits_id_seq');
+
 alter table 
 	sde.descriptionofmapunits
 add column if not exists
 	hexcolor text;
-	
+		
+		
+---------- datasources ----------	
+delete from sde.datasources;
 
+create sequence sde.datasources_id_seq;
+
+alter table sde.datasources_id_seq owner to sde;
+
+alter sequence sde.datasources_id_seq owned by sde.datasources.datasources_id;
+
+alter table sde.datasources
+   alter column datasources_id set default nextval('datasources_id_seq');
+
+alter table sde.datasources
+   alter column source type varchar(30);
+
+
+---------- contactsandfaults ----------	
+delete from sde.contactsandfaults;
+
+create sequence sde.contactsandfaults_id_seq;
+
+alter table sde.contactsandfaults_id_seq owner to sde;
+
+alter sequence sde.contactsandfaults_id_seq owned by sde.contactsandfaults.contactsandfaults_id;
+
+alter table sde.contactsandfaults
+   alter column contactsandfaults_id set default nextval('contactsandfaults_id_seq');
+
+
+---------- mapunitpolys	----------
+delete from sde.mapunitpolys;
+
+create sequence sde.mapunitpolys_id_seq;
+
+alter table sde.mapunitpolys_id_seq owner to sde;
+
+alter sequence sde.mapunitpolys_id_seq owned by sde.mapunitpolys.mapunitpolys_id;
+
+alter table sde.mapunitpolys
+   alter column mapunitpolys_id set default nextval('mapunitpolys_id_seq');
+
+
+---------- orientationpoints ----------	
+delete from sde.orientationpoints;
+
+create sequence sde.orientationpoints_id_seq;
+
+alter table sde.orientationpoints_id_seq owner to sde;
+
+alter sequence sde.orientationpoints_id_seq owned by sde.orientationpoints.orientationpoints_id;
+
+alter table sde.orientationpoints
+   alter column orientationpoints_id set default nextval('orientationpoints_id_seq');
+
+
+---------- stations ----------	
+delete from sde.stations;
+
+create sequence sde.stations_id_seq;
+
+alter table sde.stations_id_seq owner to sde;
+
+alter sequence sde.stations_id_seq owned by sde.stations.stations_id;
+
+alter table sde.stations
+   alter column stations_id set default nextval('stations_id_seq');
+
+
+---------- cfsymbology ----------
 drop table if exists sde.cfsymbology;
 create table sde.cfsymbology (
 	key text primary key,
