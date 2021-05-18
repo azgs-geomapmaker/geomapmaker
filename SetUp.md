@@ -61,7 +61,7 @@
 
 4. In Postgres, run azgs sql touchup
 
-    This is currently in file sql\cfsymbology.sql. Originally, that file only contained Contacts and Faults symbology, but it is growing and should be renamed.
+    This is currently in file sql\AZGS-customizations.sql. 
     
     It may be possible to make these changes part of the template, but I haven't figured out how yet.
 
