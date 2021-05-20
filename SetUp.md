@@ -65,6 +65,30 @@
     
     It may be possible to make these changes part of the template, but I haven't figured out how yet.
 
+5. To enable this, run the following commands (substituting values corresponding to the above)
+	```
+	insert into 
+		geomapmaker.projects (
+			id, --TODO: this should be an auto-sequence
+			name,
+			notes,
+			connection_properties
+		)
+	values (
+		4, 
+		'Project 04', 
+		'Notes for Project 04', 
+		'{"user": "sde", "database": "gems03", "instance": "127.0.0.1", "password": "password"}'
+	);
+
+	insert into
+		geomapmaker.user_project_links (
+			id, --TODO: this should be an auto-sequence
+			user_id, --TODO: add fk constraint
+			project_id --TODO: add fk constraint
+		)
+	values (5, 1, 4);
+	```
 
 # <a id="create-template"></a> To create Gems template in xml (only necessary if you need to create the template)
 1. Install USGS Gems tools in ArcGIS Pro per [https://github.com/usgs/gems-tools-pro
