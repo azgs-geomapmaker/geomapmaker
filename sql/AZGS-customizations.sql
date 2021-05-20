@@ -1,13 +1,25 @@
 ---------- descriptionofmapunits ----------
-create sequence sde.descriptionofmapunits_id_seq;
+create sequence descriptionofmapunits_id_seq;
 
 alter table sde.descriptionofmapunits_id_seq owner to sde;
 
 alter sequence sde.descriptionofmapunits_id_seq owned by sde.descriptionofmapunits.descriptionofmapunits_id;
 
-alter table sde.descriptionofmapunits
-   alter column descriptionofmapunits_id set default nextval('descriptionofmapunits_id_seq');
+create function sde.descriptionofmapunits_id_function() 
+   returns trigger 
+   language plpgsql
+as $$
+begin
+   new.descriptionofmapunits_id = nextval('descriptionofmapunits_id_seq')::text;
+   return new;
+end;
+$$;
 
+create trigger sde.descriptionofmapunits_id_update
+    before insert on sde.descriptionofmapunits    
+for each row
+    execute procedure sde.descriptionofmapunits_id_function();
+	
 alter table 
 	sde.descriptionofmapunits
 add column if not exists
@@ -23,11 +35,25 @@ alter table sde.datasources_id_seq owner to sde;
 
 alter sequence sde.datasources_id_seq owned by sde.datasources.datasources_id;
 
-alter table sde.datasources
-   alter column datasources_id set default nextval('datasources_id_seq');
+create function sde.datasources_id_function() 
+   returns trigger 
+   language plpgsql
+as $$
+begin
+   new.datasources_id = nextval('datasources_id_seq')::text;
+   return new;
+end;
+$$;
+
+create trigger datasources_id_update
+    before insert on sde.datasources    
+for each row
+    execute procedure sde.datasources_id_function();
 
 alter table sde.datasources
    alter column source type varchar(30);
+   
+alter table sde.datasources add constraint source_constraint unique (source);
 
 
 ---------- contactsandfaults ----------	
@@ -39,9 +65,21 @@ alter table sde.contactsandfaults_id_seq owner to sde;
 
 alter sequence sde.contactsandfaults_id_seq owned by sde.contactsandfaults.contactsandfaults_id;
 
-alter table sde.contactsandfaults
-   alter column contactsandfaults_id set default nextval('contactsandfaults_id_seq');
+create function sde.contactsandfaults_id_function() 
+   returns trigger 
+   language plpgsql
+as $$
+begin
+   new.contactsandfaults_id = nextval('contactsandfaults_id_seq')::text;
+   return new;
+end;
+$$;
 
+create trigger contactsandfaults_id_update
+    before insert on sde.contactsandfaults    
+for each row
+    execute procedure sde.contactsandfaults_id_function();
+	
 
 ---------- mapunitpolys	----------
 delete from sde.mapunitpolys;
@@ -52,8 +90,20 @@ alter table sde.mapunitpolys_id_seq owner to sde;
 
 alter sequence sde.mapunitpolys_id_seq owned by sde.mapunitpolys.mapunitpolys_id;
 
-alter table sde.mapunitpolys
-   alter column mapunitpolys_id set default nextval('mapunitpolys_id_seq');
+create function sde.mapunitpolys_id_function() 
+   returns trigger 
+   language plpgsql
+as $$
+begin
+   new.mapunitpolys_id = nextval('mapunitpolys_id_seq')::text;
+   return new;
+end;
+$$;
+
+create trigger mapunitpolys_id_update
+    before insert on sde.mapunitpolys    
+for each row
+    execute procedure sde.mapunitpolys_id_function();
 
 
 ---------- orientationpoints ----------	
@@ -65,8 +115,20 @@ alter table sde.orientationpoints_id_seq owner to sde;
 
 alter sequence sde.orientationpoints_id_seq owned by sde.orientationpoints.orientationpoints_id;
 
-alter table sde.orientationpoints
-   alter column orientationpoints_id set default nextval('orientationpoints_id_seq');
+create function sde.orientationpoints_id_function() 
+   returns trigger 
+   language plpgsql
+as $$
+begin
+   new.orientationpoints_id = nextval('orientationpoints_id_seq')::text;
+   return new;
+end;
+$$;
+
+create trigger orientationpoints_id_update
+    before insert on sde.orientationpoints    
+for each row
+    execute procedure sde.orientationpoints_id_function();
 
 
 ---------- stations ----------	
@@ -78,8 +140,20 @@ alter table sde.stations_id_seq owner to sde;
 
 alter sequence sde.stations_id_seq owned by sde.stations.stations_id;
 
-alter table sde.stations
-   alter column stations_id set default nextval('stations_id_seq');
+create function sde.stations_id_function() 
+   returns trigger 
+   language plpgsql
+as $$
+begin
+   new.stations_id = nextval('stations_id_seq')::text;
+   return new;
+end;
+$$;
+
+create trigger stations_id_update
+    before insert on sde.stations    
+for each row
+    execute procedure sde.stations_id_function();
 
 
 ---------- cfsymbology ----------
