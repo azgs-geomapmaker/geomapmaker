@@ -26,6 +26,7 @@ namespace Geomapmaker {
 
 		protected AddEditMapUnitPolysDockPaneViewModel() {
 			SelectedMapUnitPoly = new MapUnitPoly();
+			SelectedMapUnitPoly.DataSource = DataHelper.DataSource.Source; //for display
 			GeomapmakerModule.MapUnitPolysVM = this;
 		}
 
@@ -109,6 +110,7 @@ namespace Geomapmaker {
 		public MapUnitPoly SelectedMapUnitPoly {
 			get => selectedMapUnitPoly;
 			set {
+				value.DataSource = DataHelper.DataSource.Source; //for display
 				SetProperty(ref selectedMapUnitPoly, value, () => SelectedMapUnitPoly); //Have to do this to trigger stuff, I guess.
 			}
 		}
@@ -149,10 +151,11 @@ namespace Geomapmaker {
 				attributes["MapUnit"] = SelectedMapUnit.MU;
 				attributes["IdentityConfidence"] = SelectedMapUnitPoly.IdentityConfidence;
 				attributes["Notes"] = SelectedMapUnitPoly.Notes;
+				attributes["DataSourceID"] = DataHelper.DataSource.DataSource_ID;
 				//TODO: other fields
 
-				//Create the new feature
-				var op = new EditOperation();
+			//Create the new feature
+			var op = new EditOperation();
 				if (SelectedMapUnitPoly.ID == null) {
 					op.Name = string.Format("Create {0}", "MapUnitPolys");
 					op.Create(polyLayer, attributes);

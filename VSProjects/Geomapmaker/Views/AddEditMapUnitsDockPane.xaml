@@ -130,7 +130,7 @@
 				<TextBox x:Name="HexColorTextBox" Text="{Binding SelectedMapUnit.HexColor}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 				-->
 				<Label x:Name="DescriptionSourceLabel" Content="Description Source" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-				<TextBox x:Name="DescriptionSourceTextBox" Text="{Binding SelectedMapUnit.DescriptionSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
+				<TextBox x:Name="DescriptionSourceTextBox" IsReadOnly="True" FontStyle="Italic" Text="{Binding SelectedMapUnit.DescriptionSourceID}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 				<Label x:Name="GeoMaterialLabel" Content="GeoMaterial " HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 				<ComboBox x:Name="GeoMaterialComboBox" Margin="0,0,0,5" ItemsSource="{Binding Path=(ui:DataHelper.GeoMaterials)}"  SelectedItem ="{Binding SelectedMapUnit.GeoMaterial}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="200" RenderTransformOrigin="1.027,0.111"/>
 				<Label x:Name="GeoMaterialConfidenceLabel" Content="GeoMaterial Confidence" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />

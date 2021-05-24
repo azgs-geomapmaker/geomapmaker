@@ -103,6 +103,7 @@ namespace Geomapmaker {
 					return;
 				}
 				//selectedMapUnit = value;
+				value.DescriptionSourceID = DataHelper.DataSource.Source; // for display
 				SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
 
 				//Set heading and populate form, depending on whether this is a new map unit or not 
@@ -136,6 +137,7 @@ namespace Geomapmaker {
 					//userEnteredMapUnit = value;
 					var mapUnit = new MapUnit();
 					mapUnit.MU = userEnteredMapUnit;
+					mapUnit.DescriptionSourceID = DataHelper.DataSource.Source; //for display
 					SelectedMapUnit = mapUnit;
 				}
 			}
@@ -188,7 +190,7 @@ namespace Geomapmaker {
 											row["Symbol"] = mapUnit.Symbol;
 											row["AreaFillRGB"] = mapUnit.AreaFillRGB;
 											row["hexcolor"] = mapUnit.hexcolor;
-											row["DescriptionSourceID"] = 5; // mapUnit.DescriptionSourceID;
+											row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
 											row["GeoMaterial"] = mapUnit.GeoMaterial;
 											row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
 
@@ -221,7 +223,7 @@ namespace Geomapmaker {
 									rowBuffer["Symbol"] = mapUnit.Symbol;
 									rowBuffer["AreaFillRGB"] = mapUnit.AreaFillRGB;
 									rowBuffer["hexcolor"] = mapUnit.hexcolor;
-									rowBuffer["DescriptionSourceID"] = 5; // mapUnit.DescriptionSourceID;
+									rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
 									rowBuffer["GeoMaterial"] = mapUnit.GeoMaterial;
 									rowBuffer["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
 

@@ -167,6 +167,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
     <Compile Include="RibbonElements\ContactsAndFaultsEditTool.cs" />
@@ -192,6 +193,9 @@
     <Compile Include="DarkImages\GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
     <Compile Include="RibbonElements\LoginButton.cs" />
+    <Compile Include="Views\DataSourceDialogProWindow.xaml.cs">
+      <DependentUpon>DataSourceDialogProWindow.xaml</DependentUpon>
+    </Compile>
     <!--<Compile Include="Views\LoginDialogProWindow.xaml.cs" />-->
     <Compile Include="Views\LoginDialogProWindow.xaml.cs">
       <DependentUpon>LoginDialogProWindow.xaml</DependentUpon>
@@ -201,6 +205,7 @@
     <Compile Include="RibbonElements\ProjectComboBoxItem.cs" />
     <Compile Include="RibbonElements\ProjectsComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RibbonElements\DataSourceButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -216,6 +221,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddEditMapUnitsDockPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataSourceDialogProWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

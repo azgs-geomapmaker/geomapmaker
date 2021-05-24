@@ -75,7 +75,7 @@
 				<Label x:Name="NotesLabel"  Content="Notes" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top" Width="147" />
 				<TextBox x:Name="NotesTextBlock" Margin="0,0,0,5" Text="{Binding SelectedMapUnitPoly.Notes}" HorizontalAlignment="Left" Height="25"   TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
 				<Label x:Name="DataSourceLabel" Content="Data Source" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
-				<TextBox x:Name="DataSourceTextBox" Text="{Binding SelectedMapUnitPoly.DataSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
+				<TextBox x:Name="DataSourceTextBox"  IsReadOnly="True" FontStyle="Italic" Text="{Binding SelectedMapUnitPoly.DataSource}" Margin="0,0,0,5" HorizontalAlignment="Left" Height="25"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
 				<Label x:Name="ShapeLabel" Content="Polygon" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="147" />
 				<ScrollViewer Height="100" >
 					<TextBlock x:Name="ShapeTextBlock" Text="{Binding ShapeJson}" Margin="0,0,0,5" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>

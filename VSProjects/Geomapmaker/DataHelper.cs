@@ -68,6 +68,36 @@ namespace Geomapmaker {
 			}
 		}
 
+		public static event EventHandler DataSourcesChanged;
+		private static ObservableCollection<DataSource> dataSources = new ObservableCollection<DataSource>();
+		public static ObservableCollection<DataSource> DataSources {
+			get => dataSources;
+			set {
+				dataSources = value;
+				DataSourcesChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
+
+		public static event EventHandler DataSourceChanged;
+		private static DataSource dataSource = null;
+		public static DataSource DataSource {
+			get => dataSource;
+			set {
+				dataSource = value;
+				DataSourceChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
+
+		public static event EventHandler DummyChanged;
+		private static string dummy = "Hi there";
+		public static string Dummy {
+			get => dummy;
+			set {
+				dummy = value;
+				DummyChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
+
 		//Populate our map units list from the database and create unique value renderer for mapunitpolys featureclass 
 		//using colors from the descriptionofmapunits table. This uses a variation of the technique presented here: 
 		//https://community.esri.com/message/960006-how-to-render-color-of-individual-features-based-on-field-in-another-table
@@ -127,7 +157,7 @@ namespace Geomapmaker {
 								//mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
 								mapUnit.hexcolor = row["hexcolor"] == null ? null : row["hexcolor"].ToString();
 								//mapUnit.Color = row["hexcolor"];
-								//mapUnit.DescriptionSourceID = row["DescriptionSourceID"].ToString();
+								mapUnit.DescriptionSourceID = row["DescriptionSourceID"] == null ? null : row["DescriptionSourceID"].ToString();
 								mapUnit.GeoMaterial = row["GeoMaterial"] == null ? null : row["GeoMaterial"].ToString();
 								mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"] == null ? null : row["GeoMaterialConfidence"].ToString();
 
@@ -314,6 +344,52 @@ namespace Geomapmaker {
 			});
 			DataHelper.CFSymbols = cfSymbols;
 		}
+
+
+
+		public static async Task populateDataSources() {
+			Debug.WriteLine("populateDataSources enter");
+
+			var dataSources = new ObservableCollection<DataSource>();
+
+			if (DataHelper.connectionProperties == null) {
+				return;
+			}
+
+			await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
+
+				using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
+
+					QueryDef dsQDef = new QueryDef {
+						Tables = "DataSources",
+						PostfixClause = "order by source"
+					};
+
+					using (RowCursor rowCursor = geodatabase.Evaluate(dsQDef, false)) {
+						while (rowCursor.MoveNext()) {
+							using (Row row = rowCursor.Current) {
+								Debug.WriteLine(row["source"].ToString());
+
+								//create and load map unit
+								DataSource dS = new DataSource();
+								dS.ID = long.Parse(row["objectid"].ToString());
+								dS.Source = row["source"].ToString();
+								dS.DataSource_ID = row["datasources_id"].ToString();
+								dS.Url = row["url"] == null ? "" : row["url"].ToString();
+								dS.Notes = row["notes"] == null ? "" : row["notes"].ToString();
+
+								//add it to our list
+								dataSources.Add(dS);
+							}
+						}
+
+					}
+
+				}
+			});
+			DataHelper.DataSources = dataSources;
+		}
+
 
 
 		/*

@@ -25,6 +25,7 @@ namespace Geomapmaker {
 
 		protected AddEditContactsAndFaultsDockPaneViewModel() {
 			SelectedCF = new CF();
+			SelectedCF.DataSource = DataHelper.DataSource.Source; //for display
 			GeomapmakerModule.ContactsAndFaultsVM = this;
 		}
 
@@ -113,6 +114,7 @@ namespace Geomapmaker {
 		public CF SelectedCF {
 			get => selectedCF;
 			set {
+				value.DataSource = DataHelper.DataSource.Source; //for display
 				SetProperty(ref selectedCF, value, () => SelectedCF); //Have to do this to trigger stuff, I guess.
 			}
 		}
@@ -154,6 +156,7 @@ namespace Geomapmaker {
 			attributes["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters;
 			attributes["IsConcealed"] = SelectedCF.IsConcealed;
 			attributes["Notes"] = SelectedCF.Notes;
+			attributes["DataSourceID"] = DataHelper.DataSource.DataSource_ID;
 			//TODO: other fields
 
 			//Create the new feature

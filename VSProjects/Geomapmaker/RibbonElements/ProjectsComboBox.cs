@@ -114,6 +114,7 @@ namespace Geomapmaker {
         private async Task loadGeodatabase() {
             await DataHelper.populateMapUnits();
             await DataHelper.populateContactsAndFaults();
+            await DataHelper.populateDataSources();
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
                 var map = MapView.Active.Map;
                 map.RemoveLayers(DataHelper.currentLayers);
