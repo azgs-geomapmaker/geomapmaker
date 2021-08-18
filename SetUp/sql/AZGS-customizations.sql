@@ -1,5 +1,5 @@
 ---------- descriptionofmapunits ----------
-create sequence sde.descriptionofmapunits_id_seq;
+create sequence descriptionofmapunits_id_seq;
 
 alter table sde.descriptionofmapunits_id_seq owner to sde;
 
@@ -15,7 +15,7 @@ begin
 end;
 $$;
 
-create trigger descriptionofmapunits_id_update
+create trigger sde.descriptionofmapunits_id_update
     before insert on sde.descriptionofmapunits    
 for each row
     execute procedure sde.descriptionofmapunits_id_function();
