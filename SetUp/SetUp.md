@@ -83,10 +83,10 @@
 
 	insert into
 		geomapmaker.user_project_links (
-			user_id, --TODO: add fk constraint
-			project_id --TODO: add fk constraint
+			user_id, 
+			project_id 
 		)
-	values (1, <the id from projects>);
+	values (<the id from users>, <the id from projects>);
 	```
 
 # <a id="create-template"></a> To create Gems template in xml (only necessary if you need to create the template)
