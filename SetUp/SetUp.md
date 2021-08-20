@@ -31,6 +31,13 @@
 9. Create azgs/gems db's as described [below](#create-gems). In order for the test data to be able to access the gems dbs, call one gems01, the other gems02, and specify the sde user password to be "password". Otherwise, delete the test data from the geomapmaker db and add entries that correspond to what you create.
 
  
+# <a id="create-user"></a>To add a user
+	insert into 
+		geomapmaker.users (name, notes) 
+	values
+		('Jethro', 'Some notes')
+	returning
+		id;
 
 # <a id="create-gems"></a>To create new azgs/gems db
 1. Run Geoprocessing>Create Enterprise Geodatabase
