@@ -69,25 +69,24 @@
 	```
 	insert into 
 		geomapmaker.projects (
-			id, --TODO: this should be an auto-sequence
 			name,
 			notes,
 			connection_properties
 		)
 	values (
-		4, 
 		'Project 04', 
 		'Notes for Project 04', 
 		'{"user": "sde", "database": "gems03", "instance": "127.0.0.1", "password": "password"}'
-	);
+	)
+	returning
+		id;
 
 	insert into
 		geomapmaker.user_project_links (
-			id, --TODO: this should be an auto-sequence
 			user_id, --TODO: add fk constraint
 			project_id --TODO: add fk constraint
 		)
-	values (5, 1, 4);
+	values (1, <the id from projects>);
 	```
 
 # <a id="create-template"></a> To create Gems template in xml (only necessary if you need to create the template)
