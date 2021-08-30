@@ -58,6 +58,8 @@
 
 2. Run Catalog>Databases>New Database Connection 
 
+	Be sure to use user "sde".
+
 3. Run Geoprocessing>Import XML Workspace Document 
 
     Target Geodatabase: the connection from #2
