@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
-        Title="AZGS Login" Height="300" Width="300"
+        Title="Geomapmaker Login" Height="300" Width="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -19,7 +19,7 @@
     <Grid>
         <ComboBox x:Name="UserCombo" HorizontalAlignment="Left" Height="26" Margin="23,41,0,0" VerticalAlignment="Top" Width="251"/>
         <Label x:Name="UserLabel" Content="User" HorizontalAlignment="Left" Height="26" Margin="23,10,0,0" VerticalAlignment="Top" Width="73"/>
-        <Label x:Name="UserNotesLabel" Content="User notes" HorizontalAlignment="Left" Height="24" Margin="23,83,0,0" VerticalAlignment="Top" Width="152"/>
+        <Label x:Name="UserNotesLabel" Content="User Notes" HorizontalAlignment="Left" Height="24" Margin="23,83,0,0" VerticalAlignment="Top" Width="152"/>
         <TextBox x:Name="NotesTextBox" HorizontalAlignment="Left" Height="83" Margin="23,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="251"/>
         <Button x:Name="LoginButton" Content="Login" Click="loginButton_Click" HorizontalAlignment="Left" Height="31" Margin="175,228,0,0" VerticalAlignment="Top" Width="99"/>
         <Button x:Name="CancelButton" Content="Cancel" Click="cancelButton_Click" HorizontalAlignment="Left" Height="31" Margin="23,228,0,0" VerticalAlignment="Top" Width="95"/>

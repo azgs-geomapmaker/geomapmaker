@@ -76,7 +76,7 @@ namespace Geomapmaker {
             }
 
             Enabled = true; //enables the ComboBox
-            //SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
+            SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
 
         }
 
@@ -94,7 +94,7 @@ namespace Geomapmaker {
             if (string.IsNullOrEmpty(item.Text))
                 return;
 
-            using (var progress = new ProgressDialog("Loading AZGS Project")) {
+            using (var progress = new ProgressDialog("Loading Geomapmaker Project")) {
                 progress.Show();
                 await QueuedTask.Run(async () => {
 

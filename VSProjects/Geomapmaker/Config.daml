@@ -17,7 +17,7 @@
     <insertModule id="Geomapmaker_Module" className="GeomapmakerModule" autoLoad="false" caption="GeomapmakerModule">
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
-        <tab id="AZGS_Tab" caption="AZGS">
+        <tab id="AZGS_Tab" caption="Geomapmaker">
           <group refID="Geomapmaker_Admin" />
           <group refID="Geomapmaker_Tables" />
           <group refID="Geomapmaker_Features" />

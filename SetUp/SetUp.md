@@ -18,7 +18,7 @@
 
 5. In Postgres, create geomapmaker user with password "password" (This is currently hard-coded in the Add-In--I know, I know) 
   
-    This user must be made superuser, though I don't know why.
+    This user must have login acccess and be made superuser, though I don't know why.
 
 6. In Postgres, create database geomapmaker with schema geomapmaker. Make user geomapmaker the owner.
 

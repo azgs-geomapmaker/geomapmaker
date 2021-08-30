@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ArcScripts"
+    "\\VSProjects",
+    "\\VSProjects\\Geomapmaker"
   ],
+  "SelectedNode": "\\VSProjects\\Geomapmaker\\Geomapmaker.sln",
   "PreviewInSolutionExplorer": false
 }
