@@ -18,6 +18,7 @@ using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using Newtonsoft.Json;
 
 namespace Geomapmaker
 {
@@ -56,25 +57,17 @@ namespace Geomapmaker
             //Just clear whichever and ignore the other error
             if (GeomapmakerModule.ContactsAndFaultsAddTool != null)
             {
-                try
-                {
-                    GeomapmakerModule.ContactsAndFaultsAddTool.Clear();
-                }
-                catch (Exception) { }
+                GeomapmakerModule.ContactsAndFaultsAddTool.Clear();
             }
 
             if (GeomapmakerModule.ContactsAndFaultsEditTool != null)
             {
-                try
-                {
-                    GeomapmakerModule.ContactsAndFaultsEditTool.Clear();
-                }
-                catch (Exception) { }
+                GeomapmakerModule.ContactsAndFaultsEditTool.Clear();
             }
 
             SelectedCFSymbol = null;
             SelectedCF = new CF();
-            ShapeJson = null;
+            ShapeJson = "N/A";
             Prepopulate = false;
         }
 
