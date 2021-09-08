@@ -15,6 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <UserControl.CommandBindings>
         <CommandBinding 
 			Command="ApplicationCommands.Save"
@@ -28,6 +29,11 @@
     </UserControl.CommandBindings>
 
     <Grid>
+
+        <Grid.Resources>
+            <ui:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -59,8 +65,8 @@
 
         <ToggleButton Grid.Row="1" Grid.ColumnSpan="2" x:Name="PopulateFromExistingToggle" Content="Populate values from existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="5"/>
 
-        <WrapPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Type:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
+        <WrapPanel Grid.Row="2" Grid.Column="0">
+            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Type:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         </WrapPanel>
         <ComboBox
                 Grid.Row="2" Grid.Column="1" 
@@ -73,7 +79,7 @@
 	    		IsReadOnly="False" 
 	    		IsEditable="True"
 	    		HorizontalAlignment="Stretch" 
-                SelectedIndex="0" >
+            >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" ToolTip="{Binding description}">
@@ -84,35 +90,153 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <WrapPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Identity Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
+        <WrapPanel Grid.Row="3" Grid.Column="0" >
+            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Identity Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         </WrapPanel>
-        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="IdentityConfidenceComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.IdentityConfidences)}" SelectedItem ="{Binding SelectedCF.IdentityConfidence}" IsReadOnly="False" IsEditable="False" HorizontalAlignment="Stretch" />
+        <Grid Grid.Row="3" Grid.Column="1" >
 
-        <WrapPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
-        </WrapPanel>
-        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="ExistenceConfidenceComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.ExistenceConfidences)}" SelectedItem ="{Binding SelectedCF.ExistenceConfidence}" IsReadOnly="False" IsEditable="False" HorizontalAlignment="Stretch" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
 
-        <WrapPanel Grid.Row="5" Grid.Column="0" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Location Confidence Meters:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
-        </WrapPanel>
-        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="LocationConfidenceComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}" Text="{Binding SelectedCF.LocationConfidenceMeters}" IsReadOnly="False" IsEditable="True" HorizontalAlignment="Stretch" />
+            <RadioButton 
+              Grid.Row="0" 
+              Grid.Column="1" 
+              GroupName="IdentityConfidence" 
+              HorizontalAlignment="Left" 
+              VerticalAlignment="Center" 
+              Content="Low"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
+              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
+              Foreground="{DynamicResource Esri_TextInfoBrush}" 
+              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
+              >
+            </RadioButton>
 
-        <WrapPanel Grid.Row="6" Grid.Column="0" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Concealed:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
+            <RadioButton 
+              Grid.Row="0" 
+              Grid.Column="2" 
+              GroupName="IdentityConfidence" 
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center" 
+              Content="Medium"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
+              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
+              Foreground="{DynamicResource Esri_TextInfoBrush}" 
+              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
+              >
+            </RadioButton>
+
+            <RadioButton 
+              Grid.Row="0" 
+              Grid.Column="3"
+              GroupName="IdentityConfidence" 
+              HorizontalAlignment="Right" 
+              VerticalAlignment="Center" 
+              Content="High"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
+              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
+              Foreground="{DynamicResource Esri_TextInfoBrush}" 
+              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
+              >
+            </RadioButton>
+        </Grid>
+
+        <WrapPanel Grid.Row="4" Grid.Column="0">
+            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         </WrapPanel>
-        <!--<ComboBox Grid.Row="6" Grid.Column="1" x:Name="IsConcealedComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.ConcealedYN)}" SelectedItem ="{Binding SelectedCF.IsConcealed}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Stretch" />-->
+        <Grid Grid.Row="4" Grid.Column="1" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
+
+            <RadioButton 
+              Grid.Row="0" 
+              Grid.Column="1" 
+              GroupName="ExistenceConfidence" 
+              HorizontalAlignment="Left" 
+              VerticalAlignment="Center" 
+              Content="Low"
+              IsChecked="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
+              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
+              Foreground="{DynamicResource Esri_TextInfoBrush}" 
+              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
+              >
+            </RadioButton>
+
+            <RadioButton 
+              Grid.Row="0" 
+              Grid.Column="2" 
+              GroupName="ExistenceConfidence" 
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center" 
+              Content="Medium"
+              IsChecked="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
+              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
+              Foreground="{DynamicResource Esri_TextInfoBrush}" 
+              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
+              >
+            </RadioButton>
+
+            <RadioButton 
+              Grid.Row="0" 
+              Grid.Column="3"
+              GroupName="ExistenceConfidence" 
+              HorizontalAlignment="Right" 
+              VerticalAlignment="Center" 
+              Content="High"
+              IsChecked="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
+              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
+              Foreground="{DynamicResource Esri_TextInfoBrush}" 
+              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
+              >
+            </RadioButton>
+        </Grid>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <WrapPanel Grid.Row="5" Grid.Column="0">
+            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Location Confidence Meters:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
+        </WrapPanel>
+        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="LocationConfidenceComboBox" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}" Text="{Binding SelectedCF.LocationConfidenceMeters}" IsReadOnly="False" IsEditable="True" HorizontalAlignment="Stretch" />
+
+        <WrapPanel Grid.Row="6" Grid.Column="0">
+            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Concealed:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
+        </WrapPanel>
         <CheckBox Grid.Row="6" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}" ></CheckBox>
 
-
-
-        <WrapPanel Grid.Row="7" Grid.Column="0" Orientation="Vertical">
+        <WrapPanel Grid.Row="7" Grid.Column="0">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Notes:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
         <TextBox Grid.Row="7" Grid.Column="1" x:Name="NotesTextBlock" Margin="5" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
 
-        <WrapPanel Grid.Row="8" Grid.Column="0" Orientation="Vertical">
+        <WrapPanel Grid.Row="8" Grid.Column="0">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Data Source:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
         <TextBox Grid.Row="8" Grid.Column="1" x:Name="DataSourceTextBox" IsReadOnly="True" FontStyle="Italic"  Text="{Binding SelectedCF.DataSource}" Margin="5" HorizontalAlignment="Stretch"/>
