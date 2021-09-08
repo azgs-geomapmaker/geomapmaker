@@ -30,6 +30,7 @@ namespace Geomapmaker
         {
             SelectedCF = new CF();
             SelectedCF.DataSource = DataHelper.DataSource.Source; //for display
+            ShapeJson = "{ }";
             GeomapmakerModule.ContactsAndFaultsVM = this;
         }
 
@@ -67,7 +68,7 @@ namespace Geomapmaker
 
             SelectedCFSymbol = null;
             SelectedCF = new CF();
-            ShapeJson = "N/A";
+            ShapeJson = "{ }";
             Prepopulate = false;
         }
 

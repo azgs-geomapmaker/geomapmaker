@@ -43,7 +43,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -57,7 +57,7 @@
             </TextBlock>
         </DockPanel>
 
-        <ToggleButton Grid.Row="1" Grid.ColumnSpan="2" x:Name="PopulateFromExistingToggle" Content="Populate values from existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Height="25" Padding="3" Margin="5"/>
+        <ToggleButton Grid.Row="1" Grid.ColumnSpan="2" x:Name="PopulateFromExistingToggle" Content="Populate values from existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="5"/>
 
         <WrapPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Type:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
@@ -69,10 +69,11 @@
 	    		TextSearch.TextPath="key"
 	    		ItemsSource="{Binding Path=(ui:DataHelper.CFSymbols)}" 
 	    		SelectedItem ="{Binding SelectedCFSymbol}" 
-	    		Margin="5"  
+	    		Margin="5"
 	    		IsReadOnly="False" 
-	    		IsEditable="True"  
-	    		HorizontalAlignment="Stretch" >
+	    		IsEditable="True"
+	    		HorizontalAlignment="Stretch" 
+                SelectedIndex="0" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" ToolTip="{Binding description}">
@@ -86,22 +87,22 @@
         <WrapPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Identity Confidence" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
-        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="IdentityConfidenceComboBox" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.IdentityConfidences)}" SelectedItem ="{Binding SelectedCF.IdentityConfidence}" IsReadOnly="False" IsEditable="False" HorizontalAlignment="Stretch" />
+        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="IdentityConfidenceComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.IdentityConfidences)}" SelectedItem ="{Binding SelectedCF.IdentityConfidence}" IsReadOnly="False" IsEditable="False" HorizontalAlignment="Stretch" />
 
         <WrapPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
-        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="ExistenceConfidenceComboBox" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.ExistenceConfidences)}" SelectedItem ="{Binding SelectedCF.ExistenceConfidence}" IsReadOnly="False" IsEditable="False" HorizontalAlignment="Stretch" />
+        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="ExistenceConfidenceComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.ExistenceConfidences)}" SelectedItem ="{Binding SelectedCF.ExistenceConfidence}" IsReadOnly="False" IsEditable="False" HorizontalAlignment="Stretch" />
 
         <WrapPanel Grid.Row="5" Grid.Column="0" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Location Confidence Meters:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
-        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="LocationConfidenceComboBox" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}" Text="{Binding SelectedCF.LocationConfidenceMeters}" IsReadOnly="False" IsEditable="True" HorizontalAlignment="Stretch" />
+        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="LocationConfidenceComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}" Text="{Binding SelectedCF.LocationConfidenceMeters}" IsReadOnly="False" IsEditable="True" HorizontalAlignment="Stretch" />
 
         <WrapPanel Grid.Row="6" Grid.Column="0" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Concealed:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
-        <ComboBox Grid.Row="6" Grid.Column="1" x:Name="IsConcealedComboBox" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.ConcealedYN)}" SelectedItem ="{Binding SelectedCF.IsConcealed}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Stretch" />
+        <ComboBox Grid.Row="6" Grid.Column="1" x:Name="IsConcealedComboBox" SelectedIndex="0" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.ConcealedYN)}" SelectedItem ="{Binding SelectedCF.IsConcealed}" IsReadOnly="False" IsEditable="False"  HorizontalAlignment="Stretch" />
 
         <WrapPanel Grid.Row="7" Grid.Column="0" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Notes:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
