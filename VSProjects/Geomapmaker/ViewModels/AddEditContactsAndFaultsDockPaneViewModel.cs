@@ -97,7 +97,7 @@ namespace Geomapmaker
                     && !string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
                     && !string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
                     && !string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
-                    && !string.IsNullOrWhiteSpace(SelectedCF.IsConcealed)
+                    //&& !string.IsNullOrWhiteSpace(SelectedCF.IsConcealed)
                     && Shape != null;
             }
         }
@@ -179,7 +179,7 @@ namespace Geomapmaker
             attributes["IdentityConfidence"] = SelectedCF.IdentityConfidence;
             attributes["ExistenceConfidence"] = SelectedCF.ExistenceConfidence;
             attributes["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters;
-            attributes["IsConcealed"] = SelectedCF.IsConcealed;
+            attributes["IsConcealed"] = SelectedCF.IsConcealed ? "Y" : "N";
             attributes["Notes"] = SelectedCF.Notes;
             attributes["DataSourceID"] = DataHelper.DataSource.DataSource_ID;
             //TODO: other fields

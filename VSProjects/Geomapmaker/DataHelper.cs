@@ -925,18 +925,5 @@ namespace Geomapmaker
                 return locationConfidenceMeters;
             }
         }
-
-        private static ObservableCollection<string> concealedYN = new ObservableCollection<string>() {
-            "Y",
-            "N"
-        };
-        public static ObservableCollection<string> ConcealedYN
-        {
-            get
-            {
-                return concealedYN;
-            }
-        }
-
     }
 }
