@@ -86,22 +86,18 @@ namespace Geomapmaker
             }
         }
 
-        public Boolean IsValid
+        public bool IsValid
         {
             //TODO: It is possible to enter errant values for the Type (symbol key). Need to figure out validation on that.
             get
             {
-                //return true;
-
                 return SelectedCF != null
                     && !string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
                     && !string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
                     && !string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
-                    //&& !string.IsNullOrWhiteSpace(SelectedCF.IsConcealed)
                     && Shape != null;
             }
         }
-
 
         /// <summary>
         /// Text shown near the top of the DockPane.

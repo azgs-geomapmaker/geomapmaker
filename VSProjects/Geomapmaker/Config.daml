@@ -64,23 +64,23 @@
         <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
           <tooltip heading="Map Unit Polys">
-            Add a new map unit poly<disabledText />
+            Add a new map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText>
           </tooltip>
           <content guid="17a27ef5-1084-4d46-abc8-11641bc5b871" />
         </tool>
         <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Unit Polys">
-            Edit an existing map unit poly<disabledText />
+            Edit an existing map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText>
           </tooltip>
         </tool>
         <button id="Geomapmaker_AddMapUnitsButton" caption="Add Map Units" className="AddMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Units">
-            Add a new map unit description<disabledText />
+            Add a new map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText>
           </tooltip>
         </button>
         <button id="Geomapmaker_EditMapUnitsButton" caption="Edit Map Units" className="EditMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Units">
-            Edit an existing map unit description<disabledText />
+            Edit an existing map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText>
           </tooltip>
         </button>
         <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
