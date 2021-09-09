@@ -32,14 +32,16 @@
 
         <Grid.Resources>
             <ui:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
+            <ui:ConcealedConverter x:Key="ConcealedConverter" />
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
+            <RowDefinition Height="5"/>   
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/> 
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -70,7 +72,7 @@
             </TextBlock>
         </DockPanel>
 
-        <ToggleButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" x:Name="PopulateFromExistingToggle" Content="Populate values from existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="5"/>
+        <ToggleButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" x:Name="PopulateFromExistingToggle" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="5"/>
 
         <TextBlock Grid.Row="3" Grid.Column="3" Margin="5" FontWeight="Bold" Text="Current Values" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
 
@@ -232,21 +234,21 @@
 
         <TextBlock Grid.Row="8" Grid.Column="1" Margin="5" Text="Concealed:" Style="{DynamicResource Esri_TextBlockRegular}" />
         <CheckBox Grid.Row="8" Grid.Column="2" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}" Margin="5" ></CheckBox>
-        <TextBlock Grid.Row="8" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="9" Grid.Column="1" Margin="5" Text="Notes:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
-        <TextBox Grid.Row="9" Grid.Column="2" x:Name="NotesTextBlock" Margin="5" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250" />
+        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3" x:Name="NotesTextBlock" Margin="5" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250" />
 
-        <WrapPanel Grid.Row="10" Grid.Column="1" Margin="5">
+        <Button Grid.Row="11" Grid.Column="1" Padding="5" Margin="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
+        <Button Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Padding="5" Margin="5" Command="ApplicationCommands.Save">Submit</Button>
+
+        <WrapPanel Grid.Row="12" Grid.Column="1" Margin="5">
             <TextBlock Text="Data Source: " TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
             <TextBlock x:Name="DataSourceTextBox" FontStyle="Italic"  Text="{Binding SelectedCF.DataSource}" />
         </WrapPanel>
 
-        <Button Grid.Row="11" Grid.Column="1" Padding="5" Margin="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
-        <Button Grid.Row="11" Grid.Column="2" Padding="5" Margin="5" Command="ApplicationCommands.Save">Submit</Button>
-
-        <TextBlock Grid.Row="12" Grid.Column="1" Margin="5" Text="Line:" Style="{DynamicResource Esri_TextBlockRegular}"/>
-        <TextBlock Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" x:Name="ShapeTextBlock" Text="{Binding ShapeJson}" Margin="5" TextWrapping="Wrap" VerticalAlignment="Top" Style="{DynamicResource Esri_TextBlockRegular}" />
+        <TextBlock Grid.Row="13" Grid.Column="1" Margin="5" Text="Line:" Style="{DynamicResource Esri_TextBlockRegular}"/>
+        <TextBlock Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" x:Name="ShapeTextBlock" Text="{Binding ShapeJson}" Margin="5" TextWrapping="Wrap" VerticalAlignment="Top" Style="{DynamicResource Esri_TextBlockRegular}" />
 
     </Grid>
 </UserControl>
