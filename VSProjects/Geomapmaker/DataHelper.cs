@@ -911,14 +911,17 @@ namespace Geomapmaker
             }
         }
 
-        private static ObservableCollection<string> locationConfidenceMeters = new ObservableCollection<string>() {
-            "10",
-            "25",
-            "50",
-            "100",
-            "250"
+        private static ObservableCollection<KeyValuePair<int, string>> locationConfidenceMeters = new ObservableCollection<KeyValuePair<int, string>>() {
+
+            new KeyValuePair<int, string>(-9, "Not Known"),
+            new KeyValuePair<int, string>(10, "10m"),
+            new KeyValuePair<int, string>(25, "25m"),
+            new KeyValuePair<int, string>(50, "50m"),
+            new KeyValuePair<int, string>(100, "100m"),
+            new KeyValuePair<int, string>(250, "250m"),
         };
-        public static ObservableCollection<string> LocationConfidenceMeters
+
+        public static ObservableCollection<KeyValuePair<int, string>> LocationConfidenceMeters
         {
             get
             {
