@@ -81,7 +81,7 @@
 	    		IsTextSearchEnabled="True"
 	    		TextSearch.TextPath="key"
 	    		ItemsSource="{Binding Path=(ui:DataHelper.CFSymbols)}" 
-	    		SelectedItem ="{Binding SelectedCFSymbol}" 
+	    		SelectedItem ="{Binding SelectedCFSymbol}"
 	    		Margin="5"
 	    		IsReadOnly="False" 
 	    		IsEditable="True"
@@ -154,7 +154,7 @@
               >
             </RadioButton>
         </Grid>
-        <TextBlock Grid.Row="5" Grid.Column="3" Margin="5" Text="{Binding SelectedCF.IdentityConfidence}" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="5" Grid.Column="3" Margin="5" Text="{Binding SelectedCF.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="6" Grid.Column="1" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <Grid Grid.Row="6" Grid.Column="2" >
@@ -212,7 +212,7 @@
               >
             </RadioButton>
         </Grid>
-        <TextBlock Grid.Row="6" Grid.Column="3" Margin="5" Text="{Binding SelectedCF.ExistenceConfidence}" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="6" Grid.Column="3" Margin="5" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="7" Grid.Column="1" Margin="5" Text="Location Confidence Meters:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <ComboBox 
@@ -228,11 +228,11 @@
             SelectedValuePath="Key"
             DisplayMemberPath="Value" 
             />
-        <TextBlock Grid.Row="7" Grid.Column="3" Margin="5" Text="{Binding SelectedCF.LocationConfidenceMeters}" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="7" Grid.Column="3" Margin="5" VerticalAlignment="Center" Text="{Binding SelectedCF.LocationConfidenceMeters}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="8" Grid.Column="1" Margin="5" Text="Concealed:" Style="{DynamicResource Esri_TextBlockRegular}" />
         <CheckBox Grid.Row="8" Grid.Column="2" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}" ></CheckBox>
-        <TextBlock Grid.Row="8" Grid.Column="3" Margin="5" Text="{Binding SelectedCF.IsConcealed}" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="3" Margin="5" Text="{Binding SelectedCF.IsConcealed}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="9" Grid.Column="1" Margin="5" Text="Notes:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         <TextBox Grid.Row="9" Grid.Column="2" x:Name="NotesTextBlock" Margin="5" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" />

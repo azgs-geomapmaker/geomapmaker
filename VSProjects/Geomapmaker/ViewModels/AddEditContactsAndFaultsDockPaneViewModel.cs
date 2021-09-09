@@ -29,6 +29,7 @@ namespace Geomapmaker
         protected AddEditContactsAndFaultsDockPaneViewModel()
         {
             SelectedCF = new CF();
+            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
             SelectedCF.DataSource = DataHelper.DataSource.Source; //for display
             ShapeJson = "{ }";
             GeomapmakerModule.ContactsAndFaultsVM = this;
@@ -56,17 +57,10 @@ namespace Geomapmaker
         public void Reset()
         {
             //Just clear whichever and ignore the other error
-            if (GeomapmakerModule.ContactsAndFaultsAddTool != null)
-            {
-                GeomapmakerModule.ContactsAndFaultsAddTool.Clear();
-            }
+            GeomapmakerModule.ContactsAndFaultsAddTool?.Clear();
+            GeomapmakerModule.ContactsAndFaultsEditTool?.Clear();
 
-            if (GeomapmakerModule.ContactsAndFaultsEditTool != null)
-            {
-                GeomapmakerModule.ContactsAndFaultsEditTool.Clear();
-            }
-
-            SelectedCFSymbol = null;
+            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
             SelectedCF = new CF();
             ShapeJson = "{ }";
             Prepopulate = false;
