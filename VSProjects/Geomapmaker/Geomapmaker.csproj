@@ -188,7 +188,6 @@
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
-    <Compile Include="RadioConfidenceConverter.cs" />
     <Compile Include="RibbonElements\ContactsAndFaultsEditTool.cs" />
     <Compile Include="Views\AddEditContactsAndFaultsDockPane.xaml.cs">
       <DependentUpon>AddEditContactsAndFaultsDockPane.xaml</DependentUpon>
