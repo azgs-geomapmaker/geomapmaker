@@ -9,7 +9,7 @@ using System.Windows.Data;
 namespace Geomapmaker
 {
     /// <summary>
-    /// Valute converter for radio button groupsC
+    /// Value converter for radio button groups
     /// </summary>
     public class RadioConfidenceConverter : IValueConverter
     {

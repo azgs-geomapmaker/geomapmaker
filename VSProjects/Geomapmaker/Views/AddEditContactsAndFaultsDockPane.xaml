@@ -65,9 +65,7 @@
 
         <ToggleButton Grid.Row="1" Grid.ColumnSpan="2" x:Name="PopulateFromExistingToggle" Content="Populate values from existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="5"/>
 
-        <WrapPanel Grid.Row="2" Grid.Column="0">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Type:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        </WrapPanel>
+        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="5" Text="Type:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <ComboBox
                 Grid.Row="2" Grid.Column="1" 
 	    		x:Name="ContactsAndFaultsComboBox" 
@@ -90,9 +88,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <WrapPanel Grid.Row="3" Grid.Column="0" >
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Identity Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        </WrapPanel>
+        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Margin="5" Text="Identity Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <Grid Grid.Row="3" Grid.Column="1" >
 
             <Grid.RowDefinitions>
@@ -149,9 +145,7 @@
             </RadioButton>
         </Grid>
 
-        <WrapPanel Grid.Row="4" Grid.Column="0">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        </WrapPanel>
+        <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <Grid Grid.Row="4" Grid.Column="1" >
 
             <Grid.RowDefinitions>
@@ -207,39 +201,21 @@
               >
             </RadioButton>
         </Grid>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        <WrapPanel Grid.Row="5" Grid.Column="0">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Location Confidence Meters:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        </WrapPanel>
+                
+        <TextBlock Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" Margin="5" Text="Location Confidence Meters:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <ComboBox Grid.Row="5" Grid.Column="1" x:Name="LocationConfidenceComboBox" Margin="5" ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}" Text="{Binding SelectedCF.LocationConfidenceMeters}" IsReadOnly="False" IsEditable="True" HorizontalAlignment="Stretch" />
 
-        <WrapPanel Grid.Row="6" Grid.Column="0">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Concealed:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        </WrapPanel>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" HorizontalAlignment="Left" Margin="5" Text="Concealed:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <CheckBox Grid.Row="6" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}" ></CheckBox>
 
-        <WrapPanel Grid.Row="7" Grid.Column="0">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Notes:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
-        </WrapPanel>
+        <TextBlock Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" Margin="5" Text="Notes:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
         <TextBox Grid.Row="7" Grid.Column="1" x:Name="NotesTextBlock" Margin="5" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
 
-        <WrapPanel Grid.Row="8" Grid.Column="0">
-            <TextBlock HorizontalAlignment="Left" Margin="5" Text="Data Source:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
+        <WrapPanel Grid.Row="8" Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+            <TextBlock Text="Data Source: " TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
+            <TextBlock x:Name="DataSourceTextBox" FontStyle="Italic"  Text="{Binding SelectedCF.DataSource}" />
         </WrapPanel>
-        <TextBox Grid.Row="8" Grid.Column="1" x:Name="DataSourceTextBox" IsReadOnly="True" FontStyle="Italic"  Text="{Binding SelectedCF.DataSource}" Margin="5" HorizontalAlignment="Stretch"/>
 
         <Button Grid.Row="9" Grid.Column="0" Padding="5" Margin="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
         <Button Grid.Row="9" Grid.Column="1" Padding="5" Margin="5" Command="ApplicationCommands.Save">Submit</Button>
