@@ -229,7 +229,7 @@
         </Grid>
         <TextBlock Grid.Row="6" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
-        <TextBlock Grid.Row="7" Grid.Column="1" Margin="5" Text="Location Confidence Meters:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
+        <TextBlock Grid.Row="7" Grid.Column="1" Margin="5" Text="Location Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <ComboBox 
             Grid.Row="7" 
             Grid.Column="2" 
