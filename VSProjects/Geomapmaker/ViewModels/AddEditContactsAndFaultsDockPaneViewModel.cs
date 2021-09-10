@@ -174,6 +174,7 @@ namespace Geomapmaker
             Dictionary<string, object> attributes = new Dictionary<string, object>();
 
             attributes["SHAPE"] = SelectedCF.Shape;//Geometry
+            attributes["TYPE"] = SelectedCF.symbol.description;
             attributes["Symbol"] = SelectedCF.symbol.key;
             attributes["IdentityConfidence"] = SelectedCF.IdentityConfidence;
             attributes["ExistenceConfidence"] = SelectedCF.ExistenceConfidence;
