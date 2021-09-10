@@ -920,7 +920,6 @@ namespace Geomapmaker
             new KeyValuePair<int, string>(50, "50 meters"),
             new KeyValuePair<int, string>(100, "100 meters"),
             new KeyValuePair<int, string>(250, "250 meters"),
-            new KeyValuePair<int, string>(-9, "Not Known"),
         };
 
         public static ObservableCollection<KeyValuePair<int, string>> LocationConfidenceMeters
