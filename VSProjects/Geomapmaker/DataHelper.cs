@@ -915,12 +915,12 @@ namespace Geomapmaker
 
         private static ObservableCollection<KeyValuePair<int, string>> locationConfidenceMeters = new ObservableCollection<KeyValuePair<int, string>>() {
 
+            new KeyValuePair<int, string>(10, "10 meters"),
+            new KeyValuePair<int, string>(25, "25 meters"),
+            new KeyValuePair<int, string>(50, "50 meters"),
+            new KeyValuePair<int, string>(100, "100 meters"),
+            new KeyValuePair<int, string>(250, "250 meters"),
             new KeyValuePair<int, string>(-9, "Not Known"),
-            new KeyValuePair<int, string>(10, "10m"),
-            new KeyValuePair<int, string>(25, "25m"),
-            new KeyValuePair<int, string>(50, "50m"),
-            new KeyValuePair<int, string>(100, "100m"),
-            new KeyValuePair<int, string>(250, "250m"),
         };
 
         public static ObservableCollection<KeyValuePair<int, string>> LocationConfidenceMeters
@@ -996,7 +996,7 @@ namespace Geomapmaker
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return parameter;
+            throw new NotImplementedException();
         }
     }
 
