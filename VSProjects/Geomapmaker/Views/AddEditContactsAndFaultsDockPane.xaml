@@ -32,6 +32,7 @@
 
         <Grid.Resources>
             <ui:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
+            <ui:SliderConverter x:Key="SliderConverter" />
             <ui:ConcealedConverter x:Key="ConcealedConverter" />
         </Grid.Resources>
 
@@ -172,7 +173,8 @@
         <TextBlock Grid.Row="5" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="6" Grid.Column="1" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        <Grid Grid.Row="6" Grid.Column="2" >
+        <Slider Grid.Row="6" Grid.Column="2" Margin="5" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
+        <!--<Grid Grid.Row="6" Grid.Column="2" >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -226,7 +228,7 @@
               BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
               >
             </RadioButton>
-        </Grid>
+        </Grid>-->
         <TextBlock Grid.Row="6" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="7" Grid.Column="1" Margin="5" Text="Location Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
