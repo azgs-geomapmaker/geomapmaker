@@ -82,14 +82,23 @@ namespace Geomapmaker
 
         public bool IsValid
         {
-            //TODO: It is possible to enter errant values for the Type (symbol key). Need to figure out validation on that.
             get
             {
-                return SelectedCF != null
-                    && !string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
-                    && !string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
-                    && !string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
-                    && Shape != null;
+
+                //TODO: It is possible to enter errant values for the Type (symbol key). Need to figure out validation on that.
+
+                // I added validation for errant Type/symbol, but I think the better option would be set the combobox to IsEditable="False" -camp
+
+                if (SelectedCF.symbol == null)
+                {
+                    return false;
+                }
+
+                return !(SelectedCF == null
+                    || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
+                    || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
+                    || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
+                    || Shape == null);
             }
         }
 
