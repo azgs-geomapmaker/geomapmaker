@@ -72,7 +72,20 @@
             </TextBlock>
         </DockPanel>
 
-        <ToggleButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="5"/>
+        <ToggleButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="10" >
+            <ToggleButton.Template>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
+                        <ContentPresenter Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="#9cede5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </ToggleButton.Template>
+        </ToggleButton>
 
         <TextBlock Grid.Row="3" Grid.Column="3" Margin="5" FontWeight="Bold" Text="Current Values" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
 
