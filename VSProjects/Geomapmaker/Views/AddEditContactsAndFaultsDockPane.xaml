@@ -90,17 +90,13 @@
 
         <TextBlock Grid.Row="3" Grid.Column="3" Margin="5" FontWeight="Bold" Text="Current Values" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Margin="5" Text="Type:" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        <ComboBox
+        <TextBlock Grid.Row="4" Grid.Column="1" Margin="5" Text="Type:" VerticalAlignment="Top" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
+        <!--<ComboBox
                 Grid.Row="4" Grid.Column="2" 
 	    		x:Name="ContactsAndFaultsComboBox" 
-	    		IsTextSearchEnabled="True"
-	    		TextSearch.TextPath="key"
 	    		ItemsSource="{Binding Path=(ui:DataHelper.CFSymbols)}" 
 	    		SelectedItem ="{Binding SelectedCFSymbol}"
 	    		Margin="5"
-	    		IsReadOnly="False" 
-	    		IsEditable="True"
 	    		HorizontalAlignment="Stretch" 
             >
             <ComboBox.ItemTemplate>
@@ -111,8 +107,35 @@
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>
-        <Image Grid.Row="4" Grid.Column="3" Margin="5" Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" HorizontalAlignment="Center" />
+        </ComboBox>-->
+        <ListBox
+                Grid.Row="4" Grid.Column="2" 
+	    		x:Name="ContactsAndFaultsComboBox" 
+	    		ItemsSource="{Binding Path=(ui:DataHelper.CFSymbols)}" 
+	    		SelectedItem ="{Binding SelectedCFSymbol}"
+	    		Margin="5"
+                MaxHeight="150"
+	    		HorizontalAlignment="Stretch"
+            >
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid ToolTip="{Binding description}" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="{Binding preview}" HorizontalAlignment="Left"  />
+                        <TextBlock Grid.Column="1" Text="{Binding key}" HorizontalAlignment="Right" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Image Grid.Row="4" Grid.Column="3" Margin="5" Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
         <TextBlock Grid.Row="5" Grid.Column="1" Margin="5" Text="Identity Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
         <Grid Grid.Row="5" Grid.Column="2" >
@@ -240,10 +263,9 @@
             SelectedValue="{Binding SelectedCF.LocationConfidenceMeters}"
             IsReadOnly="False" 
             IsEditable="True" 
-            HorizontalAlignment="Stretch" 
-            SelectedValuePath="Key"
-            DisplayMemberPath="Value" 
-            />
+            HorizontalAlignment="Right" 
+            >
+        </ComboBox>
         <TextBlock Grid.Row="7" Grid.Column="3" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Text="{Binding SelectedCF.LocationConfidenceMeters}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
         <TextBlock Grid.Row="8" Grid.Column="1" Margin="5" Text="Concealed:" Style="{DynamicResource Esri_TextBlockRegular}" />
