@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="AzgsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -37,12 +38,12 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>   
+            <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/> 
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -63,7 +64,7 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
+        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" >
             <TextBlock Grid.Column="1" Text="{Binding Heading}" FontSize="22" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
                 <TextBlock.ToolTip>
                     <WrapPanel Orientation="Vertical" MaxWidth="300">
@@ -88,32 +89,14 @@
             </ToggleButton.Template>
         </ToggleButton>
 
-        <TextBlock Grid.Row="3" Grid.Column="3" Margin="5" FontWeight="Bold" Text="Current Values" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
+        <TextBlock Grid.Row="3" Grid.Column="3" FontWeight="Bold" Text="Current Values" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Margin="5" Text="Type:" VerticalAlignment="Top" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        <!--<ComboBox
-                Grid.Row="4" Grid.Column="2" 
-	    		x:Name="ContactsAndFaultsComboBox" 
-	    		ItemsSource="{Binding Path=(ui:DataHelper.CFSymbols)}" 
-	    		SelectedItem ="{Binding SelectedCFSymbol}"
-	    		Margin="5"
-	    		HorizontalAlignment="Stretch" 
-            >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" ToolTip="{Binding description}">
-                        <Image Source="{Binding preview}"   />
-                        <TextBlock Text="{Binding key}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>-->
+        <Label Grid.Row="4" Grid.Column="1" Content="Type:" VerticalAlignment="Top" />
         <ListBox
                 Grid.Row="4" Grid.Column="2" 
 	    		x:Name="ContactsAndFaultsComboBox" 
 	    		ItemsSource="{Binding Path=(ui:DataHelper.CFSymbols)}" 
 	    		SelectedItem ="{Binding SelectedCFSymbol}"
-	    		Margin="5"
                 MaxHeight="150"
 	    		HorizontalAlignment="Stretch"
             >
@@ -135,9 +118,9 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Image Grid.Row="4" Grid.Column="3" Margin="5" Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" HorizontalAlignment="Center" VerticalAlignment="Top" />
+        <Image Grid.Row="4" Grid.Column="3"  Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-        <TextBlock Grid.Row="5" Grid.Column="1" Margin="5" Text="Identity Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
+        <Label Grid.Row="5" Grid.Column="1"  Content="Identity Confidence:" />
         <Grid Grid.Row="5" Grid.Column="2" >
 
             <Grid.RowDefinitions>
@@ -193,72 +176,16 @@
               >
             </RadioButton>
         </Grid>
-        <TextBlock Grid.Row="5" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="5" Grid.Column="3" FontWeight="Bold" Text="{Binding SelectedCF.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-        <TextBlock Grid.Row="6" Grid.Column="1" Margin="5" Text="Existence Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-        <Slider Grid.Row="6" Grid.Column="2" Margin="5" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
-        <!--<Grid Grid.Row="6" Grid.Column="2" >
+        <Label Grid.Row="6" Grid.Column="1"  Content="Existence Confidence:" />
+        <Slider Grid.Row="6" Grid.Column="2"  Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
+        <TextBlock Grid.Row="6" Grid.Column="3"  FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
-            </Grid.ColumnDefinitions>
-
-            <RadioButton 
-              Grid.Row="0" 
-              Grid.Column="1" 
-              GroupName="ExistenceConfidence" 
-              HorizontalAlignment="Left" 
-              VerticalAlignment="Center" 
-              Content="Low"
-              IsChecked="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
-              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
-              Foreground="{DynamicResource Esri_TextInfoBrush}" 
-              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
-              >
-            </RadioButton>
-
-            <RadioButton 
-              Grid.Row="0" 
-              Grid.Column="2" 
-              GroupName="ExistenceConfidence" 
-              HorizontalAlignment="Center" 
-              VerticalAlignment="Center" 
-              Content="Medium"
-              IsChecked="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
-              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
-              Foreground="{DynamicResource Esri_TextInfoBrush}" 
-              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
-              >
-            </RadioButton>
-
-            <RadioButton 
-              Grid.Row="0" 
-              Grid.Column="3"
-              GroupName="ExistenceConfidence" 
-              HorizontalAlignment="Right" 
-              VerticalAlignment="Center" 
-              Content="High"
-              IsChecked="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
-              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
-              Foreground="{DynamicResource Esri_TextInfoBrush}" 
-              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
-              >
-            </RadioButton>
-        </Grid>-->
-        <TextBlock Grid.Row="6" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
-
-        <TextBlock Grid.Row="7" Grid.Column="1" Margin="5" Text="Location Confidence:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
+        <Label Grid.Row="7" Grid.Column="1" Content="Location Confidence:" />
         <ComboBox 
             Grid.Row="7" 
             Grid.Column="2" 
-            Margin="5" 
             ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}" 
             SelectedValue="{Binding SelectedCF.LocationConfidenceMeters}"
             IsReadOnly="False" 
@@ -266,25 +193,26 @@
             HorizontalAlignment="Right" 
             >
         </ComboBox>
-        <TextBlock Grid.Row="7" Grid.Column="3" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Text="{Binding SelectedCF.LocationConfidenceMeters}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="7" Grid.Column="3"  FontWeight="Bold" VerticalAlignment="Center" Text="{Binding SelectedCF.LocationConfidenceMeters}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
-        <TextBlock Grid.Row="8" Grid.Column="1" Margin="5" Text="Concealed:" Style="{DynamicResource Esri_TextBlockRegular}" />
-        <CheckBox Grid.Row="8" Grid.Column="2" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}" Margin="5" ></CheckBox>
-        <TextBlock Grid.Row="8" Grid.Column="3" Margin="5" FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
+        <Label Grid.Row="8" Grid.Column="1"  Content="Concealed:"/>
+        <CheckBox Grid.Row="8" Grid.Column="2" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}"  ></CheckBox>
+        <TextBlock Grid.Row="8" Grid.Column="3" FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-        <TextBlock Grid.Row="9" Grid.Column="1" Margin="5" Text="Notes:" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
-        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3" Margin="5" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250" />
+        <Label Grid.Row="9" Grid.Column="1"  Content="Notes:"/>
+        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3"  Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250" />
 
-        <Button Grid.Row="11" Grid.Column="1" Padding="5" Margin="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
-        <Button Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Padding="5" Margin="5" Command="ApplicationCommands.Save">Submit</Button>
+        <Button Grid.Row="11" Grid.Column="1" Padding="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
+        <Button Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Padding="5" Command="ApplicationCommands.Save" Style="{DynamicResource Esri_Button}">Submit</Button>
 
-        <WrapPanel Grid.Row="12" Grid.Column="1" Margin="5">
+        <WrapPanel Grid.Row="12" Grid.Column="1" >
             <TextBlock Text="Data Source: " TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
             <TextBlock FontStyle="Italic"  Text="{Binding SelectedCF.DataSource}" />
         </WrapPanel>
 
-        <TextBlock Grid.Row="13" Grid.Column="1" Margin="5" Text="Line:" Style="{DynamicResource Esri_TextBlockRegular}"/>
-        <TextBlock Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson}" Margin="5" TextWrapping="Wrap" VerticalAlignment="Top" Style="{DynamicResource Esri_TextBlockRegular}" />
+        <Label Grid.Row="13" Grid.Column="1" >
+            <TextBlock Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson}" TextWrapping="Wrap" VerticalAlignment="Top" Style="{DynamicResource Esri_TextBlockRegular}" />
+        </Label>
 
     </Grid>
 </UserControl>

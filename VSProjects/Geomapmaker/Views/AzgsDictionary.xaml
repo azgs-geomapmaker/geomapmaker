@@ -6,8 +6,22 @@
     <Style TargetType="ComboBox" >
         <Setter Property="Margin" Value="5"/>
     </Style>
+    <Style TargetType="ListBox" >
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+    <Style TargetType="Slider" >
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+    <Style TargetType="CheckBox" >
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+    <Style TargetType="Grid" >
+        <Setter Property="Margin" Value="5"/>
+    </Style>
     <Style TargetType="TextBox" >
         <Setter Property="Margin" Value="5"/>
     </Style>
-
+    <Style TargetType="TextBlock" >
+        <Setter Property="Margin" Value="5"/>
+    </Style>
 </ResourceDictionary>
