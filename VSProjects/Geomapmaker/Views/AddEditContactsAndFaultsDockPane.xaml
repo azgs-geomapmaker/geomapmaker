@@ -95,11 +95,11 @@
         <Label Grid.Row="4" Grid.Column="1" Content="Type:" VerticalAlignment="Top" >
             <Label.ToolTip>
                 <StackPanel>
-                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Specifies type of geologic feature represented by this database row." Margin="0" />
-                    <TextBlock />
-                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Examples of values are 'contact', 'fault', 'thrust fault', 'waterline', 'glacier boundary', 'map boundary'. Values must be defined in Glossary table. Null values not permitted." Margin="0" />
+                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Specifies type of geologic feature represented by this database row." />
+                    <TextBlock Margin="0"/>
+                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Examples of values are 'contact', 'fault', 'thrust fault', 'waterline', 'glacier boundary', 'map boundary'. Values must be defined in Glossary table. Null values not permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -134,11 +134,11 @@
         <Label Grid.Row="5" Grid.Column="1"  Content="Identity Confidence:" >
             <Label.ToolTip>
                 <StackPanel>
-                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Indicates how confidently this line feature has been identified as a particular type." Margin="0" />
-                    <TextBlock />
-                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." Margin="0" />
+                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates how confidently this line feature has been identified as a particular type." />
+                    <TextBlock Margin="0"/>
+                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -193,11 +193,11 @@
         <Label Grid.Row="6" Grid.Column="1"  Content="Existence Confidence:" >
             <Label.ToolTip>
                 <StackPanel>
-                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Indicates how confidently existence of this line feature has been determined." Margin="0" />
-                    <TextBlock />
-                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." Margin="0" />
+                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates how confidently existence of this line feature has been determined." />
+                    <TextBlock Margin="0"/>
+                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -207,11 +207,11 @@
         <Label Grid.Row="7" Grid.Column="1" Content="Location Confidence:" >
             <Label.ToolTip>
                 <StackPanel>
-                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." Margin="0" />
-                    <TextBlock />
-                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Data type is float. Null values not permitted." Margin="0" />
+                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." />
+                    <TextBlock Margin="0"/>
+                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Data type is float. Null values not permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -230,11 +230,11 @@
         <Label Grid.Row="8" Grid.Column="1"  Content="Concealed:">
             <Label.ToolTip>
                 <StackPanel>
-                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Indicates whether this contact or fault is concealed by an overlying map unit." Margin="0" />
-                    <TextBlock />
-                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Values = 'N' or 'Y'. Null values not permitted." Margin="0" />
+                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates whether this contact or fault is concealed by an overlying map unit." />
+                    <TextBlock Margin="0"/>
+                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Values = 'N' or 'Y'. Null values not permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -244,11 +244,11 @@
         <Label Grid.Row="9" Grid.Column="1"  Content="Notes:">
             <Label.ToolTip>
                 <StackPanel>
-                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Optional field." Margin="0" />
-                    <TextBlock />
-                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
-                    <TextBlock Text="Free text for additional information specific to this line feature. Null values permitted." Margin="0" />
+                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Optional field." />
+                    <TextBlock Margin="0"/>
+                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Free text for additional information specific to this line feature. Null values permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
