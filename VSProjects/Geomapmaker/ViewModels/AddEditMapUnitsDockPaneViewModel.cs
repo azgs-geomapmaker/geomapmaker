@@ -45,7 +45,7 @@ namespace Geomapmaker {
 			pane.Activate(); 
 		}
 
-		internal static void Hide() {
+		internal static new void Hide() {
 			DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
 			if (pane == null)
 				return;
