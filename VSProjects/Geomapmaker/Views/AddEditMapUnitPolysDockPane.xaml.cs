@@ -24,14 +24,13 @@ namespace Geomapmaker {
 			InitializeComponent();
 		}
 
-        private void NewCommandHandler(object sender, ExecutedRoutedEventArgs e)
-        {
-            // Calls a method to close the file and release resources.
-            var vm = (AddEditMapUnitPolysDockPaneViewModel)this.DataContext;
-            vm.Reset();
-        }
+		private async void NewCommandHandler(object sender, ExecutedRoutedEventArgs e) {
+			// Calls a method to close the file and release resources.
+			var vm = (AddEditMapUnitPolysDockPaneViewModel)this.DataContext;
+			vm.Reset();
+		}
 
-        private async void SaveCommandHandler(object sender, ExecutedRoutedEventArgs e) {
+		private async void SaveCommandHandler(object sender, ExecutedRoutedEventArgs e) {
 			// Calls a method to close the file and release resources.
 			var vm = (AddEditMapUnitPolysDockPaneViewModel)this.DataContext;
 			await vm.saveMapUnitPoly(/*vm.SelectedMapUnit*/);
