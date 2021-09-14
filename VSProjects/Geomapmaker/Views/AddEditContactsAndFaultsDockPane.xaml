@@ -92,7 +92,17 @@
 
         <TextBlock Grid.Row="3" Grid.Column="3" FontWeight="Bold" Text="Current Values" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Type:" VerticalAlignment="Top" />
+        <Label Grid.Row="4" Grid.Column="1" Content="Type:" VerticalAlignment="Top" >
+            <Label.ToolTip>
+                <StackPanel>
+                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Specifies type of geologic feature represented by this database row." Margin="0" />
+                    <TextBlock />
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Examples of values are 'contact', 'fault', 'thrust fault', 'waterline', 'glacier boundary', 'map boundary'. Values must be defined in Glossary table. Null values not permitted." Margin="0" />
+                </StackPanel>
+            </Label.ToolTip>
+        </Label>
         <ListBox
                 Grid.Row="4" Grid.Column="2" 
 	    		x:Name="ContactsAndFaultsComboBox" 
@@ -121,7 +131,17 @@
         </ListBox>
         <Image Grid.Row="4" Grid.Column="3"  Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-        <Label Grid.Row="5" Grid.Column="1"  Content="Identity Confidence:" />
+        <Label Grid.Row="5" Grid.Column="1"  Content="Identity Confidence:" >
+            <Label.ToolTip>
+                <StackPanel>
+                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Indicates how confidently this line feature has been identified as a particular type." Margin="0" />
+                    <TextBlock />
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." Margin="0" />
+                </StackPanel>
+            </Label.ToolTip>
+        </Label>
         <Grid Grid.Row="5" Grid.Column="2" >
 
             <Grid.RowDefinitions>
@@ -170,11 +190,31 @@
         </Grid>
         <TextBlock Grid.Row="5" Grid.Column="3" FontWeight="Bold" Text="{Binding SelectedCF.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-        <Label Grid.Row="6" Grid.Column="1"  Content="Existence Confidence:" />
+        <Label Grid.Row="6" Grid.Column="1"  Content="Existence Confidence:" >
+            <Label.ToolTip>
+                <StackPanel>
+                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Indicates how confidently existence of this line feature has been determined." Margin="0" />
+                    <TextBlock />
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." Margin="0" />
+                </StackPanel>
+            </Label.ToolTip>
+        </Label>
         <Slider Grid.Row="6" Grid.Column="2"  Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
         <TextBlock Grid.Row="6" Grid.Column="3"  FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-        <Label Grid.Row="7" Grid.Column="1" Content="Location Confidence:" />
+        <Label Grid.Row="7" Grid.Column="1" Content="Location Confidence:" >
+            <Label.ToolTip>
+                <StackPanel>
+                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." Margin="0" />
+                    <TextBlock />
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Data type is float. Null values not permitted." Margin="0" />
+                </StackPanel>
+            </Label.ToolTip>
+        </Label>
         <ComboBox 
             Grid.Row="7" 
             Grid.Column="2" 
@@ -187,11 +227,31 @@
         </ComboBox>
         <TextBlock Grid.Row="7" Grid.Column="3"  FontWeight="Bold" VerticalAlignment="Center" Text="{Binding SelectedCF.LocationConfidenceMeters}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
-        <Label Grid.Row="8" Grid.Column="1"  Content="Concealed:"/>
+        <Label Grid.Row="8" Grid.Column="1"  Content="Concealed:">
+            <Label.ToolTip>
+                <StackPanel>
+                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Indicates whether this contact or fault is concealed by an overlying map unit." Margin="0" />
+                    <TextBlock />
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Values = 'N' or 'Y'. Null values not permitted." Margin="0" />
+                </StackPanel>
+            </Label.ToolTip>
+        </Label>
         <CheckBox Grid.Row="8" Grid.Column="2" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}"  ></CheckBox>
         <TextBlock Grid.Row="8" Grid.Column="3" FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-        <Label Grid.Row="9" Grid.Column="1"  Content="Notes:"/>
+        <Label Grid.Row="9" Grid.Column="1"  Content="Notes:">
+            <Label.ToolTip>
+                <StackPanel>
+                    <TextBlock Text="Description:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Optional field." Margin="0" />
+                    <TextBlock />
+                    <TextBlock Text="Notes:" FontWeight="Bold" Margin="0"/>
+                    <TextBlock Text="Free text for additional information specific to this line feature. Null values permitted." Margin="0" />
+                </StackPanel>
+            </Label.ToolTip>
+        </Label>
         <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3"  Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250"  />
 
         <Button Grid.Row="11" Grid.Column="1" Padding="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
