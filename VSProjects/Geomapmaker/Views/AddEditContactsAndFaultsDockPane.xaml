@@ -143,9 +143,6 @@
               VerticalAlignment="Center" 
               Content="Low"
               IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
-              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
-              Foreground="{DynamicResource Esri_TextInfoBrush}" 
-              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
               >
             </RadioButton>
 
@@ -157,9 +154,6 @@
               VerticalAlignment="Center" 
               Content="Medium"
               IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
-              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
-              Foreground="{DynamicResource Esri_TextInfoBrush}" 
-              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
               >
             </RadioButton>
 
@@ -171,9 +165,6 @@
               VerticalAlignment="Center" 
               Content="High"
               IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
-              Background="{DynamicResource Esri_BackgroundPressedBrush}" 
-              Foreground="{DynamicResource Esri_TextInfoBrush}" 
-              BorderBrush="{DynamicResource Esri_TextStyleSubduedBrush}"
               >
             </RadioButton>
         </Grid>
@@ -201,19 +192,18 @@
         <TextBlock Grid.Row="8" Grid.Column="3" FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
         <Label Grid.Row="9" Grid.Column="1"  Content="Notes:"/>
-        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3"  Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250" />
+        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3"  Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250"  />
 
         <Button Grid.Row="11" Grid.Column="1" Padding="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
         <Button Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Padding="5" Command="ApplicationCommands.Save" Style="{DynamicResource Esri_Button}">Submit</Button>
 
         <WrapPanel Grid.Row="12" Grid.Column="1" >
-            <TextBlock Text="Data Source: " TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}"/>
-            <TextBlock FontStyle="Italic"  Text="{Binding SelectedCF.DataSource}" />
+            <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
+            <TextBlock FontStyle="Italic" Text="{Binding SelectedCF.DataSource}" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
 
-        <Label Grid.Row="13" Grid.Column="1" >
-            <TextBlock Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson}" TextWrapping="Wrap" VerticalAlignment="Top" Style="{DynamicResource Esri_TextBlockRegular}" />
-        </Label>
+        <!--<Label Grid.Row="13" Grid.Column="1" Content="Line:" />-->
+        <TextBlock Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson}" TextWrapping="Wrap" VerticalAlignment="Top" />
 
     </Grid>
 </UserControl>

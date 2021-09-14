@@ -157,8 +157,8 @@
         <Label Grid.Row="16" Grid.Column="1" Content="GeoMaterial Confidence:" />
         <ComboBox Grid.Row="16" Grid.Column="2" ItemsSource="{Binding Path=(ui:DataHelper.GeoMaterialConfidences)}" SelectedItem ="{Binding SelectedMapUnit.GeoMaterialConfidence}" />
 
-        <Button Grid.Row="17" Grid.Column="1" Command="ApplicationCommands.New">Reset</Button>
-        <Button Grid.Row="17" Grid.Column="2" Command="ApplicationCommands.Save">Submit</Button>
+        <Button Grid.Row="17" Grid.Column="1" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
+        <Button Grid.Row="17" Grid.Column="2" Command="ApplicationCommands.Save" Style="{DynamicResource Esri_Button}">Submit</Button>
 
     </Grid>
 
