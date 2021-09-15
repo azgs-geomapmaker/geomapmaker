@@ -166,6 +166,7 @@ namespace Geomapmaker
                                     //mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
                                     Description = row["Description"]?.ToString(),
                                     HierarchyKey = row["HierarchyKey"].ToString(),
+                                    ParagraphStyle = row["ParagraphStyle"].ToString(),
                                     //mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
                                     //mapUnit.Label = row["Label"].ToString();
                                     //mapUnit.Symbol = row["Symbol"].ToString();
