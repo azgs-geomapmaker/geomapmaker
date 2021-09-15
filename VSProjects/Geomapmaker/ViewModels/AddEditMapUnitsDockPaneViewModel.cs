@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ArcGIS.Core;
-using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
-using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Catalog;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Extensions;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
-using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 
 namespace Geomapmaker
@@ -32,7 +21,6 @@ namespace Geomapmaker
             Debug.WriteLine("AddEditMapUnitsDockPaneViewModel constructor enter");
         }
 
-
         /// <summary>
         /// Show the DockPane.
         /// </summary>
@@ -44,9 +32,7 @@ namespace Geomapmaker
                 return;
             }
 
-            Debug.WriteLine("VM.Show, mapUnitName = " + DataHelper.MapUnitName);
-
-            //We don't want map tool active when editing map unit descriptions
+            // We don't want map tool active when editing map unit descriptions
             //ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync(null);
 
             pane.Activate();
@@ -63,24 +49,25 @@ namespace Geomapmaker
             pane.Hide();
         }
 
-        public Boolean IsValid
+        // TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
+        // each of the properties used below. There must be a better way.
+
+        public bool IsValid
         {
-            //TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
-            //each of the properties used below. There must be a better way.
             get
             {
-                //return true;
-                return
-                    SelectedMapUnit != null &&
-                    SelectedMapUnit.MU != null && SelectedMapUnit.MU.Trim() != "" &&
-                    SelectedMapUnit.Name != null && SelectedMapUnit.Name.Trim() != "";// &&
+                //return
+                //    SelectedMapUnit != null &&
+                //    SelectedMapUnit.MU != null && SelectedMapUnit.MU.Trim() != "" &&
+                //    SelectedMapUnit.Name != null && SelectedMapUnit.Name.Trim() != "";
 
-                //SelectedMapUnit.Age != null && SelectedMapUnit.Age.Trim() != "";//&&
-                //SelectedMapUnit.HierarchyKey != null && SelectedMapUnit.HierarchyKey.Trim() != "" &&
-                //SelectedMapUnit.ParagraphStyle != null && SelectedMapUnit.ParagraphStyle.Trim() != "" &&
-                //SelectedMapUnit.Symbol != null && SelectedMapUnit.Symbol.Trim() != "" &&
-                //SelectedMapUnit.DescriptionSourceID != null && SelectedMapUnit.DescriptionSourceID.Trim() != "" &&
+                var booolvalid = SelectedMapUnit != null &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.MU) &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.Name);
 
+                return SelectedMapUnit != null &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.MU) &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.Name);
             }
         }
 
@@ -90,6 +77,7 @@ namespace Geomapmaker
         private const string GENERIC_HEADING = "Add/Edit Map Units";
         private const string ADD_HEADING = "Add Map Unit";
         public const string EDIT_HEADING = "Edit Map Unit";
+
         private string _heading = GENERIC_HEADING;
         public string Heading
         {
@@ -116,23 +104,14 @@ namespace Geomapmaker
                     SubHeading = GENERIC_HEADING;
                     return;
                 }
+
                 //selectedMapUnit = value;
                 value.DescriptionSourceID = DataHelper.DataSource.Source; // for display
                 SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
 
                 //Set heading and populate form, depending on whether this is a new map unit or not 
                 //if (!DataHelper.MapUnits.Any(p => p.Text == value)) {
-                if (!DataHelper.MapUnits.Any(mu => mu.MU == value.MU))
-                {
-                    SubHeading = ADD_HEADING;
-                    //populate form with defaults
-                }
-                else
-                {
-                    SubHeading = EDIT_HEADING;
-                    // populate form from db
-
-                }
+                SubHeading = !DataHelper.MapUnits.Any(mu => mu.MU == value.MU) ? ADD_HEADING : EDIT_HEADING;
             }
         }
 
@@ -143,10 +122,7 @@ namespace Geomapmaker
         private string userEnteredMapUnit;
         public string UserEnteredMapUnit
         {
-            get
-            {
-                return userEnteredMapUnit;
-            }
+            get => userEnteredMapUnit;
             set
             {
                 //if (userEnteredMapUnit != value) {
@@ -158,20 +134,20 @@ namespace Geomapmaker
                 else if (!DataHelper.MapUnits.Any(mu => mu.MU == value))
                 {
                     //userEnteredMapUnit = value;
-                    var mapUnit = new MapUnit();
-                    mapUnit.MU = userEnteredMapUnit;
-                    mapUnit.DescriptionSourceID = DataHelper.DataSource.Source; //for display
+                    MapUnit mapUnit = new MapUnit
+                    {
+                        MU = userEnteredMapUnit,
+                        DescriptionSourceID = DataHelper.DataSource.Source //for display
+                    };
                     SelectedMapUnit = mapUnit;
                 }
             }
         }
 
-
         public async Task saveMapUnit(MapUnit mapUnit)
         {
             Debug.WriteLine("saveMapUnit enter");
 
-            //var mapUnits = new ObservableCollection<ComboBoxItem>();
             var mapUnits = new ObservableCollection<MapUnit>();
 
             if (DataHelper.connectionProperties == null)
@@ -217,8 +193,8 @@ namespace Geomapmaker
                                             row["Age"] = mapUnit.Age;
                                             //row["RelativeAge"] = mapUnit.RelativeAge;
                                             row["Description"] = mapUnit.Description;
-                                            row["HierarchyKey"] = 5; // mapUnit.HierarchyKey;
-                                            row["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
+                                            row["HierarchyKey"] = mapUnit.HierarchyKey;
+                                            row["ParagraphStyle"] = mapUnit.ParagraphStyle;
                                             row["Label"] = mapUnit.Label;
                                             row["Symbol"] = mapUnit.Symbol;
                                             row["AreaFillRGB"] = mapUnit.AreaFillRGB;
@@ -227,7 +203,7 @@ namespace Geomapmaker
                                             row["GeoMaterial"] = mapUnit.GeoMaterial;
                                             row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
 
-                                            //After all the changes are done, persist it.
+                                            // After all the changes are done, persist it.
                                             row.Store();
 
                                             // Has to be called after the store too.
@@ -277,7 +253,10 @@ namespace Geomapmaker
                         try
                         {
                             result = editOperation.Execute();
-                            if (!result) message = editOperation.ErrorMessage;
+                            if (!result)
+                            {
+                                message = editOperation.ErrorMessage;
+                            }
                         }
                         catch (GeodatabaseException exObj)
                         {
@@ -301,15 +280,4 @@ namespace Geomapmaker
         }
 
     }
-
-    /*
-	/// <summary>
-	/// Button implementation to show the DockPane.
-	/// </summary>
-	internal class AddEditMapUnitsDockPane_ShowButton : Button {
-		protected override void OnClick() {
-			AddEditMapUnitsDockPaneViewModel.Show();
-		}
-	}
-	*/
 }
