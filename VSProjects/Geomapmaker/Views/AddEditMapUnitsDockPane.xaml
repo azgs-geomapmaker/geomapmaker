@@ -246,19 +246,17 @@
         </Label>
         <wpftk:ColorPicker Grid.Row="12" Grid.Column="2" Margin="5" SelectedColor="{Binding SelectedMapUnit.hexcolor}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False"/>
 
-        <!-- Note sure if this is still needed -->
-        <Label Grid.Row="13" Grid.Column="1" Content="Hex Color:" >
+        <Label Grid.Row="13" Grid.Column="1" Content="Area Fill Pattern Description:" >
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Specifies RGB equivalent of area-fill color of map unit as {red value, green value, blue value} tuples." />
-                    
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Easily understood description of pattern fill of map unit (for example, 'random small red dashes')." />
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Examples of values are '255,255,255', '124,005,255'. Use of consistent syntax is important to enable computer programs to read field and display intended color: (1) each RGB color value is integer between 0 and 255; (2) values are left-padded with zeroes so that each consists of 3 digits; (3) values are separated by commas with no spaces (for example, nnn,nnn,nnn). Provided as convenience for users who want to re-create area-fill colors for onscreen viewing; especially important to non-ArcGIS users who are unable to use .style file supplied with database. Null values only permitted for uncolored map units and for headings." />
+                    <TextBlock Style = "{StaticResource TooltipText}" Text="Provided as convenience for users who want to re-create area-fill patterns; especially important to non-ArcGIS users who are unable to use .style file supplied with database. Null values only permitted for unpatterned map units and for headings." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
-        <TextBox Grid.Row="13" Grid.Column="2" Text="{Binding SelectedMapUnit.HexColor}" />
+        <TextBox Grid.Row="13" Grid.Column="2" Text="{Binding SelectedMapUnit.AreaFillPatternDescription}" />
 
         <Label Grid.Row="14" Grid.Column="1" Content="Description Source:" >
             <Label.ToolTip>
