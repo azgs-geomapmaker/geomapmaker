@@ -73,6 +73,8 @@ namespace Geomapmaker
             set
             {
                 SetProperty(ref prepopulate, value, () => Prepopulate); //Have to do this to trigger stuff, I guess.
+
+                // if the toggle-btn is active
                 if (value)
                 {
                     GeomapmakerModule.ContactsAndFaultsAddTool.SetPopulate();
@@ -84,16 +86,6 @@ namespace Geomapmaker
         {
             get
             {
-
-                //TODO: It is possible to enter errant values for the Type (symbol key). Need to figure out validation on that.
-
-                // I added validation for errant Type/symbol, but I think the better option would be set the combobox to IsEditable="False" -camp
-
-                if (SelectedCF.symbol == null)
-                {
-                    return false;
-                }
-
                 return !(SelectedCF == null
                     || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
                     || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
@@ -179,13 +171,13 @@ namespace Geomapmaker
             attributes["IdentityConfidence"] = SelectedCF.IdentityConfidence;
             attributes["ExistenceConfidence"] = SelectedCF.ExistenceConfidence;
             attributes["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters;
-            attributes["IsConcealed"] = SelectedCF.IsConcealed ? "Y" : "N";
+            attributes["IsConcealed"] = SelectedCF.IsConcealed ? "Y" : "N"; // Convert bool to y/n
             attributes["Notes"] = SelectedCF.Notes;
             attributes["DataSourceID"] = DataHelper.DataSource.DataSource_ID;
             //TODO: other fields
 
             //Create the new feature
-            var op = new EditOperation();
+            EditOperation op = new EditOperation();
             if (SelectedCF.ID == null)
             {
                 op.Name = string.Format("Create {0}", "ContactsAndFaults");
@@ -241,26 +233,6 @@ namespace Geomapmaker
                 cfLayer.ClearSelection();
                 cfLayer.SetRenderer(DataHelper.cfRenderer);
             });
-
-
-            //});
-
-        }
-
-
-
-    }
-
-
-
-    /// <summary>
-    /// Button implementation to show the DockPane.
-    /// </summary>
-    internal class AddEditContactsAndFaults_ShowButton : Button
-    {
-        protected override void OnClick()
-        {
-            AddEditContactsAndFaultsDockPaneViewModel.Show();
         }
     }
 }
