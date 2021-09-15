@@ -1,9 +1,7 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,20 +9,18 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace Geomapmaker
 {
     public static class DataHelper
     {
         public static int userID;
-        public static String userName;
+        public static string userName;
 
-        public static ArcGIS.Core.Data.DatabaseConnectionProperties connectionProperties;
-        public static void setConnectionProperties(JObject props)
+        public static DatabaseConnectionProperties connectionProperties;
+        public static void SetConnectionProperties(JObject props)
         {
             connectionProperties = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL)
             {
@@ -42,7 +38,6 @@ namespace Geomapmaker
         public static CIMUniqueValueRenderer mapUnitRenderer;
         public static CIMUniqueValueRenderer cfRenderer;
 
-        //public static String mapUnitName { get; set; } = "Play A";
         public static event EventHandler MapUnitNameChanged;
         private static string mapUnitName;
         public static string MapUnitName
@@ -104,30 +99,15 @@ namespace Geomapmaker
             }
         }
 
-        public static event EventHandler DummyChanged;
-        private static string dummy = "Hi there";
-        public static string Dummy
+        // Populate our map units list from the database and create unique value renderer for mapunitpolys featureclass 
+        // using colors from the descriptionofmapunits table. This uses a variation of the technique presented here: 
+        // https://community.esri.com/message/960006-how-to-render-color-of-individual-features-based-on-field-in-another-table
+        // and here: https://community.esri.com/thread/217968-unique-value-renderer-specifying-values
+        public static async Task PopulateMapUnits()
         {
-            get => dummy;
-            set
-            {
-                dummy = value;
-                DummyChanged?.Invoke(null, EventArgs.Empty);
-            }
-        }
+            ObservableCollection<MapUnit> mapUnits = new ObservableCollection<MapUnit>();
 
-        //Populate our map units list from the database and create unique value renderer for mapunitpolys featureclass 
-        //using colors from the descriptionofmapunits table. This uses a variation of the technique presented here: 
-        //https://community.esri.com/message/960006-how-to-render-color-of-individual-features-based-on-field-in-another-table
-        //and here: https://community.esri.com/thread/217968-unique-value-renderer-specifying-values
-        public static async Task populateMapUnits()
-        {
-            Debug.WriteLine("populateMapUnits enter");
-
-            //var mapUnits = new ObservableCollection<ComboBoxItem>();
-            var mapUnits = new ObservableCollection<MapUnit>();
-
-            if (DataHelper.connectionProperties == null)
+            if (connectionProperties == null)
             {
                 return;
             }
@@ -135,7 +115,7 @@ namespace Geomapmaker
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
 
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                using (Geodatabase geodatabase = new Geodatabase(connectionProperties))
                 {
 
                     //Get list of map units currently in feature class
@@ -150,6 +130,7 @@ namespace Geomapmaker
                         {
                             using (Row row = rowCursor.Current)
                             {
+
                                 // Null-check MC
                                 if (row["MapUnit"] != null)
                                 {
@@ -159,7 +140,6 @@ namespace Geomapmaker
                         }
                     }
 
-                    //Table t = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits");
                     QueryDef mapUnitsQDef = new QueryDef
                     {
                         Tables = "DescriptionOfMapUnits",
@@ -175,30 +155,32 @@ namespace Geomapmaker
                             {
                                 Debug.WriteLine(row["Name"].ToString());
 
-                                //create and load map unit
-                                var mapUnit = new MapUnit();
-                                mapUnit.ID = int.Parse(row["ObjectID"].ToString());
-                                mapUnit.MU = row["MapUnit"].ToString();
-                                mapUnit.Name = row["Name"].ToString();
-                                mapUnit.FullName = row["FullName"] == null ? null : row["FullName"].ToString();
-                                mapUnit.Age = row["Age"] == null ? null : row["Age"].ToString(); //TODO: more formatting here
-                                                                                                 //mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
-                                mapUnit.Description = row["Description"] == null ? null : row["Description"].ToString();
-                                mapUnit.HierarchyKey = row["HierarchyKey"].ToString();
-                                //mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
-                                //mapUnit.Label = row["Label"].ToString();
-                                //mapUnit.Symbol = row["Symbol"].ToString();
-                                //mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
-                                mapUnit.hexcolor = row["hexcolor"] == null ? null : row["hexcolor"].ToString();
-                                //mapUnit.Color = row["hexcolor"];
-                                mapUnit.DescriptionSourceID = row["DescriptionSourceID"] == null ? null : row["DescriptionSourceID"].ToString();
-                                mapUnit.GeoMaterial = row["GeoMaterial"] == null ? null : row["GeoMaterial"].ToString();
-                                mapUnit.GeoMaterialConfidence = row["GeoMaterialConfidence"] == null ? null : row["GeoMaterialConfidence"].ToString();
+                                // Create and load map unit
+                                MapUnit mapUnit = new MapUnit
+                                {
+                                    ID = int.Parse(row["ObjectID"].ToString()),
+                                    MU = row["MapUnit"].ToString(),
+                                    Name = row["Name"].ToString(),
+                                    FullName = row["FullName"]?.ToString(),
+                                    Age = row["Age"]?.ToString(), //TODO: more formatting here
+                                    //mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
+                                    Description = row["Description"]?.ToString(),
+                                    HierarchyKey = row["HierarchyKey"].ToString(),
+                                    //mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
+                                    //mapUnit.Label = row["Label"].ToString();
+                                    //mapUnit.Symbol = row["Symbol"].ToString();
+                                    //mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
+                                    hexcolor = row["hexcolor"]?.ToString(),
+                                    //mapUnit.Color = row["hexcolor"];
+                                    DescriptionSourceID = row["DescriptionSourceID"]?.ToString(),
+                                    GeoMaterial = row["GeoMaterial"]?.ToString(),
+                                    GeoMaterialConfidence = row["GeoMaterialConfidence"]?.ToString()
+                                };
 
-                                //add it to our list
+                                // Add it to our list
                                 mapUnits.Add(mapUnit);
 
-                                //Only add to renderer if map unit is in the feature class
+                                // Only add to renderer if map unit is in the feature class
                                 if (muInFeatureClass.Contains(row["MapUnit"].ToString()))
                                 {
                                     //Create a "CIMUniqueValueClass" for the map unit and add it to the list of unique values.
@@ -210,11 +192,15 @@ namespace Geomapmaker
                                         };
                                     string colorString = mapUnit.AreaFillRGB;
                                     string[] strVals = colorString.Split(';');
-                                    var cF = ColorFactory.Instance;
-                                    var fill = new CIMSolidFill();
-                                    fill.Color = cF.CreateRGBColor(Double.Parse(strVals[0]), Double.Parse(strVals[1]), Double.Parse(strVals[2]));
-                                    var stroke = new CIMSolidStroke();
-                                    stroke.Color = cF.CreateRGBColor(255, 255, 255, 0);
+                                    IColorFactory cF = ColorFactory.Instance;
+                                    CIMSolidFill fill = new CIMSolidFill
+                                    {
+                                        Color = cF.CreateRGBColor(double.Parse(strVals[0]), double.Parse(strVals[1]), double.Parse(strVals[2]))
+                                    };
+                                    CIMSolidStroke stroke = new CIMSolidStroke
+                                    {
+                                        Color = cF.CreateRGBColor(255, 255, 255, 0)
+                                    };
                                     CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                                     {
                                         Editable = true,
@@ -231,15 +217,15 @@ namespace Geomapmaker
                             }
                         }
 
-                        //Create a list of CIMUniqueValueGroup
+                        // Create a list of CIMUniqueValueGroup
                         CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
                         {
                             Classes = listUniqueValueClasses.ToArray(),
                         };
                         List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
 
-                        //Use the list to create the CIMUniqueValueRenderer
-                        DataHelper.mapUnitRenderer = new CIMUniqueValueRenderer
+                        // Use the list to create the CIMUniqueValueRenderer
+                        mapUnitRenderer = new CIMUniqueValueRenderer
                         {
                             UseDefaultSymbol = false,
                             //DefaultLabel = "all other values",
@@ -249,12 +235,12 @@ namespace Geomapmaker
                             Fields = new string[] { "mapunit" }
                         };
 
-                        //Set renderer in mapunit. The try/catch is there because the first time through, this is called 
-                        //before the layer has been added to the map. We just ignore the error in that case.
+                        // Set renderer in mapunit. The try/catch is there because the first time through, this is called 
+                        // before the layer has been added to the map. We just ignore the error in that case.
                         try
                         {
-                            var muLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
-                            muLayer.SetRenderer(DataHelper.mapUnitRenderer);
+                            FeatureLayer muLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+                            muLayer.SetRenderer(mapUnitRenderer);
                         }
                         catch { }
 
@@ -262,17 +248,17 @@ namespace Geomapmaker
 
                 }
             });
-            DataHelper.MapUnits = mapUnits;
+
+            MapUnits = mapUnits;
         }
 
-
-        public static async Task populateContactsAndFaults()
+        public static async Task PopulateContactsAndFaults()
         {
             Debug.WriteLine("populateContactsAndFaults enter");
 
-            var cfSymbols = new ObservableCollection<CFSymbol>();
+            ObservableCollection<CFSymbol> cfSymbols = new ObservableCollection<CFSymbol>();
 
-            if (DataHelper.connectionProperties == null)
+            if (connectionProperties == null)
             {
                 return;
             }
@@ -280,7 +266,7 @@ namespace Geomapmaker
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
 
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                using (Geodatabase geodatabase = new Geodatabase(connectionProperties))
                 {
 
                     List<string> cfInFeatureClass = new List<string>();
@@ -316,16 +302,19 @@ namespace Geomapmaker
                             {
                                 Debug.WriteLine(row["key"].ToString());
 
-                                //create and load map unit
-                                CFSymbol cfS = new CFSymbol();
-                                cfS.key = row["key"].ToString();
-                                cfS.description = row["description"] == null ? "" : row["description"].ToString();
-                                cfS.symbol = row["symbol"].ToString();
-                                //Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
+                                // Create and load map unit
+                                CFSymbol cfS = new CFSymbol
+                                {
+                                    key = row["key"].ToString(),
+                                    description = row["description"] == null ? "" : row["description"].ToString(),
+                                    symbol = row["symbol"].ToString()
+                                };
+
+                                // Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
                                 cfS.symbol = cfS.symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
                                 cfS.symbol = cfS.symbol.Insert(cfS.symbol.Length, "}");
 
-                                //Create the preview image used in the ComboBox
+                                // Create the preview image used in the ComboBox
                                 SymbolStyleItem sSI = new SymbolStyleItem()
                                 {
                                     Symbol = CIMSymbolReference.FromJson(cfS.symbol).Symbol,
@@ -334,14 +323,14 @@ namespace Geomapmaker
                                 };
                                 cfS.preview = sSI.PreviewImage;
 
-                                //add it to our list
+                                // Add it to our list
                                 cfSymbols.Add(cfS);
 
-                                //Only add to renderer if present in the feature class
+                                // Only add to renderer if present in the feature class
                                 if (cfInFeatureClass.Contains(cfS.key))
                                 {
-                                    //Create a "CIMUniqueValueClass" for the cf and add it to the list of unique values.
-                                    //This is what creates the mapping from cf derived attribute to symbol
+                                    // Create a "CIMUniqueValueClass" for the cf and add it to the list of unique values.
+                                    // This is what creates the mapping from cf derived attribute to symbol
                                     List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                                         new CIMUniqueValue {
                                             FieldValues = new string[] { cfS.key }
@@ -380,7 +369,7 @@ namespace Geomapmaker
 						*/
 
                         //Use the list to create the CIMUniqueValueRenderer
-                        DataHelper.cfRenderer = new CIMUniqueValueRenderer
+                        cfRenderer = new CIMUniqueValueRenderer
                         {
                             UseDefaultSymbol = false,
                             Groups = listUniqueValueGroups.ToArray(),
@@ -392,8 +381,8 @@ namespace Geomapmaker
                         //before the layer has been added to the map. We just ignore the error in that case.
                         try
                         {
-                            var cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
-                            cfLayer.SetRenderer(DataHelper.cfRenderer);
+                            FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
+                            cfLayer.SetRenderer(cfRenderer);
                         }
                         catch { }
 
@@ -401,18 +390,17 @@ namespace Geomapmaker
 
                 }
             });
-            DataHelper.CFSymbols = cfSymbols;
+
+            CFSymbols = cfSymbols;
         }
 
-
-
-        public static async Task populateDataSources()
+        public static async Task PopulateDataSources()
         {
             Debug.WriteLine("populateDataSources enter");
 
-            var dataSources = new ObservableCollection<DataSource>();
+            ObservableCollection<DataSource> dataSources = new ObservableCollection<DataSource>();
 
-            if (DataHelper.connectionProperties == null)
+            if (connectionProperties == null)
             {
                 return;
             }
@@ -420,7 +408,7 @@ namespace Geomapmaker
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
 
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                using (Geodatabase geodatabase = new Geodatabase(connectionProperties))
                 {
 
                     QueryDef dsQDef = new QueryDef
@@ -438,12 +426,14 @@ namespace Geomapmaker
                                 Debug.WriteLine(row["source"].ToString());
 
                                 //create and load map unit
-                                DataSource dS = new DataSource();
-                                dS.ID = long.Parse(row["objectid"].ToString());
-                                dS.Source = row["source"].ToString();
-                                dS.DataSource_ID = row["datasources_id"].ToString();
-                                dS.Url = row["url"] == null ? "" : row["url"].ToString();
-                                dS.Notes = row["notes"] == null ? "" : row["notes"].ToString();
+                                DataSource dS = new DataSource
+                                {
+                                    ID = long.Parse(row["objectid"].ToString()),
+                                    Source = row["source"].ToString(),
+                                    DataSource_ID = row["datasources_id"].ToString(),
+                                    Url = row["url"] == null ? "" : row["url"].ToString(),
+                                    Notes = row["notes"] == null ? "" : row["notes"].ToString()
+                                };
 
                                 //add it to our list
                                 dataSources.Add(dS);
@@ -454,27 +444,13 @@ namespace Geomapmaker
 
                 }
             });
-            DataHelper.DataSources = dataSources;
+
+            DataSources = dataSources;
         }
-
-
-
-        /*
-		public static event EventHandler SelectedMapUnitChanged;
-		private static string selectedMapUnit;
-		public static string SelectedMapUnit {
-			get  => selectedMapUnit; 
-			set {
-				// populate form
-				selectedMapUnit = value;
-				SelectedMapUnitChanged?.Invoke(null, EventArgs.Empty);
-			}
-		}
-		*/
 
         public delegate void UserLoginDelegate();
         public static event UserLoginDelegate UserLoginHandler;
-        public static void UserLogin(int uID, String uName)
+        public static void UserLogin(int uID, string uName)
         {
             userID = uID;
             userName = uName;
@@ -488,12 +464,7 @@ namespace Geomapmaker
             ProjectSelectedHandler?.Invoke();
         }
 
-
-        //These intervals and their ranges are, with a little post-processing, from:
-        //	https://macrostrat.org/api/v1/defs/intervals?timescale_id=11
-        //	https://macrostrat.org/api/v1/defs/intervals?timescale_id=17
-        //TODO: Might be nice to load this from a table in geomapmaker.public
-        private static ObservableCollection<Interval> intervals = new ObservableCollection<Interval>() {
+        public static ObservableCollection<Interval> Intervals { get; } = new ObservableCollection<Interval>() {
             new Interval {name ="Cenozoic", range="66 - 0ma"},
             new Interval {name ="Holocene", range="0.0117 - 0ma"},
             new Interval {name ="Quaternary", range="2.588 - 0ma"},
@@ -754,16 +725,7 @@ namespace Geomapmaker
             new Interval {name ="Begadean", range="541 - 520ma"},
             new Interval {name ="Hadrynian", range="850 - 541ma"}
         };
-        public static ObservableCollection<Interval> Intervals
-        {
-            get
-            {
-                return intervals;
-            }
-        }
-
-        //TODO: Load these from a table in geomapmaker.public
-        private static ObservableCollection<string> geoMaterials = new ObservableCollection<string>() {
+        public static ObservableCollection<string> GeoMaterials { get; } = new ObservableCollection<string>() {
             "Sedimentary material",
             "Sediment",
             "Clastic sediment",
@@ -866,68 +828,32 @@ namespace Geomapmaker
             "Water or ice",
             "Unmapped area"
         };
-        public static ObservableCollection<string> GeoMaterials
-        {
-            get
-            {
-                return geoMaterials;
-            }
-        }
 
-        private static ObservableCollection<string> geoMaterialConfidences = new ObservableCollection<string>() {
+        public static ObservableCollection<string> GeoMaterialConfidences { get; } = new ObservableCollection<string>() {
             "High",
             "Medium",
             "Low"
         };
-        public static ObservableCollection<string> GeoMaterialConfidences
-        {
-            get
-            {
-                return geoMaterialConfidences;
-            }
-        }
 
-        private static ObservableCollection<string> identityConfidences = new ObservableCollection<string>() {
+        public static ObservableCollection<string> IdentityConfidences { get; } = new ObservableCollection<string>() {
             "High",
             "Medium",
             "Low"
         };
-        public static ObservableCollection<string> IdentityConfidences
-        {
-            get
-            {
-                return identityConfidences;
-            }
-        }
 
-        private static ObservableCollection<string> existenceConfidences = new ObservableCollection<string>() {
+        public static ObservableCollection<string> ExistenceConfidences { get; } = new ObservableCollection<string>() {
             "High",
             "Medium",
             "Low"
         };
-        public static ObservableCollection<string> ExistenceConfidences
-        {
-            get
-            {
-                return existenceConfidences;
-            }
-        }
 
-        private static ObservableCollection<string> locationConfidenceMeters = new ObservableCollection<string>() {
+        public static ObservableCollection<string> LocationConfidenceMeters { get; } = new ObservableCollection<string>() {
             "10",
             "25",
             "50",
             "100",
             "250",
         };
-
-        public static ObservableCollection<string> LocationConfidenceMeters
-        {
-            get
-            {
-                return locationConfidenceMeters;
-            }
-        }
     }
 
     /// <summary>

@@ -100,7 +100,7 @@ namespace Geomapmaker {
 
                     if (item is ProjectComboBoxItem) { //TODO: This is only here because I'm not sure how to have a combobox without an initial selection
                         var props = JObject.Parse(((ProjectComboBoxItem)item).connectionProperties);
-                        DataHelper.setConnectionProperties(props);
+                        DataHelper.SetConnectionProperties(props);
                         AddEditMapUnitsDockPaneViewModel.Hide();
                         await loadGeodatabase();
                     }
@@ -112,9 +112,9 @@ namespace Geomapmaker {
 
 
         private async Task loadGeodatabase() {
-            await DataHelper.populateMapUnits();
-            await DataHelper.populateContactsAndFaults();
-            await DataHelper.populateDataSources();
+            await DataHelper.PopulateMapUnits();
+            await DataHelper.PopulateContactsAndFaults();
+            await DataHelper.PopulateDataSources();
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
                 var map = MapView.Active.Map;
                 map.RemoveLayers(DataHelper.currentLayers);

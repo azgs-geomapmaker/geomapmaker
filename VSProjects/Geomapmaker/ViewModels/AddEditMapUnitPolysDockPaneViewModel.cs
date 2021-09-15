@@ -190,7 +190,7 @@ namespace Geomapmaker
             }
 
             //Moved this here from AddEditMapUnitsViewModel to accommodate keeping only active mu's in renderer.
-            await DataHelper.populateMapUnits();
+            await DataHelper.PopulateMapUnits();
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
                 polyLayer.ClearSelection();
