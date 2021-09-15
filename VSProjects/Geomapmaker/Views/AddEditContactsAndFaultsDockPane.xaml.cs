@@ -37,7 +37,7 @@ namespace Geomapmaker
         {
             // Calls a method to close the file and release resources.
             var vm = (AddEditContactsAndFaultsDockPaneViewModel)this.DataContext;
-            await vm.saveCF();
+            await vm.SaveCF();
             vm.Reset();
             //ContactsAndFaultsComboBox.SelectedIndex = -1;
         }
