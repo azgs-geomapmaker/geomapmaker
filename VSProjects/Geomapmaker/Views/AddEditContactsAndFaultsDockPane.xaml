@@ -97,7 +97,6 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Specifies type of geologic feature represented by this database row." />
-                    <TextBlock Margin="0"/>
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Examples of values are 'contact', 'fault', 'thrust fault', 'waterline', 'glacier boundary', 'map boundary'. Values must be defined in Glossary table. Null values not permitted." />
                 </StackPanel>
@@ -136,7 +135,6 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates how confidently this line feature has been identified as a particular type." />
-                    <TextBlock Margin="0"/>
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
                 </StackPanel>
@@ -195,7 +193,6 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates how confidently existence of this line feature has been determined." />
-                    <TextBlock Margin="0"/>
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
                 </StackPanel>
@@ -209,7 +206,7 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." />
-                    <TextBlock Margin="0"/>
+                    
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Data type is float. Null values not permitted." />
                 </StackPanel>
@@ -232,7 +229,6 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates whether this contact or fault is concealed by an overlying map unit." />
-                    <TextBlock Margin="0"/>
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Values = 'N' or 'Y'. Null values not permitted." />
                 </StackPanel>
@@ -246,7 +242,7 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Optional field." />
-                    <TextBlock Margin="0"/>
+                    
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Free text for additional information specific to this line feature. Null values permitted." />
                 </StackPanel>
@@ -262,7 +258,6 @@
             <TextBlock FontStyle="Italic" Text="{Binding SelectedCF.DataSource}" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
 
-        <!--<Label Grid.Row="13" Grid.Column="1" Content="Line:" />-->
         <TextBlock Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson}" TextWrapping="Wrap" VerticalAlignment="Top" />
 
     </Grid>
