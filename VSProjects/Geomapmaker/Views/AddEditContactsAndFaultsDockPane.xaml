@@ -74,7 +74,7 @@
             </TextBlock>
         </DockPanel>
 
-        <ToggleButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate, Mode=TwoWay}" HorizontalAlignment="Center" Padding="5" Margin="10" >
+        <ToggleButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate}" HorizontalAlignment="Center" Padding="5" Margin="10" >
             <ToggleButton.Template>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
@@ -206,7 +206,6 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." />
-                    
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Data type is float. Null values not permitted." />
                 </StackPanel>
@@ -242,7 +241,6 @@
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Optional field." />
-                    
                     <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
                     <TextBlock Style = "{StaticResource TooltipText}" Text="Free text for additional information specific to this line feature. Null values permitted." />
                 </StackPanel>
