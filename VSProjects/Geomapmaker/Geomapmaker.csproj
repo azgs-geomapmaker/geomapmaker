@@ -188,7 +188,6 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Heading.cs" />
     <Compile Include="Views\Headings.xaml.cs">
       <DependentUpon>Headings.xaml</DependentUpon>
     </Compile>

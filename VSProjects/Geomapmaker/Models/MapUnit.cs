@@ -27,6 +27,11 @@ namespace Geomapmaker.Models
         {
             get
             {
+                if (OlderInterval == null || YoungerInterval == null)
+                {
+                    return null;
+                }
+
                 var older = OlderInterval.name == null ? "" : OlderInterval.name;
                 var younger = YoungerInterval.name == null ? "" : YoungerInterval.name;
                 return older != "" || younger != "" ? older + "-" + younger : null;
@@ -104,8 +109,6 @@ namespace Geomapmaker.Models
 
         public string GeoMaterialConfidence { get; set; }
 
-        public MapUnit()
-        {
-        }
+        public int Type { get; set; }
     }
 }

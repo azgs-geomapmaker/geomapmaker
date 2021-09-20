@@ -104,7 +104,7 @@
             Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText>
           </tooltip>
         </tool>
-        <button id="Geomapmaker_Headings_ShowButton" caption="Add/Edit Headings" className="Headings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
+        <button id="Geomapmaker_Headings_ShowButton" caption="Headings" className="Headings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText>
           </tooltip>

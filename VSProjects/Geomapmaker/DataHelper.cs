@@ -153,20 +153,20 @@ namespace Geomapmaker
                         {
                             using (Row row = rowCursor.Current)
                             {
-                                Debug.WriteLine(row["Name"].ToString());
+                                //Debug.WriteLine(row["Name"].ToString());
 
                                 // Create and load map unit
                                 MapUnit mapUnit = new MapUnit
                                 {
                                     ID = int.Parse(row["ObjectID"].ToString()),
-                                    MU = row["MapUnit"].ToString(),
+                                    MU = row["MapUnit"]?.ToString(),
                                     Name = row["Name"].ToString(),
                                     FullName = row["FullName"]?.ToString(),
                                     Age = row["Age"]?.ToString(), //TODO: more formatting here
                                     //mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
                                     Description = row["Description"]?.ToString(),
-                                    HierarchyKey = row["HierarchyKey"].ToString(),
-                                    ParagraphStyle = row["ParagraphStyle"].ToString(),
+                                    HierarchyKey = row["HierarchyKey"]?.ToString(),
+                                    ParagraphStyle = row["ParagraphStyle"]?.ToString(),
                                     //mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
                                     //mapUnit.Label = row["Label"].ToString();
                                     //mapUnit.Symbol = row["Symbol"].ToString();
@@ -175,14 +175,15 @@ namespace Geomapmaker
                                     //mapUnit.Color = row["hexcolor"];
                                     DescriptionSourceID = row["DescriptionSourceID"]?.ToString(),
                                     GeoMaterial = row["GeoMaterial"]?.ToString(),
-                                    GeoMaterialConfidence = row["GeoMaterialConfidence"]?.ToString()
+                                    GeoMaterialConfidence = row["GeoMaterialConfidence"]?.ToString(),
+                                    Type = int.Parse(row["Type"]?.ToString())
                                 };
 
                                 // Add it to our list
                                 mapUnits.Add(mapUnit);
 
                                 // Only add to renderer if map unit is in the feature class
-                                if (muInFeatureClass.Contains(row["MapUnit"].ToString()))
+                                if (row["MapUnit"] != null && muInFeatureClass.Contains(row["MapUnit"].ToString()))
                                 {
                                     //Create a "CIMUniqueValueClass" for the map unit and add it to the list of unique values.
                                     //This is what creates the mapping from map unit to color
