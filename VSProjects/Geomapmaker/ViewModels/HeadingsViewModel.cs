@@ -19,7 +19,7 @@ namespace Geomapmaker
         // Add a null option for parent (create and edit)
         // Enable Submit Button on key down instad of off-focus
         // Prevent duplicate heading names for create/edit
-        // Ask Andrew about delete function
+        // Ask Andrew about deletion
 
         // DONE
         // Remove current heading from parent-options in edit
@@ -27,18 +27,21 @@ namespace Geomapmaker
 
         private const string _dockPaneID = "Geomapmaker_Headings";
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        // Create's save button
+        public ICommand CommandSubmit { get; }
+
+        // Edit's update button
+        public ICommand CommandUpdate { get; }
 
         protected HeadingsViewModel()
         {
             // Init command relays
             CommandSubmit = new RelayCommand(() => SubmitAsync(), () => CanSubmit());
-
-            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
+            CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
         }
 
         /// <summary>
-        /// Map Unit Model
+        /// Create Model
         /// </summary>
         private MapUnit _createModel = new MapUnit();
         public MapUnit CreateModel
@@ -48,9 +51,9 @@ namespace Geomapmaker
         }
 
         /// <summary>
-        /// Map Unit Model
+        /// Edit Model
         /// </summary>
-        private MapUnit _editModel = new MapUnit();
+        private MapUnit _editModel;
         public MapUnit EditModel
         {
             get => _editModel;
@@ -62,45 +65,27 @@ namespace Geomapmaker
             }
         }
 
-        public ObservableCollection<MapUnit> EditHeadings
-        {
-            get
-            {
-                return new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.Type != 2).OrderBy(a => a.Name));
-            }
-        }
+        /// <summary>
+        /// List of all Headings/Subheadings
+        /// </summary>
+        public ObservableCollection<MapUnit> HeadingsList => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.Type != 2).OrderBy(a => a.Name));
 
+        /// <summary>
+        /// List of parent-options during edit
+        /// </summary>
         public ObservableCollection<MapUnit> EditParents
         {
             get
             {
+                // Remove selected heading as a possible parent
                 IOrderedEnumerable<MapUnit> headingList = DataHelper.MapUnits
                     .Where(a => a.Type != 2)
-                    .Where(a => a.ID != EditModel.ID)
+                    .Where(a => a.ID != EditModel?.ID)
                     .OrderBy(a => a.Name);
 
                 return new ObservableCollection<MapUnit>(headingList);
             }
         }
-
-        /// <summary>
-        /// Show the DockPane.
-        /// </summary>
-        internal static void Show()
-        {
-            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            if (pane == null)
-            {
-                return;
-            }
-
-            pane.Activate();
-        }
-
-        public ICommand CommandSubmit { get; }
-
-        public ICommand CommandSave { get; }
-
 
         /// <summary>
         /// Determines the visibility (enabled state) of the submit button
@@ -109,80 +94,6 @@ namespace Geomapmaker
         private bool CanSubmit()
         {
             return CreateModel != null && !string.IsNullOrWhiteSpace(CreateModel.Name) && !string.IsNullOrWhiteSpace(CreateModel.Description);
-        }
-
-        /// <summary>
-        /// Determines the visibility (enabled state) of the submit button
-        /// </summary>
-        /// <returns>true if enabled</returns>
-        private bool CanSave()
-        {
-            return EditModel != null && !string.IsNullOrWhiteSpace(EditModel.Name) && !string.IsNullOrWhiteSpace(EditModel.Description);
-        }
-
-        /// <summary>
-        /// Execute the save command
-        /// </summary>
-        private async Task SaveAsync()
-        {
-            if (DataHelper.connectionProperties == null)
-            {
-                return;
-            }
-
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
-            {
-
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
-                {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
-                    {
-
-                        editOperation.Callback(context =>
-                        {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + EditModel.ID };
-
-                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
-                            {
-
-                                while (rowCursor.MoveNext())
-                                { //TODO: Anything? Should be only one
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        // In order to update the Map and/or the attribute table.
-                                        // Has to be called before any changes are made to the row.
-                                        context.Invalidate(row);
-
-                                        row["Name"] = EditModel.Name;
-                                        row["Description"] = EditModel.Description;
-                                        row["ParagraphStyle"] = EditModel.ParagraphStyle;
-                                        row["Type"] = string.IsNullOrWhiteSpace(EditModel.ParagraphStyle) ? 0 : 1;
-
-                                        // After all the changes are done, persist it.
-                                        row.Store();
-
-                                        // Has to be called after the store too.
-                                        context.Invalidate(row);
-                                    }
-                                }
-                            }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
-                        }
-
-                        EditModel = new MapUnit();
-
-                    }
-                }
-            });
-
         }
 
         /// <summary>
@@ -238,9 +149,111 @@ namespace Geomapmaker
 
             await DataHelper.PopulateMapUnits();
 
-            NotifyPropertyChanged("EditHeadings");
+            NotifyPropertyChanged("HeadingsList");
         }
 
+        /// <summary>
+        /// Determines the visibility (enabled state) of the submit button
+        /// </summary>
+        /// <returns>true if enabled</returns>
+        private bool CanUpdate()
+        {
+            if (EditModel == null)
+            {
+                return false;
+            }
+
+            // Find the unedited heading
+            MapUnit original = DataHelper.MapUnits.FirstOrDefault(a => a.ID == EditModel.ID);
+
+            // Validate required inputs
+            if (string.IsNullOrWhiteSpace(EditModel.Name) && string.IsNullOrWhiteSpace(EditModel.Description))
+            {
+                return false;
+            }
+
+            // Compare edit values with original values. Can update if the values changed.
+            return !(original.Name.Equals(EditModel.Name) && original.Description.Equals(EditModel.Description));
+        }
+
+        /// <summary>
+        /// Execute the save command
+        /// </summary>
+        private async Task UpdateAsync()
+        {
+            if (DataHelper.connectionProperties == null)
+            {
+                return;
+            }
+
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+
+                EditOperation editOperation = new EditOperation();
+
+                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
+
+                        editOperation.Callback(context =>
+                        {
+                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + EditModel.ID };
+
+                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            {
+
+                                while (rowCursor.MoveNext())
+                                { //TODO: Anything? Should be only one
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        // In order to update the Map and/or the attribute table.
+                                        // Has to be called before any changes are made to the row.
+                                        context.Invalidate(row);
+
+                                        row["Name"] = EditModel.Name;
+                                        row["Description"] = EditModel.Description;
+                                        row["ParagraphStyle"] = EditModel.ParagraphStyle;
+                                        row["Type"] = string.IsNullOrWhiteSpace(EditModel.ParagraphStyle) ? 0 : 1;
+
+                                        // After all the changes are done, persist it.
+                                        row.Store();
+
+                                        // Has to be called after the store too.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+
+                        if (!result)
+                        {
+                            MessageBox.Show(editOperation.ErrorMessage);
+                        }
+
+                        EditModel = null;
+
+                    }
+                }
+            });
+
+        }
+
+        /// <summary>
+        /// Show the DockPane.
+        /// </summary>
+        internal static void Show()
+        {
+            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
+            if (pane == null)
+            {
+                return;
+            }
+
+            pane.Activate();
+        }
     }
 
     /// <summary>

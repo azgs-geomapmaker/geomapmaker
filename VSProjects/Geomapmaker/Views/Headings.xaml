@@ -83,7 +83,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <ComboBox Grid.Row="5" Grid.Column="2" ItemsSource="{Binding EditHeadings}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding CreateModel.ParagraphStyle}" />
+                    <ComboBox Grid.Row="5" Grid.Column="2" ItemsSource="{Binding HeadingsList}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding CreateModel.ParagraphStyle}" />
 
                     <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSubmit}" >Submit</Button>
 
@@ -133,7 +133,7 @@
                     <ComboBox 
                     Grid.Row="2" 
                     Grid.Column="2" 
-		            ItemsSource="{Binding EditHeadings}" 
+		            ItemsSource="{Binding HeadingsList}" 
 		            DisplayMemberPath="Name" 
                     SelectedItem="{Binding EditModel}" 
                     />
@@ -176,11 +176,10 @@
                     </Label>
                     <ComboBox Grid.Row="6" Grid.Column="2" ItemsSource="{Binding EditParents}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding EditModel.ParagraphStyle}" />
 
-                    <Button Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSave}" >Save</Button>
+                    <Button Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandUpdate}" >Update</Button>
 
                 </Grid>
             </TabItem>
-            <TabItem Header="New Tab" />
         </TabControl>
     </Grid>
 </UserControl>
