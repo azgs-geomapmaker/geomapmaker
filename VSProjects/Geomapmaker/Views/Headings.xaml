@@ -16,98 +16,171 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
+        <TabControl>
+            <TabItem Header="Create">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="2" Text="{Binding Heading}" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
-                <TextBlock.ToolTip>
-                    <WrapPanel Orientation="Vertical" MaxWidth="300">
-                        <TextBlock Text="{Binding Heading}" TextWrapping="Wrap"/>
-                    </WrapPanel>
-                </TextBlock.ToolTip>
+                    <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
+                        <TextBlock Grid.Column="2" Text="Create" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+                            <TextBlock.ToolTip>
+                                <WrapPanel Orientation="Vertical" MaxWidth="300">
+                                    <TextBlock Text="Create Heading" TextWrapping="Wrap"/>
+                                </WrapPanel>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                    </DockPanel>
+
+                    <Label Grid.Row="3" Grid.Column="1" Content="Name:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CreateModel.Name}" />
+
+                    <Label Grid.Row="4" Grid.Column="1" Content="Definition:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding CreateModel.Description}" />
+
+                    <Label Grid.Row="5" Grid.Column="1" Content="Parent:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <ComboBox Grid.Row="5" Grid.Column="2" ItemsSource="{Binding EditHeadings}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding CreateModel.ParagraphStyle}" />
+
+                    <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSubmit}" >Submit</Button>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Edit">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
+                        <TextBlock Grid.Column="2" Text="Edit" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+                            <TextBlock.ToolTip>
+                                <WrapPanel Orientation="Vertical" MaxWidth="300">
+                                    <TextBlock Text="Edit Heading" TextWrapping="Wrap"/>
+                                </WrapPanel>
+                            </TextBlock.ToolTip>
             </TextBlock>
-        </DockPanel>
+                    </DockPanel>
 
-        <Label Grid.Row="2" Grid.Column="1" Content="Heading:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <!--<ComboBox 
-            Grid.Row="2" 
-            Grid.Column="2" 
-            ItemsSource="{Binding MapUnits}" 
-            SelectedItem ="{Binding Model}" 
-            DisplayMemberPath="Name"
-         />-->
-        <ComboBox 
-            Grid.Row="2" 
-            Grid.Column="2" 
-            ItemsSource="{Binding MapUnitsList}" 
-            SelectedValue ="{Binding ModelId}" 
-            SelectedValuePath="Key"
-            DisplayMemberPath="Value"
-         />
+                    <Label Grid.Row="2" Grid.Column="1" Content="Edit:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <ComboBox 
+                    Grid.Row="2" 
+                    Grid.Column="2" 
+		            ItemsSource="{Binding EditHeadings}" 
+		            DisplayMemberPath="Name" 
+                    SelectedItem="{Binding EditModel}" 
+                    />
 
-        <Label Grid.Row="3" Grid.Column="1" Content="Name:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Model.Name}" />
+                    <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Definition:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Model.Description}" />
+                    <Label Grid.Row="4" Grid.Column="1" Content="Name:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding EditModel.Name}" />
 
-        <Label Grid.Row="5" Grid.Column="1" Content="Parent:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <ComboBox Grid.Row="5" Grid.Column="2" ItemsSource="{Binding ParentOptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Model.ParagraphStyle}" />
+                    <Label Grid.Row="5" Grid.Column="1" Content="Definition:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding EditModel.Description}" />
 
-        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSubmit}" >Submit</Button>
+                    <Label Grid.Row="6" Grid.Column="1" Content="Parent:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <ComboBox Grid.Row="6" Grid.Column="2" ItemsSource="{Binding EditParents}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding EditModel.ParagraphStyle}" />
 
+                    <Button Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSave}" >Save</Button>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="New Tab" />
+        </TabControl>
     </Grid>
 </UserControl>

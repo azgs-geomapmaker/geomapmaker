@@ -5,6 +5,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,37 +15,72 @@ namespace Geomapmaker
 {
     internal class HeadingsViewModel : DockPane
     {
+        // TODO
+        // Add a null option for parent (create and edit)
+        // Enable Submit Button on key down instad of off-focus
+        // Prevent duplicate heading names for create/edit
+        // Ask Andrew about delete function
+
+        // DONE
+        // Remove current heading from parent-options in edit
+        // Update parent-options when a new heading is created
+
         private const string _dockPaneID = "Geomapmaker_Headings";
 
-        public ObservableCollection<MapUnit> HeadingOptions { get; set; }
-
-        public ObservableCollection<KeyValuePair<int, string>> ParentOptions { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected HeadingsViewModel()
         {
             // Init command relays
             CommandSubmit = new RelayCommand(() => SubmitAsync(), () => CanSubmit());
 
-            HeadingOptions = DataHelper.MapUnits;
-
-            ParentOptions = new ObservableCollection<KeyValuePair<int, string>>
-            {
-                new KeyValuePair<int, string>( 1, "A"),
-                new KeyValuePair<int, string>( 2, "B"),
-                new KeyValuePair<int, string>( 3, "C"),
-                new KeyValuePair<int, string>( 4, "D"),
-            };
-
+            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
         }
 
         /// <summary>
         /// Map Unit Model
         /// </summary>
-        private MapUnit _model = new MapUnit();
-        public MapUnit Model
+        private MapUnit _createModel = new MapUnit();
+        public MapUnit CreateModel
         {
-            get => _model;
-            set => SetProperty(ref _model, value, () => Model);
+            get => _createModel;
+            set => SetProperty(ref _createModel, value, () => CreateModel);
+        }
+
+        /// <summary>
+        /// Map Unit Model
+        /// </summary>
+        private MapUnit _editModel = new MapUnit();
+        public MapUnit EditModel
+        {
+            get => _editModel;
+            set
+            {
+                SetProperty(ref _editModel, value, () => EditModel);
+
+                NotifyPropertyChanged("EditParents");
+            }
+        }
+
+        public ObservableCollection<MapUnit> EditHeadings
+        {
+            get
+            {
+                return new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.Type != 2).OrderBy(a => a.Name));
+            }
+        }
+
+        public ObservableCollection<MapUnit> EditParents
+        {
+            get
+            {
+                IOrderedEnumerable<MapUnit> headingList = DataHelper.MapUnits
+                    .Where(a => a.Type != 2)
+                    .Where(a => a.ID != EditModel.ID)
+                    .OrderBy(a => a.Name);
+
+                return new ObservableCollection<MapUnit>(headingList);
+            }
         }
 
         /// <summary>
@@ -61,17 +97,10 @@ namespace Geomapmaker
             pane.Activate();
         }
 
-        /// <summary>
-        /// Text shown near the top of the DockPane.
-        /// </summary>
-        private string _heading = "Headings";
-        public string Heading
-        {
-            get { return _heading; }
-            set => SetProperty(ref _heading, value, () => Heading);
-        }
-
         public ICommand CommandSubmit { get; }
+
+        public ICommand CommandSave { get; }
+
 
         /// <summary>
         /// Determines the visibility (enabled state) of the submit button
@@ -79,26 +108,87 @@ namespace Geomapmaker
         /// <returns>true if enabled</returns>
         private bool CanSubmit()
         {
-            return Model != null && !string.IsNullOrWhiteSpace(Model.Name) && !string.IsNullOrWhiteSpace(Model.Description);
+            return CreateModel != null && !string.IsNullOrWhiteSpace(CreateModel.Name) && !string.IsNullOrWhiteSpace(CreateModel.Description);
+        }
+
+        /// <summary>
+        /// Determines the visibility (enabled state) of the submit button
+        /// </summary>
+        /// <returns>true if enabled</returns>
+        private bool CanSave()
+        {
+            return EditModel != null && !string.IsNullOrWhiteSpace(EditModel.Name) && !string.IsNullOrWhiteSpace(EditModel.Description);
+        }
+
+        /// <summary>
+        /// Execute the save command
+        /// </summary>
+        private async Task SaveAsync()
+        {
+            if (DataHelper.connectionProperties == null)
+            {
+                return;
+            }
+
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+
+                EditOperation editOperation = new EditOperation();
+
+                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
+
+                        editOperation.Callback(context =>
+                        {
+                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + EditModel.ID };
+
+                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            {
+
+                                while (rowCursor.MoveNext())
+                                { //TODO: Anything? Should be only one
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        // In order to update the Map and/or the attribute table.
+                                        // Has to be called before any changes are made to the row.
+                                        context.Invalidate(row);
+
+                                        row["Name"] = EditModel.Name;
+                                        row["Description"] = EditModel.Description;
+                                        row["ParagraphStyle"] = EditModel.ParagraphStyle;
+                                        row["Type"] = string.IsNullOrWhiteSpace(EditModel.ParagraphStyle) ? 0 : 1;
+
+                                        // After all the changes are done, persist it.
+                                        row.Store();
+
+                                        // Has to be called after the store too.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+
+                        if (!result)
+                        {
+                            MessageBox.Show(editOperation.ErrorMessage);
+                        }
+
+                        EditModel = new MapUnit();
+
+                    }
+                }
+            });
+
         }
 
         /// <summary>
         /// Execute the submit command
         /// </summary>
         private async Task SubmitAsync()
-        {
-            if (Model.ID == 0)
-            {
-                // Save Heading
-                await SaveHeadingAsync(Model);
-            }
-            else
-            {
-                // Update Heading
-            }
-        }
-
-        private async Task SaveHeadingAsync(MapUnit model)
         {
             if (DataHelper.connectionProperties == null)
             {
@@ -121,10 +211,10 @@ namespace Geomapmaker
                             using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                             {
 
-                                rowBuffer["Name"] = model.Name;
-                                rowBuffer["Description"] = model.Description;
-                                rowBuffer["ParagraphStyle"] = model.ParagraphStyle;
-                                rowBuffer["Type"] = string.IsNullOrWhiteSpace(model.ParagraphStyle) ? 0 : 1;
+                                rowBuffer["Name"] = CreateModel.Name;
+                                rowBuffer["Description"] = CreateModel.Description;
+                                rowBuffer["ParagraphStyle"] = CreateModel.ParagraphStyle;
+                                rowBuffer["Type"] = string.IsNullOrWhiteSpace(CreateModel.ParagraphStyle) ? 0 : 1;
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {
@@ -141,33 +231,14 @@ namespace Geomapmaker
                             MessageBox.Show(editOperation.ErrorMessage);
                         }
 
-                        Model = null;
-
+                        CreateModel = new MapUnit();
                     }
                 }
             });
-        }
 
-        public int ModelId
-        {
-            set
-            {
-                Model = DataHelper.MapUnits.FirstOrDefault(a => a.ID == value) ?? new MapUnit();
-            }
-        }
+            await DataHelper.PopulateMapUnits();
 
-        public ObservableCollection<KeyValuePair<int, string>> MapUnitsList
-        {
-            get
-            {
-                var headings = DataHelper.MapUnits.Where(a => a.Type == 0 || a.Type == 1).OrderBy(a => a.Name).Select(a => new KeyValuePair<int, string>(a.ID, a.Name));
-
-                var collection = new ObservableCollection<KeyValuePair<int, string>>(headings);
-
-                collection.Insert(0, new KeyValuePair<int, string>(-1, "Add Heading"));
-
-                return collection;
-            }
+            NotifyPropertyChanged("EditHeadings");
         }
 
     }
