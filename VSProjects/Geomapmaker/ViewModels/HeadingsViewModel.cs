@@ -15,16 +15,6 @@ namespace Geomapmaker
 {
     internal class HeadingsViewModel : DockPane
     {
-        // TODO
-        // Add a null option for parent (create and edit)
-        // Enable Submit Button on key down instad of off-focus
-        // Prevent duplicate heading names for create/edit
-        // Ask Andrew about deletion
-
-        // DONE
-        // Remove current heading from parent-options in edit
-        // Update parent-options when a new heading is created
-
         private const string _dockPaneID = "Geomapmaker_Headings";
 
         // Create's save button
@@ -96,7 +86,7 @@ namespace Geomapmaker
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
                     .ToList();
 
-                headingList.Insert(0, new KeyValuePair<int?, string>(null, "(No Parent)"));
+                headingList.Insert(0, new KeyValuePair<int?, string>(-1, "(No Parent)"));
 
                 return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
             }
@@ -117,7 +107,7 @@ namespace Geomapmaker
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
                     .ToList();
 
-                headingList.Insert(0, new KeyValuePair<int?, string>(null, "(No Parent)"));
+                headingList.Insert(0, new KeyValuePair<int?, string>(-1, "(No Parent)"));
 
                 return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
             }
@@ -160,7 +150,7 @@ namespace Geomapmaker
 
                                 rowBuffer["Name"] = CreateModel.Name;
                                 rowBuffer["Description"] = CreateModel.Description;
-                                rowBuffer["ParagraphStyle"] = CreateModel.ParagraphStyle;
+                                rowBuffer["ParagraphStyle"] = CreateModel.ParagraphStyle == "-1" ? null : CreateModel.ParagraphStyle;
                                 rowBuffer["Type"] = CreateModel.ParagraphStyle == null ? 0 : 1;
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
@@ -253,7 +243,7 @@ namespace Geomapmaker
 
                                         row["Name"] = EditModel.Name;
                                         row["Description"] = EditModel.Description;
-                                        row["ParagraphStyle"] = EditModel.ParagraphStyle;
+                                        row["ParagraphStyle"] = EditModel.ParagraphStyle == "-1" ? null : EditModel.ParagraphStyle;
                                         row["Type"] = EditModel.ParagraphStyle == null ? 0 : 1;
 
                                         // After all the changes are done, persist it.
