@@ -19,6 +19,9 @@ namespace Geomapmaker
         // Add a null option for parent (create and edit)
         // Enable Submit Button on key down instad of off-focus
         // Prevent duplicate heading names for create/edit
+
+        // Edit needs some changes. Need to save a copy of the original Heading 
+
         // Ask Andrew about deletion
 
         // DONE
@@ -53,15 +56,31 @@ namespace Geomapmaker
         /// <summary>
         /// Edit Model
         /// </summary>
-        private MapUnit _editModel;
+        private MapUnit _selectedModel;
+        public MapUnit SelectedModel
+        {
+            get => _selectedModel;
+            set
+            {
+                SetProperty(ref _selectedModel, value, () => SelectedModel);
+                NotifyPropertyChanged("EditParents");
+                EditModel.Name = value?.Name;
+                EditModel.Description = value?.Description;
+                EditModel.ParagraphStyle = value?.ParagraphStyle;
+                NotifyPropertyChanged("EditModel");
+            }
+        }
+
+        /// <summary>
+        /// Edit Model
+        /// </summary>
+        private MapUnit _editModel = new MapUnit();
         public MapUnit EditModel
         {
             get => _editModel;
             set
             {
                 SetProperty(ref _editModel, value, () => EditModel);
-
-                NotifyPropertyChanged("EditParents");
             }
         }
 
@@ -80,7 +99,7 @@ namespace Geomapmaker
                 // Remove selected heading as a possible parent
                 IOrderedEnumerable<MapUnit> headingList = DataHelper.MapUnits
                     .Where(a => a.Type != 2)
-                    .Where(a => a.ID != EditModel?.ID)
+                    .Where(a => a.ID != SelectedModel?.ID)
                     .OrderBy(a => a.Name);
 
                 return new ObservableCollection<MapUnit>(headingList);
@@ -142,14 +161,15 @@ namespace Geomapmaker
                             MessageBox.Show(editOperation.ErrorMessage);
                         }
 
-                        CreateModel = new MapUnit();
                     }
                 }
             });
 
+            CreateModel = new MapUnit();
+
             await DataHelper.PopulateMapUnits();
 
-            NotifyPropertyChanged("HeadingsList");
+            NotifyPropertyChanged("HeadingsList"); 
         }
 
         /// <summary>
@@ -158,13 +178,10 @@ namespace Geomapmaker
         /// <returns>true if enabled</returns>
         private bool CanUpdate()
         {
-            if (EditModel == null)
+            if (SelectedModel == null || EditModel == null)
             {
                 return false;
             }
-
-            // Find the unedited heading
-            MapUnit original = DataHelper.MapUnits.FirstOrDefault(a => a.ID == EditModel.ID);
 
             // Validate required inputs
             if (string.IsNullOrWhiteSpace(EditModel.Name) && string.IsNullOrWhiteSpace(EditModel.Description))
@@ -173,7 +190,7 @@ namespace Geomapmaker
             }
 
             // Compare edit values with original values. Can update if the values changed.
-            return !(original.Name.Equals(EditModel.Name) && original.Description.Equals(EditModel.Description));
+            return !(SelectedModel.Name.Equals(EditModel.Name) && SelectedModel.Description.Equals(EditModel.Description));
         }
 
         /// <summary>
@@ -198,7 +215,7 @@ namespace Geomapmaker
 
                         editOperation.Callback(context =>
                         {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + EditModel.ID };
+                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedModel.ID };
 
                             using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                             {
@@ -232,13 +249,15 @@ namespace Geomapmaker
                         {
                             MessageBox.Show(editOperation.ErrorMessage);
                         }
-
-                        EditModel = null;
-
                     }
                 }
             });
 
+            await DataHelper.PopulateMapUnits();
+
+            NotifyPropertyChanged("HeadingsList");
+
+            SelectedModel = null;
         }
 
         /// <summary>

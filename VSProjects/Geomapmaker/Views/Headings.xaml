@@ -71,7 +71,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding CreateModel.Description}" />
+                    <TextBox Grid.Row="4" Grid.Column="2" MinLines="3" Text="{Binding CreateModel.Description}" />
 
                     <Label Grid.Row="5" Grid.Column="1" Content="Parent:" >
                         <Label.ToolTip>
@@ -135,7 +135,7 @@
                     Grid.Column="2" 
 		            ItemsSource="{Binding HeadingsList}" 
 		            DisplayMemberPath="Name" 
-                    SelectedItem="{Binding EditModel}" 
+                    SelectedItem="{Binding SelectedModel}" 
                     />
 
                     <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
@@ -162,7 +162,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding EditModel.Description}" />
+                    <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding EditModel.Description}" />
 
                     <Label Grid.Row="6" Grid.Column="1" Content="Parent:" >
                         <Label.ToolTip>
