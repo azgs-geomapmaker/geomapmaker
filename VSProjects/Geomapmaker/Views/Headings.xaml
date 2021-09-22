@@ -43,7 +43,7 @@
                         <TextBlock Grid.Column="2" Text="Create" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
                             <TextBlock.ToolTip>
                                 <WrapPanel Orientation="Vertical" MaxWidth="300">
-                                    <TextBlock Text="Create Heading" TextWrapping="Wrap"/>
+                                    <TextBlock Text="Create" TextWrapping="Wrap"/>
                                 </WrapPanel>
                             </TextBlock.ToolTip>
                         </TextBlock>
@@ -59,7 +59,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CreateModel.Name}" />
+                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CreateModel.Name, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="4" Grid.Column="1" Content="Definition:" >
                         <Label.ToolTip>
@@ -71,7 +71,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="4" Grid.Column="2" MinLines="3" Text="{Binding CreateModel.Description}" />
+                    <TextBox Grid.Row="4" Grid.Column="2" MinLines="3" Text="{Binding CreateModel.Description, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="5" Grid.Column="1" Content="Parent:" >
                         <Label.ToolTip>
@@ -83,7 +83,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <ComboBox Grid.Row="5" Grid.Column="2" ItemsSource="{Binding HeadingsList}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding CreateModel.ParagraphStyle}" />
+                    <ComboBox Grid.Row="5" Grid.Column="2" ItemsSource="{Binding CreateParents}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding CreateModel.ParagraphStyle}" />
 
                     <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSubmit}" >Submit</Button>
 
@@ -114,10 +114,10 @@
                         <TextBlock Grid.Column="2" Text="Edit" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
                             <TextBlock.ToolTip>
                                 <WrapPanel Orientation="Vertical" MaxWidth="300">
-                                    <TextBlock Text="Edit Heading" TextWrapping="Wrap"/>
+                                    <TextBlock Text="Edit" TextWrapping="Wrap"/>
                                 </WrapPanel>
                             </TextBlock.ToolTip>
-            </TextBlock>
+                        </TextBlock>
                     </DockPanel>
 
                     <Label Grid.Row="2" Grid.Column="1" Content="Edit:" >
@@ -150,7 +150,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding EditModel.Name}" />
+                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding EditModel.Name, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="5" Grid.Column="1" Content="Definition:" >
                         <Label.ToolTip>
@@ -162,7 +162,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding EditModel.Description}" />
+                    <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding EditModel.Description, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="6" Grid.Column="1" Content="Parent:" >
                         <Label.ToolTip>
@@ -174,10 +174,39 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <ComboBox Grid.Row="6" Grid.Column="2" ItemsSource="{Binding EditParents}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding EditModel.ParagraphStyle}" />
+                    <ComboBox Grid.Row="6" Grid.Column="2" ItemsSource="{Binding EditParents}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding EditModel.ParagraphStyle}" />
 
                     <Button Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandUpdate}" >Update</Button>
 
+                </Grid>
+                
+            </TabItem>
+            <TabItem Header="Delete">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
+                        <TextBlock Grid.Column="2" Text="Delete" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+                            <TextBlock.ToolTip>
+                                <WrapPanel Orientation="Vertical" MaxWidth="300">
+                                    <TextBlock Text="Delete" TextWrapping="Wrap"/>
+                                </WrapPanel>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                    </DockPanel>
+                    
+                    
                 </Grid>
             </TabItem>
         </TabControl>

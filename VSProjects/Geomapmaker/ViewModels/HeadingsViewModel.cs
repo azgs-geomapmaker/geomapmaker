@@ -19,9 +19,6 @@ namespace Geomapmaker
         // Add a null option for parent (create and edit)
         // Enable Submit Button on key down instad of off-focus
         // Prevent duplicate heading names for create/edit
-
-        // Edit needs some changes. Need to save a copy of the original Heading 
-
         // Ask Andrew about deletion
 
         // DONE
@@ -78,10 +75,7 @@ namespace Geomapmaker
         public MapUnit EditModel
         {
             get => _editModel;
-            set
-            {
-                SetProperty(ref _editModel, value, () => EditModel);
-            }
+            set => SetProperty(ref _editModel, value, () => EditModel);
         }
 
         /// <summary>
@@ -90,19 +84,42 @@ namespace Geomapmaker
         public ObservableCollection<MapUnit> HeadingsList => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.Type != 2).OrderBy(a => a.Name));
 
         /// <summary>
+        /// List of parent-options available during create
+        /// </summary>
+        public ObservableCollection<KeyValuePair<int?, string>> CreateParents
+        {
+            get
+            {
+                List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
+                    .Where(a => a.Type != 2)
+                    .OrderBy(a => a.Name)
+                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
+                    .ToList();
+
+                headingList.Insert(0, new KeyValuePair<int?, string>(null, "(No Parent)"));
+
+                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
+            }
+        }
+
+        /// <summary>
         /// List of parent-options during edit
         /// </summary>
-        public ObservableCollection<MapUnit> EditParents
+        public ObservableCollection<KeyValuePair<int?, string>> EditParents
         {
             get
             {
                 // Remove selected heading as a possible parent
-                IOrderedEnumerable<MapUnit> headingList = DataHelper.MapUnits
+                List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
                     .Where(a => a.Type != 2)
                     .Where(a => a.ID != SelectedModel?.ID)
-                    .OrderBy(a => a.Name);
+                    .OrderBy(a => a.Name)
+                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
+                    .ToList();
 
-                return new ObservableCollection<MapUnit>(headingList);
+                headingList.Insert(0, new KeyValuePair<int?, string>(null, "(No Parent)"));
+
+                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
             }
         }
 
@@ -144,7 +161,7 @@ namespace Geomapmaker
                                 rowBuffer["Name"] = CreateModel.Name;
                                 rowBuffer["Description"] = CreateModel.Description;
                                 rowBuffer["ParagraphStyle"] = CreateModel.ParagraphStyle;
-                                rowBuffer["Type"] = string.IsNullOrWhiteSpace(CreateModel.ParagraphStyle) ? 0 : 1;
+                                rowBuffer["Type"] = CreateModel.ParagraphStyle == null ? 0 : 1;
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {
@@ -169,7 +186,12 @@ namespace Geomapmaker
 
             await DataHelper.PopulateMapUnits();
 
-            NotifyPropertyChanged("HeadingsList"); 
+            NotifyPropertyChanged("HeadingsList");
+
+            NotifyPropertyChanged("CreateParents");
+
+            NotifyPropertyChanged("EditParents");
+
         }
 
         /// <summary>
@@ -178,6 +200,7 @@ namespace Geomapmaker
         /// <returns>true if enabled</returns>
         private bool CanUpdate()
         {
+            // Null check
             if (SelectedModel == null || EditModel == null)
             {
                 return false;
@@ -189,8 +212,8 @@ namespace Geomapmaker
                 return false;
             }
 
-            // Compare edit values with original values. Can update if the values changed.
-            return !(SelectedModel.Name.Equals(EditModel.Name) && SelectedModel.Description.Equals(EditModel.Description));
+            // Compare edit values with original values. Can only update if a value changed.
+            return SelectedModel.Name != EditModel.Name || SelectedModel.Description != EditModel.Description || SelectedModel.ParagraphStyle != EditModel.ParagraphStyle;
         }
 
         /// <summary>
@@ -231,7 +254,7 @@ namespace Geomapmaker
                                         row["Name"] = EditModel.Name;
                                         row["Description"] = EditModel.Description;
                                         row["ParagraphStyle"] = EditModel.ParagraphStyle;
-                                        row["Type"] = string.IsNullOrWhiteSpace(EditModel.ParagraphStyle) ? 0 : 1;
+                                        row["Type"] = EditModel.ParagraphStyle == null ? 0 : 1;
 
                                         // After all the changes are done, persist it.
                                         row.Store();
@@ -256,6 +279,10 @@ namespace Geomapmaker
             await DataHelper.PopulateMapUnits();
 
             NotifyPropertyChanged("HeadingsList");
+
+            NotifyPropertyChanged("CreateParents");
+
+            NotifyPropertyChanged("EditParents");
 
             SelectedModel = null;
         }
