@@ -9,7 +9,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using Button = ArcGIS.Desktop.Framework.Contracts.Button;
 
 namespace Geomapmaker
 {
@@ -185,7 +187,7 @@ namespace Geomapmaker
         }
 
         /// <summary>
-        /// Determines the visibility (enabled state) of the submit button
+        /// Determines the visibility (enabled state) of the update button
         /// </summary>
         /// <returns>true if enabled</returns>
         private bool CanUpdate()
@@ -300,6 +302,24 @@ namespace Geomapmaker
         protected override void OnClick()
         {
             HeadingsViewModel.Show();
+        }
+    }
+
+    public class CreateHeadingNameTaken : ValidationRule
+    {
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            if (value == null)
+            {
+                return new ValidationResult(true, null);
+            }
+
+            if (DataHelper.MapUnits.Any(a => a.Name.ToLower() == value.ToString().ToLower()))
+            {
+                return new ValidationResult(false, "Name is already in use.");
+            }
+
+            return new ValidationResult(true, null);
         }
     }
 }

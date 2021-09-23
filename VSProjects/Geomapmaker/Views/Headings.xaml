@@ -59,8 +59,26 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CreateModel.Name, UpdateSourceTrigger=PropertyChanged}" />
-
+                    <!--<TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CreateModel.Name, UpdateSourceTrigger=PropertyChanged}" />-->
+                    <TextBox Grid.Row="3" Grid.Column="2">
+                        <TextBox.Text>
+                            <Binding Path="CreateModel.Name" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <ui:CreateHeadingNameTaken ValidationStep="RawProposedValue"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <Validation.ErrorTemplate>
+                            <ControlTemplate>
+                                <StackPanel>
+                                    <!-- Placeholder for the TextBox itself -->
+                                    <AdornedElementPlaceholder/>
+                                    <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                                </StackPanel>
+                            </ControlTemplate>
+                        </Validation.ErrorTemplate>
+                    </TextBox>
+                        
                     <Label Grid.Row="4" Grid.Column="1" Content="Definition:" >
                         <Label.ToolTip>
                             <StackPanel>
@@ -131,11 +149,11 @@
                         </Label.ToolTip>
                     </Label>
                     <ComboBox 
-                    Grid.Row="2" 
-                    Grid.Column="2" 
-		            ItemsSource="{Binding HeadingsList}" 
-		            DisplayMemberPath="Name" 
-                    SelectedItem="{Binding SelectedModel}" 
+                        Grid.Row="2" 
+                        Grid.Column="2" 
+		                ItemsSource="{Binding HeadingsList}" 
+		                DisplayMemberPath="Name" 
+                        SelectedItem="{Binding SelectedModel}" 
                     />
 
                     <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
