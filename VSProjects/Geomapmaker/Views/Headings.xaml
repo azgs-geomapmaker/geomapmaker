@@ -19,7 +19,7 @@
 
     <Grid>
         <TabControl>
-            <TabItem Header="Create">
+            <TabItem Header="Create" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5"/>
@@ -60,20 +60,20 @@
                         </Label.ToolTip>
                     </Label>
                     <!--<TextBox Grid.Row="3" Grid.Column="2" Text="{Binding CreateModel.Name, UpdateSourceTrigger=PropertyChanged}" />-->
-                    <TextBox Grid.Row="3" Grid.Column="2">
-                        <TextBox.Text>
-                            <Binding Path="CreateModel.Name" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <ui:CreateHeadingNameTaken ValidationStep="RawProposedValue"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
+
+                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" >
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
                                     <!-- Placeholder for the TextBox itself -->
-                                    <AdornedElementPlaceholder/>
-                                    <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                                    <AdornedElementPlaceholder x:Name="textBox"/>
+                                    <ItemsControl ItemsSource="{Binding}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </StackPanel>
                             </ControlTemplate>
                         </Validation.ErrorTemplate>

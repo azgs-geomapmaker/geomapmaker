@@ -15,8 +15,90 @@ using Button = ArcGIS.Desktop.Framework.Contracts.Button;
 
 namespace Geomapmaker
 {
-    internal class HeadingsViewModel : DockPane
+    internal class HeadingsViewModel : DockPane, INotifyDataErrorInfo
     {
+        #region INotifyDataErrorInfo members
+
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+
+        public event System.EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            if (ErrorsChanged != null)
+                ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        public System.Collections.IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors
+        {
+            get { return _validationErrors.Count > 0; }
+        }
+
+        private string _username;
+        public string Username
+        {
+            get { return _username; }
+            set
+            {
+                SetProperty(ref _username, value, () => Username);
+                ValidateUsername(_username);
+            }
+        }
+
+        private void ValidateUsername(string username)
+        {
+            const string propertyKey = "Username";
+            ICollection<string> validationErrors = new Collection<string>() { "Can't contain a" };
+
+            bool isValid;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                isValid = true;
+            }
+            else if (username.Contains("a"))
+            {
+                isValid = false;
+            }
+            else
+            {
+                isValid = true;
+            }
+
+            if (!isValid)
+            {
+                /* Update the collection in the dictionary returned by the GetErrors method */
+                _validationErrors[propertyKey] = validationErrors;
+                /* Raise event to tell WPF to execute the GetErrors method */
+                RaiseErrorsChanged(propertyKey);
+            }
+            else if (_validationErrors.ContainsKey(propertyKey))
+            {
+                /* Remove all errors for this property */
+                _validationErrors.Remove(propertyKey);
+                /* Raise event to tell WPF to execute the GetErrors method */
+                RaiseErrorsChanged(propertyKey);
+            }
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+
         private const string _dockPaneID = "Geomapmaker_Headings";
 
         // Create's save button
@@ -24,6 +106,7 @@ namespace Geomapmaker
 
         // Edit's update button
         public ICommand CommandUpdate { get; }
+
 
         protected HeadingsViewModel()
         {
