@@ -24,14 +24,29 @@ namespace Geomapmaker
         protected HeadingsViewModel()
         {
             Create = new HeadingsCreateVM();
+            Edit = new HeadingsEditVM();
         }
 
         public HeadingsCreateVM Create { get; set; }
 
-        /// <summary>
-        /// List of all Headings/Subheadings
-        /// </summary>
-        public ObservableCollection<MapUnit> HeadingsList => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.Type != 2).OrderBy(a => a.Name));
+        public HeadingsEditVM Edit { get; set; }
+
+        // Tooltips dictionary
+        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
+        {
+            {"NameDescription", "TODO" },
+            {"NameNotes", "TODO" },
+
+            {"DefinitionDescription", "TODO" },
+            {"DefinitionNotes", "TODO" },
+
+            {"ParentDescription", "TODO" },
+            {"ParentNotes", "TODO" },
+            
+            // Combobox to select a heading to edit
+            {"EditDescription", "TODO" },
+            {"EditNotes", "TODO" },
+        };
 
         /// <summary>
         /// Show the DockPane.

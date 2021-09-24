@@ -189,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModels\HeadingsCreateVM.cs" />
+    <Compile Include="ViewModels\HeadingsEditVM.cs" />
     <Compile Include="Views\Headings.xaml.cs">
       <DependentUpon>Headings.xaml</DependentUpon>
     </Compile>
