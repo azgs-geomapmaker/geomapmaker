@@ -63,15 +63,17 @@
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
-                                    <AdornedElementPlaceholder/>
+                                    <AdornedElementPlaceholder >
+                                        <Border BorderBrush="Red" BorderThickness="1" />
+                                    </AdornedElementPlaceholder>
                                     <ItemsControl ItemsSource="{Binding}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
                             </ControlTemplate>
                         </Validation.ErrorTemplate>
                     </TextBox>
@@ -86,11 +88,13 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="3" Grid.Column="2" MinLines="3" Text="{Binding Create.Definition, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox Grid.Row="3" Grid.Column="2" MinLines="3" Text="{Binding Create.Definition, UpdateSourceTrigger=PropertyChanged}" >
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
-                                    <AdornedElementPlaceholder/>
+                                    <AdornedElementPlaceholder >
+                                        <Border BorderBrush="Red" BorderThickness="1" />
+                                    </AdornedElementPlaceholder>
                                     <ItemsControl ItemsSource="{Binding}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
@@ -113,7 +117,7 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <ComboBox Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Create.ParentOptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Create.Parent}" />
+                    <ComboBox Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Create.ParentOptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding Create.Parent}" />
 
                     <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSubmit}" >Submit</Button>
 

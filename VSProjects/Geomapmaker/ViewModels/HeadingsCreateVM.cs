@@ -54,8 +54,8 @@ namespace Geomapmaker.ViewModels
         }
 
         // Heading parent Id
-        private int? _parent;
-        public int? Parent
+        private KeyValuePair<int, string>? _parent;
+        public KeyValuePair<int, string>? Parent
         {
             get => _parent;
             set => SetProperty(ref _parent, value, () => Parent);
@@ -96,11 +96,21 @@ namespace Geomapmaker.ViewModels
                             TableDefinition tableDefinition = enterpriseTable.GetDefinition();
                             using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                             {
-
                                 rowBuffer["Name"] = Name;
                                 rowBuffer["Description"] = Definition;
-                                rowBuffer["ParagraphStyle"] = Parent == null || Parent == -1 ? null : Parent.ToString();
-                                rowBuffer["Type"] = Parent == null || Parent == -1 ? 0 : 1;
+
+                                if (Parent == null || Parent.Value.Key == -1)
+                                {
+                                    rowBuffer["ParagraphStyle"] = "Root";
+                                    rowBuffer["ParentId"] = null;
+                                    rowBuffer["Type"] = 0;
+                                }
+                                else
+                                {
+                                    rowBuffer["ParagraphStyle"] = Parent.Value.Value;
+                                    rowBuffer["ParentId"] = Parent.Value.Key;
+                                    rowBuffer["Type"] = 1;
+                                }
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {
@@ -134,27 +144,27 @@ namespace Geomapmaker.ViewModels
         /// <summary>
         /// List of parent-options available during create
         /// </summary>
-        public ObservableCollection<KeyValuePair<int?, string>> ParentOptions
+        public ObservableCollection<KeyValuePair<int, string>> ParentOptions
         {
             get
             {
                 // Get Headings/Subheadings from map units.
                 // Sort by name
                 // Create a int/string kvp for the combobox
-                List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
+                List<KeyValuePair<int, string>> headingList = DataHelper.MapUnits
                     .Where(a => a.Type == 0 || a.Type == 1)
                     .OrderBy(a => a.Name)
-                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
+                    .Select(a => new KeyValuePair<int, string>(a.ID, a.Name))
                     .ToList();
 
                 // Insert the no parent option (-1) at the top of the list.
                 // Needed an explicit option incase user opens the combobox. 
                 // If they don't open the comboobox then parent is null.
-                headingList.Insert(0, new KeyValuePair<int?, string>(-1, "(No Parent)"));
+                headingList.Insert(0, new KeyValuePair<int, string>(-1, "(No Parent)"));
 
                 // Initialize a ObservableCollection with the list
                 // Note: Casting a list as an OC does not working.
-                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
+                return new ObservableCollection<KeyValuePair<int, string>>(headingList);
             }
         }
 
@@ -185,9 +195,9 @@ namespace Geomapmaker.ViewModels
         {
             const string propertyKey = "Name";
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Required field." };
+                _validationErrors[propertyKey] = new List<string>() { "" };
                 RaiseErrorsChanged(propertyKey);
             }
             else if (DataHelper.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
@@ -209,7 +219,7 @@ namespace Geomapmaker.ViewModels
 
             if (string.IsNullOrWhiteSpace(definition))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Required field." };
+                _validationErrors[propertyKey] = new List<string>() { "" };
                 RaiseErrorsChanged(propertyKey);
             }
             else

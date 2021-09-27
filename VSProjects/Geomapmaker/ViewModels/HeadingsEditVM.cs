@@ -44,7 +44,6 @@ namespace Geomapmaker.ViewModels
                 Name = value?.Name;
                 Definition = value?.Description;
 
-
                 // TODO. Double check this conversion is working
                 // Try converting ParagraphStyle to int, -1 if fails 
                 Parent = int.TryParse(value?.ParagraphStyle, out int i) ? i : -1;
@@ -149,6 +148,13 @@ namespace Geomapmaker.ViewModels
 
                                         row["Name"] = Name;
                                         row["Description"] = Definition;
+
+
+
+
+
+
+
                                         row["ParagraphStyle"] = Parent == null || Parent == -1 ? null : Parent.ToString();
                                         row["Type"] = Parent == null || Parent == -1 ? 0 : 1;
 
@@ -236,9 +242,9 @@ namespace Geomapmaker.ViewModels
         {
             const string propertyKey = "Name";
 
-            if (SelectedHeading != null && string.IsNullOrEmpty(name))
+            if (SelectedHeading != null && string.IsNullOrWhiteSpace(name))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Required field." };
+                _validationErrors[propertyKey] = new List<string>() { "" };
                 RaiseErrorsChanged(propertyKey);
             }
             else if (DataHelper.MapUnits.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
@@ -260,7 +266,7 @@ namespace Geomapmaker.ViewModels
 
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(definition))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Required field." };
+                _validationErrors[propertyKey] = new List<string>() { "" };
                 RaiseErrorsChanged(propertyKey);
             }
             else
