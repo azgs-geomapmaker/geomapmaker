@@ -109,6 +109,6 @@ namespace Geomapmaker.Models
 
         public string GeoMaterialConfidence { get; set; }
 
-        public int Type { get; set; }
+        public int? ParentId { get; set; }
     }
 }

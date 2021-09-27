@@ -78,17 +78,17 @@
                         </Validation.ErrorTemplate>
                     </TextBox>
 
-                    <Label Grid.Row="3" Grid.Column="1" Content="Definition:" >
+                    <Label Grid.Row="3" Grid.Column="1" Content="Description:" >
                         <Label.ToolTip>
                             <StackPanel>
                                 <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DefinitionDescription]}" />
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionDescription]}" />
                                 <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DefinitionNotes]}" />
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionNotes]}" />
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="3" Grid.Column="2" MinLines="3" Text="{Binding Create.Definition, UpdateSourceTrigger=PropertyChanged}" >
+                    <TextBox Grid.Row="3" Grid.Column="2" MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" >
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
@@ -117,9 +117,9 @@
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <ComboBox Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Create.ParentOptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedItem="{Binding Create.Parent}" />
+                    <ComboBox Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Create.ParentOptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Create.Parent}" />
 
-                    <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSubmit}" >Submit</Button>
+                    <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSave}" >Save</Button>
 
                 </Grid>
             </TabItem>
@@ -202,17 +202,17 @@
                         </Validation.ErrorTemplate>
                     </TextBox>
 
-                    <Label Grid.Row="5" Grid.Column="1" Content="Definition:" >
+                    <Label Grid.Row="5" Grid.Column="1" Content="Description:" >
                         <Label.ToolTip>
                             <StackPanel>
                                 <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DefinitionDescription]}" />
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionDescription]}" />
                                 <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DefinitionNotes]}" />
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionNotes]}" />
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding Edit.Definition, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}">
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
@@ -261,6 +261,97 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Delete">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
+                        <TextBlock Grid.Column="2" Text="Delete" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+                            <TextBlock.ToolTip>
+                                <WrapPanel Orientation="Vertical" MaxWidth="300">
+                                    <TextBlock Text="Delete" TextWrapping="Wrap"/>
+                                </WrapPanel>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                    </DockPanel>
+
+                    <Label Grid.Row="2" Grid.Column="1" Content="Delete:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding DeleteDescription}" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding DeleteNotes}" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <ComboBox 
+                        Grid.Row="2" 
+                        Grid.Column="2" 
+		                ItemsSource="{Binding Delete.AllHeadings}" 
+		                DisplayMemberPath="Name" 
+                        SelectedItem="{Binding Delete.SelectedHeading}" 
+                    />
+
+                    <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
+
+                    <Label Grid.Row="4" Grid.Column="1" Content="Name:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[NameDescription]}" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[NameNotes]}" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Delete.Name}" IsEnabled="False" IsReadOnly="True" />
+
+                    <Label Grid.Row="5" Grid.Column="1" Content="Description:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionDescription]}" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionNotes]}" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding Delete.Description}" IsEnabled="False" IsReadOnly="True" />
+
+                    <Label Grid.Row="6" Grid.Column="1" Content="Parent:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[ParentDescription]}" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[ParentNotes]}" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Delete.Parent}" IsEnabled="False" IsReadOnly="True" />
+
+                    <Button Grid.Row="7" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandReset}" >Reset</Button>
+
+                    <Button Grid.Row="7" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandDelete}" >Delete</Button>
+
+                </Grid>
 
             </TabItem>
         </TabControl>

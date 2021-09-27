@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -29,7 +28,7 @@ namespace Geomapmaker.ViewModels
         /// <summary>
         /// List of all Headings/Subheadings
         /// </summary>
-        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.Type == 0 || a.Type == 1).OrderBy(a => a.Name));
+        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name));
 
         /// <summary>
         /// Edit Model
@@ -41,15 +40,14 @@ namespace Geomapmaker.ViewModels
             set
             {
                 SetProperty(ref _selectedHeading, value, () => SelectedHeading);
-                Name = value?.Name;
-                Definition = value?.Description;
-
-                // TODO. Double check this conversion is working
-                // Try converting ParagraphStyle to int, -1 if fails 
-                Parent = int.TryParse(value?.ParagraphStyle, out int i) ? i : -1;
 
                 // Update parent options to remove selected heading
                 NotifyPropertyChanged("ParentOptions");
+
+                Name = value?.Name;
+                Description = value?.Description;
+                Parent = value?.ParentId;
+
             }
         }
 
@@ -66,18 +64,18 @@ namespace Geomapmaker.ViewModels
         }
 
         // Heading Definition
-        private string _definition;
-        public string Definition
+        private string _description;
+        public string Description
         {
-            get => _definition;
+            get => _description;
             set
             {
-                SetProperty(ref _definition, value, () => Definition);
-                ValidateDefinition(_definition);
+                SetProperty(ref _description, value, () => Description);
+                ValidateDescription(_description);
             }
         }
 
-        // Heading parent Id
+        // Heading's Parent
         private int? _parent;
         public int? Parent
         {
@@ -95,20 +93,14 @@ namespace Geomapmaker.ViewModels
         /// <returns>true if enabled</returns>
         private bool CanUpdate()
         {
-            // Can't submit if are any errors
+            // Can't submit if are any errors or a heading is not selected to edit
             if (HasErrors || SelectedHeading == null)
             {
                 return false;
             }
 
-            // Convert null or empty to an empty string (Or the string value)
-            string originalParent = string.IsNullOrEmpty(SelectedHeading.ParagraphStyle) ? "" : SelectedHeading.ParagraphStyle;
-
-            // Convert null or -1 to an empty string (Or the string value)
-            string newParent = Parent == null || Parent == -1 ? "" : Parent.ToString();
-
             // Compare original values to updated values
-            return SelectedHeading.Name != Name || SelectedHeading.Description != Definition || originalParent != newParent;
+            return SelectedHeading.Name != Name || SelectedHeading.Description != Description || SelectedHeading.ParentId != Parent;
         }
 
         /// <summary>
@@ -147,16 +139,9 @@ namespace Geomapmaker.ViewModels
                                         context.Invalidate(row);
 
                                         row["Name"] = Name;
-                                        row["Description"] = Definition;
-
-
-
-
-
-
-
-                                        row["ParagraphStyle"] = Parent == null || Parent == -1 ? null : Parent.ToString();
-                                        row["Type"] = Parent == null || Parent == -1 ? 0 : 1;
+                                        row["Description"] = Description;
+                                        row["ParagraphStyle"] = "Heading";
+                                        row["ParentId"] = Parent;
 
                                         // After all the changes are done, persist it.
                                         row.Store();
@@ -185,7 +170,6 @@ namespace Geomapmaker.ViewModels
 
             // Reset values
             SelectedHeading = null;
-            Parent = null;
         }
 
         /// <summary>
@@ -195,21 +179,15 @@ namespace Geomapmaker.ViewModels
         {
             get
             {
-
-
-
-
                 // Remove selected heading from parent options
                 List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
-                    .Where(a => a.Type == 0 || a.Type == 1)
+                    .Where(a => a.ParagraphStyle == "Heading")
                     .Where(a => a.ID != SelectedHeading?.ID)
                     .OrderBy(a => a.Name)
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
                     .ToList();
 
-                var foo = headingList;
-
-                headingList.Insert(0, new KeyValuePair<int?, string>(-1, "(No Parent)"));
+                headingList.Insert(0, new KeyValuePair<int?, string>(null, ""));
 
                 return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
             }
@@ -260,9 +238,9 @@ namespace Geomapmaker.ViewModels
         }
 
         // Validate the Heading's definition
-        private void ValidateDefinition(string definition)
+        private void ValidateDescription(string definition)
         {
-            const string propertyKey = "Definition";
+            const string propertyKey = "Description";
 
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(definition))
             {
@@ -277,29 +255,22 @@ namespace Geomapmaker.ViewModels
         }
 
         // Validate the Heading's definition
-        private void ValidateParent(int? parent)
+        private void ValidateParent(int? checkId)
         {
             const string propertyKey = "Parent";
 
-            int? checkId = parent;
-
-            while (checkId != null && checkId != -1)
+            // Loop over parents
+            while (checkId != null)
             {
-                // Look up the parent
-                MapUnit current = DataHelper.MapUnits.FirstOrDefault(a => a.ID == checkId);
+                // Look up the parent to grab grandparent id
+                checkId = DataHelper.MapUnits.FirstOrDefault(a => a.ID == checkId)?.ParentId;
 
-                if (current != null)
+                // Compare with selected heading
+                if (checkId == SelectedHeading.ID)
                 {
-                    var parentId = int.Parse(current.ParagraphStyle);
-
-                    if (parentId == SelectedHeading.ID)
-                    {
-                        _validationErrors[propertyKey] = new List<string>() { "Yikes!" };
-                        RaiseErrorsChanged(propertyKey);
-                        return;
-                    }
-                    checkId = parentId;
-
+                    _validationErrors[propertyKey] = new List<string>() { "Parent" };
+                    RaiseErrorsChanged(propertyKey);
+                    return;
                 }
             }
 

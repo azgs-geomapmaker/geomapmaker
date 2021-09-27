@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -17,16 +16,16 @@ namespace Geomapmaker.ViewModels
     internal class HeadingsCreateVM : DockPane, INotifyDataErrorInfo
     {
         // Create's save button
-        public ICommand CommandSubmit { get; }
+        public ICommand CommandSave { get; }
 
         public HeadingsCreateVM()
         {
             // Init submit command
-            CommandSubmit = new RelayCommand(() => SubmitAsync(), () => CanSubmit());
+            CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
 
             // Initializing as empty strings to trigger validation
             Name = "";
-            Definition = "";
+            Description = "";
         }
 
         // Heading Name
@@ -42,20 +41,20 @@ namespace Geomapmaker.ViewModels
         }
 
         // Heading Definition
-        private string _definition;
-        public string Definition
+        private string _description;
+        public string Description
         {
-            get => _definition;
+            get => _description;
             set
             {
-                SetProperty(ref _definition, value, () => Definition);
-                ValidateDefinition(_definition);
+                SetProperty(ref _description, value, () => Description);
+                ValidateDescription(_description);
             }
         }
 
         // Heading parent Id
-        private KeyValuePair<int, string>? _parent;
-        public KeyValuePair<int, string>? Parent
+        private int? _parent;
+        public int? Parent
         {
             get => _parent;
             set => SetProperty(ref _parent, value, () => Parent);
@@ -65,7 +64,7 @@ namespace Geomapmaker.ViewModels
         /// Determines the visibility (enabled state) of the submit button
         /// </summary>
         /// <returns>true if enabled</returns>
-        private bool CanSubmit()
+        private bool CanSave()
         {
             // Can't submit if are any errors
             return !HasErrors;
@@ -97,20 +96,9 @@ namespace Geomapmaker.ViewModels
                             using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                             {
                                 rowBuffer["Name"] = Name;
-                                rowBuffer["Description"] = Definition;
-
-                                if (Parent == null || Parent.Value.Key == -1)
-                                {
-                                    rowBuffer["ParagraphStyle"] = "Root";
-                                    rowBuffer["ParentId"] = null;
-                                    rowBuffer["Type"] = 0;
-                                }
-                                else
-                                {
-                                    rowBuffer["ParagraphStyle"] = Parent.Value.Value;
-                                    rowBuffer["ParentId"] = Parent.Value.Key;
-                                    rowBuffer["Type"] = 1;
-                                }
+                                rowBuffer["Description"] = Description;
+                                rowBuffer["ParagraphStyle"] = "Heading";
+                                rowBuffer["ParentId"] = Parent;
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {
@@ -135,7 +123,7 @@ namespace Geomapmaker.ViewModels
 
             // Reset values
             Name = "";
-            Definition = "";
+            Description = "";
             Parent = null;
 
             NotifyPropertyChanged("ParentOptions");
@@ -144,27 +132,24 @@ namespace Geomapmaker.ViewModels
         /// <summary>
         /// List of parent-options available during create
         /// </summary>
-        public ObservableCollection<KeyValuePair<int, string>> ParentOptions
+        public ObservableCollection<KeyValuePair<int?, string>> ParentOptions
         {
             get
             {
                 // Get Headings/Subheadings from map units.
                 // Sort by name
                 // Create a int/string kvp for the combobox
-                List<KeyValuePair<int, string>> headingList = DataHelper.MapUnits
-                    .Where(a => a.Type == 0 || a.Type == 1)
+                List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
+                    .Where(a => a.ParagraphStyle == "Heading")
                     .OrderBy(a => a.Name)
-                    .Select(a => new KeyValuePair<int, string>(a.ID, a.Name))
+                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
                     .ToList();
 
-                // Insert the no parent option (-1) at the top of the list.
-                // Needed an explicit option incase user opens the combobox. 
-                // If they don't open the comboobox then parent is null.
-                headingList.Insert(0, new KeyValuePair<int, string>(-1, "(No Parent)"));
+                headingList.Insert(0, new KeyValuePair<int?, string>(null, ""));
 
                 // Initialize a ObservableCollection with the list
                 // Note: Casting a list as an OC does not working.
-                return new ObservableCollection<KeyValuePair<int, string>>(headingList);
+                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
             }
         }
 
@@ -213,9 +198,9 @@ namespace Geomapmaker.ViewModels
         }
 
         // Validate the Heading's definition
-        private void ValidateDefinition(string definition)
+        private void ValidateDescription(string definition)
         {
-            const string propertyKey = "Definition";
+            const string propertyKey = "Description";
 
             if (string.IsNullOrWhiteSpace(definition))
             {

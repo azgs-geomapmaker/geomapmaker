@@ -21,15 +21,11 @@ namespace Geomapmaker
 
         private const string _dockPaneID = "Geomapmaker_Headings";
 
-        protected HeadingsViewModel()
-        {
-            Create = new HeadingsCreateVM();
-            Edit = new HeadingsEditVM();
-        }
+        public HeadingsCreateVM Create { get; set; } = new HeadingsCreateVM();
 
-        public HeadingsCreateVM Create { get; set; }
+        public HeadingsEditVM Edit { get; set; } = new HeadingsEditVM();
 
-        public HeadingsEditVM Edit { get; set; }
+        public HeadingsDeleteVM Delete { get; set; } = new HeadingsDeleteVM();
 
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
@@ -37,8 +33,8 @@ namespace Geomapmaker
             {"NameDescription", "TODO" },
             {"NameNotes", "TODO" },
 
-            {"DefinitionDescription", "TODO" },
-            {"DefinitionNotes", "TODO" },
+            {"DescriptionDescription", "TODO" },
+            {"DescriptionNotes", "TODO" },
 
             {"ParentDescription", "TODO" },
             {"ParentNotes", "TODO" },
@@ -46,6 +42,10 @@ namespace Geomapmaker
             // Combobox to select a heading to edit
             {"EditDescription", "TODO" },
             {"EditNotes", "TODO" },
+
+            // Combobox to select a heading to delete
+            {"DeleteDescription", "TODO" },
+            {"DeleteNotes", "TODO" },
         };
 
         /// <summary>
