@@ -18,11 +18,13 @@ namespace Geomapmaker.ViewModels
     {
         // Create's save button
         public ICommand CommandUpdate { get; }
+        public ICommand CommandReset { get; }
 
         public HeadingsEditVM()
         {
             // Init submit command
             CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
+            CommandReset = new RelayCommand(() => ResetAsync());
         }
 
         /// <summary>
@@ -48,6 +50,8 @@ namespace Geomapmaker.ViewModels
                 Description = value?.Description;
                 Parent = value?.ParentId;
 
+                Tree = value != null ? new List<MapUnit> { new MapUnit { Name = value.Name, Children = GetChildren(value) } } : null;
+                NotifyPropertyChanged("Tree");
             }
         }
 
@@ -88,6 +92,41 @@ namespace Geomapmaker.ViewModels
                 ValidateParent(_parent);
                 ValidateIfChangeWasMade();
             }
+        }
+
+        public List<MapUnit> Tree { get; set; }
+
+        // Recursively look up children
+        private List<MapUnit> GetChildren(MapUnit root)
+        {
+            // Get mapunit's children
+            List<MapUnit> children = DataHelper.MapUnits.Where(a => a.ParentId == root?.ID).ToList();
+
+            // If no children
+            if (children.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                // Get the children of each child
+                foreach (MapUnit child in children)
+                {
+                    child.Children = GetChildren(child);
+                }
+            }
+
+            return children;
+        }
+        
+        private async Task ResetAsync()
+        {
+            await DataHelper.PopulateMapUnits();
+
+            NotifyPropertyChanged("AllHeadings");
+
+            // Reset values
+            SelectedHeading = null;
         }
 
         /// <summary>
@@ -215,6 +254,13 @@ namespace Geomapmaker.ViewModels
         {
             // This error isn't display on any field. Prevents user from hitting update until a change is made.
             const string propertyKey = "SilentError";
+
+            if (SelectedHeading == null)
+            {
+                _validationErrors.Remove(propertyKey);
+                RaiseErrorsChanged(propertyKey);
+                return;
+            }
 
             if (SelectedHeading.Name == Name && SelectedHeading.Description == Description && SelectedHeading.ParentId == Parent)
             {

@@ -54,4 +54,8 @@
         <Setter Property="Margin" Value="10"/>
     </Style>
 
+    <Style TargetType="TreeView" >
+        <Setter Property="Margin" Value="10"/>
+    </Style>
+
 </ResourceDictionary>

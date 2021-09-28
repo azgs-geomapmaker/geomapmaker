@@ -188,6 +188,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\MapUnitTree.cs" />
     <Compile Include="ViewModels\HeadingsCreateVM.cs" />
     <Compile Include="ViewModels\HeadingsDeleteVM.cs" />
     <Compile Include="ViewModels\HeadingsEditVM.cs" />

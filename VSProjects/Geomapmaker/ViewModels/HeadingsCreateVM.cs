@@ -17,11 +17,13 @@ namespace Geomapmaker.ViewModels
     {
         // Create's save button
         public ICommand CommandSave { get; }
+        public ICommand CommandReset { get; }
 
         public HeadingsCreateVM()
         {
             // Init submit command
             CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
+            CommandReset = new RelayCommand(() => ResetAsync());
 
             // Initializing as empty strings to trigger validation
             Name = "";
@@ -127,6 +129,18 @@ namespace Geomapmaker.ViewModels
             Parent = null;
 
             NotifyPropertyChanged("ParentOptions");
+        }
+
+        private async Task ResetAsync()
+        {
+            await DataHelper.PopulateMapUnits();
+
+            NotifyPropertyChanged("AllHeadings");
+
+            // Reset values
+            Name = null;
+            Description = null;
+            Parent = null;
         }
 
         /// <summary>

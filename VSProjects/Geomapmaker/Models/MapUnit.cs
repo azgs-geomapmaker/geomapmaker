@@ -110,5 +110,8 @@ namespace Geomapmaker.Models
         public string GeoMaterialConfidence { get; set; }
 
         public int? ParentId { get; set; }
+
+        // Only used to build out the tree-view. Not saved in db
+        public List<MapUnit> Children { get; set; } = new List<MapUnit>();
     }
 }

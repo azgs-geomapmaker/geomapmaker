@@ -23,8 +23,8 @@ namespace Geomapmaker.ViewModels
         public HeadingsDeleteVM()
         {
             // Init submit command
-            CommandDelete = new RelayCommand(() => DeleteAsync(), () => CanDelete());
-            CommandReset = new RelayCommand(() => ResetAsync(), () => CanReset());
+            CommandDelete = new RelayCommand(() => DeleteHeadingAsync(), () => CanDelete());
+            CommandReset = new RelayCommand(() => ResetAsync());
         }
 
         /// <summary>
@@ -46,16 +46,42 @@ namespace Geomapmaker.ViewModels
                 Name = value?.Name;
                 Description = value?.Description;
                 Parent = DataHelper.MapUnits.FirstOrDefault(a => a.ID == value?.ParentId)?.Name;
-
+                Tree = value != null ? new List<MapUnit> { new MapUnit { Name = value.Name, Children = GetChildren(value) } } : null;
                 NotifyPropertyChanged("Name");
                 NotifyPropertyChanged("Description");
                 NotifyPropertyChanged("Parent");
+                NotifyPropertyChanged("Tree");
+                ValidateChildfree(Tree);
             }
+        }
+
+        // Recursively look up children
+        private List<MapUnit> GetChildren(MapUnit root)
+        {
+            // Get mapunit's children
+            List<MapUnit> children = DataHelper.MapUnits.Where(a => a.ParentId == root?.ID).ToList();
+
+            // If no children
+            if (children.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                // Get the children of each child
+                foreach (MapUnit child in children)
+                {
+                    child.Children = GetChildren(child);
+                }
+            }
+
+            return children;
         }
 
         public string Name { get; set; }
         public string Description { get; set; }
         public string Parent { get; set; }
+        public List<MapUnit> Tree { get; set; }
 
         /// <summary>
         /// Determines the visibility (enabled state) of the button
@@ -63,12 +89,7 @@ namespace Geomapmaker.ViewModels
         /// <returns>true if enabled</returns>
         private bool CanDelete()
         {
-            return HasErrors;
-        }
-
-        private bool CanReset()
-        {
-            return SelectedHeading != null;
+            return SelectedHeading != null && !HasErrors;
         }
 
         private async Task ResetAsync()
@@ -84,7 +105,7 @@ namespace Geomapmaker.ViewModels
         /// <summary>
         /// Execute the save command
         /// </summary>
-        private async Task DeleteAsync()
+        private async Task DeleteHeadingAsync()
         {
             if (DataHelper.connectionProperties == null)
             {
@@ -94,6 +115,40 @@ namespace Geomapmaker.ViewModels
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
 
+                EditOperation editOperation = new EditOperation();
+
+                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
+
+                        editOperation.Callback(context =>
+                        {
+                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
+
+                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            {
+
+                                while (rowCursor.MoveNext())
+                                { //TODO: Anything? Should be only one
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        context.Invalidate(row);
+
+                                        row.Delete();
+                                    }
+                                }
+                            }
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+
+                        if (!result)
+                        {
+                            MessageBox.Show(editOperation.ErrorMessage);
+                        }
+                    }
+                }
             });
 
             await DataHelper.PopulateMapUnits();
@@ -104,7 +159,7 @@ namespace Geomapmaker.ViewModels
             SelectedHeading = null;
         }
 
-         // Validation
+        // Validation
         #region INotifyDataErrorInfo members
         // Error collection
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
@@ -126,27 +181,33 @@ namespace Geomapmaker.ViewModels
 
         public bool HasErrors => _validationErrors.Count > 0;
 
-        //// Validate the Heading's name
-        //private void ValidateHeadingName(string name)
-        //{
-        //    const string propertyKey = "Name";
+        // Validate children
+        private void ValidateChildfree(List<MapUnit> tree)
+        {
+            const string propertyKey = "Tree";
 
-        //    if (SelectedHeading != null && string.IsNullOrWhiteSpace(name))
-        //    {
-        //        _validationErrors[propertyKey] = new List<string>() { "" };
-        //        RaiseErrorsChanged(propertyKey);
-        //    }
-        //    else if (DataHelper.MapUnits.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
-        //    {
-        //        _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-        //        RaiseErrorsChanged(propertyKey);
-        //    }
-        //    else
-        //    {
-        //        _validationErrors.Remove(propertyKey);
-        //        RaiseErrorsChanged(propertyKey);
-        //    }
-        //}
+            if (tree == null || tree.Count == 0)
+            {
+                _validationErrors.Remove(propertyKey);
+                RaiseErrorsChanged(propertyKey);
+                return;
+            }
+
+            // First node in the list is the root element
+            MapUnit root = tree.First();
+
+            if (root.Children != null && root.Children.Count != 0)
+            {
+                // Raise the error
+                _validationErrors[propertyKey] = new List<string>() { "Can't delete headings with a child nodes" };
+                RaiseErrorsChanged(propertyKey);
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+                RaiseErrorsChanged(propertyKey);
+            }
+        }
 
         #endregion
     }
