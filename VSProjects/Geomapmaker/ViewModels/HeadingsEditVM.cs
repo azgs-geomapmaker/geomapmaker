@@ -60,6 +60,7 @@ namespace Geomapmaker.ViewModels
             {
                 SetProperty(ref _name, value, () => Name);
                 ValidateHeadingName(_name);
+                ValidateIfChangeWasMade();
             }
         }
 
@@ -72,6 +73,7 @@ namespace Geomapmaker.ViewModels
             {
                 SetProperty(ref _description, value, () => Description);
                 ValidateDescription(_description);
+                ValidateIfChangeWasMade();
             }
         }
 
@@ -84,6 +86,7 @@ namespace Geomapmaker.ViewModels
             {
                 SetProperty(ref _parent, value, () => Parent);
                 ValidateParent(_parent);
+                ValidateIfChangeWasMade();
             }
         }
 
@@ -93,14 +96,7 @@ namespace Geomapmaker.ViewModels
         /// <returns>true if enabled</returns>
         private bool CanUpdate()
         {
-            // Can't submit if are any errors or a heading is not selected to edit
-            if (HasErrors || SelectedHeading == null)
-            {
-                return false;
-            }
-
-            // Compare original values to updated values
-            return SelectedHeading.Name != Name || SelectedHeading.Description != Description || SelectedHeading.ParentId != Parent;
+            return SelectedHeading != null && !HasErrors;
         }
 
         /// <summary>
@@ -214,6 +210,23 @@ namespace Geomapmaker.ViewModels
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
+
+        private void ValidateIfChangeWasMade()
+        {
+            // This error isn't display on any field. Prevents user from hitting update until a change is made.
+            const string propertyKey = "SilentError";
+
+            if (SelectedHeading.Name == Name && SelectedHeading.Description == Description && SelectedHeading.ParentId == Parent)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
+                RaiseErrorsChanged(propertyKey);
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+                RaiseErrorsChanged(propertyKey);
+            }
+        }
 
         // Validate the Heading's name
         private void ValidateHeadingName(string name)
