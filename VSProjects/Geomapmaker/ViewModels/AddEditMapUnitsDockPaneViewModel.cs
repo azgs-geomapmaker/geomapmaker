@@ -1,271 +1,283 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ArcGIS.Core;
-using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
-using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Catalog;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Extensions;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
-using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 
-namespace Geomapmaker {
-	internal class AddEditMapUnitsDockPaneViewModel : DockPane {
-		private const string _dockPaneID = "Geomapmaker_AddEditMapUnitsDockPane";
+namespace Geomapmaker
+{
+    internal class AddEditMapUnitsDockPaneViewModel : DockPane
+    {
+        private const string _dockPaneID = "Geomapmaker_AddEditMapUnitsDockPane";
 
-		protected  AddEditMapUnitsDockPaneViewModel() { 
-			Debug.WriteLine("AddEditMapUnitsDockPaneViewModel constructor enter");
-		}
+        protected AddEditMapUnitsDockPaneViewModel()
+        {
+            Debug.WriteLine("AddEditMapUnitsDockPaneViewModel constructor enter");
+        }
 
+        /// <summary>
+        /// Show the DockPane.
+        /// </summary>
+        internal static void Show()
+        {
+            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
+            if (pane == null)
+            {
+                return;
+            }
 
-		/// <summary>
-		/// Show the DockPane.
-		/// </summary>
-		internal static void Show() {
-			DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-			if (pane == null)
-				return;
-			Debug.WriteLine("VM.Show, mapUnitName = " + DataHelper.MapUnitName);
+            // We don't want map tool active when editing map unit descriptions
+            //ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync(null);
 
-			//We don't want map tool active when editing map unit descriptions
-			//ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync(null);
+            pane.Activate();
+        }
 
-			pane.Activate(); 
-		}
+        internal static new void Hide()
+        {
+            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
+            if (pane == null)
+            {
+                return;
+            }
 
-		internal static void Hide() {
-			DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-			if (pane == null)
-				return;
-			pane.Hide();
-		}
+            pane.Hide();
+        }
 
-		public Boolean IsValid {
-		//TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
-		//each of the properties used below. There must be a better way.
-			get {
-				//return true;
-				return
-					SelectedMapUnit != null &&
-					SelectedMapUnit.MU != null && SelectedMapUnit.MU.Trim() != "" &&
-					SelectedMapUnit.Name != null && SelectedMapUnit.Name.Trim() != "";// &&
+        // TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
+        // each of the properties used below. There must be a better way.
 
-					//SelectedMapUnit.Age != null && SelectedMapUnit.Age.Trim() != "";//&&
-					//SelectedMapUnit.HierarchyKey != null && SelectedMapUnit.HierarchyKey.Trim() != "" &&
-					//SelectedMapUnit.ParagraphStyle != null && SelectedMapUnit.ParagraphStyle.Trim() != "" &&
-					//SelectedMapUnit.Symbol != null && SelectedMapUnit.Symbol.Trim() != "" &&
-					//SelectedMapUnit.DescriptionSourceID != null && SelectedMapUnit.DescriptionSourceID.Trim() != "" &&
-				
-			}
-		}
+        public bool IsValid
+        {
+            get
+            {
+                //return
+                //    SelectedMapUnit != null &&
+                //    SelectedMapUnit.MU != null && SelectedMapUnit.MU.Trim() != "" &&
+                //    SelectedMapUnit.Name != null && SelectedMapUnit.Name.Trim() != "";
 
+                var booolvalid = SelectedMapUnit != null &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.MU) &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.Name);
 
-		/// <summary>
-		/// Text shown near the top of the DockPane.
-		/// </summary>
-		private const string GENERIC_HEADING = "Add/Edit Map Units";
-		private const string ADD_HEADING = "Add Map Unit";
-		public const string EDIT_HEADING = "Edit Map Unit";
-		private string _heading = GENERIC_HEADING;
-		public string Heading {
-			get { return _heading; }
-			set {
-				SetProperty(ref _heading, value, () => Heading);
-			}
-		}
-		private string subHeading = GENERIC_HEADING;
-		public string SubHeading {
-			get { return subHeading; }
-			set {
-				SetProperty(ref subHeading, value, () => SubHeading);
-			}
-		}
+                return SelectedMapUnit != null &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.MU) &&
+                    !string.IsNullOrWhiteSpace(SelectedMapUnit.Name);
+            }
+        }
 
-		private MapUnit selectedMapUnit;
-		public MapUnit SelectedMapUnit {
-			get => selectedMapUnit;
-			set {
-				if (value == null) {
-					SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit);
-					SubHeading = GENERIC_HEADING;
-					return;
-				}
-				//selectedMapUnit = value;
-				value.DescriptionSourceID = DataHelper.DataSource.Source; // for display
-				SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
+        /// <summary>
+        /// Text shown near the top of the DockPane.
+        /// </summary>
+        private const string GENERIC_HEADING = "Add/Edit Map Units";
+        private const string ADD_HEADING = "Add Map Unit";
+        public const string EDIT_HEADING = "Edit Map Unit";
 
-				//Set heading and populate form, depending on whether this is a new map unit or not 
-				//if (!DataHelper.MapUnits.Any(p => p.Text == value)) {
-				if (!DataHelper.MapUnits.Any(mu => mu.MU == value.MU)) {
-					SubHeading = ADD_HEADING;
-					//populate form with defaults
-				} else {
-					SubHeading = EDIT_HEADING;
-					// populate form from db
+        private string _heading = GENERIC_HEADING;
+        public string Heading
+        {
+            get => _heading;
+            set => SetProperty(ref _heading, value, () => Heading);
+        }
 
-				}
-			}
-		}
+        private string subHeading = GENERIC_HEADING;
+        public string SubHeading
+        {
+            get => subHeading;
+            set => SetProperty(ref subHeading, value, () => SubHeading);
+        }
 
-		public Interval SelectedOlderInterval { get; set; }
-		public Interval SelectedYoungerInterval { get; set; }
+        private MapUnit selectedMapUnit;
+        public MapUnit SelectedMapUnit
+        {
+            get => selectedMapUnit;
+            set
+            {
+                if (value == null)
+                {
+                    SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit);
+                    SubHeading = GENERIC_HEADING;
+                    return;
+                }
 
-		//This is to capture the user entering a new map unit (not in the list)
-		private string userEnteredMapUnit;
-		public string UserEnteredMapUnit {
-			get {
-				return userEnteredMapUnit;
-			}
-			set {
-				//if (userEnteredMapUnit != value) {
-				userEnteredMapUnit = value;
-				if (value == null) {
-					SelectedMapUnit = null;
-				} else if (!DataHelper.MapUnits.Any(mu => mu.MU == value)) {
-					//userEnteredMapUnit = value;
-					var mapUnit = new MapUnit();
-					mapUnit.MU = userEnteredMapUnit;
-					mapUnit.DescriptionSourceID = DataHelper.DataSource.Source; //for display
-					SelectedMapUnit = mapUnit;
-				}
-			}
-		}
+                //selectedMapUnit = value;
+                value.DescriptionSourceID = DataHelper.DataSource.Source; // for display
+                SetProperty(ref selectedMapUnit, value, () => SelectedMapUnit); //Have to do this to trigger stuff, I guess.
 
+                //Set heading and populate form, depending on whether this is a new map unit or not 
+                //if (!DataHelper.MapUnits.Any(p => p.Text == value)) {
+                SubHeading = !DataHelper.MapUnits.Any(mu => mu.MU == value.MU) ? ADD_HEADING : EDIT_HEADING;
+            }
+        }
 
-		public  async Task saveMapUnit(MapUnit mapUnit) {
-			Debug.WriteLine("saveMapUnit enter");
+        public Interval SelectedOlderInterval { get; set; }
+        public Interval SelectedYoungerInterval { get; set; }
 
-			//var mapUnits = new ObservableCollection<ComboBoxItem>();
-			var mapUnits = new ObservableCollection<MapUnit>();
+        //This is to capture the user entering a new map unit (not in the list)
+        private string userEnteredMapUnit;
+        public string UserEnteredMapUnit
+        {
+            get => userEnteredMapUnit;
+            set
+            {
+                //if (userEnteredMapUnit != value) {
+                userEnteredMapUnit = value;
+                if (value == null)
+                {
+                    SelectedMapUnit = null;
+                }
+                else if (!DataHelper.MapUnits.Any(mu => mu.MU == value))
+                {
+                    //userEnteredMapUnit = value;
+                    MapUnit mapUnit = new MapUnit
+                    {
+                        MU = userEnteredMapUnit,
+                        DescriptionSourceID = DataHelper.DataSource.Source //for display
+                    };
+                    SelectedMapUnit = mapUnit;
+                }
+            }
+        }
 
-			if (DataHelper.connectionProperties == null) {
-				return;
-			}
+        public async Task saveMapUnit(MapUnit mapUnit)
+        {
+            Debug.WriteLine("saveMapUnit enter");
 
-			await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
-				string message = String.Empty;
-				bool result = false;
-				EditOperation editOperation = new EditOperation();
+            var mapUnits = new ObservableCollection<MapUnit>();
 
-				using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties)) {
-					using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits")) {
+            if (DataHelper.connectionProperties == null)
+            {
+                return;
+            }
 
-						if (DataHelper.MapUnits.Any(mu => mu.MU == mapUnit.MU)) {
-							Debug.WriteLine("editting");
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+                string message = String.Empty;
+                bool result = false;
+                EditOperation editOperation = new EditOperation();
 
-							editOperation.Callback(context => {
-								QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + mapUnit.ID };
+                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
 
-								using (RowCursor rowCursor = enterpriseTable.Search(filter, false)) {
-									TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-									int subtypeFieldIndex = tableDefinition.FindField(tableDefinition.GetSubtypeField());
+                        if (DataHelper.MapUnits.Any(mu => mu.MU == mapUnit.MU))
+                        {
+                            Debug.WriteLine("editting");
 
-									while (rowCursor.MoveNext()) { //TODO: Anything? Should be only one
-										using (Row row = rowCursor.Current) {
-											// In order to update the Map and/or the attribute table.
-											// Has to be called before any changes are made to the row.
-											context.Invalidate(row);
+                            editOperation.Callback(context =>
+                            {
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + mapUnit.ID };
 
-											row["MapUnit"] = mapUnit.MU;
-											row["Name"] = mapUnit.Name;
-											row["FullName"] = mapUnit.FullName;
-											row["Age"] = mapUnit.Age;
-											//row["RelativeAge"] = mapUnit.RelativeAge;
-											row["Description"] = mapUnit.Description;
-											row["HierarchyKey"] = 5; // mapUnit.HierarchyKey;
-											row["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
-											row["Label"] = mapUnit.Label;
-											row["Symbol"] = mapUnit.Symbol;
-											row["AreaFillRGB"] = mapUnit.AreaFillRGB;
-											row["hexcolor"] = mapUnit.hexcolor;
-											row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
-											row["GeoMaterial"] = mapUnit.GeoMaterial;
-											row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                                {
+                                    TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+                                    int subtypeFieldIndex = tableDefinition.FindField(tableDefinition.GetSubtypeField());
 
-											//After all the changes are done, persist it.
-											row.Store();
+                                    while (rowCursor.MoveNext())
+                                    { //TODO: Anything? Should be only one
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-											// Has to be called after the store too.
-											context.Invalidate(row);
-										}
-									}
-								}
-							}, enterpriseTable);
+                                            row["MapUnit"] = mapUnit.MU;
+                                            row["Name"] = mapUnit.Name;
+                                            row["FullName"] = mapUnit.FullName;
+                                            row["Age"] = mapUnit.Age;
+                                            //row["RelativeAge"] = mapUnit.RelativeAge;
+                                            row["Description"] = mapUnit.Description;
+                                            row["HierarchyKey"] = mapUnit.HierarchyKey;
+                                            row["ParagraphStyle"] = mapUnit.ParagraphStyle;
+                                            row["Label"] = mapUnit.Label;
+                                            row["Symbol"] = mapUnit.Symbol;
+                                            row["AreaFillRGB"] = mapUnit.AreaFillRGB;
+                                            row["hexcolor"] = mapUnit.hexcolor;
+                                            row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
+                                            row["GeoMaterial"] = mapUnit.GeoMaterial;
+                                            row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
 
-						} else {
-							Debug.WriteLine("adding");
+                                            // After all the changes are done, persist it.
+                                            row.Store();
 
-							editOperation.Callback(context => {
-								TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-								using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer()) {
-									// Either the field index or the field name can be used in the indexer.
-									rowBuffer["MapUnit"] = mapUnit.MU;
-									rowBuffer["Name"] = mapUnit.Name;
-									rowBuffer["FullName"] = mapUnit.FullName;
-									rowBuffer["Age"] = mapUnit.Age;
-									//rowBuffer["RelativeAge"] = mapUnit.RelativeAge;
-									rowBuffer["Description"] = mapUnit.Description;
-									rowBuffer["HierarchyKey"] = 5; // mapUnit.HierarchyKey;
-									rowBuffer["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
-									rowBuffer["Label"] = mapUnit.Label;
-									rowBuffer["Symbol"] = mapUnit.Symbol;
-									rowBuffer["AreaFillRGB"] = mapUnit.AreaFillRGB;
-									rowBuffer["hexcolor"] = mapUnit.hexcolor;
-									rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
-									rowBuffer["GeoMaterial"] = mapUnit.GeoMaterial;
-									rowBuffer["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
+                                        }
+                                    }
+                                }
+                            }, enterpriseTable);
 
-									using (Row row = enterpriseTable.CreateRow(rowBuffer)) {
-										// To Indicate that the attribute table has to be updated.
-										context.Invalidate(row);
-									}
-								}
-							}, enterpriseTable);
+                        }
+                        else
+                        {
+                            Debug.WriteLine("adding");
 
-						}
+                            editOperation.Callback(context =>
+                            {
+                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    // Either the field index or the field name can be used in the indexer.
+                                    rowBuffer["MapUnit"] = mapUnit.MU;
+                                    rowBuffer["Name"] = mapUnit.Name;
+                                    rowBuffer["FullName"] = mapUnit.FullName;
+                                    rowBuffer["Age"] = mapUnit.Age;
+                                    //rowBuffer["RelativeAge"] = mapUnit.RelativeAge;
+                                    rowBuffer["Description"] = mapUnit.Description;
+                                    rowBuffer["HierarchyKey"] = 5; // mapUnit.HierarchyKey;
+                                    rowBuffer["ParagraphStyle"] = 5; // mapUnit.ParagraphStyle;
+                                    rowBuffer["Label"] = mapUnit.Label;
+                                    rowBuffer["Symbol"] = mapUnit.Symbol;
+                                    rowBuffer["AreaFillRGB"] = mapUnit.AreaFillRGB;
+                                    rowBuffer["hexcolor"] = mapUnit.hexcolor;
+                                    rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
+                                    rowBuffer["GeoMaterial"] = mapUnit.GeoMaterial;
+                                    rowBuffer["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
 
-						try {
-							result = editOperation.Execute();
-							if (!result) message = editOperation.ErrorMessage;
-						} catch (GeodatabaseException exObj) {
-							message = exObj.Message;
-						}
-					}
-				}
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                        // To Indicate that the attribute table has to be updated.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }, enterpriseTable);
 
-				if (!string.IsNullOrEmpty(message))
-					MessageBox.Show(message);
-				else {
-					UserEnteredMapUnit = null;
-				}
-			});
+                        }
 
-			await DataHelper.populateMapUnits();
+                        try
+                        {
+                            result = editOperation.Execute();
+                            if (!result)
+                            {
+                                message = editOperation.ErrorMessage;
+                            }
+                        }
+                        catch (GeodatabaseException exObj)
+                        {
+                            message = exObj.Message;
+                        }
+                    }
+                }
 
-		}
+                if (!string.IsNullOrEmpty(message))
+                {
+                    MessageBox.Show(message);
+                }
+                else
+                {
+                    UserEnteredMapUnit = null;
+                }
+            });
 
-	}
+            await DataHelper.PopulateMapUnits();
 
-	/*
-	/// <summary>
-	/// Button implementation to show the DockPane.
-	/// </summary>
-	internal class AddEditMapUnitsDockPane_ShowButton : Button {
-		protected override void OnClick() {
-			AddEditMapUnitsDockPaneViewModel.Show();
-		}
-	}
-	*/
+        }
+
+    }
 }

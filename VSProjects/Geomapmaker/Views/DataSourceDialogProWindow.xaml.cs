@@ -143,7 +143,7 @@ namespace Geomapmaker {
 
 			});
 
-			await DataHelper.populateDataSources();
+			await DataHelper.PopulateDataSources();
 			DataHelper.DataSource = DataHelper.DataSources.First(dataSource => dataSource.Source == source.Source);
 			FrameworkApplication.State.Activate("datasource_selected");
 

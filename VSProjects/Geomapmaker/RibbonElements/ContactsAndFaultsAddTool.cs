@@ -78,7 +78,7 @@ namespace Geomapmaker {
 												cf.IdentityConfidence = row["identityconfidence"].ToString();
 												cf.ExistenceConfidence = row["existenceconfidence"].ToString();
 												cf.LocationConfidenceMeters = row["locationconfidencemeters"].ToString();
-												cf.IsConcealed = row["isconcealed"].ToString();
+												cf.IsConcealed = row["isconcealed"].ToString() == "Y";
 												cf.Notes = row["notes"] == null ? "" : row["notes"].ToString();
 												cf.Shape = GeomapmakerModule.ContactsAndFaultsVM.Shape; //in case user had already drawn a line
 												//TODO: Datasource, etc.

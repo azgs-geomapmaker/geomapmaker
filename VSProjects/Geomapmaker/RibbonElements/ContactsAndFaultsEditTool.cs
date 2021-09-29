@@ -81,7 +81,7 @@ namespace Geomapmaker.RibbonElements {
 												cf.IdentityConfidence = Convert.ToString(row["identityconfidence"]);
 												cf.ExistenceConfidence = Convert.ToString(row["existenceconfidence"]);
 												cf.LocationConfidenceMeters = Convert.ToString(row["locationconfidencemeters"]);
-												cf.IsConcealed = Convert.ToString(row["isconcealed"]);
+												cf.IsConcealed = Convert.ToString(row["isconcealed"]) == "Y";
 												cf.DataSource = Convert.ToString(row["datasourceid"]);
 												cf.Shape = (Geometry)row["shape"]; //TODO: no idea
 											}
