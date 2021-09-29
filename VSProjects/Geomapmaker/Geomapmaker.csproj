@@ -188,6 +188,14 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\MapUnitTree.cs" />
+    <Compile Include="ViewModels\HeadingsCreateVM.cs" />
+    <Compile Include="ViewModels\HeadingsDeleteVM.cs" />
+    <Compile Include="ViewModels\HeadingsEditVM.cs" />
+    <Compile Include="Views\Headings.xaml.cs">
+      <DependentUpon>Headings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\HeadingsViewModel.cs" />
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
@@ -234,6 +242,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Headings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddEditContactsAndFaultsDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

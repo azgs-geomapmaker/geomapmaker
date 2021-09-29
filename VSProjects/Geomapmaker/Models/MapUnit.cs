@@ -27,6 +27,11 @@ namespace Geomapmaker.Models
         {
             get
             {
+                if (OlderInterval == null || YoungerInterval == null)
+                {
+                    return null;
+                }
+
                 var older = OlderInterval.name == null ? "" : OlderInterval.name;
                 var younger = YoungerInterval.name == null ? "" : YoungerInterval.name;
                 return older != "" || younger != "" ? older + "-" + younger : null;
@@ -104,8 +109,9 @@ namespace Geomapmaker.Models
 
         public string GeoMaterialConfidence { get; set; }
 
-        public MapUnit()
-        {
-        }
+        public int? ParentId { get; set; }
+
+        // Only used to build out the tree-view. Not saved in db
+        public List<MapUnit> Children { get; set; } = new List<MapUnit>();
     }
 }

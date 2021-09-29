@@ -89,7 +89,7 @@
 		    Text="{Binding UserEnteredMapUnit, UpdateSourceTrigger=LostFocus}"  
 		    ItemsSource="{Binding Path=(ui:DataHelper.MapUnits)}" 
 		    DisplayMemberPath="MU" 
-		    SelectedItem ="{Binding SelectedMapUnit}" 
+		    SelectedItem ="{Binding Model}" 
 		    IsEditable="True"  
          />
 

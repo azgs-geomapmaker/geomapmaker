@@ -246,7 +246,7 @@
                 </StackPanel>
             </Label.ToolTip>
         </Label>
-        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3"  Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250"  />
+        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250"  />
 
         <Button Grid.Row="11" Grid.Column="1" Padding="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
         <Button Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Padding="5" Command="ApplicationCommands.Save" Style="{DynamicResource Esri_Button}">Submit</Button>

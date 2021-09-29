@@ -55,6 +55,14 @@ namespace Geomapmaker {
             if (dockPane != null) {
                 dockPane.IsVisible = false;
             }
+
+            //When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
+            DockPane headingDockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_Headings");
+            if (headingDockPane != null)
+            {
+                headingDockPane.IsVisible = false;
+            }
+
             return true;
         }
 
