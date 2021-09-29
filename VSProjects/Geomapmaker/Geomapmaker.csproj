@@ -188,6 +188,10 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\MapUnits.xaml.cs">
+      <DependentUpon>MapUnits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\MapUnitsViewModel.cs" />
     <Compile Include="Models\MapUnitTree.cs" />
     <Compile Include="ViewModels\HeadingsCreateVM.cs" />
     <Compile Include="ViewModels\HeadingsDeleteVM.cs" />
@@ -242,6 +246,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\MapUnits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Headings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

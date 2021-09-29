@@ -34,6 +34,7 @@
           <button refID="Geomapmaker_DataSourceButton" size="large" />
           <button refID="Geomapmaker_AddMapUnitsButton" />
           <button refID="Geomapmaker_EditMapUnitsButton" />
+          <button refID="Geomapmaker_MapUnits_ShowButton" />
           <button refID="Geomapmaker_Headings_ShowButton" />
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts And Faults" keytip="CF">
@@ -104,6 +105,11 @@
             Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText>
           </tooltip>
         </tool>
+        <button id="Geomapmaker_MapUnits_ShowButton" caption="Map Units" className="MapUnits_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
+          <tooltip heading="Show Dockpane">
+            Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText>
+          </tooltip>
+        </button>
         <button id="Geomapmaker_Headings_ShowButton" caption="Headings" className="Headings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText>
@@ -123,6 +129,9 @@
         </dockPane>
         <dockPane id="Geomapmaker_Headings" caption="Headings" className="HeadingsViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="HeadingsView" />
+        </dockPane>
+        <dockPane id="Geomapmaker_MapUnits" caption="MapUnits" className="MapUnitsViewModel" dock="group" dockWith="esri_core_projectDockPane">
+          <content className="MapUnitsView" />
         </dockPane>
       </dockPanes>
     </insertModule>
