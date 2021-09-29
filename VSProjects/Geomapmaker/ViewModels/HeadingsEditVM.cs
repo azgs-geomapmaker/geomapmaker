@@ -33,7 +33,7 @@ namespace Geomapmaker.ViewModels
         public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name));
 
         /// <summary>
-        /// Edit Model
+        /// Map Unit selected for edit
         /// </summary>
         private MapUnit _selectedHeading;
         public MapUnit SelectedHeading

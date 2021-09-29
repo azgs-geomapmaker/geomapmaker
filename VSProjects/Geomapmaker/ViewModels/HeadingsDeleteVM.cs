@@ -33,7 +33,7 @@ namespace Geomapmaker.ViewModels
         public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name));
 
         /// <summary>
-        /// Edit Model
+        /// Map Unit selected to be deleted
         /// </summary>
         private MapUnit _selectedHeading;
         public MapUnit SelectedHeading
@@ -130,7 +130,7 @@ namespace Geomapmaker.ViewModels
                             {
 
                                 while (rowCursor.MoveNext())
-                                { //TODO: Anything? Should be only one
+                                { 
                                     using (Row row = rowCursor.Current)
                                     {
                                         context.Invalidate(row);

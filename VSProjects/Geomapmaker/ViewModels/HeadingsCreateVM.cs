@@ -25,7 +25,7 @@ namespace Geomapmaker.ViewModels
             CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
             CommandReset = new RelayCommand(() => ResetAsync());
 
-            // Initializing as empty strings to trigger validation
+            // Initialize to trigger validation
             Name = "";
             Description = "";
         }
@@ -63,7 +63,7 @@ namespace Geomapmaker.ViewModels
         }
 
         /// <summary>
-        /// Determines the visibility (enabled state) of the submit button
+        /// Determines the visibility (enabled state) of the button
         /// </summary>
         /// <returns>true if enabled</returns>
         private bool CanSave()
@@ -121,6 +121,7 @@ namespace Geomapmaker.ViewModels
                 }
             });
 
+            // Update mapunits
             await DataHelper.PopulateMapUnits();
 
             // Reset values
@@ -194,11 +195,13 @@ namespace Geomapmaker.ViewModels
         {
             const string propertyKey = "Name";
 
+            // Required field
             if (string.IsNullOrWhiteSpace(name))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
                 RaiseErrorsChanged(propertyKey);
             }
+            // Name must be unique 
             else if (DataHelper.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
@@ -216,6 +219,7 @@ namespace Geomapmaker.ViewModels
         {
             const string propertyKey = "Description";
 
+            // Required field
             if (string.IsNullOrWhiteSpace(definition))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };

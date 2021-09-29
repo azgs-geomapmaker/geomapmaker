@@ -10,6 +10,7 @@ namespace Geomapmaker
 
         private const string _dockPaneID = "Geomapmaker_Headings";
 
+        // View models
         public HeadingsCreateVM Create { get; set; } = new HeadingsCreateVM();
 
         public HeadingsEditVM Edit { get; set; } = new HeadingsEditVM();
