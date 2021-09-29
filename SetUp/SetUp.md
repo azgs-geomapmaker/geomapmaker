@@ -98,6 +98,8 @@
 	values (<the id from users>, <the id from projects>);
 	```
 
+6. Create a new int column in sde.descriptionofmapunits named parentid with a fkey contraint. (I will revisit/clean-up this process later)
+
 # <a id="create-template"></a> To create Gems template in xml (only necessary if you need to create the template)
 1. Install USGS Gems tools in ArcGIS Pro per [https://github.com/usgs/gems-tools-pro
 ](https://github.com/usgs/gems-tools-pro)
