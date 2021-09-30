@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace Geomapmaker
 {
     /// <summary>
-    /// Interaction logic for MapUnitsView.xaml
+    /// Interaction logic for DescriptionOfMapUnitsView.xaml
     /// </summary>
-    public partial class MapUnitsView : UserControl
+    public partial class DescriptionOfMapUnitsView : UserControl
     {
-        public MapUnitsView()
+        public DescriptionOfMapUnitsView()
         {
             InitializeComponent();
         }

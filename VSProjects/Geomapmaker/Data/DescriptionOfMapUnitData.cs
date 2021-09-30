@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public static class MapUnitsData
+    public static class DescriptionOfMapUnitData
     {
-        public static List<MapUnit> AllMapUnits { get; set; } = new List<MapUnit>();
+        public static List<MapUnit> AllDescriptionOfMapUnits { get; set; } = new List<MapUnit>();
 
         // Returns headings from all map units
-        public static List<MapUnit> Headings => AllMapUnits.Where(a => a.ParagraphStyle == "Heading").ToList();
+        public static List<MapUnit> Headings => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Heading").ToList();
 
         // Returns map units from all map units
-        public static List<MapUnit> MapUnits => AllMapUnits.Where(a => a.ParagraphStyle == "Standard").ToList();
+        public static List<MapUnit> MapUnits => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Standard").ToList();
 
         public static async Task RefreshMapUnitsAsync()
         {
@@ -65,14 +65,14 @@ namespace Geomapmaker.Data
                                     ParentId = (int?)row["ParentId"]
                                 };
 
-                                // Add it to our list
+                                // Add it to temp list
                                 tempMapUnits.Add(mapUnit);
                             }
                         }
                     }
                 }
 
-                AllMapUnits = tempMapUnits;
+                AllDescriptionOfMapUnits = tempMapUnits;
             });
         }
     }

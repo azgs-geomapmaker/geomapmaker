@@ -189,11 +189,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DbConnectionProperties.cs" />
-    <Compile Include="Data\MapUnitsData.cs" />
-    <Compile Include="Views\MapUnits.xaml.cs">
-      <DependentUpon>MapUnits.xaml</DependentUpon>
+    <Compile Include="Data\DescriptionOfMapUnitData.cs" />
+    <Compile Include="Views\DescriptionOfMapUnits.xaml.cs">
+      <DependentUpon>DescriptionOfMapUnits.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\MapUnitsViewModel.cs" />
+    <Compile Include="ViewModels\DescriptionOfMapUnitsViewModel.cs" />
     <Compile Include="Models\MapUnitTree.cs" />
     <Compile Include="ViewModels\HeadingsCreateVM.cs" />
     <Compile Include="ViewModels\HeadingsDeleteVM.cs" />
@@ -248,7 +248,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\MapUnits.xaml">
+    <Page Include="Views\DescriptionOfMapUnits.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

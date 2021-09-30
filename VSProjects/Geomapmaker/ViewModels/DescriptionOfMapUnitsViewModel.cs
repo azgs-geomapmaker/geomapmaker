@@ -3,14 +3,11 @@ using ArcGIS.Desktop.Framework.Contracts;
 
 namespace Geomapmaker
 {
-    internal class MapUnitsViewModel : DockPane
+    internal class DescriptionOfMapUnitsViewModel : DockPane
     {
-        private const string _dockPaneID = "Geomapmaker_MapUnits";
+        private const string _dockPaneID = "Geomapmaker_DescriptionOfMapUnits";
 
-        protected MapUnitsViewModel() 
-        {
-
-        }
+        protected DescriptionOfMapUnitsViewModel() { }
 
         /// <summary>
         /// Show the DockPane.
@@ -25,11 +22,11 @@ namespace Geomapmaker
     /// <summary>
     /// Button implementation to show the DockPane.
     /// </summary>
-    internal class MapUnits_ShowButton : Button
+    internal class DescriptionOfMapUnits_ShowButton : Button
     {
         protected override void OnClick()
         {
-            MapUnitsViewModel.Show();
+            DescriptionOfMapUnitsViewModel.Show();
         }
     }
 }

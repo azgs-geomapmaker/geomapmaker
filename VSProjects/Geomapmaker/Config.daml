@@ -34,8 +34,8 @@
           <button refID="Geomapmaker_DataSourceButton" size="large" />
           <button refID="Geomapmaker_AddMapUnitsButton" />
           <button refID="Geomapmaker_EditMapUnitsButton" />
-          <button refID="Geomapmaker_MapUnits_ShowButton" />
           <button refID="Geomapmaker_Headings_ShowButton" />
+          <button refID="Geomapmaker_DescriptionOfMapUnits_ShowButton" />
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts And Faults" keytip="CF">
           <tool refID="Geomapmaker_ContactsAndFaultsAddTool" />
@@ -50,64 +50,53 @@
       <controls>
         <button id="Geomapmaker_LoginButton" caption="Login" className="LoginButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="esri_mapping_mapPane" keytip="l">
           <tooltip heading="Login">
-            Choose a user to operate as<disabledText />
-          </tooltip>
+            Choose a user to operate as<disabledText /></tooltip>
         </button>
         <button id="Geomapmaker_DataSourceButton" caption="Data Source" className="DataSourceButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="projectSelectedCondition" keytip="ds">
           <tooltip heading="Datasource">
-            This is a stub: do not use yet<disabledText />
-          </tooltip>
+            This is a stub: do not use yet<disabledText /></tooltip>
         </button>
         <comboBox id="Geomapmaker_ProjectsComboBox" caption="Projects" className="ProjectsComboBox" itemWidth="140" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" condition="userLoginCondition" keytip="prj">
           <tooltip heading="Projects">
-            Select a project to work on<disabledText />
-          </tooltip>
+            Select a project to work on<disabledText /></tooltip>
         </comboBox>
         <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
           <tooltip heading="Map Unit Polys">
-            Add a new map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Add a new map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
           <content guid="17a27ef5-1084-4d46-abc8-11641bc5b871" />
         </tool>
         <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Unit Polys">
-            Edit an existing map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Edit an existing map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
         <button id="Geomapmaker_AddMapUnitsButton" caption="Add Map Units" className="AddMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Units">
-            Add a new map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Add a new map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </button>
         <button id="Geomapmaker_EditMapUnitsButton" caption="Edit Map Units" className="EditMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Units">
-            Edit an existing map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Edit an existing map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </button>
         <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
           <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText />
-          </tooltip>
+            Show Dockpane<disabledText /></tooltip>
         </button>
         <tool id="Geomapmaker_ContactsAndFaultsAddTool" caption="Add Contacts and Faults" className="ContactsAndFaultsAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Contacts and Faults">
-            Add a new contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Add a new contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
         <button id="Geomapmaker_AddEditContactsAndFaults_ShowButton" caption="Show AddEditContactsAndFaults" className="AddEditContactsAndFaults_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
           <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText />
-          </tooltip>
+            Show Dockpane<disabledText /></tooltip>
         </button>
         <tool id="Geomapmaker_ContactsAndFaultsEditTool" caption="Edit Contacts and Faults" className="Geomapmaker.RibbonElements.ContactsAndFaultsEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Contacts and Faults">
-            Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
-        <button id="Geomapmaker_MapUnits_ShowButton" caption="Map Units" className="MapUnits_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
+        <button id="Geomapmaker_DescriptionOfMapUnits_ShowButton" caption="Description Of Map Units" className="DescriptionOfMapUnits_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText>
+            Show Dockpane<disabledText />
           </tooltip>
         </button>
         <button id="Geomapmaker_Headings_ShowButton" caption="Headings" className="Headings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
@@ -132,6 +121,9 @@
         </dockPane>
         <dockPane id="Geomapmaker_MapUnits" caption="MapUnits" className="MapUnitsViewModel" dock="group" dockWith="esri_core_projectDockPane">
           <content className="MapUnitsView" />
+        </dockPane>
+        <dockPane id="Geomapmaker_DescriptionOfMapUnits" caption="Description Of Map Units" className="DescriptionOfMapUnitsViewModel" dock="group" dockWith="esri_core_projectDockPane">
+          <content className="DescriptionOfMapUnitsView" />
         </dockPane>
       </dockPanes>
     </insertModule>
