@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using Newtonsoft.Json.Linq;
 using System;
@@ -30,6 +31,10 @@ namespace Geomapmaker
                 User = props["user"].ToString(),
                 Password = props["password"].ToString(),
             };
+
+            // My plan is to slowly break this class up into smaller classes in the Data folder. 
+            // I'm setting the connection properties twice while I migrate things -camp
+            Data.DbConnectionProperties.SetProperties(props);
         }
 
         public static List<FeatureLayer> currentLayers = new List<FeatureLayer>();
@@ -252,6 +257,9 @@ namespace Geomapmaker
             });
 
             MapUnits = mapUnits;
+
+            // Temp fix while migrating to new class
+            await MapUnitsData.RefreshMapUnitsAsync();
         }
 
         public static async Task PopulateContactsAndFaults()

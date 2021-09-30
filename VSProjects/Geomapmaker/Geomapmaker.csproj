@@ -188,6 +188,8 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DbConnectionProperties.cs" />
+    <Compile Include="Data\MapUnitsData.cs" />
     <Compile Include="Views\MapUnits.xaml.cs">
       <DependentUpon>MapUnits.xaml</DependentUpon>
     </Compile>
@@ -279,6 +281,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   PackageAction can be:
