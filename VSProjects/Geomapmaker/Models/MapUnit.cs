@@ -32,8 +32,8 @@ namespace Geomapmaker.Models
                     return null;
                 }
 
-                var older = OlderInterval.name == null ? "" : OlderInterval.name;
-                var younger = YoungerInterval.name == null ? "" : YoungerInterval.name;
+                var older = OlderInterval.Name == null ? "" : OlderInterval.Name;
+                var younger = YoungerInterval.Name == null ? "" : YoungerInterval.Name;
                 return older != "" || younger != "" ? older + "-" + younger : null;
             }
             set
@@ -43,8 +43,9 @@ namespace Geomapmaker.Models
                     var intervals = value.Split('-');
                     //OlderInterval.name = intervals.Length > 0 ? intervals[0] : null;
                     //YoungerInterval.name = intervals.Length > 1 ? intervals[1] : null;
-                    OlderInterval = intervals.Length > 0 ? DataHelper.Intervals.Single(i => i.name == intervals[0]) : null;
-                    YoungerInterval = intervals.Length > 1 ? DataHelper.Intervals.Single(i => i.name == intervals[1]) : null;
+
+                    //OlderInterval = intervals.Length > 0 ? DataHelper.Intervals.Single(i => i.Name == intervals[0]) : null;
+                    //YoungerInterval = intervals.Length > 1 ? DataHelper.Intervals.Single(i => i.Name == intervals[1]) : null;
                 }
             }
         }

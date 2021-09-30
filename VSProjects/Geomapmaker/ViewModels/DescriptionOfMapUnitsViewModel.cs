@@ -20,6 +20,19 @@ namespace Geomapmaker
             {"NameDescription", "TODO" },
             {"NameNotes", "TODO" },
 
+            {"FullNameDescription", "TODO" },
+            {"FullNameNotes", "TODO" },
+
+            {"AgeDescription", "TODO" },
+            {"AgeNotes", "TODO" },
+
+
+
+
+
+
+
+
             {"DescriptionDescription", "TODO" },
             {"DescriptionNotes", "TODO" },
         };
