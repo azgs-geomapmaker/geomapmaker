@@ -190,6 +190,7 @@
   <ItemGroup>
     <Compile Include="Data\DbConnectionProperties.cs" />
     <Compile Include="Data\DescriptionOfMapUnitData.cs" />
+    <Compile Include="ViewModels\DMUCreateVM.cs" />
     <Compile Include="Views\DescriptionOfMapUnits.xaml.cs">
       <DependentUpon>DescriptionOfMapUnits.xaml</DependentUpon>
     </Compile>

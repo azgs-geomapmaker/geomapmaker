@@ -1,5 +1,7 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.ViewModels;
+using System.Collections.Generic;
 
 namespace Geomapmaker
 {
@@ -7,7 +9,20 @@ namespace Geomapmaker
     {
         private const string _dockPaneID = "Geomapmaker_DescriptionOfMapUnits";
 
+        // View models
+        public DMUCreateVM Create { get; set; } = new DMUCreateVM();
+
         protected DescriptionOfMapUnitsViewModel() { }
+
+        // Tooltips dictionary
+        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
+        {
+            {"NameDescription", "TODO" },
+            {"NameNotes", "TODO" },
+
+            {"DescriptionDescription", "TODO" },
+            {"DescriptionNotes", "TODO" },
+        };
 
         /// <summary>
         /// Show the DockPane.
