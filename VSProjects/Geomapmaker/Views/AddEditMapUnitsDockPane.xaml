@@ -138,7 +138,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" Content="Older Interval:" />
-            <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=(ui:DataHelper.Intervals)}" SelectedItem ="{Binding SelectedMapUnit.OlderInterval}" >
+            <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="" SelectedItem ="{Binding SelectedMapUnit.OlderInterval}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" ToolTip="{Binding range}">
@@ -149,7 +149,7 @@
             </ComboBox>
 
             <Label Grid.Row="0" Grid.Column="1" Content="Younger Interval" />
-            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=(ui:DataHelper.Intervals)}" SelectedItem ="{Binding SelectedMapUnit.YoungerInterval}" >
+            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="" SelectedItem ="{Binding SelectedMapUnit.YoungerInterval}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" ToolTip="{Binding range}">

@@ -1,7 +1,9 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Models;
 using Geomapmaker.ViewModels;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Geomapmaker
 {
@@ -11,6 +13,8 @@ namespace Geomapmaker
 
         // View models
         public DMUCreateVM Create { get; set; } = new DMUCreateVM();
+
+        public ObservableCollection<Interval> Intervals => Data.Intervals.IntervalCollection;
 
         protected DescriptionOfMapUnitsViewModel() { }
 
@@ -25,13 +29,6 @@ namespace Geomapmaker
 
             {"AgeDescription", "TODO" },
             {"AgeNotes", "TODO" },
-
-
-
-
-
-
-
 
             {"DescriptionDescription", "TODO" },
             {"DescriptionNotes", "TODO" },

@@ -128,32 +128,23 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Content="Older Interval:" />
-                        <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=(ui:DataHelper.Intervals)}" SelectedItem ="{Binding Create.OlderInterval}" >
+                        <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Intervals}" SelectedItem ="{Binding Create.OlderInterval}" >
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" ToolTip="{Binding range}">
-                                        <TextBlock Text="{Binding name}" />
-                                    </StackPanel>
+                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
                         <Label Grid.Row="0" Grid.Column="1" Content="Younger Interval" />
-                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=(ui:DataHelper.Intervals)}" SelectedItem ="{Binding Create.YoungerInterval}" >
+                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Intervals}" SelectedItem ="{Binding Create.YoungerInterval}" >
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" ToolTip="{Binding range}">
-                                        <TextBlock Text="{Binding name}" />
-                                    </StackPanel>
+                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </Grid>
-
-
-
-
-
 
                     <Button Grid.Row="5" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandReset}" >Clear</Button>
                     <Button Grid.Row="5" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSave}" >Save</Button>
