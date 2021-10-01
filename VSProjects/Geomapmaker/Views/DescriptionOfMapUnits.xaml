@@ -195,16 +195,37 @@
                         <Label.ToolTip>
                             <StackPanel>
                                 <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[NameDescription]}" />
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[RelativeAgeDescription]}" />
                                 <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[NameNotes]}" />
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[RelativeAgeNotes]}" />
                             </StackPanel>
                         </Label.ToolTip>
                     </Label>
-                    <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged }" />
+                    <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Create.RelativeAge, UpdateSourceTrigger=PropertyChanged }" />
 
+                    <Label Grid.Row="6" Grid.Column="1" Content="Description:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionDescription]}" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionNotes]}" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <TextBox Grid.Row="6" Grid.Column="2"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged }" />
 
-
+                    <Label Grid.Row="7" Grid.Column="1" Content="Parent:" >
+                        <Label.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[ParentDescription]}" />
+                                <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
+                                <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[ParentNotes]}" />
+                            </StackPanel>
+                        </Label.ToolTip>
+                    </Label>
+                    <ComboBox Grid.Row="7" Grid.Column="2" ItemsSource="{Binding Create.ParentOptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Edit.Parent}" />
 
 
 

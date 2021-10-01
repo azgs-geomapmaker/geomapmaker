@@ -3,9 +3,9 @@ using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels
@@ -95,6 +95,39 @@ namespace Geomapmaker.ViewModels
             }
         }
 
+        // Heading parent Id
+        private int? _parent;
+        public int? Parent
+        {
+            get => _parent;
+            set
+            {
+                SetProperty(ref _parent, value, () => Parent);
+                ValidateParent(Parent);
+            }
+        }
+
+        /// <summary>
+        /// List of parent-options available during create
+        /// </summary>
+        public ObservableCollection<KeyValuePair<int?, string>> ParentOptions
+        {
+            get
+            {
+                // Get Headings/Subheadings from map units.
+                // Sort by name
+                // Create a int/string kvp for the combobox
+                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
+                    .OrderBy(a => a.Name)
+                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
+                    .ToList();
+
+                // Initialize a ObservableCollection with the list
+                // Note: Casting a list as an OC does not working.
+                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
+            }
+        }
+
         // Label
         private string _label;
         public string Label
@@ -161,6 +194,7 @@ namespace Geomapmaker.ViewModels
             FullName = null;
             YoungerInterval = null;
             OlderInterval = null;
+            Parent = null;
             //Description = null;
             //Parent = null;
         }
@@ -242,11 +276,12 @@ namespace Geomapmaker.ViewModels
             {
                 _validationErrors["YoungerInterval"] = new List<string>() { "" };
             }
-            else if (older == null)
+            if (older == null)
             {
                 _validationErrors["OlderInterval"] = new List<string>() { "" };
             }
-            else
+
+            if (younger != null && older != null)
             {
                 _validationErrors.Remove("YoungerInterval");
 
@@ -263,6 +298,23 @@ namespace Geomapmaker.ViewModels
 
             RaiseErrorsChanged("YoungerInterval");
             RaiseErrorsChanged("OlderInterval");
+        }
+
+        private void ValidateParent(int? parentid)
+        {
+            const string propertyKey = "Parent";
+
+            // Required field
+            if (parentid == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         #endregion

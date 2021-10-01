@@ -39,12 +39,22 @@ namespace Geomapmaker
             {"RelativeAgeDescription", "TODO" },
             {"RelativeAgeNotes", "TODO" },
 
-
-
-
-
             {"DescriptionDescription", "TODO" },
             {"DescriptionNotes", "TODO" },
+
+            {"ParentDescription", "TODO" },
+            {"ParentNotes", "TODO" },
+
+
+
+
+
+
+
+
+
+
+
 
             {"Description", "TODO" },
             {"Notes", "TODO" },
