@@ -14,7 +14,7 @@ namespace Geomapmaker
         // View models
         public DMUCreateVM Create { get; set; } = new DMUCreateVM();
 
-        public ObservableCollection<Interval> Intervals => Data.Intervals.IntervalCollection;
+        public List<Interval> Intervals => Data.Intervals.IntervalCollection;
 
         protected DescriptionOfMapUnitsViewModel() { }
 
@@ -30,8 +30,26 @@ namespace Geomapmaker
             {"AgeDescription", "TODO" },
             {"AgeNotes", "TODO" },
 
+            {"OlderIntervalDescription", "TODO" },
+            {"OlderIntervalNotes", "TODO" },
+
+            {"YoungerIntervalDescription", "TODO" },
+            {"YoungerIntervalNotes", "TODO" },
+
+            {"RelativeAgeDescription", "TODO" },
+            {"RelativeAgeNotes", "TODO" },
+
+
+
+
+
             {"DescriptionDescription", "TODO" },
             {"DescriptionNotes", "TODO" },
+
+            {"Description", "TODO" },
+            {"Notes", "TODO" },
+
+
         };
 
         /// <summary>

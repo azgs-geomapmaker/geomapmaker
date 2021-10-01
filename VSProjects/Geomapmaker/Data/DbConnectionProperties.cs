@@ -23,6 +23,5 @@ namespace Geomapmaker.Data
         {
             return connectionProperties;
         }
-
     }
 }

@@ -228,7 +228,9 @@
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
-                                    <AdornedElementPlaceholder/>
+                                    <AdornedElementPlaceholder >
+                                        <Border BorderBrush="Red" BorderThickness="1" />
+                                    </AdornedElementPlaceholder>
                                     <ItemsControl ItemsSource="{Binding}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
@@ -255,7 +257,9 @@
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
-                                    <AdornedElementPlaceholder/>
+                                    <AdornedElementPlaceholder >
+                                        <Border BorderBrush="Red" BorderThickness="1" />
+                                    </AdornedElementPlaceholder>
                                     <ItemsControl ItemsSource="{Binding}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>

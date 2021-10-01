@@ -2,6 +2,8 @@
 
 $response = Invoke-RestMethod https://macrostrat.org/api/v1/defs/intervals?timescale=international%20intervals
 
+$textInfo = (Get-Culture).TextInfo
+
 $response.success.data | ForEach-Object {
 
     $line = [System.Collections.ArrayList]@(
@@ -9,7 +11,8 @@ $response.success.data | ForEach-Object {
         "Name=`"$($_.name)`",",
         "Early_Age=$($_.early_age),",
         "Late_Age=$($_.late_age),",
-        "Type=`"$($_.type)`"",
+        # Title-case the type string
+        "Type=`"$($textInfo.ToTitleCase($_.type))`"",
         "},"
     ) 
 

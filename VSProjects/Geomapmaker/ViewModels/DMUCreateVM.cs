@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,30 +47,36 @@ namespace Geomapmaker.ViewModels
         }
 
         // Younger Interval
-        private string _youngerInterval;
-        public string YoungerInterval
+        private Interval _youngerInterval;
+        public Interval YoungerInterval
         {
             get => _youngerInterval;
             set
             {
                 SetProperty(ref _youngerInterval, value, () => YoungerInterval);
+                ValidateIntervals(YoungerInterval, OlderInterval);
             }
         }
 
         // Older Interval
-        private string _olderInterval;
-        public string OlderInterval
+        private Interval _olderInterval;
+        public Interval OlderInterval
         {
             get => _olderInterval;
             set
             {
                 SetProperty(ref _olderInterval, value, () => OlderInterval);
+                ValidateIntervals(YoungerInterval, OlderInterval);
             }
         }
 
+        // Convert the two interval names into a string
+        public string Age => $"{OlderInterval?.Name} - {YoungerInterval?.Name}";
+
         // Relative Age
         private string _relativeAge;
-        public string RelativeAge {
+        public string RelativeAge
+        {
             get => _relativeAge;
             set
             {
@@ -151,6 +158,9 @@ namespace Geomapmaker.ViewModels
 
             // Reset values
             Name = null;
+            FullName = null;
+            YoungerInterval = null;
+            OlderInterval = null;
             //Description = null;
             //Parent = null;
         }
@@ -170,24 +180,15 @@ namespace Geomapmaker.ViewModels
         /// </summary>
         private void Submit()
         {
-            if (DataHelper.connectionProperties == null)
+            if (Data.DbConnectionProperties.GetProperties() == null)
             {
                 return;
             }
 
+
+
             return;
         }
-
-
-
-
-
-
-
-
-
-
-
 
         // Validation
         #region INotifyDataErrorInfo members
@@ -221,19 +222,47 @@ namespace Geomapmaker.ViewModels
             if (string.IsNullOrWhiteSpace(name))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-                RaiseErrorsChanged(propertyKey);
             }
             // Name must be unique 
             else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateIntervals(Interval younger, Interval older)
+        {
+            if (younger == null)
+            {
+                _validationErrors["YoungerInterval"] = new List<string>() { "" };
+            }
+            else if (older == null)
+            {
+                _validationErrors["OlderInterval"] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove("YoungerInterval");
+
+                if (younger.Early_Age < older.Early_Age)
+                {
+                    _validationErrors["OlderInterval"] = new List<string>() { "Swap those comboboxes!" };
+                }
+                else
+                {
+                    _validationErrors.Remove("OlderInterval");
+                }
+
+            }
+
+            RaiseErrorsChanged("YoungerInterval");
+            RaiseErrorsChanged("OlderInterval");
         }
 
         #endregion

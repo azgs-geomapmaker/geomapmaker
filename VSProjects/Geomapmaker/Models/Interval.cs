@@ -16,6 +16,6 @@ namespace Geomapmaker.Models
 
         public string Type { get; set; }
 
-        public string Tooltip => $"Range: {Early_Age} - {Late_Age}ma" + Environment.NewLine +  $"Type: {Type}";
+        public string Tooltip => $"Range: {Early_Age} - {Late_Age}ma" + Environment.NewLine + $"Type: {Type}";
     }
 }

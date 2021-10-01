@@ -199,7 +199,7 @@ namespace Geomapmaker.ViewModels
             if (root.Children != null && root.Children.Count != 0)
             {
                 // Raise the error
-                _validationErrors[propertyKey] = new List<string>() { "Can't delete headings with a child nodes" };
+                _validationErrors[propertyKey] = new List<string>() { "Can't delete headings with a child node." };
                 RaiseErrorsChanged(propertyKey);
             }
             else
