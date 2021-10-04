@@ -14,8 +14,6 @@ namespace Geomapmaker
         // View models
         public DMUCreateVM Create { get; set; } = new DMUCreateVM();
 
-        public List<Interval> Intervals => Data.Intervals.IntervalCollection;
-
         protected DescriptionOfMapUnitsViewModel() { }
 
         // Tooltips dictionary
@@ -45,17 +43,6 @@ namespace Geomapmaker
             {"ParentDescription", "TODO" },
             {"ParentNotes", "TODO" },
 
-
-
-
-
-
-
-
-
-
-
-
             {"Description", "TODO" },
             {"Notes", "TODO" },
 
@@ -75,7 +62,7 @@ namespace Geomapmaker
     /// <summary>
     /// Button implementation to show the DockPane.
     /// </summary>
-    internal class DescriptionOfMapUnits_ShowButton : Button
+    internal class DescriptionOfMapUnits_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
     {
         protected override void OnClick()
         {

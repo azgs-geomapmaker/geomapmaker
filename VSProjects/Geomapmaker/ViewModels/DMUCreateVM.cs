@@ -5,7 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels
@@ -43,20 +46,11 @@ namespace Geomapmaker.ViewModels
             set
             {
                 SetProperty(ref _fullName, value, () => FullName);
+                ValidateFullName(FullName);
             }
         }
 
-        // Younger Interval
-        private Interval _youngerInterval;
-        public Interval YoungerInterval
-        {
-            get => _youngerInterval;
-            set
-            {
-                SetProperty(ref _youngerInterval, value, () => YoungerInterval);
-                ValidateIntervals(YoungerInterval, OlderInterval);
-            }
-        }
+        public ObservableCollection<Interval> OlderIntervalOptions { get; set; } = Data.Intervals.IntervalCollection;
 
         // Older Interval
         private Interval _olderInterval;
@@ -66,6 +60,25 @@ namespace Geomapmaker.ViewModels
             set
             {
                 SetProperty(ref _olderInterval, value, () => OlderInterval);
+                ValidateIntervals(YoungerInterval, OlderInterval);
+
+                if (YoungerInterval == null)
+                {
+                    YoungerInterval = YoungerIntervalOptions.FirstOrDefault(a => a.Name == OlderInterval.Name);
+                }
+            }
+        }
+
+        public ObservableCollection<Interval> YoungerIntervalOptions { get; set; } = Data.Intervals.IntervalCollection;
+
+        // Younger Interval
+        private Interval _youngerInterval;
+        public Interval YoungerInterval
+        {
+            get => _youngerInterval;
+            set
+            {
+                SetProperty(ref _youngerInterval, value, () => YoungerInterval);
                 ValidateIntervals(YoungerInterval, OlderInterval);
             }
         }
@@ -104,6 +117,7 @@ namespace Geomapmaker.ViewModels
             {
                 SetProperty(ref _parent, value, () => Parent);
                 ValidateParent(Parent);
+                NotifyPropertyChanged("RankingOptions");
             }
         }
 
@@ -121,6 +135,43 @@ namespace Geomapmaker.ViewModels
                     .OrderBy(a => a.Name)
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
                     .ToList();
+
+                // Initialize a ObservableCollection with the list
+                // Note: Casting a list as an OC does not working.
+                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
+            }
+        }
+
+        public ObservableCollection<KeyValuePair<int?, string>> RankingOptions
+        {
+            get
+            {
+                if (Parent == null)
+                {
+                    return null;
+                }
+
+                // Get Headings/Subheadings from map units.
+                // Sort by name
+                // Create a int/string kvp for the combobox
+                //List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
+                //    .Where(a => a.ParentId == Parent)
+                //    .OrderBy(a => a.Name)
+                //    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
+                //    .ToList();
+
+
+                // SEEDING MOCK DATA
+                Random rnd = new Random();
+                List<KeyValuePair<int?, string>> headingList = new List<KeyValuePair<int?, string>>
+                {
+                    new KeyValuePair<int?, string>( 1, "Map Unit " + rnd.Next(1, 2) ),
+                    new KeyValuePair<int?, string>( 2, "Map Unit " + rnd.Next(3, 4) ),
+                    new KeyValuePair<int?, string>( 3, "Map Unit " + rnd.Next(5, 8) ),
+                    new KeyValuePair<int?, string>( 4, "Map Unit " + rnd.Next(8, 10) ),
+                };
+
+                headingList.Add(new KeyValuePair<int?, string>(5, "(This Map Unit)"));
 
                 // Initialize a ObservableCollection with the list
                 // Note: Casting a list as an OC does not working.
@@ -192,11 +243,10 @@ namespace Geomapmaker.ViewModels
             // Reset values
             Name = null;
             FullName = null;
-            YoungerInterval = null;
             OlderInterval = null;
+            YoungerInterval = null;
+
             Parent = null;
-            //Description = null;
-            //Parent = null;
         }
 
         /// <summary>
@@ -205,7 +255,6 @@ namespace Geomapmaker.ViewModels
         /// <returns>true if enabled</returns>
         private bool CanSave()
         {
-            // Can't submit if are any errors
             return !HasErrors;
         }
 
@@ -218,8 +267,6 @@ namespace Geomapmaker.ViewModels
             {
                 return;
             }
-
-
 
             return;
         }
@@ -261,6 +308,24 @@ namespace Geomapmaker.ViewModels
             else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        // Validate the Heading's Full Name
+        private void ValidateFullName(string fullName)
+        {
+            const string propertyKey = "FullName";
+
+            // Required field
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
             }
             else
             {

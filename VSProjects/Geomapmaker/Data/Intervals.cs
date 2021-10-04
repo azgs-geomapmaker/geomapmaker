@@ -10,7 +10,11 @@ namespace Geomapmaker.Data
         // Sourced from https://macrostrat.org/api/v1/defs/intervals?timescale=international%20intervals on 9/30/2021
         // I wrote a script to convert from JSON to this initialized list in the Scripts folder
 
-        public static List<Interval> IntervalCollection => new List<Interval>() {
+        // Convert the list to an ObservableCollection
+        public static ObservableCollection<Interval> IntervalCollection => new ObservableCollection<Interval>(IntervalList);
+
+        // ObservableCollection doesn't support sorting so we initialize then sort this list.
+        private static List<Interval> IntervalList => new List<Interval>() {
            new Interval { Name="Cenozoic", Early_Age=66, Late_Age=0, Type="Era" },
            new Interval { Name="Holocene", Early_Age=0.0117, Late_Age=0, Type="Epoch" },
            new Interval { Name="Quaternary", Early_Age=2.588, Late_Age=0, Type="Period" },

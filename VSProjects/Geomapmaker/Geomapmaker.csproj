@@ -195,7 +195,7 @@
     <Compile Include="Views\DescriptionOfMapUnits.xaml.cs">
       <DependentUpon>DescriptionOfMapUnits.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DescriptionOfMapUnitsViewModel.cs" />
+    <Compile Include="ViewModels\DMUViewModel.cs" />
     <Compile Include="Models\MapUnitTree.cs" />
     <Compile Include="ViewModels\HeadingsCreateVM.cs" />
     <Compile Include="ViewModels\HeadingsDeleteVM.cs" />
