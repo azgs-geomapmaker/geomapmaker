@@ -1,11 +1,8 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using Geomapmaker.Models;
-using Geomapmaker.ViewModels;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
-namespace Geomapmaker
+namespace Geomapmaker.ViewModels.DMU
 {
     internal class DescriptionOfMapUnitsViewModel : DockPane
     {

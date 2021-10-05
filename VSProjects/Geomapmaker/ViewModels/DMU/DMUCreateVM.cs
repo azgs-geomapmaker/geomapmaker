@@ -5,13 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels
+namespace Geomapmaker.ViewModels.DMU
 {
     public class DMUCreateVM : DockPane, INotifyDataErrorInfo
     {
@@ -64,7 +61,7 @@ namespace Geomapmaker.ViewModels
 
                 if (YoungerInterval == null)
                 {
-                    YoungerInterval = YoungerIntervalOptions.FirstOrDefault(a => a.Name == OlderInterval.Name);
+                    YoungerInterval = YoungerIntervalOptions.FirstOrDefault(a => a.Name == OlderInterval?.Name);
                 }
             }
         }

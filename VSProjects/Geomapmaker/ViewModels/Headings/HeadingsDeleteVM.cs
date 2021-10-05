@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels
+namespace Geomapmaker.ViewModels.Headings
 {
     internal class HeadingsDeleteVM : DockPane, INotifyDataErrorInfo
     {

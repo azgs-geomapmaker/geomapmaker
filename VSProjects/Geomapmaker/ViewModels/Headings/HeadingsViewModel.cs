@@ -1,9 +1,8 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using Geomapmaker.ViewModels;
 using System.Collections.Generic;
 
-namespace Geomapmaker
+namespace Geomapmaker.ViewModels.Headings
 {
     internal class HeadingsViewModel : DockPane
     {

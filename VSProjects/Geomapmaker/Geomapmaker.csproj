@@ -191,19 +191,19 @@
     <Compile Include="Data\DbConnectionProperties.cs" />
     <Compile Include="Data\DescriptionOfMapUnitData.cs" />
     <Compile Include="Data\Intervals.cs" />
-    <Compile Include="ViewModels\DMUCreateVM.cs" />
+    <Compile Include="ViewModels\DMU\DMUCreateVM.cs" />
     <Compile Include="Views\DescriptionOfMapUnits.xaml.cs">
       <DependentUpon>DescriptionOfMapUnits.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DMUViewModel.cs" />
+    <Compile Include="ViewModels\DMU\DMUViewModel.cs" />
     <Compile Include="Models\MapUnitTree.cs" />
-    <Compile Include="ViewModels\HeadingsCreateVM.cs" />
-    <Compile Include="ViewModels\HeadingsDeleteVM.cs" />
-    <Compile Include="ViewModels\HeadingsEditVM.cs" />
+    <Compile Include="ViewModels\Headings\HeadingsCreateVM.cs" />
+    <Compile Include="ViewModels\Headings\HeadingsDeleteVM.cs" />
+    <Compile Include="ViewModels\Headings\HeadingsEditVM.cs" />
     <Compile Include="Views\Headings.xaml.cs">
       <DependentUpon>Headings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\HeadingsViewModel.cs" />
+    <Compile Include="ViewModels\Headings\HeadingsViewModel.cs" />
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
