@@ -188,8 +188,10 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Confidence.cs" />
     <Compile Include="Data\DbConnectionProperties.cs" />
     <Compile Include="Data\DescriptionOfMapUnitData.cs" />
+    <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="ViewModels\DMU\DMUCreateVM.cs" />
     <Compile Include="Views\DescriptionOfMapUnits.xaml.cs">

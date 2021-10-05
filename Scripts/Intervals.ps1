@@ -4,7 +4,7 @@ $response = Invoke-RestMethod https://macrostrat.org/api/v1/defs/intervals?times
 
 $textInfo = (Get-Culture).TextInfo
 
-$response.success.data | ForEach-Object {
+$response.success.data | Sort-Object -Property early_age | ForEach-Object {
 
     $line = [System.Collections.ArrayList]@(
         "new Interval {",

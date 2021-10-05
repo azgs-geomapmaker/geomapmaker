@@ -1,21 +1,25 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace Geomapmaker.ViewModels.DMU
 {
-    internal class DescriptionOfMapUnitsViewModel : DockPane
+    internal class DMUViewModel : DockPane
     {
         private const string _dockPaneID = "Geomapmaker_DescriptionOfMapUnits";
 
         // View models
         public DMUCreateVM Create { get; set; } = new DMUCreateVM();
 
-        protected DescriptionOfMapUnitsViewModel() { }
+        protected DMUViewModel() { }
 
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
+            {"MapUnitDescription", "TODO" },
+            {"MapUnitNotes", "TODO" },
+
             {"NameDescription", "TODO" },
             {"NameNotes", "TODO" },
 
@@ -40,9 +44,22 @@ namespace Geomapmaker.ViewModels.DMU
             {"ParentDescription", "TODO" },
             {"ParentNotes", "TODO" },
 
+            {"LabelDescription", "TODO" },
+            {"LabelNotes", "TODO" },
+
+            {"ColorDescription", "TODO" },
+            {"ColorNotes", "TODO" },
+
+            {"GeoMaterialDescription", "TODO" },
+            {"GeoMaterialNotes", "TODO" },
+
+            {"GeoMaterialConfidenceDescription", "TODO" },
+            {"GeoMaterialConfidenceNotes", "TODO" },
+
+
+
             {"Description", "TODO" },
             {"Notes", "TODO" },
-
 
         };
 
@@ -54,16 +71,23 @@ namespace Geomapmaker.ViewModels.DMU
             DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
             pane?.Activate();
         }
+
+        public static string HexToRGB(string hex)
+        {
+            Color color = (Color)ColorConverter.ConvertFromString(hex);
+
+            return $"{color.R},{color.G},{color.B}";
+        }
     }
 
     /// <summary>
     /// Button implementation to show the DockPane.
     /// </summary>
-    internal class DescriptionOfMapUnits_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
+    internal class DMU_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
     {
         protected override void OnClick()
         {
-            DescriptionOfMapUnitsViewModel.Show();
+            DMUViewModel.Show();
         }
     }
 }

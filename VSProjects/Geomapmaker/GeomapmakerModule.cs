@@ -18,8 +18,10 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.RibbonElements;
 
-namespace Geomapmaker {
-    internal /*public*/ class GeomapmakerModule : Module {
+namespace Geomapmaker
+{
+    internal /*public*/ class GeomapmakerModule : Module
+    {
         private static GeomapmakerModule _this = null;
 
         //public DataHelper helper = new DataHelper();
@@ -34,8 +36,10 @@ namespace Geomapmaker {
         /// <summary>
         /// Retrieve the singleton instance to this module here
         /// </summary>
-        public static GeomapmakerModule Current {
-            get {
+        public static GeomapmakerModule Current
+        {
+            get
+            {
                 return _this ?? (_this = (GeomapmakerModule)FrameworkApplication.FindModule("Geomapmaker_Module"));
             }
         }
@@ -52,7 +56,8 @@ namespace Geomapmaker {
 
             //When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
             DockPane dockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_AddEditMapUnitsDockPane");
-            if (dockPane != null) {
+            if (dockPane != null)
+            {
                 dockPane.IsVisible = false;
             }
 
@@ -61,6 +66,13 @@ namespace Geomapmaker {
             if (headingDockPane != null)
             {
                 headingDockPane.IsVisible = false;
+            }
+
+            //When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
+            DockPane dmuDockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_DescriptionOfMapUnits");
+            if (dmuDockPane != null)
+            {
+                dmuDockPane.IsVisible = false;
             }
 
             return true;

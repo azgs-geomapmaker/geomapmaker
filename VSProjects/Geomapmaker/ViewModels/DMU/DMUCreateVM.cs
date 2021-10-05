@@ -1,4 +1,6 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using System;
@@ -6,6 +8,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.DMU
@@ -19,8 +23,31 @@ namespace Geomapmaker.ViewModels.DMU
         public DMUCreateVM()
         {
             // Init submit command
-            CommandSave = new RelayCommand(() => Submit(), () => CanSave());
-            CommandReset = new RelayCommand(() => Reset());
+            CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
+            CommandReset = new RelayCommand(() => ResetAsync());
+
+            // Initialize required values
+            MapUnit = null;
+            Name = null;
+            FullName = null;
+            Description = null;
+            OlderInterval = null;
+            YoungerInterval = null;
+            HexColor = null;
+            GeoMaterial = null;
+            GeoMaterialConfidence = null;
+        }
+
+        // MapUnit
+        private string _mapUnit;
+        public string MapUnit
+        {
+            get => _mapUnit;
+            set
+            {
+                SetProperty(ref _mapUnit, value, () => MapUnit);
+                ValidateMapUnit(MapUnit);
+            }
         }
 
         // Name
@@ -31,7 +58,7 @@ namespace Geomapmaker.ViewModels.DMU
             set
             {
                 SetProperty(ref _name, value, () => Name);
-                ValidateHeadingName(_name);
+                ValidateName(Name);
             }
         }
 
@@ -47,7 +74,7 @@ namespace Geomapmaker.ViewModels.DMU
             }
         }
 
-        public ObservableCollection<Interval> OlderIntervalOptions { get; set; } = Data.Intervals.IntervalCollection;
+        public ObservableCollection<Interval> OlderIntervalOptions { get; set; } = Data.Intervals.IntervalOptions;
 
         // Older Interval
         private Interval _olderInterval;
@@ -66,7 +93,7 @@ namespace Geomapmaker.ViewModels.DMU
             }
         }
 
-        public ObservableCollection<Interval> YoungerIntervalOptions { get; set; } = Data.Intervals.IntervalCollection;
+        public ObservableCollection<Interval> YoungerIntervalOptions { get; set; } = Data.Intervals.IntervalOptions;
 
         // Younger Interval
         private Interval _youngerInterval;
@@ -188,26 +215,20 @@ namespace Geomapmaker.ViewModels.DMU
         }
 
         // Color
-        private string _color;
-        public string Color
+        private string _hexColor;
+        public string HexColor
         {
-            get => _color;
+            get => _hexColor;
             set
             {
-                SetProperty(ref _color, value, () => Color);
+                SetProperty(ref _hexColor, value, () => HexColor);
+                ValidateColor(HexColor);
             }
         }
 
-        // DescriptionSource
-        private string _descriptionSource;
-        public string DescriptionSource
-        {
-            get => _descriptionSource;
-            set
-            {
-                SetProperty(ref _descriptionSource, value, () => DescriptionSource);
-            }
-        }
+        public string AreaFillRGB => DMUViewModel.HexToRGB(HexColor);
+
+        public ObservableCollection<string> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 
         // GeoMaterial
         private string _geoMaterial;
@@ -217,8 +238,11 @@ namespace Geomapmaker.ViewModels.DMU
             set
             {
                 SetProperty(ref _geoMaterial, value, () => GeoMaterial);
+                ValidateGeoMaterial(GeoMaterial);
             }
         }
+
+        public ObservableCollection<string> GeoMaterialConfidenceOptions { get; set; } = Data.Confidence.ConfidenceOptions;
 
         // GeoMaterialConfidence
         private string _geoMaterialConfidence;
@@ -228,22 +252,29 @@ namespace Geomapmaker.ViewModels.DMU
             set
             {
                 SetProperty(ref _geoMaterialConfidence, value, () => GeoMaterialConfidence);
+                ValidateGeoMaterialConfidence(GeoMaterialConfidence);
             }
         }
 
-        private void Reset()
+        private async Task ResetAsync()
         {
-            //await DataHelper.PopulateMapUnits();
-
-            //NotifyPropertyChanged("AllHeadings");
+            // Refresh map unit data
+            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            NotifyPropertyChanged("ParentOptions");
 
             // Reset values
+            MapUnit = null;
             Name = null;
             FullName = null;
             OlderInterval = null;
             YoungerInterval = null;
-
+            RelativeAge = null;
+            Description = null;
             Parent = null;
+            Label = null;
+            HexColor = null;
+            GeoMaterial = null;
+            GeoMaterialConfidence = null;
         }
 
         /// <summary>
@@ -258,14 +289,65 @@ namespace Geomapmaker.ViewModels.DMU
         /// <summary>
         /// Execute the submit command
         /// </summary>
-        private void Submit()
+        private async Task SubmitAsync()
         {
-            if (Data.DbConnectionProperties.GetProperties() == null)
+            if (DataHelper.connectionProperties == null)
             {
                 return;
             }
 
-            return;
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+
+                EditOperation editOperation = new EditOperation();
+
+                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
+
+                        editOperation.Callback(context =>
+                        {
+                            TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+                            using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                            {
+                                rowBuffer["MapUnit"] = MapUnit;
+                                rowBuffer["Name"] = Name;
+                                rowBuffer["FullName"] = FullName;
+                                rowBuffer["Age"] = Age;
+                                rowBuffer["RelativeAge"] = RelativeAge;
+                                rowBuffer["Description"] = Description;
+                                rowBuffer["ParentId"] = Parent;
+                                //rowBuffer["Ranking"] = Ranking;
+                                rowBuffer["Label"] = Label;
+                                rowBuffer["AreaFillRGB"] = AreaFillRGB;
+                                rowBuffer["HexColor"] = HexColor;
+                                rowBuffer["GeoMaterial"] = GeoMaterial;
+                                rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
+                                rowBuffer["ParagraphStyle"] = "Standard";
+                                rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+
+                                using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                {
+                                    // To Indicate that the attribute table has to be updated.
+                                    context.Invalidate(row);
+                                }
+                            }
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+
+                        if (!result)
+                        {
+                            MessageBox.Show(editOperation.ErrorMessage);
+                        }
+
+                    }
+                }
+            });
+
+            // Reset
+            await ResetAsync();
         }
 
         // Validation
@@ -291,8 +373,31 @@ namespace Geomapmaker.ViewModels.DMU
 
         public bool HasErrors => _validationErrors.Count > 0;
 
+        private void ValidateMapUnit(string mapUnit)
+        {
+            const string propertyKey = "MapUnit";
+
+            // Required field
+            if (string.IsNullOrWhiteSpace(mapUnit))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            // Name must be unique 
+            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+
+        }
+
         // Validate the Heading's name
-        private void ValidateHeadingName(string name)
+        private void ValidateName(string name)
         {
             const string propertyKey = "Name";
 
@@ -300,11 +405,6 @@ namespace Geomapmaker.ViewModels.DMU
             if (string.IsNullOrWhiteSpace(name))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-            }
-            // Name must be unique 
-            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
             }
             else
             {
@@ -368,6 +468,57 @@ namespace Geomapmaker.ViewModels.DMU
 
             // Required field
             if (parentid == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateColor(string color)
+        {
+            const string propertyKey = "HexColor";
+
+            // Required field
+            if (string.IsNullOrWhiteSpace(color))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateGeoMaterial(string geoMaterial)
+        {
+            const string propertyKey = "GeoMaterial";
+
+            // Required field
+            if (string.IsNullOrWhiteSpace(GeoMaterial))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateGeoMaterialConfidence(string confidence)
+        {
+            const string propertyKey = "GeoMaterialConfidence";
+
+            // Required field
+            if (string.IsNullOrWhiteSpace(confidence))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
