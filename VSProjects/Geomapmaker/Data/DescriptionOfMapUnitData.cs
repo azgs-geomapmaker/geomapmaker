@@ -54,7 +54,7 @@ namespace Geomapmaker.Data
                                     HierarchyKey = row["HierarchyKey"]?.ToString(),
                                     ParagraphStyle = row["ParagraphStyle"]?.ToString(),
                                     //mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
-                                    //mapUnit.Label = row["Label"].ToString();
+                                    Label = row["Label"].ToString(),
                                     //mapUnit.Symbol = row["Symbol"].ToString();
                                     //mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
                                     hexcolor = row["hexcolor"]?.ToString(),

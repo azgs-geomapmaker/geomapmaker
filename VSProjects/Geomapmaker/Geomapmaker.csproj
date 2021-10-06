@@ -195,6 +195,8 @@
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="ViewModels\MapUnits\CreateMapUnitVM.cs" />
+    <Compile Include="ViewModels\MapUnits\DeleteMapUnitVM.cs" />
+    <Compile Include="ViewModels\MapUnits\EditMapUnitVM.cs" />
     <Compile Include="Views\MapUnits\CreateMapUnit.xaml.cs">
       <DependentUpon>CreateMapUnit.xaml</DependentUpon>
     </Compile>

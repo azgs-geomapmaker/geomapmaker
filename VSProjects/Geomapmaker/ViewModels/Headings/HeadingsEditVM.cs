@@ -46,11 +46,11 @@ namespace Geomapmaker.ViewModels.Headings
                 // Update parent options to remove selected heading
                 NotifyPropertyChanged("ParentOptions");
 
-                Name = value?.Name;
-                Description = value?.Description;
-                Parent = value?.ParentId;
+                Name = SelectedHeading?.Name;
+                Description = SelectedHeading?.Description;
+                Parent = SelectedHeading?.ParentId;
 
-                Tree = value != null ? new List<MapUnit> { new MapUnit { Name = value.Name, Children = GetChildren(value) } } : null;
+                Tree = SelectedHeading != null ? new List<MapUnit> { new MapUnit { Name = SelectedHeading.Name, Children = GetChildren(SelectedHeading) } } : null;
                 NotifyPropertyChanged("Tree");
             }
         }

@@ -112,7 +112,7 @@ namespace Geomapmaker.Models
 
         public int? ParentId { get; set; }
 
-        // Only used to build out the tree-view. Not saved in db
+        // Only used to hold the tree-view. Not saved in db
         public List<MapUnit> Children { get; set; } = new List<MapUnit>();
     }
 }

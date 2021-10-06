@@ -12,6 +12,10 @@ namespace Geomapmaker.ViewModels.MapUnits
         // View models
         public CreateMapUnitVM Create { get; set; } = new CreateMapUnitVM();
 
+        public EditMapUnitVM Edit { get; set; } = new EditMapUnitVM();
+
+        public DeleteMapUnitVM Delete { get; set; } = new DeleteMapUnitVM();
+
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {

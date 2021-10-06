@@ -1,6 +1,4 @@
-﻿using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using System;
@@ -8,34 +6,49 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnits
 {
-    public class CreateMapUnitVM : DockPane, INotifyDataErrorInfo
+    public class EditMapUnitVM : DockPane, INotifyDataErrorInfo
     {
-        // Create's save button
-        public ICommand CommandSave { get; }
+        // Edits's save button
+        public ICommand CommandUpdate { get; }
         public ICommand CommandReset { get; }
 
-        public CreateMapUnitVM()
+        public EditMapUnitVM()
         {
-            // Init submit command
-            CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
+            // Init commands
+            CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
             CommandReset = new RelayCommand(() => ResetAsync());
+        }
 
-            // Initialize required values
-            MapUnit = null;
-            Name = null;
-            FullName = null;
-            Description = null;
-            OlderInterval = null;
-            YoungerInterval = null;
-            HexColor = null;
-            GeoMaterial = null;
-            GeoMaterialConfidence = null;
+        public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name));
+
+        private MapUnit _selectedMapUnit;
+        public MapUnit SelectedMapUnit
+        {
+            get => _selectedMapUnit;
+            set
+            {
+                SetProperty(ref _selectedMapUnit, value, () => SelectedMapUnit);
+
+                // Update parent options to remove selected heading
+                NotifyPropertyChanged("ParentOptions");
+
+                MapUnit = SelectedMapUnit.MU;
+                Name = SelectedMapUnit.Name;
+                FullName = SelectedMapUnit.FullName;
+                OlderInterval = SelectedMapUnit.OlderInterval;
+                YoungerInterval = SelectedMapUnit.YoungerInterval;
+                RelativeAge = SelectedMapUnit.RelativeAge;
+                Description = SelectedMapUnit.Description;
+                Parent = SelectedMapUnit.ParentId;
+                Label = SelectedMapUnit.Label;
+                HexColor = SelectedMapUnit.hexcolor;
+                GeoMaterial = SelectedMapUnit.GeoMaterial;
+                GeoMaterialConfidence = SelectedMapUnit.GeoMaterialConfidence;
+            }
         }
 
         // MapUnit
@@ -247,98 +260,21 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
-        private async Task ResetAsync()
-        {
-            // Refresh map unit data
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
-            NotifyPropertyChanged("ParentOptions");
-
-            // Reset values
-            MapUnit = null;
-            Name = null;
-            FullName = null;
-            OlderInterval = null;
-            YoungerInterval = null;
-            RelativeAge = null;
-            Description = null;
-            Parent = null;
-            Label = null;
-            HexColor = null;
-            GeoMaterial = null;
-            GeoMaterialConfidence = null;
-        }
-
-        /// <summary>
-        /// Determines the visibility (enabled state) of the button
-        /// </summary>
-        /// <returns>true if enabled</returns>
-        private bool CanSave()
+        private bool CanUpdate()
         {
             return !HasErrors;
         }
 
-        /// <summary>
-        /// Execute the submit command
-        /// </summary>
-        private async Task SubmitAsync()
+        private void ResetAsync()
         {
-            if (DataHelper.connectionProperties == null)
-            {
-                return;
-            }
+            // TODO
+            throw new NotImplementedException();
+        }
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
-            {
-
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
-                {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
-                    {
-
-                        editOperation.Callback(context =>
-                        {
-                            TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-                            using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
-                            {
-                                rowBuffer["MapUnit"] = MapUnit;
-                                rowBuffer["Name"] = Name;
-                                rowBuffer["FullName"] = FullName;
-                                rowBuffer["Age"] = Age;
-                                rowBuffer["RelativeAge"] = RelativeAge;
-                                rowBuffer["Description"] = Description;
-                                rowBuffer["ParentId"] = Parent;
-                                //rowBuffer["Ranking"] = Ranking;
-                                rowBuffer["Label"] = Label;
-                                rowBuffer["AreaFillRGB"] = AreaFillRGB;
-                                rowBuffer["HexColor"] = HexColor;
-                                rowBuffer["GeoMaterial"] = GeoMaterial;
-                                rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
-                                rowBuffer["ParagraphStyle"] = "Standard";
-                                rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
-
-                                using (Row row = enterpriseTable.CreateRow(rowBuffer))
-                                {
-                                    // To Indicate that the attribute table has to be updated.
-                                    context.Invalidate(row);
-                                }
-                            }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
-                        }
-
-                    }
-                }
-            });
-
-            // Reset
-            await ResetAsync();
+        private void UpdateAsync()
+        {
+            // TODO
+            throw new NotImplementedException();
         }
 
         // Validation
@@ -372,7 +308,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ID != SelectedMapUnit?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
