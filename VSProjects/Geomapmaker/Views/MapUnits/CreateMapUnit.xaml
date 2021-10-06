@@ -12,7 +12,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
-                <ResourceDictionary Source="/Geomapmaker;component/Views/AzgsDictionary.xaml" />
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -47,13 +47,13 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="2" Text="Create DMU" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+            <TextBlock Grid.Column="2" Text="Create Map Unit" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
                 <TextBlock.ToolTip>
                     <WrapPanel Orientation="Vertical" MaxWidth="300">
-                        <TextBlock Text="Create DMU" TextWrapping="Wrap"/>
+                        <TextBlock Text="Create Map Unit" TextWrapping="Wrap"/>
                     </WrapPanel>
                 </TextBlock.ToolTip>
-                        </TextBlock>
+            </TextBlock>
         </DockPanel>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Map Unit:" >

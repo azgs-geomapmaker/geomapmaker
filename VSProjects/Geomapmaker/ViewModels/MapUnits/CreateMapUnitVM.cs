@@ -434,28 +434,29 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private void ValidateIntervals(Interval younger, Interval older)
         {
-            if (younger == null)
-            {
-                _validationErrors["YoungerInterval"] = new List<string>() { "" };
-            }
             if (older == null)
             {
                 _validationErrors["OlderInterval"] = new List<string>() { "" };
             }
-
+            if (younger == null)
+            {
+                _validationErrors["YoungerInterval"] = new List<string>() { "" };
+            }
             if (younger != null && older != null)
             {
+                _validationErrors.Remove("OlderInterval");
                 _validationErrors.Remove("YoungerInterval");
 
                 if (younger.Early_Age < older.Early_Age)
                 {
-                    _validationErrors["OlderInterval"] = new List<string>() { "Swap those comboboxes!" };
+                    _validationErrors["OlderInterval"] = new List<string>() { "Swap these comboboxes!" };
+                    _validationErrors["YoungerInterval"] = new List<string>() { "" };
                 }
                 else
                 {
                     _validationErrors.Remove("OlderInterval");
+                    _validationErrors.Remove("YoungerInterval");
                 }
-
             }
 
             RaiseErrorsChanged("YoungerInterval");

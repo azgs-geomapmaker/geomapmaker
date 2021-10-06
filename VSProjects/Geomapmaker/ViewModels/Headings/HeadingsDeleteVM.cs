@@ -51,7 +51,7 @@ namespace Geomapmaker.ViewModels.Headings
                 NotifyPropertyChanged("Description");
                 NotifyPropertyChanged("Parent");
                 NotifyPropertyChanged("Tree");
-                ValidateChildfree(Tree);
+                ValidateChildfreeTree(Tree, "Tree");
             }
         }
 
@@ -182,10 +182,8 @@ namespace Geomapmaker.ViewModels.Headings
         public bool HasErrors => _validationErrors.Count > 0;
 
         // Validate children
-        private void ValidateChildfree(List<MapUnit> tree)
+        private void ValidateChildfreeTree(List<MapUnit> tree, string propertyKey)
         {
-            const string propertyKey = "Tree";
-
             if (tree == null || tree.Count == 0)
             {
                 _validationErrors.Remove(propertyKey);

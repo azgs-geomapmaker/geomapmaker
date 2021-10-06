@@ -63,7 +63,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _name, value, () => Name);
-                ValidateHeadingName(_name);
+                ValidateHeadingName(_name, "Name");
                 ValidateIfChangeWasMade();
             }
         }
@@ -76,7 +76,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _description, value, () => Description);
-                ValidateDescription(_description);
+                ValidateDescription(_description, "Description");
                 ValidateIfChangeWasMade();
             }
         }
@@ -89,7 +89,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _parent, value, () => Parent);
-                ValidateParent(_parent);
+                ValidateParent(_parent, "Parent");
                 ValidateIfChangeWasMade();
             }
         }
@@ -275,10 +275,8 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         // Validate the Heading's name
-        private void ValidateHeadingName(string name)
+        private void ValidateHeadingName(string name, string propertyKey)
         {
-            const string propertyKey = "Name";
-
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(name))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
@@ -297,10 +295,8 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         // Validate the Heading's definition
-        private void ValidateDescription(string definition)
+        private void ValidateDescription(string definition, string propertyKey)
         {
-            const string propertyKey = "Description";
-
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(definition))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
@@ -314,10 +310,8 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         // Validate the Heading's definition
-        private void ValidateParent(int? checkId)
+        private void ValidateParent(int? checkId, string propertyKey)
         {
-            const string propertyKey = "Parent";
-
             // Loop over parents
             while (checkId != null)
             {

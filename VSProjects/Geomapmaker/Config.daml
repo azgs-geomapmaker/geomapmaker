@@ -32,10 +32,8 @@
         </group>
         <group id="Geomapmaker_Tables" caption="Tables" keytip="DS">
           <button refID="Geomapmaker_DataSourceButton" size="large" />
-          <button refID="Geomapmaker_AddMapUnitsButton" />
-          <button refID="Geomapmaker_EditMapUnitsButton" />
           <button refID="Geomapmaker_Headings_ShowButton" />
-          <button refID="Geomapmaker_DescriptionOfMapUnits_ShowButton" />
+          <button refID="Geomapmaker_MapUnits_ShowButton" />
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts And Faults" keytip="CF">
           <tool refID="Geomapmaker_ContactsAndFaultsAddTool" />
@@ -69,15 +67,7 @@
         <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Unit Polys">
             Edit an existing map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
-        </tool>
-        <button id="Geomapmaker_AddMapUnitsButton" caption="Add Map Units" className="AddMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition" keytip="todo">
-          <tooltip heading="Map Units">
-            Add a new map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
-        </button>
-        <button id="Geomapmaker_EditMapUnitsButton" caption="Edit Map Units" className="EditMapUnitsButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition" keytip="todo">
-          <tooltip heading="Map Units">
-            Edit an existing map unit description<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
-        </button>
+        </tool>        
         <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText /></tooltip>
@@ -94,7 +84,7 @@
           <tooltip heading="Contacts and Faults">
             Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
-        <button id="Geomapmaker_DescriptionOfMapUnits_ShowButton" caption="Description Of Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnits_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition" keytip="todo">
+        <button id="Geomapmaker_MapUnits_ShowButton" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnits_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText />
           </tooltip>

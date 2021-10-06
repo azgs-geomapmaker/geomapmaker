@@ -38,7 +38,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _name, value, () => Name);
-                ValidateHeadingName(_name);
+                ValidateHeadingName(_name, "Name");
             }
         }
 
@@ -50,7 +50,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _description, value, () => Description);
-                ValidateDescription(_description);
+                ValidateDescription(_description, "Description");
             }
         }
 
@@ -191,10 +191,8 @@ namespace Geomapmaker.ViewModels.Headings
         public bool HasErrors => _validationErrors.Count > 0;
 
         // Validate the Heading's name
-        private void ValidateHeadingName(string name)
+        private void ValidateHeadingName(string name, string propertyKey)
         {
-            const string propertyKey = "Name";
-
             // Required field
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -215,10 +213,8 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         // Validate the Heading's definition
-        private void ValidateDescription(string definition)
+        private void ValidateDescription(string definition, string propertyKey)
         {
-            const string propertyKey = "Description";
-
             // Required field
             if (string.IsNullOrWhiteSpace(definition))
             {
