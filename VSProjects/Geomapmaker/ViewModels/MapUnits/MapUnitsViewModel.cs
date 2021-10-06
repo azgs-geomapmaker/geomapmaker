@@ -3,14 +3,14 @@ using ArcGIS.Desktop.Framework.Contracts;
 using System.Collections.Generic;
 using System.Windows.Media;
 
-namespace Geomapmaker.ViewModels.DMU
+namespace Geomapmaker.ViewModels.MapUnits
 {
-    internal class DMUViewModel : DockPane
+    internal class MapUnitsViewModel : DockPane
     {
         private const string _dockPaneID = "Geomapmaker_DescriptionOfMapUnits";
 
         // View models
-        public DMUCreateVM Create { get; set; } = new DMUCreateVM();
+        public CreateMapUnitVM Create { get; set; } = new CreateMapUnitVM();
 
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
@@ -81,11 +81,11 @@ namespace Geomapmaker.ViewModels.DMU
     /// <summary>
     /// Button implementation to show the DockPane.
     /// </summary>
-    internal class DMU_ShowButton : Button
+    internal class MapUnits_ShowButton : Button
     {
         protected override void OnClick()
         {
-            DMUViewModel.Show();
+            MapUnitsViewModel.Show();
         }
     }
 }

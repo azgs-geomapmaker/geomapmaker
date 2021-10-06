@@ -94,7 +94,7 @@
           <tooltip heading="Contacts and Faults">
             Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
-        <button id="Geomapmaker_DescriptionOfMapUnits_ShowButton" caption="Description Of Map Units" className="Geomapmaker.ViewModels.DMU.DMU_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition" keytip="todo">
+        <button id="Geomapmaker_DescriptionOfMapUnits_ShowButton" caption="Description Of Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnits_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText />
           </tooltip>
@@ -122,8 +122,8 @@
         <dockPane id="Geomapmaker_MapUnits" caption="MapUnits" className="MapUnitsViewModel" dock="group" dockWith="esri_core_projectDockPane">
           <content className="MapUnitsView" />
         </dockPane>
-        <dockPane id="Geomapmaker_DescriptionOfMapUnits" caption="Description Of Map Units" className="Geomapmaker.ViewModels.DMU.DMUViewModel" dock="group" dockWith="esri_core_projectDockPane">
-          <content className="DescriptionOfMapUnitsView" />
+        <dockPane id="Geomapmaker_DescriptionOfMapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnitsViewModel" dock="group" dockWith="esri_core_projectDockPane">
+          <content className="Geomapmaker.Views.MapUnits.MapUnitsView" />
         </dockPane>
       </dockPanes>
     </insertModule>

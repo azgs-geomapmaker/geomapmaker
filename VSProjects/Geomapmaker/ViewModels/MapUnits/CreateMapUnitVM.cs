@@ -12,15 +12,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels.DMU
+namespace Geomapmaker.ViewModels.MapUnits
 {
-    public class DMUCreateVM : DockPane, INotifyDataErrorInfo
+    public class CreateMapUnitVM : DockPane, INotifyDataErrorInfo
     {
         // Create's save button
         public ICommand CommandSave { get; }
         public ICommand CommandReset { get; }
 
-        public DMUCreateVM()
+        public CreateMapUnitVM()
         {
             // Init submit command
             CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
@@ -226,7 +226,7 @@ namespace Geomapmaker.ViewModels.DMU
             }
         }
 
-        public string AreaFillRGB => DMUViewModel.HexToRGB(HexColor);
+        public string AreaFillRGB => MapUnitsViewModel.HexToRGB(HexColor);
 
         public ObservableCollection<string> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 

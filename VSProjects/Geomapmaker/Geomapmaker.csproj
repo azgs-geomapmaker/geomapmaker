@@ -194,23 +194,32 @@
     <Compile Include="Data\DescriptionOfMapUnitData.cs" />
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
-    <Compile Include="ViewModels\DMU\DMUCreateVM.cs" />
-    <Compile Include="Views\DescriptionOfMapUnits.xaml.cs">
-      <DependentUpon>DescriptionOfMapUnits.xaml</DependentUpon>
+    <Compile Include="ViewModels\MapUnits\CreateMapUnitVM.cs" />
+    <Compile Include="Views\MapUnits\CreateMapUnit.xaml.cs">
+      <DependentUpon>CreateMapUnit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DMU\DMUViewModel.cs" />
+    <Compile Include="Views\MapUnits\DeleteMapUnit.xaml.cs">
+      <DependentUpon>DeleteMapUnit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnits\EditMapUnit.xaml.cs">
+      <DependentUpon>EditMapUnit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnits\MapUnits.xaml.cs">
+      <DependentUpon>MapUnits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
     <Compile Include="Models\MapUnitTree.cs" />
     <Compile Include="ViewModels\Headings\HeadingsCreateVM.cs" />
     <Compile Include="ViewModels\Headings\HeadingsDeleteVM.cs" />
     <Compile Include="ViewModels\Headings\HeadingsEditVM.cs" />
-    <Compile Include="Views\Headings\Create.xaml.cs">
-      <DependentUpon>Create.xaml</DependentUpon>
+    <Compile Include="Views\Headings\CreateHeading.xaml.cs">
+      <DependentUpon>CreateHeading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Headings\Delete.xaml.cs">
-      <DependentUpon>Delete.xaml</DependentUpon>
+    <Compile Include="Views\Headings\DeleteHeading.xaml.cs">
+      <DependentUpon>DeleteHeading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Headings\Edit.xaml.cs">
-      <DependentUpon>Edit.xaml</DependentUpon>
+    <Compile Include="Views\Headings\EditHeading.xaml.cs">
+      <DependentUpon>EditHeading.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Headings\Headings.xaml.cs">
       <DependentUpon>Headings.xaml</DependentUpon>
@@ -262,19 +271,31 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\DescriptionOfMapUnits.xaml">
+    <Page Include="Views\MapUnits\CreateMapUnit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Headings\Create.xaml">
+    <Page Include="Views\MapUnits\DeleteMapUnit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Headings\Delete.xaml">
+    <Page Include="Views\MapUnits\EditMapUnit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Headings\Edit.xaml">
+    <Page Include="Views\MapUnits\MapUnits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\CreateHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\DeleteHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\EditHeading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

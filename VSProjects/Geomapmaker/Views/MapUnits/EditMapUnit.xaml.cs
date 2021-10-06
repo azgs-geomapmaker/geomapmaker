@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Geomapmaker.Views.Headings
+namespace Geomapmaker.Views.MapUnits
 {
     /// <summary>
-    /// Interaction logic for Create.xaml
+    /// Interaction logic for MapUnitEdit.xaml
     /// </summary>
-    public partial class Create : UserControl
+    public partial class EditMapUnit : UserControl
     {
-        public Create()
+        public EditMapUnit()
         {
             InitializeComponent();
         }
