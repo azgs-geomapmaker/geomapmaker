@@ -136,7 +136,7 @@ namespace Geomapmaker.ViewModels.Headings
         {
             await DataHelper.PopulateMapUnits();
 
-            NotifyPropertyChanged("AllHeadings");
+            NotifyPropertyChanged("ParentOptions");
 
             // Reset values
             Name = null;

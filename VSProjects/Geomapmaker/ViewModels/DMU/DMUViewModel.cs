@@ -12,8 +12,6 @@ namespace Geomapmaker.ViewModels.DMU
         // View models
         public DMUCreateVM Create { get; set; } = new DMUCreateVM();
 
-        protected DMUViewModel() { }
-
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
@@ -83,7 +81,7 @@ namespace Geomapmaker.ViewModels.DMU
     /// <summary>
     /// Button implementation to show the DockPane.
     /// </summary>
-    internal class DMU_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
+    internal class DMU_ShowButton : Button
     {
         protected override void OnClick()
         {
