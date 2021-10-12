@@ -8,47 +8,15 @@ namespace Geomapmaker.Models
 {
     public class MapUnit
     {
-        //TODO: Some of these will need more fancy processing. Here or in view model?
         public int ID { get; set; }
 
-        //public string MU;
-        //private string mu;
         public string MU { get; set; }
 
-        //private string name;
         public string Name { get; set; }
 
-        //public string fullName;
         public string FullName { get; set; }
 
-        //TODO: This age logic, and the older/younger properties that drive it, should probably be moved into the 
-        //view model. Addendum: I tried this and got it working. But it felt messy to me. I think Imma leave it here afterall.
-        public string Age
-        {
-            get
-            {
-                if (OlderInterval == null || YoungerInterval == null)
-                {
-                    return null;
-                }
-
-                var older = OlderInterval.Name == null ? "" : OlderInterval.Name;
-                var younger = YoungerInterval.Name == null ? "" : YoungerInterval.Name;
-                return older != "" || younger != "" ? older + "-" + younger : null;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    var intervals = value.Split('-');
-                    //OlderInterval.name = intervals.Length > 0 ? intervals[0] : null;
-                    //YoungerInterval.name = intervals.Length > 1 ? intervals[1] : null;
-
-                    //OlderInterval = intervals.Length > 0 ? DataHelper.Intervals.Single(i => i.Name == intervals[0]) : null;
-                    //YoungerInterval = intervals.Length > 1 ? DataHelper.Intervals.Single(i => i.Name == intervals[1]) : null;
-                }
-            }
-        }
+        public string Age { get; set; }
 
         public Interval OlderInterval { get; set; }
 
@@ -56,12 +24,10 @@ namespace Geomapmaker.Models
 
         public string RelativeAge { get; set; }
 
-        //private string description;
         public string Description { get; set; }
 
         public string HierarchyKey { get; set; }
 
-        //public List<string> ParagraphStyle { get; set; }
         public string ParagraphStyle { get; set; }
 
         public string Label { get; set; }

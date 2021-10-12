@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnits
@@ -36,18 +37,21 @@ namespace Geomapmaker.ViewModels.MapUnits
                 // Update parent options to remove selected heading
                 NotifyPropertyChanged("ParentOptions");
 
-                MapUnit = SelectedMapUnit.MU;
-                Name = SelectedMapUnit.Name;
-                FullName = SelectedMapUnit.FullName;
-                OlderInterval = SelectedMapUnit.OlderInterval;
-                YoungerInterval = SelectedMapUnit.YoungerInterval;
-                RelativeAge = SelectedMapUnit.RelativeAge;
-                Description = SelectedMapUnit.Description;
-                Parent = SelectedMapUnit.ParentId;
-                Label = SelectedMapUnit.Label;
-                HexColor = SelectedMapUnit.hexcolor;
-                GeoMaterial = SelectedMapUnit.GeoMaterial;
-                GeoMaterialConfidence = SelectedMapUnit.GeoMaterialConfidence;
+                if (SelectedMapUnit != null)
+                {
+                    MapUnit = SelectedMapUnit.MU;
+                    Name = SelectedMapUnit.Name;
+                    FullName = SelectedMapUnit.FullName;
+                    OlderInterval = GetOlderIntervalFromAge(SelectedMapUnit.Age);
+                    YoungerInterval = GetYoungerIntervalFromAge(SelectedMapUnit.Age);
+                    RelativeAge = SelectedMapUnit.RelativeAge;
+                    Description = SelectedMapUnit.Description;
+                    Parent = SelectedMapUnit.ParentId;
+                    Label = SelectedMapUnit.Label;
+                    HexColor = SelectedMapUnit.hexcolor;
+                    GeoMaterial = SelectedMapUnit.GeoMaterial;
+                    GeoMaterialConfidence = SelectedMapUnit.GeoMaterialConfidence;
+                }
             }
         }
 
@@ -89,6 +93,18 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public ObservableCollection<Interval> OlderIntervalOptions { get; set; } = Data.Intervals.IntervalOptions;
 
+        private Interval GetOlderIntervalFromAge(string age)
+        {
+            if (string.IsNullOrEmpty(age) || !age.Contains('-'))
+            {
+                return null;
+            }
+
+            string olderName = age.Substring(0, age.IndexOf('-'));
+
+            return OlderIntervalOptions.FirstOrDefault(a => a.Name == olderName);
+        }
+
         // Older Interval
         private Interval _olderInterval;
         public Interval OlderInterval
@@ -98,15 +114,22 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _olderInterval, value, () => OlderInterval);
                 ValidateIntervals(YoungerInterval, OlderInterval);
-
-                if (YoungerInterval == null)
-                {
-                    YoungerInterval = YoungerIntervalOptions.FirstOrDefault(a => a.Name == OlderInterval?.Name);
-                }
             }
         }
 
         public ObservableCollection<Interval> YoungerIntervalOptions { get; set; } = Data.Intervals.IntervalOptions;
+
+        private Interval GetYoungerIntervalFromAge(string age)
+        {
+            if (string.IsNullOrEmpty(age) || !age.Contains('-'))
+            {
+                return null;
+            }
+
+            string youngerName = age.Substring(age.IndexOf('-') + 1);
+
+            return YoungerIntervalOptions.FirstOrDefault(a => a.Name == youngerName);
+        }
 
         // Younger Interval
         private Interval _youngerInterval;
@@ -265,10 +288,24 @@ namespace Geomapmaker.ViewModels.MapUnits
             return !HasErrors;
         }
 
-        private void ResetAsync()
+        private async Task ResetAsync()
         {
-            // TODO
-            throw new NotImplementedException();
+            // Refresh map unit data
+            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+
+            MapUnit = null;
+            Name = null;
+            FullName = null;
+            OlderInterval = null;
+            YoungerInterval = null;
+            RelativeAge = null;
+            Description = null;
+            Parent = null;
+            Label = null;
+            HexColor = null;
+            GeoMaterial = null;
+            GeoMaterialConfidence = null;
+            SelectedMapUnit = null;
         }
 
         private void UpdateAsync()

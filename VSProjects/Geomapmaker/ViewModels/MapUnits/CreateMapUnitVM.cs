@@ -108,7 +108,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         // Convert the two interval names into a string
-        public string Age => $"{OlderInterval?.Name} - {YoungerInterval?.Name}";
+        public string Age => $"{OlderInterval?.Name}-{YoungerInterval?.Name}";
 
         // Relative Age
         private string _relativeAge;
