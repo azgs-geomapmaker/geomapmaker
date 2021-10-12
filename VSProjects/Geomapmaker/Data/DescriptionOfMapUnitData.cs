@@ -8,6 +8,7 @@ namespace Geomapmaker.Data
 {
     public static class DescriptionOfMapUnitData
     {
+        // All headings and map units
         public static List<MapUnit> AllDescriptionOfMapUnits { get; set; } = new List<MapUnit>();
 
         // Returns headings from all map units

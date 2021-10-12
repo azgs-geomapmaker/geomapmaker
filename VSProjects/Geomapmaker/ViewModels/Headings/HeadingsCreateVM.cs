@@ -77,7 +77,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task SubmitAsync()
         {
-            if (DataHelper.connectionProperties == null)
+            if (Data.DbConnectionProperties.GetProperties() == null)
             {
                 return;
             }
@@ -87,7 +87,7 @@ namespace Geomapmaker.ViewModels.Headings
 
                 EditOperation editOperation = new EditOperation();
 
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
                 {
                     using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
                     {
@@ -117,12 +117,13 @@ namespace Geomapmaker.ViewModels.Headings
                             MessageBox.Show(editOperation.ErrorMessage);
                         }
 
+
                     }
                 }
             });
 
             // Update mapunits
-            await DataHelper.PopulateMapUnits();
+            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
 
             // Reset values
             Name = "";
@@ -134,7 +135,7 @@ namespace Geomapmaker.ViewModels.Headings
 
         private async Task ResetAsync()
         {
-            await DataHelper.PopulateMapUnits();
+            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("ParentOptions");
 
@@ -154,8 +155,7 @@ namespace Geomapmaker.ViewModels.Headings
                 // Get Headings/Subheadings from map units.
                 // Sort by name
                 // Create a int/string kvp for the combobox
-                List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
-                    .Where(a => a.ParagraphStyle == "Heading")
+                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
                     .OrderBy(a => a.Name)
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
                     .ToList();
@@ -168,9 +168,8 @@ namespace Geomapmaker.ViewModels.Headings
             }
         }
 
-        // Validation
-        #region INotifyDataErrorInfo members
-        // Error collection
+        #region Validation
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -200,7 +199,7 @@ namespace Geomapmaker.ViewModels.Headings
                 RaiseErrorsChanged(propertyKey);
             }
             // Name must be unique 
-            else if (DataHelper.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
+            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
                 RaiseErrorsChanged(propertyKey);

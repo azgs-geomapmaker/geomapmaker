@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// <summary>
         /// List of all Headings/Subheadings
         /// </summary>
-        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name));
+        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnitData.Headings.OrderBy(a => a.Name));
 
         /// <summary>
         /// Map Unit selected for edit
@@ -100,7 +100,7 @@ namespace Geomapmaker.ViewModels.Headings
         private List<MapUnit> GetChildren(MapUnit root)
         {
             // Get mapunit's children
-            List<MapUnit> children = DataHelper.MapUnits.Where(a => a.ParentId == root?.ID).ToList();
+            List<MapUnit> children = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ParentId == root?.ID).ToList();
 
             // If no children
             if (children.Count == 0)
@@ -121,7 +121,7 @@ namespace Geomapmaker.ViewModels.Headings
         
         private async Task ResetAsync()
         {
-            await DataHelper.PopulateMapUnits();
+            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
 
@@ -143,7 +143,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task UpdateAsync()
         {
-            if (DataHelper.connectionProperties == null)
+            if (Data.DbConnectionProperties.GetProperties() == null)
             {
                 return;
             }
@@ -153,7 +153,7 @@ namespace Geomapmaker.ViewModels.Headings
 
                 EditOperation editOperation = new EditOperation();
 
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
                 {
                     using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
                     {
@@ -198,7 +198,7 @@ namespace Geomapmaker.ViewModels.Headings
                 }
             });
 
-            await DataHelper.PopulateMapUnits();
+            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
             NotifyPropertyChanged("ParentOptions");
@@ -215,8 +215,7 @@ namespace Geomapmaker.ViewModels.Headings
             get
             {
                 // Remove selected heading from parent options
-                List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
-                    .Where(a => a.ParagraphStyle == "Heading")
+                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
                     .Where(a => a.ID != SelectedHeading?.ID)
                     .OrderBy(a => a.Name)
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
@@ -282,7 +281,7 @@ namespace Geomapmaker.ViewModels.Headings
                 _validationErrors[propertyKey] = new List<string>() { "" };
                 RaiseErrorsChanged(propertyKey);
             }
-            else if (DataHelper.MapUnits.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
+            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
                 RaiseErrorsChanged(propertyKey);
@@ -316,7 +315,7 @@ namespace Geomapmaker.ViewModels.Headings
             while (checkId != null)
             {
                 // Look up the parent to grab grandparent id
-                checkId = DataHelper.MapUnits.FirstOrDefault(a => a.ID == checkId)?.ParentId;
+                checkId = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.FirstOrDefault(a => a.ID == checkId)?.ParentId;
 
                 // Compare with selected heading
                 if (checkId == SelectedHeading.ID)
