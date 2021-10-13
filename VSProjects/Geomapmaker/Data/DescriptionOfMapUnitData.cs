@@ -12,10 +12,10 @@ namespace Geomapmaker.Data
         public static List<MapUnit> AllDescriptionOfMapUnits { get; set; } = new List<MapUnit>();
 
         // Returns headings from all map units
-        public static List<MapUnit> Headings => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Heading").ToList();
+        public static List<MapUnit> Headings => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.MU).ToList();
 
         // Returns map units from all map units
-        public static List<MapUnit> MapUnits => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Standard").ToList();
+        public static List<MapUnit> MapUnits => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.MU).ToList();
 
         public static async Task RefreshMapUnitsAsync()
         {
@@ -58,7 +58,7 @@ namespace Geomapmaker.Data
                                     Label = row["Label"]?.ToString(),
                                     //mapUnit.Symbol = row["Symbol"].ToString();
                                     //mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
-                                    hexcolor = row["hexcolor"]?.ToString(),
+                                    Hexcolor = row["hexcolor"]?.ToString(),
                                     //mapUnit.Color = row["hexcolor"];
                                     DescriptionSourceID = row["DescriptionSourceID"]?.ToString(),
                                     GeoMaterial = row["GeoMaterial"]?.ToString(),

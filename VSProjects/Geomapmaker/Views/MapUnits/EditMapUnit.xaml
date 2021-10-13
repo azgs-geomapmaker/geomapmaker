@@ -73,7 +73,7 @@
             Grid.Row="2" 
             Grid.Column="2" 
 		    ItemsSource="{Binding Edit.AllMapUnits}" 
-		    DisplayMemberPath="Name" 
+		    DisplayMemberPath="MU" 
             SelectedItem="{Binding Edit.SelectedMapUnit}" 
         />
 

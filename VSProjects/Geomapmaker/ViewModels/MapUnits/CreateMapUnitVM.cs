@@ -180,7 +180,6 @@ namespace Geomapmaker.ViewModels.MapUnits
         {
             // Refresh map unit data
             await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
-            NotifyPropertyChanged("ParentOptions");
 
             // Reset values
             MapUnit = null;
@@ -376,10 +375,18 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private void ValidateColor(string color, string propertyKey)
         {
+            var foo = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits;
+            var fooooo = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.Hexcolor == color);
+
             // Required field
             if (string.IsNullOrWhiteSpace(color))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            // Color must be unique 
+            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.Hexcolor == color))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }
             else
             {

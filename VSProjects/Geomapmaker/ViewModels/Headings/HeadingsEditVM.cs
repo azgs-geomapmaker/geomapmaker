@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// <summary>
         /// List of all Headings/Subheadings
         /// </summary>
-        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnitData.Headings.OrderBy(a => a.Name));
+        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnitData.Headings);
 
         /// <summary>
         /// Map Unit selected for edit
@@ -174,6 +174,7 @@ namespace Geomapmaker.ViewModels.Headings
                                         context.Invalidate(row);
 
                                         row["Name"] = Name;
+                                        row["FullName"] = Name;
                                         row["Description"] = Description;
                                         row["ParagraphStyle"] = "Heading";
                                         row["ParentId"] = Parent;

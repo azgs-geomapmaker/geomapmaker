@@ -27,7 +27,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             CommandReset = new RelayCommand(() => ResetAsync());
         }
 
-        public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name));
+        public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnitData.MapUnits);
 
         private MapUnit _selectedMapUnit;
         public MapUnit SelectedMapUnit
@@ -36,9 +36,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             set
             {
                 SetProperty(ref _selectedMapUnit, value, () => SelectedMapUnit);
-
-                // Update parent options to remove selected heading
-                NotifyPropertyChanged("ParentOptions");
 
                 if (SelectedMapUnit != null)
                 {
@@ -50,7 +47,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                     RelativeAge = SelectedMapUnit.RelativeAge;
                     Description = SelectedMapUnit.Description;
                     Label = SelectedMapUnit.Label;
-                    HexColor = SelectedMapUnit.hexcolor;
+                    HexColor = SelectedMapUnit.Hexcolor;
                     GeoMaterial = SelectedMapUnit.GeoMaterial;
                     GeoMaterialConfidence = SelectedMapUnit.GeoMaterialConfidence;
                 }
@@ -97,12 +94,14 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private Interval GetOlderIntervalFromAge(string age)
         {
+            // TODO: Convert other possible formats such as "Name to Name", "Name - Name", "Name", etc
+
             if (string.IsNullOrEmpty(age) || !age.Contains('-'))
             {
                 return null;
             }
 
-            string olderName = age.Substring(0, age.IndexOf('-'));
+            string olderName = age.Substring(0, age.IndexOf('-')).Trim();
 
             return OlderIntervalOptions.FirstOrDefault(a => a.Name == olderName);
         }
@@ -128,7 +127,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 return null;
             }
 
-            string youngerName = age.Substring(age.IndexOf('-') + 1);
+            string youngerName = age.Substring(age.IndexOf('-') + 1).Trim();
 
             return YoungerIntervalOptions.FirstOrDefault(a => a.Name == youngerName);
         }
@@ -146,7 +145,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         // Convert the two interval names into a string
-        public string Age => $"{OlderInterval?.Name} - {YoungerInterval?.Name}";
+        public string Age => $"{OlderInterval?.Name}-{YoungerInterval?.Name}";
 
         // Relative Age
         private string _relativeAge;
@@ -223,6 +222,8 @@ namespace Geomapmaker.ViewModels.MapUnits
         {
             // Refresh map unit data
             await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+
+            NotifyPropertyChanged("AllMapUnits");
 
             MapUnit = null;
             Name = null;
@@ -415,6 +416,11 @@ namespace Geomapmaker.ViewModels.MapUnits
             if (string.IsNullOrWhiteSpace(color))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            // Color must be unique 
+            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ID != SelectedMapUnit?.ID).Any(a => a.Hexcolor == color))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }
             else
             {

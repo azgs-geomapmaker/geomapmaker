@@ -176,7 +176,7 @@ namespace Geomapmaker
                                     //mapUnit.Label = row["Label"].ToString();
                                     //mapUnit.Symbol = row["Symbol"].ToString();
                                     //mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
-                                    hexcolor = row["hexcolor"]?.ToString(),
+                                    Hexcolor = row["hexcolor"]?.ToString(),
                                     //mapUnit.Color = row["hexcolor"];
                                     DescriptionSourceID = row["DescriptionSourceID"]?.ToString(),
                                     GeoMaterial = row["GeoMaterial"]?.ToString(),

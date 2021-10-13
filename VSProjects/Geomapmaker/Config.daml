@@ -109,10 +109,7 @@
         <dockPane id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.HeadingsViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="Geomapmaker.Views.Headings.Headings" />
         </dockPane>
-        <dockPane id="Geomapmaker_MapUnits" caption="MapUnits" className="MapUnitsViewModel" dock="group" dockWith="esri_core_projectDockPane">
-          <content className="MapUnitsView" />
-        </dockPane>
-        <dockPane id="Geomapmaker_DescriptionOfMapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnitsViewModel" dock="group" dockWith="esri_core_projectDockPane">
+        <dockPane id="Geomapmaker_DescriptionOfMapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnitsViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="Geomapmaker.Views.MapUnits.MapUnitsView" />
         </dockPane>
       </dockPanes>

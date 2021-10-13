@@ -98,6 +98,7 @@ namespace Geomapmaker.ViewModels.Headings
                             using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                             {
                                 rowBuffer["Name"] = Name;
+                                rowBuffer["FullName"] = Name;
                                 rowBuffer["Description"] = Description;
                                 rowBuffer["ParagraphStyle"] = "Heading";
                                 rowBuffer["ParentId"] = Parent;
