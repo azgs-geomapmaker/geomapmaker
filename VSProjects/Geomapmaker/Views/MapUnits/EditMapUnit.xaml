@@ -364,7 +364,7 @@
                 </StackPanel>
             </Label.ToolTip>
         </Label>
-        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}">
+        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" MaxHeight="25">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
