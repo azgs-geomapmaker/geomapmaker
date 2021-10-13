@@ -351,12 +351,13 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private void ValidateChangeWasMade()
         {
-            // Error message isn't displayed on a field. Just prevents user from hitting update until a change is made.
+            // Silent error message
+            // Just prevents update until a map unit is selected and a change is made.
             const string propertyKey = "SilentError";
 
             if (SelectedMapUnit == null)
             {
-                _validationErrors.Remove(propertyKey);
+                _validationErrors[propertyKey] = new List<string>() { "Select a map unit to edit." };
                 return;
             }
 
