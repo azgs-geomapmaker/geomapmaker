@@ -1,8 +1,14 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnits
@@ -20,21 +26,128 @@ namespace Geomapmaker.ViewModels.MapUnits
             CommandReset = new RelayCommand(() => ResetAsync());
         }
 
+        public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
+
+        private MapUnit _selected;
+        public MapUnit Selected
+        {
+            get => _selected;
+            set
+            {
+                SetProperty(ref _selected, value, () => Selected);
+
+                MapUnit = Selected?.MU;
+                NotifyPropertyChanged("MapUnit");
+
+                Name = Selected?.Name;
+                NotifyPropertyChanged("Name");
+
+                FullName = Selected?.FullName;
+                NotifyPropertyChanged("FullName");
+
+                Age = Selected?.Age;
+                NotifyPropertyChanged("Age");
+
+                RelativeAge = Selected?.RelativeAge;
+                NotifyPropertyChanged("RelativeAge");
+
+                Description = Selected?.Description;
+                NotifyPropertyChanged("Description");
+
+                Label = Selected?.Label;
+                NotifyPropertyChanged("Label");
+
+                HexColor = Selected?.HexColor;
+                NotifyPropertyChanged("HexColor");
+
+                GeoMaterial = Selected?.GeoMaterial;
+                NotifyPropertyChanged("GeoMaterial");
+
+                GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
+                NotifyPropertyChanged("GeoMaterialConfidence");
+
+                ValidateCanDelete();
+            }
+        }
+
+        public string MapUnit { get; set; }
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string Age { get; set; }
+        public string RelativeAge { get; set; }
+        public string Description { get; set; }
+        public string Label { get; set; }
+        public string HexColor { get; set; }
+        public string GeoMaterial { get; set; }
+        public string GeoMaterialConfidence { get; set; }
+
         private bool CanDelete()
         {
             return !HasErrors;
         }
 
-        private void ResetAsync()
+        private async Task ResetAsync()
         {
-            // TODO
-            throw new NotImplementedException();
+            // Refresh map unit data
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+
+            NotifyPropertyChanged("AllMapUnits");
+
+            Selected = null;
         }
 
-        private void DeleteMapUnitAsync()
+        private async Task DeleteMapUnitAsync()
         {
-            // TODO
-            throw new NotImplementedException();
+            if (Data.DbConnectionProperties.GetProperties() == null)
+            {
+                return;
+            }
+
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+
+                EditOperation editOperation = new EditOperation();
+
+                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
+
+                        editOperation.Callback(context =>
+                        {
+                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
+
+                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            {
+
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        context.Invalidate(row);
+
+                                        row.Delete();
+                                    }
+                                }
+                            }
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+
+                        if (!result)
+                        {
+                            MessageBox.Show(editOperation.ErrorMessage);
+                        }
+                    }
+                }
+            });
+
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+
+            NotifyPropertyChanged("AllMapUnits");
+
+            // Reset values
+            Selected = null;
         }
 
         // Validation
@@ -59,6 +172,22 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
+
+        private void ValidateCanDelete()
+        {
+            const string propertyKey = "SilentError";
+
+            if (Selected == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
 
         #endregion
     }
