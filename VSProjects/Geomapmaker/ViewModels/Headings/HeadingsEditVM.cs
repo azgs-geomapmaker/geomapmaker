@@ -64,7 +64,7 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 SetProperty(ref _name, value, () => Name);
                 ValidateHeadingName(_name, "Name");
-                ValidateIfChangeWasMade();
+                ValidateChangeWasMade();
             }
         }
 
@@ -77,7 +77,7 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 SetProperty(ref _description, value, () => Description);
                 ValidateDescription(_description, "Description");
-                ValidateIfChangeWasMade();
+                ValidateChangeWasMade();
             }
         }
 
@@ -90,7 +90,7 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 SetProperty(ref _parent, value, () => Parent);
                 ValidateParent(_parent, "Parent");
-                ValidateIfChangeWasMade();
+                ValidateChangeWasMade();
             }
         }
 
@@ -250,9 +250,9 @@ namespace Geomapmaker.ViewModels.Headings
 
         public bool HasErrors => _validationErrors.Count > 0;
 
-        private void ValidateIfChangeWasMade()
+        private void ValidateChangeWasMade()
         {
-            // This error isn't display on any field. Prevents user from hitting update until a change is made.
+            // Error message isn't display on a field. Just prevents user from hitting update until a change is made.
             const string propertyKey = "SilentError";
 
             if (SelectedHeading == null)

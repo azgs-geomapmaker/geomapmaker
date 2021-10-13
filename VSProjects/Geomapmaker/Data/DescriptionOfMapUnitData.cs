@@ -17,6 +17,19 @@ namespace Geomapmaker.Data
         // Returns map units from all map units
         public static List<MapUnit> MapUnits => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.MU).ToList();
 
+        private static string RowValueToString(object value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+            else
+            {
+                return value.ToString();
+            }
+
+        }
+
         public static async Task RefreshMapUnitsAsync()
         {
             if (DbConnectionProperties.GetProperties() == null)
@@ -46,23 +59,18 @@ namespace Geomapmaker.Data
                                 MapUnit mapUnit = new MapUnit
                                 {
                                     ID = int.Parse(row["ObjectID"].ToString()),
-                                    MU = row["MapUnit"]?.ToString(),
-                                    Name = row["Name"].ToString(),
-                                    FullName = row["FullName"]?.ToString(),
-                                    Age = row["Age"]?.ToString(), //TODO: more formatting here
-                                    //mapUnit.RelativeAge = row["RelativeAge"].ToString(); //TODO: this is column missing in the table right now
-                                    Description = row["Description"]?.ToString(),
-                                    HierarchyKey = row["HierarchyKey"]?.ToString(),
-                                    ParagraphStyle = row["ParagraphStyle"]?.ToString(),
-                                    //mapUnit.ParagraphStyle = JsonConvert.DeserializeObject<List<string>>(row["ParagraphStyle"].ToString());
-                                    Label = row["Label"]?.ToString(),
-                                    //mapUnit.Symbol = row["Symbol"].ToString();
-                                    //mapUnit.AreaFillRGB = row["AreaFillRGB"].ToString(); //TODO: more formatting here
-                                    Hexcolor = row["hexcolor"]?.ToString(),
-                                    //mapUnit.Color = row["hexcolor"];
-                                    DescriptionSourceID = row["DescriptionSourceID"]?.ToString(),
-                                    GeoMaterial = row["GeoMaterial"]?.ToString(),
-                                    GeoMaterialConfidence = row["GeoMaterialConfidence"]?.ToString(),
+                                    MU = RowValueToString(row["MapUnit"]),
+                                    Name = RowValueToString(row["Name"]),
+                                    FullName = RowValueToString(row["FullName"]),
+                                    Age = RowValueToString(row["Age"]),
+                                    Description = RowValueToString(row["Description"]),
+                                    HierarchyKey = RowValueToString(row["HierarchyKey"]),
+                                    ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
+                                    Label = RowValueToString(row["Label"]),
+                                    Hexcolor = RowValueToString(row["Hexcolor"]),
+                                    DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
+                                    GeoMaterial = RowValueToString(row["GeoMaterial"]),
+                                    GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
                                     ParentId = (int?)row["ParentId"]
                                 };
 

@@ -63,6 +63,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _mapUnit, value, () => MapUnit);
                 ValidateMapUnit(MapUnit, "MapUnit");
+                ValidateChangeWasMade();
             }
         }
 
@@ -75,6 +76,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _name, value, () => Name);
                 ValidateName(Name, "Name");
+                ValidateChangeWasMade();
             }
         }
 
@@ -87,6 +89,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _fullName, value, () => FullName);
                 ValidateFullName(FullName, "FullName");
+                ValidateChangeWasMade();
             }
         }
 
@@ -115,6 +118,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _olderInterval, value, () => OlderInterval);
                 ValidateIntervals(YoungerInterval, OlderInterval);
+                ValidateChangeWasMade();
             }
         }
 
@@ -141,6 +145,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _youngerInterval, value, () => YoungerInterval);
                 ValidateIntervals(YoungerInterval, OlderInterval);
+                ValidateChangeWasMade();
             }
         }
 
@@ -152,7 +157,11 @@ namespace Geomapmaker.ViewModels.MapUnits
         public string RelativeAge
         {
             get => _relativeAge;
-            set => SetProperty(ref _relativeAge, value, () => RelativeAge);
+            set
+            {
+                SetProperty(ref _relativeAge, value, () => RelativeAge);
+                ValidateChangeWasMade();
+            }
         }
 
         // Description
@@ -160,7 +169,11 @@ namespace Geomapmaker.ViewModels.MapUnits
         public string Description
         {
             get => _description;
-            set => SetProperty(ref _description, value, () => Description);
+            set
+            {
+                SetProperty(ref _description, value, () => Description);
+                ValidateChangeWasMade();
+            }
         }
 
         // Label
@@ -168,7 +181,11 @@ namespace Geomapmaker.ViewModels.MapUnits
         public string Label
         {
             get => _label;
-            set => SetProperty(ref _label, value, () => Label);
+            set
+            {
+                SetProperty(ref _label, value, () => Label);
+                ValidateChangeWasMade();
+            }
         }
 
         // Color
@@ -180,6 +197,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _hexColor, value, () => HexColor);
                 ValidateColor(HexColor, "HexColor");
+                ValidateChangeWasMade();
             }
         }
 
@@ -196,6 +214,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _geoMaterial, value, () => GeoMaterial);
                 ValidateGeoMaterial(GeoMaterial, "GeoMaterial");
+                ValidateChangeWasMade();
             }
         }
 
@@ -210,6 +229,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _geoMaterialConfidence, value, () => GeoMaterialConfidence);
                 ValidateGeoMaterialConfidence(GeoMaterialConfidence, "GeoMaterialConfidence");
+                ValidateChangeWasMade();
             }
         }
 
@@ -325,6 +345,39 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
+
+        private void ValidateChangeWasMade()
+        {
+            // Error message isn't display on a field. Just prevents user from hitting update until a change is made.
+            const string propertyKey = "SilentError";
+
+            if (SelectedMapUnit == null)
+            {
+                _validationErrors.Remove(propertyKey);
+                return;
+            }
+
+            if (SelectedMapUnit.MU == MapUnit &&
+                SelectedMapUnit.Name == Name &&
+                SelectedMapUnit.FullName == FullName &&
+                SelectedMapUnit.Age == Age &&
+                SelectedMapUnit.RelativeAge == RelativeAge &&
+                SelectedMapUnit.Description == Description &&
+                SelectedMapUnit.Label == Label &&
+                SelectedMapUnit.Hexcolor == HexColor &&
+                SelectedMapUnit.GeoMaterial == GeoMaterial &&
+                SelectedMapUnit.GeoMaterialConfidence == GeoMaterialConfidence
+                )
+            {
+                _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
 
         private void ValidateMapUnit(string mapUnit, string propertyKey)
         {
