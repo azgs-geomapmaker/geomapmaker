@@ -19,26 +19,26 @@ namespace Geomapmaker.ViewModels.Headings
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
-            {"NameDescription", "TODO" },
-            {"NameNotes", "TODO" },
+            // Dockpane Headings
+            {"CreateHeading", "TODO CreateHeading" },
+            {"EditHeading", "TODO EditHeading" },
+            {"DeleteHeading", "TODO DeleteHeading" },
 
-            {"DescriptionDescription", "TODO" },
-            {"DescriptionNotes", "TODO" },
-
-            {"ParentDescription", "TODO" },
-            {"ParentNotes", "TODO" },
+            // Control Labels
+            {"Tree", "TODO Tree" },
+            {"Name", "TODO Name" },
+            {"Description", "TODO Description" },
+            {"Parent", "TODO Parent" },
             
-            // Combobox to select a heading to edit
-            {"EditDescription", "TODO" },
-            {"EditNotes", "TODO" },
+            // Heading Selection Comboboxes
+            {"Edit", "TODO Edit" },
+            {"Delete", "TODO Delete" },
 
-            // Combobox to select a heading to delete
-            {"DeleteDescription", "TODO" },
-            {"DeleteNotes", "TODO" },
-
-            // Tree view
-            {"TreeDescription", "TODO" },
-            {"TreeNotes", "TODO" },
+            // Buttons
+            {"ClearButton", "TODO ClearButton" },
+            {"SaveButton", "TODO SaveButton" },
+            {"UpdateButton", "TODO UpdateButton" },
+            {"DeleteButton", "TODO DeleteButton" },
         };
 
         /// <summary>

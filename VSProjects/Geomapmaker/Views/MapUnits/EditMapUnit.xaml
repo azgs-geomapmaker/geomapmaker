@@ -50,46 +50,23 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="2" Text="Edit Map Unit" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
-                <TextBlock.ToolTip>
-                    <WrapPanel Orientation="Vertical" MaxWidth="300">
-                        <TextBlock Text="Edit Map Unit" TextWrapping="Wrap"/>
-                    </WrapPanel>
-                </TextBlock.ToolTip>
-            </TextBlock>
+            <TextBlock Grid.Column="2" Text="Edit Map Unit" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" ToolTip="{Binding Tooltips[EditHeading]}" />
         </DockPanel>
 
-        <Label Grid.Row="2" Grid.Column="1" Content="Edit:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[EditDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[EditNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
+        <Label Grid.Row="2" Grid.Column="1" Content="Edit:" ToolTip="{Binding Tooltips[Edit]}"/>
         <ComboBox 
             Grid.Row="2" 
             Grid.Column="2" 
 		    ItemsSource="{Binding Edit.AllMapUnits}" 
 		    DisplayMemberPath="MU" 
             SelectedItem="{Binding Edit.SelectedMapUnit}" 
+            ToolTip="{Binding Tooltips[Edit]}"
         />
 
         <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Map Unit:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[MapUnitDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[MapUnitNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Edit.MapUnit, UpdateSourceTrigger=PropertyChanged }" >
+        <Label Grid.Row="4" Grid.Column="1" Content="Map Unit:" ToolTip="{Binding Tooltips[MapUnit]}"/>
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Edit.MapUnit, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[MapUnit]}" >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -108,17 +85,8 @@
             </Validation.ErrorTemplate>
         </TextBox>
 
-        <Label Grid.Row="5" Grid.Column="1" Content="Name:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[NameDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[NameNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged }" >
+        <Label Grid.Row="5" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
+        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -137,17 +105,8 @@
             </Validation.ErrorTemplate>
         </TextBox>
 
-        <Label Grid.Row="6" Grid.Column="1" Content="Full Name:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[FullNameDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[FullNameNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Edit.FullName, UpdateSourceTrigger=PropertyChanged }" >
+        <Label Grid.Row="6" Grid.Column="1" Content="Full Name:" ToolTip="{Binding Tooltips[FullName]}" />
+        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Edit.FullName, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[FullName]}" >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -166,16 +125,7 @@
             </Validation.ErrorTemplate>
         </TextBox>
 
-        <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10">
-
-            <GroupBox.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[AgeDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[AgeNotes]}" />
-                </StackPanel>
-            </GroupBox.ToolTip>
+        <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}">
 
             <Grid >
                 <Grid.RowDefinitions>
@@ -188,17 +138,8 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Margin="0" Content="Older Interval:">
-                    <Label.ToolTip>
-                        <StackPanel>
-                            <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                            <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[OlderIntervalDescription]}" />
-                            <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                            <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[OlderIntervalNotes]}" />
-                        </StackPanel>
-                    </Label.ToolTip>
-                </Label>
-                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Edit.OlderIntervalOptions}" SelectedItem="{Binding Edit.OlderInterval }" >
+                <Label Grid.Row="0" Grid.Column="0" Margin="0" Content="Older Interval:" ToolTip="{Binding Tooltips[OlderInterval]}"/>
+                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Edit.OlderIntervalOptions}" SelectedItem="{Binding Edit.OlderInterval}" ToolTip="{Binding Tooltips[OlderInterval]}" >
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}" />
@@ -224,17 +165,8 @@
 
                 <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
 
-                <Label Grid.Row="0" Grid.Column="2" Margin="0" Content="Younger Interval:">
-                    <Label.ToolTip>
-                        <StackPanel>
-                            <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                            <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[YoungerIntervalDescription]}" />
-                            <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                            <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[YoungerIntervalNotes]}" />
-                        </StackPanel>
-                    </Label.ToolTip>
-                </Label>
-                <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Edit.YoungerIntervalOptions}" SelectedItem="{Binding Edit.YoungerInterval}" >
+                <Label Grid.Row="0" Grid.Column="2" Margin="0" Content="Younger Interval:" ToolTip="{Binding Tooltips[YoungerInterval]}" />
+                <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Edit.YoungerIntervalOptions}" SelectedItem="{Binding Edit.YoungerInterval}" ToolTip="{Binding Tooltips[YoungerInterval]}" >
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}" />
@@ -260,53 +192,17 @@
             </Grid>
         </GroupBox>
 
-        <Label Grid.Row="8" Grid.Column="1" Content="Relative Age:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[RelativeAgeDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[RelativeAgeNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Edit.RelativeAge, UpdateSourceTrigger=PropertyChanged }" />
+        <Label Grid.Row="8" Grid.Column="1" Content="Relative Age:" ToolTip="{Binding Tooltips[RelativeAge]}" />
+        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Edit.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}"  />
 
-        <Label Grid.Row="9" Grid.Column="1" Content="Description:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[DescriptionNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="9" Grid.Column="2"  MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged }" />
+        <Label Grid.Row="9" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
+        <TextBox Grid.Row="9" Grid.Column="2"  MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" />
 
-        <Label Grid.Row="10" Grid.Column="1" Content="Label:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[LabelDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[LabelNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Edit.Label }" />
+        <Label Grid.Row="10" Grid.Column="1" Content="Label:" ToolTip="{Binding Tooltips[Label]}" />
+        <TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Edit.Label}" ToolTip="{Binding Tooltips[Label]}" />
 
-        <Label Grid.Row="11" Grid.Column="1" Content="Color:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[ColorDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[ColorNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <wpftk:ColorPicker Grid.Row="11" Grid.Column="2" Margin="10" SelectedColor="{Binding Edit.HexColor}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False">
+        <Label Grid.Row="11" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
+        <wpftk:ColorPicker Grid.Row="11" Grid.Column="2" Margin="10" SelectedColor="{Binding Edit.HexColor}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding Tooltips[Color]}">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -325,17 +221,8 @@
             </Validation.ErrorTemplate>
         </wpftk:ColorPicker>
 
-        <Label Grid.Row="12" Grid.Column="1" Content="GeoMaterial:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[GeoMaterialDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[GeoMaterialNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <ComboBox Grid.Row="12" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialOptions}" SelectedValue="{Binding Edit.GeoMaterial}">
+        <Label Grid.Row="12" Grid.Column="1" Content="GeoMaterial:" ToolTip="{Binding Tooltips[GeoMaterial]}" />
+        <ComboBox Grid.Row="12" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialOptions}" SelectedValue="{Binding Edit.GeoMaterial}" ToolTip="{Binding Tooltips[GeoMaterial]}">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -354,17 +241,8 @@
             </Validation.ErrorTemplate>
         </ComboBox>
 
-        <Label Grid.Row="13" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[GeoMaterialDescription]}" />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="{Binding Tooltips[GeoMaterialNotes]}" />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" MaxHeight="25">
+        <Label Grid.Row="13" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
+        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -383,8 +261,8 @@
             </Validation.ErrorTemplate>
         </ComboBox>
 
-        <Button Grid.Row="14" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandReset}" >Clear</Button>
-        <Button Grid.Row="14" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}" >Update</Button>
+        <Button Grid.Row="14" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
+        <Button Grid.Row="14" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}" ToolTip="{Binding Tooltips[UpdateButton]}" >Update</Button>
 
     </Grid>
 

@@ -23,50 +23,35 @@ namespace Geomapmaker.ViewModels.MapUnits
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
-            {"MapUnitDescription", "TODO" },
-            {"MapUnitNotes", "TODO" },
+            // Dockpane Headings
+            {"CreateHeading", "TODO CreateHeading" },
+            {"EditHeading", "TODO EditHeading" },
+            {"DeleteHeading", "TODO DeleteHeading" },
 
-            {"NameDescription", "TODO" },
-            {"NameNotes", "TODO" },
+            // Control Labels
+            {"MapUnit", "TODO MapUnit" },
+            {"Name", "TODO Name" },
+            {"FullName", "TODO FullName" },
+            {"Age", "TODO Age" },
+            {"OlderInterval", "TODO OlderInterval" },
+            {"YoungerInterval", "TODO YoungerInterval" },
+            {"RelativeAge", "TODO RelativeAge" },
+            {"Description", "TODO Description" },
+            {"Parent", "TODO Parent" },
+            {"Label", "TODO Label" },
+            {"Color", "TODO Color" },
+            {"GeoMaterial", "TODO GeoMaterial" },
+            {"GeoMaterialConfidence", "TODO GeoMaterialConfidence" },
 
-            {"FullNameDescription", "TODO" },
-            {"FullNameNotes", "TODO" },
+            // Map Unit Selection Comboboxes 
+            {"Edit", "TODO Edit" },
+            {"Delete", "TODO Delete" },
 
-            {"AgeDescription", "TODO" },
-            {"AgeNotes", "TODO" },
-
-            {"OlderIntervalDescription", "TODO" },
-            {"OlderIntervalNotes", "TODO" },
-
-            {"YoungerIntervalDescription", "TODO" },
-            {"YoungerIntervalNotes", "TODO" },
-
-            {"RelativeAgeDescription", "TODO" },
-            {"RelativeAgeNotes", "TODO" },
-
-            {"DescriptionDescription", "TODO" },
-            {"DescriptionNotes", "TODO" },
-
-            {"ParentDescription", "TODO" },
-            {"ParentNotes", "TODO" },
-
-            {"LabelDescription", "TODO" },
-            {"LabelNotes", "TODO" },
-
-            {"ColorDescription", "TODO" },
-            {"ColorNotes", "TODO" },
-
-            {"GeoMaterialDescription", "TODO" },
-            {"GeoMaterialNotes", "TODO" },
-
-            {"GeoMaterialConfidenceDescription", "TODO" },
-            {"GeoMaterialConfidenceNotes", "TODO" },
-
-
-
-            {"Description", "TODO" },
-            {"Notes", "TODO" },
-
+            // Buttons
+            {"ClearButton", "TODO ClearButton" },
+            {"SaveButton", "TODO SaveButton" },
+            {"UpdateButton", "TODO UpdateButton" },
+            {"DeleteButton", "TODO DeleteButton" },
         };
 
         /// <summary>
@@ -78,6 +63,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             pane?.Activate();
         }
 
+        // Convert Hex Color to RGB
         public static string HexToRGB(string hex)
         {
             Color color = (Color)ColorConverter.ConvertFromString(hex);

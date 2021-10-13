@@ -175,6 +175,9 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private void ValidateCanDelete()
         {
+
+            // TODO: Prevent user from deleting any mapunits with mapunitpolys
+
             const string propertyKey = "SilentError";
 
             if (Selected == null)
