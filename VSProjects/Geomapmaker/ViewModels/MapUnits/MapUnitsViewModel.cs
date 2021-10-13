@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 
@@ -8,6 +9,9 @@ namespace Geomapmaker.ViewModels.MapUnits
     internal class MapUnitsViewModel : DockPane
     {
         private const string _dockPaneID = "Geomapmaker_DescriptionOfMapUnits";
+
+        // This is the only way I found to add a New Line in a label so far
+        public string GeoMaterialConfidenceLabel  => "GeoMaterial" + Environment.NewLine + "Confidence:";
 
         // View models
         public CreateMapUnitVM Create { get; set; } = new CreateMapUnitVM();

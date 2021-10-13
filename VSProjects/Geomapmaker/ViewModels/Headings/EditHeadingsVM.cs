@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// <summary>
         /// List of all Headings/Subheadings
         /// </summary>
-        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnitData.Headings);
+        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Headings);
 
         /// <summary>
         /// Map Unit selected for edit
@@ -100,7 +100,7 @@ namespace Geomapmaker.ViewModels.Headings
         private List<MapUnit> GetChildren(MapUnit root)
         {
             // Get mapunit's children
-            List<MapUnit> children = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ParentId == root?.ID).ToList();
+            List<MapUnit> children = Data.DescriptionOfMapUnits.DMUs.Where(a => a.ParentId == root?.ID).ToList();
 
             // If no children
             if (children.Count == 0)
@@ -121,7 +121,7 @@ namespace Geomapmaker.ViewModels.Headings
         
         private async Task ResetAsync()
         {
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
 
@@ -199,7 +199,7 @@ namespace Geomapmaker.ViewModels.Headings
                 }
             });
 
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
             NotifyPropertyChanged("ParentOptions");
@@ -216,7 +216,7 @@ namespace Geomapmaker.ViewModels.Headings
             get
             {
                 // Remove selected heading from parent options
-                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
+                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnits.Headings
                     .Where(a => a.ID != SelectedHeading?.ID)
                     .OrderBy(a => a.Name)
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
@@ -282,7 +282,7 @@ namespace Geomapmaker.ViewModels.Headings
                 _validationErrors[propertyKey] = new List<string>() { "" };
                 RaiseErrorsChanged(propertyKey);
             }
-            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
+            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
                 RaiseErrorsChanged(propertyKey);
@@ -316,7 +316,7 @@ namespace Geomapmaker.ViewModels.Headings
             while (checkId != null)
             {
                 // Look up the parent to grab grandparent id
-                checkId = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.FirstOrDefault(a => a.ID == checkId)?.ParentId;
+                checkId = Data.DescriptionOfMapUnits.DMUs.FirstOrDefault(a => a.ID == checkId)?.ParentId;
 
                 // Compare with selected heading
                 if (checkId == SelectedHeading.ID)

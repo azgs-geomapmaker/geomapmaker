@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// <summary>
         /// List of all Headings/Subheadings
         /// </summary>
-        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnitData.Headings.OrderBy(a => a.Name));
+        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Headings.OrderBy(a => a.Name));
 
         /// <summary>
         /// Map Unit selected to be deleted
@@ -45,7 +45,7 @@ namespace Geomapmaker.ViewModels.Headings
 
                 Name = value?.Name;
                 Description = value?.Description;
-                Parent = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.FirstOrDefault(a => a.ID == value?.ParentId)?.Name;
+                Parent = Data.DescriptionOfMapUnits.DMUs.FirstOrDefault(a => a.ID == value?.ParentId)?.Name;
                 Tree = value != null ? new List<MapUnit> { new MapUnit { Name = value.Name, Children = GetChildren(value) } } : null;
                 NotifyPropertyChanged("Name");
                 NotifyPropertyChanged("Description");
@@ -59,7 +59,7 @@ namespace Geomapmaker.ViewModels.Headings
         private List<MapUnit> GetChildren(MapUnit root)
         {
             // Get mapunit's children
-            List<MapUnit> children = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ParentId == root?.ID).ToList();
+            List<MapUnit> children = Data.DescriptionOfMapUnits.DMUs.Where(a => a.ParentId == root?.ID).ToList();
 
             // If no children
             if (children.Count == 0)
@@ -94,7 +94,7 @@ namespace Geomapmaker.ViewModels.Headings
 
         private async Task ResetAsync()
         {
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
 
@@ -151,7 +151,7 @@ namespace Geomapmaker.ViewModels.Headings
                 }
             });
 
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
 

@@ -179,7 +179,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         private async Task ResetAsync()
         {
             // Refresh map unit data
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             // Reset values
             MapUnit = null;
@@ -297,7 +297,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
@@ -375,8 +375,8 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private void ValidateColor(string color, string propertyKey)
         {
-            var foo = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits;
-            var fooooo = Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.HexColor == color);
+            var foo = Data.DescriptionOfMapUnits.DMUs;
+            var fooooo = Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == color);
 
             // Required field
             if (string.IsNullOrWhiteSpace(color))
@@ -384,7 +384,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.HexColor == color))
+            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == color))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }

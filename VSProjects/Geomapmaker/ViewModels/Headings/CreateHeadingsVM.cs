@@ -124,7 +124,7 @@ namespace Geomapmaker.ViewModels.Headings
             });
 
             // Update mapunits
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             // Reset values
             Name = "";
@@ -136,7 +136,7 @@ namespace Geomapmaker.ViewModels.Headings
 
         private async Task ResetAsync()
         {
-            await Data.DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("ParentOptions");
 
@@ -156,7 +156,7 @@ namespace Geomapmaker.ViewModels.Headings
                 // Get Headings/Subheadings from map units.
                 // Sort by name
                 // Create a int/string kvp for the combobox
-                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
+                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnits.Headings
                     .OrderBy(a => a.Name)
                     .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
                     .ToList();
@@ -200,7 +200,7 @@ namespace Geomapmaker.ViewModels.Headings
                 RaiseErrorsChanged(propertyKey);
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
+            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
                 RaiseErrorsChanged(propertyKey);

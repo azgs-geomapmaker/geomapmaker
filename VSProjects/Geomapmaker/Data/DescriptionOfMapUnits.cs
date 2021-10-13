@@ -6,22 +6,25 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public static class DescriptionOfMapUnitData
+    public static class DescriptionOfMapUnits
     {
         // All headings and map units
-        public static List<MapUnit> AllDescriptionOfMapUnits { get; set; } = new List<MapUnit>();
+        public static List<MapUnit> DMUs { get; set; } = new List<MapUnit>();
 
-        // Returns headings from all map units
-        public static List<MapUnit> Headings => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.MU).ToList();
+        // Returns only headings
+        public static List<MapUnit> Headings => DMUs.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name).ToList();
 
-        // Returns map units from all map units
-        public static List<MapUnit> MapUnits => AllDescriptionOfMapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.MU).ToList();
+        // Returns only map units
+        public static List<MapUnit> MapUnits => DMUs.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.MU).ToList();
 
+        // Convert row object to a string. 
         private static string RowValueToString(object value)
         {
+            // Nulls are converted to an empty string
             return value == null ? "" : value.ToString();
         }
 
+        // Refresh Map Units. Might need to refresh everytime in the Getter instead..
         public static async Task RefreshMapUnitsAsync()
         {
             if (DbConnectionProperties.GetProperties() == null)
@@ -31,14 +34,13 @@ namespace Geomapmaker.Data
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-                List<MapUnit> tempMapUnits = new List<MapUnit>();
+                List<MapUnit> MapUnitsList = new List<MapUnit>();
 
                 using (Geodatabase geodatabase = new Geodatabase(DbConnectionProperties.GetProperties()))
                 {
                     QueryDef mapUnitsQDef = new QueryDef
                     {
                         Tables = "DescriptionOfMapUnits",
-                        PostfixClause = "order by objectid"
                     };
 
                     using (RowCursor rowCursor = geodatabase.Evaluate(mapUnitsQDef, false))
@@ -47,7 +49,7 @@ namespace Geomapmaker.Data
                         {
                             using (Row row = rowCursor.Current)
                             {
-                                // Create and load map unit
+                                // Create map unit from row 
                                 MapUnit mapUnit = new MapUnit
                                 {
                                     ID = int.Parse(row["ObjectID"].ToString()),
@@ -68,13 +70,13 @@ namespace Geomapmaker.Data
                                 };
 
                                 // Add it to temp list
-                                tempMapUnits.Add(mapUnit);
+                                MapUnitsList.Add(mapUnit);
                             }
                         }
                     }
                 }
 
-                AllDescriptionOfMapUnits = tempMapUnits;
+                DMUs = MapUnitsList;
             });
         }
     }

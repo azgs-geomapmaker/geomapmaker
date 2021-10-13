@@ -354,7 +354,7 @@
             </Validation.ErrorTemplate>
         </ComboBox>
 
-        <Label Grid.Row="13" Grid.Column="1" Content="GeoMaterial Confidence:" >
+        <Label Grid.Row="13" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" >
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>

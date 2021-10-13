@@ -259,7 +259,7 @@ namespace Geomapmaker
             MapUnits = mapUnits;
 
             // Temp fix while migrating to new data class
-            await DescriptionOfMapUnitData.RefreshMapUnitsAsync();
+            await DescriptionOfMapUnits.RefreshMapUnitsAsync();
         }
 
         public static async Task PopulateContactsAndFaults()
