@@ -18,10 +18,6 @@ namespace Geomapmaker.Models
 
         public string Age { get; set; }
 
-        public Interval OlderInterval { get; set; }
-
-        public Interval YoungerInterval { get; set; }
-
         public string RelativeAge { get; set; }
 
         public string Description { get; set; }

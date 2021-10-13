@@ -1,4 +1,6 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using System;
@@ -7,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnits
@@ -46,7 +49,6 @@ namespace Geomapmaker.ViewModels.MapUnits
                     YoungerInterval = GetYoungerIntervalFromAge(SelectedMapUnit.Age);
                     RelativeAge = SelectedMapUnit.RelativeAge;
                     Description = SelectedMapUnit.Description;
-                    Parent = SelectedMapUnit.ParentId;
                     Label = SelectedMapUnit.Label;
                     HexColor = SelectedMapUnit.hexcolor;
                     GeoMaterial = SelectedMapUnit.GeoMaterial;
@@ -162,77 +164,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             set => SetProperty(ref _description, value, () => Description);
         }
 
-        // Heading parent Id
-        private int? _parent;
-        public int? Parent
-        {
-            get => _parent;
-            set
-            {
-                SetProperty(ref _parent, value, () => Parent);
-                ValidateParent(Parent, "Parent");
-                NotifyPropertyChanged("RankingOptions");
-            }
-        }
-
-        /// <summary>
-        /// List of parent-options available during create
-        /// </summary>
-        public ObservableCollection<KeyValuePair<int?, string>> ParentOptions
-        {
-            get
-            {
-                // Get Headings/Subheadings from map units.
-                // Sort by name
-                // Create a int/string kvp for the combobox
-                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
-                    .OrderBy(a => a.Name)
-                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
-                    .ToList();
-
-                // Initialize a ObservableCollection with the list
-                // Note: Casting a list as an OC does not working.
-                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
-            }
-        }
-
-        public ObservableCollection<KeyValuePair<int?, string>> RankingOptions
-        {
-            get
-            {
-                if (Parent == null)
-                {
-                    return null;
-                }
-
-                // Get Headings/Subheadings from map units.
-                // Sort by name
-                // Create a int/string kvp for the combobox
-                //List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
-                //    .Where(a => a.ParentId == Parent)
-                //    .OrderBy(a => a.Name)
-                //    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
-                //    .ToList();
-
-
-                // SEEDING MOCK DATA
-                Random rnd = new Random();
-                List<KeyValuePair<int?, string>> headingList = new List<KeyValuePair<int?, string>>
-                {
-                    new KeyValuePair<int?, string>( 1, "Map Unit " + rnd.Next(1, 2) ),
-                    new KeyValuePair<int?, string>( 2, "Map Unit " + rnd.Next(3, 4) ),
-                    new KeyValuePair<int?, string>( 3, "Map Unit " + rnd.Next(5, 8) ),
-                    new KeyValuePair<int?, string>( 4, "Map Unit " + rnd.Next(8, 10) ),
-                };
-
-                headingList.Add(new KeyValuePair<int?, string>(5, "(This Map Unit)"));
-
-                // Initialize a ObservableCollection with the list
-                // Note: Casting a list as an OC does not working.
-                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
-            }
-        }
-
         // Label
         private string _label;
         public string Label
@@ -300,7 +231,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             YoungerInterval = null;
             RelativeAge = null;
             Description = null;
-            Parent = null;
             Label = null;
             HexColor = null;
             GeoMaterial = null;
@@ -308,10 +238,68 @@ namespace Geomapmaker.ViewModels.MapUnits
             SelectedMapUnit = null;
         }
 
-        private void UpdateAsync()
+        private async Task UpdateAsync()
         {
-            // TODO
-            throw new NotImplementedException();
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+
+                EditOperation editOperation = new EditOperation();
+
+                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
+
+                        editOperation.Callback(context =>
+                        {
+                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedMapUnit.ID };
+
+                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            {
+
+                                while (rowCursor.MoveNext())
+                                { //TODO: Anything? Should be only one
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        // In order to update the Map and/or the attribute table.
+                                        // Has to be called before any changes are made to the row.
+                                        context.Invalidate(row);
+
+                                        row["MapUnit"] = MapUnit;
+                                        row["Name"] = Name;
+                                        row["FullName"] = FullName;
+                                        row["Age"] = Age;
+                                        row["RelativeAge"] = RelativeAge;
+                                        row["Description"] = Description;
+                                        row["Label"] = Label;
+                                        row["AreaFillRGB"] = AreaFillRGB;
+                                        row["HexColor"] = HexColor;
+                                        row["GeoMaterial"] = GeoMaterial;
+                                        row["GeoMaterialConfidence"] = GeoMaterialConfidence;
+                                        row["ParagraphStyle"] = "Standard";
+                                        row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+
+                                        // After all the changes are done, persist it.
+                                        row.Store();
+
+                                        // Has to be called after the store too.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+
+                        if (!result)
+                        {
+                            MessageBox.Show(editOperation.ErrorMessage);
+                        }
+                    }
+                }
+            });
+
+            await ResetAsync();
         }
 
         // Validation
@@ -419,21 +407,6 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             RaiseErrorsChanged("YoungerInterval");
             RaiseErrorsChanged("OlderInterval");
-        }
-
-        private void ValidateParent(int? parentid, string propertyKey)
-        {
-            // Required field
-            if (parentid == null)
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
         }
 
         private void ValidateColor(string color, string propertyKey)

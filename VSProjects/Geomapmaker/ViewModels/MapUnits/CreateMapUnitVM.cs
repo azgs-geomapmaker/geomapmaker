@@ -126,77 +126,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             set => SetProperty(ref _description, value, () => Description);
         }
 
-        // Heading parent Id
-        private int? _parent;
-        public int? Parent
-        {
-            get => _parent;
-            set
-            {
-                SetProperty(ref _parent, value, () => Parent);
-                ValidateParent(Parent, "Parent");
-                NotifyPropertyChanged("RankingOptions");
-            }
-        }
-
-        /// <summary>
-        /// List of parent-options available during create
-        /// </summary>
-        public ObservableCollection<KeyValuePair<int?, string>> ParentOptions
-        {
-            get
-            {
-                // Get Headings/Subheadings from map units.
-                // Sort by name
-                // Create a int/string kvp for the combobox
-                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
-                    .OrderBy(a => a.Name)
-                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
-                    .ToList();
-
-                // Initialize a ObservableCollection with the list
-                // Note: Casting a list as an OC does not working.
-                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
-            }
-        }
-
-        public ObservableCollection<KeyValuePair<int?, string>> RankingOptions
-        {
-            get
-            {
-                if (Parent == null)
-                {
-                    return null;
-                }
-
-                // Get Headings/Subheadings from map units.
-                // Sort by name
-                // Create a int/string kvp for the combobox
-                //List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnitData.Headings
-                //    .Where(a => a.ParentId == Parent)
-                //    .OrderBy(a => a.Name)
-                //    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
-                //    .ToList();
-
-
-                // SEEDING MOCK DATA
-                Random rnd = new Random();
-                List<KeyValuePair<int?, string>> headingList = new List<KeyValuePair<int?, string>>
-                {
-                    new KeyValuePair<int?, string>( 1, "Map Unit " + rnd.Next(1, 2) ),
-                    new KeyValuePair<int?, string>( 2, "Map Unit " + rnd.Next(3, 4) ),
-                    new KeyValuePair<int?, string>( 3, "Map Unit " + rnd.Next(5, 8) ),
-                    new KeyValuePair<int?, string>( 4, "Map Unit " + rnd.Next(8, 10) ),
-                };
-
-                headingList.Add(new KeyValuePair<int?, string>(5, "(This Map Unit)"));
-
-                // Initialize a ObservableCollection with the list
-                // Note: Casting a list as an OC does not working.
-                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
-            }
-        }
-
         // Label
         private string _label;
         public string Label
@@ -261,7 +190,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             YoungerInterval = null;
             RelativeAge = null;
             Description = null;
-            Parent = null;
             Label = null;
             HexColor = null;
             GeoMaterial = null;
@@ -308,8 +236,6 @@ namespace Geomapmaker.ViewModels.MapUnits
                                 rowBuffer["Age"] = Age;
                                 rowBuffer["RelativeAge"] = RelativeAge;
                                 rowBuffer["Description"] = Description;
-                                rowBuffer["ParentId"] = Parent;
-                                //rowBuffer["Ranking"] = Ranking;
                                 rowBuffer["Label"] = Label;
                                 rowBuffer["AreaFillRGB"] = AreaFillRGB;
                                 rowBuffer["HexColor"] = HexColor;
@@ -446,21 +372,6 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             RaiseErrorsChanged("YoungerInterval");
             RaiseErrorsChanged("OlderInterval");
-        }
-
-        private void ValidateParent(int? parentid, string propertyKey)
-        {
-            // Required field
-            if (parentid == null)
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
         }
 
         private void ValidateColor(string color, string propertyKey)
