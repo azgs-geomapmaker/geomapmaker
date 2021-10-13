@@ -37,6 +37,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _selectedMapUnit, value, () => SelectedMapUnit);
 
+                // Set control values if a Map Unit was selected to edit
                 if (SelectedMapUnit != null)
                 {
                     MapUnit = SelectedMapUnit.MU;
@@ -47,7 +48,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                     RelativeAge = SelectedMapUnit.RelativeAge;
                     Description = SelectedMapUnit.Description;
                     Label = SelectedMapUnit.Label;
-                    HexColor = SelectedMapUnit.Hexcolor;
+                    HexColor = SelectedMapUnit.HexColor;
                     GeoMaterial = SelectedMapUnit.GeoMaterial;
                     GeoMaterialConfidence = SelectedMapUnit.GeoMaterialConfidence;
                 }
@@ -126,6 +127,8 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private Interval GetYoungerIntervalFromAge(string age)
         {
+            // TODO: Convert other possible formats such as "Name to Name", "Name - Name", "Name", etc
+
             if (string.IsNullOrEmpty(age) || !age.Contains('-'))
             {
                 return null;
@@ -348,7 +351,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private void ValidateChangeWasMade()
         {
-            // Error message isn't display on a field. Just prevents user from hitting update until a change is made.
+            // Error message isn't displayed on a field. Just prevents user from hitting update until a change is made.
             const string propertyKey = "SilentError";
 
             if (SelectedMapUnit == null)
@@ -364,7 +367,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 SelectedMapUnit.RelativeAge == RelativeAge &&
                 SelectedMapUnit.Description == Description &&
                 SelectedMapUnit.Label == Label &&
-                SelectedMapUnit.Hexcolor == HexColor &&
+                SelectedMapUnit.HexColor == HexColor &&
                 SelectedMapUnit.GeoMaterial == GeoMaterial &&
                 SelectedMapUnit.GeoMaterialConfidence == GeoMaterialConfidence
                 )
@@ -471,7 +474,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ID != SelectedMapUnit?.ID).Any(a => a.Hexcolor == color))
+            else if (Data.DescriptionOfMapUnitData.AllDescriptionOfMapUnits.Where(a => a.ID != SelectedMapUnit?.ID).Any(a => a.HexColor == color))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }

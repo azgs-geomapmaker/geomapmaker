@@ -19,15 +19,7 @@ namespace Geomapmaker.Data
 
         private static string RowValueToString(object value)
         {
-            if (value == null)
-            {
-                return "";
-            }
-            else
-            {
-                return value.ToString();
-            }
-
+            return value == null ? "" : value.ToString();
         }
 
         public static async Task RefreshMapUnitsAsync()
@@ -63,11 +55,12 @@ namespace Geomapmaker.Data
                                     Name = RowValueToString(row["Name"]),
                                     FullName = RowValueToString(row["FullName"]),
                                     Age = RowValueToString(row["Age"]),
+                                    RelativeAge = RowValueToString(row["RelativeAge"]),
                                     Description = RowValueToString(row["Description"]),
                                     HierarchyKey = RowValueToString(row["HierarchyKey"]),
                                     ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
                                     Label = RowValueToString(row["Label"]),
-                                    Hexcolor = RowValueToString(row["Hexcolor"]),
+                                    HexColor = RowValueToString(row["Hexcolor"]),
                                     DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
                                     GeoMaterial = RowValueToString(row["GeoMaterial"]),
                                     GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),

@@ -35,11 +35,11 @@ namespace Geomapmaker.Models
             //hexcolor is the primary color holder, and is bound to the view. AreaFilleRGB just reformats that into xxx;xxx;xxx.
             get
             {
-                if (Hexcolor != null)
+                if (HexColor != null)
                 {
-                    int r = Convert.ToInt32(Hexcolor.Substring(1, 2), 16);
-                    int g = Convert.ToInt32(Hexcolor.Substring(3, 2), 16);
-                    int b = Convert.ToInt32(Hexcolor.Substring(5, 2), 16);
+                    int r = Convert.ToInt32(HexColor.Substring(1, 2), 16);
+                    int g = Convert.ToInt32(HexColor.Substring(3, 2), 16);
+                    int b = Convert.ToInt32(HexColor.Substring(5, 2), 16);
                     return r + ";" + g + ";" + b;
                 }
                 else
@@ -49,7 +49,7 @@ namespace Geomapmaker.Models
             }
         }
 
-        public string Hexcolor { get; set; }
+        public string HexColor { get; set; }
 
         public string DescriptionSourceID { get; set; }
 

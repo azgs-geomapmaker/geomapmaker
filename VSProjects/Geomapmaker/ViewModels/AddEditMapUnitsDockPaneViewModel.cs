@@ -198,7 +198,7 @@ namespace Geomapmaker
                                             row["Label"] = mapUnit.Label;
                                             row["Symbol"] = mapUnit.Symbol;
                                             row["AreaFillRGB"] = mapUnit.AreaFillRGB;
-                                            row["hexcolor"] = mapUnit.Hexcolor;
+                                            row["hexcolor"] = mapUnit.HexColor;
                                             row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
                                             row["GeoMaterial"] = mapUnit.GeoMaterial;
                                             row["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;
@@ -235,7 +235,7 @@ namespace Geomapmaker
                                     rowBuffer["Label"] = mapUnit.Label;
                                     rowBuffer["Symbol"] = mapUnit.Symbol;
                                     rowBuffer["AreaFillRGB"] = mapUnit.AreaFillRGB;
-                                    rowBuffer["hexcolor"] = mapUnit.Hexcolor;
+                                    rowBuffer["hexcolor"] = mapUnit.HexColor;
                                     rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID; //5; // mapUnit.DescriptionSourceID;
                                     rowBuffer["GeoMaterial"] = mapUnit.GeoMaterial;
                                     rowBuffer["GeoMaterialConfidence"] = mapUnit.GeoMaterialConfidence;

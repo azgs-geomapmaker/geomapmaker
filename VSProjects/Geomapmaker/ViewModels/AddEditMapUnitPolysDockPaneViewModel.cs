@@ -109,7 +109,7 @@ namespace Geomapmaker
                 if (value != null)
                 {
                     var mapUnit = Array.Find<MapUnit>(DataHelper.MapUnits.ToArray(), mu => mu.MU == value.MU);
-                    SelectedMapUnitPoly.Symbol = mapUnit.Hexcolor;
+                    SelectedMapUnitPoly.Symbol = mapUnit.HexColor;
                 }
             }
         }
