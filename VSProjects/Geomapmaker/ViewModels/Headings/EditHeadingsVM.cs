@@ -14,13 +14,13 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
 {
-    internal class HeadingsEditVM : DockPane, INotifyDataErrorInfo
+    internal class EditHeadingsVM : DockPane, INotifyDataErrorInfo
     {
         // Create's save button
         public ICommand CommandUpdate { get; }
         public ICommand CommandReset { get; }
 
-        public HeadingsEditVM()
+        public EditHeadingsVM()
         {
             // Init submit command
             CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());

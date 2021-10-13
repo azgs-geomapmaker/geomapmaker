@@ -10,11 +10,11 @@ namespace Geomapmaker.ViewModels.Headings
         private const string _dockPaneID = "Geomapmaker_Headings";
 
         // View models
-        public HeadingsCreateVM Create { get; set; } = new HeadingsCreateVM();
+        public CreateHeadingsVM Create { get; set; } = new CreateHeadingsVM();
 
-        public HeadingsEditVM Edit { get; set; } = new HeadingsEditVM();
+        public EditHeadingsVM Edit { get; set; } = new EditHeadingsVM();
 
-        public HeadingsDeleteVM Delete { get; set; } = new HeadingsDeleteVM();
+        public DeleteHeadingsVM Delete { get; set; } = new DeleteHeadingsVM();
 
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>

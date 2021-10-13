@@ -14,13 +14,13 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
 {
-    internal class HeadingsDeleteVM : DockPane, INotifyDataErrorInfo
+    internal class DeleteHeadingsVM : DockPane, INotifyDataErrorInfo
     {
         // Create's save button
         public ICommand CommandDelete { get; }
         public ICommand CommandReset { get; }
 
-        public HeadingsDeleteVM()
+        public DeleteHeadingsVM()
         {
             // Init submit command
             CommandDelete = new RelayCommand(() => DeleteHeadingAsync(), () => CanDelete());

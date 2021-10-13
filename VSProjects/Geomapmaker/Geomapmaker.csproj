@@ -211,9 +211,9 @@
     </Compile>
     <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
     <Compile Include="Models\MapUnitTree.cs" />
-    <Compile Include="ViewModels\Headings\HeadingsCreateVM.cs" />
-    <Compile Include="ViewModels\Headings\HeadingsDeleteVM.cs" />
-    <Compile Include="ViewModels\Headings\HeadingsEditVM.cs" />
+    <Compile Include="ViewModels\Headings\CreateHeadingsVM.cs" />
+    <Compile Include="ViewModels\Headings\DeleteHeadingsVM.cs" />
+    <Compile Include="ViewModels\Headings\EditHeadingsVM.cs" />
     <Compile Include="Views\Headings\CreateHeading.xaml.cs">
       <DependentUpon>CreateHeading.xaml</DependentUpon>
     </Compile>
