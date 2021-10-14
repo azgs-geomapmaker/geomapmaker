@@ -194,6 +194,10 @@
     <Compile Include="Data\DescriptionOfMapUnits.cs" />
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
+    <Compile Include="Views\Hierarchy.xaml.cs">
+      <DependentUpon>Hierarchy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\HierarchyViewModel.cs" />
     <Compile Include="ViewModels\MapUnits\CreateMapUnitVM.cs" />
     <Compile Include="ViewModels\MapUnits\DeleteMapUnitVM.cs" />
     <Compile Include="ViewModels\MapUnits\EditMapUnitVM.cs" />
@@ -272,6 +276,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Hierarchy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MapUnits\CreateMapUnit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
