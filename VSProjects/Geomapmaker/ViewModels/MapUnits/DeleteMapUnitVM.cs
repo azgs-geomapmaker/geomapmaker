@@ -24,6 +24,9 @@ namespace Geomapmaker.ViewModels.MapUnits
             // Init commands
             CommandDelete = new RelayCommand(() => DeleteMapUnitAsync(), () => CanDelete());
             CommandReset = new RelayCommand(() => ResetAsync());
+
+            // Trigger validation
+            ValidateCanDelete();
         }
 
         public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);

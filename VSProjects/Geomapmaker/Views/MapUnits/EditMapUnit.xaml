@@ -59,7 +59,7 @@
             Grid.Column="2" 
 		    ItemsSource="{Binding Edit.AllMapUnits}" 
 		    DisplayMemberPath="MU" 
-            SelectedItem="{Binding Edit.SelectedMapUnit}" 
+            SelectedItem="{Binding Edit.Selected}" 
             ToolTip="{Binding Tooltips[Edit]}"
         />
 

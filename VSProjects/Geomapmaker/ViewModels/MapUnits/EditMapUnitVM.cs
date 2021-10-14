@@ -25,32 +25,35 @@ namespace Geomapmaker.ViewModels.MapUnits
             // Init commands
             CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
             CommandReset = new RelayCommand(() => ResetAsync());
+
+            // Trigger validation
+            ValidateChangeWasMade();
         }
 
         public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
 
-        private MapUnit _selectedMapUnit;
-        public MapUnit SelectedMapUnit
+        private MapUnit _selected;
+        public MapUnit Selected
         {
-            get => _selectedMapUnit;
+            get => _selected;
             set
             {
-                SetProperty(ref _selectedMapUnit, value, () => SelectedMapUnit);
+                SetProperty(ref _selected, value, () => Selected);
 
                 // Set control values if a Map Unit was selected to edit
-                if (SelectedMapUnit != null)
+                if (Selected != null)
                 {
-                    MapUnit = SelectedMapUnit.MU;
-                    Name = SelectedMapUnit.Name;
-                    FullName = SelectedMapUnit.FullName;
-                    OlderInterval = GetOlderIntervalFromAge(SelectedMapUnit.Age);
-                    YoungerInterval = GetYoungerIntervalFromAge(SelectedMapUnit.Age);
-                    RelativeAge = SelectedMapUnit.RelativeAge;
-                    Description = SelectedMapUnit.Description;
-                    Label = SelectedMapUnit.Label;
-                    HexColor = SelectedMapUnit.HexColor;
-                    GeoMaterial = SelectedMapUnit.GeoMaterial;
-                    GeoMaterialConfidence = SelectedMapUnit.GeoMaterialConfidence;
+                    MapUnit = Selected.MU;
+                    Name = Selected.Name;
+                    FullName = Selected.FullName;
+                    OlderInterval = GetOlderIntervalFromAge(Selected.Age);
+                    YoungerInterval = GetYoungerIntervalFromAge(Selected.Age);
+                    RelativeAge = Selected.RelativeAge;
+                    Description = Selected.Description;
+                    Label = Selected.Label;
+                    HexColor = Selected.HexColor;
+                    GeoMaterial = Selected.GeoMaterial;
+                    GeoMaterialConfidence = Selected.GeoMaterialConfidence;
                 }
             }
         }
@@ -259,7 +262,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             HexColor = null;
             GeoMaterial = null;
             GeoMaterialConfidence = null;
-            SelectedMapUnit = null;
+            Selected = null;
         }
 
         private async Task UpdateAsync()
@@ -276,7 +279,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                         editOperation.Callback(context =>
                         {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedMapUnit.ID };
+                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
 
                             using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                             {
@@ -355,22 +358,22 @@ namespace Geomapmaker.ViewModels.MapUnits
             // Just prevents update until a map unit is selected and a change is made.
             const string propertyKey = "SilentError";
 
-            if (SelectedMapUnit == null)
+            if (Selected == null)
             {
                 _validationErrors[propertyKey] = new List<string>() { "Select a map unit to edit." };
                 return;
             }
 
-            if (SelectedMapUnit.MU == MapUnit &&
-                SelectedMapUnit.Name == Name &&
-                SelectedMapUnit.FullName == FullName &&
-                SelectedMapUnit.Age == Age &&
-                SelectedMapUnit.RelativeAge == RelativeAge &&
-                SelectedMapUnit.Description == Description &&
-                SelectedMapUnit.Label == Label &&
-                SelectedMapUnit.HexColor == HexColor &&
-                SelectedMapUnit.GeoMaterial == GeoMaterial &&
-                SelectedMapUnit.GeoMaterialConfidence == GeoMaterialConfidence
+            if (Selected.MU == MapUnit &&
+                Selected.Name == Name &&
+                Selected.FullName == FullName &&
+                Selected.Age == Age &&
+                Selected.RelativeAge == RelativeAge &&
+                Selected.Description == Description &&
+                Selected.Label == Label &&
+                Selected.HexColor == HexColor &&
+                Selected.GeoMaterial == GeoMaterial &&
+                Selected.GeoMaterialConfidence == GeoMaterialConfidence
                 )
             {
                 _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
@@ -391,7 +394,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != SelectedMapUnit?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
@@ -475,7 +478,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != SelectedMapUnit?.ID).Any(a => a.HexColor == color))
+            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.HexColor == color))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }
