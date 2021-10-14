@@ -147,6 +147,7 @@ namespace Geomapmaker
 
                     QueryDef mapUnitsQDef = new QueryDef
                     {
+                        WhereClause = "ParagraphStyle='Standard'",
                         Tables = "DescriptionOfMapUnits",
                         PostfixClause = "order by objectid"
                     };
