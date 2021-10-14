@@ -50,7 +50,7 @@ namespace Geomapmaker.ViewModels.Headings
                 Description = SelectedHeading?.Description;
                 Parent = SelectedHeading?.ParentId;
 
-                Tree = SelectedHeading != null ? new List<MapUnit> { new MapUnit { Name = SelectedHeading.Name, Children = GetChildren(SelectedHeading) } } : null;
+                Tree = SelectedHeading != null ? new ObservableCollection<MapUnit> { new MapUnit { Name = SelectedHeading.Name, Children = GetChildren(SelectedHeading) } } : null;
                 NotifyPropertyChanged("Tree");
             }
         }
@@ -94,13 +94,13 @@ namespace Geomapmaker.ViewModels.Headings
             }
         }
 
-        public List<MapUnit> Tree { get; set; }
+        public ObservableCollection<MapUnit> Tree { get; set; }
 
         // Recursively look up children
-        private List<MapUnit> GetChildren(MapUnit root)
+        private ObservableCollection<MapUnit> GetChildren(MapUnit root)
         {
             // Get mapunit's children
-            List<MapUnit> children = Data.DescriptionOfMapUnits.DMUs.Where(a => a.ParentId == root?.ID).ToList();
+            ObservableCollection<MapUnit> children = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.DMUs.Where(a => a.ParentId == root?.ID).ToList());
 
             // If no children
             if (children.Count == 0)
@@ -118,7 +118,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             return children;
         }
-        
+
         private async Task ResetAsync()
         {
             await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();

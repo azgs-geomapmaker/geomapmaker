@@ -6,6 +6,7 @@
              xmlns:ui="clr-namespace:Geomapmaker"
              xmlns:models="clr-namespace:Geomapmaker.Models"
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{Binding Path=ui.HierarchyViewModel}">
@@ -24,6 +25,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
@@ -31,7 +36,6 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
@@ -39,7 +43,8 @@
             <TextBlock Grid.Column="1" Text="DMU Hierarchy" ToolTip="DMU Hierarchy" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" />
         </DockPanel>
 
-        <TreeView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding TreeData}">
+        <Label Grid.Row="2" Grid.Column="1" Content="Hierarchy Tree"/>
+        <TreeView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
@@ -66,17 +71,11 @@
             </Validation.ErrorTemplate>
         </TreeView>
 
-        <ListView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Orphans}">
-            <ListView.View>
-                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employee Information">
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ParagraphStyle}" Header="Type" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Label Grid.Row="4" Grid.Column="1" Content="Orphans"/>
+        <ListBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Orphans}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" DisplayMemberPath="Name" />
 
-        <Button Grid.Row="4" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" >Clear</Button>
-        <Button Grid.Row="4" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" >Save</Button>
+        <Button Grid.Row="6" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" >Clear</Button>
+        <Button Grid.Row="6" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" >Save</Button>
 
     </Grid>
 </UserControl>

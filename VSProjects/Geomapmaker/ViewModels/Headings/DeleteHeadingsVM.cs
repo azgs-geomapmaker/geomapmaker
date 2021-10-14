@@ -56,10 +56,10 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         // Recursively look up children
-        private List<MapUnit> GetChildren(MapUnit root)
+        private ObservableCollection<MapUnit> GetChildren(MapUnit root)
         {
             // Get mapunit's children
-            List<MapUnit> children = Data.DescriptionOfMapUnits.DMUs.Where(a => a.ParentId == root?.ID).ToList();
+            ObservableCollection<MapUnit> children = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.DMUs.Where(a => a.ParentId == root?.ID).ToList());
 
             // If no children
             if (children.Count == 0)
@@ -130,7 +130,7 @@ namespace Geomapmaker.ViewModels.Headings
                             {
 
                                 while (rowCursor.MoveNext())
-                                { 
+                                {
                                     using (Row row = rowCursor.Current)
                                     {
                                         context.Invalidate(row);

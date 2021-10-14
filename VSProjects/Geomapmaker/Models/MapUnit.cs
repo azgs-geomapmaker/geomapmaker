@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,6 +61,9 @@ namespace Geomapmaker.Models
         public int? ParentId { get; set; }
 
         // Only used to hold the tree-view. Not saved in db
-        public List<MapUnit> Children { get; set; } = new List<MapUnit>();
+        public ObservableCollection<MapUnit> Children { get; set; } = new ObservableCollection<MapUnit>();
+
+        public bool CanAcceptChildren { get; set; }
+
     }
 }
