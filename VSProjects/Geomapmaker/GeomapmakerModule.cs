@@ -54,25 +54,22 @@ namespace Geomapmaker
             //TODO - add your business logic
             //return false to ~cancel~ Application close
 
-            //When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
-            DockPane dockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_AddEditMapUnitsDockPane");
-            if (dockPane != null)
+            // When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
+            List<string> DockPaneIds = new List<string>
             {
-                dockPane.IsVisible = false;
-            }
+                // Old dockpane id => can eventually remove this one
+                "Geomapmaker_AddEditMapUnitsDockPane",
 
-            //When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
-            DockPane headingDockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_Headings");
-            if (headingDockPane != null)
-            {
-                headingDockPane.IsVisible = false;
-            }
 
-            //When the app starts up next time, there will be no user logged in. Clean up dockpanes to reflect this
-            DockPane dmuDockPane = FrameworkApplication.DockPaneManager.Find("Geomapmaker_DescriptionOfMapUnits");
-            if (dmuDockPane != null)
+                "Geomapmaker_Headings",
+                "Geomapmaker_DescriptionOfMapUnits",
+                "Geomapmaker_Hierarchy"
+            };
+
+            foreach (string dockId in DockPaneIds)
             {
-                dmuDockPane.IsVisible = false;
+                DockPane pane = FrameworkApplication.DockPaneManager.Find(dockId);
+                pane?.Hide();
             }
 
             return true;

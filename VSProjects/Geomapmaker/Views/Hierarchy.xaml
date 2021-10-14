@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"   
              xmlns:ui="clr-namespace:Geomapmaker"
+             xmlns:models="clr-namespace:Geomapmaker.Models"
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{Binding Path=ui.HierarchyViewModel}">
-     <UserControl.Resources>
+    <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
@@ -20,8 +21,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -36,19 +39,44 @@
             <TextBlock Grid.Column="1" Text="DMU Hierarchy" ToolTip="DMU Hierarchy" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" />
         </DockPanel>
 
-        <TreeView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-            <TreeViewItem Header="MapUnit 1" IsExpanded="True">
-                <TreeViewItem Header="MapUnit 2.1" />
-                <TreeViewItem Header="MapUnit 2.2" IsExpanded="True">
-                    <TreeViewItem Header="MapUnit 3.1" />
-                    <TreeViewItem Header="MapUnit 3.2" />
-                </TreeViewItem>
-                <TreeViewItem Header="MapUnit 2.3" />
-            </TreeViewItem>
+        <TreeView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding TreeData}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type models:MapUnit}" ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder/>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
         </TreeView>
 
-        <Button Grid.Row="3" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" >Clear</Button>
-        <Button Grid.Row="3" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" >Save</Button>
+        <ListView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Orphans}">
+            <ListView.View>
+                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employee Information">
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ParagraphStyle}" Header="Type" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Grid.Row="4" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" >Clear</Button>
+        <Button Grid.Row="4" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" >Save</Button>
 
     </Grid>
 </UserControl>

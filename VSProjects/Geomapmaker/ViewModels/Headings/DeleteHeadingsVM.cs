@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// <summary>
         /// List of all Headings/Subheadings
         /// </summary>
-        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Headings.OrderBy(a => a.Name));
+        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Headings);
 
         /// <summary>
         /// Map Unit selected to be deleted

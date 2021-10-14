@@ -1,5 +1,8 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Models;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Geomapmaker.ViewModels
 {
@@ -9,6 +12,10 @@ namespace Geomapmaker.ViewModels
 
         protected HierarchyViewModel() { }
 
+        public ObservableCollection<MapUnit> TreeData => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Headings);
+
+        public ObservableCollection<MapUnit> Orphans => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
+
         /// <summary>
         /// Show the DockPane.
         /// </summary>
@@ -16,19 +23,6 @@ namespace Geomapmaker.ViewModels
         {
             DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
             pane?.Activate();
-        }
-
-        /// <summary>
-        /// Text shown near the top of the DockPane.
-        /// </summary>
-        private string _heading = "Testing123";
-        public string Heading
-        {
-            get { return _heading; }
-            set
-            {
-                SetProperty(ref _heading, value, () => Heading);
-            }
         }
     }
 
