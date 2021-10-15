@@ -14,7 +14,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
-                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml"/>
+                <!--<ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -71,11 +71,11 @@
             </Validation.ErrorTemplate>
         </TreeView>
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Orphans"/>
-        <ListBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Orphans}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" DisplayMemberPath="Name" />
+        <Label Grid.Row="4" Grid.Column="1" Content="Unassigned" />
+        <ListBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Unassigned}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" DisplayMemberPath="Name" />
 
-        <Button Grid.Row="6" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" >Clear</Button>
-        <Button Grid.Row="6" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" >Save</Button>
+        <Button Grid.Row="6" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandReset}" >Reset</Button>
+        <Button Grid.Row="6" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSave}" >Save</Button>
 
     </Grid>
 </UserControl>

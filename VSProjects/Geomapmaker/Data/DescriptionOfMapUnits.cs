@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using Geomapmaker.Models;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,10 @@ namespace Geomapmaker.Data
 
         // Returns only map units
         public static List<MapUnit> MapUnits => DMUs.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.MU).ToList();
+
+        public static List<MapUnit> Tree => DMUs.Where(a => !string.IsNullOrWhiteSpace(a.HierarchyKey)).ToList();
+
+        public static List<MapUnit> Unassigned => DMUs.Where(a => string.IsNullOrWhiteSpace(a.HierarchyKey)).ToList();
 
         // Convert row object to a string. 
         private static string RowValueToString(object value)

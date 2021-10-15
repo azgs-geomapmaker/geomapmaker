@@ -1,9 +1,17 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels
 {
@@ -11,31 +19,141 @@ namespace Geomapmaker.ViewModels
     {
         private const string _dockPaneID = "Geomapmaker_Hierarchy";
 
-        public ObservableCollection<MapUnit> Tree { get; set; }
-
-        public ObservableCollection<MapUnit> Orphans { get; set; }
-
-        protected HierarchyViewModel() 
+        // Tooltips dictionary
+        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
+            // Dockpane Headings
+            {"Heading", "Heading" },
+        };
 
-            MapUnit heading1 = new MapUnit() { Name = "Heading1" };
-            heading1.Children.Add(new MapUnit() { Name = "SubHeading1" });
-            heading1.Children.Add(new MapUnit() { Name = "SubHeading2" });
 
-            MapUnit heading2 = new MapUnit() { Name = "Heading2" };
-            heading2.Children.Add(new MapUnit() { Name = "SubHeading3" });
-            heading2.Children.Add(new MapUnit() { Name = "SubHeading4" });
-            Tree = new ObservableCollection<MapUnit> { heading1, heading2 };
+        public ObservableCollection<MapUnit> Tree { get; set; } = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Tree);
 
-            MapUnit orphan1 = new MapUnit() { Name = "Orphan1" };
-            MapUnit orphan2 = new MapUnit() { Name = "Orphan2" };
-            MapUnit orphan3 = new MapUnit() { Name = "Orphan3" };
-            MapUnit orphan4 = new MapUnit() { Name = "Orphan4" };
+        public ObservableCollection<MapUnit> Unassigned { get; set; } = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Unassigned);
 
-            Orphans = new ObservableCollection<MapUnit> { orphan1, orphan2, orphan3, orphan4 };
+        public ICommand CommandSave { get; }
+        public ICommand CommandReset { get; }
 
-            //Tree = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Headings);
-            //Orphans = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
+        protected HierarchyViewModel()
+        {
+            // Init submit command
+            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
+            CommandReset = new RelayCommand(() => ResetAsync());
+        }
+
+        private bool CanSave()
+        {
+            return true;
+        }
+
+        private async Task ResetAsync()
+        {
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            Tree = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Tree);
+            NotifyPropertyChanged("Tree");
+            Unassigned = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Unassigned);
+            NotifyPropertyChanged("Unassigned");
+        }
+
+        private List<MapUnit> HierarchyList = new List<MapUnit>();
+        private void SetHierarchyKeys(ObservableCollection<MapUnit> collection, string zeroPadding, string prefix = "")
+        {
+            if (collection == null || collection.Count == 0)
+            {
+                return;
+            }
+
+            int index = 1;
+
+            foreach (MapUnit mu in collection)
+            {
+                string dash = string.IsNullOrEmpty(prefix) ? "" : "-";
+
+                string HierarchyKey = prefix + dash + index.ToString(zeroPadding);
+
+                mu.HierarchyKey = HierarchyKey;
+
+                HierarchyList.Add(mu);
+
+                SetHierarchyKeys(mu.Children, zeroPadding, HierarchyKey);
+
+                index++;
+            }
+        }
+
+        private int MaxChildren;
+        private void SetMaxChildren(ObservableCollection<MapUnit> collection)
+        {
+            if (collection == null || collection.Count == 0)
+            {
+                return;
+            }
+
+            if (collection.Count > MaxChildren)
+            {
+                MaxChildren = collection.Count;
+            }
+
+            foreach (MapUnit mu in collection)
+            {
+                SetMaxChildren(mu.Children);
+            }
+        }
+
+        private async Task SaveAsync()
+        {
+            SetMaxChildren(Tree);
+            string zeroPadding = new string('0', MaxChildren.ToString().Length);
+
+            HierarchyList = new List<MapUnit>();
+            SetHierarchyKeys(Tree, zeroPadding);
+
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+                EditOperation editOperation = new EditOperation();
+
+                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                {
+                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    {
+                        editOperation.Callback(context =>
+                        {
+                            using (RowCursor rowCursor = enterpriseTable.Search(null, false))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        int ID = int.Parse(row["ObjectID"].ToString());
+
+                                        // In order to update the Map and/or the attribute table.
+                                        // Has to be called before any changes are made to the row.
+                                        context.Invalidate(row);
+
+                                        row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
+
+                                        // After all the changes are done, persist it.
+                                        row.Store();
+
+                                        // Has to be called after the store too.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+
+                        if (!result)
+                        {
+                            MessageBox.Show(editOperation.ErrorMessage);
+                        }
+                    }
+                }
+            });
+
+            await ResetAsync();
+
         }
 
         /// <summary>
