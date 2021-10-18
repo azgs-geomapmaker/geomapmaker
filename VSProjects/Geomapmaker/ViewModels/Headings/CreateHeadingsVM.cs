@@ -186,19 +186,18 @@ namespace Geomapmaker.ViewModels.Headings
             if (string.IsNullOrWhiteSpace(name))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-                RaiseErrorsChanged(propertyKey);
             }
             // Name must be unique 
             else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         // Validate the Heading's definition
@@ -208,13 +207,13 @@ namespace Geomapmaker.ViewModels.Headings
             if (string.IsNullOrWhiteSpace(definition))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         #endregion

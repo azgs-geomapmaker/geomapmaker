@@ -191,20 +191,19 @@ namespace Geomapmaker.ViewModels.Headings
             if (SelectedHeading == null)
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
                 return;
             }
 
             if (SelectedHeading.Name == Name && SelectedHeading.Description == Description)
             {
                 _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         // Validate the Heading's name
@@ -213,18 +212,17 @@ namespace Geomapmaker.ViewModels.Headings
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(name))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-                RaiseErrorsChanged(propertyKey);
             }
             else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         // Validate the Heading's definition
@@ -233,13 +231,13 @@ namespace Geomapmaker.ViewModels.Headings
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(definition))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         #endregion
