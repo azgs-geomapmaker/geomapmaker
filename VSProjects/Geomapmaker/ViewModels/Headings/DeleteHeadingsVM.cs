@@ -77,6 +77,13 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task DeleteHeadingAsync()
         {
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you want to delete {Name}?", $"Delete {Name}?", System.Windows.MessageBoxButton.YesNo);
+
+            if (messageBoxResult == MessageBoxResult.No)
+            {
+                return;
+            }
+
             if (Data.DbConnectionProperties.GetProperties() == null)
             {
                 return;

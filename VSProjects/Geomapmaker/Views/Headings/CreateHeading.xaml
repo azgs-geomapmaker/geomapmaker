@@ -34,7 +34,7 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="2" Text="Create" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" ToolTip="{Binding Tooltips[CreateHeading]}" />
+            <TextBlock Grid.Column="2" Text="Create Heading" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" ToolTip="{Binding Tooltips[CreateHeading]}" />
         </DockPanel>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
