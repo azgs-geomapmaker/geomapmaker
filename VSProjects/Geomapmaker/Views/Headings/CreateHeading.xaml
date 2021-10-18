@@ -23,7 +23,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
@@ -78,11 +77,8 @@
             </Validation.ErrorTemplate>
         </TextBox>
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Parent:" ToolTip="{Binding Tooltips[Parent]}"  />
-        <ComboBox Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Create.ParentOptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Create.Parent}" ToolTip="{Binding Tooltips[Parent]}"  />
-
-        <Button Grid.Row="5" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}"  >Clear</Button>
-        <Button Grid.Row="5" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSave}" ToolTip="{Binding Tooltips[SaveButton]}"  >Save</Button>
+        <Button Grid.Row="4" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}"  >Clear</Button>
+        <Button Grid.Row="4" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSave}" ToolTip="{Binding Tooltips[SaveButton]}"  >Save</Button>
 
     </Grid>
 </UserControl>

@@ -1,8 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using Geomapmaker.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,8 +17,10 @@ namespace Geomapmaker.Data
         // Returns only map units
         public static List<MapUnit> MapUnits => DMUs.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.MU).ToList();
 
+        // Map units in a tree structure based on HierarchyKey
         public static List<MapUnit> Tree;
 
+        // Map units not in the tree
         public static List<MapUnit> Unassigned;
 
         // Convert row object to a string. 
@@ -32,55 +32,59 @@ namespace Geomapmaker.Data
 
         public static void RefreshTreeStructure()
         {
+            // Empty the tree
             Tree = new List<MapUnit>();
+            // Set all DMUs as unassigned
             Unassigned = DMUs;
-
-            // Strip any leading zeros from all of the indexes
-            foreach (MapUnit mu in Unassigned)
-            {
-                string[] indexes = mu.HierarchyKey.Split('-');
-
-                foreach (var ind in indexes)
-                {
-                    // Remove leading-zeros. 0001=>1, 0000=>0, etc
-                    ind.TrimStart('0').PadLeft(1, '0');
-                }
-
-                // Join indexes with a dash. 0001-0001-0001
-                mu.HierarchyKey = string.Join("-", indexes);
-            }
 
             BuildTree();
         }
 
+        // Build the tree stucture by looping over the dmus
         private static void BuildTree()
         {
+            // Temp list for unassigned DMUS
             var tmpUnassigned = new List<MapUnit>();
+
+            // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents 
             var hierarchyList = Unassigned.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).ToList();
 
+            // Loop over the DMUs
             foreach (MapUnit mu in hierarchyList)
             {
 
-                if (mu.HierarchyKey.LastIndexOf("-") != -1)
+                // Check the HierarchyKey string for a dash
+                // Children will always have a dash (001-001 for example)
+                if (mu.HierarchyKey.IndexOf("-") != -1)
                 {
+                    // Remove the last dash and last index to find their parent's HierarchyKey (001-001 becomes 001)
                     string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
 
+                    // Look for a map unit that matches the parent HierarchyKey
                     MapUnit parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
 
-                    if (parent != null)
+                    if (parent == null)
                     {
+                        // Parent not found. Add to the unassigned list.
+                        tmpUnassigned.Add(mu);
+                    }
+                    else
+                    {
+                        // Add child to parent
                         parent.Children.Add(mu);
                     }
                 }
                 else
                 {
-
+                    // Check if the HierarchyKey is empty
                     if (string.IsNullOrWhiteSpace(mu.HierarchyKey))
                     {
+                        // Add to the unassigned list.
                         tmpUnassigned.Add(mu);
                     }
                     else
                     {
+                        // Map Unit must be a root node
                         Tree.Add(mu);
                     }
 
@@ -90,7 +94,7 @@ namespace Geomapmaker.Data
             Unassigned = tmpUnassigned;
         }
 
-        // Refresh Map Units. Might need to refresh everytime in the Getter instead..
+        // Refresh Map Units
         public static async Task RefreshMapUnitsAsync()
         {
             if (DbConnectionProperties.GetProperties() == null)
@@ -132,7 +136,6 @@ namespace Geomapmaker.Data
                                     DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
                                     GeoMaterial = RowValueToString(row["GeoMaterial"]),
                                     GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
-                                    ParentId = (int?)row["ParentId"]
                                 };
 
                                 // Add it to temp list

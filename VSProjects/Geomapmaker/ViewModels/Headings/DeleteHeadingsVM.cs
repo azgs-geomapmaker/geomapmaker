@@ -44,44 +44,14 @@ namespace Geomapmaker.ViewModels.Headings
                 SetProperty(ref _selectedHeading, value, () => SelectedHeading);
 
                 Name = value?.Name;
-                Description = value?.Description;
-                Parent = Data.DescriptionOfMapUnits.DMUs.FirstOrDefault(a => a.ID == value?.ParentId)?.Name;
-                Tree = value != null ? new List<MapUnit> { new MapUnit { Name = value.Name, Children = GetChildren(value) } } : null;
                 NotifyPropertyChanged("Name");
+                Description = value?.Description;
                 NotifyPropertyChanged("Description");
-                NotifyPropertyChanged("Parent");
-                NotifyPropertyChanged("Tree");
-                ValidateChildfreeTree(Tree, "Tree");
             }
-        }
-
-        // Recursively look up children
-        private ObservableCollection<MapUnit> GetChildren(MapUnit root)
-        {
-            // Get mapunit's children
-            ObservableCollection<MapUnit> children = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.DMUs.Where(a => a.ParentId == root?.ID).ToList());
-
-            // If no children
-            if (children.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                // Get the children of each child
-                foreach (MapUnit child in children)
-                {
-                    child.Children = GetChildren(child);
-                }
-            }
-
-            return children;
         }
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Parent { get; set; }
-        public List<MapUnit> Tree { get; set; }
 
         /// <summary>
         /// Determines the visibility (enabled state) of the button
@@ -180,32 +150,6 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
-
-        // Validate children
-        private void ValidateChildfreeTree(List<MapUnit> tree, string propertyKey)
-        {
-            if (tree == null || tree.Count == 0)
-            {
-                _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
-                return;
-            }
-
-            // First node in the list is the root element
-            MapUnit root = tree.First();
-
-            if (root.Children != null && root.Children.Count != 0)
-            {
-                // Raise the error
-                _validationErrors[propertyKey] = new List<string>() { "Can't delete headings with a child node." };
-                RaiseErrorsChanged(propertyKey);
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
-            }
-        }
 
         #endregion
     }

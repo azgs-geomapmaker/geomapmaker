@@ -24,8 +24,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
@@ -52,45 +50,14 @@
 
         <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Tree:" ToolTip="{Binding Tooltips[Tree]}" />
-        <TreeView Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Delete.Tree}" IsEnabled="False" BorderBrush="LightGray" >
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="True" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type models:MapUnit}" ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Name}" />
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder/>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </TreeView>
+        <Label Grid.Row="4" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Delete.Name}" IsEnabled="False" IsReadOnly="True" />
 
-        <Label Grid.Row="5" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Delete.Name}" IsEnabled="False" IsReadOnly="True" />
+        <Label Grid.Row="5" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
+        <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding Delete.Description}" IsEnabled="False" IsReadOnly="True" />
 
-        <Label Grid.Row="6" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="6" Grid.Column="2" MinLines="3" Text="{Binding Delete.Description}" IsEnabled="False" IsReadOnly="True" />
-
-        <Label Grid.Row="7" Grid.Column="1" Content="Parent:" ToolTip="{Binding Tooltips[Parent]}" />
-        <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding Delete.Parent}" IsEnabled="False" IsReadOnly="True" />
-
-        <Button Grid.Row="8" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
-        <Button Grid.Row="8" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandDelete}" ToolTip="{Binding Tooltips[DeleteButton]}" >Delete</Button>
+        <Button Grid.Row="6" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
+        <Button Grid.Row="6" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandDelete}" ToolTip="{Binding Tooltips[DeleteButton]}" >Delete</Button>
 
     </Grid>
 

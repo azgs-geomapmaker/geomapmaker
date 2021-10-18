@@ -25,10 +25,8 @@ namespace Geomapmaker.ViewModels.Headings
             {"DeleteHeading", "TODO DeleteHeading" },
 
             // Control Labels
-            {"Tree", "TODO Tree" },
             {"Name", "TODO Name" },
             {"Description", "TODO Description" },
-            {"Parent", "TODO Parent" },
             
             // Heading Selection Comboboxes
             {"Edit", "TODO Edit" },

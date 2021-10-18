@@ -4,10 +4,8 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -56,7 +54,7 @@ namespace Geomapmaker.ViewModels
         }
 
         private List<MapUnit> HierarchyList = new List<MapUnit>();
-        private void SetHierarchyKeys(ObservableCollection<MapUnit> collection, string zeroPadding, string prefix = "")
+        private void SetHierarchyKeys(ObservableCollection<MapUnit> collection, string prefix = "")
         {
             if (collection == null || collection.Count == 0)
             {
@@ -69,44 +67,22 @@ namespace Geomapmaker.ViewModels
             {
                 string dash = string.IsNullOrEmpty(prefix) ? "" : "-";
 
-                string HierarchyKey = prefix + dash + index.ToString(zeroPadding);
+                string HierarchyKey = prefix + dash + index.ToString("000");
 
                 mu.HierarchyKey = HierarchyKey;
 
                 HierarchyList.Add(mu);
 
-                SetHierarchyKeys(mu.Children, zeroPadding, HierarchyKey);
+                SetHierarchyKeys(mu.Children, HierarchyKey);
 
                 index++;
             }
         }
 
-        private int MaxChildren;
-        private void SetMaxChildren(ObservableCollection<MapUnit> collection)
-        {
-            if (collection == null || collection.Count == 0)
-            {
-                return;
-            }
-
-            if (collection.Count > MaxChildren)
-            {
-                MaxChildren = collection.Count;
-            }
-
-            foreach (MapUnit mu in collection)
-            {
-                SetMaxChildren(mu.Children);
-            }
-        }
-
         private async Task SaveAsync()
         {
-            SetMaxChildren(Tree);
-            string zeroPadding = new string('0', MaxChildren.ToString().Length);
-
             HierarchyList = new List<MapUnit>();
-            SetHierarchyKeys(Tree, zeroPadding);
+            SetHierarchyKeys(Tree);
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {

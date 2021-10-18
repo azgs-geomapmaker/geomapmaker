@@ -54,14 +54,6 @@ namespace Geomapmaker.ViewModels.Headings
             }
         }
 
-        // Heading parent Id
-        private int? _parent;
-        public int? Parent
-        {
-            get => _parent;
-            set => SetProperty(ref _parent, value, () => Parent);
-        }
-
         /// <summary>
         /// Determines the visibility (enabled state) of the button
         /// </summary>
@@ -101,7 +93,6 @@ namespace Geomapmaker.ViewModels.Headings
                                 rowBuffer["FullName"] = Name;
                                 rowBuffer["Description"] = Description;
                                 rowBuffer["ParagraphStyle"] = "Heading";
-                                rowBuffer["ParentId"] = Parent;
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {
@@ -129,7 +120,6 @@ namespace Geomapmaker.ViewModels.Headings
             // Reset values
             Name = "";
             Description = "";
-            Parent = null;
 
             NotifyPropertyChanged("ParentOptions");
         }
@@ -143,7 +133,6 @@ namespace Geomapmaker.ViewModels.Headings
             // Reset values
             Name = null;
             Description = null;
-            Parent = null;
         }
 
         /// <summary>

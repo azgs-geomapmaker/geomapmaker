@@ -182,7 +182,6 @@ namespace Geomapmaker
                                     DescriptionSourceID = row["DescriptionSourceID"]?.ToString(),
                                     GeoMaterial = row["GeoMaterial"]?.ToString(),
                                     GeoMaterialConfidence = row["GeoMaterialConfidence"]?.ToString(),
-                                    ParentId = (int?)row["ParentId"]
                                 };
 
                                 // Add it to our list

@@ -58,8 +58,6 @@ namespace Geomapmaker.Models
 
         public string GeoMaterialConfidence { get; set; }
 
-        public int? ParentId { get; set; }
-
         // Only used to hold the tree-view. Not saved in db
         public ObservableCollection<MapUnit> Children { get; set; } = new ObservableCollection<MapUnit>();
 
