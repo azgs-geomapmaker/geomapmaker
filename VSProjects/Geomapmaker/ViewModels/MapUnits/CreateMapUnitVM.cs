@@ -148,7 +148,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public string AreaFillRGB => MapUnitsViewModel.HexToRGB(HexColor);
 
-        public ObservableCollection<string> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
+        public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 
         // GeoMaterial
         private string _geoMaterial;
