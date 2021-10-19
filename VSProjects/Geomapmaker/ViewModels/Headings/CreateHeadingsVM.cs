@@ -93,6 +93,7 @@ namespace Geomapmaker.ViewModels.Headings
                                 rowBuffer["FullName"] = Name;
                                 rowBuffer["Description"] = Description;
                                 rowBuffer["ParagraphStyle"] = "Heading";
+                                rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {

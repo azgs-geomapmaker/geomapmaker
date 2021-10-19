@@ -132,6 +132,7 @@ namespace Geomapmaker.ViewModels.Headings
                                         row["FullName"] = Name;
                                         row["Description"] = Description;
                                         row["ParagraphStyle"] = "Heading";
+                                        row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
 
                                         // After all the changes are done, persist it.
                                         row.Store();
