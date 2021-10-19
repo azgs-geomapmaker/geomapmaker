@@ -21,7 +21,10 @@ namespace Geomapmaker.ViewModels
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
             // Dockpane Headings
-            {"Heading", "Heading" },
+            {"Heading", "TODO Heading" },
+
+            {"HierarchyTree", "TODO HierarchyTree" },
+            {"Unassigned", "TODO Unassigned" },
         };
 
 
@@ -46,39 +49,52 @@ namespace Geomapmaker.ViewModels
 
         private async Task ResetAsync()
         {
+
             await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+
             Tree = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Tree);
             NotifyPropertyChanged("Tree");
+
             Unassigned = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Unassigned);
             NotifyPropertyChanged("Unassigned");
         }
 
         private List<MapUnit> HierarchyList = new List<MapUnit>();
+        // Recursively build out Hierarchy Keys
         private void SetHierarchyKeys(ObservableCollection<MapUnit> collection, string prefix = "")
         {
+            // Base Case: The tree or a MU's children is empty
             if (collection == null || collection.Count == 0)
             {
                 return;
             }
 
+            // Start the index at 1
             int index = 1;
 
             foreach (MapUnit mu in collection)
             {
+                // Add a dash if the prefix is not empty
                 string dash = string.IsNullOrEmpty(prefix) ? "" : "-";
 
+                // Combine prefix, dash, and zero-padded index. For example, "001-001" + "-" + "001"
                 string HierarchyKey = prefix + dash + index.ToString("000");
 
+                // Set the HierarchyKey.
                 mu.HierarchyKey = HierarchyKey;
 
+                // Add to the list
                 HierarchyList.Add(mu);
 
-                SetHierarchyKeys(mu.Children, HierarchyKey);
+                // Recursive call to any children
+                SetHierarchyKeys(mu.Children, mu.HierarchyKey);
 
+                // Increment index for any siblings
                 index++;
             }
         }
 
+        // Write HierarchyKey to database
         private async Task SaveAsync()
         {
             HierarchyList = new List<MapUnit>();
@@ -146,7 +162,7 @@ namespace Geomapmaker.ViewModels
             MapUnit sourceItem = dropInfo.Data as MapUnit;
             MapUnit targetItem = dropInfo.TargetItem as MapUnit;
 
-            if (sourceItem != null && targetItem != null && targetItem.CanAcceptChildren)
+            if (sourceItem != null && targetItem != null && targetItem.CanAcceptChildren && targetItem.ParagraphStyle == "Heading")
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                 dropInfo.Effects = DragDropEffects.Copy;
