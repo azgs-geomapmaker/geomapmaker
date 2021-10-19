@@ -213,6 +213,14 @@
 
         <Label Grid.Row="10" Grid.Column="1" Content="GeoMaterial:" ToolTip="{Binding Tooltips[GeoMaterial]}" />
         <ComboBox Grid.Row="10" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" ToolTip="{Binding Tooltips[GeoMaterial]}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" >
+                        <TextBlock Text="{Binding GeoMaterial}" FontWeight="Bold" FontSize="12" />
+                        <TextBlock Text="{Binding Definition}" TextWrapping="Wrap" MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=ActualWidth}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>

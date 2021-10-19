@@ -2,7 +2,9 @@
 {
     public class Geomaterial
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string HierarchyKey { get; set; }
+        public string GeoMaterial { get; set; }
+        public string IndentedName { get; set; }
+        public string Definition { get; set; }
     }
 }
