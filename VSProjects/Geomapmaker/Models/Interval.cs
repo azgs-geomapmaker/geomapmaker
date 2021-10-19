@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Geomapmaker.Models
+﻿namespace Geomapmaker.Models
 {
     public class Interval
     {
@@ -18,6 +12,6 @@ namespace Geomapmaker.Models
 
         public string Range => $"{Early_Age}-{Late_Age}ma";
 
-        public string Tooltip => $"Name: {Name}" + Environment.NewLine + $"Range: {Early_Age}-{Late_Age}ma" + Environment.NewLine + $"Type: {Type}";
+        public string Tooltip => $"<b>Name:</b> {Name} <br /> <b>Range:</b> {Early_Age}-{Late_Age}ma <br /> <b>Type:</b> {Type}";
     }
 }
