@@ -101,8 +101,6 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private Interval GetOlderIntervalFromAge(string age)
         {
-            // TODO: Convert other possible formats such as "Name to Name", "Name - Name", "Name", etc
-
             if (string.IsNullOrEmpty(age) || !age.Contains('-'))
             {
                 return null;
@@ -210,6 +208,16 @@ namespace Geomapmaker.ViewModels.MapUnits
         public string AreaFillRGB => MapUnitsViewModel.HexToRGB(HexColor);
 
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
+
+        //private Geomaterial GetGeomaterialFromIndentedName(string indentedName)
+        //{
+        //    if (string.IsNullOrEmpty(indentedName))
+        //    {
+        //        return null;
+        //    }
+
+        //    return GeoMaterialOptions.FirstOrDefault(a => a.IndentedName == indentedName);
+        //}
 
         // GeoMaterial
         private string _geoMaterial;
@@ -431,6 +439,11 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
+            // Full Name must be unique 
+            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Full name is taken." };
+            }
             else
             {
                 _validationErrors.Remove(propertyKey);
@@ -454,7 +467,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors.Remove("OlderInterval");
                 _validationErrors.Remove("YoungerInterval");
 
-                if (youngerInterval.Early_Age < olderInterval.Early_Age)
+                if (youngerInterval.Early_Age > olderInterval.Early_Age)
                 {
                     _validationErrors["OlderInterval"] = new List<string>() { "Swap these comboboxes!" };
                     _validationErrors["YoungerInterval"] = new List<string>() { "" };

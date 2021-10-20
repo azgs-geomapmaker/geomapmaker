@@ -335,6 +335,11 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
+            // Full Name must be unique 
+            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Full name is taken." };
+            }
             else
             {
                 _validationErrors.Remove(propertyKey);
@@ -343,22 +348,22 @@ namespace Geomapmaker.ViewModels.MapUnits
             RaiseErrorsChanged(propertyKey);
         }
 
-        private void ValidateIntervals(Interval younger, Interval older)
+        private void ValidateIntervals(Interval youngerInterval, Interval olderInterval)
         {
-            if (older == null)
+            if (olderInterval == null)
             {
                 _validationErrors["OlderInterval"] = new List<string>() { "" };
             }
-            if (younger == null)
+            if (youngerInterval == null)
             {
                 _validationErrors["YoungerInterval"] = new List<string>() { "" };
             }
-            if (younger != null && older != null)
+            if (youngerInterval != null && olderInterval != null)
             {
                 _validationErrors.Remove("OlderInterval");
                 _validationErrors.Remove("YoungerInterval");
 
-                if (younger.Early_Age < older.Early_Age)
+                if (youngerInterval.Early_Age > olderInterval.Early_Age)
                 {
                     _validationErrors["OlderInterval"] = new List<string>() { "Swap these comboboxes!" };
                     _validationErrors["YoungerInterval"] = new List<string>() { "" };
@@ -376,9 +381,6 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private void ValidateColor(string color, string propertyKey)
         {
-            var foo = Data.DescriptionOfMapUnits.DMUs;
-            var fooooo = Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == color);
-
             // Required field
             if (string.IsNullOrWhiteSpace(color))
             {

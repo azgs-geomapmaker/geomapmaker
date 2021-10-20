@@ -110,7 +110,7 @@
             </Validation.ErrorTemplate>
         </TextBox>
 
-        <GroupBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}">
+        <GroupBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="5" ToolTip="{Binding Tooltips[Age]}">
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -189,10 +189,10 @@
         <TextBox Grid.Row="7" Grid.Column="2"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" />
 
         <Label Grid.Row="8" Grid.Column="1" Content="Label:" ToolTip="{Binding Tooltips[Label]}" />
-        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" />
+        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" />
 
         <Label Grid.Row="9" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
-        <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" Margin="10" SelectedColor="{Binding Create.HexColor}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding Tooltips[Color]}">
+        <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" Margin="5" SelectedColor="{Binding Create.HexColor}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding Tooltips[Color]}">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -212,7 +212,7 @@
         </wpftk:ColorPicker>
 
         <Label Grid.Row="10" Grid.Column="1" Content="GeoMaterial:" ToolTip="{Binding Tooltips[GeoMaterial]}" />
-        <ComboBox Grid.Row="10" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" ToolTip="{Binding Tooltips[GeoMaterial]}">
+        <ComboBox Grid.Row="10" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding Tooltips[GeoMaterial]}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical" >

@@ -84,7 +84,7 @@
         <TextBox Grid.Row="9" Grid.Column="2"  MinLines="3" Text="{Binding Delete.Description }" IsReadOnly="True" IsEnabled="False" />
 
         <Label Grid.Row="10" Grid.Column="1" Content="Label:" ToolTip="{Binding Tooltips[Label]}" />
-        <TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Delete.Label }" IsReadOnly="True" IsEnabled="False" />
+        <TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Delete.Label }" IsReadOnly="True" IsEnabled="False" FontFamily="FGDCGeoAge" />
 
         <Label Grid.Row="11" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
         <TextBox Grid.Row="11" Grid.Column="2" Background="{Binding Delete.HexColor}" IsReadOnly="True" IsEnabled="False" />
