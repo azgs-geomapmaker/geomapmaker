@@ -54,6 +54,17 @@ namespace Geomapmaker.ViewModels.MapUnits
             {"DeleteButton", "TODO DeleteButton" },
         };
 
+        // Max length of the field's string
+        public Dictionary<string, int> MaxLength => new Dictionary<string, int>
+        {
+            {"MapUnit", 10 },
+            {"Name", 254 },
+            {"FullName", 254 },
+            {"RelativeAge", 254 },
+            {"Description", 3000 },
+            {"Label", 30 },
+        };
+
         /// <summary>
         /// Show the DockPane.
         /// </summary>

@@ -51,7 +51,7 @@
         </DockPanel>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Map Unit:" ToolTip="{Binding Tooltips[MapUnit]}" />
-        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Create.MapUnit, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[MapUnit]}" >
+        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Create.MapUnit, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -71,7 +71,7 @@
         </TextBox>
 
         <Label Grid.Row="3" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[Name]}" >
+        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -91,7 +91,7 @@
         </TextBox>
 
         <Label Grid.Row="4" Grid.Column="1" Content="Full Name:" ToolTip="{Binding Tooltips[FullName]}" />
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Create.FullName, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[FullName]}" >
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Create.FullName, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -183,13 +183,13 @@
         </GroupBox>
 
         <Label Grid.Row="6" Grid.Column="1" Content="Relative Age:" ToolTip="{Binding Tooltips[RelativeAge]}" />
-        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Create.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}" />
+        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Create.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}" MaxLength="{Binding MaxLength[RelativeAge]}" />
 
         <Label Grid.Row="7" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="7" Grid.Column="2"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" />
+        <TextBox Grid.Row="7" Grid.Column="2"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
 
         <Label Grid.Row="8" Grid.Column="1" Content="Label:" ToolTip="{Binding Tooltips[Label]}" />
-        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" />
+        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" />
 
         <Label Grid.Row="9" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
         <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" Margin="5" SelectedColor="{Binding Create.HexColor}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding Tooltips[Color]}">

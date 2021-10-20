@@ -38,7 +38,7 @@
         </DockPanel>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" >
+        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
@@ -58,7 +58,7 @@
         </TextBox>
 
         <Label Grid.Row="3" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="3" Grid.Column="2" MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" >
+        <TextBox Grid.Row="3" Grid.Column="2" MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
