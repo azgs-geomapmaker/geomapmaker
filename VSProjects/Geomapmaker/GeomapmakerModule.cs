@@ -25,13 +25,16 @@ namespace Geomapmaker
         {
             get
             {
-                HideDockPanes();
-
                 return _this ?? (_this = (GeomapmakerModule)FrameworkApplication.FindModule("Geomapmaker_Module"));
             }
         }
 
-        private static void HideDockPanes()
+        #region Overrides
+        /// <summary>
+        /// Called by Framework when ArcGIS Pro is closing
+        /// </summary>
+        /// <returns>False to prevent Pro from closing, otherwise True</returns>
+        protected override bool CanUnload()
         {
             // When the app starts up, there will be no user logged in. Clean up dockpanes to reflect this
             List<string> DockPaneIds = new List<string>
@@ -46,16 +49,6 @@ namespace Geomapmaker
                 DockPane pane = FrameworkApplication.DockPaneManager.Find(dockId);
                 pane?.Hide();
             }
-        }
-
-        #region Overrides
-        /// <summary>
-        /// Called by Framework when ArcGIS Pro is closing
-        /// </summary>
-        /// <returns>False to prevent Pro from closing, otherwise True</returns>
-        protected override bool CanUnload()
-        {
-            HideDockPanes();
 
             return true;
         }

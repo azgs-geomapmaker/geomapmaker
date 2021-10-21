@@ -76,7 +76,7 @@ namespace Geomapmaker {
             }
 
             Enabled = true; //enables the ComboBox
-            SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
+            //SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
 
         }
 
@@ -109,7 +109,6 @@ namespace Geomapmaker {
             }
             FrameworkApplication.State.Activate("project_selected");
         }
-
 
         private async Task loadGeodatabase() {
             await DataHelper.PopulateMapUnits();
