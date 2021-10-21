@@ -8,9 +8,9 @@
     
     This dll must correspond to the versions of Postgres and ArcGIS Pro you are running. Obtaining this dll is left as an exercise for the reader. 
 
-3. Copy Add-In directory (built by VisualStudio) to Add-In directory (currently E:\ArcGISPro-AddIns). 
-    
-    Follow the "Load an add-in from a well-known folder" instructions at [https://pro.arcgis.com/en/pro-app/latest/get-started/manage-add-ins.htm](https://pro.arcgis.com/en/pro-app/latest/get-started/manage-add-ins.htm) to set up ArcGIS Pro to access this directory. It's not clear to me whether this must be done for each user on a shared machine.
+3. Visual Studio handles this step for you.
+
+	<strike> Copy Add-In directory (built by VisualStudio) to Add-In directory (currently E:\ArcGISPro-AddIns). Follow the "Load an add-in from a well-known folder" instructions at [https://pro.arcgis.com/en/pro-app/latest/get-started/manage-add-ins.htm](https://pro.arcgis.com/en/pro-app/latest/get-started/manage-add-ins.htm) to set up ArcGIS Pro to access this directory. It's not clear to me whether this must be done for each user on a shared machine. </strike>
 
 4. Copy keycodes file to keycode directory (currently E:\geomapmaker-stuff\ArcGIS-keycodes). 
     
