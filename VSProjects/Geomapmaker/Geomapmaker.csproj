@@ -225,7 +225,6 @@
       <DependentUpon>MapUnits.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
-    <Compile Include="Models\MapUnitTree.cs" />
     <Compile Include="ViewModels\Headings\CreateHeadingsVM.cs" />
     <Compile Include="ViewModels\Headings\DeleteHeadingsVM.cs" />
     <Compile Include="ViewModels\Headings\EditHeadingsVM.cs" />
