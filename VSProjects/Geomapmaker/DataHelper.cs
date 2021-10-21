@@ -622,7 +622,7 @@ namespace Geomapmaker
     }
 
     /// <summary>
-    /// Value converter for slider
+    /// TODO THIS NEEDS TO BE MOVED INTO VIEWMODEL Value converter for slider
     /// </summary>
     public class SliderConverter : IValueConverter
     {
@@ -658,7 +658,7 @@ namespace Geomapmaker
     }
 
     /// <summary>
-    /// Value converter for concealed boolean
+    /// TODO THIS NEEDS TO BE MOVED INTO VIEWMODEL
     /// </summary>
     public class ConcealedConverter : IValueConverter
     {
