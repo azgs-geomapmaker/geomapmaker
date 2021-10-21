@@ -111,6 +111,7 @@ namespace Geomapmaker {
         }
 
         private async Task loadGeodatabase() {
+            await Data.DescriptionOfMapUnits.GetFields();
             await DataHelper.PopulateMapUnits();
             await DataHelper.PopulateContactsAndFaults();
             await DataHelper.PopulateDataSources();

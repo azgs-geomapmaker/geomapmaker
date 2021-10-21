@@ -8,6 +8,8 @@ namespace Geomapmaker.Data
 {
     public static class DescriptionOfMapUnits
     {
+        public static List<Field> Fields { get; set; }
+
         // All headings and map units
         public static List<MapUnit> DMUs { get; set; } = new List<MapUnit>();
 
@@ -92,6 +94,19 @@ namespace Geomapmaker.Data
             }
 
             Unassigned = tmpUnassigned;
+        }
+
+        public static async Task GetFields()
+        {
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+                using (Geodatabase geodatabase = new Geodatabase(DbConnectionProperties.GetProperties()))
+                {
+                    var dmuTableDefinition = geodatabase.GetDefinition<TableDefinition>("DescriptionOfMapUnits");
+
+                    Fields = dmuTableDefinition.GetFields().ToList();
+                }
+            });
         }
 
         // Refresh Map Units

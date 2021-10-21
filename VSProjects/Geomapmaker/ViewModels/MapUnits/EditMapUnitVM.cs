@@ -301,11 +301,16 @@ namespace Geomapmaker.ViewModels.MapUnits
                                         row["Description"] = Description;
                                         row["Label"] = Label;
                                         row["AreaFillRGB"] = AreaFillRGB;
-                                        row["HexColor"] = Color.ToString();
                                         row["GeoMaterial"] = GeoMaterial;
                                         row["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                         row["ParagraphStyle"] = "Standard";
                                         row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+
+                                        //  If the hexcolor field exists in table
+                                        if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))
+                                        {
+                                            row["HexColor"] = Color.ToString();
+                                        }
 
                                         // After all the changes are done, persist it.
                                         row.Store();

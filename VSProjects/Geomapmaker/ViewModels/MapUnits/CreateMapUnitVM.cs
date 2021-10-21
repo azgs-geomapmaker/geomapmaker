@@ -241,11 +241,16 @@ namespace Geomapmaker.ViewModels.MapUnits
                                 rowBuffer["Description"] = Description;
                                 rowBuffer["Label"] = Label;
                                 rowBuffer["AreaFillRGB"] = AreaFillRGB;
-                                rowBuffer["HexColor"] = Color.ToString();
                                 rowBuffer["GeoMaterial"] = GeoMaterial;
                                 rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                 rowBuffer["ParagraphStyle"] = "Standard";
                                 rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+
+                                //  If the hexcolor field exists in table
+                                if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))
+                                {
+                                    rowBuffer["HexColor"] = Color.ToString();
+                                }
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {
