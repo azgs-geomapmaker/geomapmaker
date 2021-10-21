@@ -112,9 +112,6 @@
       </controls>
       <!-- Dock Panes -->
       <dockPanes>
-        <dockPane id="Geomapmaker_AddEditMapUnitsDockPane" caption="Map Units" className="AddEditMapUnitsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
-          <content className="AddEditMapUnitsDockPaneView" />
-        </dockPane>
         <dockPane id="Geomapmaker_AddEditMapUnitPolysDockPane" caption="Map Unit Polys" className="AddEditMapUnitPolysDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="AddEditMapUnitPolysDockPaneView" />
         </dockPane>

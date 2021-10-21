@@ -66,66 +66,15 @@
         <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
 
         <Label Grid.Row="4" Grid.Column="1" Content="Map Unit:" ToolTip="{Binding Tooltips[MapUnit]}"/>
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Edit.MapUnit, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" >
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </TextBox>
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Edit.MapUnit, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" />
 
         <Label Grid.Row="5" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" >
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </TextBox>
+        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" />
 
         <Label Grid.Row="6" Grid.Column="1" Content="Full Name:" ToolTip="{Binding Tooltips[FullName]}" />
-        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Edit.FullName, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" >
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </TextBox>
+        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Edit.FullName, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" />
 
-        <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="5" ToolTip="{Binding Tooltips[Age]}">
+        <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}">
 
             <Grid >
                 <Grid.RowDefinitions>
@@ -148,22 +97,6 @@
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                    <Validation.ErrorTemplate>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <AdornedElementPlaceholder >
-                                    <Border BorderBrush="Red" BorderThickness="1" />
-                                </AdornedElementPlaceholder>
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Validation.ErrorTemplate>
                 </ComboBox>
 
                 <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
@@ -178,22 +111,6 @@
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                    <Validation.ErrorTemplate>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <AdornedElementPlaceholder >
-                                    <Border BorderBrush="Red" BorderThickness="1" />
-                                </AdornedElementPlaceholder>
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Validation.ErrorTemplate>
                 </ComboBox>
             </Grid>
         </GroupBox>
@@ -237,46 +154,13 @@
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
         </ComboBox>
 
         <Label Grid.Row="13" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
-        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25">
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </ComboBox>
+        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
 
-        <Button Grid.Row="14" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
-        <Button Grid.Row="14" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}" ToolTip="{Binding Tooltips[UpdateButton]}" >Update</Button>
+        <Button Grid.Row="14" Grid.Column="1" Command="{Binding Edit.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
+        <Button Grid.Row="14" Grid.Column="2" Command="{Binding Edit.CommandUpdate}" ToolTip="{Binding Tooltips[UpdateButton]}" >Update</Button>
 
     </Grid>
 

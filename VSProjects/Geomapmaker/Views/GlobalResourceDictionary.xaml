@@ -4,6 +4,51 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 >
 
+    <Style TargetType="TextBox">
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder >
+                            <Border BorderBrush="Red" BorderThickness="1" />
+                        </AdornedElementPlaceholder>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ComboBox" >
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder >
+                            <Border BorderBrush="Red" BorderThickness="1" />
+                        </AdornedElementPlaceholder>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Render HTML in tooltips --> 
     <Style TargetType="ToolTip">
         <Setter Property="ContentTemplate">
             <Setter.Value>
@@ -29,10 +74,6 @@
         <Setter Property="Margin" Value="10"/>
     </Style>
 
-    <Style TargetType="ComboBox" >
-        <Setter Property="Margin" Value="10"/>
-    </Style>
-
     <Style TargetType="ListBox" >
         <Setter Property="Margin" Value="10"/>
     </Style>
@@ -55,16 +96,13 @@
         <Setter Property="Margin" Value="10"/>
     </Style>
 
-    <Style TargetType="TextBox" >
-        <Setter Property="Margin" Value="10"/>
-    </Style>
-
     <Style TargetType="TextBlock" >
         <Setter Property="Margin" Value="10"/>
     </Style>
 
     <Style TargetType="Button" >
         <Setter Property="Margin" Value="10"/>
+        <Setter Property="Padding" Value="5"/>
     </Style>
 
     <Style TargetType="TreeView" >

@@ -260,9 +260,6 @@
     <Compile Include="RibbonElements\EditMapUnitsButton.cs" />
     <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
     <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
-    <Compile Include="Views\AddEditMapUnitsDockPane.xaml.cs">
-      <DependentUpon>AddEditMapUnitsDockPane.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
     <Compile Include="DarkImages\GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
@@ -327,10 +324,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddEditMapUnitPolysDockPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddEditMapUnitsDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -95,8 +95,8 @@
         <Label Grid.Row="13" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
         <TextBox Grid.Row="13" Grid.Column="2" Text="{Binding Delete.GeoMaterialConfidence}" MaxHeight="25" IsReadOnly="True" IsEnabled="False" />
 
-        <Button Grid.Row="14" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
-        <Button Grid.Row="14" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandDelete}" ToolTip="{Binding Tooltips[DeleteButton]}" >Delete</Button>
+        <Button Grid.Row="14" Grid.Column="1" Command="{Binding Delete.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
+        <Button Grid.Row="14" Grid.Column="2" Command="{Binding Delete.CommandDelete}" ToolTip="{Binding Tooltips[DeleteButton]}" >Delete</Button>
 
     </Grid>
 

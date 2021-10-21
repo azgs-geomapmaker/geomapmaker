@@ -52,47 +52,13 @@
         <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
 
         <Label Grid.Row="4" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" >
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </TextBox>
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" />
 
         <Label Grid.Row="5" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" >
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </TextBox>
+        <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
 
-        <Button Grid.Row="6" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
-        <Button Grid.Row="6" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}" ToolTip="{Binding Tooltips[EditButton]}" >Update</Button>
+        <Button Grid.Row="6" Grid.Column="1" Command="{Binding Edit.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
+        <Button Grid.Row="6" Grid.Column="2" Command="{Binding Edit.CommandUpdate}" ToolTip="{Binding Tooltips[EditButton]}" >Update</Button>
     </Grid>
 
 </UserControl>
