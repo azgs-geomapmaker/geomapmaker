@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Geomapmaker.ViewModels.MapUnits
 {
@@ -33,7 +34,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             Description = null;
             OlderInterval = null;
             YoungerInterval = null;
-            HexColor = null;
+            Color = null;
             GeoMaterial = null;
             GeoMaterialConfidence = null;
         }
@@ -135,18 +136,21 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         // Color
-        private string _hexColor;
-        public string HexColor
+        // Color
+        private Color? _color;
+        public Color? Color
         {
-            get => _hexColor;
+            get => _color;
             set
             {
-                SetProperty(ref _hexColor, value, () => HexColor);
-                ValidateColor(HexColor, "HexColor");
+                SetProperty(ref _color, value, () => Color);
+                ValidateColor(Color, "Color");
             }
         }
 
-        public string AreaFillRGB => MapUnitsViewModel.HexToRGB(HexColor);
+        public string AreaFillRGB => MapUnitsViewModel.ColorToRGB(Color);
+
+        public string HexColor => Color == null ? "" : Color.ToString();
 
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 
@@ -190,7 +194,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             RelativeAge = null;
             Description = null;
             Label = null;
-            HexColor = null;
+            Color = null;
             GeoMaterial = null;
             GeoMaterialConfidence = null;
         }
@@ -237,7 +241,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                                 rowBuffer["Description"] = Description;
                                 rowBuffer["Label"] = Label;
                                 rowBuffer["AreaFillRGB"] = AreaFillRGB;
-                                rowBuffer["HexColor"] = HexColor;
+                                rowBuffer["HexColor"] = Color.ToString();
                                 rowBuffer["GeoMaterial"] = GeoMaterial;
                                 rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                 rowBuffer["ParagraphStyle"] = "Standard";
@@ -388,15 +392,15 @@ namespace Geomapmaker.ViewModels.MapUnits
             RaiseErrorsChanged("OlderInterval");
         }
 
-        private void ValidateColor(string color, string propertyKey)
+        private void ValidateColor(Color? color, string propertyKey)
         {
             // Required field
-            if (string.IsNullOrWhiteSpace(color))
+            if (color == null)
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == color))
+            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == HexColor))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }

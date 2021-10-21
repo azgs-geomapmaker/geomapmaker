@@ -133,6 +133,7 @@ namespace Geomapmaker.Data
                                     ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
                                     Label = RowValueToString(row["Label"]),
                                     HexColor = RowValueToString(row["Hexcolor"]),
+                                    AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
                                     DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
                                     GeoMaterial = RowValueToString(row["GeoMaterial"]),
                                     GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),

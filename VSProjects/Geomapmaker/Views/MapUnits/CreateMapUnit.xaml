@@ -109,7 +109,7 @@
         <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" />
 
         <Label Grid.Row="9" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
-        <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" Margin="10" SelectedColor="{Binding Create.HexColor}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding Tooltips[Color]}">
+        <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" Margin="10" SelectedColor="{Binding Create.Color}" DisplayColorAndName="True" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding Tooltips[Color]}">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>

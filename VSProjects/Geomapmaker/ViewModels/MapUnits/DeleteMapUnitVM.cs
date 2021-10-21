@@ -60,7 +60,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Label = Selected?.Label;
                 NotifyPropertyChanged("Label");
 
-                HexColor = Selected?.HexColor;
+                HexColor = MapUnitsViewModel.RGBtoHex(Selected?.AreaFillRGB);
                 NotifyPropertyChanged("HexColor");
 
                 GeoMaterial = Selected?.GeoMaterial;

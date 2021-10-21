@@ -11,7 +11,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         private const string _dockPaneID = "Geomapmaker_DescriptionOfMapUnits";
 
         // This is the only way I found to add a New Line in a label so far
-        public string GeoMaterialConfidenceLabel  => "GeoMaterial" + Environment.NewLine + "Confidence:";
+        public string GeoMaterialConfidenceLabel => "GeoMaterial" + Environment.NewLine + "Confidence:";
 
         // View models
         public CreateMapUnitVM Create { get; set; } = new CreateMapUnitVM();
@@ -74,12 +74,55 @@ namespace Geomapmaker.ViewModels.MapUnits
             pane?.Activate();
         }
 
-        // Convert Hex Color to RGB
-        public static string HexToRGB(string hex)
+        // Convert Color to RGB
+        public static string ColorToRGB(Color? color)
         {
-            Color color = (Color)ColorConverter.ConvertFromString(hex);
+            if (color == null)
+            {
+                return "#00000000";
+            }
 
-            return $"{color.R},{color.G},{color.B}";
+            // GeMS: (1) each RGB color value is integer between 0 and 255; (2) values are left - padded with zeroes so that each consists of 3 digits; (3) values are separated by commas with no spaces(for example, nnn,nnn,nnn).
+
+            return $"{color.Value.R:000},{color.Value.G:000},{color.Value.B:000}";
+        }
+
+        // Convert RGB string to System Color
+        public static Color? RGBtoColor(string rgb)
+        {
+            // Null if the string is empty
+            if (string.IsNullOrEmpty(rgb))
+            {
+                return null;
+            }
+
+            // Split by comma 
+            string[] strArray = rgb.Split(',');
+
+            // Color from RGB bytes
+            return strArray.Length != 3
+                ? null
+                : (Color?)Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2]));
+        }
+
+        // Convert RGB string to Hex
+        public static string RGBtoHex(string rgb)
+        {
+            // Null if the string is empty
+            if (string.IsNullOrEmpty(rgb))
+            {
+                return "#00000000";
+            }
+
+            // Split by comma 
+            string[] strArray = rgb.Split(',');
+
+            if (strArray.Length != 3)
+            {
+                return "#00000000";
+            }
+
+            return Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2])).ToString();
         }
     }
 

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Geomapmaker.ViewModels.MapUnits
 {
@@ -51,7 +52,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                     RelativeAge = Selected.RelativeAge;
                     Description = Selected.Description;
                     Label = Selected.Label;
-                    HexColor = Selected.HexColor;
+                    Color = MapUnitsViewModel.RGBtoColor(Selected.AreaFillRGB);
                     GeoMaterial = Selected.GeoMaterial;
                     GeoMaterialConfidence = Selected.GeoMaterialConfidence;
                 }
@@ -193,31 +194,23 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         // Color
-        private string _hexColor;
-        public string HexColor
+        private Color? color;
+        public Color? Color
         {
-            get => _hexColor;
+            get => color;
             set
             {
-                SetProperty(ref _hexColor, value, () => HexColor);
-                ValidateColor(HexColor, "HexColor");
+                SetProperty(ref color, value, () => Color);
+                ValidateColor(Color, "Color");
                 ValidateChangeWasMade();
             }
         }
 
-        public string AreaFillRGB => MapUnitsViewModel.HexToRGB(HexColor);
+        public string AreaFillRGB => MapUnitsViewModel.ColorToRGB(Color);
+
+        public string HexColor => Color == null ? "" : Color.ToString();
 
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
-
-        //private Geomaterial GetGeomaterialFromIndentedName(string indentedName)
-        //{
-        //    if (string.IsNullOrEmpty(indentedName))
-        //    {
-        //        return null;
-        //    }
-
-        //    return GeoMaterialOptions.FirstOrDefault(a => a.IndentedName == indentedName);
-        //}
 
         // GeoMaterial
         private string _geoMaterial;
@@ -267,7 +260,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             RelativeAge = null;
             Description = null;
             Label = null;
-            HexColor = null;
+            Color = null;
             GeoMaterial = null;
             GeoMaterialConfidence = null;
             Selected = null;
@@ -308,7 +301,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                                         row["Description"] = Description;
                                         row["Label"] = Label;
                                         row["AreaFillRGB"] = AreaFillRGB;
-                                        row["HexColor"] = HexColor;
+                                        row["HexColor"] = Color.ToString();
                                         row["GeoMaterial"] = GeoMaterial;
                                         row["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                         row["ParagraphStyle"] = "Standard";
@@ -493,15 +486,15 @@ namespace Geomapmaker.ViewModels.MapUnits
             RaiseErrorsChanged("OlderInterval");
         }
 
-        private void ValidateColor(string color, string propertyKey)
+        private void ValidateColor(Color? color, string propertyKey)
         {
             // Required field
-            if (string.IsNullOrWhiteSpace(color))
+            if (color == null)
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.HexColor == color))
+            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.HexColor == HexColor))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }
