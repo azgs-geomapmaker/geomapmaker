@@ -160,8 +160,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             Selected = null;
         }
 
-        // Validation
-        #region INotifyDataErrorInfo members
+        #region ### Validation ####
 
         // Error collection
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();

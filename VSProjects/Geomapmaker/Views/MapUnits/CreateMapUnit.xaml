@@ -141,7 +141,7 @@
         </ComboBox>
 
         <Label Grid.Row="11" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
-        <ComboBox Grid.Row="11" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
+        <ComboBox Grid.Row="11" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" />
 
         <Button Grid.Row="12" Grid.Column="1" Command="{Binding Create.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
         <Button Grid.Row="12" Grid.Column="2" Command="{Binding Create.CommandSave}" ToolTip="{Binding Tooltips[SaveButton]}" >Save</Button>
