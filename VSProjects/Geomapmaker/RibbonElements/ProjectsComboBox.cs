@@ -117,8 +117,6 @@ namespace Geomapmaker {
             await DataHelper.PopulateDataSources();
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
                 var map = MapView.Active.Map;
-                map.RemoveLayers(map.Layers.Where(a => a.MapLayerType != MapLayerType.BasemapBackground && a.MapLayerType != MapLayerType.BasemapTopReference));
-                map.RemoveStandaloneTables(map.StandaloneTables);
                 DataHelper.currentLayers.Clear();
                 DataHelper.currentTables.Clear();
 

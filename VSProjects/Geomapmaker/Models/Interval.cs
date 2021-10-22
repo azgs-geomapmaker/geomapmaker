@@ -12,6 +12,6 @@
 
         public string Range => $"{Early_Age}-{Late_Age}ma";
 
-        public string Tooltip => $"<b>Name:</b> {Name} <br /> <b>Range:</b> {Early_Age}-{Late_Age}ma <br /> <b>Type:</b> {Type}";
+        public string Tooltip => $"Name: {Name} <br /> Range: {Early_Age}-{Late_Age}ma <br /> Type: {Type}";
     }
 }

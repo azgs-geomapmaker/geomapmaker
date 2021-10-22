@@ -76,7 +76,9 @@ namespace Geomapmaker
 
                 if (map != null)
                 {
+                    // Remove all layers except basemaps
                     map.RemoveLayers(map.Layers.Where(a => a.MapLayerType != MapLayerType.BasemapBackground && a.MapLayerType != MapLayerType.BasemapTopReference));
+                    // Remove all standalone tables
                     map.RemoveStandaloneTables(map.StandaloneTables);
                 }
 

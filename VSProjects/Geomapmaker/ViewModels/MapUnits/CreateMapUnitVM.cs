@@ -334,7 +334,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             // Alphabet chars only
             else if (!name.All(Char.IsLetter))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Alphabetical letters only." };
+                _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
             }
             else
             {
@@ -422,6 +422,10 @@ namespace Geomapmaker.ViewModels.MapUnits
             if (string.IsNullOrWhiteSpace(GeoMaterial))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (geoMaterial == "Other materials")
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Please select a subdivision" };
             }
             else
             {

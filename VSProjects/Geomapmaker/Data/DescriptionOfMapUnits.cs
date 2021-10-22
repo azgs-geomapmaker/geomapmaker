@@ -46,10 +46,10 @@ namespace Geomapmaker.Data
         private static void BuildTree()
         {
             // Temp list for unassigned DMUS
-            var tmpUnassigned = new List<MapUnit>();
+            List<MapUnit> tmpUnassigned = new List<MapUnit>();
 
             // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents 
-            var hierarchyList = Unassigned.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).ToList();
+            List<MapUnit> hierarchyList = Unassigned.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).ToList();
 
             // Loop over the DMUs
             foreach (MapUnit mu in hierarchyList)

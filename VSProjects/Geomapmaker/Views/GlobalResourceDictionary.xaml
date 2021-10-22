@@ -53,21 +53,20 @@
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <htmlControls:HtmlLabel Text="{TemplateBinding Content}" />
+                    <htmlControls:HtmlLabel Text="{TemplateBinding Content}" MaxWidth="500" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style x:Key = "TooltipLabel" TargetType = "TextBlock">
-        <Setter Property = "FontWeight" Value="Bold" />
-        <Setter Property = "Margin" Value="0,5,0,0" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Margin" Value="0,5,0,0" />
     </Style>
 
     <Style x:Key = "TooltipText" TargetType = "TextBlock">
-        <Setter Property = "MaxWidth" Value = "500" />
-        <Setter Property = "TextWrapping" Value = "Wrap" />
-        <Setter Property = "Margin" Value="0,0,0,5" />
+        <Setter Property="TextWrapping" Value = "Wrap" />
+        <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
     <Style TargetType="Label" >
