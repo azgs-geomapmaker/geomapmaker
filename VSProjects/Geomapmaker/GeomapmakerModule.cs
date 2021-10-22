@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ArcGIS.Core.CIM;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.RibbonElements;
 
 namespace Geomapmaker
@@ -21,20 +25,32 @@ namespace Geomapmaker
         /// <summary>
         /// Retrieve the singleton instance to this module here
         /// </summary>
-        public static GeomapmakerModule Current
-        {
-            get
-            {
-                return _this ?? (_this = (GeomapmakerModule)FrameworkApplication.FindModule("Geomapmaker_Module"));
-            }
-        }
+        public static GeomapmakerModule Current => _this ?? (_this = (GeomapmakerModule)FrameworkApplication.FindModule("Geomapmaker_Module"));
 
         #region Overrides
+
+        protected override bool Initialize()
+        {
+            HideDockPanes();
+            RemoveLayersTables();
+
+            return true;
+        }
+
         /// <summary>
         /// Called by Framework when ArcGIS Pro is closing
         /// </summary>
         /// <returns>False to prevent Pro from closing, otherwise True</returns>
         protected override bool CanUnload()
+        {
+            HideDockPanes();
+            RemoveLayersTables();
+
+            return true;
+        }
+
+        // Hide geomapmaker dockpanes when loading/unloading
+        private void HideDockPanes()
         {
             // When the app starts up, there will be no user logged in. Clean up dockpanes to reflect this
             List<string> DockPaneIds = new List<string>
@@ -49,8 +65,22 @@ namespace Geomapmaker
                 DockPane pane = FrameworkApplication.DockPaneManager.Find(dockId);
                 pane?.Hide();
             }
+        }
 
-            return true;
+        // Remove geomapmaker layers and tables when loading/unloading
+        private void RemoveLayersTables()
+        {
+            ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+                var map = MapView.Active?.Map;
+
+                if (map != null)
+                {
+                    map.RemoveLayers(map.Layers.Where(a => a.MapLayerType != MapLayerType.BasemapBackground && a.MapLayerType != MapLayerType.BasemapTopReference));
+                    map.RemoveStandaloneTables(map.StandaloneTables);
+                }
+
+            });
         }
 
         #endregion Overrides
