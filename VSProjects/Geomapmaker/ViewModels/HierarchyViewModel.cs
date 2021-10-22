@@ -27,10 +27,9 @@ namespace Geomapmaker.ViewModels
             {"Unassigned", "TODO Unassigned" },
         };
 
+        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Tree);
 
-        public ObservableCollection<MapUnit> Tree { get; set; } = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Tree);
-
-        public ObservableCollection<MapUnit> Unassigned { get; set; } = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Unassigned);
+        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Unassigned);
 
         public ICommand CommandSave { get; }
         public ICommand CommandReset { get; }
@@ -49,19 +48,18 @@ namespace Geomapmaker.ViewModels
 
         private async Task ResetAsync()
         {
-
             await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
-            Tree = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Tree);
+            Tree = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Tree);
             NotifyPropertyChanged("Tree");
 
-            Unassigned = new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Unassigned);
+            Unassigned = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Unassigned);
             NotifyPropertyChanged("Unassigned");
         }
 
-        private List<MapUnit> HierarchyList = new List<MapUnit>();
+        private List<MapUnitTreeItem> HierarchyList = new List<MapUnitTreeItem>();
         // Recursively build out Hierarchy Keys
-        private void SetHierarchyKeys(ObservableCollection<MapUnit> collection, string prefix = "")
+        private void SetHierarchyKeys(ObservableCollection<MapUnitTreeItem> collection, string prefix = "")
         {
             // Base Case: The tree or a MU's children is empty
             if (collection == null || collection.Count == 0)
@@ -72,7 +70,7 @@ namespace Geomapmaker.ViewModels
             // Start the index at 1
             int index = 1;
 
-            foreach (MapUnit mu in collection)
+            foreach (MapUnitTreeItem mu in collection)
             {
                 // Add a dash if the prefix is not empty
                 string dash = string.IsNullOrEmpty(prefix) ? "" : "-";
@@ -97,7 +95,7 @@ namespace Geomapmaker.ViewModels
         // Write HierarchyKey to database
         private async Task SaveAsync()
         {
-            HierarchyList = new List<MapUnit>();
+            HierarchyList = new List<MapUnitTreeItem>();
             SetHierarchyKeys(Tree);
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
@@ -159,10 +157,15 @@ namespace Geomapmaker.ViewModels
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            MapUnit sourceItem = dropInfo.Data as MapUnit;
-            MapUnit targetItem = dropInfo.TargetItem as MapUnit;
+            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
+            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
+            ICollection<MapUnitTreeItem> targetCollection = dropInfo.TargetCollection as ICollection<MapUnitTreeItem>;
 
-            if (sourceItem != null && targetItem != null && targetItem.CanAcceptChildren && targetItem.ParagraphStyle == "Heading")
+            bool isItemDropValid = sourceItem != null && targetItem != null && targetItem.CanAcceptChildren;
+            bool isCollectionDropValid = sourceItem != null && targetCollection != null;
+
+
+            if (sourceItem != null && targetItem != null)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                 dropInfo.Effects = DragDropEffects.Copy;
@@ -171,9 +174,14 @@ namespace Geomapmaker.ViewModels
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            MapUnit sourceItem = dropInfo.Data as MapUnit;
-            MapUnit targetItem = dropInfo.TargetItem as MapUnit;
+            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
+
+            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
+
+            ICollection<MapUnitTreeItem> sourceCollection = dropInfo.DragInfo.SourceCollection as ICollection<MapUnitTreeItem>;
+
             targetItem.Children.Add(sourceItem);
+            sourceCollection.Remove(sourceItem);
         }
     }
 

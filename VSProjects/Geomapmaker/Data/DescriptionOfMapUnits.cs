@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using Geomapmaker.Models;
+using Nelibur.ObjectMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,10 +21,10 @@ namespace Geomapmaker.Data
         public static List<MapUnit> MapUnits => DMUs.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.MU).ToList();
 
         // Map units in a tree structure based on HierarchyKey
-        public static List<MapUnit> Tree;
+        public static List<MapUnitTreeItem> Tree;
 
         // Map units not in the tree
-        public static List<MapUnit> Unassigned;
+        public static List<MapUnitTreeItem> Unassigned;
 
         // Convert row object to a string. 
         private static string RowValueToString(object value)
@@ -34,10 +35,9 @@ namespace Geomapmaker.Data
 
         public static void RefreshTreeStructure()
         {
-            // Empty the tree
-            Tree = new List<MapUnit>();
-            // Set all DMUs as unassigned
-            Unassigned = DMUs;
+            // Empty the tree and unassigned
+            Tree = new List<MapUnitTreeItem>();
+            Unassigned = new List<MapUnitTreeItem>();
 
             BuildTree();
         }
@@ -46,15 +46,16 @@ namespace Geomapmaker.Data
         private static void BuildTree()
         {
             // Temp list for unassigned DMUS
-            List<MapUnit> tmpUnassigned = new List<MapUnit>();
+            List<MapUnitTreeItem> tmpUnassigned = new List<MapUnitTreeItem>();
+
+            TinyMapper.Bind<MapUnit, MapUnitTreeItem>();
 
             // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents 
-            List<MapUnit> hierarchyList = Unassigned.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).ToList();
+            List<MapUnitTreeItem> hierarchyList = DMUs.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).Select(a => TinyMapper.Map<MapUnitTreeItem>(a)).ToList();
 
             // Loop over the DMUs
-            foreach (MapUnit mu in hierarchyList)
+            foreach (MapUnitTreeItem mu in hierarchyList)
             {
-
                 // Check the HierarchyKey string for a dash
                 // Children will always have a dash (001-001 for example)
                 if (mu.HierarchyKey.IndexOf("-") != -1)
@@ -63,7 +64,7 @@ namespace Geomapmaker.Data
                     string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
 
                     // Look for a map unit that matches the parent HierarchyKey
-                    MapUnit parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
+                    MapUnitTreeItem parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
 
                     if (parent == null)
                     {
@@ -89,11 +90,10 @@ namespace Geomapmaker.Data
                         // Map Unit must be a root node
                         Tree.Add(mu);
                     }
-
                 }
             }
 
-            Unassigned = tmpUnassigned;
+            Unassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
         }
 
         public static async Task GetFields()

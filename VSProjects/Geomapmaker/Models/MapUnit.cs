@@ -40,11 +40,12 @@ namespace Geomapmaker.Models
         public string GeoMaterial { get; set; }
 
         public string GeoMaterialConfidence { get; set; }
+    }
 
-        // Only used to hold the tree-view. Not saved in db
-        public ObservableCollection<MapUnit> Children { get; set; } = new ObservableCollection<MapUnit>();
+    public class MapUnitTreeItem : MapUnit
+    {
+        public ObservableCollection<MapUnitTreeItem> Children { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
-        public bool CanAcceptChildren { get; set; }
-
+        public bool CanAcceptChildren => string.IsNullOrEmpty(ParagraphStyle) || ParagraphStyle == "Heading" ;
     }
 }
