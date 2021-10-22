@@ -109,24 +109,7 @@
         <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" />
 
         <Label Grid.Row="9" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
-        <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" Margin="10" SelectedColor="{Binding Create.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}">
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
-        </wpftk:ColorPicker>
+        <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" SelectedColor="{Binding Create.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" />
 
         <Label Grid.Row="10" Grid.Column="1" Content="GeoMaterial:" ToolTip="{Binding Tooltips[GeoMaterial]}" />
         <ComboBox Grid.Row="10" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" >

@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:htmlControls="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+                    xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 >
 
@@ -48,7 +49,29 @@
         </Setter>
     </Style>
 
-    <!-- Render HTML in tooltips --> 
+    <Style TargetType="wpftk:ColorPicker" >
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder >
+                            <Border BorderBrush="Red" BorderThickness="1" />
+                        </AdornedElementPlaceholder>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Render HTML in tooltips -->
     <Style TargetType="ToolTip">
         <Setter Property="ContentTemplate">
             <Setter.Value>
