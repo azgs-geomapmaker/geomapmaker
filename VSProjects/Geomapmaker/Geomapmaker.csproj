@@ -264,7 +264,7 @@
     <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
     <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
     <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
-    <Compile Include="DarkImages\GeomapmakerConfiguration.cs" />
+    <Compile Include="GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
     <Compile Include="RibbonElements\LoginButton.cs" />
     <Compile Include="Views\DataSourceDialogProWindow.xaml.cs">

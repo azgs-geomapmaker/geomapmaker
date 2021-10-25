@@ -41,7 +41,7 @@ namespace Geomapmaker
                         var id = tabElement.Attribute("id");
                         if (id == null) continue;
 
-                        if (!id.Value.StartsWith("Acme") && !id.Value.StartsWith("LoginTest02"))
+                        if (!id.Value.StartsWith("AZGS") && !id.Value.StartsWith("Geomapmaker"))
                             elements.Add(tabElement);
                         else
                         {
