@@ -40,15 +40,13 @@
         </DockPanel>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Edit:" ToolTip="{Binding Tooltips[Edit]}" />
-        <ComboBox 
-            Grid.Row="2" 
-            Grid.Column="2" 
-		    ItemsSource="{Binding Edit.AllHeadings}" 
-		    DisplayMemberPath="Name" 
-            SelectedItem="{Binding Edit.SelectedHeading}"
-            ToolTip="{Binding Tooltips[Edit]}"
-        />
-
+        <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Edit.AllHeadings}" SelectedItem="{Binding Edit.SelectedHeading}" ToolTip="{Binding Tooltips[Edit]}" >
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
 
         <Label Grid.Row="4" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Geomapmaker.Models
 {
@@ -40,12 +36,70 @@ namespace Geomapmaker.Models
         public string GeoMaterial { get; set; }
 
         public string GeoMaterialConfidence { get; set; }
+
+        public string Tooltip
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append($"<b>ID: </b>{ID}<br>");
+
+                if (!string.IsNullOrEmpty(MU))
+                {
+                    sb.Append($"<b>MapUnit: </b>{MU}<br>");
+                }
+
+                sb.Append($"<b>Name: </b>{Name}<br>");
+
+                if (!string.IsNullOrEmpty(FullName))
+                {
+                    sb.Append($"<b>FullName: </b>{FullName}<br>");
+                }
+                if (!string.IsNullOrEmpty(Age))
+                {
+                    sb.Append($"<b>Age: </b>{Age}<br>");
+                }
+                if (!string.IsNullOrEmpty(RelativeAge))
+                {
+                    sb.Append($"<b>RelativeAge: </b>{RelativeAge}<br>");
+                }
+                if (!string.IsNullOrEmpty(Description))
+                {
+                    sb.Append($"<b>Description: </b>{Description}<br>");
+                }
+                if (!string.IsNullOrEmpty(Label))
+                {
+                    sb.Append($"<b>Label: </b>{Label}<br>");
+                }
+                if (!string.IsNullOrEmpty(AreaFillRGB))
+                {
+                    sb.Append($"<b>AreaFillRGB: </b>{AreaFillRGB}<br>");
+                }
+                if (!string.IsNullOrEmpty(HexColor))
+                {
+                    sb.Append($"<b>HexColor: </b>{HexColor}<br>");
+                }
+                if (!string.IsNullOrEmpty(GeoMaterial))
+                {
+                    sb.Append($"<b>GeoMaterial: </b>{GeoMaterial}<br>");
+                }
+                if (!string.IsNullOrEmpty(GeoMaterialConfidence))
+                {
+                    sb.Append($"<b>GeoMaterialConfidence: </b>{GeoMaterialConfidence}<br>");
+                }
+
+                sb.Append($"<b>DescriptionSourceID: </b>{DescriptionSourceID}<br>");
+
+                return sb.ToString();
+            }
+        }
     }
 
     public class MapUnitTreeItem : MapUnit
     {
         public ObservableCollection<MapUnitTreeItem> Children { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
-        public bool CanAcceptChildren => string.IsNullOrEmpty(ParagraphStyle) || ParagraphStyle == "Heading" ;
+        public bool CanAcceptChildren => string.IsNullOrEmpty(ParagraphStyle) || ParagraphStyle == "Heading";
     }
 }

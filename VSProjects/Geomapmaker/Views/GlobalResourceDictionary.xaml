@@ -73,6 +73,7 @@
 
     <!-- Render HTML in tooltips -->
     <Style TargetType="ToolTip">
+        <Setter Property="ToolTipService.ShowDuration" Value="2147483647"/>
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
