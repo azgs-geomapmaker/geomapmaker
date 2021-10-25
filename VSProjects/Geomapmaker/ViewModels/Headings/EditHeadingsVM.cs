@@ -12,15 +12,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels
+namespace Geomapmaker.ViewModels.Headings
 {
-    internal class HeadingsEditVM : DockPane, INotifyDataErrorInfo
+    internal class EditHeadingsVM : DockPane, INotifyDataErrorInfo
     {
         // Create's save button
         public ICommand CommandUpdate { get; }
         public ICommand CommandReset { get; }
 
-        public HeadingsEditVM()
+        public EditHeadingsVM()
         {
             // Init submit command
             CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels
         /// <summary>
         /// List of all Headings/Subheadings
         /// </summary>
-        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(DataHelper.MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name));
+        public ObservableCollection<MapUnit> AllHeadings => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.Headings);
 
         /// <summary>
         /// Map Unit selected for edit
@@ -43,15 +43,8 @@ namespace Geomapmaker.ViewModels
             {
                 SetProperty(ref _selectedHeading, value, () => SelectedHeading);
 
-                // Update parent options to remove selected heading
-                NotifyPropertyChanged("ParentOptions");
-
-                Name = value?.Name;
-                Description = value?.Description;
-                Parent = value?.ParentId;
-
-                Tree = value != null ? new List<MapUnit> { new MapUnit { Name = value.Name, Children = GetChildren(value) } } : null;
-                NotifyPropertyChanged("Tree");
+                Name = SelectedHeading?.Name;
+                Description = SelectedHeading?.Description;
             }
         }
 
@@ -63,8 +56,8 @@ namespace Geomapmaker.ViewModels
             set
             {
                 SetProperty(ref _name, value, () => Name);
-                ValidateHeadingName(_name);
-                ValidateIfChangeWasMade();
+                ValidateHeadingName(_name, "Name");
+                ValidateChangeWasMade();
             }
         }
 
@@ -76,52 +69,14 @@ namespace Geomapmaker.ViewModels
             set
             {
                 SetProperty(ref _description, value, () => Description);
-                ValidateDescription(_description);
-                ValidateIfChangeWasMade();
+                ValidateDescription(_description, "Description");
+                ValidateChangeWasMade();
             }
         }
 
-        // Heading's Parent
-        private int? _parent;
-        public int? Parent
-        {
-            get => _parent;
-            set
-            {
-                SetProperty(ref _parent, value, () => Parent);
-                ValidateParent(_parent);
-                ValidateIfChangeWasMade();
-            }
-        }
-
-        public List<MapUnit> Tree { get; set; }
-
-        // Recursively look up children
-        private List<MapUnit> GetChildren(MapUnit root)
-        {
-            // Get mapunit's children
-            List<MapUnit> children = DataHelper.MapUnits.Where(a => a.ParentId == root?.ID).ToList();
-
-            // If no children
-            if (children.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                // Get the children of each child
-                foreach (MapUnit child in children)
-                {
-                    child.Children = GetChildren(child);
-                }
-            }
-
-            return children;
-        }
-        
         private async Task ResetAsync()
         {
-            await DataHelper.PopulateMapUnits();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
 
@@ -143,7 +98,7 @@ namespace Geomapmaker.ViewModels
         /// </summary>
         private async Task UpdateAsync()
         {
-            if (DataHelper.connectionProperties == null)
+            if (Data.DbConnectionProperties.GetProperties() == null)
             {
                 return;
             }
@@ -153,7 +108,7 @@ namespace Geomapmaker.ViewModels
 
                 EditOperation editOperation = new EditOperation();
 
-                using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
+                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
                 {
                     using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
                     {
@@ -174,9 +129,10 @@ namespace Geomapmaker.ViewModels
                                         context.Invalidate(row);
 
                                         row["Name"] = Name;
+                                        row["FullName"] = Name;
                                         row["Description"] = Description;
                                         row["ParagraphStyle"] = "Heading";
-                                        row["ParentId"] = Parent;
+                                        row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
 
                                         // After all the changes are done, persist it.
                                         row.Store();
@@ -198,38 +154,16 @@ namespace Geomapmaker.ViewModels
                 }
             });
 
-            await DataHelper.PopulateMapUnits();
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
             NotifyPropertyChanged("AllHeadings");
-            NotifyPropertyChanged("ParentOptions");
 
             // Reset values
             SelectedHeading = null;
         }
 
-        /// <summary>
-        /// List of parent-options available during create
-        /// </summary>
-        public ObservableCollection<KeyValuePair<int?, string>> ParentOptions
-        {
-            get
-            {
-                // Remove selected heading from parent options
-                List<KeyValuePair<int?, string>> headingList = DataHelper.MapUnits
-                    .Where(a => a.ParagraphStyle == "Heading")
-                    .Where(a => a.ID != SelectedHeading?.ID)
-                    .OrderBy(a => a.Name)
-                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
-                    .ToList();
+        #region ### Validation ####
 
-                headingList.Insert(0, new KeyValuePair<int?, string>(null, ""));
-
-                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
-            }
-        }
-
-        // Validation
-        #region INotifyDataErrorInfo members
         // Error collection
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
@@ -250,91 +184,60 @@ namespace Geomapmaker.ViewModels
 
         public bool HasErrors => _validationErrors.Count > 0;
 
-        private void ValidateIfChangeWasMade()
+        private void ValidateChangeWasMade()
         {
-            // This error isn't display on any field. Prevents user from hitting update until a change is made.
+            // Error message isn't display on a field. Just prevents user from hitting update until a change is made.
             const string propertyKey = "SilentError";
 
             if (SelectedHeading == null)
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
                 return;
             }
 
-            if (SelectedHeading.Name == Name && SelectedHeading.Description == Description && SelectedHeading.ParentId == Parent)
+            if (SelectedHeading.Name == Name && SelectedHeading.Description == Description)
             {
                 _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         // Validate the Heading's name
-        private void ValidateHeadingName(string name)
+        private void ValidateHeadingName(string name, string propertyKey)
         {
-            const string propertyKey = "Name";
-
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(name))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-                RaiseErrorsChanged(propertyKey);
             }
-            else if (DataHelper.MapUnits.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
+            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != SelectedHeading?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
             }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         // Validate the Heading's definition
-        private void ValidateDescription(string definition)
+        private void ValidateDescription(string definition, string propertyKey)
         {
-            const string propertyKey = "Description";
-
             if (SelectedHeading != null && string.IsNullOrWhiteSpace(definition))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
-                RaiseErrorsChanged(propertyKey);
             }
             else
             {
                 _validationErrors.Remove(propertyKey);
-                RaiseErrorsChanged(propertyKey);
-            }
-        }
-
-        // Validate the Heading's definition
-        private void ValidateParent(int? checkId)
-        {
-            const string propertyKey = "Parent";
-
-            // Loop over parents
-            while (checkId != null)
-            {
-                // Look up the parent to grab grandparent id
-                checkId = DataHelper.MapUnits.FirstOrDefault(a => a.ID == checkId)?.ParentId;
-
-                // Compare with selected heading
-                if (checkId == SelectedHeading.ID)
-                {
-                    _validationErrors[propertyKey] = new List<string>() { "Parent" };
-                    RaiseErrorsChanged(propertyKey);
-                    return;
-                }
             }
 
-            // Finally remove any error
-            _validationErrors.Remove(propertyKey);
             RaiseErrorsChanged(propertyKey);
         }
 

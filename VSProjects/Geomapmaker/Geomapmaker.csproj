@@ -63,6 +63,15 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
+      <HintPath>packages\gong-wpf-dragdrop.2.4.3\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer.WPF, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlRenderer.WPF.1.5.0.6\lib\net45\HtmlRenderer.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.1.2.30, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>packages\AvalonEdit.6.1.2.30\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
@@ -76,7 +85,9 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -102,6 +113,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="TinyMapper, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\TinyMapper.3.0.3\lib\net40\TinyMapper.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="System.Xaml" />
     <Reference Include="ArcGIS.Desktop.Framework">
@@ -188,14 +202,48 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\MapUnitTree.cs" />
-    <Compile Include="ViewModels\HeadingsCreateVM.cs" />
-    <Compile Include="ViewModels\HeadingsDeleteVM.cs" />
-    <Compile Include="ViewModels\HeadingsEditVM.cs" />
-    <Compile Include="Views\Headings.xaml.cs">
+    <Compile Include="Data\Confidence.cs" />
+    <Compile Include="Data\DbConnectionProperties.cs" />
+    <Compile Include="Data\DescriptionOfMapUnits.cs" />
+    <Compile Include="Data\GeoMaterials.cs" />
+    <Compile Include="Data\Intervals.cs" />
+    <Compile Include="Models\Geomaterial.cs" />
+    <Compile Include="Views\Hierarchy.xaml.cs">
+      <DependentUpon>Hierarchy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\HierarchyViewModel.cs" />
+    <Compile Include="ViewModels\MapUnits\CreateMapUnitVM.cs" />
+    <Compile Include="ViewModels\MapUnits\DeleteMapUnitVM.cs" />
+    <Compile Include="ViewModels\MapUnits\EditMapUnitVM.cs" />
+    <Compile Include="Views\MapUnits\CreateMapUnit.xaml.cs">
+      <DependentUpon>CreateMapUnit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnits\DeleteMapUnit.xaml.cs">
+      <DependentUpon>DeleteMapUnit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnits\EditMapUnit.xaml.cs">
+      <DependentUpon>EditMapUnit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnits\MapUnits.xaml.cs">
+      <DependentUpon>MapUnits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
+    <Compile Include="ViewModels\Headings\CreateHeadingsVM.cs" />
+    <Compile Include="ViewModels\Headings\DeleteHeadingsVM.cs" />
+    <Compile Include="ViewModels\Headings\EditHeadingsVM.cs" />
+    <Compile Include="Views\Headings\CreateHeading.xaml.cs">
+      <DependentUpon>CreateHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\DeleteHeading.xaml.cs">
+      <DependentUpon>DeleteHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\EditHeading.xaml.cs">
+      <DependentUpon>EditHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\Headings.xaml.cs">
       <DependentUpon>Headings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\HeadingsViewModel.cs" />
+    <Compile Include="ViewModels\Headings\HeadingsViewModel.cs" />
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
@@ -215,11 +263,8 @@
     <Compile Include="RibbonElements\EditMapUnitsButton.cs" />
     <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
     <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
-    <Compile Include="Views\AddEditMapUnitsDockPane.xaml.cs">
-      <DependentUpon>AddEditMapUnitsDockPane.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
-    <Compile Include="DarkImages\GeomapmakerConfiguration.cs" />
+    <Compile Include="GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
     <Compile Include="RibbonElements\LoginButton.cs" />
     <Compile Include="Views\DataSourceDialogProWindow.xaml.cs">
@@ -237,12 +282,43 @@
     <Compile Include="RibbonElements\DataSourceButton.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\Headings.xaml">
+    <Page Include="Views\Hierarchy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnits\CreateMapUnit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnits\DeleteMapUnit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnits\EditMapUnit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnits\MapUnits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\CreateHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\DeleteHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\EditHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\Headings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -254,11 +330,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddEditMapUnitsDockPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AzgsDictionary.xaml">
+    <Page Include="Views\GlobalResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -270,6 +342,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\ContactsAndFaults\" />
+    <Folder Include="ViewModels\MapUnitPolys\" />
+    <Folder Include="Views\ContactsAndFaults\" />
+    <Folder Include="Views\MapUnitPolys\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--

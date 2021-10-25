@@ -76,7 +76,7 @@ namespace Geomapmaker {
             }
 
             Enabled = true; //enables the ComboBox
-            SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
+            //SelectedItem = ItemCollection.FirstOrDefault(); //set the default item in the comboBox
 
         }
 
@@ -110,15 +110,13 @@ namespace Geomapmaker {
             FrameworkApplication.State.Activate("project_selected");
         }
 
-
         private async Task loadGeodatabase() {
+            await Data.DescriptionOfMapUnits.GetFields();
             await DataHelper.PopulateMapUnits();
             await DataHelper.PopulateContactsAndFaults();
             await DataHelper.PopulateDataSources();
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
                 var map = MapView.Active.Map;
-                map.RemoveLayers(DataHelper.currentLayers);
-                map.RemoveStandaloneTables(DataHelper.currentTables);
                 DataHelper.currentLayers.Clear();
                 DataHelper.currentTables.Clear();
 

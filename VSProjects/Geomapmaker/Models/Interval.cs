@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Geomapmaker.Models
+{
+    public class Interval
+    {
+        public string Name { get; set; }
 
-namespace Geomapmaker.Models {
-	public class Interval {
-		public Interval() { }
-		public Interval(string name, string range) {
-			this.name = name;
-			this.range = range;
-		}
+        public double Early_Age { get; set; }
 
-		public string name { get; set; }
-		public string range { get; set; }
-	}
+        public double Late_Age { get; set; }
+
+        public string Type { get; set; }
+
+        public string Range => $"{Early_Age}-{Late_Age}ma";
+
+        public string Tooltip => $"Name: {Name} <br /> Range: {Early_Age}-{Late_Age}ma <br /> Type: {Type}";
+    }
 }
