@@ -37,7 +37,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             {"YoungerInterval", "TODO YoungerInterval" },
             {"RelativeAge", "TODO RelativeAge" },
             {"Description", "TODO Description" },
-            {"Parent", "TODO Parent" },
             {"Label", "TODO Label" },
             {"Color", "TODO Color" },
             {"GeoMaterial", "TODO GeoMaterial" },

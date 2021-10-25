@@ -121,42 +121,15 @@ namespace Geomapmaker.ViewModels.Headings
             // Reset values
             Name = "";
             Description = "";
-
-            NotifyPropertyChanged("ParentOptions");
         }
 
         private async Task ResetAsync()
         {
             await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
-            NotifyPropertyChanged("ParentOptions");
-
             // Reset values
             Name = null;
             Description = null;
-        }
-
-        /// <summary>
-        /// List of parent-options available during create
-        /// </summary>
-        public ObservableCollection<KeyValuePair<int?, string>> ParentOptions
-        {
-            get
-            {
-                // Get Headings/Subheadings from map units.
-                // Sort by name
-                // Create a int/string kvp for the combobox
-                List<KeyValuePair<int?, string>> headingList = Data.DescriptionOfMapUnits.Headings
-                    .OrderBy(a => a.Name)
-                    .Select(a => new KeyValuePair<int?, string>(a.ID, a.Name))
-                    .ToList();
-
-                headingList.Insert(0, new KeyValuePair<int?, string>(null, ""));
-
-                // Initialize a ObservableCollection with the list
-                // Note: Casting a list as an OC does not working.
-                return new ObservableCollection<KeyValuePair<int?, string>>(headingList);
-            }
         }
 
         #region Validation
