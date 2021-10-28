@@ -32,7 +32,6 @@ namespace Geomapmaker
         protected override bool Initialize()
         {
             HideDockPanes();
-            RemoveLayersTables();
 
             return true;
         }
@@ -44,7 +43,6 @@ namespace Geomapmaker
         protected override bool CanUnload()
         {
             HideDockPanes();
-            RemoveLayersTables();
 
             return true;
         }
@@ -65,24 +63,6 @@ namespace Geomapmaker
                 DockPane pane = FrameworkApplication.DockPaneManager.Find(dockId);
                 pane?.Hide();
             }
-        }
-
-        // Remove geomapmaker layers and tables when loading/unloading
-        private void RemoveLayersTables()
-        {
-            ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
-            {
-                var map = MapView.Active?.Map;
-
-                if (map != null)
-                {
-                    // Remove all layers except basemaps
-                    map.RemoveLayers(map.Layers.Where(a => a.MapLayerType != MapLayerType.BasemapBackground && a.MapLayerType != MapLayerType.BasemapTopReference));
-                    // Remove all standalone tables
-                    map.RemoveStandaloneTables(map.StandaloneTables);
-                }
-
-            });
         }
 
         #endregion Overrides
