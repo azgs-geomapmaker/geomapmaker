@@ -234,28 +234,20 @@ Value | Definition
 250 | You really don’t know where a feature is! Or you captured its location from a 1:250,000 scale source map
 
 ### Hierarchy Keys
-Both the `HierarchyKeys` and `ParagraphStyles` fields (moreso ParagraphStyles) are really legacies of the layout design process and complicate the role of the [DescriptionOfMapUnits](#description-of-map-units) table as the location of primarily geologic information. Most importantly, the DMU as currently envisioned includes both headers (not map units) and map units. This creates headaches regarding field constraints as some *required* fields for map units are not required for headers. 
+Both the `HierarchyKeys` and `ParagraphStyles` fields (moreso ParagraphStyles) are really legacies of the layout design process and complicate the role of the [DescriptionOfMapUnits](#description-of-map-units) table as the location of primarily geologic information. 
 
-Our current design solution is to have headings broken out into their own table and use `ParagraphStyles` as an FKEY to said table.
+We set a two zero minimum of left padding on hierarchy indexes. The ParagraphStyle field is used to distinguish Headings and Map Units.  
 
 (Truncated DMU)
 Name | HierarchyKey | ParagraphStyles
 ---- | ---- | ----
-Hamilton Group | 1 | 10
-Marcellus Shale | 1-4 | 10
-Skaneateles  | 1-3 | 10
-Ludlowville  | 1-2 | 10
-Moscow | 1-1 | 10
-Tully Limestone | 2 | 10
+Miscellaneous Units | 001 | Heading
+Marcellus Shale | 001-004 | Standard
+Skaneateles  | 001-003 | Standard
+Ludlowville  | 001-002 | Standard
+Moscow | 001-001 | Standard
 
-> Note that the convention is that 1-2 is older than 1-1. Also note that older AZGS databases use the 1.1 format, but GeMS demands using `-` instead of `.` as the separator.
-
-(Truncated Header's table)
-id | name
----- | ----
-10 | Middle Devonian Rocks
-
-There are pros and cons to this. In terms of pro is solves the inconsistent constraints issue. The con is that this will break scripts meant to *plot* layout elements strictly from the DMU break.
+> Note that the convention is that 001-002 is older than 001-001. Also note that older AZGS databases use the 1.1 format, but GeMS demands using `-` instead of `.` as the separator.
 
 ### Topology Checks
 It may be prudent to build certain topology checks into toolbar so that invalid features cannot be entered at all. 
