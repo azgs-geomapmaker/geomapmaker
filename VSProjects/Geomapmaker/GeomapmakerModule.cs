@@ -29,6 +29,23 @@ namespace Geomapmaker
 
         #region Overrides
 
+        //protected override Task OnReadSettingsAsync(ModuleSettingsReader settings)
+        //{
+        //    //the project is being opened
+        //    object value = settings.Get("MyModule.Setting1");
+
+        //    if (value != null)
+        //    {
+        //        //Do something with the read property
+        //    }
+        //}
+
+        //protected override Task OnWriteSettingsAsync(ModuleSettingsWriter settings)
+        //{
+        //    //the project is being saved
+        //    settings.Add("MyModule.Setting1", _customValue);
+        //}
+
         protected override bool Initialize()
         {
             HideDockPanes();

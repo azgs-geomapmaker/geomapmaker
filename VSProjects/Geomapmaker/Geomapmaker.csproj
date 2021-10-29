@@ -209,6 +209,10 @@
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
+    <Compile Include="ProjectSettings.xaml.cs">
+      <DependentUpon>ProjectSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
     <Compile Include="Views\DataSourceWindow.xaml.cs">
       <DependentUpon>DataSourceWindow.xaml</DependentUpon>
@@ -287,6 +291,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ProjectSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DataSourceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
