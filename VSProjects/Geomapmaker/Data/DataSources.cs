@@ -1,55 +1,98 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Catalog;
+using ArcGIS.Desktop.Core;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public class DataSources
+    public static class DataSources
     {
-        public async Task<List<DataSource>> GetDatasourcesAsync()
-        {
-            if (DbConnectionProperties.GetProperties() == null)
-            {
-                return null;
-            }
+        public static List<DataSource> DataSourcesList { get; set; } = new List<DataSource>();
 
-            List<DataSource> DataSources = new List<DataSource>();
+        public static async Task RefreshAsync()
+        {
+            List<DataSource> DataSourcesList = new List<DataSource>();
+
+            IEnumerable<GDBProjectItem> gdbProjectItems = Project.Current.GetItems<GDBProjectItem>();
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-                using (Geodatabase geodatabase = new Geodatabase(DbConnectionProperties.GetProperties()))
+
+                foreach (GDBProjectItem gdbProjectItem in gdbProjectItems)
                 {
-                    QueryDef dsQDef = new QueryDef
+                    using (Datastore datastore = gdbProjectItem.GetDatastore())
                     {
-                        Tables = "DataSources",
-                        PostfixClause = "order by source"
-                    };
+                        //Unsupported datastores (non File GDB and non Enterprise GDB) will be of type UnknownDatastore
+                        if (datastore is UnknownDatastore)
+                            continue;
 
-                    using (RowCursor rowCursor = geodatabase.Evaluate(dsQDef, false))
-                    {
-                        while (rowCursor.MoveNext())
+                        Geodatabase geodatabase = datastore as Geodatabase;
+
+                        QueryDef dsQDef = new QueryDef
                         {
-                            using (Row row = rowCursor.Current)
-                            {
-                                //create and load map unit
-                                DataSource dS = new DataSource
-                                {
-                                    ID = long.Parse(row["objectid"].ToString()),
-                                    Source = row["source"].ToString(),
-                                    DataSource_ID = row["datasources_id"].ToString(),
-                                    Url = row["url"]?.ToString(),
-                                    Notes = row["notes"]?.ToString()
-                                };
+                            Tables = "DataSources",
+                            PostfixClause = "order by source"
+                        };
 
-                                DataSources.Add(dS);
+                        using (RowCursor rowCursor = geodatabase.Evaluate(dsQDef, false))
+                        {
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    DataSource dS = new DataSource
+                                    {
+                                        ID = long.Parse(row["objectid"].ToString()),
+                                        Source = row["source"].ToString(),
+                                        DataSource_ID = row["datasources_id"].ToString(),
+                                        Url = row["url"]?.ToString(),
+                                        Notes = row["notes"]?.ToString()
+                                    };
+
+                                    DataSourcesList.Add(dS);
+                                }
                             }
                         }
                     }
-                }
-            });
 
-            return DataSources;
+                }
+
+
+
+
+
+
+                //using (Geodatabase geodatabase = new Geodatabase())
+                //{
+                //    QueryDef dsQDef = new QueryDef
+                //    {
+                //        Tables = "DataSources",
+                //        PostfixClause = "order by source"
+                //    };
+
+                //    using (RowCursor rowCursor = geodatabase.Evaluate(dsQDef, false))
+                //    {
+                //        while (rowCursor.MoveNext())
+                //        {
+                //            using (Row row = rowCursor.Current)
+                //            {
+                //                DataSource dS = new DataSource
+                //                {
+                //                    ID = long.Parse(row["objectid"].ToString()),
+                //                    Source = row["source"].ToString(),
+                //                    DataSource_ID = row["datasources_id"].ToString(),
+                //                    Url = row["url"]?.ToString(),
+                //                    Notes = row["notes"]?.ToString()
+                //                };
+
+                //                DataSourcesList.Add(dS);
+                //            }
+                //        }
+                //    }
+                //}
+            });
         }
     }
 }

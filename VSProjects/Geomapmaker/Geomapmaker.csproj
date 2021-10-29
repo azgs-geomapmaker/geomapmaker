@@ -209,6 +209,10 @@
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
+    <Compile Include="ViewModels\DataSourceViewModel.cs" />
+    <Compile Include="Views\DataSourceWindow.xaml.cs">
+      <DependentUpon>DataSourceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Hierarchy.xaml.cs">
       <DependentUpon>Hierarchy.xaml</DependentUpon>
     </Compile>
@@ -261,13 +265,11 @@
     <Compile Include="ViewModels\AddEditMapUnitPolysDockPaneViewModel.cs" />
     <Compile Include="Models\MapUnitPoly.cs" />
     <Compile Include="RibbonElements\AddMapUnitsButton.cs" />
-    <Compile Include="RibbonElements\EditMapUnitsButton.cs" />
     <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
     <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
     <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
     <Compile Include="GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
-    <Compile Include="RibbonElements\LoginButton.cs" />
     <Compile Include="Views\DataSourceDialogProWindow.xaml.cs">
       <DependentUpon>DataSourceDialogProWindow.xaml</DependentUpon>
     </Compile>
@@ -277,8 +279,6 @@
     </Compile>
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
-    <Compile Include="RibbonElements\ProjectComboBoxItem.cs" />
-    <Compile Include="RibbonElements\ProjectsComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RibbonElements\DataSourceButton.cs" />
   </ItemGroup>
@@ -287,6 +287,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\DataSourceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Hierarchy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
