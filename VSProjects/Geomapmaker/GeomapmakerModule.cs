@@ -1,16 +1,37 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Core.Events;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Mapping;
 using Geomapmaker.RibbonElements;
 
 namespace Geomapmaker
 {
     internal class GeomapmakerModule : Module
     {
+        private GeomapmakerModule()
+        {
+            ProjectOpenedEvent.Subscribe(OnProjectOpen);
+            ProjectClosedEvent.Subscribe(OnProjectClosed);
+        }
+
+        private void OnProjectClosed(ProjectEventArgs args)
+        {
+            // reset the flag
+            hasSettings = false;
+        }
+
+        private void OnProjectOpen(ProjectEventArgs args)
+        {
+            // if flag has not been set then we didn't enter OnReadSettingsAsync
+            if (!hasSettings)
+            {
+                Settings.Clear();
+            }
+        }
+
+        internal Dictionary<string, string> Settings { get; set; } = new Dictionary<string, string>();
+
         private static GeomapmakerModule _this = null;
 
         //public DataHelper helper = new DataHelper();
@@ -29,22 +50,51 @@ namespace Geomapmaker
 
         #region Overrides
 
-        //protected override Task OnReadSettingsAsync(ModuleSettingsReader settings)
-        //{
-        //    //the project is being opened
-        //    object value = settings.Get("MyModule.Setting1");
+        private bool hasSettings = false;
+        protected override Task OnReadSettingsAsync(ModuleSettingsReader settings)
+        {
+            // set the flag
+            hasSettings = true;
 
-        //    if (value != null)
-        //    {
-        //        //Do something with the read property
-        //    }
-        //}
+            // clear existing setting values
+            Settings.Clear();
 
-        //protected override Task OnWriteSettingsAsync(ModuleSettingsWriter settings)
-        //{
-        //    //the project is being saved
-        //    settings.Add("MyModule.Setting1", _customValue);
-        //}
+            if (settings == null)
+            {
+                return Task.FromResult(0);
+            }
+
+            // Settings defined in the Property sheet’s viewmodel.	
+            string[] keys = new string[] { "Setting1", "Setting2" };
+
+            foreach (string key in keys)
+            {
+                object value = settings.Get(key);
+
+                if (value != null)
+                {
+                    if (Settings.ContainsKey(key))
+                    {
+                        Settings[key] = value.ToString();
+                    }
+                    else
+                    {
+                        Settings.Add(key, value.ToString());
+                    }
+                }
+            }
+
+            return Task.FromResult(0);
+        }
+
+        protected override Task OnWriteSettingsAsync(ModuleSettingsWriter settings)
+        {
+            foreach (string key in Settings.Keys)
+            {
+                settings.Add(key, Settings[key]);
+            }
+            return Task.FromResult(0);
+        }
 
         protected override bool Initialize()
         {

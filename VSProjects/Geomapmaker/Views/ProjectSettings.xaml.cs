@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Geomapmaker
+namespace Geomapmaker.Views
 {
     /// <summary>
     /// Interaction logic for ProjectSettingsView.xaml
     /// </summary>
-    public partial class ProjectSettingsView : UserControl
+    public partial class ProjectSettings : UserControl
     {
-        public ProjectSettingsView()
+        public ProjectSettings()
         {
             InitializeComponent();
         }

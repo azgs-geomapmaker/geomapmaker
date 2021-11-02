@@ -59,11 +59,6 @@ namespace Geomapmaker.Data
 
                 }
 
-
-
-
-
-
                 //using (Geodatabase geodatabase = new Geodatabase())
                 //{
                 //    QueryDef dsQDef = new QueryDef

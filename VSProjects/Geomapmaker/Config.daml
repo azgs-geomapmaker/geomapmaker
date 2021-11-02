@@ -14,7 +14,7 @@
     <ConfigurationManager className="GeomapmakerConfiguration" />
   </Configuration>
   <modules>
-    <insertModule id="Geomapmaker_Module" className="GeomapmakerModule" autoLoad="false" caption="GeomapmakerModule">
+    <insertModule id="Geomapmaker_Module" className="GeomapmakerModule" autoLoad="true" caption="GeomapmakerModule">
       <!-- Tabs -->
       <tabs>
         <tab id="AZGS_Tab" caption="Geomapmaker" keytip="GMM">
@@ -88,7 +88,7 @@
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </button>
-        <button id="Geomapmaker_ProjectSettings_ShowPropertySheet" caption="Show ProjectSettings" className="ProjectSettings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
+        <button id="Geomapmaker_ProjectSettings_ShowPropertySheet" caption="Settings" className="Geomapmaker.ViewModels.ProjectSettings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Show Property Sheet">Show Property Sheet<disabledText /></tooltip>
         </button>
       </controls>
@@ -138,9 +138,9 @@
     </insertCondition>
   </conditions>
   <propertySheets>
-    <insertSheet id="Geomapmaker_ProjectSettings" caption="ProjectSettings" hasGroups="true">
-      <page id="Geomapmaker_ProjectSettings" caption="ProjectSettings" className="ProjectSettingsViewModel" group="Group 1">
-        <content className="ProjectSettingsView" />
+    <insertSheet id="Geomapmaker_ProjectSettings" caption="Project Settings" hasGroups="false">
+      <page id="Geomapmaker_ProjectSettingsPage" caption="Database" className="Geomapmaker.ViewModels.ProjectSettingsViewModel" group="Group 1">
+        <content className="Geomapmaker.Views.ProjectSettings" />
       </page>
     </insertSheet>
   </propertySheets>
