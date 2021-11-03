@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Core.Events;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.RibbonElements;
+using Geomapmaker.ViewModels;
 
 namespace Geomapmaker
 {
@@ -86,10 +88,10 @@ namespace Geomapmaker
                 return Task.FromResult(0);
             }
 
-            // Settings defined in the Property sheet’s viewmodel.	
-            string[] keys = new string[] { "Instance", "Database", "Username", "Password" };
+            // Get the property names from the setting view model
+            List<string> settingPropertyNames = typeof(ProjectSettingsViewModel).GetProperties().Select(f => f.Name).ToList();
 
-            foreach (string key in keys)
+            foreach (string key in settingPropertyNames)
             {
                 object value = settings.Get(key);
 
