@@ -21,16 +21,9 @@ namespace Geomapmaker
         public static string userName;
 
         public static DatabaseConnectionProperties connectionProperties;
-        public static void SetConnectionProperties(JObject props)
+        public static void SetConnectionProperties(DatabaseConnectionProperties props)
         {
-            connectionProperties = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL)
-            {
-                AuthenticationMode = AuthenticationMode.DBMS,
-                Instance = props["instance"].ToString(),
-                Database = props["database"].ToString(),
-                User = props["user"].ToString(),
-                Password = props["password"].ToString(),
-            };
+            connectionProperties = props;
 
             // My plan is to slowly break this class up into smaller classes in the Data folder. 
             // I'm setting the connection properties twice while I migrate things -camp

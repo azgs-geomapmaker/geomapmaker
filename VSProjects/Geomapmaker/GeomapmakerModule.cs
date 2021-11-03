@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Core.Events;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
@@ -17,17 +18,19 @@ namespace Geomapmaker
 
         private void OnProjectClosed(ProjectEventArgs args)
         {
-            // reset the flag
+            // Reset the flag
             hasSettings = false;
         }
 
         private void OnProjectOpen(ProjectEventArgs args)
         {
-            // if flag has not been set then we didn't enter OnReadSettingsAsync
+            // If flag has not been set then we didn't enter OnReadSettingsAsync
             if (!hasSettings)
             {
                 Settings.Clear();
             }
+
+            DataHelper.SetConnectionProperties(GetConnectionPropertiesFromSettings());
         }
 
         internal Dictionary<string, string> Settings { get; set; } = new Dictionary<string, string>();
@@ -42,6 +45,25 @@ namespace Geomapmaker
         internal static AddEditMapUnitPolysDockPaneViewModel MapUnitPolysVM { get; set; }
         internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
         internal static MapUnitPolyEditTool EditMapUnitPolyTool { get; set; }
+
+        public DatabaseConnectionProperties GetConnectionPropertiesFromSettings()
+        {
+            string Instance = Settings.ContainsKey("Instance") ? Settings["Instance"] : "";
+            string Database = Settings.ContainsKey("Database") ? Settings["Database"] : "";
+            string Username = Settings.ContainsKey("Username") ? Settings["Username"] : "";
+            string Password = Settings.ContainsKey("Password") ? Settings["Password"] : "";
+
+            DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL)
+            {
+                AuthenticationMode = AuthenticationMode.DBMS,
+                Instance = Instance,
+                Database = Database,
+                User = Username,
+                Password = Password
+            };
+
+            return dbConnectionProps;
+        }
 
         /// <summary>
         /// Retrieve the singleton instance to this module here
@@ -65,7 +87,7 @@ namespace Geomapmaker
             }
 
             // Settings defined in the Property sheet’s viewmodel.	
-            string[] keys = new string[] { "Setting1", "Setting2" };
+            string[] keys = new string[] { "Instance", "Database", "Username", "Password" };
 
             foreach (string key in keys)
             {

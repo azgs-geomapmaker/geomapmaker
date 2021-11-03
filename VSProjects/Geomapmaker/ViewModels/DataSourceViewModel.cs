@@ -9,10 +9,12 @@ namespace Geomapmaker.ViewModels
 
         public DataSourceViewModel()
         {
-            var foo = Data.DataSources.DataSourcesList;
+            DataSources = new ObservableCollection<DataSource>(Data.DataSources.DataSourcesList);
         }
 
-        ObservableCollection<DataSource> DataSources { get; set; } = new ObservableCollection<DataSource>(Data.DataSources.DataSourcesList);
+        public ObservableCollection<DataSource> DataSources { get; set; }
+
+        public DataSource SelectedDataSource { get; set; }
 
     }
 }

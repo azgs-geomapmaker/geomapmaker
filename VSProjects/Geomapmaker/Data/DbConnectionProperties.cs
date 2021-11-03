@@ -1,5 +1,4 @@
 ﻿using ArcGIS.Core.Data;
-using Newtonsoft.Json.Linq;
 
 namespace Geomapmaker.Data
 {
@@ -7,16 +6,9 @@ namespace Geomapmaker.Data
     {
         private static DatabaseConnectionProperties connectionProperties;
 
-        public static void SetProperties(JObject props)
+        public static void SetProperties(DatabaseConnectionProperties props)
         {
-            connectionProperties = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL)
-            {
-                AuthenticationMode = AuthenticationMode.DBMS,
-                Instance = props["instance"].ToString(),
-                Database = props["database"].ToString(),
-                User = props["user"].ToString(),
-                Password = props["password"].ToString(),
-            };
+            connectionProperties = props;
         }
 
         public static DatabaseConnectionProperties GetProperties()

@@ -1,4 +1,5 @@
-﻿using ArcGIS.Desktop.Core;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using System;
@@ -9,21 +10,26 @@ namespace Geomapmaker.ViewModels
 {
     internal class ProjectSettingsViewModel : Page
     {
-        private bool _origModuleSetting1 = true;
-        private string _origModuleSetting2 = "";
+        private string _origInstance;
+        private string _origDatabase;
+        private string _origUsername;
+        private string _origPassword;
 
         protected override Task InitializeAsync()
         {
             // Get the settings
             Dictionary<string, string> settings = GeomapmakerModule.Current.Settings;
 
-            //ModuleSetting1 = settings.ContainsKey("Setting1") ? System.Convert.ToBoolean(settings["Setting1"]) : true;
-
-            ModuleSetting2 = settings.ContainsKey("Setting2") ? settings["Setting2"] : "";
+            Instance = settings.ContainsKey("Instance") ? settings["Instance"] : "";
+            Database = settings.ContainsKey("Database") ? settings["Database"] : "";
+            Username = settings.ContainsKey("Username") ? settings["Username"] : "";
+            Password = settings.ContainsKey("Password") ? settings["Password"] : "";
 
             // keep track of the original values (used for comparison when saving)
-            _origModuleSetting1 = ModuleSetting1;
-            _origModuleSetting2 = ModuleSetting2;
+            _origInstance = Instance;
+            _origDatabase = Database;
+            _origUsername = Username;
+            _origPassword = Password;
 
             return Task.FromResult(0);
         }
@@ -31,12 +37,22 @@ namespace Geomapmaker.ViewModels
         // Determines if the current settings are different from the original.
         private bool IsDirty()
         {
-            if (_origModuleSetting1 != ModuleSetting1)
+            if (_origInstance != Instance)
             {
                 return true;
             }
 
-            if (_origModuleSetting2 != ModuleSetting2)
+            if (_origDatabase != Database)
+            {
+                return true;
+            }
+
+            if (_origUsername != Username)
+            {
+                return true;
+            }
+
+            if (_origPassword != Password)
             {
                 return true;
             }
@@ -48,18 +64,21 @@ namespace Geomapmaker.ViewModels
         {
             if (IsDirty())
             {
-                // store the new settings in the dictionary ... save happens in OnProjectSave
-                Dictionary<string, string> settings = GeomapmakerModule.Current.Settings;
+                AddUpdateSetting("Instance", Instance);
+                AddUpdateSetting("Database", Database);
+                AddUpdateSetting("Username", Username);
+                AddUpdateSetting("Password", Password);
 
-                if (settings.ContainsKey("Setting1"))
-                    settings["Setting1"] = ModuleSetting1.ToString();
-                else
-                    settings.Add("Setting1", ModuleSetting1.ToString());
+                DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL)
+                {
+                    AuthenticationMode = AuthenticationMode.DBMS,
+                    Instance = Instance,
+                    Database = Database,
+                    User = Username,
+                    Password = Password
+                };
 
-                if (settings.ContainsKey("Setting2"))
-                    settings["Setting2"] = ModuleSetting2;
-                else
-                    settings.Add("Setting2", ModuleSetting2);
+                DataHelper.SetConnectionProperties(dbConnectionProps);
 
                 // set the project dirty
                 Project.Current.SetDirty(true);
@@ -67,34 +86,69 @@ namespace Geomapmaker.ViewModels
             return Task.FromResult(0);
         }
 
-        /// <summary>
-        /// Called when the page is destroyed.
-        /// </summary>
-        protected override void Uninitialize()
+        private void AddUpdateSetting(string settingName, string settingValue)
         {
-        }
+            Dictionary<string, string> settings = GeomapmakerModule.Current.Settings;
 
-        private bool _moduleSetting1;
-        public bool ModuleSetting1
-        {
-            get { return _moduleSetting1; }
-            set
+            if (settings.ContainsKey(settingName))
             {
-                if (SetProperty(ref _moduleSetting1, value, () => ModuleSetting1))
-                    //You must set "IsModified = true" to have your CommitAsync called
-                    base.IsModified = true;
+                settings[settingName] = settingValue;
+            }
+            else
+            {
+                settings.Add(settingName, settingValue);
             }
         }
 
-        private string _moduleSetting2;
-        public string ModuleSetting2
+        private string instance;
+        public string Instance
         {
-            get { return _moduleSetting2; }
+            get => instance;
             set
             {
-                if (SetProperty(ref _moduleSetting2, value, () => ModuleSetting2))
-                    //You must set "IsModified = true" to have your CommitAsync called
-                    base.IsModified = true;
+                if (SetProperty(ref instance, value, () => Instance))
+                {
+                    IsModified = true;
+                }
+            }
+        }
+
+        private string database;
+        public string Database
+        {
+            get => database;
+            set
+            {
+                if (SetProperty(ref database, value, () => Database))
+                {
+                    IsModified = true;
+                }
+            }
+        }
+
+        private string username;
+        public string Username
+        {
+            get => username;
+            set
+            {
+                if (SetProperty(ref username, value, () => Username))
+                {
+                    IsModified = true;
+                }
+            }
+        }
+
+        private string password;
+        public string Password
+        {
+            get => password;
+            set
+            {
+                if (SetProperty(ref password, value, () => Password))
+                {
+                    IsModified = true;
+                }
             }
         }
 

@@ -12,19 +12,48 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
-        <CheckBox Margin="16,8,0,0" Grid.Row="0" Content="Module Setting 1" IsChecked="{Binding ModuleSetting1}"/>
-        <StackPanel Grid.Row="1" Margin="16,8,0,0" Orientation="Horizontal">
-            <TextBlock Text="Some string" VerticalAlignment="Center" Style="{DynamicResource Esri_TextBlockDialog}"/>
-            <TextBox Margin="6,0,0,0" Text="{Binding ModuleSetting2, UpdateSourceTrigger=PropertyChanged}" Width="200"
-               VerticalAlignment="Center"/>
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Connection Properties" HorizontalAlignment="Center" Style="{DynamicResource Esri_TextBlockDialog}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="Instance" Style="{DynamicResource Esri_TextBlockDialog}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Instance, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="Database" Style="{DynamicResource Esri_TextBlockDialog}"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Database, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Username" Style="{DynamicResource Esri_TextBlockDialog}"/>
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="Password" Style="{DynamicResource Esri_TextBlockDialog}"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+
     </Grid>
+
 </UserControl>

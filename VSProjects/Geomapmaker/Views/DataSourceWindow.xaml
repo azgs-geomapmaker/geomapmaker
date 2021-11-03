@@ -30,7 +30,6 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
@@ -39,8 +38,7 @@
             <TextBlock Grid.Column="1" Text="Data Source" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" />
         </DockPanel>
 
-        <Label Grid.Row="2" Grid.Column="1" Content="Data Source" />
-        <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding DataSources}" DisplayMemberPath="Source" />
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding DataSources}" SelectedItem="{Binding SelectedDataSource}" DisplayMemberPath="Source" />
         
 
     </Grid>

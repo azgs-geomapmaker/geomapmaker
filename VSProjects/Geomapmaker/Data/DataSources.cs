@@ -13,80 +13,47 @@ namespace Geomapmaker.Data
 
         public static async Task RefreshAsync()
         {
-            List<DataSource> DataSourcesList = new List<DataSource>();
+            //List<DataSource> DataSourcesList = new List<DataSource>();
 
-            IEnumerable<GDBProjectItem> gdbProjectItems = Project.Current.GetItems<GDBProjectItem>();
+            if (DbConnectionProperties.GetProperties() == null)
+            {
+                return;
+            }
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-
-                foreach (GDBProjectItem gdbProjectItem in gdbProjectItems)
+                using (Geodatabase geodatabase = new Geodatabase(DbConnectionProperties.GetProperties()))
                 {
-                    using (Datastore datastore = gdbProjectItem.GetDatastore())
+
+                    QueryDef dsQDef = new QueryDef
                     {
-                        //Unsupported datastores (non File GDB and non Enterprise GDB) will be of type UnknownDatastore
-                        if (datastore is UnknownDatastore)
-                            continue;
+                        Tables = "DataSources",
+                        PostfixClause = "order by source"
+                    };
 
-                        Geodatabase geodatabase = datastore as Geodatabase;
-
-                        QueryDef dsQDef = new QueryDef
+                    using (RowCursor rowCursor = geodatabase.Evaluate(dsQDef, false))
+                    {
+                        while (rowCursor.MoveNext())
                         {
-                            Tables = "DataSources",
-                            PostfixClause = "order by source"
-                        };
-
-                        using (RowCursor rowCursor = geodatabase.Evaluate(dsQDef, false))
-                        {
-                            while (rowCursor.MoveNext())
+                            using (Row row = rowCursor.Current)
                             {
-                                using (Row row = rowCursor.Current)
+                                DataSource dS = new DataSource
                                 {
-                                    DataSource dS = new DataSource
-                                    {
-                                        ID = long.Parse(row["objectid"].ToString()),
-                                        Source = row["source"].ToString(),
-                                        DataSource_ID = row["datasources_id"].ToString(),
-                                        Url = row["url"]?.ToString(),
-                                        Notes = row["notes"]?.ToString()
-                                    };
+                                    ID = long.Parse(row["objectid"].ToString()),
+                                    Source = row["source"].ToString(),
+                                    DataSource_ID = row["datasources_id"].ToString(),
+                                    Url = row["url"] == null ? "" : row["url"].ToString(),
+                                    Notes = row["notes"] == null ? "" : row["notes"].ToString()
+                                };
 
-                                    DataSourcesList.Add(dS);
-                                }
+                                //add it to our list
+                                DataSourcesList.Add(dS);
                             }
                         }
+
                     }
 
                 }
-
-                //using (Geodatabase geodatabase = new Geodatabase())
-                //{
-                //    QueryDef dsQDef = new QueryDef
-                //    {
-                //        Tables = "DataSources",
-                //        PostfixClause = "order by source"
-                //    };
-
-                //    using (RowCursor rowCursor = geodatabase.Evaluate(dsQDef, false))
-                //    {
-                //        while (rowCursor.MoveNext())
-                //        {
-                //            using (Row row = rowCursor.Current)
-                //            {
-                //                DataSource dS = new DataSource
-                //                {
-                //                    ID = long.Parse(row["objectid"].ToString()),
-                //                    Source = row["source"].ToString(),
-                //                    DataSource_ID = row["datasources_id"].ToString(),
-                //                    Url = row["url"]?.ToString(),
-                //                    Notes = row["notes"]?.ToString()
-                //                };
-
-                //                DataSourcesList.Add(dS);
-                //            }
-                //        }
-                //    }
-                //}
             });
         }
     }
