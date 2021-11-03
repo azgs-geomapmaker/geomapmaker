@@ -12,6 +12,7 @@ namespace Geomapmaker.ViewModels
     {
         private string _origInstance;
         private string _origDatabase;
+        private string _origVersion;
         private string _origUsername;
         private string _origPassword;
 
@@ -22,12 +23,14 @@ namespace Geomapmaker.ViewModels
 
             Instance = settings.ContainsKey("Instance") ? settings["Instance"] : "";
             Database = settings.ContainsKey("Database") ? settings["Database"] : "";
+            Version = settings.ContainsKey("Version") ? settings["Version"] : "";
             Username = settings.ContainsKey("Username") ? settings["Username"] : "";
             Password = settings.ContainsKey("Password") ? settings["Password"] : "";
 
             // keep track of the original values (used for comparison when saving)
             _origInstance = Instance;
             _origDatabase = Database;
+            _origVersion = Version;
             _origUsername = Username;
             _origPassword = Password;
 
@@ -43,6 +46,11 @@ namespace Geomapmaker.ViewModels
             }
 
             if (_origDatabase != Database)
+            {
+                return true;
+            }
+
+            if (_origVersion != Version)
             {
                 return true;
             }
@@ -66,6 +74,7 @@ namespace Geomapmaker.ViewModels
             {
                 AddUpdateSetting("Instance", Instance);
                 AddUpdateSetting("Database", Database);
+                AddUpdateSetting("Version", Version);
                 AddUpdateSetting("Username", Username);
                 AddUpdateSetting("Password", Password);
 
@@ -74,6 +83,7 @@ namespace Geomapmaker.ViewModels
                     AuthenticationMode = AuthenticationMode.DBMS,
                     Instance = Instance,
                     Database = Database,
+                    Version = Version,
                     User = Username,
                     Password = Password
                 };
@@ -120,6 +130,19 @@ namespace Geomapmaker.ViewModels
             set
             {
                 if (SetProperty(ref database, value, () => Database))
+                {
+                    IsModified = true;
+                }
+            }
+        }
+
+        private string version;
+        public string Version
+        {
+            get => version;
+            set
+            {
+                if (SetProperty(ref version, value, () => Version))
                 {
                     IsModified = true;
                 }

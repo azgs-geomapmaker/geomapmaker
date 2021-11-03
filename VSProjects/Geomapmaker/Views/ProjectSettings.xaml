@@ -48,11 +48,14 @@
         <TextBlock Grid.Row="4" Grid.Column="1" Text="Database" Style="{DynamicResource Esri_TextBlockDialog}"/>
         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Database, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Username" Style="{DynamicResource Esri_TextBlockDialog}"/>
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Version" Style="{DynamicResource Esri_TextBlockDialog}"/>
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Version, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="Password" Style="{DynamicResource Esri_TextBlockDialog}"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="Username" Style="{DynamicResource Esri_TextBlockDialog}"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Row="10" Grid.Column="1" Text="Password" Style="{DynamicResource Esri_TextBlockDialog}"/>
+        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
 
     </Grid>
 

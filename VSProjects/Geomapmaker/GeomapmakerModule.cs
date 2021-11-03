@@ -52,6 +52,7 @@ namespace Geomapmaker
         {
             string Instance = Settings.ContainsKey("Instance") ? Settings["Instance"] : "";
             string Database = Settings.ContainsKey("Database") ? Settings["Database"] : "";
+            string Version = Settings.ContainsKey("Version") ? Settings["Version"] : "";
             string Username = Settings.ContainsKey("Username") ? Settings["Username"] : "";
             string Password = Settings.ContainsKey("Password") ? Settings["Password"] : "";
 
@@ -60,6 +61,7 @@ namespace Geomapmaker
                 AuthenticationMode = AuthenticationMode.DBMS,
                 Instance = Instance,
                 Database = Database,
+                Version = Version,
                 User = Username,
                 Password = Password
             };

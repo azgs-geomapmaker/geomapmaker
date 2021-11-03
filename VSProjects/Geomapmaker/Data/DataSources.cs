@@ -13,7 +13,7 @@ namespace Geomapmaker.Data
 
         public static async Task RefreshAsync()
         {
-            //List<DataSource> DataSourcesList = new List<DataSource>();
+            List<DataSource> DataSourcesList = new List<DataSource>();
 
             if (DbConnectionProperties.GetProperties() == null)
             {
