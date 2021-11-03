@@ -1,11 +1,12 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 
 namespace Geomapmaker
 {
     internal class DataSourceButton : Button
     {
-        private DataSourceWindow _dswindow = null;
+        private DataSourceDialogProWindow _dswindow = null;
 
         protected override async void OnClick()
         {
@@ -15,9 +16,21 @@ namespace Geomapmaker
                 return;
             }
 
-            await Data.DataSources.RefreshAsync();
+            using (var progress = new ProgressDialog("Loading Geomapmaker Project"))
+            {
+                progress.Show();
+                await QueuedTask.Run(async () =>
+                {
+                    await Data.DescriptionOfMapUnits.GetFields();
+                    await DataHelper.PopulateMapUnits();
+                    await DataHelper.PopulateContactsAndFaults();
+                    await DataHelper.PopulateDataSources();
+                    await Data.DataSources.RefreshAsync();
+                });
+                progress.Hide();
+            }
 
-            _dswindow = new DataSourceWindow();
+            _dswindow = new DataSourceDialogProWindow();
             _dswindow.Owner = FrameworkApplication.Current.MainWindow;
             _dswindow.Closed += (o, e) => { _dswindow = null; };
             //_datasourcedialogprowindow.Show();

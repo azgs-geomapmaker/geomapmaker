@@ -114,25 +114,9 @@
   </modules>
   <!-- Conditions -->
   <conditions>
-    <insertCondition id="userLoginCondition">
-      <!-- TODO: should change this to something like userLoggedInAndMapLoaded-->
-      <and>
-        <state id="user_logged_in" />
-        <state id="esri_mapping_mapPane" />
-      </and>
-    </insertCondition>
-    <insertCondition id="projectSelectedCondition">
-      <and>
-        <state id="user_logged_in" />
-        <state id="esri_mapping_mapPane" />
-        <state id="project_selected" />
-      </and>
-    </insertCondition>
     <insertCondition id="dataSourceSelectedCondition">
       <and>
-        <state id="user_logged_in" />
         <state id="esri_mapping_mapPane" />
-        <state id="project_selected" />
         <state id="datasource_selected" />
       </and>
     </insertCondition>
