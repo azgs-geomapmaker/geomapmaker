@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using Nelibur.ObjectMapper;
 using System.Collections.Generic;
@@ -112,54 +113,91 @@ namespace Geomapmaker.Data
         // Refresh Map Units
         public static async Task RefreshMapUnitsAsync()
         {
-            if (DbConnectionProperties.GetProperties() == null)
-            {
-                return;
-            }
+            List<MapUnit> MapUnitsList = new List<MapUnit>();
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-                List<MapUnit> MapUnitsList = new List<MapUnit>();
+                StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
-                using (Geodatabase geodatabase = new Geodatabase(DbConnectionProperties.GetProperties()))
+                if (dmu == null)
                 {
-                    QueryDef mapUnitsQDef = new QueryDef
-                    {
-                        Tables = "DescriptionOfMapUnits",
-                    };
+                    return;
+                }
 
-                    using (RowCursor rowCursor = geodatabase.Evaluate(mapUnitsQDef, false))
+
+                Table enterpriseTable = dmu.GetTable();
+
+                using (RowCursor rowCursor = enterpriseTable.Search())
+                {
+                    while (rowCursor.MoveNext())
                     {
-                        while (rowCursor.MoveNext())
+                        using (Row row = rowCursor.Current)
                         {
-                            using (Row row = rowCursor.Current)
+                            // Create map unit from row 
+                            MapUnit mapUnit = new MapUnit
                             {
-                                // Create map unit from row 
-                                MapUnit mapUnit = new MapUnit
-                                {
-                                    ID = int.Parse(row["ObjectID"].ToString()),
-                                    MU = RowValueToString(row["MapUnit"]),
-                                    Name = RowValueToString(row["Name"]),
-                                    FullName = RowValueToString(row["FullName"]),
-                                    Age = RowValueToString(row["Age"]),
-                                    RelativeAge = RowValueToString(row["RelativeAge"]),
-                                    Description = RowValueToString(row["Description"]),
-                                    HierarchyKey = RowValueToString(row["HierarchyKey"]),
-                                    ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
-                                    Label = RowValueToString(row["Label"]),
-                                    HexColor = RowValueToString(row["Hexcolor"]),
-                                    AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
-                                    DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
-                                    GeoMaterial = RowValueToString(row["GeoMaterial"]),
-                                    GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
-                                };
+                                ID = int.Parse(row["ObjectID"].ToString()),
+                                MU = RowValueToString(row["MapUnit"]),
+                                Name = RowValueToString(row["Name"]),
+                                FullName = RowValueToString(row["FullName"]),
+                                Age = RowValueToString(row["Age"]),
+                                RelativeAge = RowValueToString(row["RelativeAge"]),
+                                Description = RowValueToString(row["Description"]),
+                                HierarchyKey = RowValueToString(row["HierarchyKey"]),
+                                ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
+                                Label = RowValueToString(row["Label"]),
+                                HexColor = RowValueToString(row["Hexcolor"]),
+                                AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
+                                DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
+                                GeoMaterial = RowValueToString(row["GeoMaterial"]),
+                                GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
+                            };
 
-                                // Add it to temp list
-                                MapUnitsList.Add(mapUnit);
-                            }
+                            // Add it to temp list
+                            MapUnitsList.Add(mapUnit);
                         }
                     }
                 }
+
+                //using (Geodatabase geodatabase = new Geodatabase(DbConnectionProperties.GetProperties()))
+                //{
+                //    QueryDef mapUnitsQDef = new QueryDef
+                //    {
+                //        Tables = "DescriptionOfMapUnits",
+                //    };
+
+                //    using (RowCursor rowCursor = geodatabase.Evaluate(mapUnitsQDef, false))
+                //    {
+                //        while (rowCursor.MoveNext())
+                //        {
+                //            using (Row row = rowCursor.Current)
+                //            {
+                //                // Create map unit from row 
+                //                MapUnit mapUnit = new MapUnit
+                //                {
+                //                    ID = int.Parse(row["ObjectID"].ToString()),
+                //                    MU = RowValueToString(row["MapUnit"]),
+                //                    Name = RowValueToString(row["Name"]),
+                //                    FullName = RowValueToString(row["FullName"]),
+                //                    Age = RowValueToString(row["Age"]),
+                //                    RelativeAge = RowValueToString(row["RelativeAge"]),
+                //                    Description = RowValueToString(row["Description"]),
+                //                    HierarchyKey = RowValueToString(row["HierarchyKey"]),
+                //                    ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
+                //                    Label = RowValueToString(row["Label"]),
+                //                    HexColor = RowValueToString(row["Hexcolor"]),
+                //                    AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
+                //                    DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
+                //                    GeoMaterial = RowValueToString(row["GeoMaterial"]),
+                //                    GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
+                //                };
+
+                //                // Add it to temp list
+                //                MapUnitsList.Add(mapUnit);
+                //            }
+                //        }
+                //    }
+                //}
 
                 DMUs = MapUnitsList;
             });
