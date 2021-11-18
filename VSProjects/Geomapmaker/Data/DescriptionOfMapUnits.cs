@@ -115,18 +115,17 @@ namespace Geomapmaker.Data
         {
             List<MapUnit> MapUnitsList = new List<MapUnit>();
 
+            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
+            {
+                return;
+            }
+
+            Table enterpriseTable = dmu.GetTable();
+
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-                StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-                if (dmu == null)
-                {
-                    return;
-                }
-
-
-                Table enterpriseTable = dmu.GetTable();
-
                 using (RowCursor rowCursor = enterpriseTable.Search())
                 {
                     while (rowCursor.MoveNext())
@@ -159,47 +158,8 @@ namespace Geomapmaker.Data
                     }
                 }
 
-                //using (Geodatabase geodatabase = new Geodatabase(DbConnectionProperties.GetProperties()))
-                //{
-                //    QueryDef mapUnitsQDef = new QueryDef
-                //    {
-                //        Tables = "DescriptionOfMapUnits",
-                //    };
-
-                //    using (RowCursor rowCursor = geodatabase.Evaluate(mapUnitsQDef, false))
-                //    {
-                //        while (rowCursor.MoveNext())
-                //        {
-                //            using (Row row = rowCursor.Current)
-                //            {
-                //                // Create map unit from row 
-                //                MapUnit mapUnit = new MapUnit
-                //                {
-                //                    ID = int.Parse(row["ObjectID"].ToString()),
-                //                    MU = RowValueToString(row["MapUnit"]),
-                //                    Name = RowValueToString(row["Name"]),
-                //                    FullName = RowValueToString(row["FullName"]),
-                //                    Age = RowValueToString(row["Age"]),
-                //                    RelativeAge = RowValueToString(row["RelativeAge"]),
-                //                    Description = RowValueToString(row["Description"]),
-                //                    HierarchyKey = RowValueToString(row["HierarchyKey"]),
-                //                    ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
-                //                    Label = RowValueToString(row["Label"]),
-                //                    HexColor = RowValueToString(row["Hexcolor"]),
-                //                    AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
-                //                    DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
-                //                    GeoMaterial = RowValueToString(row["GeoMaterial"]),
-                //                    GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
-                //                };
-
-                //                // Add it to temp list
-                //                MapUnitsList.Add(mapUnit);
-                //            }
-                //        }
-                //    }
-                //}
-
                 DMUs = MapUnitsList;
+
             });
 
             RefreshTreeStructure();

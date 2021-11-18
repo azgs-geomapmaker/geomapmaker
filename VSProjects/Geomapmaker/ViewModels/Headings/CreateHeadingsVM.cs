@@ -71,18 +71,18 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task SubmitAsync()
         {
+            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
+            {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                return;
+            }
+
+            Table enterpriseTable = dmu.GetTable();
+
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-                StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-                if (dmu == null)
-                {
-                    MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
-                    return;
-                }
-
-                Table enterpriseTable = dmu.GetTable();
-
                 EditOperation editOperation = new EditOperation();
 
                 editOperation.Callback(context =>
