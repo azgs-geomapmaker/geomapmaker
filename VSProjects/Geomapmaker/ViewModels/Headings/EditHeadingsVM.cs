@@ -100,14 +100,14 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task UpdateAsync()
         {
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(async () =>
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
                 StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
                 if (dmu == null)
                 {
                     MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
-                    return;
+                    return Task.CompletedTask;
                 }
 
                 Table enterpriseTable = dmu.GetTable();
@@ -121,7 +121,7 @@ namespace Geomapmaker.ViewModels.Headings
                     using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                     {
                         while (rowCursor.MoveNext())
-                        { 
+                        {
                             using (Row row = rowCursor.Current)
                             {
                                 // In order to update the Map and/or the attribute table.
@@ -145,10 +145,7 @@ namespace Geomapmaker.ViewModels.Headings
                 }, enterpriseTable);
 
                 bool result = editOperation.Execute();
-
-                // Save Edit
-                await Project.Current.SaveEditsAsync();
-
+                return Task.CompletedTask;
             });
 
             await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();

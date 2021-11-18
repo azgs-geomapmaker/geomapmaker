@@ -1,7 +1,9 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -69,50 +71,42 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task SubmitAsync()
         {
-            if (Data.DbConnectionProperties.GetProperties() == null)
-            {
-                return;
-            }
-
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
+                StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+                if (dmu == null)
+                {
+                    MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                    return;
+                }
+
+                Table enterpriseTable = dmu.GetTable();
 
                 EditOperation editOperation = new EditOperation();
 
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                editOperation.Callback(context =>
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+
+                    using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                     {
+                        rowBuffer["Name"] = Name;
+                        rowBuffer["FullName"] = Name;
+                        rowBuffer["Description"] = Description;
+                        rowBuffer["ParagraphStyle"] = "Heading";
+                        rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
 
-                        editOperation.Callback(context =>
+                        using (Row row = enterpriseTable.CreateRow(rowBuffer))
                         {
-                            TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-                            using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
-                            {
-                                rowBuffer["Name"] = Name;
-                                rowBuffer["FullName"] = Name;
-                                rowBuffer["Description"] = Description;
-                                rowBuffer["ParagraphStyle"] = "Heading";
-                                rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
-
-                                using (Row row = enterpriseTable.CreateRow(rowBuffer))
-                                {
-                                    // To Indicate that the attribute table has to be updated.
-                                    context.Invalidate(row);
-                                }
-                            }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
+                            // To Indicate that the attribute table has to be updated.
+                            context.Invalidate(row);
                         }
-
-
                     }
-                }
+                }, enterpriseTable);
+
+                bool result = editOperation.Execute();
+
             });
 
             // Update mapunits
