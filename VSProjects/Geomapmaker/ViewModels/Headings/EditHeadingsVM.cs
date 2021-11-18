@@ -1,7 +1,9 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -98,60 +100,55 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task UpdateAsync()
         {
-            if (Data.DbConnectionProperties.GetProperties() == null)
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(async () =>
             {
-                return;
-            }
+                StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
-            {
+                if (dmu == null)
+                {
+                    MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                    return;
+                }
+
+                Table enterpriseTable = dmu.GetTable();
 
                 EditOperation editOperation = new EditOperation();
 
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                editOperation.Callback(context =>
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
+
+                    using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                     {
-
-                        editOperation.Callback(context =>
-                        {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
-
-                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        while (rowCursor.MoveNext())
+                        { 
+                            using (Row row = rowCursor.Current)
                             {
+                                // In order to update the Map and/or the attribute table.
+                                // Has to be called before any changes are made to the row.
+                                context.Invalidate(row);
 
-                                while (rowCursor.MoveNext())
-                                { //TODO: Anything? Should be only one
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        // In order to update the Map and/or the attribute table.
-                                        // Has to be called before any changes are made to the row.
-                                        context.Invalidate(row);
+                                row["Name"] = Name;
+                                row["FullName"] = Name;
+                                row["Description"] = Description;
+                                row["ParagraphStyle"] = "Heading";
+                                row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
 
-                                        row["Name"] = Name;
-                                        row["FullName"] = Name;
-                                        row["Description"] = Description;
-                                        row["ParagraphStyle"] = "Heading";
-                                        row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                                // After all the changes are done, persist it.
+                                row.Store();
 
-                                        // After all the changes are done, persist it.
-                                        row.Store();
-
-                                        // Has to be called after the store too.
-                                        context.Invalidate(row);
-                                    }
-                                }
+                                // Has to be called after the store too.
+                                context.Invalidate(row);
                             }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
                         }
                     }
-                }
+                }, enterpriseTable);
+
+                bool result = editOperation.Execute();
+
+                // Save Edit
+                await Project.Current.SaveEditsAsync();
+
             });
 
             await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();

@@ -40,10 +40,10 @@ namespace Geomapmaker.Data
                                 DataSource dS = new DataSource
                                 {
                                     ID = long.Parse(row["objectid"].ToString()),
-                                    Source = row["source"].ToString(),
-                                    DataSource_ID = row["datasources_id"].ToString(),
-                                    Url = row["url"] == null ? "" : row["url"].ToString(),
-                                    Notes = row["notes"] == null ? "" : row["notes"].ToString()
+                                    Source = row["source"]?.ToString(),
+                                    DataSource_ID = row["datasources_id"]?.ToString(),
+                                    Url = row["url"]?.ToString(),
+                                    Notes = row["notes"]?.ToString()
                                 };
 
                                 //add it to our list
