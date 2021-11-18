@@ -2,11 +2,13 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -72,7 +74,7 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         /// <summary>
-        /// Execute the save command
+        /// Execute the delete command
         /// </summary>
         private async Task DeleteHeadingAsync()
         {
@@ -83,49 +85,46 @@ namespace Geomapmaker.ViewModels.Headings
                 return;
             }
 
-            if (Data.DbConnectionProperties.GetProperties() == null)
+            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
             {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
                 return;
             }
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
-            {
+             {
+                 Table enterpriseTable = dmu.GetTable();
 
-                EditOperation editOperation = new EditOperation();
+                 EditOperation editOperation = new EditOperation();
 
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
-                {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
-                    {
+                 editOperation.Callback(context =>
+                 {
+                     QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
 
-                        editOperation.Callback(context =>
-                        {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
+                     using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                     {
+                         while (rowCursor.MoveNext())
+                         {
+                             using (Row row = rowCursor.Current)
+                             {
+                                 context.Invalidate(row);
 
-                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
-                            {
+                                 row.Delete();
+                             }
+                         }
+                     }
+                 }, enterpriseTable);
 
-                                while (rowCursor.MoveNext())
-                                {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        context.Invalidate(row);
+                 bool result = editOperation.Execute();
 
-                                        row.Delete();
-                                    }
-                                }
-                            }
-                        }, enterpriseTable);
+                 if (!result)
+                 {
+                     MessageBox.Show(editOperation.ErrorMessage);
+                 }
 
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
-                        }
-                    }
-                }
-            });
+             });
 
             await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
