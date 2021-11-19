@@ -113,19 +113,19 @@ namespace Geomapmaker.Data
         // Refresh Map Units
         public static async Task RefreshMapUnitsAsync()
         {
-            List<MapUnit> MapUnitsList = new List<MapUnit>();
-
-            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-            if (dmu == null)
-            {
-                return;
-            }
-
-            Table enterpriseTable = dmu.GetTable();
-
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
+                List<MapUnit> MapUnitsList = new List<MapUnit>();
+
+                StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+                if (dmu == null)
+                {
+                    return;
+                }
+
+                Table enterpriseTable = dmu.GetTable();
+
                 using (RowCursor rowCursor = enterpriseTable.Search())
                 {
                     while (rowCursor.MoveNext())

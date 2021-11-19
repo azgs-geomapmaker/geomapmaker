@@ -128,17 +128,15 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 MessageBox.Show(errorMessage, "One or more errors occured.");
             }
-
-
-            await QueuedTask.Run(async () =>
+            else
             {
-                //Update mapunits
-                await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
-            });
+                // Reset values
+                Name = "";
+                Description = "";
+            }
 
-            // Reset values
-            Name = "";
-            Description = "";
+            //Update mapunits
+            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
         }
 
         private async Task ResetAsync()

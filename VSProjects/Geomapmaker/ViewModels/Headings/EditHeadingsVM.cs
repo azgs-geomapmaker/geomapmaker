@@ -3,6 +3,7 @@ using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
@@ -100,6 +101,8 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task UpdateAsync()
         {
+            string errorMessage = null;
+
             StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             if (dmu == null)
@@ -108,52 +111,74 @@ namespace Geomapmaker.ViewModels.Headings
                 return;
             }
 
-            Table enterpriseTable = dmu.GetTable();
-
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
-                EditOperation editOperation = new EditOperation();
-
-                editOperation.Callback(context =>
+                try
                 {
-                    QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
+                    Table enterpriseTable = dmu.GetTable();
 
-                    using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                    EditOperation editOperation = new EditOperation();
+
+                    editOperation.Callback(context =>
                     {
-                        while (rowCursor.MoveNext())
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
+
+                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
-                            using (Row row = rowCursor.Current)
+                            while (rowCursor.MoveNext())
                             {
-                                // In order to update the Map and/or the attribute table.
-                                // Has to be called before any changes are made to the row.
-                                context.Invalidate(row);
+                                using (Row row = rowCursor.Current)
+                                {
+                                    // In order to update the Map and/or the attribute table.
+                                    // Has to be called before any changes are made to the row.
+                                    context.Invalidate(row);
 
-                                row["Name"] = Name;
-                                row["FullName"] = Name;
-                                row["Description"] = Description;
-                                row["ParagraphStyle"] = "Heading";
-                                row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                                    row["Name"] = Name;
+                                    row["FullName"] = Name;
+                                    row["Description"] = Description;
+                                    row["ParagraphStyle"] = "Heading";
+                                    row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
 
-                                // After all the changes are done, persist it.
-                                row.Store();
+                                    // After all the changes are done, persist it.
+                                    row.Store();
 
-                                // Has to be called after the store too.
-                                context.Invalidate(row);
+                                    // Has to be called after the store too.
+                                    context.Invalidate(row);
+                                }
                             }
                         }
-                    }
-                }, enterpriseTable);
+                    }, enterpriseTable);
 
-                bool result = editOperation.Execute();
-                return Task.CompletedTask;
+                    bool result = editOperation.Execute();
+                }
+                catch (Exception ex)
+                {
+                    string innerEx = ex.InnerException?.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (innerEx.Contains("--->"))
+                    {
+                        innerEx = innerEx.Substring(0, innerEx.IndexOf("--->"));
+                    }
+
+                    errorMessage = innerEx;
+                }
             });
 
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                // Reset values
+                SelectedHeading = null;
 
-            NotifyPropertyChanged("AllHeadings");
+                //Update mapunits
+                await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
-            // Reset values
-            SelectedHeading = null;
+                NotifyPropertyChanged("AllHeadings");
+            }
         }
 
         #region ### Validation ####
