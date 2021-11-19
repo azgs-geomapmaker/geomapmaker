@@ -2,6 +2,8 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -268,71 +270,90 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private async Task UpdateAsync()
         {
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            string errorMessage = null;
+
+            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
             {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                return;
+            }
 
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+            await QueuedTask.Run(() =>
+            {
+                try
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    Table enterpriseTable = dmu.GetTable();
+
+                    EditOperation editOperation = new EditOperation();
+
+                    editOperation.Callback(context =>
                     {
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
 
-                        editOperation.Callback(context =>
+                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
-
-                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            while (rowCursor.MoveNext())
                             {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    // In order to update the Map and/or the attribute table.
+                                    // Has to be called before any changes are made to the row.
+                                    context.Invalidate(row);
 
-                                while (rowCursor.MoveNext())
-                                { //TODO: Anything? Should be only one
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        // In order to update the Map and/or the attribute table.
-                                        // Has to be called before any changes are made to the row.
-                                        context.Invalidate(row);
+                                    row["MapUnit"] = MapUnit;
+                                    row["Name"] = Name;
+                                    row["FullName"] = FullName;
+                                    row["Age"] = Age;
+                                    row["RelativeAge"] = RelativeAge;
+                                    row["Description"] = Description;
+                                    row["Label"] = Label;
+                                    row["AreaFillRGB"] = AreaFillRGB;
+                                    row["GeoMaterial"] = GeoMaterial;
+                                    row["GeoMaterialConfidence"] = GeoMaterialConfidence;
+                                    row["ParagraphStyle"] = "Standard";
+                                    row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
 
-                                        row["MapUnit"] = MapUnit;
-                                        row["Name"] = Name;
-                                        row["FullName"] = FullName;
-                                        row["Age"] = Age;
-                                        row["RelativeAge"] = RelativeAge;
-                                        row["Description"] = Description;
-                                        row["Label"] = Label;
-                                        row["AreaFillRGB"] = AreaFillRGB;
-                                        row["GeoMaterial"] = GeoMaterial;
-                                        row["GeoMaterialConfidence"] = GeoMaterialConfidence;
-                                        row["ParagraphStyle"] = "Standard";
-                                        row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                                    //  If the hexcolor field exists in table
+                                    //if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))
+                                    //{
+                                    //    row["HexColor"] = Color.ToString();
+                                    //}
 
-                                        //  If the hexcolor field exists in table
-                                        if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))
-                                        {
-                                            row["HexColor"] = Color.ToString();
-                                        }
+                                    // After all the changes are done, persist it.
+                                    row.Store();
 
-                                        // After all the changes are done, persist it.
-                                        row.Store();
-
-                                        // Has to be called after the store too.
-                                        context.Invalidate(row);
-                                    }
+                                    // Has to be called after the store too.
+                                    context.Invalidate(row);
                                 }
                             }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
                         }
+                    }, enterpriseTable);
+
+                    bool result = editOperation.Execute();
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
                 }
             });
 
-            await ResetAsync();
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                await ResetAsync();
+            }
         }
 
         #region ### Validation ####
@@ -376,7 +397,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Selected.RelativeAge == RelativeAge &&
                 Selected.Description == Description &&
                 Selected.Label == Label &&
-                Selected.HexColor == HexColor &&
+                //Selected.HexColor == HexColor &&
                 Selected.GeoMaterial == GeoMaterial &&
                 Selected.GeoMaterialConfidence == GeoMaterialConfidence
                 )

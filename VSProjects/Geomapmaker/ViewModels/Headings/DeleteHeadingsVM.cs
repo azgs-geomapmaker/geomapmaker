@@ -130,15 +130,15 @@ namespace Geomapmaker.ViewModels.Headings
                  }
                  catch (Exception ex)
                  {
-                     string innerEx = ex.InnerException?.ToString();
+                     errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
 
                      // Trim the stack-trace from the error msg
-                     if (innerEx.Contains("--->"))
+                     if (errorMessage.Contains("--->"))
                      {
-                         innerEx = innerEx.Substring(0, innerEx.IndexOf("--->"));
+                         errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                      }
 
-                     errorMessage = innerEx + Environment.NewLine + Environment.NewLine + "Check attribute rules.";
+                     errorMessage = errorMessage + Environment.NewLine + Environment.NewLine + "Check attribute rules.";
                  }
              });
 
