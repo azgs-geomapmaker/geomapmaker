@@ -78,12 +78,14 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task DeleteHeadingAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you want to delete {Name}?", $"Delete {Name}?", System.Windows.MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", System.Windows.MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
                 return;
             }
+
+            string errorMessage = null;
 
             StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
@@ -95,43 +97,64 @@ namespace Geomapmaker.ViewModels.Headings
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
              {
-                 Table enterpriseTable = dmu.GetTable();
-
-                 EditOperation editOperation = new EditOperation();
-
-                 editOperation.Callback(context =>
+                 try
                  {
-                     QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
+                     Table enterpriseTable = dmu.GetTable();
 
-                     using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                     EditOperation editOperation = new EditOperation();
+
+                     editOperation.Callback(context =>
                      {
-                         while (rowCursor.MoveNext())
-                         {
-                             using (Row row = rowCursor.Current)
-                             {
-                                 context.Invalidate(row);
+                         QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + SelectedHeading.ID };
 
-                                 row.Delete();
+                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                         {
+                             while (rowCursor.MoveNext())
+                             {
+                                 using (Row row = rowCursor.Current)
+                                 {
+                                     context.Invalidate(row);
+
+                                     row.Delete();
+                                 }
                              }
                          }
+                     }, enterpriseTable);
+
+                     bool result = editOperation.Execute();
+
+                     if (!result)
+                     {
+                         MessageBox.Show(editOperation.ErrorMessage);
                      }
-                 }, enterpriseTable);
-
-                 bool result = editOperation.Execute();
-
-                 if (!result)
-                 {
-                     MessageBox.Show(editOperation.ErrorMessage);
                  }
+                 catch (Exception ex)
+                 {
+                     string innerEx = ex.InnerException?.ToString();
 
+                     // Trim the stack-trace from the error msg
+                     if (innerEx.Contains("--->"))
+                     {
+                         innerEx = innerEx.Substring(0, innerEx.IndexOf("--->"));
+                     }
+
+                     errorMessage = innerEx + Environment.NewLine + Environment.NewLine + "Check attribute rules.";
+                 }
              });
 
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                // Reset values
+                SelectedHeading = null;
 
-            NotifyPropertyChanged("AllHeadings");
+                await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
-            // Reset values
-            SelectedHeading = null;
+                NotifyPropertyChanged("AllHeadings");
+            }
         }
 
         #region ### Validation ####

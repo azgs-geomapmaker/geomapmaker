@@ -101,7 +101,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private async Task DeleteMapUnitAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you want to delete {Name}?", $"Delete {Name}?", System.Windows.MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", System.Windows.MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
