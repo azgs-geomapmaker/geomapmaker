@@ -2,6 +2,7 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
 using System;
@@ -98,6 +99,14 @@ namespace Geomapmaker.ViewModels
         {
             string errorMessage = null;
 
+            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
+            {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                return;
+            }
+
             HierarchyList = new List<MapUnitTreeItem>();
             SetHierarchyKeys(Tree);
 
@@ -105,46 +114,43 @@ namespace Geomapmaker.ViewModels
             {
                 try
                 {
+                    Table enterpriseTable = dmu.GetTable();
+
                     EditOperation editOperation = new EditOperation();
 
-                    using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                    editOperation.Callback(context =>
                     {
-                        using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                        using (RowCursor rowCursor = enterpriseTable.Search(null, false))
                         {
-                            editOperation.Callback(context =>
+                            while (rowCursor.MoveNext())
                             {
-                                using (RowCursor rowCursor = enterpriseTable.Search(null, false))
+                                using (Row row = rowCursor.Current)
                                 {
-                                    while (rowCursor.MoveNext())
-                                    {
-                                        using (Row row = rowCursor.Current)
-                                        {
-                                            int ID = int.Parse(row["ObjectID"].ToString());
+                                    int ID = int.Parse(row["ObjectID"].ToString());
 
-                                            // In order to update the Map and/or the attribute table.
-                                            // Has to be called before any changes are made to the row.
-                                            context.Invalidate(row);
+                                    // In order to update the Map and/or the attribute table.
+                                    // Has to be called before any changes are made to the row.
+                                    context.Invalidate(row);
 
-                                            row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
+                                    row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
 
-                                            // After all the changes are done, persist it.
-                                            row.Store();
+                                    // After all the changes are done, persist it.
+                                    row.Store();
 
-                                            // Has to be called after the store too.
-                                            context.Invalidate(row);
-                                        }
-                                    }
+                                    // Has to be called after the store too.
+                                    context.Invalidate(row);
                                 }
-                            }, enterpriseTable);
-
-                            bool result = editOperation.Execute();
-
-                            if (!result)
-                            {
-                                MessageBox.Show(editOperation.ErrorMessage);
                             }
                         }
+                    }, enterpriseTable);
+
+                    bool result = editOperation.Execute();
+
+                    if (!result)
+                    {
+                        MessageBox.Show(editOperation.ErrorMessage);
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -158,8 +164,6 @@ namespace Geomapmaker.ViewModels
 
                     errorMessage = innerEx;
                 }
-
-
             });
 
             if (!string.IsNullOrEmpty(errorMessage))
