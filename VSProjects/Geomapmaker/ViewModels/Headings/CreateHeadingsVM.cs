@@ -1,12 +1,11 @@
 ﻿using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,6 +70,8 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task SubmitAsync()
         {
+            string errorMessage = null;
+
             StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             if (dmu == null)
@@ -79,38 +80,61 @@ namespace Geomapmaker.ViewModels.Headings
                 return;
             }
 
-            Table enterpriseTable = dmu.GetTable();
-
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
-                EditOperation editOperation = new EditOperation();
-
-                editOperation.Callback(context =>
+                try
                 {
-                    TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+                    Table enterpriseTable = dmu.GetTable();
 
-                    using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
-                    {
-                        rowBuffer["Name"] = Name;
-                        rowBuffer["FullName"] = Name;
-                        rowBuffer["Description"] = Description;
-                        rowBuffer["ParagraphStyle"] = "Heading";
-                        rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                    EditOperation editOperation = new EditOperation();
 
-                        using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                    editOperation.Callback(context =>
                         {
-                            // To Indicate that the attribute table has to be updated.
-                            context.Invalidate(row);
-                        }
+                            TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+
+                            using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                            {
+                                rowBuffer["Name"] = Name;
+                                rowBuffer["FullName"] = Name;
+                                rowBuffer["Description"] = Description;
+                                rowBuffer["ParagraphStyle"] = "Heading";
+                                rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+
+                                using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                {
+                                    // To Indicate that the attribute table has to be updated.
+                                    context.Invalidate(row);
+                                }
+                            }
+                        }, enterpriseTable);
+
+                    bool result = editOperation.Execute();
+                }
+                catch (Exception ex)
+                {
+                    string innerEx = ex.InnerException?.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (innerEx.Contains("--->"))
+                    {
+                        innerEx = innerEx.Substring(0, innerEx.IndexOf("--->"));
                     }
-                }, enterpriseTable);
 
-                bool result = editOperation.Execute();
-
+                    errorMessage = innerEx;
+                }
             });
 
-            // Update mapunits
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+
+
+            await QueuedTask.Run(async () =>
+            {
+                //Update mapunits
+                await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            });
 
             // Reset values
             Name = "";
