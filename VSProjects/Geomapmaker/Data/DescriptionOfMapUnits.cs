@@ -117,7 +117,7 @@ namespace Geomapmaker.Data
             {
                 List<MapUnit> MapUnitsList = new List<MapUnit>();
 
-                StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+                StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
                 if (dmu == null)
                 {

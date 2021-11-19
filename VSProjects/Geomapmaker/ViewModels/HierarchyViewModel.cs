@@ -3,6 +3,7 @@ using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
 using System;
@@ -99,7 +100,7 @@ namespace Geomapmaker.ViewModels
         {
             string errorMessage = null;
 
-            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             if (dmu == null)
             {
@@ -220,8 +221,11 @@ namespace Geomapmaker.ViewModels
     /// </summary>
     internal class Hierarchy_ShowButton : Button
     {
-        protected override void OnClick()
+        protected override async void OnClick()
         {
+            // Refresh data
+            await DescriptionOfMapUnits.RefreshMapUnitsAsync();
+
             HierarchyViewModel.Show();
         }
     }

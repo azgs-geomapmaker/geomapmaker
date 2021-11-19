@@ -28,6 +28,7 @@
       <groups>
         <group id="Geomapmaker_Admin" caption="Admin" keytip="A">
           <button refID="Geomapmaker_ProjectSettings_ShowPropertySheet" size="large" />
+          <comboBox refID="Geomapmaker_DataSourceComboBox" />
         </group>
         <group id="Geomapmaker_Tables" caption="Tables" keytip="DS">
           <button refID="Geomapmaker_DataSourceButton" size="large" />
@@ -46,7 +47,7 @@
       </groups>
       <!-- Controls -->
       <controls>
-        <button id="Geomapmaker_DataSourceButton" caption="Data Source" className="DataSourceButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="ds">
+        <button id="Geomapmaker_DataSourceButton" caption="DataHelper Init" className="DataSourceButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="ds">
           <tooltip heading="Datasource">
             This is a stub: do not use yet<disabledText /></tooltip>
         </button>
@@ -91,6 +92,9 @@
         <button id="Geomapmaker_ProjectSettings_ShowPropertySheet" caption="Settings" className="Geomapmaker.ViewModels.ProjectSettings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Show Property Sheet">Show Property Sheet<disabledText /></tooltip>
         </button>
+        <comboBox id="Geomapmaker_DataSourceComboBox" caption="Data Source" className="Geomapmaker.RibbonElements.DataSourceComboBox" itemWidth="120" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" keytip="todo">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </comboBox>
       </controls>
       <!-- Dock Panes -->
       <dockPanes>

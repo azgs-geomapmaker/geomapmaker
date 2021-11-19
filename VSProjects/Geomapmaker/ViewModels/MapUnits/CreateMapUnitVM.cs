@@ -216,7 +216,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         {
             string errorMessage = null;
 
-            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             if (dmu == null)
             {
@@ -248,7 +248,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                             rowBuffer["GeoMaterial"] = GeoMaterial;
                             rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
                             rowBuffer["ParagraphStyle"] = "Standard";
-                            rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                            rowBuffer["DescriptionSourceID"] = Data.DataSources.DataSourceId;
 
                             //  If the hexcolor field exists in table
                             //if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))

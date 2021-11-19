@@ -72,7 +72,7 @@ namespace Geomapmaker.ViewModels.Headings
         {
             string errorMessage = null;
 
-            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             if (dmu == null)
             {
@@ -98,7 +98,7 @@ namespace Geomapmaker.ViewModels.Headings
                                 rowBuffer["FullName"] = Name;
                                 rowBuffer["Description"] = Description;
                                 rowBuffer["ParagraphStyle"] = "Heading";
-                                rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                                rowBuffer["DescriptionSourceID"] = Data.DataSources.DataSourceId;
 
                                 using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                 {

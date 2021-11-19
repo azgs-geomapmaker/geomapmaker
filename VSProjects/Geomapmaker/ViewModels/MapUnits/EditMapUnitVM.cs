@@ -272,7 +272,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         {
             string errorMessage = null;
 
-            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             if (dmu == null)
             {
@@ -313,7 +313,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                                     row["GeoMaterial"] = GeoMaterial;
                                     row["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                     row["ParagraphStyle"] = "Standard";
-                                    row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                                    row["DescriptionSourceID"] = Data.DataSources.DataSourceId;
 
                                     //  If the hexcolor field exists in table
                                     //if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))

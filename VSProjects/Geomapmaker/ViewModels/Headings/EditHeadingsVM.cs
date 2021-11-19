@@ -103,7 +103,7 @@ namespace Geomapmaker.ViewModels.Headings
         {
             string errorMessage = null;
 
-            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             if (dmu == null)
             {
@@ -137,7 +137,7 @@ namespace Geomapmaker.ViewModels.Headings
                                     row["FullName"] = Name;
                                     row["Description"] = Description;
                                     row["ParagraphStyle"] = "Heading";
-                                    row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                                    row["DescriptionSourceID"] = Data.DataSources.DataSourceId;
 
                                     // After all the changes are done, persist it.
                                     row.Store();

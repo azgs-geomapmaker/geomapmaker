@@ -86,7 +86,13 @@ namespace Geomapmaker
         }
 
         public static event EventHandler DataSourceChanged;
-        private static DataSource dataSource = null;
+        private static DataSource dataSource = new DataSource()
+        {
+            // TODO remove this temp fix. 
+            DataSource_ID = "TODO_FIX",
+            Notes = "Hardcoded a DS while switching to no login mode",
+        };
+
         public static DataSource DataSource
         {
             get => dataSource;

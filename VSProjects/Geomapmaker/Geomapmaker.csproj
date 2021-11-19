@@ -202,6 +202,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RibbonElements\DataSourceComboBox.cs" />
     <Compile Include="Data\Confidence.cs" />
     <Compile Include="Data\DataSources.cs" />
     <Compile Include="Data\DbConnectionProperties.cs" />
