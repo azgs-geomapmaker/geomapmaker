@@ -345,7 +345,6 @@ namespace Geomapmaker.ViewModels.MapUnits
                 }
             });
 
-
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 MessageBox.Show(errorMessage, "One or more errors occured.");

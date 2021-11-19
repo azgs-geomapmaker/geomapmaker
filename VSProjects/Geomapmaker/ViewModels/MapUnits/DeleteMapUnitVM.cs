@@ -2,11 +2,14 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -108,56 +111,71 @@ namespace Geomapmaker.ViewModels.MapUnits
                 return;
             }
 
-            if (Data.DbConnectionProperties.GetProperties() == null)
+            string errorMessage = null;
+
+            StandaloneTable dmu = MapView.Active.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
             {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
                 return;
             }
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
-
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                try
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    Table enterpriseTable = dmu.GetTable();
+
+                    EditOperation editOperation = new EditOperation();
+
+                    editOperation.Callback(context =>
                     {
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
 
-                        editOperation.Callback(context =>
+                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
-
-                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            while (rowCursor.MoveNext())
                             {
-
-                                while (rowCursor.MoveNext())
+                                using (Row row = rowCursor.Current)
                                 {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        context.Invalidate(row);
+                                    context.Invalidate(row);
 
-                                        row.Delete();
-                                    }
+                                    row.Delete();
                                 }
                             }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
                         }
+                    }, enterpriseTable);
+
+                    bool result = editOperation.Execute();
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
+
+                    errorMessage = errorMessage + Environment.NewLine + Environment.NewLine + "Check attribute rules.";
                 }
             });
 
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
-            NotifyPropertyChanged("AllMapUnits");
+                NotifyPropertyChanged("AllMapUnits");
 
-            // Reset values
-            Selected = null;
+                // Reset values
+                Selected = null;
+            }
         }
 
         #region ### Validation ####
