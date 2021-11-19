@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -95,55 +96,80 @@ namespace Geomapmaker.ViewModels
         // Write HierarchyKey to database
         private async Task SaveAsync()
         {
+            string errorMessage = null;
+
             HierarchyList = new List<MapUnitTreeItem>();
             SetHierarchyKeys(Tree);
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                try
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    EditOperation editOperation = new EditOperation();
+
+                    using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
                     {
-                        editOperation.Callback(context =>
+                        using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
                         {
-                            using (RowCursor rowCursor = enterpriseTable.Search(null, false))
+                            editOperation.Callback(context =>
                             {
-                                while (rowCursor.MoveNext())
+                                using (RowCursor rowCursor = enterpriseTable.Search(null, false))
                                 {
-                                    using (Row row = rowCursor.Current)
+                                    while (rowCursor.MoveNext())
                                     {
-                                        int ID = int.Parse(row["ObjectID"].ToString());
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            int ID = int.Parse(row["ObjectID"].ToString());
 
-                                        // In order to update the Map and/or the attribute table.
-                                        // Has to be called before any changes are made to the row.
-                                        context.Invalidate(row);
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                        row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
+                                            row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
 
-                                        // After all the changes are done, persist it.
-                                        row.Store();
+                                            // After all the changes are done, persist it.
+                                            row.Store();
 
-                                        // Has to be called after the store too.
-                                        context.Invalidate(row);
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
+                                        }
                                     }
                                 }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+
+                            if (!result)
+                            {
+                                MessageBox.Show(editOperation.ErrorMessage);
                             }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    string innerEx = ex.InnerException?.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (innerEx.Contains("--->"))
+                    {
+                        innerEx = innerEx.Substring(0, innerEx.IndexOf("--->"));
+                    }
+
+                    errorMessage = innerEx;
+                }
+
+
             });
 
-            await ResetAsync();
-
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                await ResetAsync();
+            }
         }
 
         /// <summary>
