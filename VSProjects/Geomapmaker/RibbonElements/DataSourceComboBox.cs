@@ -37,6 +37,43 @@ namespace Geomapmaker.RibbonElements
             return true;
         }
 
+        private async void UpdateComboBoxOptions()
+        {
+            Clear();
+
+            StandaloneTable dataSources = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
+
+            if (dataSources == null)
+            {
+                return;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                Table enterpriseTable = dataSources.GetTable();
+
+                using (RowCursor rowCursor = enterpriseTable.Search())
+                {
+                    while (rowCursor.MoveNext())
+                    {
+                        using (Row row = rowCursor.Current)
+                        {
+                            DataSource dS = new DataSource
+                            {
+                                ID = long.Parse(row["objectid"].ToString()),
+                                Source = row["source"]?.ToString(),
+                                DataSource_ID = row["datasources_id"]?.ToString(),
+                                Url = row["url"]?.ToString(),
+                                Notes = row["notes"]?.ToString()
+                            };
+
+                            Add(new ComboBoxItem(dS.DataSource_ID));
+                        }
+                    }
+                }
+            });
+        }
+
         /// <summary>
         /// Updates the combo box with all the items.
         /// </summary>
@@ -45,44 +82,17 @@ namespace Geomapmaker.RibbonElements
         {
             if (!_isInitialized)
             {
-                Clear();
-
-                StandaloneTable dataSources = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
-
-                if (dataSources == null)
-                {
-                    return;
-                }
-
-                await QueuedTask.Run(() =>
-                {
-                    Table enterpriseTable = dataSources.GetTable();
-
-                    using (RowCursor rowCursor = enterpriseTable.Search())
-                    {
-                        while (rowCursor.MoveNext())
-                        {
-                            using (Row row = rowCursor.Current)
-                            {
-                                DataSource dS = new DataSource
-                                {
-                                    ID = long.Parse(row["objectid"].ToString()),
-                                    Source = row["source"]?.ToString(),
-                                    DataSource_ID = row["datasources_id"]?.ToString(),
-                                    Url = row["url"]?.ToString(),
-                                    Notes = row["notes"]?.ToString()
-                                };
-
-                                Add(new ComboBoxItem(dS.DataSource_ID));
-                            }
-                        }
-                    }
-                });
+                UpdateComboBoxOptions();
 
                 _isInitialized = true;
             }
 
             Enabled = true;
+        }
+
+        protected override async void OnDropDownOpened()
+        {
+            UpdateComboBoxOptions();
         }
 
         /// <summary>
