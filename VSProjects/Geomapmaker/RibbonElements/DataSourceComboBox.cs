@@ -49,6 +49,11 @@ namespace Geomapmaker.RibbonElements
 
                 StandaloneTable dataSources = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
 
+                if (dataSources == null)
+                {
+                    return;
+                }
+
                 await QueuedTask.Run(() =>
                 {
                     Table enterpriseTable = dataSources.GetTable();

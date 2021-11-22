@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using System.Windows;
 
 namespace Geomapmaker
 {
@@ -13,6 +14,12 @@ namespace Geomapmaker
             //already open?
             if (_dswindow != null)
             {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(DataHelper.connectionProperties.Password))
+            {
+                MessageBox.Show("Project connection properties is null", "Error");
                 return;
             }
 
