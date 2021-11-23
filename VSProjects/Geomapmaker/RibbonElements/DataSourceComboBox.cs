@@ -27,15 +27,15 @@ namespace Geomapmaker.RibbonElements
         }
 
         // TODO 
-        private bool isValidGemsProject()
-        {
-            if (MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources") == null)
-                return false;
-            if (MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits") == null)
-                return false;
+        //private bool isValidGemsProject()
+        //{
+        //    if (MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources") == null)
+        //        return false;
+        //    if (MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits") == null)
+        //        return false;
 
-            return true;
-        }
+        //    return true;
+        //}
 
         private async void UpdateComboBoxOptions()
         {
@@ -45,6 +45,7 @@ namespace Geomapmaker.RibbonElements
 
             if (dataSources == null)
             {
+                FrameworkApplication.State.Deactivate("datasource_selected");
                 return;
             }
 
@@ -78,7 +79,7 @@ namespace Geomapmaker.RibbonElements
         /// Updates the combo box with all the items.
         /// </summary>
 
-        private async void UpdateCombo()
+        private void UpdateCombo()
         {
             if (!_isInitialized)
             {
@@ -90,7 +91,7 @@ namespace Geomapmaker.RibbonElements
             Enabled = true;
         }
 
-        protected override async void OnDropDownOpened()
+        protected override void OnDropDownOpened()
         {
             UpdateComboBoxOptions();
         }
@@ -101,7 +102,6 @@ namespace Geomapmaker.RibbonElements
         /// <param name="item">The newly selected combo box item</param>
         protected override void OnSelectionChange(ComboBoxItem item)
         {
-
             if (item == null || string.IsNullOrEmpty(item.Text))
             {
                 FrameworkApplication.State.Deactivate("datasource_selected");
