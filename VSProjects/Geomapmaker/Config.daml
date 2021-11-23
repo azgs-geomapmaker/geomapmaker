@@ -32,6 +32,7 @@
         </group>
         <group id="Geomapmaker_Tables" caption="Tables" keytip="DS">
           <button refID="Geomapmaker_DataSourceButton" size="large" />
+          <button refID="Geomapmaker_DataSources" />
           <button refID="Geomapmaker_Headings_ShowButton" />
           <button refID="Geomapmaker_MapUnits_ShowButton" />
           <button refID="Geomapmaker_Hierarchy_ShowButton" />
@@ -95,6 +96,9 @@
         <comboBox id="Geomapmaker_DataSourceComboBox" caption="Data Source" className="Geomapmaker.RibbonElements.DataSourceComboBox" itemWidth="120" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" keytip="todo">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </comboBox>
+        <button id="Geomapmaker_DataSources" caption="Data Sources" className="Geomapmaker.RibbonElements.ShowDataSources" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition" keytip="todo">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
       </controls>
       <!-- Dock Panes -->
       <dockPanes>

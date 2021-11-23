@@ -202,6 +202,9 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\DataSources.xaml.cs">
+      <DependentUpon>DataSources.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RibbonElements\DataSourceComboBox.cs" />
     <Compile Include="Data\Confidence.cs" />
     <Compile Include="Data\DataSources.cs" />
@@ -210,6 +213,7 @@
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
+    <Compile Include="RibbonElements\ShowDataSources.cs" />
     <Compile Include="Views\ProjectSettings.xaml.cs">
       <DependentUpon>ProjectSettings.xaml</DependentUpon>
     </Compile>
@@ -292,6 +296,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\DataSources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProjectSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
