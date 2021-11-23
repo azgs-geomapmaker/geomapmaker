@@ -1,5 +1,4 @@
-﻿using ArcGIS.Desktop.Framework;
-using ArcGIS.Desktop.Framework.Controls;
+﻿using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Contracts;
 
 namespace Geomapmaker.ViewModels.DataSources

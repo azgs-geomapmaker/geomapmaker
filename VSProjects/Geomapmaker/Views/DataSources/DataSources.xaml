@@ -32,11 +32,5 @@
                 <tabData:DeleteDataSource />
             </TabItem>
         </TabControl>
-
-        <StackPanel Orientation="Horizontal" MinWidth="200">
-            <Button Style="{DynamicResource Esri_Button}" MaxWidth="90" MaxHeight="25" Command="{Binding CmdOk}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Ok</Button>
-            <Button Style="{DynamicResource Esri_Button}" IsDefault="True" MaxWidth="90" MaxHeight="25" Command="{Binding CmdCancel}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Cancel</Button>
-        </StackPanel>
-
     </StackPanel>
 </controls:ProWindow>
