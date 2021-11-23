@@ -1,6 +1,6 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using Geomapmaker.Views;
+using Geomapmaker.Views.DataSources;
 
 namespace Geomapmaker.RibbonElements
 {

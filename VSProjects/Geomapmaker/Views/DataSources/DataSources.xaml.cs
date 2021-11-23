@@ -1,4 +1,4 @@
-﻿namespace Geomapmaker.Views
+﻿namespace Geomapmaker.Views.DataSources
 {
     /// <summary>
     /// Interaction logic for DataSources.xaml

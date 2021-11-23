@@ -202,7 +202,16 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\DataSources.xaml.cs">
+    <Compile Include="Views\DataSources\DeleteDataSource.xaml.cs">
+      <DependentUpon>DeleteDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSources\EditDataSource.xaml.cs">
+      <DependentUpon>EditDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSources\CreateDataSource.xaml.cs">
+      <DependentUpon>CreateDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSources\DataSources.xaml.cs">
       <DependentUpon>DataSources.xaml</DependentUpon>
     </Compile>
     <Compile Include="RibbonElements\DataSourceComboBox.cs" />
@@ -219,9 +228,6 @@
     </Compile>
     <Compile Include="ViewModels\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
-    <Compile Include="Views\DataSourceWindow.xaml.cs">
-      <DependentUpon>DataSourceWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Hierarchy.xaml.cs">
       <DependentUpon>Hierarchy.xaml</DependentUpon>
     </Compile>
@@ -296,17 +302,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\DataSources.xaml">
+    <Page Include="Views\DataSources\DeleteDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DataSources\EditDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DataSources\CreateDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DataSources\DataSources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DataSourceWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Hierarchy.xaml">
       <SubType>Designer</SubType>
