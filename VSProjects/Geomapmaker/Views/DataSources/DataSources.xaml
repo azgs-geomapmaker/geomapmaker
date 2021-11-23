@@ -5,9 +5,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
-        xmlns:tabData="clr-namespace:Geomapmaker.Views.DataSources"
+        xmlns:tabData="clr-namespace:Geomapmaker.Views.DataSources" 
+        xmlns:geomapmaker="clr-namespace:Geomapmaker.ViewModels.DataSources" 
+        d:DataContext="{d:DesignInstance Type=geomapmaker:DataSourcesViewModel}"
         mc:Ignorable="d"
-        Title="Data Sources" Height="500" Width="500"
+        Title="Data Sources" Height="300" Width="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -30,5 +32,11 @@
                 <tabData:DeleteDataSource />
             </TabItem>
         </TabControl>
+
+        <StackPanel Orientation="Horizontal" MinWidth="200">
+            <Button Style="{DynamicResource Esri_Button}" MaxWidth="90" MaxHeight="25" Command="{Binding CmdOk}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Ok</Button>
+            <Button Style="{DynamicResource Esri_Button}" IsDefault="True" MaxWidth="90" MaxHeight="25" Command="{Binding CmdCancel}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Cancel</Button>
+        </StackPanel>
+
     </StackPanel>
 </controls:ProWindow>

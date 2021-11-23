@@ -202,6 +202,8 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\DataSources\CreateDataSourceVM.cs" />
+    <Compile Include="ViewModels\DataSources\DataSourcesViewModel.cs" />
     <Compile Include="Views\DataSources\DeleteDataSource.xaml.cs">
       <DependentUpon>DeleteDataSource.xaml</DependentUpon>
     </Compile>
@@ -222,7 +224,6 @@
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
-    <Compile Include="RibbonElements\ShowDataSources.cs" />
     <Compile Include="Views\ProjectSettings.xaml.cs">
       <DependentUpon>ProjectSettings.xaml</DependentUpon>
     </Compile>

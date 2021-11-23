@@ -6,15 +6,32 @@
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
-                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <TextBlock>Test Create</TextBlock>
-    
+    <StackPanel>
+        <TextBlock Text="Create Data Source" HorizontalAlignment="Center" />
+
+        <Label Content="Source" />
+        <TextBox Text="{Binding Create.Source, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Label Content="Source URL" />
+        <TextBox />
+
+        <Label Content="Source Notes" />
+        <TextBox MinLines="3"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button Margin="5" Padding="5">Cancel</Button>
+            <Button Margin="5" Padding="5">Save</Button>
+        </StackPanel>
+
+    </StackPanel>
+
 </UserControl>
