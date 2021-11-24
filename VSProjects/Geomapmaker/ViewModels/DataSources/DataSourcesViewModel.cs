@@ -1,10 +1,22 @@
 ﻿using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Contracts;
+using System.Windows.Input;
+using System;
+using ArcGIS.Desktop.Framework;
 
 namespace Geomapmaker.ViewModels.DataSources
 {
     public class DataSourcesViewModel : ProWindow
     {
+        public ICommand CommandCancel => new RelayCommand((proWindow) =>
+        {
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
+
+        }, () => true);
+
         public CreateDataSourceVM Create { get; set; } = new CreateDataSourceVM();
     }
 
@@ -14,7 +26,6 @@ namespace Geomapmaker.ViewModels.DataSources
 
         protected override void OnClick()
         {
-            //already open?
             if (_datasources != null)
             {
                 return;
