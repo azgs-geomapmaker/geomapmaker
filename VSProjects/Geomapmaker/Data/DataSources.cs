@@ -9,9 +9,6 @@ namespace Geomapmaker.Data
 {
     public static class DataSources
     {
-        // User's DS for the geomapmaker tool. Hiding this here for now.
-        public static string DataSourceId { get; set; }
-
         public static List<DataSource> DataSourcesList { get; set; } = new List<DataSource>();
 
         public static async Task RefreshAsync()

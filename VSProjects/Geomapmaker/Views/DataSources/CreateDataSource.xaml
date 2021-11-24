@@ -4,33 +4,58 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" 
+             xmlns:datasources="clr-namespace:Geomapmaker.ViewModels.DataSources" 
+             d:DataContext="{d:DesignInstance Type=datasources:DataSourcesViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             >
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/DisplayErrorsResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel>
-        <TextBlock Text="Create Data Source" HorizontalAlignment="Center" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
 
-        <Label Content="Source" />
-        <TextBox Text="{Binding Create.Source, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="1" Grid.Column="1" Content="Id" />
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.Id, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Label Content="Source URL" />
-        <TextBox Text="{Binding Create.Url, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="3" Grid.Column="1" Content="Source" />
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.Source, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Label Content="Source Notes" />
-        <TextBox Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3"/>
+        <Label Grid.Row="5" Grid.Column="1" Content="URL" />
+        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+        <Label Grid.Row="7" Grid.Column="1" Content="Notes" />
+        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3"/>
+
+        <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
             <Button Margin="5" Padding="5" Command="{Binding Create.CommandSave}">Save</Button>
         </StackPanel>
-    </StackPanel>
+
+    </Grid>
 
 </UserControl>

@@ -248,7 +248,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                             rowBuffer["GeoMaterial"] = GeoMaterial;
                             rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
                             rowBuffer["ParagraphStyle"] = "Standard";
-                            rowBuffer["DescriptionSourceID"] = Data.DataSources.DataSourceId;
+                            rowBuffer["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
 
                             //  If the hexcolor field exists in table
                             //if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))

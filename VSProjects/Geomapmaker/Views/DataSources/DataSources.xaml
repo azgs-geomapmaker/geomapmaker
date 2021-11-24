@@ -9,7 +9,7 @@
         xmlns:geomapmaker="clr-namespace:Geomapmaker.ViewModels.DataSources" 
         d:DataContext="{d:DesignInstance Type=geomapmaker:DataSourcesViewModel}"
         mc:Ignorable="d"
-        Title="Data Sources" Height="300" Width="300"
+        Title="Data Sources" Height="350" Width="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -20,8 +20,15 @@
         </ResourceDictionary>
     </controls:ProWindow.Resources>
 
-    <StackPanel>
-        <TabControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Row="0" Grid.Column="0">
             <TabItem Header="Create" >
                 <tabData:CreateDataSource />
             </TabItem>
@@ -32,5 +39,6 @@
                 <tabData:DeleteDataSource />
             </TabItem>
         </TabControl>
-    </StackPanel>
+    </Grid>
+    
 </controls:ProWindow>

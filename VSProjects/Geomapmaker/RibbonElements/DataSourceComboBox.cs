@@ -109,7 +109,7 @@ namespace Geomapmaker.RibbonElements
             }
 
             // Set the user's data source
-            Data.DataSources.DataSourceId = item.Text;
+            GeomapmakerModule.DataSourceId = item.Text;
 
             FrameworkApplication.State.Activate("datasource_selected");
         }

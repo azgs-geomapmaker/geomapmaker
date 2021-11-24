@@ -39,6 +39,8 @@ namespace Geomapmaker
 
         private static GeomapmakerModule _this = null;
 
+        public static string DataSourceId { get; set; }
+
         //public DataHelper helper = new DataHelper();
         internal static AddEditContactsAndFaultsDockPaneViewModel ContactsAndFaultsVM { get; set; }
         internal static ContactsAndFaultsAddTool ContactsAndFaultsAddTool { get; set; }

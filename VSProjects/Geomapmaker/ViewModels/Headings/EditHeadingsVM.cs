@@ -137,7 +137,7 @@ namespace Geomapmaker.ViewModels.Headings
                                     row["FullName"] = Name;
                                     row["Description"] = Description;
                                     row["ParagraphStyle"] = "Heading";
-                                    row["DescriptionSourceID"] = Data.DataSources.DataSourceId;
+                                    row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
 
                                     // After all the changes are done, persist it.
                                     row.Store();
