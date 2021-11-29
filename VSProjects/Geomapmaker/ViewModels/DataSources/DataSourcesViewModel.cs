@@ -24,11 +24,13 @@ namespace Geomapmaker.ViewModels.DataSources
 
         public CreateDataSourceVM Create { get; set; }
         public EditDataSourceVM Edit { get; set; }
+        public DeleteDataSourceVM Delete { get; set; }
 
         public DataSourcesViewModel()
         {
             Create = new CreateDataSourceVM(this);
             Edit = new EditDataSourceVM(this);
+            Delete = new DeleteDataSourceVM(this);
         }
 
         private List<DataSource> _dataSources { get; set; }

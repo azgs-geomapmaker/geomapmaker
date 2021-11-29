@@ -204,6 +204,7 @@
   <ItemGroup>
     <Compile Include="ViewModels\DataSources\CreateDataSourceVM.cs" />
     <Compile Include="ViewModels\DataSources\DataSourcesViewModel.cs" />
+    <Compile Include="ViewModels\DataSources\DeleteDataSourceVM.cs" />
     <Compile Include="ViewModels\DataSources\EditDataSourceVM.cs" />
     <Compile Include="Views\DataSources\DeleteDataSource.xaml.cs">
       <DependentUpon>DeleteDataSource.xaml</DependentUpon>
