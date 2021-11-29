@@ -39,16 +39,16 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="1" Grid.Column="1" Content="Id" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="ID" />
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.Id, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Label Grid.Row="3" Grid.Column="1" Content="Source" />
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Source" />
         <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.Source, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Label Grid.Row="5" Grid.Column="1" Content="URL" />
+        <TextBlock Grid.Row="5" Grid.Column="1" Text="URL" />
         <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Label Grid.Row="7" Grid.Column="1" Content="Notes" />
+        <TextBlock Grid.Row="7" Grid.Column="1" Text="Notes" />
         <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3"/>
 
         <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">

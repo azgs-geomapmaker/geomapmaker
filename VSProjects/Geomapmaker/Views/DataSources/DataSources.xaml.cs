@@ -7,7 +7,7 @@ namespace Geomapmaker.Views.DataSources
     /// </summary>
     public partial class DataSources : ArcGIS.Desktop.Framework.Controls.ProWindow
     {
-        DataSourcesViewModel dataSourcesVM = new DataSourcesViewModel();
+        public DataSourcesViewModel dataSourcesVM = new DataSourcesViewModel();
 
         public DataSources()
         {

@@ -9,7 +9,7 @@
         xmlns:geomapmaker="clr-namespace:Geomapmaker.ViewModels.DataSources" 
         d:DataContext="{d:DesignInstance Type=geomapmaker:DataSourcesViewModel}"
         mc:Ignorable="d"
-        Title="Data Sources" Height="350" Width="300"
+        Title="Data Sources" Height="400" Width="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

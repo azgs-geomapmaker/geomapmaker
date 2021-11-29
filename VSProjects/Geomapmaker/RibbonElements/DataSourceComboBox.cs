@@ -61,7 +61,7 @@ namespace Geomapmaker.RibbonElements
                         {
                             DataSource dS = new DataSource
                             {
-                                ID = long.Parse(row["objectid"].ToString()),
+                                ObjecttId = long.Parse(row["objectid"].ToString()),
                                 Source = row["source"]?.ToString(),
                                 DataSource_ID = row["datasources_id"]?.ToString(),
                                 Url = row["url"]?.ToString(),
