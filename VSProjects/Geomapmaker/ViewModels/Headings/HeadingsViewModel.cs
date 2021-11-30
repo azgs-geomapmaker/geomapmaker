@@ -3,7 +3,6 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using Geomapmaker.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -127,5 +126,4 @@ namespace Geomapmaker.ViewModels.Headings
             _headings.Show();
         }
     }
-
 }

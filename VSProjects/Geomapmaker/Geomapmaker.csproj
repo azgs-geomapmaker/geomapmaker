@@ -202,6 +202,9 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\MapUnits\MapUnits.xaml.cs">
+      <DependentUpon>MapUnits.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\Headings\DeleteHeadingVM.cs" />
     <Compile Include="ViewModels\Headings\EditHeadingVM.cs" />
     <Compile Include="ViewModels\Headings\CreateHeadingVM.cs" />
@@ -263,9 +266,6 @@
     <Compile Include="Views\MapUnits\EditMapUnit.xaml.cs">
       <DependentUpon>EditMapUnit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MapUnits\MapUnits.xaml.cs">
-      <DependentUpon>MapUnits.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
@@ -305,6 +305,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\MapUnits\MapUnits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Headings\CreateHeading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -358,10 +362,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MapUnits\EditMapUnit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MapUnits\MapUnits.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

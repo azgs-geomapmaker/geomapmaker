@@ -28,13 +28,13 @@
       <groups>
         <group id="Geomapmaker_Admin" caption="Admin" keytip="A">
           <button refID="Geomapmaker_ProjectSettings_ShowPropertySheet" size="large" />
+          <button refID="Geomapmaker_DataSourceButton" size="large" />
           <comboBox refID="Geomapmaker_DataSourceComboBox" />
         </group>
         <group id="Geomapmaker_Tables" caption="Tables" keytip="DS">
-          <button refID="Geomapmaker_DataSourceButton" size="large" />
           <button refID="Geomapmaker_DataSources" />
           <button refID="Geomapmaker_Headings" />
-          <button refID="Geomapmaker_MapUnits_ShowButton" />
+          <button refID="Geomapmaker_MapUnits" />
           <button refID="Geomapmaker_Hierarchy_ShowButton" />
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts And Faults" keytip="CF">
@@ -50,70 +50,56 @@
       <controls>
         <button id="Geomapmaker_DataSourceButton" caption="DataHelper Init" className="DataSourceButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="ds">
           <tooltip heading="Datasource">
-            This is a stub: do not use yet<disabledText />
-          </tooltip>
+            This is a stub: do not use yet<disabledText /></tooltip>
         </button>
         <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
           <tooltip heading="Map Unit Polys">
-            Add a new map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Add a new map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
           <content guid="17a27ef5-1084-4d46-abc8-11641bc5b871" />
         </tool>
         <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Map Unit Polys">
-            Edit an existing map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Edit an existing map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
         <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
           <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText />
-          </tooltip>
+            Show Dockpane<disabledText /></tooltip>
         </button>
         <tool id="Geomapmaker_ContactsAndFaultsAddTool" caption="Add Contacts and Faults" className="ContactsAndFaultsAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Contacts and Faults">
-            Add a new contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Add a new contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
         <button id="Geomapmaker_AddEditContactsAndFaults_ShowButton" caption="Show AddEditContactsAndFaults" className="AddEditContactsAndFaults_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
           <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText />
-          </tooltip>
+            Show Dockpane<disabledText /></tooltip>
         </button>
         <tool id="Geomapmaker_ContactsAndFaultsEditTool" caption="Edit Contacts and Faults" className="Geomapmaker.RibbonElements.ContactsAndFaultsEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Contacts and Faults">
-            Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
-        <button id="Geomapmaker_MapUnits_ShowButton" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnits_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition" keytip="todo">
-          <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText />
-          </tooltip>
-        </button>
         <button id="Geomapmaker_Hierarchy_ShowButton" caption="Hierarchy" className="Geomapmaker.ViewModels.Hierarchy_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText>
-          </tooltip>
+            Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </button>
         <button id="Geomapmaker_ProjectSettings_ShowPropertySheet" caption="Settings" className="Geomapmaker.ViewModels.ProjectSettings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Show Property Sheet">
-            Show Property Sheet<disabledText />
-          </tooltip>
+            Show Property Sheet<disabledText /></tooltip>
         </button>
         <comboBox id="Geomapmaker_DataSourceComboBox" caption="Data Source" className="Geomapmaker.RibbonElements.DataSourceComboBox" itemWidth="120" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" keytip="todo">
           <tooltip heading="Tooltip Heading">
-            Tooltip text<disabledText />
-          </tooltip>
+            Tooltip text<disabledText /></tooltip>
         </comboBox>
-        <button id="Geomapmaker_DataSources" caption="Data Sources" className="Geomapmaker.ViewModels.DataSources.ShowDataSources" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="" keytip="todo">
+        <button id="Geomapmaker_DataSources" caption="Data Sources" className="Geomapmaker.ViewModels.DataSources.ShowDataSources" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo">
           <tooltip heading="Tooltip Heading">
-            Tooltip text<disabledText />
-          </tooltip>
+            Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
+        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" >
           <tooltip heading="Tooltip Heading">
-            Tooltip text<disabledText />
-          </tooltip>
+            Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_MapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.ShowMapUnits" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
       <!-- Dock Panes -->
@@ -123,9 +109,6 @@
         </dockPane>
         <dockPane id="Geomapmaker_AddEditContactsAndFaultsDockPane" caption="Contacts and Faults" className="AddEditContactsAndFaultsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="AddEditContactsAndFaultsDockPaneView" />
-        </dockPane>
-        <dockPane id="Geomapmaker_DescriptionOfMapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.MapUnitsViewModel" dock="group" dockWith="esri_core_contentsDockPane">
-          <content className="Geomapmaker.Views.MapUnits.MapUnitsView" />
         </dockPane>
         <dockPane id="Geomapmaker_Hierarchy" caption="Hierarchy" className="Geomapmaker.ViewModels.HierarchyViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="Geomapmaker.Views.HierarchyView" />

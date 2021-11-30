@@ -16,17 +16,19 @@ using System.Windows.Media;
 
 namespace Geomapmaker.ViewModels.MapUnits
 {
-    public class CreateMapUnitVM : DockPane, INotifyDataErrorInfo
+    public class CreateMapUnitVM : PropertyChangedBase, INotifyDataErrorInfo
     {
         // Create's save button
         public ICommand CommandSave { get; }
-        public ICommand CommandReset { get; }
 
-        public CreateMapUnitVM()
+        public MapUnitsViewModel ParentVM { get; set; }
+
+        public CreateMapUnitVM(MapUnitsViewModel parentVM)
         {
             // Init submit command
             CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
-            CommandReset = new RelayCommand(() => ResetAsync());
+
+            ParentVM = parentVM;
 
             // Initialize required values
             MapUnit = null;
@@ -137,7 +139,6 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         // Color
-        // Color
         private Color? _color;
         public Color? Color
         {
@@ -150,8 +151,6 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         public string AreaFillRGB => MapUnitsViewModel.ColorToRGB(Color);
-
-        public string HexColor => Color == null ? "" : Color.ToString();
 
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 
@@ -413,19 +412,19 @@ namespace Geomapmaker.ViewModels.MapUnits
         private void ValidateColor(Color? color, string propertyKey)
         {
             // Required field
-            if (color == null)
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
-            }
-            // Color must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == HexColor))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
+            //if (color == null)
+            //{
+            //    _validationErrors[propertyKey] = new List<string>() { "" };
+            //}
+            //// Color must be unique 
+            //else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == HexColor))
+            //{
+            //    _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
+            //}
+            //else
+            //{
+            //    _validationErrors.Remove(propertyKey);
+            //}
 
             RaiseErrorsChanged(propertyKey);
         }

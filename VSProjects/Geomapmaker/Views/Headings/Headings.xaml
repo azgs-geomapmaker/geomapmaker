@@ -4,9 +4,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" xmlns:tabData="clr-namespace:Geomapmaker.Views.Headings"
-                    mc:Ignorable="d"
-        Title="Headings" Height="300" Width="300"
+        xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" 
+        xmlns:tabData="clr-namespace:Geomapmaker.Views.Headings"
+        mc:Ignorable="d"
+        Title="Headings" 
+        Height="300" 
+        Width="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -16,6 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:ProWindow.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
