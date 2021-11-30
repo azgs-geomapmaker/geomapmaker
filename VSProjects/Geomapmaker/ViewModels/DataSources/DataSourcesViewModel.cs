@@ -50,8 +50,6 @@ namespace Geomapmaker.ViewModels.DataSources
             DataSources = await Data.DataSources.GetDataSourcesAsync();
         }
 
-        public ObservableCollection<DataSource> DataSourcesOptions => new ObservableCollection<DataSource>(DataSources);
-
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;

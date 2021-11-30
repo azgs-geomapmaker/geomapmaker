@@ -10,6 +10,7 @@ namespace Geomapmaker.Data
 {
     public static class DescriptionOfMapUnits
     {
+
         public static async Task<List<MapUnit>> GetMapUnitsAsync()
         {
             List<MapUnit> MapUnitList = new List<MapUnit>();

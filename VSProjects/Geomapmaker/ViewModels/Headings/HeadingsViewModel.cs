@@ -34,6 +34,36 @@ namespace Geomapmaker.ViewModels.Headings
             Delete = new DeleteHeadingVM(this);
         }
 
+        // Tooltips dictionary
+        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
+        {
+            // Dockpane Headings
+            {"CreateHeading", "TODO CreateHeading" },
+            {"EditHeading", "TODO EditHeading" },
+            {"DeleteHeading", "TODO DeleteHeading" },
+
+            // Control Labels
+            {"Name", "TODO Name" },
+            {"Description", "TODO Description" },
+            
+            // Heading Selection Comboboxes
+            {"Edit", "TODO Edit" },
+            {"Delete", "TODO Delete" },
+
+            // Buttons
+            {"ClearButton", "TODO ClearButton" },
+            {"SaveButton", "TODO SaveButton" },
+            {"UpdateButton", "TODO UpdateButton" },
+            {"DeleteButton", "TODO DeleteButton" },
+        };
+
+        // Max length of the field's string
+        public Dictionary<string, int> MaxLength => new Dictionary<string, int>
+        {
+            {"Name", 254 },
+            {"Description", 3000 },
+        };
+
         private List<MapUnit> _mapUnits { get; set; }
         public List<MapUnit> MapUnits
         {
@@ -45,13 +75,23 @@ namespace Geomapmaker.ViewModels.Headings
             }
         }
 
-        // Update collection of dmu
+        private List<MapUnit> _headings { get; set; }
+        public List<MapUnit> Headings
+        {
+            get => _headings;
+            set
+            {
+                _headings = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        //Update collection of dmu
         public async Task RefreshMapUnitsAsync()
         {
             MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
+            Headings = MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name).ToList();
         }
-
-        public ObservableCollection<MapUnit> HeadingOptions => new ObservableCollection<MapUnit>(MapUnits.Where(a => a.ParagraphStyle == "Heading"));
 
         #region INotifyPropertyChanged
 
@@ -86,7 +126,6 @@ namespace Geomapmaker.ViewModels.Headings
 
             _headings.Show();
         }
-
     }
 
 }

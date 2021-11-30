@@ -1,6 +1,4 @@
 ﻿using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Catalog;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
@@ -50,7 +48,6 @@ namespace Geomapmaker.Data
 
             return DataSourcesList;
         }
-
 
         public static List<DataSource> DataSourcesList { get; set; } = new List<DataSource>();
 
