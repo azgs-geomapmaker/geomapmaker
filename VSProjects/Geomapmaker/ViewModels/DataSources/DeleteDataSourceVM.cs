@@ -62,6 +62,13 @@ namespace Geomapmaker.ViewModels.DataSources
 
         private async void DeleteAsync()
         {
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Id}?", $"Delete {Id}?", System.Windows.MessageBoxButton.YesNo);
+
+            if (messageBoxResult == MessageBoxResult.No)
+            {
+                return;
+            }
+
             string errorMessage = null;
 
             StandaloneTable ds = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
@@ -148,6 +155,8 @@ namespace Geomapmaker.ViewModels.DataSources
         private void ValidateCanDelete()
         {
             const string propertyKey = "SilentError";
+
+            // TODO: Prevent delete if the datasource id is used in any tables?
 
             //if ()
             //{
