@@ -18,6 +18,53 @@
     </UserControl.Resources>
 
     <Grid>
-        <TextBlock>Delete</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Delete " />
+            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Headings}" SelectedItem="{Binding Delete.Selected}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+
+        <Separator Grid.Row="2" Grid.Column="1" Margin="0, 5, 0, 5" />
+
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" />
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Delete.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" IsEnabled="False" IsReadOnly="True" />
+
+        <TextBlock Grid.Row="5" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" />
+        <TextBox Grid.Row="6" Grid.Column="1" MinLines="3" Text="{Binding Delete.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" IsEnabled="False" IsReadOnly="True" />
+
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+            <Button Margin="5" Padding="5" Command="{Binding Delete.CommandDelete}">Delete</Button>
+        </StackPanel>
+
     </Grid>
 </UserControl>

@@ -62,7 +62,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
         private async void DeleteAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Id}?", $"Delete {Id}?", System.Windows.MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Id}?", $"Delete {Id}?", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
