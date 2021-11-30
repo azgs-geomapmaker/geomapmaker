@@ -3,61 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:models="clr-namespace:Geomapmaker.Models"
+             xmlns:local="clr-namespace:Geomapmaker.Views.Headings" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             >
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
-                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
+                <ResourceDictionary Source="/Geomapmaker;component/Views/DisplayErrorsResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
-
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="2" Text="Delete Heading" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" ToolTip="{Binding Tooltips[DeleteHeading]}" />
-        </DockPanel>
-
-        <Label Grid.Row="2" Grid.Column="1" Content="Delete:" ToolTip="{Binding Tooltips[Delete]}" />
-        <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Delete.AllHeadings}" SelectedItem="{Binding Delete.SelectedHeading}" ToolTip="{Binding Tooltips[Delete]}" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-
-        <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
-
-        <Label Grid.Row="4" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Delete.Name}" IsEnabled="False" IsReadOnly="True" />
-
-        <Label Grid.Row="5" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="5" Grid.Column="2" MinLines="3" Text="{Binding Delete.Description}" IsEnabled="False" IsReadOnly="True" />
-
-        <Button Grid.Row="6" Grid.Column="1" Command="{Binding Delete.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
-        <Button Grid.Row="6" Grid.Column="2" Command="{Binding Delete.CommandDelete}" ToolTip="{Binding Tooltips[DeleteButton]}" >Delete</Button>
-
+        <TextBlock>Delete</TextBlock>
     </Grid>
-
 </UserControl>

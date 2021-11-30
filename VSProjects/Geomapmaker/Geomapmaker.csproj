@@ -202,10 +202,26 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\Headings\DeleteHeadingVM.cs" />
+    <Compile Include="ViewModels\Headings\EditHeadingVM.cs" />
+    <Compile Include="ViewModels\Headings\CreateHeadingVM.cs" />
+    <Compile Include="Views\Headings\CreateHeading.xaml.cs">
+      <DependentUpon>CreateHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\DeleteHeading.xaml.cs">
+      <DependentUpon>DeleteHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\EditHeading.xaml.cs">
+      <DependentUpon>EditHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\Headings.xaml.cs">
+      <DependentUpon>Headings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\DataSources\CreateDataSourceVM.cs" />
     <Compile Include="ViewModels\DataSources\DataSourcesViewModel.cs" />
     <Compile Include="ViewModels\DataSources\DeleteDataSourceVM.cs" />
     <Compile Include="ViewModels\DataSources\EditDataSourceVM.cs" />
+    <Compile Include="ViewModels\Headings\HeadingsViewModel.cs" />
     <Compile Include="Views\DataSources\DeleteDataSource.xaml.cs">
       <DependentUpon>DeleteDataSource.xaml</DependentUpon>
     </Compile>
@@ -251,22 +267,6 @@
       <DependentUpon>MapUnits.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
-    <Compile Include="ViewModels\Headings\CreateHeadingsVM.cs" />
-    <Compile Include="ViewModels\Headings\DeleteHeadingsVM.cs" />
-    <Compile Include="ViewModels\Headings\EditHeadingsVM.cs" />
-    <Compile Include="Views\Headings\CreateHeading.xaml.cs">
-      <DependentUpon>CreateHeading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Headings\DeleteHeading.xaml.cs">
-      <DependentUpon>DeleteHeading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Headings\EditHeading.xaml.cs">
-      <DependentUpon>EditHeading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Headings\Headings.xaml.cs">
-      <DependentUpon>Headings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\Headings\HeadingsViewModel.cs" />
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
@@ -305,6 +305,22 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Headings\CreateHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\DeleteHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\EditHeading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Headings\Headings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DataSources\DeleteDataSource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -346,22 +362,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MapUnits\MapUnits.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Headings\CreateHeading.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Headings\DeleteHeading.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Headings\EditHeading.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Headings\Headings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

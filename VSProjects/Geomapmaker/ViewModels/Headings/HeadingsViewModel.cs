@@ -1,69 +1,92 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
+using Geomapmaker.Models;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
 {
-    internal class HeadingsViewModel : DockPane
+    public class HeadingsViewModel : ProWindow, INotifyPropertyChanged
     {
-
-        private const string _dockPaneID = "Geomapmaker_Headings";
-
-        // View models
-        public CreateHeadingsVM Create { get; set; } = new CreateHeadingsVM();
-
-        public EditHeadingsVM Edit { get; set; } = new EditHeadingsVM();
-
-        public DeleteHeadingsVM Delete { get; set; } = new DeleteHeadingsVM();
-
-        // Tooltips dictionary
-        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
+        public ICommand CommandCancel => new RelayCommand((proWindow) =>
         {
-            // Dockpane Headings
-            {"CreateHeading", "TODO CreateHeading" },
-            {"EditHeading", "TODO EditHeading" },
-            {"DeleteHeading", "TODO DeleteHeading" },
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
 
-            // Control Labels
-            {"Name", "TODO Name" },
-            {"Description", "TODO Description" },
-            
-            // Heading Selection Comboboxes
-            {"Edit", "TODO Edit" },
-            {"Delete", "TODO Delete" },
+        }, () => true);
 
-            // Buttons
-            {"ClearButton", "TODO ClearButton" },
-            {"SaveButton", "TODO SaveButton" },
-            {"UpdateButton", "TODO UpdateButton" },
-            {"DeleteButton", "TODO DeleteButton" },
-        };
+        public CreateHeadingVM Create { get; set; }
+        public EditHeadingVM Edit { get; set; }
+        public DeleteHeadingVM Delete { get; set; }
 
-        // Max length of the field's string
-        public Dictionary<string, int> MaxLength => new Dictionary<string, int>
+        public HeadingsViewModel()
         {
-            {"Name", 254 },
-            {"Description", 3000 },
-        };
-
-        /// <summary>
-        /// Show the DockPane.
-        /// </summary>
-        internal static void Show()
-        {
-            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            pane?.Activate();
+            Create = new CreateHeadingVM(this);
+            Edit = new EditHeadingVM(this);
+            Delete = new DeleteHeadingVM(this);
         }
+
+        private List<MapUnit> _mapUnits { get; set; }
+        public List<MapUnit> MapUnits
+        {
+            get => _mapUnits;
+            set
+            {
+                _mapUnits = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        // Update collection of dmu
+        public async Task RefreshMapUnitsAsync()
+        {
+            MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
+        }
+
+        public ObservableCollection<MapUnit> HeadingOptions => new ObservableCollection<MapUnit>(MapUnits.Where(a => a.ParagraphStyle == "Heading"));
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
-    /// <summary>
-    /// Button implementation to show the DockPane.
-    /// </summary>
-    internal class Headings_ShowButton : Button
+    internal class ShowHeadings : Button
     {
-        protected override void OnClick()
+        private Views.Headings.Headings _headings = null;
+
+        protected override async void OnClick()
         {
-            HeadingsViewModel.Show();
+            if (_headings != null)
+            {
+                return;
+            }
+
+            _headings = new Views.Headings.Headings
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
+            await _headings.headingsVM.RefreshMapUnitsAsync();
+
+            _headings.Closed += (o, e) => { _headings = null; };
+
+            _headings.Show();
         }
+
     }
+
 }

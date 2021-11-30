@@ -8,25 +8,21 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
 {
-    internal class CreateHeadingsVM : DockPane, INotifyDataErrorInfo
+    public class CreateHeadingVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        // Create's save button
         public ICommand CommandSave { get; }
-        public ICommand CommandReset { get; }
 
-        public CreateHeadingsVM()
+        public HeadingsViewModel ParentVM { get; set; }
+
+        public CreateHeadingVM(HeadingsViewModel parentVM)
         {
-            // Init submit command
-            CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
-            CommandReset = new RelayCommand(() => ResetAsync());
-
-            // Initialize to trigger validation
+            ParentVM = parentVM;
+            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
             Name = "";
             Description = "";
         }
@@ -39,7 +35,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _name, value, () => Name);
-                ValidateHeadingName(_name, "Name");
+                ValidateHeadingName(Name, "Name");
             }
         }
 
@@ -51,7 +47,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _description, value, () => Description);
-                ValidateDescription(_description, "Description");
+                ValidateDescription(Description, "Description");
             }
         }
 
@@ -68,7 +64,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// <summary>
         /// Execute the submit command
         /// </summary>
-        private async Task SubmitAsync()
+        private async void SaveAsync()
         {
             string errorMessage = null;
 
@@ -89,24 +85,24 @@ namespace Geomapmaker.ViewModels.Headings
                     EditOperation editOperation = new EditOperation();
 
                     editOperation.Callback(context =>
+                    {
+                        TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+
+                        using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                         {
-                            TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+                            rowBuffer["Name"] = Name;
+                            rowBuffer["FullName"] = Name;
+                            rowBuffer["Description"] = Description;
+                            rowBuffer["ParagraphStyle"] = "Heading";
+                            rowBuffer["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
 
-                            using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                            using (Row row = enterpriseTable.CreateRow(rowBuffer))
                             {
-                                rowBuffer["Name"] = Name;
-                                rowBuffer["FullName"] = Name;
-                                rowBuffer["Description"] = Description;
-                                rowBuffer["ParagraphStyle"] = "Heading";
-                                rowBuffer["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
-
-                                using (Row row = enterpriseTable.CreateRow(rowBuffer))
-                                {
-                                    // To Indicate that the attribute table has to be updated.
-                                    context.Invalidate(row);
-                                }
+                                // To Indicate that the attribute table has to be updated.
+                                context.Invalidate(row);
                             }
-                        }, enterpriseTable);
+                        }
+                    }, enterpriseTable);
 
                     bool result = editOperation.Execute();
                 }
@@ -128,22 +124,12 @@ namespace Geomapmaker.ViewModels.Headings
             }
             else
             {
+                await ParentVM.RefreshMapUnitsAsync();
+
                 // Reset values
                 Name = "";
                 Description = "";
             }
-
-            //Update mapunits
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
-        }
-
-        private async Task ResetAsync()
-        {
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
-
-            // Reset values
-            Name = null;
-            Description = null;
         }
 
         #region Validation
@@ -176,7 +162,7 @@ namespace Geomapmaker.ViewModels.Headings
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.Name.ToLower() == name.ToLower()))
+            else if (ParentVM.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
             }

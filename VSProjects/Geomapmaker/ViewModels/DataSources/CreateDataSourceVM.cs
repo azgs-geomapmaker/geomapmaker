@@ -18,13 +18,15 @@ namespace Geomapmaker.ViewModels.DataSources
     {
         public ICommand CommandSave { get; }
 
+        public DataSourcesViewModel ParentVM { get; set; }
+
         public CreateDataSourceVM(DataSourcesViewModel parentVM)
         {
             ParentVM = parentVM;
-            CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
+            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
+            Id = "";
+            Source = "";
         }
-
-        public DataSourcesViewModel ParentVM { get; set; }
 
         private string _id;
         public string Id
@@ -33,7 +35,7 @@ namespace Geomapmaker.ViewModels.DataSources
             set
             {
                 SetProperty(ref _id, value, () => Id);
-                ValidateId(_id, "Id");
+                ValidateId(Id, "Id");
             }
         }
 
@@ -44,7 +46,7 @@ namespace Geomapmaker.ViewModels.DataSources
             set
             {
                 SetProperty(ref _source, value, () => Source);
-                ValidateSource(_source, "Source");
+                ValidateSource(Source, "Source");
             }
         }
 
@@ -67,7 +69,7 @@ namespace Geomapmaker.ViewModels.DataSources
             return !HasErrors;
         }
 
-        private async void SubmitAsync()
+        private async void SaveAsync()
         {
             string errorMessage = null;
 

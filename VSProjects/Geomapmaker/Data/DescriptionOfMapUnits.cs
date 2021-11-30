@@ -10,6 +10,57 @@ namespace Geomapmaker.Data
 {
     public static class DescriptionOfMapUnits
     {
+        public static async Task<List<MapUnit>> GetMapUnitsAsync()
+        {
+            List<MapUnit> MapUnitList = new List<MapUnit>();
+
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            {
+                StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+                if (dmu == null)
+                {
+                    return;
+                }
+
+                Table enterpriseTable = dmu.GetTable();
+
+                using (RowCursor rowCursor = enterpriseTable.Search())
+                {
+                    while (rowCursor.MoveNext())
+                    {
+                        using (Row row = rowCursor.Current)
+                        {
+                            // Create map unit from row 
+                            MapUnit mapUnit = new MapUnit
+                            {
+                                ID = int.Parse(row["ObjectID"].ToString()),
+                                MU = RowValueToString(row["MapUnit"]),
+                                Name = RowValueToString(row["Name"]),
+                                FullName = RowValueToString(row["FullName"]),
+                                Age = RowValueToString(row["Age"]),
+                                RelativeAge = RowValueToString(row["RelativeAge"]),
+                                Description = RowValueToString(row["Description"]),
+                                HierarchyKey = RowValueToString(row["HierarchyKey"]),
+                                ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
+                                Label = RowValueToString(row["Label"]),
+                                HexColor = RowValueToString(row["Hexcolor"]),
+                                AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
+                                DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
+                                GeoMaterial = RowValueToString(row["GeoMaterial"]),
+                                GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
+                            };
+
+                            // Add it to temp list
+                            MapUnitList.Add(mapUnit);
+                        }
+                    }
+                }
+            });
+
+            return MapUnitList;
+        }
+
         public static List<Field> Fields { get; set; }
 
         // All headings and map units

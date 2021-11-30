@@ -48,7 +48,7 @@ namespace Geomapmaker.ViewModels.DataSources
             set
             {
                 SetProperty(ref _id, value, () => Id);
-                ValidateId(_id, "Id");
+                ValidateId(Id, "Id");
                 ValidateChangeWasMade();
             }
         }
@@ -60,7 +60,7 @@ namespace Geomapmaker.ViewModels.DataSources
             set
             {
                 SetProperty(ref _source, value, () => Source);
-                ValidateSource(_source, "Source");
+                ValidateSource(Source, "Source");
                 ValidateChangeWasMade();
             }
         }
