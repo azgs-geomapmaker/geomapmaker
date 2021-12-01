@@ -38,8 +38,12 @@ namespace Geomapmaker.ViewModels.DataSources
                 Source = Selected?.Source;
                 Url = Selected?.Url;
                 Notes = Selected?.Notes;
+
+                NotifyPropertyChanged("Visibility");
             }
         }
+
+        public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         private string _id;
         public string Id

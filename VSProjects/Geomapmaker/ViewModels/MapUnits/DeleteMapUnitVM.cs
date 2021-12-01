@@ -71,9 +71,13 @@ namespace Geomapmaker.ViewModels.MapUnits
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
                 NotifyPropertyChanged("GeoMaterialConfidence");
 
+                NotifyPropertyChanged("Visibility");
+
                 ValidateCanDelete();
             }
         }
+
+        public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         public string MapUnit { get; set; }
         public string Name { get; set; }

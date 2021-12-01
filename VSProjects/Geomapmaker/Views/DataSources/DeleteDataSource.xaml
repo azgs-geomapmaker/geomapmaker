@@ -48,19 +48,19 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" />
+        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="ID" />
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.Id, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="ID" Visibility="{Binding Delete.Visibility}" />
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.Id, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Source" />
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Delete.Source, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" />
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Source" Visibility="{Binding Delete.Visibility}" />
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Delete.Source, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="URL" />
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.Url, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" />
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="URL" Visibility="{Binding Delete.Visibility}" />
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.Url, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="10" Grid.Column="1" Text="Notes" />
-        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Delete.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" IsEnabled="False" IsReadOnly="True" />
+        <TextBlock Grid.Row="10" Grid.Column="1" Text="Notes" Visibility="{Binding Delete.Visibility}" />
+        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Delete.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
         <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>

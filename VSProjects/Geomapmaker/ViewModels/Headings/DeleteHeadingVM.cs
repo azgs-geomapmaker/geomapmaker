@@ -44,9 +44,13 @@ namespace Geomapmaker.ViewModels.Headings
                 Description = Selected?.Description;
                 NotifyPropertyChanged("Description");
 
+                NotifyPropertyChanged("Visibility");
+
                 ValidateCanDelete();
             }
         }
+
+        public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         public string Name { get; set; }
         public string Description { get; set; }

@@ -45,13 +45,13 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" />
+        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" IsEnabled="False" IsReadOnly="True" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" Visibility="{Binding Delete.Visibility}" />
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Delete.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" IsEnabled="False" IsReadOnly="True" />
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Delete.Visibility}" />
+        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Delete.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
         <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>

@@ -51,9 +51,11 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Color = MapUnitsViewModel.RGBtoColor(Selected?.AreaFillRGB);
                 GeoMaterial = Selected?.GeoMaterial;
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
-
+                NotifyPropertyChanged("Visibility");
             }
         }
+
+        public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         // MapUnit
         private string _mapUnit;

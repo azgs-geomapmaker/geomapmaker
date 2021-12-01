@@ -39,8 +39,11 @@ namespace Geomapmaker.ViewModels.Headings
                 SetProperty(ref _selected, value, () => Selected);
                 Name = Selected?.Name;
                 Description = Selected?.Description;
+                NotifyPropertyChanged("Visibility");
             }
         }
+
+        public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         // Heading Name
         private string _name;

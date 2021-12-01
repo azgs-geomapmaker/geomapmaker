@@ -46,9 +46,13 @@ namespace Geomapmaker.ViewModels.DataSources
                 Notes = Selected?.Notes;
                 NotifyPropertyChanged("Notes");
 
+                NotifyPropertyChanged("Visibility");
+
                 ValidateCanDelete();
             }
         }
+
+        public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         public string Id { get; set; }
         public string Source { get; set; }
