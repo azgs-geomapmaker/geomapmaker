@@ -35,7 +35,7 @@
           <button refID="Geomapmaker_DataSources" />
           <button refID="Geomapmaker_Headings" />
           <button refID="Geomapmaker_MapUnits" />
-          <button refID="Geomapmaker_Hierarchy_ShowButton" />
+          <button refID="Geomapmaker_Hierarchy" />
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts And Faults" keytip="CF">
           <tool refID="Geomapmaker_ContactsAndFaultsAddTool" />
@@ -78,10 +78,6 @@
           <tooltip heading="Contacts and Faults">
             Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
-        <button id="Geomapmaker_Hierarchy_ShowButton" caption="Hierarchy" className="Geomapmaker.ViewModels.Hierarchy_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
-          <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
-        </button>
         <button id="Geomapmaker_ProjectSettings_ShowPropertySheet" caption="Settings" className="Geomapmaker.ViewModels.ProjectSettings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Show Property Sheet">
             Show Property Sheet<disabledText /></tooltip>
@@ -94,11 +90,14 @@
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition" >
+        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_MapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.ShowMapUnits" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_MapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.ShowMapUnits" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_Hierarchy" caption="Hierarchy" className="Geomapmaker.ViewModels.ShowHierarchy" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
@@ -109,9 +108,6 @@
         </dockPane>
         <dockPane id="Geomapmaker_AddEditContactsAndFaultsDockPane" caption="Contacts and Faults" className="AddEditContactsAndFaultsDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
           <content className="AddEditContactsAndFaultsDockPaneView" />
-        </dockPane>
-        <dockPane id="Geomapmaker_Hierarchy" caption="Hierarchy" className="Geomapmaker.ViewModels.HierarchyViewModel" dock="group" dockWith="esri_core_contentsDockPane">
-          <content className="Geomapmaker.Views.HierarchyView" />
         </dockPane>
       </dockPanes>
     </insertModule>

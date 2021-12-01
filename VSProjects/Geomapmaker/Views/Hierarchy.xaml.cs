@@ -1,15 +1,18 @@
-﻿using System.Windows.Controls;
+﻿using Geomapmaker.ViewModels;
 
 namespace Geomapmaker.Views
 {
     /// <summary>
-    /// Interaction logic for HierarchyView.xaml
+    /// Interaction logic for Hierarchy.xaml
     /// </summary>
-    public partial class HierarchyView : UserControl
+    public partial class Hierarchy : ArcGIS.Desktop.Framework.Controls.ProWindow
     {
-        public HierarchyView()
+        public HierarchyViewModel hierarchyVM = new HierarchyViewModel();
+
+        public Hierarchy()
         {
             InitializeComponent();
+            DataContext = hierarchyVM;
         }
     }
 }

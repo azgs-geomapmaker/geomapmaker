@@ -202,6 +202,9 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\Hierarchy.xaml.cs">
+      <DependentUpon>Hierarchy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MapUnits\MapUnits.xaml.cs">
       <DependentUpon>MapUnits.xaml</DependentUpon>
     </Compile>
@@ -249,10 +252,6 @@
       <DependentUpon>ProjectSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ProjectSettingsViewModel.cs" />
-    <Compile Include="ViewModels\DataSourceViewModel.cs" />
-    <Compile Include="Views\Hierarchy.xaml.cs">
-      <DependentUpon>Hierarchy.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\HierarchyViewModel.cs" />
     <Compile Include="ViewModels\MapUnits\CreateMapUnitVM.cs" />
     <Compile Include="ViewModels\MapUnits\DeleteMapUnitVM.cs" />
@@ -305,6 +304,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Hierarchy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MapUnits\MapUnits.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -342,10 +345,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectSettings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Hierarchy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

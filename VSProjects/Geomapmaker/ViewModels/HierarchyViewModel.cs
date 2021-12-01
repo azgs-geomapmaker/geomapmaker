@@ -2,24 +2,24 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker.Data;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels
 {
-    internal class HierarchyViewModel : DockPane, IDropTarget
+    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
     {
-        private const string _dockPaneID = "Geomapmaker_Hierarchy";
-
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
@@ -35,29 +35,20 @@ namespace Geomapmaker.ViewModels
         public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Unassigned);
 
         public ICommand CommandSave { get; }
-        public ICommand CommandReset { get; }
 
-        protected HierarchyViewModel()
+        public ICommand CommandCancel => new RelayCommand((proWindow) =>
+        {
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
+
+        }, () => true);
+
+        public HierarchyViewModel()
         {
             // Init submit command
-            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
-            CommandReset = new RelayCommand(() => ResetAsync());
-        }
-
-        private bool CanSave()
-        {
-            return true;
-        }
-
-        private async Task ResetAsync()
-        {
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
-
-            Tree = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Tree);
-            NotifyPropertyChanged("Tree");
-
-            Unassigned = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Unassigned);
-            NotifyPropertyChanged("Unassigned");
+            CommandSave = new RelayCommand(() => SaveAsync());
         }
 
         private List<MapUnitTreeItem> HierarchyList = new List<MapUnitTreeItem>();
@@ -173,17 +164,8 @@ namespace Geomapmaker.ViewModels
             }
             else
             {
-                await ResetAsync();
+                // Reset
             }
-        }
-
-        /// <summary>
-        /// Show the DockPane.
-        /// </summary>
-        internal static void Show()
-        {
-            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            pane?.Activate();
         }
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
@@ -214,19 +196,38 @@ namespace Geomapmaker.ViewModels
             targetItem.Children.Add(sourceItem);
             sourceCollection.Remove(sourceItem);
         }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
-    /// <summary>
-    /// Button implementation to show the DockPane.
-    /// </summary>
-    internal class Hierarchy_ShowButton : Button
+    internal class ShowHierarchy : Button
     {
-        protected override async void OnClick()
-        {
-            // Refresh data
-            await DescriptionOfMapUnits.RefreshMapUnitsAsync();
 
-            HierarchyViewModel.Show();
+        private Views.Hierarchy _hierarchy = null;
+
+        protected override void OnClick()
+        {
+            if (_hierarchy != null)
+            {
+                return;
+
+            }
+
+            _hierarchy = new Views.Hierarchy
+            {
+                Owner = Application.Current.MainWindow
+            };
+            _hierarchy.Closed += (o, e) => { _hierarchy = null; };
+
+            _hierarchy.Show();
         }
     }
 }
