@@ -21,10 +21,13 @@ namespace Geomapmaker.ViewModels.Headings
 
         public CreateHeadingVM(HeadingsViewModel parentVM)
         {
-            ParentVM = parentVM;
             CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
-            Name = "";
-            Description = "";
+
+            ParentVM = parentVM;
+
+            // Initialize required values
+            Name = null;
+            Description = null;
         }
 
         // Heading Name
