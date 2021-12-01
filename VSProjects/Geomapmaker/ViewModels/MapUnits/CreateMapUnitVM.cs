@@ -146,7 +146,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             set
             {
                 SetProperty(ref _color, value, () => Color);
-                ValidateColor(Color, "Color");
+                ValidateColor(AreaFillRGB, "Color");
             }
         }
 
@@ -323,7 +323,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "Alphabetical letters only." };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (ParentVM.MapUnits.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
@@ -345,7 +345,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Alphabet chars only
-            else if (!name.All(Char.IsLetter))
+            else if (!name.All(char.IsLetter))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
             }
@@ -366,7 +366,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Full Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
+            else if (ParentVM.MapUnits.Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Full name is taken." };
             }
@@ -409,22 +409,22 @@ namespace Geomapmaker.ViewModels.MapUnits
             RaiseErrorsChanged("OlderInterval");
         }
 
-        private void ValidateColor(Color? color, string propertyKey)
+        private void ValidateColor(string rgb, string propertyKey)
         {
             // Required field
-            //if (color == null)
-            //{
-            //    _validationErrors[propertyKey] = new List<string>() { "" };
-            //}
-            //// Color must be unique 
-            //else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.HexColor == HexColor))
-            //{
-            //    _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
-            //}
-            //else
-            //{
-            //    _validationErrors.Remove(propertyKey);
-            //}
+            if (rgb == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            // Color must be unique 
+            else if (ParentVM.MapUnits.Any(a => a.AreaFillRGB == rgb))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
 
             RaiseErrorsChanged(propertyKey);
         }

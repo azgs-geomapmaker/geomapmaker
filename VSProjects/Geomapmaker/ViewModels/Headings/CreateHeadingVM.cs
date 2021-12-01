@@ -162,10 +162,10 @@ namespace Geomapmaker.ViewModels.Headings
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Name must be unique 
-            //else if (ParentVM.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
-            //{
-            //    _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-            //}
+            else if (ParentVM.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
+            }
             else
             {
                 _validationErrors.Remove(propertyKey);

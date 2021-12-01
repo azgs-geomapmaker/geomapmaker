@@ -113,7 +113,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         {
             if (color == null)
             {
-                return "#00000000";
+                return null;
             }
 
             // GeMS: (1) each RGB color value is integer between 0 and 255; (2) values are left - padded with zeroes so that each consists of 3 digits; (3) values are separated by commas with no spaces(for example, nnn,nnn,nnn).
