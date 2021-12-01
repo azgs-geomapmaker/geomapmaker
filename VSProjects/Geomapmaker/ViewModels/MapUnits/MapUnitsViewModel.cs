@@ -25,14 +25,14 @@ namespace Geomapmaker.ViewModels.MapUnits
         }, () => true);
 
         public CreateMapUnitVM Create { get; set; }
-        //public EditMapUnitVM Edit { get; set; }
-        //public DeleteMapUnitVM Delete { get; set; }
+        public EditMapUnitVM Edit { get; set; }
+        public DeleteMapUnitVM Delete { get; set; }
 
         public MapUnitsViewModel()
         {
             Create = new CreateMapUnitVM(this);
-            //Edit = new EditMapUnitVM(this);
-            //Delete = new DeleteMapUnitVM(this);
+            Edit = new EditMapUnitVM(this);
+            Delete = new DeleteMapUnitVM(this);
         }
 
         // Tooltips dictionary
@@ -121,6 +121,43 @@ namespace Geomapmaker.ViewModels.MapUnits
             return $"{color.Value.R:000},{color.Value.G:000},{color.Value.B:000}";
         }
 
+        public static Color? RGBtoColor(string rgb)
+        {
+            // Null if the string is empty
+            if (string.IsNullOrEmpty(rgb))
+            {
+                return null;
+            }
+
+            // Split by comma 
+            string[] strArray = rgb.Split(',');
+
+            // Color from RGB bytes
+            return strArray.Length != 3
+                ? null
+                : (Color?)Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2]));
+        }
+
+        // Convert RGB string to Hex
+        public static string RGBtoHex(string rgb)
+        {
+            // Null if the string is empty
+            if (string.IsNullOrEmpty(rgb))
+            {
+                return null;
+            }
+
+            // Split by comma 
+            string[] strArray = rgb.Split(',');
+
+            if (strArray.Length != 3)
+            {
+                return null;
+            }
+
+            return Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2])).ToString();
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -145,7 +182,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             _mapunits = new Views.MapUnits.MapUnits
             {
-                Owner = FrameworkApplication.Current.MainWindow
+                Owner = System.Windows.Application.Current.MainWindow
             };
 
             await _mapunits.mapUnitsVM.RefreshMapUnitsAsync();

@@ -16,209 +16,196 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnits
 {
-    //public class DeleteMapUnitVM : DockPane, INotifyDataErrorInfo
-    //{
-    //    // Deletes's save button
-    //    public ICommand CommandDelete { get; }
-    //    public ICommand CommandReset { get; }
+    public class DeleteMapUnitVM : PropertyChangedBase, INotifyDataErrorInfo
+    {
+        // Deletes's save button
+        public ICommand CommandDelete { get; }
 
-    //    public DeleteMapUnitVM()
-    //    {
-    //        // Init commands
-    //        CommandDelete = new RelayCommand(() => DeleteMapUnitAsync(), () => CanDelete());
-    //        CommandReset = new RelayCommand(() => ResetAsync());
+        public MapUnitsViewModel ParentVM { get; set; }
 
-    //        // Trigger validation
-    //        ValidateCanDelete();
-    //    }
+        public DeleteMapUnitVM(MapUnitsViewModel parentVM)
+        {
+            // Init commands
+            CommandDelete = new RelayCommand(() => DeleteAsync(), () => CanDelete());
 
-    //    public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
+            ParentVM = parentVM;
+        }
 
-    //    private MapUnit _selected;
-    //    public MapUnit Selected
-    //    {
-    //        get => _selected;
-    //        set
-    //        {
-    //            SetProperty(ref _selected, value, () => Selected);
+        public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
 
-    //            MapUnit = Selected?.MU;
-    //            NotifyPropertyChanged("MapUnit");
+        private MapUnit _selected;
+        public MapUnit Selected
+        {
+            get => _selected;
+            set
+            {
+                SetProperty(ref _selected, value, () => Selected);
 
-    //            Name = Selected?.Name;
-    //            NotifyPropertyChanged("Name");
+                MapUnit = Selected?.MU;
+                NotifyPropertyChanged("MapUnit");
 
-    //            FullName = Selected?.FullName;
-    //            NotifyPropertyChanged("FullName");
+                Name = Selected?.Name;
+                NotifyPropertyChanged("Name");
 
-    //            Age = Selected?.Age;
-    //            NotifyPropertyChanged("Age");
+                FullName = Selected?.FullName;
+                NotifyPropertyChanged("FullName");
 
-    //            RelativeAge = Selected?.RelativeAge;
-    //            NotifyPropertyChanged("RelativeAge");
+                Age = Selected?.Age;
+                NotifyPropertyChanged("Age");
 
-    //            Description = Selected?.Description;
-    //            NotifyPropertyChanged("Description");
+                RelativeAge = Selected?.RelativeAge;
+                NotifyPropertyChanged("RelativeAge");
 
-    //            Label = Selected?.Label;
-    //            NotifyPropertyChanged("Label");
+                Description = Selected?.Description;
+                NotifyPropertyChanged("Description");
 
-    //            HexColor = MapUnitsViewModel.RGBtoHex(Selected?.AreaFillRGB);
-    //            NotifyPropertyChanged("HexColor");
+                Label = Selected?.Label;
+                NotifyPropertyChanged("Label");
 
-    //            GeoMaterial = Selected?.GeoMaterial;
-    //            NotifyPropertyChanged("GeoMaterial");
+                HexColor = MapUnitsViewModel.RGBtoHex(Selected?.AreaFillRGB);
+                NotifyPropertyChanged("HexColor");
 
-    //            GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
-    //            NotifyPropertyChanged("GeoMaterialConfidence");
+                GeoMaterial = Selected?.GeoMaterial;
+                NotifyPropertyChanged("GeoMaterial");
 
-    //            ValidateCanDelete();
-    //        }
-    //    }
+                GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
+                NotifyPropertyChanged("GeoMaterialConfidence");
 
-    //    public string MapUnit { get; set; }
-    //    public string Name { get; set; }
-    //    public string FullName { get; set; }
-    //    public string Age { get; set; }
-    //    public string RelativeAge { get; set; }
-    //    public string Description { get; set; }
-    //    public string Label { get; set; }
-    //    public string HexColor { get; set; }
-    //    public string GeoMaterial { get; set; }
-    //    public string GeoMaterialConfidence { get; set; }
+                ValidateCanDelete();
+            }
+        }
 
-    //    private bool CanDelete()
-    //    {
-    //        return !HasErrors;
-    //    }
+        public string MapUnit { get; set; }
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string Age { get; set; }
+        public string RelativeAge { get; set; }
+        public string Description { get; set; }
+        public string Label { get; set; }
+        public string HexColor { get; set; }
+        public string GeoMaterial { get; set; }
+        public string GeoMaterialConfidence { get; set; }
 
-    //    private async Task ResetAsync()
-    //    {
-    //        // Refresh map unit data
-    //        await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+        private bool CanDelete()
+        {
+            return Selected != null && !HasErrors;
+        }
 
-    //        NotifyPropertyChanged("AllMapUnits");
+        private async Task DeleteAsync()
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", MessageBoxButton.YesNo);
 
-    //        Selected = null;
-    //    }
+            if (messageBoxResult == MessageBoxResult.No)
+            {
+                return;
+            }
 
-    //    private async Task DeleteMapUnitAsync()
-    //    {
-    //        MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", System.Windows.MessageBoxButton.YesNo);
+            string errorMessage = null;
 
-    //        if (messageBoxResult == MessageBoxResult.No)
-    //        {
-    //            return;
-    //        }
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
-    //        string errorMessage = null;
+            if (dmu == null)
+            {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                return;
+            }
 
-    //        StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+            await QueuedTask.Run(() =>
+            {
+                try
+                {
+                    Table enterpriseTable = dmu.GetTable();
 
-    //        if (dmu == null)
-    //        {
-    //            MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
-    //            return;
-    //        }
+                    EditOperation editOperation = new EditOperation();
 
-    //        await QueuedTask.Run(() =>
-    //        {
-    //            try
-    //            {
-    //                Table enterpriseTable = dmu.GetTable();
+                    editOperation.Callback(context =>
+                    {
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
 
-    //                EditOperation editOperation = new EditOperation();
+                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        {
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    context.Invalidate(row);
 
-    //                editOperation.Callback(context =>
-    //                {
-    //                    QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
+                                    row.Delete();
+                                }
+                            }
+                        }
+                    }, enterpriseTable);
 
-    //                    using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
-    //                    {
-    //                        while (rowCursor.MoveNext())
-    //                        {
-    //                            using (Row row = rowCursor.Current)
-    //                            {
-    //                                context.Invalidate(row);
+                    bool result = editOperation.Execute();
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
 
-    //                                row.Delete();
-    //                            }
-    //                        }
-    //                    }
-    //                }, enterpriseTable);
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
+                    }
 
-    //                bool result = editOperation.Execute();
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
+                    errorMessage = errorMessage + Environment.NewLine + Environment.NewLine + "Check attribute rules.";
+                }
+            });
 
-    //                // Trim the stack-trace from the error msg
-    //                if (errorMessage.Contains("--->"))
-    //                {
-    //                    errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
-    //                }
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                await ParentVM.RefreshMapUnitsAsync();
 
-    //                errorMessage = errorMessage + Environment.NewLine + Environment.NewLine + "Check attribute rules.";
-    //            }
-    //        });
+                // Reset values
+                Selected = null;
+            }
+        }
 
-    //        if (!string.IsNullOrEmpty(errorMessage))
-    //        {
-    //            MessageBox.Show(errorMessage, "One or more errors occured.");
-    //        }
-    //        else
-    //        {
-    //            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+        #region ### Validation ####
 
-    //            NotifyPropertyChanged("AllMapUnits");
+        // Error collection
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
-    //            // Reset values
-    //            Selected = null;
-    //        }
-    //    }
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-    //    #region ### Validation ####
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
 
-    //    // Error collection
-    //    private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        public System.Collections.IEnumerable GetErrors(string propertyName)
+        {
+            // Return null if parameters is null/empty OR there are no errors for that parameter
+            // Otherwise, return the errors for that parameter.
+            return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
+                null : (System.Collections.IEnumerable)_validationErrors[propertyName];
+        }
 
-    //    public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        public bool HasErrors => _validationErrors.Count > 0;
 
-    //    private void RaiseErrorsChanged(string propertyName)
-    //    {
-    //        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-    //    }
+        private void ValidateCanDelete()
+        {
 
-    //    public System.Collections.IEnumerable GetErrors(string propertyName)
-    //    {
-    //        // Return null if parameters is null/empty OR there are no errors for that parameter
-    //        // Otherwise, return the errors for that parameter.
-    //        return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
-    //            null : (System.Collections.IEnumerable)_validationErrors[propertyName];
-    //    }
+            // TODO: Prevent user from deleting any mapunits with mapunitpolys
 
-    //    public bool HasErrors => _validationErrors.Count > 0;
+            const string propertyKey = "SilentError";
 
-    //    private void ValidateCanDelete()
-    //    {
+            if (Selected == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
 
-    //        // TODO: Prevent user from deleting any mapunits with mapunitpolys
+            RaiseErrorsChanged(propertyKey);
+        }
 
-    //        const string propertyKey = "SilentError";
-
-    //        if (Selected == null)
-    //        {
-    //            _validationErrors[propertyKey] = new List<string>() { "" };
-    //        }
-    //        else
-    //        {
-    //            _validationErrors.Remove(propertyKey);
-    //        }
-
-    //        RaiseErrorsChanged(propertyKey);
-    //    }
-
-    //    #endregion
-    //}
+        #endregion
+    }
 }

@@ -153,7 +153,6 @@ namespace Geomapmaker.ViewModels.Headings
             }
         }
 
-
         #region ### Validation ####
 
         // Error collection

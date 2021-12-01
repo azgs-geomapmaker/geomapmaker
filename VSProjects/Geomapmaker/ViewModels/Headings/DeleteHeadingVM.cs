@@ -23,8 +23,8 @@ namespace Geomapmaker.ViewModels.Headings
 
         public DeleteHeadingVM(HeadingsViewModel parentVM)
         {
-            ParentVM = parentVM;
             CommandDelete = new RelayCommand(() => DeleteAsync(), () => CanDelete());
+            ParentVM = parentVM;
         }
 
         /// <summary>

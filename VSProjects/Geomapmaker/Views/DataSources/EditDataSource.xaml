@@ -28,6 +28,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/> <!--Notes-->
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
@@ -38,39 +39,30 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Grid.Column="1" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Edit " />
-            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding DataSources}" SelectedItem="{Binding Edit.Selected}" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding DataSource_ID}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Grid>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Edit " />
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding DataSources}" SelectedItem="{Binding Edit.Selected}" >
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DataSource_ID}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
-        <Separator Grid.Row="2" Grid.Column="1" Margin="0, 5, 0, 5" />
+        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" />
 
-        <TextBlock Grid.Row="3" Grid.Column="1" Text="ID" />
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Edit.Id, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="ID" />
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.Id, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="1" Text="Source" />
-        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Edit.Source, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Source" />
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Edit.Source, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="7" Grid.Column="1" Text="URL" />
-        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Edit.Url, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="URL" />
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Edit.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="9" Grid.Column="1" Text="Notes" />
-        <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3"/>
+        <TextBlock Grid.Row="10" Grid.Column="1" Text="Notes" />
+        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3"/>
 
-        <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+        <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
             <Button Margin="5" Padding="5" Command="{Binding Edit.CommandUpdate}">Update</Button>
         </StackPanel>

@@ -10,6 +10,8 @@
         Title="Headings" 
         Height="300" 
         Width="300"
+        MinHeight="300" 
+        MinWidth="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

@@ -180,25 +180,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
-        private async Task ResetAsync()
-        {
-            // Refresh map unit data
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
-
-            // Reset values
-            MapUnit = null;
-            Name = null;
-            FullName = null;
-            OlderInterval = null;
-            YoungerInterval = null;
-            RelativeAge = null;
-            Description = null;
-            Label = null;
-            Color = null;
-            GeoMaterial = null;
-            GeoMaterialConfidence = null;
-        }
-
         /// <summary>
         /// Determines the visibility (enabled state) of the button
         /// </summary>
@@ -283,8 +264,20 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
-                // Reset
-                await ResetAsync();
+                await ParentVM.RefreshMapUnitsAsync();
+
+                // Reset values
+                MapUnit = null;
+                Name = null;
+                FullName = null;
+                OlderInterval = null;
+                YoungerInterval = null;
+                RelativeAge = null;
+                Description = null;
+                Label = null;
+                Color = null;
+                GeoMaterial = null;
+                GeoMaterialConfidence = null;
             }
         }
 

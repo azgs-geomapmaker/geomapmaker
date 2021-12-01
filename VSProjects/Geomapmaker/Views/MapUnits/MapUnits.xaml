@@ -8,8 +8,10 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.MapUnits"
         mc:Ignorable="d"
         Title="Map Units" 
-        Height="650" 
+        Height="750" 
         Width="400"
+        MinHeight="750"
+        MinWidth="400"            
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -32,12 +34,12 @@
             <TabItem Header="Create" >
                 <tabData:CreateMapUnit />
             </TabItem>
-            <!--<TabItem Header="Edit">
+            <TabItem Header="Edit">
                 <tabData:EditMapUnit />
             </TabItem>
             <TabItem Header="Delete">
-                <tabData:EditMapUnit />
-            </TabItem>-->
+                <tabData:DeleteMapUnit />
+            </TabItem>
         </TabControl>
     </Grid>
 
