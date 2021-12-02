@@ -3,6 +3,7 @@ using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -150,7 +151,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
-        public string AreaFillRGB => MapUnitsViewModel.ColorToRGB(Color);
+        public string AreaFillRGB => _helpers.ColorConverter.ColorToRGB(Color);
 
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 

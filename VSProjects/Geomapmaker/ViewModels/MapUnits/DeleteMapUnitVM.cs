@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,6 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             ParentVM = parentVM;
         }
-
-        public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
 
         private MapUnit _selected;
         public MapUnit Selected
@@ -62,7 +61,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Label = Selected?.Label;
                 NotifyPropertyChanged("Label");
 
-                HexColor = MapUnitsViewModel.RGBtoHex(Selected?.AreaFillRGB);
+                HexColor = ColorConverter.RGBtoHex(Selected?.AreaFillRGB);
                 NotifyPropertyChanged("HexColor");
 
                 GeoMaterial = Selected?.GeoMaterial;

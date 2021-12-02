@@ -9,7 +9,11 @@
         xmlns:models="clr-namespace:Geomapmaker.Models"            
         xmlns:dd="urn:gong-wpf-dragdrop"
         mc:Ignorable="d"
-        Title="Hierarchy" Height="300" Width="300"
+        Title="Hierarchy" 
+        Height="300" 
+        Width="300"
+        MinHeight="300" 
+        MinWidth="300"
         WindowStartupLocation="CenterOwner"
     >
     
@@ -17,6 +21,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:ProWindow.Resources>
@@ -24,14 +29,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -40,7 +44,7 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="1" Grid.Column="1" Content="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}"/>
         <TreeView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Tree}" Padding="0,5,0,5" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
@@ -82,7 +86,7 @@
             </Validation.ErrorTemplate>
         </TreeView>
 
-        <Label Grid.Row="3" Grid.Column="1" Content="Unassigned" ToolTip="{Binding Tooltips[Unassigned]}" />
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Unassigned" ToolTip="{Binding Tooltips[Unassigned]}" />
         <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Unassigned}" ToolTip="{Binding Tooltips[Unassigned]}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" MinHeight="25">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -106,7 +110,7 @@
         </ListBox>
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Cancel</Button>
+            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Close</Button>
             <Button Margin="5" Padding="5" Command="{Binding CommandSave}">Save</Button>
         </StackPanel>
 

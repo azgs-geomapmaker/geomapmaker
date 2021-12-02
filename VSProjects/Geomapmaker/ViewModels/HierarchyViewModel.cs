@@ -6,6 +6,7 @@ using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
+using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,9 +31,9 @@ namespace Geomapmaker.ViewModels
             {"Unassigned", "TODO Unassigned" },
         };
 
-        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Tree);
+        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
-        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Unassigned);
+        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
         public ICommand CommandSave { get; }
 
@@ -51,7 +52,72 @@ namespace Geomapmaker.ViewModels
             CommandSave = new RelayCommand(() => SaveAsync());
         }
 
+        // Build the tree stucture by looping over the dmus
+        public async Task BuildTree()
+        {
+            // Temp list for unassigned DMUS
+            List<MapUnitTreeItem> tmpUnassigned = new List<MapUnitTreeItem>();
+            List<MapUnitTreeItem> tmpTree = new List<MapUnitTreeItem>();
+
+            TinyMapper.Bind<MapUnit, MapUnitTreeItem>();
+
+            List<MapUnit> DMUs = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
+
+            // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents 
+            List<MapUnitTreeItem> hierarchyList = DMUs.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).Select(a => TinyMapper.Map<MapUnitTreeItem>(a)).ToList();
+
+            // Loop over the DMUs
+            foreach (MapUnitTreeItem mu in hierarchyList)
+            {
+                // Check the HierarchyKey string for a dash
+                // Children will always have a dash (001-001 for example)
+                if (mu.HierarchyKey.IndexOf("-") != -1)
+                {
+                    // Remove the last dash and last index to find their parent's HierarchyKey (001-001 becomes 001)
+                    string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
+
+                    // Look for a map unit that matches the parent HierarchyKey
+                    MapUnitTreeItem parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
+
+                    if (parent == null)
+                    {
+                        // Parent not found. Add to the unassigned list.
+                        tmpUnassigned.Add(mu);
+                    }
+                    else
+                    {
+                        // Add child to parent
+                        parent.Children.Add(mu);
+                    }
+                }
+                else
+                {
+                    // Check if the HierarchyKey is empty
+                    if (string.IsNullOrWhiteSpace(mu.HierarchyKey))
+                    {
+                        // Add to the unassigned list.
+                        tmpUnassigned.Add(mu);
+                    }
+                    else
+                    {
+                        // Map Unit must be a root node
+                        tmpTree.Add(mu);
+                    }
+                }
+            }
+
+            // Sort unassigned
+            tmpUnassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
+
+            Tree = new ObservableCollection<MapUnitTreeItem>(tmpTree);
+            Unassigned = new ObservableCollection<MapUnitTreeItem>(tmpUnassigned);
+
+            NotifyPropertyChanged("Tree");
+            NotifyPropertyChanged("Unassigned");
+        }
+
         private List<MapUnitTreeItem> HierarchyList = new List<MapUnitTreeItem>();
+
         // Recursively build out Hierarchy Keys
         private void SetHierarchyKeys(ObservableCollection<MapUnitTreeItem> collection, string prefix = "")
         {
@@ -213,7 +279,7 @@ namespace Geomapmaker.ViewModels
 
         private Views.Hierarchy _hierarchy = null;
 
-        protected override void OnClick()
+        protected override async void OnClick()
         {
             if (_hierarchy != null)
             {
@@ -225,8 +291,10 @@ namespace Geomapmaker.ViewModels
             {
                 Owner = Application.Current.MainWindow
             };
-            _hierarchy.Closed += (o, e) => { _hierarchy = null; };
 
+            await _hierarchy.hierarchyVM.BuildTree();
+
+            _hierarchy.Closed += (o, e) => { _hierarchy = null; };
             _hierarchy.Show();
         }
     }

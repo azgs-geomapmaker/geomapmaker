@@ -28,7 +28,7 @@ namespace Geomapmaker
                 progress.Show();
                 await QueuedTask.Run(async () =>
                 {
-                    await Data.DescriptionOfMapUnits.GetFields();
+                    await Data.DescriptionOfMapUnits.GetFieldsAsync();
                     await DataHelper.PopulateMapUnits();
                     await DataHelper.PopulateContactsAndFaults();
                     await DataHelper.PopulateDataSources();
@@ -37,12 +37,12 @@ namespace Geomapmaker
                 progress.Hide();
             }
 
-            _dswindow = new DataSourceDialogProWindow();
-            _dswindow.Owner = FrameworkApplication.Current.MainWindow;
-            _dswindow.Closed += (o, e) => { _dswindow = null; };
-            //_datasourcedialogprowindow.Show();
-            //uncomment for modal
-            _dswindow.ShowDialog();
+            //_dswindow = new DataSourceDialogProWindow();
+            //_dswindow.Owner = FrameworkApplication.Current.MainWindow;
+            //_dswindow.Closed += (o, e) => { _dswindow = null; };
+            ////_datasourcedialogprowindow.Show();
+            ////uncomment for modal
+            //_dswindow.ShowDialog();
         }
 
     }

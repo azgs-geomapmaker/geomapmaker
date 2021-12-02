@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 RelativeAge = Selected?.RelativeAge;
                 Description = Selected?.Description;
                 Label = Selected?.Label;
-                Color = MapUnitsViewModel.RGBtoColor(Selected?.AreaFillRGB);
+                Color = _helpers.ColorConverter.RGBtoColor(Selected?.AreaFillRGB);
                 GeoMaterial = Selected?.GeoMaterial;
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
                 NotifyPropertyChanged("Visibility");
@@ -204,7 +205,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
-        public string AreaFillRGB => MapUnitsViewModel.ColorToRGB(Color);
+        public string AreaFillRGB => _helpers.ColorConverter.ColorToRGB(Color);
 
         public string HexColor => Color == null ? "" : Color.ToString();
 
@@ -374,7 +375,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Selected.RelativeAge == RelativeAge &&
                 Selected.Description == Description &&
                 Selected.Label == Label &&
-                //Selected.HexColor == HexColor &&
+                Selected.AreaFillRGB == AreaFillRGB &&
                 Selected.GeoMaterial == GeoMaterial &&
                 Selected.GeoMaterialConfidence == GeoMaterialConfidence
                 )
@@ -402,7 +403,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
@@ -445,7 +446,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Full Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Full name is taken." };
             }
@@ -496,7 +497,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.HexColor == HexColor))
+            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.AreaFillRGB == AreaFillRGB))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }

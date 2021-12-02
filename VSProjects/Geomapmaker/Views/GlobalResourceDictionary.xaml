@@ -6,6 +6,7 @@
 >
 
     <Style TargetType="TextBox">
+        <Setter Property="Margin" Value="0,0,0,10"/>
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -27,6 +28,7 @@
     </Style>
 
     <Style TargetType="ComboBox" >
+        <Setter Property="Margin" Value="0,0,0,10"/>
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -48,6 +50,7 @@
     </Style>
 
     <Style TargetType="wpftk:ColorPicker" >
+        <Setter Property="Margin" Value="0,0,0,10"/>
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -86,9 +89,9 @@
         <Setter Property="BorderBrush" Value="{DynamicResource Esri_TextStyleSubduedBrush}"/>
     </Style>
 
-    <Style TargetType="Button" >
+    <!--<Style TargetType="Button" >
         <Setter Property="Margin" Value="10"/>
         <Setter Property="Padding" Value="5"/>
-    </Style>
+    </Style>-->
 
 </ResourceDictionary>
