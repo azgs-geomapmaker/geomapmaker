@@ -116,7 +116,7 @@
   <conditions>
     <insertCondition id="dataSourceSelectedCondition">
       <and>
-        <state id="esri_mapping_mapPane" />
+        <!--<state id="esri_mapping_mapPane" />-->
         <state id="datasource_selected" />
       </and>
     </insertCondition>
