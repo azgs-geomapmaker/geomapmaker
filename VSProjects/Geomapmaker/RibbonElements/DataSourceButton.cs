@@ -35,6 +35,7 @@ namespace Geomapmaker
                     await Data.DataSources.RefreshAsync();
                 });
                 progress.Hide();
+                FrameworkApplication.State.Activate("connectPropsSet");
             }
 
             //_dswindow = new DataSourceDialogProWindow();

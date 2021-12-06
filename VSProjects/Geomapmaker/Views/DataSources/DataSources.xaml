@@ -6,8 +6,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         xmlns:tabData="clr-namespace:Geomapmaker.Views.DataSources" 
-        xmlns:geomapmaker="clr-namespace:Geomapmaker.ViewModels.DataSources" 
-        d:DataContext="{d:DesignInstance Type=geomapmaker:DataSourcesViewModel}"
         mc:Ignorable="d"
         Title="Data Sources"
         Height="400" 
@@ -38,7 +36,7 @@
             </TabItem>
             <TabItem Header="Edit">
                 <tabData:EditDataSource />
-            </TabItem>
+            </TabItem> 
             <TabItem Header="Delete">
                 <tabData:DeleteDataSource />
             </TabItem>
