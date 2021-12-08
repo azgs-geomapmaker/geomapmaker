@@ -6,7 +6,7 @@
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d"
              >
-    
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,56 +16,58 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/><!--Notes-->
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <!--Notes-->
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Delete" />
-        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding DataSources}" SelectedItem="{Binding Delete.Selected}" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding DataSource_ID}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Delete" />
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding DataSources}" SelectedItem="{Binding Delete.Selected}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DataSource_ID}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Visibility="{Binding Delete.Visibility}" />
+            <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="ID" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.Id, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="ID" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.Id, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Source" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Delete.Source, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Source" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Delete.Source, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="URL" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.Url, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="URL" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.Url, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="10" Grid.Column="1" Text="Notes" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Delete.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="Notes" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Delete.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
-            <Button Margin="5" Padding="5" Command="{Binding Delete.CommandDelete}">Delete</Button>
-        </StackPanel>
-
-    </Grid>
+            <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+                <Button Margin="5" Padding="5" Command="{Binding Delete.CommandDelete}">Delete</Button>
+            </StackPanel>
+        </Grid>
+    </AdornerDecorator>
 </UserControl>

@@ -6,7 +6,7 @@
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
              >
-    
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,88 +16,89 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <!--Description-->
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <!--Description-->
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Delete" ToolTip="{Binding Tooltips[Delete]}"/>
-        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding StandardDMUs}" SelectedItem="{Binding Delete.Selected}" ToolTip="{Binding Tooltips[Delete]}" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding MU}" ToolTip="{Binding Tooltip}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Delete" ToolTip="{Binding Tooltips[Delete]}"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding StandardDMUs}" SelectedItem="{Binding Delete.Selected}" ToolTip="{Binding Tooltips[Delete]}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding MU}" ToolTip="{Binding Tooltip}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Delete.Visibility}" />
+            <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="Map Unit" ToolTip="{Binding Tooltips[MapUnit]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.MapUnit, UpdateSourceTrigger=PropertyChanged }" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Map Unit" ToolTip="{Binding Tooltips[MapUnit]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.MapUnit, UpdateSourceTrigger=PropertyChanged }" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Delete.Name, UpdateSourceTrigger=PropertyChanged }" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Delete.Name, UpdateSourceTrigger=PropertyChanged }" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="Full Name" ToolTip="{Binding Tooltips[FullName]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.FullName, UpdateSourceTrigger=PropertyChanged }" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Full Name" ToolTip="{Binding Tooltips[FullName]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.FullName, UpdateSourceTrigger=PropertyChanged }" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="10" Grid.Column="1" Text="Age" ToolTip="{Binding Tooltips[Age]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Delete.Age }" IsReadOnly="True" IsEnabled="False" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="Age" ToolTip="{Binding Tooltips[Age]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Delete.Age }" IsReadOnly="True" IsEnabled="False" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="12" Grid.Column="1" Text="Relative Age" ToolTip="{Binding Tooltips[RelativeAge]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Delete.RelativeAge, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="12" Grid.Column="1" Text="Relative Age" ToolTip="{Binding Tooltips[RelativeAge]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Delete.RelativeAge, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="14" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="15" Grid.Column="1"  MinLines="3" Text="{Binding Delete.Description, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="14" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="15" Grid.Column="1"  MinLines="3" Text="{Binding Delete.Description, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="16" Grid.Column="1" Text="Label" ToolTip="{Binding Tooltips[Label]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="17" Grid.Column="1" Text="{Binding Delete.Label}" FontFamily="FGDCGeoAge" IsEnabled="False" IsReadOnly="True" MinHeight="20" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="16" Grid.Column="1" Text="Label" ToolTip="{Binding Tooltips[Label]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="17" Grid.Column="1" Text="{Binding Delete.Label}" FontFamily="FGDCGeoAge" IsEnabled="False" IsReadOnly="True" MinHeight="20" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="18" Grid.Column="1" Text="Color" ToolTip="{Binding Tooltips[Color]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="19" Grid.Column="1" Text="{Binding Delete.HexColor}" Background="{Binding Delete.HexColor}" IsReadOnly="True" IsEnabled="False" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="18" Grid.Column="1" Text="Color" ToolTip="{Binding Tooltips[Color]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="19" Grid.Column="1" Text="{Binding Delete.HexColor}" Background="{Binding Delete.HexColor}" IsReadOnly="True" IsEnabled="False" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="20" Grid.Column="1" Text="GeoMaterial" ToolTip="{Binding Tooltips[GeoMaterial]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="21" Grid.Column="1" Text="{Binding Delete.GeoMaterial}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="20" Grid.Column="1" Text="GeoMaterial" ToolTip="{Binding Tooltips[GeoMaterial]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="21" Grid.Column="1" Text="{Binding Delete.GeoMaterial}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <TextBlock Grid.Row="22" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" Visibility="{Binding Delete.Visibility}" />
-        <TextBox Grid.Row="23" Grid.Column="1" Text="{Binding Delete.GeoMaterialConfidence}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="22" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="23" Grid.Column="1" Text="{Binding Delete.GeoMaterialConfidence}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-        <StackPanel Grid.Row="24" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
-            <Button Margin="5" Padding="5" Command="{Binding Delete.CommandDelete}">Delete</Button>
-        </StackPanel>
+            <StackPanel Grid.Row="24" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+                <Button Margin="5" Padding="5" Command="{Binding Delete.CommandDelete}">Delete</Button>
+            </StackPanel>
 
-    </Grid>
-
+        </Grid>
+    </AdornerDecorator>
 </UserControl>
