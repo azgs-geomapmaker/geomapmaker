@@ -45,7 +45,7 @@ namespace Geomapmaker.ViewModels.DataSources
         }
 
         // Update collection of data sources
-        public async Task RefreshDataSourcesAsync()
+        public async void RefreshDataSourcesAsync()
         {
             DataSources = await Data.DataSources.GetDataSourcesAsync();
         }
@@ -77,7 +77,7 @@ namespace Geomapmaker.ViewModels.DataSources
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
-            await _datasources.dataSourcesVM.RefreshDataSourcesAsync();
+             _datasources.dataSourcesVM.RefreshDataSourcesAsync();
 
             _datasources.Closed += (o, e) => { _datasources = null; };
 

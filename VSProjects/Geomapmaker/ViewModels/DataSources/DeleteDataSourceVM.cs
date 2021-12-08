@@ -129,9 +129,9 @@ namespace Geomapmaker.ViewModels.DataSources
             }
             else
             {
-                Selected = null;
+                ParentVM.RefreshDataSourcesAsync();
 
-                await ParentVM.RefreshDataSourcesAsync();
+                Selected = null;
             }
         }
 

@@ -165,15 +165,9 @@ namespace Geomapmaker.ViewModels.DataSources
             }
             else
             {
+                ParentVM.RefreshDataSourcesAsync();
+
                 Selected = null;
-
-                await ParentVM.RefreshDataSourcesAsync();
-
-                // Reset values
-                Id = "";
-                Source = "";
-                Url = "";
-                Notes = "";
             }
         }
 

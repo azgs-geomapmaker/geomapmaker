@@ -128,7 +128,7 @@ namespace Geomapmaker.ViewModels.DataSources
             }
             else
             {
-                await ParentVM.RefreshDataSourcesAsync();
+                ParentVM.RefreshDataSourcesAsync();
 
                 // Reset values
                 Id = "";
