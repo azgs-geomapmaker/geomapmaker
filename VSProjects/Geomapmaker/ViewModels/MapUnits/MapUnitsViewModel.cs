@@ -102,7 +102,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         }
 
         //Update collection of dmu
-        public async Task RefreshMapUnitsAsync()
+        public async void RefreshMapUnitsAsync()
         {
             MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
             StandardDMUs = MapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name).ToList();
@@ -135,7 +135,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
-            await _mapunits.mapUnitsVM.RefreshMapUnitsAsync();
+            _mapunits.mapUnitsVM.RefreshMapUnitsAsync();
 
             _mapunits.Closed += (o, e) => { _mapunits = null; };
             _mapunits.Show();

@@ -86,7 +86,7 @@ namespace Geomapmaker.ViewModels.Headings
         }
 
         //Update collection of dmu
-        public async Task RefreshMapUnitsAsync()
+        public async void RefreshMapUnitsAsync()
         {
             MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
             Headings = MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name).ToList();
@@ -107,7 +107,7 @@ namespace Geomapmaker.ViewModels.Headings
     {
         private Views.Headings.Headings _headings = null;
 
-        protected override async void OnClick()
+        protected override void OnClick()
         {
             if (_headings != null)
             {
@@ -119,7 +119,7 @@ namespace Geomapmaker.ViewModels.Headings
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
-            await _headings.headingsVM.RefreshMapUnitsAsync();
+            _headings.headingsVM.RefreshMapUnitsAsync();
 
             _headings.Closed += (o, e) => { _headings = null; };
 

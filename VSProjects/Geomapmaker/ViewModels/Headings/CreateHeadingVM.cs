@@ -127,7 +127,7 @@ namespace Geomapmaker.ViewModels.Headings
             }
             else
             {
-                await ParentVM.RefreshMapUnitsAsync();
+                ParentVM.RefreshMapUnitsAsync();
 
                 // Reset values
                 Name = "";

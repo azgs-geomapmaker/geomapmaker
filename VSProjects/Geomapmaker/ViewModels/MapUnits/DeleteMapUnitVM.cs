@@ -161,7 +161,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
-                await ParentVM.RefreshMapUnitsAsync();
+                ParentVM.RefreshMapUnitsAsync();
 
                 // Reset values
                 Selected = null;
