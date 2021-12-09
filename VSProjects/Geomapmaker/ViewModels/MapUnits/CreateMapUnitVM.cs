@@ -153,6 +153,8 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public string AreaFillRGB => _helpers.ColorConverter.ColorToRGB(Color);
 
+        public string HexColor => Color?.ToString();
+
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 
         // GeoMaterial
@@ -226,16 +228,11 @@ namespace Geomapmaker.ViewModels.MapUnits
                             rowBuffer["Description"] = Description;
                             rowBuffer["Label"] = Label;
                             rowBuffer["AreaFillRGB"] = AreaFillRGB;
+                            rowBuffer["HexColor"] = HexColor;
                             rowBuffer["GeoMaterial"] = GeoMaterial;
                             rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
                             rowBuffer["ParagraphStyle"] = "Standard";
                             rowBuffer["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
-
-                            //  If the hexcolor field exists in table
-                            //if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))
-                            //{
-                            //    rowBuffer["HexColor"] = Color.ToString();
-                            //}
 
                             using (Row row = enterpriseTable.CreateRow(rowBuffer))
                             {

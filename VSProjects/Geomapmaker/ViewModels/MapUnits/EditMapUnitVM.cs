@@ -207,7 +207,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public string AreaFillRGB => _helpers.ColorConverter.ColorToRGB(Color);
 
-        public string HexColor => Color == null ? "" : Color.ToString();
+        public string HexColor => Color?.ToString();
 
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 
@@ -286,16 +286,11 @@ namespace Geomapmaker.ViewModels.MapUnits
                                     row["Description"] = Description;
                                     row["Label"] = Label;
                                     row["AreaFillRGB"] = AreaFillRGB;
+                                    row["HexColor"] = HexColor;
                                     row["GeoMaterial"] = GeoMaterial;
                                     row["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                     row["ParagraphStyle"] = "Standard";
                                     row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
-
-                                    //  If the hexcolor field exists in table
-                                    //if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))
-                                    //{
-                                    //    row["HexColor"] = Color.ToString();
-                                    //}
 
                                     // After all the changes are done, persist it.
                                     row.Store();
