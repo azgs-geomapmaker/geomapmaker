@@ -2,7 +2,7 @@
 {
     public class DataSource
     {
-        public long ObjecttId { get; set; }
+        public long ObjectId { get; set; }
 
         public string DataSource_ID { get; set; }
 

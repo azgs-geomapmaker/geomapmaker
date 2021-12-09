@@ -4,10 +4,8 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker.Data;
 using Geomapmaker.Models;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Geomapmaker.RibbonElements
 {
@@ -16,31 +14,8 @@ namespace Geomapmaker.RibbonElements
     /// </summary>
     internal class DataSourceComboBox : ComboBox
     {
-        private bool _isInitialized;
-
-        /// <summary>
-        /// Combo Box constructor
-        /// </summary>
-        public DataSourceComboBox()
+        protected override void OnDropDownOpened()
         {
-            UpdateCombo();
-        }
-
-        // TODO 
-        //private bool isValidGemsProject()
-        //{
-        //    if (MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources") == null)
-        //        return false;
-        //    if (MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits") == null)
-        //        return false;
-
-        //    return true;
-        //}
-
-        private async void UpdateComboBoxOptions()
-        {
-            Clear();
-
             StandaloneTable dataSources = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
 
             if (dataSources == null)
@@ -49,7 +24,9 @@ namespace Geomapmaker.RibbonElements
                 return;
             }
 
-            await QueuedTask.Run(() =>
+            Clear();
+
+            QueuedTask.Run(() =>
             {
                 Table enterpriseTable = dataSources.GetTable();
 
@@ -61,7 +38,7 @@ namespace Geomapmaker.RibbonElements
                         {
                             DataSource dS = new DataSource
                             {
-                                ObjecttId = long.Parse(row["objectid"].ToString()),
+                                ObjectId = long.Parse(row["objectid"].ToString()),
                                 Source = row["source"]?.ToString(),
                                 DataSource_ID = row["datasources_id"]?.ToString(),
                                 Url = row["url"]?.ToString(),
@@ -75,43 +52,17 @@ namespace Geomapmaker.RibbonElements
             });
         }
 
-        /// <summary>
-        /// Updates the combo box with all the items.
-        /// </summary>
-
-        private void UpdateCombo()
+        protected override void OnTextChange(string text)
         {
-            if (!_isInitialized)
-            {
-                UpdateComboBoxOptions();
-
-                _isInitialized = true;
-            }
-
-            Enabled = true;
-        }
-
-        protected override void OnDropDownOpened()
-        {
-            UpdateComboBoxOptions();
-        }
-
-        /// <summary>
-        /// The on comboBox selection change event. 
-        /// </summary>
-        /// <param name="item">The newly selected combo box item</param>
-        protected override void OnSelectionChange(ComboBoxItem item)
-        {
-            if (item == null || string.IsNullOrEmpty(item.Text))
+            if (string.IsNullOrEmpty(text))
             {
                 FrameworkApplication.State.Deactivate("datasource_selected");
-                return;
             }
-
-            // Set the user's data source
-            GeomapmakerModule.DataSourceId = item.Text;
-
-            FrameworkApplication.State.Activate("datasource_selected");
+            else
+            {
+                GeomapmakerModule.DataSourceId = text;
+                FrameworkApplication.State.Activate("datasource_selected");
+            }
         }
 
     }

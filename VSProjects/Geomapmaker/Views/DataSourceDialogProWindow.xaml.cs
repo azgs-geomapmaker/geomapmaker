@@ -109,7 +109,7 @@ namespace Geomapmaker
 
                             editOperation.Callback(context =>
                             {
-                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + source.ObjecttId };
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + source.ObjectId };
 
                                 using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {

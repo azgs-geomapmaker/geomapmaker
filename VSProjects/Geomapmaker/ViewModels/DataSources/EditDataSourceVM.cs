@@ -118,7 +118,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
                     editOperation.Callback(context =>
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjecttId };
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectId };
 
                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
@@ -200,7 +200,7 @@ namespace Geomapmaker.ViewModels.DataSources
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.DataSources.Where(a => a.ObjecttId != Selected?.ObjecttId).Any(a => a.DataSource_ID.ToLower() == Id?.ToLower()))
+            else if (ParentVM.DataSources.Where(a => a.ObjectId != Selected?.ObjectId).Any(a => a.DataSource_ID.ToLower() == Id?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "ID is taken." };
             }
