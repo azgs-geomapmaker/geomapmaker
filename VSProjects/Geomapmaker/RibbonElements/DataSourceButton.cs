@@ -28,11 +28,9 @@ namespace Geomapmaker
                 progress.Show();
                 await QueuedTask.Run(async () =>
                 {
-                    await Data.DescriptionOfMapUnits.GetFieldsAsync();
                     await DataHelper.PopulateMapUnits();
                     await DataHelper.PopulateContactsAndFaults();
                     await DataHelper.PopulateDataSources();
-                    await Data.DataSources.RefreshAsync();
                 });
                 progress.Hide();
                 FrameworkApplication.State.Activate("connectPropsSet");

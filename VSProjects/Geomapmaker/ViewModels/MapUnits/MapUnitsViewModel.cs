@@ -123,7 +123,7 @@ namespace Geomapmaker.ViewModels.MapUnits
     {
         private Views.MapUnits.MapUnits _mapunits = null;
 
-        protected override async void OnClick()
+        protected override void OnClick()
         {
             if (_mapunits != null)
             {

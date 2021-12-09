@@ -24,10 +24,6 @@ namespace Geomapmaker
         public static void SetConnectionProperties(DatabaseConnectionProperties props)
         {
             connectionProperties = props;
-
-            // My plan is to slowly break this class up into smaller classes in the Data folder. 
-            // I'm setting the connection properties twice while I migrate things -camp
-            Data.DbConnectionProperties.SetProperties(props);
         }
 
         public static List<FeatureLayer> currentLayers = new List<FeatureLayer>();

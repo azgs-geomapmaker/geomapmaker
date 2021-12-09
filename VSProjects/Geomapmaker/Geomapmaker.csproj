@@ -243,7 +243,6 @@
     <Compile Include="RibbonElements\DataSourceComboBox.cs" />
     <Compile Include="Data\Confidence.cs" />
     <Compile Include="Data\DataSources.cs" />
-    <Compile Include="Data\DbConnectionProperties.cs" />
     <Compile Include="Data\DescriptionOfMapUnits.cs" />
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
