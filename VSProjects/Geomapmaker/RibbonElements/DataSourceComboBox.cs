@@ -68,7 +68,7 @@ namespace Geomapmaker.RibbonElements
                                 Notes = row["notes"]?.ToString()
                             };
 
-                            Add(new ComboBoxItem(dS.DataSource_ID));
+                            Add(new ComboBoxItem(dS.DataSource_ID, null, dS.Source));
                         }
                     }
                 }
