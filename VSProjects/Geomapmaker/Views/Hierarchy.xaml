@@ -46,7 +46,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}"/>
-        <TreeView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Tree}" Padding="0,5,0,5" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
+        <TreeView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
@@ -54,8 +54,8 @@
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:MapUnitTreeItem}" ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Visibility="{Binding ColorVisibility}" />
                         <TextBlock Text="{Binding FullName}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
