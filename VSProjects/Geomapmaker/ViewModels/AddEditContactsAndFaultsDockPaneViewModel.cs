@@ -22,7 +22,7 @@ namespace Geomapmaker
         {
             SelectedCF = new CF();
             SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
-            SelectedCF.DataSource = DataHelper.DataSource.Source; //for display
+            SelectedCF.DataSource = GeomapmakerModule.DataSourceId; //for display
             ShapeJson = "{ }";
             GeomapmakerModule.ContactsAndFaultsVM = this;
         }
@@ -85,6 +85,7 @@ namespace Geomapmaker
             get
             {
                 return !(SelectedCF == null
+                    || SelectedCF.symbol == null
                     || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
                     || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
                     || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
@@ -120,7 +121,7 @@ namespace Geomapmaker
             get => selectedCF;
             set
             {
-                value.DataSource = DataHelper.DataSource.Source; // For display
+                value.DataSource = GeomapmakerModule.DataSourceId; // For display
                 SetProperty(ref selectedCF, value, () => SelectedCF); // Have to do this to trigger stuff, I guess.
             }
         }
@@ -160,7 +161,7 @@ namespace Geomapmaker
                 ["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters,
                 ["IsConcealed"] = SelectedCF.IsConcealed ? "Y" : "N", // Convert the bool to 'y'/'n'
                 ["Notes"] = SelectedCF.Notes,
-                ["DataSourceID"] = DataHelper.DataSource.DataSource_ID
+                ["DataSourceID"] = GeomapmakerModule.DataSourceId
             };
 
             // Create the new feature
