@@ -30,10 +30,10 @@ namespace Geomapmaker.RibbonElements
             {
                 Table enterpriseTable = dataSources.GetTable();
 
-                QueryFilter queryFilter = new QueryFilter();
-
-                string postfixClause = "ORDER BY datasources_id";
-                queryFilter.PostfixClause = postfixClause;
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    PostfixClause = "ORDER BY datasources_id"
+                };
 
                 using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
                 {

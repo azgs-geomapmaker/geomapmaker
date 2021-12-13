@@ -243,7 +243,6 @@ namespace Geomapmaker.ViewModels
             bool isItemDropValid = sourceItem != null && targetItem != null && targetItem.CanAcceptChildren;
             bool isCollectionDropValid = sourceItem != null && targetCollection != null;
 
-
             if (sourceItem != null && targetItem != null)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
