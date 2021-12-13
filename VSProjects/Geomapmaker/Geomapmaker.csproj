@@ -280,10 +280,8 @@
     </Compile>
     <Compile Include="ViewModels\AddEditMapUnitPolysDockPaneViewModel.cs" />
     <Compile Include="Models\MapUnitPoly.cs" />
-    <Compile Include="RibbonElements\AddMapUnitsButton.cs" />
     <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
     <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
-    <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
     <Compile Include="GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
     <Compile Include="Views\DataSourceDialogProWindow.xaml.cs">
