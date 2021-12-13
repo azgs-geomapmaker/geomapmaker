@@ -11,9 +11,9 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:HierarchyViewModel}"
         mc:Ignorable="d"
         Title="Hierarchy" 
-        Height="300" 
+        Height="500" 
         Width="300"
-        MinHeight="300" 
+        MinHeight="500" 
         MinWidth="300"
         WindowStartupLocation="CenterOwner"
     >
@@ -46,7 +46,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}"/>
-        <TreeView Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
+        <TreeView Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
