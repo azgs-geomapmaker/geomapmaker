@@ -65,7 +65,7 @@ namespace Geomapmaker.ViewModels.DataSources
     {
         private Views.DataSources.DataSources _datasources = null;
 
-        protected override async void OnClick()
+        protected override void OnClick()
         {
             if (_datasources != null)
             {
@@ -77,7 +77,7 @@ namespace Geomapmaker.ViewModels.DataSources
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
-             _datasources.dataSourcesVM.RefreshDataSourcesAsync();
+            _datasources.dataSourcesVM.RefreshDataSourcesAsync();
 
             _datasources.Closed += (o, e) => { _datasources = null; };
 
