@@ -202,6 +202,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\CFSymbols.cs" />
     <Compile Include="Views\Hierarchy.xaml.cs">
       <DependentUpon>Hierarchy.xaml</DependentUpon>
     </Compile>

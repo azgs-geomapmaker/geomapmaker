@@ -54,7 +54,6 @@ namespace Geomapmaker
 
         public void Reset()
         {
-            //Just clear whichever and ignore the other error
             GeomapmakerModule.ContactsAndFaultsAddTool?.Clear();
             GeomapmakerModule.ContactsAndFaultsEditTool?.Clear();
 

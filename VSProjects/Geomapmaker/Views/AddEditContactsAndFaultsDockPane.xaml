@@ -96,9 +96,9 @@
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" />
-                    <TextBlock  Text="Specifies type of geologic feature represented by this database row." />
+                    <TextBlock Text="Specifies type of geologic feature represented by this database row." />
                     <TextBlock Text="Notes:" />
-                    <TextBlock  Text="Examples of values are 'contact', 'fault', 'thrust fault', 'waterline', 'glacier boundary', 'map boundary'. Values must be defined in Glossary table. Null values not permitted." />
+                    <TextBlock Text="Examples of values are 'contact', 'fault', 'thrust fault', 'waterline', 'glacier boundary', 'map boundary'. Values must be defined in Glossary table. Null values not permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -134,9 +134,9 @@
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" />
-                    <TextBlock  Text="Indicates how confidently this line feature has been identified as a particular type." />
+                    <TextBlock Text="Indicates how confidently this line feature has been identified as a particular type." />
                     <TextBlock Text="Notes:" />
-                    <TextBlock  Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
+                    <TextBlock Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -192,9 +192,9 @@
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" />
-                    <TextBlock  Text="Indicates how confidently existence of this line feature has been determined." />
+                    <TextBlock Text="Indicates how confidently existence of this line feature has been determined." />
                     <TextBlock Text="Notes:" />
-                    <TextBlock  Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
+                    <TextBlock Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -205,9 +205,9 @@
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" />
-                    <TextBlock  Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." />
+                    <TextBlock Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." />
                     <TextBlock Text="Notes:" />
-                    <TextBlock  Text="Data type is float. Null values not permitted." />
+                    <TextBlock Text="Data type is float. Null values not permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -227,9 +227,9 @@
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" />
-                    <TextBlock  Text="Indicates whether this contact or fault is concealed by an overlying map unit." />
+                    <TextBlock Text="Indicates whether this contact or fault is concealed by an overlying map unit." />
                     <TextBlock Text="Notes:" />
-                    <TextBlock  Text="Values = 'N' or 'Y'. Null values not permitted." />
+                    <TextBlock Text="Values = 'N' or 'Y'. Null values not permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
@@ -240,9 +240,9 @@
             <Label.ToolTip>
                 <StackPanel>
                     <TextBlock Text="Description:" />
-                    <TextBlock  Text="Optional field." />
+                    <TextBlock Text="Optional field." />
                     <TextBlock Text="Notes:" />
-                    <TextBlock  Text="Free text for additional information specific to this line feature. Null values permitted." />
+                    <TextBlock Text="Free text for additional information specific to this line feature. Null values permitted." />
                 </StackPanel>
             </Label.ToolTip>
         </Label>
