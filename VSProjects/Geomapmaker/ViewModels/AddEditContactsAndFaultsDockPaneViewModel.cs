@@ -18,10 +18,25 @@ namespace Geomapmaker
     {
         private const string _dockPaneID = "Geomapmaker_AddEditContactsAndFaultsDockPane";
 
+        private List<CFSymbol> _cfSymbols = new List<CFSymbol>();
+        public List<CFSymbol> CFSymbols
+        {
+            get => _cfSymbols;
+            set
+            {
+                SetProperty(ref _cfSymbols, value, () => CFSymbols);
+            }
+        }
+
+        public async void RefreshCFSymbolsAsync()
+        {
+            CFSymbols = await Data.CFSymbols.GetCFSymbolList();
+        }
+
         public AddEditContactsAndFaultsDockPaneViewModel()
         {
             SelectedCF = new CF();
-            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
+            SelectedCFSymbol = CFSymbols.FirstOrDefault();
             SelectedCF.DataSource = GeomapmakerModule.DataSourceId; //for display
             ShapeJson = "{ }";
             GeomapmakerModule.ContactsAndFaultsVM = this;
@@ -57,7 +72,7 @@ namespace Geomapmaker
             GeomapmakerModule.ContactsAndFaultsAddTool?.Clear();
             GeomapmakerModule.ContactsAndFaultsEditTool?.Clear();
 
-            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
+            SelectedCFSymbol = CFSymbols.FirstOrDefault();
             SelectedCF = new CF();
             ShapeJson = "{ }";
             Prepopulate = false;
@@ -182,44 +197,44 @@ namespace Geomapmaker
                 MessageBox.Show("Hogan's goat!");
             }
 
-            // Update renderer with new symbol
-            // TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
-            List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
-            List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
-                new CIMUniqueValue {
-                    FieldValues = new string[] { SelectedCF.symbol.key }
-                }
-            };
+            //// Update renderer with new symbol
+            //// TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
+            //List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
+            //List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
+            //    new CIMUniqueValue {
+            //        FieldValues = new string[] { SelectedCF.symbol.key }
+            //    }
+            //};
 
-            CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
-            {
-                Editable = true,
-                Label = SelectedCF.symbol.key,
-                //Patch = PatchShape.Default,
-                Patch = PatchShape.AreaPolygon,
-                Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.symbol, null),
-                Visible = true,
-                Values = listUniqueValues.ToArray()
-            };
-            listUniqueValueClasses.Add(uniqueValueClass);
-            CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
-            {
-                Classes = listUniqueValueClasses.ToArray(),
-            };
-            List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
-            DataHelper.cfRenderer = new CIMUniqueValueRenderer
-            {
-                UseDefaultSymbol = false,
-                Groups = listUniqueValueGroups.ToArray(),
-                Fields = new string[] { "symbol" }
-                //ValueExpressionInfo = cEI //fields used for testing
-            };
+            //CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
+            //{
+            //    Editable = true,
+            //    Label = SelectedCF.symbol.key,
+            //    //Patch = PatchShape.Default,
+            //    Patch = PatchShape.AreaPolygon,
+            //    Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.symbol, null),
+            //    Visible = true,
+            //    Values = listUniqueValues.ToArray()
+            //};
+            //listUniqueValueClasses.Add(uniqueValueClass);
+            //CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
+            //{
+            //    Classes = listUniqueValueClasses.ToArray(),
+            //};
+            //List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
+            //DataHelper.cfRenderer = new CIMUniqueValueRenderer
+            //{
+            //    UseDefaultSymbol = false,
+            //    Groups = listUniqueValueGroups.ToArray(),
+            //    Fields = new string[] { "symbol" }
+            //    //ValueExpressionInfo = cEI //fields used for testing
+            //};
 
-            await QueuedTask.Run(() =>
-            {
-                cfLayer.ClearSelection();
-                cfLayer.SetRenderer(DataHelper.cfRenderer);
-            });
+            //await QueuedTask.Run(() =>
+            //{
+            //    cfLayer.ClearSelection();
+            //    cfLayer.SetRenderer(DataHelper.cfRenderer);
+            //});
         }
     }
 }
