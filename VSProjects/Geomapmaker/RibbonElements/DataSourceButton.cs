@@ -7,23 +7,15 @@ namespace Geomapmaker
 {
     internal class DataSourceButton : Button
     {
-        private DataSourceDialogProWindow _dswindow = null;
-
         protected override async void OnClick()
         {
-            //already open?
-            if (_dswindow != null)
-            {
-                return;
-            }
-
             if (string.IsNullOrEmpty(DataHelper.connectionProperties.Password))
             {
                 MessageBox.Show("Project connection properties is null", "Error");
                 return;
             }
 
-            using (var progress = new ProgressDialog("Loading Geomapmaker Project"))
+            using (ProgressDialog progress = new ProgressDialog("Loading Geomapmaker Project"))
             {
                 progress.Show();
                 await QueuedTask.Run(async () =>
@@ -35,14 +27,6 @@ namespace Geomapmaker
                 progress.Hide();
                 FrameworkApplication.State.Activate("connectPropsSet");
             }
-
-            //_dswindow = new DataSourceDialogProWindow();
-            //_dswindow.Owner = FrameworkApplication.Current.MainWindow;
-            //_dswindow.Closed += (o, e) => { _dswindow = null; };
-            ////_datasourcedialogprowindow.Show();
-            ////uncomment for modal
-            //_dswindow.ShowDialog();
         }
-
     }
 }

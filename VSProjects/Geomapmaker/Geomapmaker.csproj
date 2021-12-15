@@ -285,9 +285,6 @@
     <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
     <Compile Include="GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
-    <Compile Include="Views\DataSourceDialogProWindow.xaml.cs">
-      <DependentUpon>DataSourceDialogProWindow.xaml</DependentUpon>
-    </Compile>
     <!--<Compile Include="Views\LoginDialogProWindow.xaml.cs" />-->
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
@@ -365,10 +362,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GlobalResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DataSourceDialogProWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
