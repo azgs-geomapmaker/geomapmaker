@@ -14,11 +14,11 @@ using Geomapmaker.Models;
 
 namespace Geomapmaker
 {
-    internal class AddEditContactsAndFaultsDockPaneViewModel : DockPane
+    public class AddEditContactsAndFaultsDockPaneViewModel : DockPane
     {
         private const string _dockPaneID = "Geomapmaker_AddEditContactsAndFaultsDockPane";
 
-        protected AddEditContactsAndFaultsDockPaneViewModel()
+        public AddEditContactsAndFaultsDockPaneViewModel()
         {
             SelectedCF = new CF();
             SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();

@@ -17,7 +17,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <UserControl.CommandBindings>
+    <!--<UserControl.CommandBindings>
         <CommandBinding 
 			Command="ApplicationCommands.Save"
 			Executed="SaveCommandHandler"
@@ -27,7 +27,7 @@
 			Command="ApplicationCommands.New"
 			Executed="NewCommandHandler"
         />
-    </UserControl.CommandBindings>
+    </UserControl.CommandBindings>-->
 
     <Grid>
 

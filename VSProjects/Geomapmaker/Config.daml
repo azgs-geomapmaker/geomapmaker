@@ -66,7 +66,7 @@
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText /></tooltip>
         </button>
-        <tool id="Geomapmaker_ContactsAndFaultsAddTool" caption="Add Contacts and Faults" className="ContactsAndFaultsAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="connectionPropertiesNotNull" keytip="todo">
+        <tool id="Geomapmaker_ContactsAndFaultsAddTool" caption="Add Contacts and Faults" className="ContactsAndFaultsAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Contacts and Faults">
             Add a new contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
