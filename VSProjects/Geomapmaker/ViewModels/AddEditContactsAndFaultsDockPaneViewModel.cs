@@ -2,13 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using ArcGIS.Core.CIM;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
-using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 
@@ -16,31 +14,62 @@ namespace Geomapmaker
 {
     public class AddEditContactsAndFaultsDockPaneViewModel : DockPane
     {
+        // Tooltips dictionary
+        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
+        {
+            // Dockpane Headings
+            {"Heading", "TODO Heading" },
+        };
+
         private const string _dockPaneID = "Geomapmaker_AddEditContactsAndFaultsDockPane";
 
+        public ICommand CommandSubmit { get; }
+        public ICommand CommandReset { get; }
+
+        public AddEditContactsAndFaultsDockPaneViewModel()
+        {
+
+            CommandSubmit = new RelayCommand(() => SaveAsync(), () => CanSubmit());
+            CommandReset = new RelayCommand(() => Reset());
+
+            SelectedCF = new CF();
+            SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
+            SelectedCF.DataSource = GeomapmakerModule.DataSourceId; //for display
+            ShapeJson = "{ }";
+            GeomapmakerModule.ContactsAndFaultsVM = this;
+            RefreshCFSymbolsAsync();
+        }
+
         private List<CFSymbol> _cfSymbols = new List<CFSymbol>();
-        public List<CFSymbol> CFSymbols
+        public List<CFSymbol> CFSymbolsOptions
         {
             get => _cfSymbols;
-            set
-            {
-                SetProperty(ref _cfSymbols, value, () => CFSymbols);
-            }
+            set => SetProperty(ref _cfSymbols, value, () => CFSymbolsOptions);
         }
 
         public async void RefreshCFSymbolsAsync()
         {
-            CFSymbols = await Data.CFSymbols.GetCFSymbolList();
+            CFSymbolsOptions = await Data.CFSymbols.GetCFSymbolList();
         }
 
-        public AddEditContactsAndFaultsDockPaneViewModel()
-        {
-            SelectedCF = new CF();
-            SelectedCFSymbol = CFSymbols.FirstOrDefault();
-            SelectedCF.DataSource = GeomapmakerModule.DataSourceId; //for display
-            ShapeJson = "{ }";
-            GeomapmakerModule.ContactsAndFaultsVM = this;
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+        private bool CanSubmit() => !(SelectedCF == null
+                    || SelectedCF.symbol == null
+                    || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
+                    || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
+                    || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
+                    || Shape == null);
 
         /// <summary>
         /// Show the DockPane.
@@ -69,10 +98,12 @@ namespace Geomapmaker
 
         public void Reset()
         {
+            RefreshCFSymbolsAsync();
+
             GeomapmakerModule.ContactsAndFaultsAddTool?.Clear();
             GeomapmakerModule.ContactsAndFaultsEditTool?.Clear();
 
-            SelectedCFSymbol = CFSymbols.FirstOrDefault();
+            SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
             SelectedCF = new CF();
             ShapeJson = "{ }";
             Prepopulate = false;
@@ -91,19 +122,6 @@ namespace Geomapmaker
                 {
                     GeomapmakerModule.ContactsAndFaultsAddTool.SetPopulate();
                 }
-            }
-        }
-
-        public bool IsValid
-        {
-            get
-            {
-                return !(SelectedCF == null
-                    || SelectedCF.symbol == null
-                    || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
-                    || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
-                    || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
-                    || Shape == null);
             }
         }
 
@@ -140,16 +158,17 @@ namespace Geomapmaker
             }
         }
 
+        private Geometry shape;
         public Geometry Shape
         {
             get => SelectedCF.Shape; //shape;
             set
             {
-                //SetProperty(ref shape, value, () => Shape);
+                SetProperty(ref shape, value, () => Shape);
                 SelectedCF.Shape = value;
                 ShapeJson = value.ToJson();
-                CommandManager.InvalidateRequerySuggested(); // Force update of submit button
-                                                             // TODO: The previous line is not enabling Submit when geometry is changed during editing
+                //CommandManager.InvalidateRequerySuggested(); // Force update of submit button
+                //                                             // TODO: The previous line is not enabling Submit when geometry is changed during editing
             }
         }
 
@@ -160,7 +179,7 @@ namespace Geomapmaker
             set => SetProperty(ref shapeJson, value, () => ShapeJson);
         }
 
-        public async Task SaveCF()
+        public async Task SaveAsync()
         {
             FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
@@ -196,45 +215,6 @@ namespace Geomapmaker
             {
                 MessageBox.Show("Hogan's goat!");
             }
-
-            //// Update renderer with new symbol
-            //// TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
-            //List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
-            //List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
-            //    new CIMUniqueValue {
-            //        FieldValues = new string[] { SelectedCF.symbol.key }
-            //    }
-            //};
-
-            //CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
-            //{
-            //    Editable = true,
-            //    Label = SelectedCF.symbol.key,
-            //    //Patch = PatchShape.Default,
-            //    Patch = PatchShape.AreaPolygon,
-            //    Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.symbol, null),
-            //    Visible = true,
-            //    Values = listUniqueValues.ToArray()
-            //};
-            //listUniqueValueClasses.Add(uniqueValueClass);
-            //CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
-            //{
-            //    Classes = listUniqueValueClasses.ToArray(),
-            //};
-            //List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
-            //DataHelper.cfRenderer = new CIMUniqueValueRenderer
-            //{
-            //    UseDefaultSymbol = false,
-            //    Groups = listUniqueValueGroups.ToArray(),
-            //    Fields = new string[] { "symbol" }
-            //    //ValueExpressionInfo = cEI //fields used for testing
-            //};
-
-            //await QueuedTask.Run(() =>
-            //{
-            //    cfLayer.ClearSelection();
-            //    cfLayer.SetRenderer(DataHelper.cfRenderer);
-            //});
         }
     }
 }

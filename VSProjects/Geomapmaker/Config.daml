@@ -74,7 +74,7 @@
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText /></tooltip>
         </button>
-        <tool id="Geomapmaker_ContactsAndFaultsEditTool" caption="Edit Contacts and Faults" className="Geomapmaker.RibbonElements.ContactsAndFaultsEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="connectionPropertiesNotNull" keytip="todo">
+        <tool id="Geomapmaker_ContactsAndFaultsEditTool" caption="Edit Contacts and Faults" className="Geomapmaker.RibbonElements.ContactsAndFaultsEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition" keytip="todo">
           <tooltip heading="Contacts and Faults">
             Edit an existing contact or fault<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
         </tool>
