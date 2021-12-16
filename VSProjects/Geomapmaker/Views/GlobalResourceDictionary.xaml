@@ -84,9 +84,22 @@
     </Style>
 
     <Style TargetType="RadioButton" >
+        <Setter Property="Margin" Value="0,0,0,10"/>
         <Setter Property="Background" Value="{DynamicResource Esri_BackgroundPressedBrush}"/>
         <Setter Property="Foreground" Value="{DynamicResource Esri_TextInfoBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Esri_TextStyleSubduedBrush}"/>
+    </Style>
+
+    <Style TargetType="Slider" >
+        <Setter Property="Margin" Value="0,0,0,10"/>
+    </Style>
+
+    <Style TargetType="CheckBox" >
+        <Setter Property="Margin" Value="0,0,0,10"/>
+    </Style>
+
+    <Style TargetType="ListBox" >
+        <Setter Property="Margin" Value="0,0,0,10"/>
     </Style>
 
     <!--<Style TargetType="Button" >

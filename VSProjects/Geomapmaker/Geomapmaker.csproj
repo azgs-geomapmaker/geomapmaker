@@ -370,8 +370,6 @@
   <ItemGroup>
     <Folder Include="ViewModels\ContactsAndFaults\" />
     <Folder Include="ViewModels\MapUnitPolys\" />
-    <Folder Include="Views\ContactsAndFaults\" />
-    <Folder Include="Views\MapUnitPolys\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--

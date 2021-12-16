@@ -17,6 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    
     <AdornerDecorator>
         <Grid>
             <Grid.RowDefinitions>

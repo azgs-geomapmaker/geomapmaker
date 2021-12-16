@@ -9,6 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{Binding Path=ui.AddEditContactsAndFaultsDockPaneViewModel}">
+    
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -177,7 +178,7 @@
         <ComboBox 
             Grid.Row="10" 
             Grid.Column="1" 
-            ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
             SelectedValue="{Binding SelectedCF.LocationConfidenceMeters}"
             IsReadOnly="False" 
             IsEditable="False" 
