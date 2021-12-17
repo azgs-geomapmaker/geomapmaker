@@ -9,7 +9,7 @@ namespace Geomapmaker
     {
         protected override async void OnClick()
         {
-            if (string.IsNullOrEmpty(DataHelper.connectionProperties.Password))
+            if (DataHelper.connectionProperties == null)
             {
                 MessageBox.Show("Project connection properties is null", "Error");
                 return;

@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"   
              xmlns:ui="clr-namespace:Geomapmaker._helpers"
+             xmlns:conv="clr-namespace:Geomapmaker._helpers"
              xmlns:data="clr-namespace:Geomapmaker.Data"           
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{Binding Path=ui.AddEditContactsAndFaultsDockPaneViewModel}">
-    
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,9 +23,9 @@
     <Grid>
 
         <Grid.Resources>
-            <ui:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
-            <ui:SliderConverter x:Key="SliderConverter" />
-            <ui:ConcealedConverter x:Key="ConcealedConverter" />
+            <conv:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
+            <conv:SliderConverter x:Key="SliderConverter" />
+            <conv:ConcealedConverter x:Key="ConcealedConverter" />
         </Grid.Resources>
 
         <Grid.RowDefinitions>
@@ -95,7 +96,7 @@
             <TextBlock Text="Type:" VerticalAlignment="Center" />
             <Image Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" VerticalAlignment="Center"/>
         </StackPanel>
-        <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding CFSymbolsOptions}" SelectedItem ="{Binding SelectedCFSymbol}" MaxHeight="150" HorizontalAlignment="Stretch">
+        <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding CFSymbolsOptions}" SelectedItem ="{Binding SelectedCFSymbol, UpdateSourceTrigger=PropertyChanged}" MaxHeight="150" MinHeight="50" HorizontalAlignment="Stretch">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -138,7 +139,7 @@
               HorizontalAlignment="Left" 
               VerticalAlignment="Center" 
               Content="Low"
-              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
               >
             </RadioButton>
 
@@ -149,7 +150,7 @@
               HorizontalAlignment="Center" 
               VerticalAlignment="Center" 
               Content="Medium"
-              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
               >
             </RadioButton>
 
@@ -160,26 +161,26 @@
               HorizontalAlignment="Right" 
               VerticalAlignment="Center" 
               Content="High"
-              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
               >
             </RadioButton>
         </Grid>
 
         <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
             <TextBlock Text="Existence Confidence: " />
-            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
         </StackPanel>
         <Slider Grid.Row="8" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
 
         <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
             <TextBlock Text="Location Confidence: " />
-            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.LocationConfidenceMeters}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
         </StackPanel>
         <ComboBox 
             Grid.Row="10" 
             Grid.Column="1" 
             ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
-            SelectedValue="{Binding SelectedCF.LocationConfidenceMeters}"
+            SelectedValue="{Binding SelectedCF.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
             IsEditable="False" 
             >
@@ -189,10 +190,10 @@
             <TextBlock Text="Concealed: " />
             <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" />
         </StackPanel>
-        <CheckBox Grid.Row="12" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}" />
+        <CheckBox Grid.Row="12" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="13" Grid.Column="1" Text="Notes:" />
-        <TextBox Grid.Row="14" Grid.Column="1" MinLines="3" Text="{Binding SelectedCF.Notes}" TextWrapping="Wrap" MaxLength="250"  />
+        <TextBox Grid.Row="14" Grid.Column="1" MinLines="3" Text="{Binding SelectedCF.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
 
         <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandReset}" Style="{DynamicResource Esri_Button}" >Reset</Button>
@@ -201,10 +202,9 @@
 
         <WrapPanel Grid.Row="16" Grid.Column="1" >
             <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
-            <TextBlock FontStyle="Italic" Text="{Binding SelectedCF.DataSource}" Style="{DynamicResource Esri_TextBlockRegular}"/>
+            <TextBlock FontStyle="Italic" Text="{Binding SelectedCF.DataSource, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
 
-        <TextBlock Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson}" TextWrapping="Wrap" VerticalAlignment="Top" />
-
+        <TextBlock Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" />
     </Grid>
 </UserControl>

@@ -44,43 +44,27 @@ namespace Geomapmaker
             return base.OnToolDeactivateAsync(hasMapViewChanged);
         }
 
-        protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
+        protected async override Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
             if (geometry == null)
             {
-                return false;
+                return false; //Task.FromResult(false);
             }
 
-            if (SketchType != SketchGeometryType.Point)
-            {
-                // New Contact or Fault
-                GeomapmakerModule.ContactsAndFaultsVM.Shape = geometry;
-
-                //This is a little janky, but it's the only way I have found to persist the poly and keep it editable
-                //until the whole map unit is saved.
-                //TODO: Is there a better way?
-                //StartSketchAsync(); //Looks like setting current is enough
-                await SetCurrentSketchAsync(geometry);
-            }
-            else
-            {
-                // Populate from existing  
+            if (SketchType == SketchGeometryType.Point)
+            { //Populate from existing 
                 await QueuedTask.Run(() =>
                 {
-                    MapView mv = MapView.Active;
-
+                    var mv = MapView.Active;
                     // Get the features that intersect the sketch geometry.
                     var features = mv.GetFeatures(geometry);
-
                     //Only interested in ContactsAndFaults
                     var cfFeatures = features.Where(x => x.Key.Name == "ContactsAndFaults");
-
                     if (cfFeatures.Count() > 0)
                     {
                         if (cfFeatures.First().Value.Count() > 0)
                         {
                             var cfID = cfFeatures.First().Value.First();
-
                             using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
                             {
                                 using (Table cfTable = geodatabase.OpenDataset<Table>("ContactsAndFaults"))
@@ -89,7 +73,6 @@ namespace Geomapmaker
                                     {
                                         WhereClause = "objectid in (" + cfID + ")"
                                     };
-
                                     using (RowCursor rowCursor = cfTable.Search(queryFilter, false))
                                     {
                                         if (rowCursor.MoveNext())
@@ -97,23 +80,21 @@ namespace Geomapmaker
                                             using (Row row = rowCursor.Current)
                                             {
                                                 //populate a CF from fields
-                                                CF cf = new CF
-                                                {
-                                                    symbol = DataHelper.CFSymbols.Where(cfs => cfs.key == row["symbol"].ToString()).First(),
-                                                    IdentityConfidence = row["identityconfidence"].ToString(),
-                                                    ExistenceConfidence = row["existenceconfidence"].ToString(),
-                                                    LocationConfidenceMeters = row["locationconfidencemeters"].ToString(),
-                                                    IsConcealed = row["isconcealed"].ToString() == "Y",
-                                                    Notes = row["notes"] == null ? "" : row["notes"].ToString(),
-                                                    Shape = GeomapmakerModule.ContactsAndFaultsVM.Shape //in case user had already drawn a line
-                                                    //TODO: Datasource, etc.
-                                                };
+                                                var cf = new CF();
+                                                cf.symbol = DataHelper.CFSymbols.Where(cfs => cfs.key == row["symbol"].ToString()).First();
+                                                cf.IdentityConfidence = row["identityconfidence"].ToString();
+                                                cf.ExistenceConfidence = row["existenceconfidence"].ToString();
+                                                cf.LocationConfidenceMeters = row["locationconfidencemeters"].ToString();
+                                                cf.IsConcealed = row["isconcealed"].ToString() == "Y";
+                                                cf.Notes = row["notes"] == null ? "" : row["notes"].ToString();
+                                                cf.Shape = GeomapmakerModule.ContactsAndFaultsVM.Shape; //in case user had already drawn a line
+                                                                                                        //TODO: Datasource, etc.
 
-                                                // Pass it to a method in the viewmodel called Populate, which will do just that
+                                                //pass it to a method in the viewmodel called Populate, which will do just that
                                                 GeomapmakerModule.ContactsAndFaultsVM.SelectedCF = cf;
                                                 GeomapmakerModule.ContactsAndFaultsVM.SelectedCFSymbol = cf.symbol;
 
-                                                // Turn off populate mode
+                                                //unset populate mode
                                                 SketchType = SketchGeometryType.Line;
                                                 GeomapmakerModule.ContactsAndFaultsVM.Prepopulate = false;
                                                 SetCurrentSketchAsync(cf.Shape); //redraw existing shape if exists
@@ -126,8 +107,21 @@ namespace Geomapmaker
                     }
                 });
             }
+            else
+            {  //creating line for new CF
 
-            return false;
+                //GeomapmakerModule.ContactsAndFaultsVM.SelectedCF.Shape = geometry;
+                GeomapmakerModule.ContactsAndFaultsVM.Shape = geometry;
+
+                //This is a little janky, but it's the only way I have found to persist the poly and keep it editable
+                //until the whole map unit is saved.
+                //TODO: Is there a better way?
+                //StartSketchAsync(); //Looks like setting current is enough
+                await SetCurrentSketchAsync(geometry);
+            }
+
+            return false; // Task.FromResult(false);
+
         }
     }
 }
