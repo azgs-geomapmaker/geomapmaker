@@ -50,6 +50,7 @@ namespace Geomapmaker
         private bool CanSubmit()
         {
             return !(SelectedCF == null
+                || SelectedCF.symbol == null
                 || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
                 || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
                 || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)

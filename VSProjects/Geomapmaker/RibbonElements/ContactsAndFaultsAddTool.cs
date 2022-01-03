@@ -56,15 +56,19 @@ namespace Geomapmaker
                 await QueuedTask.Run(() =>
                 {
                     var mv = MapView.Active;
+
                     // Get the features that intersect the sketch geometry.
                     var features = mv.GetFeatures(geometry);
+
                     //Only interested in ContactsAndFaults
                     var cfFeatures = features.Where(x => x.Key.Name == "ContactsAndFaults");
+
                     if (cfFeatures.Count() > 0)
                     {
                         if (cfFeatures.First().Value.Count() > 0)
                         {
                             var cfID = cfFeatures.First().Value.First();
+
                             using (Geodatabase geodatabase = new Geodatabase(DataHelper.connectionProperties))
                             {
                                 using (Table cfTable = geodatabase.OpenDataset<Table>("ContactsAndFaults"))
