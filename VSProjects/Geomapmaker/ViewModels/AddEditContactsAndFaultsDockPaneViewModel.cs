@@ -203,6 +203,7 @@ namespace Geomapmaker
             // Update renderer with new symbol
             // TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
             List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
+
             List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                 new CIMUniqueValue {
                     FieldValues = new string[] { SelectedCF.symbol.key }
@@ -220,6 +221,7 @@ namespace Geomapmaker
                 Values = listUniqueValues.ToArray()
             };
             listUniqueValueClasses.Add(uniqueValueClass);
+
             CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
             {
                 Classes = listUniqueValueClasses.ToArray(),
