@@ -29,8 +29,8 @@ namespace Geomapmaker
             RefreshCFSymbolsAsync();
 
             SelectedCF = new CF();
-            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
-            SelectedCF.DataSource = DataHelper.DataSource.Source; //for display
+            SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
+            SelectedCF.DataSource = GeomapmakerModule.DataSourceId;
             ShapeJson = "{ }";
             GeomapmakerModule.ContactsAndFaultsVM = this;
         }
@@ -88,7 +88,7 @@ namespace Geomapmaker
             GeomapmakerModule.ContactsAndFaultsAddTool?.Clear();
             GeomapmakerModule.ContactsAndFaultsEditTool?.Clear();
 
-            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
+            SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
             SelectedCF = new CF();
             ShapeJson = "{ }";
             Prepopulate = false;
@@ -138,7 +138,7 @@ namespace Geomapmaker
             get => selectedCF;
             set
             {
-                value.DataSource = DataHelper.DataSource.Source; // For display
+                value.DataSource = GeomapmakerModule.DataSourceId; // For display
                 SetProperty(ref selectedCF, value, () => SelectedCF); // Have to do this to trigger stuff, I guess.
             }
         }
@@ -178,7 +178,7 @@ namespace Geomapmaker
                 ["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters,
                 ["IsConcealed"] = SelectedCF.IsConcealed ? "Y" : "N", // Convert the bool to 'y'/'n'
                 ["Notes"] = SelectedCF.Notes,
-                ["DataSourceID"] = DataHelper.DataSource.DataSource_ID
+                ["DataSourceID"] = GeomapmakerModule.DataSourceId
             };
 
             // Create the new feature
@@ -202,7 +202,7 @@ namespace Geomapmaker
 
             // Update renderer with new symbol
             // TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
-            List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
+            List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(Data.CFSymbols.cfRenderer.Groups[0].Classes);
 
             List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                 new CIMUniqueValue {
@@ -214,7 +214,6 @@ namespace Geomapmaker
             {
                 Editable = true,
                 Label = SelectedCF.symbol.key,
-                //Patch = PatchShape.Default,
                 Patch = PatchShape.AreaPolygon,
                 Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.symbol, null),
                 Visible = true,
@@ -227,7 +226,8 @@ namespace Geomapmaker
                 Classes = listUniqueValueClasses.ToArray(),
             };
             List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
-            DataHelper.cfRenderer = new CIMUniqueValueRenderer
+
+            Data.CFSymbols.cfRenderer = new CIMUniqueValueRenderer
             {
                 UseDefaultSymbol = false,
                 Groups = listUniqueValueGroups.ToArray(),
@@ -238,8 +238,10 @@ namespace Geomapmaker
             await QueuedTask.Run(() =>
             {
                 cfLayer.ClearSelection();
-                cfLayer.SetRenderer(DataHelper.cfRenderer);
+                cfLayer.SetRenderer(Data.CFSymbols.cfRenderer);
             });
+
+            Reset();
         }
     }
 }

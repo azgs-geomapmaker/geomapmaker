@@ -13,8 +13,6 @@ namespace Geomapmaker.Data
     {
         public static CIMUniqueValueRenderer cfRenderer;
 
-        public static ObservableCollection<CFSymbol> CFSymbolsCollection;
-
         public static async Task<List<string>> GetContactsAndFaultsSymbolsAsync()
         {
             List<string> cfInFeatureClass = new List<string>();
@@ -82,6 +80,9 @@ namespace Geomapmaker.Data
                                 description = row["description"] == null ? "" : row["description"].ToString(),
                                 symbol = row["symbol"].ToString()
                             };
+
+                            // TODO: preprocess all this stuff
+                            cfS.symbol = cfS.symbol.Replace("'", "\"");
 
                             // Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
                             cfS.symbol = cfS.symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
