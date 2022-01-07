@@ -202,7 +202,11 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\ContactsFaults\ContactsFaults.xaml.cs">
+      <DependentUpon>ContactsFaults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\CFSymbols.cs" />
+    <Compile Include="ViewModels\ContactsFaults\ContactsFaultsViewModel.cs" />
     <Compile Include="Views\Hierarchy.xaml.cs">
       <DependentUpon>Hierarchy.xaml</DependentUpon>
     </Compile>
@@ -298,6 +302,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ContactsFaults\ContactsFaults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Hierarchy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -368,7 +376,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\ContactsAndFaults\" />
     <Folder Include="ViewModels\MapUnitPolys\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
