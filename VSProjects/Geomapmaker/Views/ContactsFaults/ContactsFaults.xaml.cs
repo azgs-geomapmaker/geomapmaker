@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Geomapmaker.ViewModels.ContactsFaults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,12 @@ namespace Geomapmaker.Views.ContactsFaults
     /// </summary>
     public partial class ContactsFaults : ArcGIS.Desktop.Framework.Controls.ProWindow
     {
+        public ContactsFaultsViewModel contactsFaultsVM = new ContactsFaultsViewModel();
+
         public ContactsFaults()
         {
             InitializeComponent();
+            DataContext = contactsFaultsVM;
         }
     }
 }

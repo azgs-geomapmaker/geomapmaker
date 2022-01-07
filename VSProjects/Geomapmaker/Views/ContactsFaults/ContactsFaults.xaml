@@ -6,17 +6,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
-        Title="ContactsFaults" Height="300" Width="300"
+        Title="Contacts and Faults"
+        Height="300" 
+        Width="300"
+        MinHeight="300" 
+        MinWidth="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:ProWindow.Resources>
-    <Grid>
 
+    <Grid>
+        
     </Grid>
+    
 </controls:ProWindow>
