@@ -1,24 +1,39 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
+using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Geomapmaker.ViewModels.MapUnits
 {
-    internal class MapUnitsViewModel : DockPane
+    public class MapUnitsViewModel : ProWindow, INotifyPropertyChanged
     {
-        private const string _dockPaneID = "Geomapmaker_DescriptionOfMapUnits";
+        public ICommand CommandCancel => new RelayCommand((proWindow) =>
+        {
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
 
-        // This is the only way I found to add a New Line in a label so far
-        public string GeoMaterialConfidenceLabel => "GeoMaterial" + Environment.NewLine + "Confidence:";
+        }, () => true);
 
-        // View models
-        public CreateMapUnitVM Create { get; set; } = new CreateMapUnitVM();
+        public CreateMapUnitVM Create { get; set; }
+        public EditMapUnitVM Edit { get; set; }
+        public DeleteMapUnitVM Delete { get; set; }
 
-        public EditMapUnitVM Edit { get; set; } = new EditMapUnitVM();
-
-        public DeleteMapUnitVM Delete { get; set; } = new DeleteMapUnitVM();
+        public MapUnitsViewModel()
+        {
+            Create = new CreateMapUnitVM(this);
+            Edit = new EditMapUnitVM(this);
+            Delete = new DeleteMapUnitVM(this);
+        }
 
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
@@ -64,75 +79,68 @@ namespace Geomapmaker.ViewModels.MapUnits
             {"Label", 30 },
         };
 
-        /// <summary>
-        /// Show the DockPane.
-        /// </summary>
-        internal static void Show()
+        private List<MapUnit> _mapUnits { get; set; }
+        public List<MapUnit> MapUnits
         {
-            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            pane?.Activate();
+            get => _mapUnits;
+            set
+            {
+                _mapUnits = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        // Convert Color to RGB
-        public static string ColorToRGB(Color? color)
+        private List<MapUnit> _standardDMUs { get; set; }
+        public List<MapUnit> StandardDMUs
         {
-            if (color == null)
+            get => _standardDMUs;
+            set
             {
-                return "#00000000";
+                _standardDMUs = value;
+                NotifyPropertyChanged();
             }
-
-            // GeMS: (1) each RGB color value is integer between 0 and 255; (2) values are left - padded with zeroes so that each consists of 3 digits; (3) values are separated by commas with no spaces(for example, nnn,nnn,nnn).
-
-            return $"{color.Value.R:000},{color.Value.G:000},{color.Value.B:000}";
         }
 
-        // Convert RGB string to System Color
-        public static Color? RGBtoColor(string rgb)
+        //Update collection of dmu
+        public async void RefreshMapUnitsAsync()
         {
-            // Null if the string is empty
-            if (string.IsNullOrEmpty(rgb))
-            {
-                return null;
-            }
-
-            // Split by comma 
-            string[] strArray = rgb.Split(',');
-
-            // Color from RGB bytes
-            return strArray.Length != 3
-                ? null
-                : (Color?)Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2]));
+            MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
+            StandardDMUs = MapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name).ToList();
         }
 
-        // Convert RGB string to Hex
-        public static string RGBtoHex(string rgb)
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            // Null if the string is empty
-            if (string.IsNullOrEmpty(rgb))
-            {
-                return "#00000000";
-            }
-
-            // Split by comma 
-            string[] strArray = rgb.Split(',');
-
-            if (strArray.Length != 3)
-            {
-                return "#00000000";
-            }
-
-            return Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2])).ToString();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
     }
 
-    /// <summary>
-    /// Button implementation to show the DockPane.
-    /// </summary>
-    internal class MapUnits_ShowButton : Button
+    internal class ShowMapUnits : Button
     {
+        private Views.MapUnits.MapUnits _mapunits = null;
+
         protected override void OnClick()
         {
-            MapUnitsViewModel.Show();
+            if (_mapunits != null)
+            {
+                return;
+            }
+
+            _mapunits = new Views.MapUnits.MapUnits
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
+            _mapunits.mapUnitsVM.RefreshMapUnitsAsync();
+
+            _mapunits.Closed += (o, e) => { _mapunits = null; };
+            _mapunits.Show();
+
         }
+
     }
 }

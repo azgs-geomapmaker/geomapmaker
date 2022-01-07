@@ -2,21 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-//using System.Windows;
 using System.Windows.Input;
-using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Catalog;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Extensions;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
-using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 
@@ -29,7 +21,7 @@ namespace Geomapmaker
         protected AddEditMapUnitPolysDockPaneViewModel()
         {
             SelectedMapUnitPoly = new MapUnitPoly();
-            SelectedMapUnitPoly.DataSource = DataHelper.DataSource.Source; //for display
+            SelectedMapUnitPoly.DataSource = GeomapmakerModule.DataSourceId;
             GeomapmakerModule.MapUnitPolysVM = this;
         }
 
@@ -39,40 +31,30 @@ namespace Geomapmaker
         internal static void Show()
         {
             DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            if (pane == null)
-                return;
-            pane.Activate();
+            pane?.Activate();
         }
 
         internal static new void Hide()
         {
             DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            if (pane == null)
-                return;
-            pane.Hide();
+            pane?.Hide();
         }
 
         public Boolean IsValid
         {
-            //TODO: This is not raising property changed event, so the button never enables. Hard to believe I'll have to raise an event from 
-            //each of the properties used below. There must be a better way.
             get
             {
-                //return true;
-
                 return
                     SelectedMapUnit != null &&
                     SelectedMapUnitPoly != null &&
-                    SelectedMapUnitPoly.IdentityConfidence != null && SelectedMapUnitPoly.IdentityConfidence.Trim() != "" &&
-                    //SelectedMapUnitPoly.Shape != null;// &&
-                    Shape != null;// &&
-                                  //SelectedMapUnitPoly.Notes != null && SelectedMapUnitPoly.Notes.Trim() != "" &&
+                    SelectedMapUnitPoly.IdentityConfidence != null &&
+                    SelectedMapUnitPoly.IdentityConfidence.Trim() != "" &&
+                    Shape != null;
             }
         }
 
         public void Reset()
         {
-            //Just clear whichever and ignore the other error
             GeomapmakerModule.AddMapUnitPolyTool?.Clear();
             GeomapmakerModule.EditMapUnitPolyTool?.Clear();
 
@@ -95,7 +77,6 @@ namespace Geomapmaker
             }
         }
 
-        //public string SelectedMapUnit { get; set; }
         private MapUnit selectedMapUnit;
         public MapUnit SelectedMapUnit
         {
@@ -121,8 +102,8 @@ namespace Geomapmaker
             get => selectedMapUnitPoly;
             set
             {
-                value.DataSource = DataHelper.DataSource.Source; //for display
-                SetProperty(ref selectedMapUnitPoly, value, () => SelectedMapUnitPoly); //Have to do this to trigger stuff, I guess.
+                value.DataSource = GeomapmakerModule.DataSourceId; 
+                SetProperty(ref selectedMapUnitPoly, value, () => SelectedMapUnitPoly);
             }
         }
 
@@ -152,11 +133,6 @@ namespace Geomapmaker
 
         public async Task saveMapUnitPoly(/*MapUnitPoly mapUnitPoly*/)
         {
-            Debug.WriteLine("saveMapUnitPoly enter");
-            //MessageBox.Show("Saving");
-
-            //return ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() => {
-
             var polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
 
             //Define some default attribute values
@@ -195,9 +171,6 @@ namespace Geomapmaker
             {
                 polyLayer.ClearSelection();
             });
-
-            //});
-
         }
 
         /// <summary>

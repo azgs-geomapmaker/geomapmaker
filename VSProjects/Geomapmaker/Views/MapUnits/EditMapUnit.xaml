@@ -15,131 +15,132 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="2" Text="Edit Map Unit" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" ToolTip="{Binding Tooltips[EditHeading]}" />
-        </DockPanel>
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <!--Description-->
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="2" Grid.Column="1" Content="Edit:" ToolTip="{Binding Tooltips[Edit]}"/>
-        <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Edit.AllMapUnits}" SelectedItem="{Binding Edit.Selected}" ToolTip="{Binding Tooltips[Edit]}" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding MU}" ToolTip="{Binding Tooltip}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Edit" ToolTip="{Binding Tooltips[Edit]}"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding StandardDMUs}" SelectedItem="{Binding Edit.Selected}" ToolTip="{Binding Tooltips[Edit]}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding MU}" ToolTip="{Binding Tooltip}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-        <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="0, 10, 0, 10" />
+            <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Map Unit:" ToolTip="{Binding Tooltips[MapUnit]}"/>
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Edit.MapUnit, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Map Unit" ToolTip="{Binding Tooltips[MapUnit]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.MapUnit, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="5" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="6" Grid.Column="1" Content="Full Name:" ToolTip="{Binding Tooltips[FullName]}" />
-        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Edit.FullName, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Full Name" ToolTip="{Binding Tooltips[FullName]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Edit.FullName, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" Visibility="{Binding Edit.Visibility}" />
 
-        <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}">
+            <GroupBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}" Visibility="{Binding Edit.Visibility}" >
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-            <Grid >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0" Text="Older Interval" ToolTip="{Binding Tooltips[OlderInterval]}"/>
+                    <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Edit.OlderIntervalOptions}" SelectedItem="{Binding Edit.OlderInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
+                                    <TextBlock Text="{Binding Range}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-                <Label Grid.Row="0" Grid.Column="0" Margin="0" Content="Older Interval:" ToolTip="{Binding Tooltips[OlderInterval]}"/>
-                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Edit.OlderIntervalOptions}" SelectedItem="{Binding Edit.OlderInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
-                                <TextBlock Text="{Binding Range}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
 
-                <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0" Text="Younger Interval" ToolTip="{Binding Tooltips[YoungerInterval]}" />
+                    <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Edit.YoungerIntervalOptions}" SelectedItem="{Binding Edit.YoungerInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}"  >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
+                                    <TextBlock Text="{Binding Range}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+            </GroupBox>
 
-                <Label Grid.Row="0" Grid.Column="2" Margin="0" Content="Younger Interval:" ToolTip="{Binding Tooltips[YoungerInterval]}" />
-                <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Edit.YoungerIntervalOptions}" SelectedItem="{Binding Edit.YoungerInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
-                                <TextBlock Text="{Binding Range}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </Grid>
-        </GroupBox>
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="Relative Age" ToolTip="{Binding Tooltips[RelativeAge]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Edit.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}" MaxLength="{Binding MaxLength[RelativeAge]}" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="8" Grid.Column="1" Content="Relative Age:" ToolTip="{Binding Tooltips[RelativeAge]}" />
-        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Edit.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}" MaxLength="{Binding MaxLength[RelativeAge]}" />
+            <TextBlock Grid.Row="13" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="14" Grid.Column="1"  MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="9" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="9" Grid.Column="2"  MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Label" ToolTip="{Binding Tooltips[Label]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding Edit.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" MinHeight="20" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="10" Grid.Column="1" Content="Label:" ToolTip="{Binding Tooltips[Label]}" />
-        <TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Edit.Label, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge"  MaxLength="{Binding MaxLength[Label]}" />
+            <TextBlock Grid.Row="17" Grid.Column="1" Text="Color" ToolTip="{Binding Tooltips[Color]}" Visibility="{Binding Edit.Visibility}" />
+            <wpftk:ColorPicker Grid.Row="18" Grid.Column="1" SelectedColor="{Binding Edit.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" Margin="0,0,0,10" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="11" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
-        <wpftk:ColorPicker Grid.Row="11" Grid.Column="2" SelectedColor="{Binding Edit.Color}" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" />
+            <TextBlock Grid.Row="19" Grid.Column="1" Text="GeoMaterial" ToolTip="{Binding Tooltips[GeoMaterial]}" Visibility="{Binding Edit.Visibility}" />
+            <ComboBox Grid.Row="20" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialOptions}" SelectedValue="{Binding Edit.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" Visibility="{Binding Edit.Visibility}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding IndentedName}" ToolTip="{Binding Definition}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-        <Label Grid.Row="12" Grid.Column="1" Content="GeoMaterial:" ToolTip="{Binding Tooltips[GeoMaterial]}" />
-        <ComboBox Grid.Row="12" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialOptions}" SelectedValue="{Binding Edit.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding IndentedName}" ToolTip="{Binding Definition}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+            <TextBlock Grid.Row="21" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" Visibility="{Binding Edit.Visibility}" />
+            <ComboBox Grid.Row="22" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" Visibility="{Binding Edit.Visibility}" />
 
-        <Label Grid.Row="13" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
-        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" />
+            <StackPanel Grid.Row="23" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+                <Button Margin="5" Padding="5" Command="{Binding Edit.CommandUpdate}">Update</Button>
+            </StackPanel>
 
-        <Button Grid.Row="14" Grid.Column="1" Command="{Binding Edit.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
-        <Button Grid.Row="14" Grid.Column="2" Command="{Binding Edit.CommandUpdate}" ToolTip="{Binding Tooltips[UpdateButton]}" >Update</Button>
-
-    </Grid>
-
+        </Grid>
+    </AdornerDecorator>
 </UserControl>

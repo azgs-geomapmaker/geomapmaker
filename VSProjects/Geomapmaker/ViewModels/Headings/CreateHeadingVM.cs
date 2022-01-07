@@ -2,32 +2,32 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
 {
-    internal class CreateHeadingsVM : DockPane, INotifyDataErrorInfo
+    public class CreateHeadingVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        // Create's save button
         public ICommand CommandSave { get; }
-        public ICommand CommandReset { get; }
 
-        public CreateHeadingsVM()
+        public HeadingsViewModel ParentVM { get; set; }
+
+        public CreateHeadingVM(HeadingsViewModel parentVM)
         {
-            // Init submit command
-            CommandSave = new RelayCommand(() => SubmitAsync(), () => CanSave());
-            CommandReset = new RelayCommand(() => ResetAsync());
+            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
 
-            // Initialize to trigger validation
-            Name = "";
-            Description = "";
+            ParentVM = parentVM;
+
+            // Initialize required values
+            Name = null;
+            Description = null;
         }
 
         // Heading Name
@@ -38,7 +38,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _name, value, () => Name);
-                ValidateHeadingName(_name, "Name");
+                ValidateHeadingName(Name, "Name");
             }
         }
 
@@ -50,7 +50,7 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _description, value, () => Description);
-                ValidateDescription(_description, "Description");
+                ValidateDescription(Description, "Description");
             }
         }
 
@@ -67,69 +67,72 @@ namespace Geomapmaker.ViewModels.Headings
         /// <summary>
         /// Execute the submit command
         /// </summary>
-        private async Task SubmitAsync()
+        private async void SaveAsync()
         {
-            if (Data.DbConnectionProperties.GetProperties() == null)
+            string errorMessage = null;
+
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
             {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
                 return;
             }
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
-
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                try
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    Table enterpriseTable = dmu.GetTable();
+
+                    EditOperation editOperation = new EditOperation();
+
+                    editOperation.Callback(context =>
                     {
+                        TableDefinition tableDefinition = enterpriseTable.GetDefinition();
 
-                        editOperation.Callback(context =>
+                        using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                         {
-                            TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-                            using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                            rowBuffer["Name"] = Name;
+                            rowBuffer["FullName"] = Name;
+                            rowBuffer["Description"] = Description;
+                            rowBuffer["ParagraphStyle"] = "Heading";
+                            rowBuffer["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+
+                            using (Row row = enterpriseTable.CreateRow(rowBuffer))
                             {
-                                rowBuffer["Name"] = Name;
-                                rowBuffer["FullName"] = Name;
-                                rowBuffer["Description"] = Description;
-                                rowBuffer["ParagraphStyle"] = "Heading";
-                                rowBuffer["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
-
-                                using (Row row = enterpriseTable.CreateRow(rowBuffer))
-                                {
-                                    // To Indicate that the attribute table has to be updated.
-                                    context.Invalidate(row);
-                                }
+                                // To Indicate that the attribute table has to be updated.
+                                context.Invalidate(row);
                             }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
                         }
+                    }, enterpriseTable);
 
+                    bool result = editOperation.Execute();
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
 
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
                 }
             });
 
-            // Update mapunits
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                ParentVM.RefreshMapUnitsAsync();
 
-            // Reset values
-            Name = "";
-            Description = "";
-        }
-
-        private async Task ResetAsync()
-        {
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
-
-            // Reset values
-            Name = null;
-            Description = null;
+                // Reset values
+                Name = "";
+                Description = "";
+            }
         }
 
         #region Validation
@@ -162,7 +165,7 @@ namespace Geomapmaker.ViewModels.Headings
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Any(a => a.Name.ToLower() == name.ToLower()))
+            else if (ParentVM.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
             }

@@ -1,20 +1,37 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
+using Geomapmaker.Models;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
 {
-    internal class HeadingsViewModel : DockPane
+    public class HeadingsViewModel : ProWindow, INotifyPropertyChanged
     {
+        public ICommand CommandCancel => new RelayCommand((proWindow) =>
+        {
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
 
-        private const string _dockPaneID = "Geomapmaker_Headings";
+        }, () => true);
 
-        // View models
-        public CreateHeadingsVM Create { get; set; } = new CreateHeadingsVM();
+        public CreateHeadingVM Create { get; set; }
+        public EditHeadingVM Edit { get; set; }
+        public DeleteHeadingVM Delete { get; set; }
 
-        public EditHeadingsVM Edit { get; set; } = new EditHeadingsVM();
-
-        public DeleteHeadingsVM Delete { get; set; } = new DeleteHeadingsVM();
+        public HeadingsViewModel()
+        {
+            Create = new CreateHeadingVM(this);
+            Edit = new EditHeadingVM(this);
+            Delete = new DeleteHeadingVM(this);
+        }
 
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
@@ -46,24 +63,67 @@ namespace Geomapmaker.ViewModels.Headings
             {"Description", 3000 },
         };
 
-        /// <summary>
-        /// Show the DockPane.
-        /// </summary>
-        internal static void Show()
+        private List<MapUnit> _mapUnits { get; set; }
+        public List<MapUnit> MapUnits
         {
-            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            pane?.Activate();
+            get => _mapUnits;
+            set
+            {
+                _mapUnits = value;
+                NotifyPropertyChanged();
+            }
         }
+
+        private List<MapUnit> _headings { get; set; }
+        public List<MapUnit> Headings
+        {
+            get => _headings;
+            set
+            {
+                _headings = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        //Update collection of dmu
+        public async void RefreshMapUnitsAsync()
+        {
+            MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
+            Headings = MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name).ToList();
+        }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
-    /// <summary>
-    /// Button implementation to show the DockPane.
-    /// </summary>
-    internal class Headings_ShowButton : Button
+    internal class ShowHeadings : Button
     {
+        private Views.Headings.Headings _headings = null;
+
         protected override void OnClick()
         {
-            HeadingsViewModel.Show();
+            if (_headings != null)
+            {
+                return;
+            }
+
+            _headings = new Views.Headings.Headings
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
+            _headings.headingsVM.RefreshMapUnitsAsync();
+
+            _headings.Closed += (o, e) => { _headings = null; };
+
+            _headings.Show();
         }
     }
 }

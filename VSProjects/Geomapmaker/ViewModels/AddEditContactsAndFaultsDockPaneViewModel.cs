@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,13 +19,42 @@ namespace Geomapmaker
     {
         private const string _dockPaneID = "Geomapmaker_AddEditContactsAndFaultsDockPane";
 
+        public ICommand CommandSubmit { get; }
+        public ICommand CommandReset { get; }
+
         protected AddEditContactsAndFaultsDockPaneViewModel()
         {
+            CommandSubmit = new RelayCommand(() => SaveAsync(), () => CanSubmit());
+            CommandReset = new RelayCommand(() => Reset());
+            RefreshCFSymbolsAsync();
+
             SelectedCF = new CF();
-            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
-            SelectedCF.DataSource = DataHelper.DataSource.Source; //for display
+            SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
+            SelectedCF.DataSource = GeomapmakerModule.DataSourceId;
             ShapeJson = "{ }";
             GeomapmakerModule.ContactsAndFaultsVM = this;
+        }
+
+        private List<CFSymbol> _cfSymbolsOptions = new List<CFSymbol>();
+        public List<CFSymbol> CFSymbolsOptions
+        {
+            get => _cfSymbolsOptions;
+            set => SetProperty(ref _cfSymbolsOptions, value, () => CFSymbolsOptions);
+        }
+
+        public async void RefreshCFSymbolsAsync()
+        {
+            CFSymbolsOptions = await Data.CFSymbols.GetCFSymbolList();
+        }
+
+        private bool CanSubmit()
+        {
+            return !(SelectedCF == null
+                || SelectedCF.symbol == null
+                || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
+                || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
+                || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
+                || Shape == null);
         }
 
         /// <summary>
@@ -58,7 +88,7 @@ namespace Geomapmaker
             GeomapmakerModule.ContactsAndFaultsAddTool?.Clear();
             GeomapmakerModule.ContactsAndFaultsEditTool?.Clear();
 
-            SelectedCFSymbol = DataHelper.CFSymbols.FirstOrDefault();
+            SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
             SelectedCF = new CF();
             ShapeJson = "{ }";
             Prepopulate = false;
@@ -77,18 +107,6 @@ namespace Geomapmaker
                 {
                     GeomapmakerModule.ContactsAndFaultsAddTool.SetPopulate();
                 }
-            }
-        }
-
-        public bool IsValid
-        {
-            get
-            {
-                return !(SelectedCF == null
-                    || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
-                    || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
-                    || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
-                    || Shape == null);
             }
         }
 
@@ -120,7 +138,7 @@ namespace Geomapmaker
             get => selectedCF;
             set
             {
-                value.DataSource = DataHelper.DataSource.Source; // For display
+                value.DataSource = GeomapmakerModule.DataSourceId; // For display
                 SetProperty(ref selectedCF, value, () => SelectedCF); // Have to do this to trigger stuff, I guess.
             }
         }
@@ -145,7 +163,7 @@ namespace Geomapmaker
             set => SetProperty(ref shapeJson, value, () => ShapeJson);
         }
 
-        public async Task SaveCF()
+        public async Task SaveAsync()
         {
             FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
@@ -160,7 +178,7 @@ namespace Geomapmaker
                 ["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters,
                 ["IsConcealed"] = SelectedCF.IsConcealed ? "Y" : "N", // Convert the bool to 'y'/'n'
                 ["Notes"] = SelectedCF.Notes,
-                ["DataSourceID"] = DataHelper.DataSource.DataSource_ID
+                ["DataSourceID"] = GeomapmakerModule.DataSourceId
             };
 
             // Create the new feature
@@ -184,7 +202,8 @@ namespace Geomapmaker
 
             // Update renderer with new symbol
             // TODO: This approach (just adding the new symbol to the renderer) does not remove a symbol if it is no longer used.
-            List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(DataHelper.cfRenderer.Groups[0].Classes);
+            List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>(Data.CFSymbols.cfRenderer.Groups[0].Classes);
+
             List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                 new CIMUniqueValue {
                     FieldValues = new string[] { SelectedCF.symbol.key }
@@ -195,19 +214,20 @@ namespace Geomapmaker
             {
                 Editable = true,
                 Label = SelectedCF.symbol.key,
-                //Patch = PatchShape.Default,
                 Patch = PatchShape.AreaPolygon,
                 Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.symbol, null),
                 Visible = true,
                 Values = listUniqueValues.ToArray()
             };
             listUniqueValueClasses.Add(uniqueValueClass);
+
             CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
             {
                 Classes = listUniqueValueClasses.ToArray(),
             };
             List<CIMUniqueValueGroup> listUniqueValueGroups = new List<CIMUniqueValueGroup> { uvg };
-            DataHelper.cfRenderer = new CIMUniqueValueRenderer
+
+            Data.CFSymbols.cfRenderer = new CIMUniqueValueRenderer
             {
                 UseDefaultSymbol = false,
                 Groups = listUniqueValueGroups.ToArray(),
@@ -218,8 +238,10 @@ namespace Geomapmaker
             await QueuedTask.Run(() =>
             {
                 cfLayer.ClearSelection();
-                cfLayer.SetRenderer(DataHelper.cfRenderer);
+                cfLayer.SetRenderer(Data.CFSymbols.cfRenderer);
             });
+
+            Reset();
         }
     }
 }

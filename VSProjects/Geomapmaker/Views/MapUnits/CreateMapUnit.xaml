@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:local="clr-namespace:Geomapmaker.Views.MapUnits"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             >
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,115 +16,133 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="2" Text="Create Map Unit" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" ToolTip="{Binding Tooltips[CreateHeading]}" />
-        </DockPanel>
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <!--Description-->
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="2" Grid.Column="1" Content="Map Unit:" ToolTip="{Binding Tooltips[MapUnit]}" />
-        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Create.MapUnit, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Map Unit" ToolTip="{Binding Tooltips[MapUnit]}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.MapUnit, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" />
 
-        <Label Grid.Row="3" Grid.Column="1" Content="Name:" ToolTip="{Binding Tooltips[Name]}" />
-        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" />
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Full Name:" ToolTip="{Binding Tooltips[FullName]}" />
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Create.FullName, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" />
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Full Name" ToolTip="{Binding Tooltips[FullName]}" />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.FullName, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" />
 
-        <GroupBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}">
-            <Grid >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Margin="0" Content="Older Interval:" ToolTip="{Binding Tooltips[OlderInterval]}"/>
-                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Create.OlderIntervalOptions}" SelectedItem="{Binding Create.OlderInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
-                                <TextBlock Text="{Binding Range}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0" Text="Older Interval" ToolTip="{Binding Tooltips[OlderInterval]}"/>
+                    <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Create.OlderIntervalOptions}" SelectedItem="{Binding Create.OlderInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
+                                    <TextBlock Text="{Binding Range}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-                <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
 
-                <Label Grid.Row="0" Grid.Column="2" Margin="0" Content="Younger Interval:" ToolTip="{Binding Tooltips[YoungerInterval]}" />
-                <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Create.YoungerIntervalOptions}" SelectedItem="{Binding Create.YoungerInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}"  >
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
-                                <TextBlock Text="{Binding Range}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </Grid>
-        </GroupBox>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0" Text="Younger Interval" ToolTip="{Binding Tooltips[YoungerInterval]}" />
+                    <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Create.YoungerIntervalOptions}" SelectedItem="{Binding Create.YoungerInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}"  >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12" />
+                                    <TextBlock Text="{Binding Range}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+            </GroupBox>
 
-        <Label Grid.Row="6" Grid.Column="1" Content="Relative Age:" ToolTip="{Binding Tooltips[RelativeAge]}" />
-        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Create.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}" MaxLength="{Binding MaxLength[RelativeAge]}" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Relative Age" ToolTip="{Binding Tooltips[RelativeAge]}" />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Create.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}" MaxLength="{Binding MaxLength[RelativeAge]}" />
 
-        <Label Grid.Row="7" Grid.Column="1" Content="Description:" ToolTip="{Binding Tooltips[Description]}" />
-        <TextBox Grid.Row="7" Grid.Column="2"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" />
+            <TextBox Grid.Row="11" Grid.Column="1"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
 
-        <Label Grid.Row="8" Grid.Column="1" Content="Label:" ToolTip="{Binding Tooltips[Label]}" />
-        <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" />
+            <TextBlock Grid.Row="12" Grid.Column="1" Text="Label" ToolTip="{Binding Tooltips[Label]}" />
+            <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" MinHeight="20" />
 
-        <Label Grid.Row="9" Grid.Column="1" Content="Color:" ToolTip="{Binding Tooltips[Color]}" />
-        <wpftk:ColorPicker Grid.Row="9" Grid.Column="2" SelectedColor="{Binding Create.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" />
+            <TextBlock Grid.Row="14" Grid.Column="1" Text="Color" ToolTip="{Binding Tooltips[Color]}" />
+            <wpftk:ColorPicker Grid.Row="15" Grid.Column="1" SelectedColor="{Binding Create.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" Margin="0,0,0,10" />
 
-        <Label Grid.Row="10" Grid.Column="1" Content="GeoMaterial:" ToolTip="{Binding Tooltips[GeoMaterial]}" />
-        <ComboBox Grid.Row="10" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding IndentedName}" ToolTip="{Binding Definition}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+            <TextBlock Grid.Row="16" Grid.Column="1" Text="GeoMaterial" ToolTip="{Binding Tooltips[GeoMaterial]}" />
+            <ComboBox Grid.Row="17" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding IndentedName}" ToolTip="{Binding Definition}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-        <Label Grid.Row="11" Grid.Column="1" Content="{Binding GeoMaterialConfidenceLabel}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
-        <ComboBox Grid.Row="11" Grid.Column="2" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" />
+            <TextBlock Grid.Row="18" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
+            <ComboBox Grid.Row="19" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" />
 
-        <Button Grid.Row="12" Grid.Column="1" Command="{Binding Create.CommandReset}" ToolTip="{Binding Tooltips[ClearButton]}" >Clear</Button>
-        <Button Grid.Row="12" Grid.Column="2" Command="{Binding Create.CommandSave}" ToolTip="{Binding Tooltips[SaveButton]}" >Save</Button>
+            <StackPanel Grid.Row="20" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+                <Button Margin="5" Padding="5" Command="{Binding Create.CommandSave}">Save</Button>
+            </StackPanel>
 
-    </Grid>
+        </Grid>
+    </AdornerDecorator>
 </UserControl>

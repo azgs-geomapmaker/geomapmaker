@@ -202,15 +202,56 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\CFSymbols.cs" />
+    <Compile Include="Views\Hierarchy.xaml.cs">
+      <DependentUpon>Hierarchy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnits\MapUnits.xaml.cs">
+      <DependentUpon>MapUnits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Headings\DeleteHeadingVM.cs" />
+    <Compile Include="ViewModels\Headings\EditHeadingVM.cs" />
+    <Compile Include="ViewModels\Headings\CreateHeadingVM.cs" />
+    <Compile Include="Views\Headings\CreateHeading.xaml.cs">
+      <DependentUpon>CreateHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\DeleteHeading.xaml.cs">
+      <DependentUpon>DeleteHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\EditHeading.xaml.cs">
+      <DependentUpon>EditHeading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Headings\Headings.xaml.cs">
+      <DependentUpon>Headings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\DataSources\CreateDataSourceVM.cs" />
+    <Compile Include="ViewModels\DataSources\DataSourcesViewModel.cs" />
+    <Compile Include="ViewModels\DataSources\DeleteDataSourceVM.cs" />
+    <Compile Include="ViewModels\DataSources\EditDataSourceVM.cs" />
+    <Compile Include="ViewModels\Headings\HeadingsViewModel.cs" />
+    <Compile Include="Views\DataSources\DeleteDataSource.xaml.cs">
+      <DependentUpon>DeleteDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSources\EditDataSource.xaml.cs">
+      <DependentUpon>EditDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSources\CreateDataSource.xaml.cs">
+      <DependentUpon>CreateDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSources\DataSources.xaml.cs">
+      <DependentUpon>DataSources.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RibbonElements\DataSourceComboBox.cs" />
     <Compile Include="Data\Confidence.cs" />
-    <Compile Include="Data\DbConnectionProperties.cs" />
+    <Compile Include="Data\DataSources.cs" />
     <Compile Include="Data\DescriptionOfMapUnits.cs" />
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
-    <Compile Include="Views\Hierarchy.xaml.cs">
-      <DependentUpon>Hierarchy.xaml</DependentUpon>
+    <Compile Include="Views\ProjectSettings.xaml.cs">
+      <DependentUpon>ProjectSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModels\HierarchyViewModel.cs" />
     <Compile Include="ViewModels\MapUnits\CreateMapUnitVM.cs" />
     <Compile Include="ViewModels\MapUnits\DeleteMapUnitVM.cs" />
@@ -224,26 +265,7 @@
     <Compile Include="Views\MapUnits\EditMapUnit.xaml.cs">
       <DependentUpon>EditMapUnit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MapUnits\MapUnits.xaml.cs">
-      <DependentUpon>MapUnits.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
-    <Compile Include="ViewModels\Headings\CreateHeadingsVM.cs" />
-    <Compile Include="ViewModels\Headings\DeleteHeadingsVM.cs" />
-    <Compile Include="ViewModels\Headings\EditHeadingsVM.cs" />
-    <Compile Include="Views\Headings\CreateHeading.xaml.cs">
-      <DependentUpon>CreateHeading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Headings\DeleteHeading.xaml.cs">
-      <DependentUpon>DeleteHeading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Headings\EditHeading.xaml.cs">
-      <DependentUpon>EditHeading.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Headings\Headings.xaml.cs">
-      <DependentUpon>Headings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\Headings\HeadingsViewModel.cs" />
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
@@ -259,27 +281,17 @@
     </Compile>
     <Compile Include="ViewModels\AddEditMapUnitPolysDockPaneViewModel.cs" />
     <Compile Include="Models\MapUnitPoly.cs" />
-    <Compile Include="RibbonElements\AddMapUnitsButton.cs" />
-    <Compile Include="RibbonElements\EditMapUnitsButton.cs" />
     <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
     <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
-    <Compile Include="ViewModels\AddEditMapUnitsDockPaneViewModel.cs" />
     <Compile Include="GeomapmakerConfiguration.cs" />
     <Compile Include="DataHelper.cs" />
-    <Compile Include="RibbonElements\LoginButton.cs" />
-    <Compile Include="Views\DataSourceDialogProWindow.xaml.cs">
-      <DependentUpon>DataSourceDialogProWindow.xaml</DependentUpon>
-    </Compile>
     <!--<Compile Include="Views\LoginDialogProWindow.xaml.cs" />-->
-    <Compile Include="Views\LoginDialogProWindow.xaml.cs">
-      <DependentUpon>LoginDialogProWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
-    <Compile Include="RibbonElements\ProjectComboBoxItem.cs" />
-    <Compile Include="RibbonElements\ProjectsComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RibbonElements\DataSourceButton.cs" />
+    <Compile Include="_helpers\ColorConverter.cs" />
+    <Compile Include="_helpers\ValueConverters.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -287,18 +299,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\Hierarchy.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MapUnits\CreateMapUnit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MapUnits\DeleteMapUnit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MapUnits\EditMapUnit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -322,6 +322,38 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\DataSources\DeleteDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DataSources\EditDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DataSources\CreateDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DataSources\DataSources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnits\CreateMapUnit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnits\DeleteMapUnit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnits\EditMapUnit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddEditContactsAndFaultsDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -334,20 +366,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DataSourceDialogProWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LoginDialogProWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\ContactsAndFaults\" />
     <Folder Include="ViewModels\MapUnitPolys\" />
-    <Folder Include="Views\ContactsAndFaults\" />
-    <Folder Include="Views\MapUnitPolys\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--

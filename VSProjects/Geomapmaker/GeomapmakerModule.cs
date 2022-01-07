@@ -1,17 +1,45 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Core.Events;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Mapping;
 using Geomapmaker.RibbonElements;
+using Geomapmaker.ViewModels;
 
 namespace Geomapmaker
 {
     internal class GeomapmakerModule : Module
     {
+        private GeomapmakerModule()
+        {
+            ProjectOpenedEvent.Subscribe(OnProjectOpen);
+            ProjectClosedEvent.Subscribe(OnProjectClosed);
+        }
+
+        private void OnProjectClosed(ProjectEventArgs args)
+        {
+            // Reset the flag
+            hasSettings = false;
+        }
+
+        private void OnProjectOpen(ProjectEventArgs args)
+        {
+            // If flag has not been set then we didn't enter OnReadSettingsAsync
+            if (!hasSettings)
+            {
+                Settings.Clear();
+            }
+
+            DataHelper.SetConnectionProperties(GetConnectionPropertiesFromSettings());
+        }
+
+        internal Dictionary<string, string> Settings { get; set; } = new Dictionary<string, string>();
+
         private static GeomapmakerModule _this = null;
+
+        public static string DataSourceId { get; set; }
 
         //public DataHelper helper = new DataHelper();
         internal static AddEditContactsAndFaultsDockPaneViewModel ContactsAndFaultsVM { get; set; }
@@ -22,6 +50,27 @@ namespace Geomapmaker
         internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
         internal static MapUnitPolyEditTool EditMapUnitPolyTool { get; set; }
 
+        public DatabaseConnectionProperties GetConnectionPropertiesFromSettings()
+        {
+            string Instance = Settings.ContainsKey("Instance") ? Settings["Instance"] : "";
+            string Database = Settings.ContainsKey("Database") ? Settings["Database"] : "";
+            string Version = Settings.ContainsKey("Version") ? Settings["Version"] : "";
+            string Username = Settings.ContainsKey("Username") ? Settings["Username"] : "";
+            string Password = Settings.ContainsKey("Password") ? Settings["Password"] : "";
+
+            DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL)
+            {
+                AuthenticationMode = AuthenticationMode.DBMS,
+                Instance = Instance,
+                Database = Database,
+                Version = Version,
+                User = Username,
+                Password = Password
+            };
+
+            return dbConnectionProps;
+        }
+
         /// <summary>
         /// Retrieve the singleton instance to this module here
         /// </summary>
@@ -29,10 +78,55 @@ namespace Geomapmaker
 
         #region Overrides
 
+        private bool hasSettings = false;
+        protected override Task OnReadSettingsAsync(ModuleSettingsReader settings)
+        {
+            // set the flag
+            hasSettings = true;
+
+            // clear existing setting values
+            Settings.Clear();
+
+            if (settings == null)
+            {
+                return Task.FromResult(0);
+            }
+
+            // Get the property names from the setting view model
+            List<string> settingPropertyNames = typeof(ProjectSettingsViewModel).GetProperties().Select(f => f.Name).ToList();
+
+            foreach (string key in settingPropertyNames)
+            {
+                object value = settings.Get(key);
+
+                if (value != null)
+                {
+                    if (Settings.ContainsKey(key))
+                    {
+                        Settings[key] = value.ToString();
+                    }
+                    else
+                    {
+                        Settings.Add(key, value.ToString());
+                    }
+                }
+            }
+
+            return Task.FromResult(0);
+        }
+
+        protected override Task OnWriteSettingsAsync(ModuleSettingsWriter settings)
+        {
+            foreach (string key in Settings.Keys)
+            {
+                settings.Add(key, Settings[key]);
+            }
+            return Task.FromResult(0);
+        }
+
         protected override bool Initialize()
         {
             HideDockPanes();
-            RemoveLayersTables();
 
             return true;
         }
@@ -44,7 +138,6 @@ namespace Geomapmaker
         protected override bool CanUnload()
         {
             HideDockPanes();
-            RemoveLayersTables();
 
             return true;
         }
@@ -65,24 +158,6 @@ namespace Geomapmaker
                 DockPane pane = FrameworkApplication.DockPaneManager.Find(dockId);
                 pane?.Hide();
             }
-        }
-
-        // Remove geomapmaker layers and tables when loading/unloading
-        private void RemoveLayersTables()
-        {
-            ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
-            {
-                var map = MapView.Active?.Map;
-
-                if (map != null)
-                {
-                    // Remove all layers except basemaps
-                    map.RemoveLayers(map.Layers.Where(a => a.MapLayerType != MapLayerType.BasemapBackground && a.MapLayerType != MapLayerType.BasemapTopReference));
-                    // Remove all standalone tables
-                    map.RemoveStandaloneTables(map.StandaloneTables);
-                }
-
-            });
         }
 
         #endregion Overrides

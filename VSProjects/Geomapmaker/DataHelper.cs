@@ -1,17 +1,13 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker.Data;
 using Geomapmaker.Models;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 
 namespace Geomapmaker
 {
@@ -21,20 +17,9 @@ namespace Geomapmaker
         public static string userName;
 
         public static DatabaseConnectionProperties connectionProperties;
-        public static void SetConnectionProperties(JObject props)
+        public static void SetConnectionProperties(DatabaseConnectionProperties props)
         {
-            connectionProperties = new DatabaseConnectionProperties(EnterpriseDatabaseType.PostgreSQL)
-            {
-                AuthenticationMode = AuthenticationMode.DBMS,
-                Instance = props["instance"].ToString(),
-                Database = props["database"].ToString(),
-                User = props["user"].ToString(),
-                Password = props["password"].ToString(),
-            };
-
-            // My plan is to slowly break this class up into smaller classes in the Data folder. 
-            // I'm setting the connection properties twice while I migrate things -camp
-            Data.DbConnectionProperties.SetProperties(props);
+            connectionProperties = props;
         }
 
         public static List<FeatureLayer> currentLayers = new List<FeatureLayer>();
@@ -93,7 +78,13 @@ namespace Geomapmaker
         }
 
         public static event EventHandler DataSourceChanged;
-        private static DataSource dataSource = null;
+        private static DataSource dataSource = new DataSource()
+        {
+            // TODO remove this temp fix. 
+            DataSource_ID = "TODO_FIX",
+            Notes = "Hardcoded a DS while switching to no login mode",
+        };
+
         public static DataSource DataSource
         {
             get => dataSource;
@@ -259,7 +250,7 @@ namespace Geomapmaker
             MapUnits = mapUnits;
 
             // Temp fix while migrating to new data class
-            await DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            //await DescriptionOfMapUnits.RefreshMapUnitsAsync();
         }
 
         public static async Task PopulateContactsAndFaults()
@@ -438,11 +429,11 @@ namespace Geomapmaker
                                 //create and load map unit
                                 DataSource dS = new DataSource
                                 {
-                                    ID = long.Parse(row["objectid"].ToString()),
-                                    Source = row["source"].ToString(),
-                                    DataSource_ID = row["datasources_id"].ToString(),
-                                    Url = row["url"] == null ? "" : row["url"].ToString(),
-                                    Notes = row["notes"] == null ? "" : row["notes"].ToString()
+                                    ObjectId = long.Parse(row["objectid"].ToString()),
+                                    Source = row["source"]?.ToString(),
+                                    DataSource_ID = row["datasources_id"]?.ToString(),
+                                    Url = row["url"]?.ToString(),
+                                    Notes = row["notes"]?.ToString()
                                 };
 
                                 //add it to our list
@@ -604,73 +595,4 @@ namespace Geomapmaker
             "250",
         };
     }
-
-    /// <summary>
-    /// Value converter for radio button groups
-    /// </summary>
-    public class RadioConfidenceConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return Equals(value, parameter);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return parameter;
-        }
-    }
-
-    /// <summary>
-    /// TODO THIS NEEDS TO BE MOVED INTO VIEWMODEL Value converter for slider
-    /// </summary>
-    public class SliderConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            switch (value)
-            {
-                case "Low":
-                    return 0;
-                case "Medium":
-                    return 1;
-                case "High":
-                    return 2;
-                default:
-                    return -1;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            switch (value)
-            {
-                case 0.0:
-                    return "Low";
-                case 1.0:
-                    return "Medium";
-                case 2.0:
-                    return "High";
-                default:
-                    return "N/A";
-            }
-        }
-    }
-
-    /// <summary>
-    /// TODO THIS NEEDS TO BE MOVED INTO VIEWMODEL
-    /// </summary>
-    public class ConcealedConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (bool)value ? "Y" : "N";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }

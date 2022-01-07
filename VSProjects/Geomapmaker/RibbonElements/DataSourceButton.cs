@@ -1,38 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
-using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Catalog;
-using ArcGIS.Desktop.Core;
-using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Extensions;
-using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Layouts;
-using ArcGIS.Desktop.Mapping;
+using System.Windows;
 
-namespace Geomapmaker {
-	internal class DataSourceButton : Button {
+namespace Geomapmaker
+{
+    internal class DataSourceButton : Button
+    {
+        protected override async void OnClick()
+        {
+            if (DataHelper.connectionProperties == null)
+            {
+                MessageBox.Show("Project connection properties is null", "Error");
+                return;
+            }
 
-		private DataSourceDialogProWindow _datasourcedialogprowindow = null;
-
-		protected override void OnClick() {
-			//already open?
-			if (_datasourcedialogprowindow != null)
-				return;
-			_datasourcedialogprowindow = new DataSourceDialogProWindow();
-			_datasourcedialogprowindow.Owner = FrameworkApplication.Current.MainWindow;
-			_datasourcedialogprowindow.Closed += (o, e) => { _datasourcedialogprowindow = null; };
-			//_datasourcedialogprowindow.Show();
-			//uncomment for modal
-			_datasourcedialogprowindow.ShowDialog();
-		}
-
-	}
+            using (ProgressDialog progress = new ProgressDialog("Loading Geomapmaker Project"))
+            {
+                progress.Show();
+                await QueuedTask.Run(async () =>
+                {
+                    await DataHelper.PopulateMapUnits();
+                    await DataHelper.PopulateContactsAndFaults();
+                    await DataHelper.PopulateDataSources();
+                });
+                progress.Hide();
+                FrameworkApplication.State.Activate("connectPropsSet");
+            }
+        }
+    }
 }

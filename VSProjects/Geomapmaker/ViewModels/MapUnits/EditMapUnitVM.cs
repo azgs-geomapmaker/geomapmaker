@@ -2,6 +2,9 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -19,19 +22,16 @@ namespace Geomapmaker.ViewModels.MapUnits
     {
         // Edits's save button
         public ICommand CommandUpdate { get; }
-        public ICommand CommandReset { get; }
 
-        public EditMapUnitVM()
+        public MapUnitsViewModel ParentVM { get; set; }
+
+        public EditMapUnitVM(MapUnitsViewModel parentVM)
         {
             // Init commands
             CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
-            CommandReset = new RelayCommand(() => ResetAsync());
 
-            // Trigger validation
-            ValidateChangeWasMade();
+            ParentVM = parentVM;
         }
-
-        public ObservableCollection<MapUnit> AllMapUnits => new ObservableCollection<MapUnit>(Data.DescriptionOfMapUnits.MapUnits);
 
         private MapUnit _selected;
         public MapUnit Selected
@@ -41,23 +41,22 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 SetProperty(ref _selected, value, () => Selected);
 
-                // Set control values if a Map Unit was selected to edit
-                if (Selected != null)
-                {
-                    MapUnit = Selected.MU;
-                    Name = Selected.Name;
-                    FullName = Selected.FullName;
-                    OlderInterval = GetOlderIntervalFromAge(Selected.Age);
-                    YoungerInterval = GetYoungerIntervalFromAge(Selected.Age);
-                    RelativeAge = Selected.RelativeAge;
-                    Description = Selected.Description;
-                    Label = Selected.Label;
-                    Color = MapUnitsViewModel.RGBtoColor(Selected.AreaFillRGB);
-                    GeoMaterial = Selected.GeoMaterial;
-                    GeoMaterialConfidence = Selected.GeoMaterialConfidence;
-                }
+                MapUnit = Selected?.MU;
+                Name = Selected?.Name;
+                FullName = Selected?.FullName;
+                OlderInterval = GetOlderIntervalFromAge(Selected?.Age);
+                YoungerInterval = GetYoungerIntervalFromAge(Selected?.Age);
+                RelativeAge = Selected?.RelativeAge;
+                Description = Selected?.Description;
+                Label = Selected?.Label;
+                Color = _helpers.ColorConverter.RGBtoColor(Selected?.AreaFillRGB);
+                GeoMaterial = Selected?.GeoMaterial;
+                GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
+                NotifyPropertyChanged("Visibility");
             }
         }
+
+        public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         // MapUnit
         private string _mapUnit;
@@ -206,9 +205,9 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
-        public string AreaFillRGB => MapUnitsViewModel.ColorToRGB(Color);
+        public string AreaFillRGB => _helpers.ColorConverter.ColorToRGB(Color);
 
-        public string HexColor => Color == null ? "" : Color.ToString();
+        public string HexColor => Color?.ToString();
 
         public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
 
@@ -242,97 +241,92 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         private bool CanUpdate()
         {
-            return !HasErrors;
-        }
-
-        private async Task ResetAsync()
-        {
-            // Refresh map unit data
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
-
-            NotifyPropertyChanged("AllMapUnits");
-
-            MapUnit = null;
-            Name = null;
-            FullName = null;
-            OlderInterval = null;
-            YoungerInterval = null;
-            RelativeAge = null;
-            Description = null;
-            Label = null;
-            Color = null;
-            GeoMaterial = null;
-            GeoMaterialConfidence = null;
-            Selected = null;
+            return Selected != null && !HasErrors;
         }
 
         private async Task UpdateAsync()
         {
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            string errorMessage = null;
+
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
             {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                return;
+            }
 
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+            await QueuedTask.Run(() =>
+            {
+                try
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    Table enterpriseTable = dmu.GetTable();
+
+                    EditOperation editOperation = new EditOperation();
+
+                    editOperation.Callback(context =>
                     {
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
 
-                        editOperation.Callback(context =>
+                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
-
-                            using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                            while (rowCursor.MoveNext())
                             {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    // In order to update the Map and/or the attribute table.
+                                    // Has to be called before any changes are made to the row.
+                                    context.Invalidate(row);
 
-                                while (rowCursor.MoveNext())
-                                { //TODO: Anything? Should be only one
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        // In order to update the Map and/or the attribute table.
-                                        // Has to be called before any changes are made to the row.
-                                        context.Invalidate(row);
+                                    row["MapUnit"] = MapUnit;
+                                    row["Name"] = Name;
+                                    row["FullName"] = FullName;
+                                    row["Age"] = Age;
+                                    row["RelativeAge"] = RelativeAge;
+                                    row["Description"] = Description;
+                                    row["Label"] = Label;
+                                    row["AreaFillRGB"] = AreaFillRGB;
+                                    row["HexColor"] = HexColor;
+                                    row["GeoMaterial"] = GeoMaterial;
+                                    row["GeoMaterialConfidence"] = GeoMaterialConfidence;
+                                    row["ParagraphStyle"] = "Standard";
+                                    row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
 
-                                        row["MapUnit"] = MapUnit;
-                                        row["Name"] = Name;
-                                        row["FullName"] = FullName;
-                                        row["Age"] = Age;
-                                        row["RelativeAge"] = RelativeAge;
-                                        row["Description"] = Description;
-                                        row["Label"] = Label;
-                                        row["AreaFillRGB"] = AreaFillRGB;
-                                        row["GeoMaterial"] = GeoMaterial;
-                                        row["GeoMaterialConfidence"] = GeoMaterialConfidence;
-                                        row["ParagraphStyle"] = "Standard";
-                                        row["DescriptionSourceID"] = DataHelper.DataSource.DataSource_ID;
+                                    // After all the changes are done, persist it.
+                                    row.Store();
 
-                                        //  If the hexcolor field exists in table
-                                        if (Data.DescriptionOfMapUnits.Fields.Any(a => a.Name == "hexcolor"))
-                                        {
-                                            row["HexColor"] = Color.ToString();
-                                        }
-
-                                        // After all the changes are done, persist it.
-                                        row.Store();
-
-                                        // Has to be called after the store too.
-                                        context.Invalidate(row);
-                                    }
+                                    // Has to be called after the store too.
+                                    context.Invalidate(row);
                                 }
                             }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
                         }
+                    }, enterpriseTable);
+
+                    bool result = editOperation.Execute();
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
                 }
             });
 
-            await ResetAsync();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                ParentVM.RefreshMapUnitsAsync();
+
+                // Reset values
+                Selected = null;
+            }
         }
 
         #region ### Validation ####
@@ -376,7 +370,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Selected.RelativeAge == RelativeAge &&
                 Selected.Description == Description &&
                 Selected.Label == Label &&
-                Selected.HexColor == HexColor &&
+                Selected.AreaFillRGB == AreaFillRGB &&
                 Selected.GeoMaterial == GeoMaterial &&
                 Selected.GeoMaterialConfidence == GeoMaterialConfidence
                 )
@@ -404,7 +398,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
             }
             // Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
@@ -447,7 +441,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Full Name must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Full name is taken." };
             }
@@ -498,7 +492,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (Data.DescriptionOfMapUnits.DMUs.Where(a => a.ID != Selected?.ID).Any(a => a.HexColor == HexColor))
+            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.AreaFillRGB == AreaFillRGB))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }

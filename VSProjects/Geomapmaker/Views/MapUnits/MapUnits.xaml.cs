@@ -1,15 +1,18 @@
-﻿using System.Windows.Controls;
+﻿using Geomapmaker.ViewModels.MapUnits;
 
 namespace Geomapmaker.Views.MapUnits
 {
     /// <summary>
-    /// Interaction logic for DescriptionOfMapUnitsView.xaml
+    /// Interaction logic for MapUnits.xaml
     /// </summary>
-    public partial class MapUnitsView : UserControl
+    public partial class MapUnits : ArcGIS.Desktop.Framework.Controls.ProWindow
     {
-        public MapUnitsView()
+        public MapUnitsViewModel mapUnitsVM = new MapUnitsViewModel();
+
+        public MapUnits()
         {
             InitializeComponent();
+            DataContext = mapUnitsVM;
         }
     }
 }

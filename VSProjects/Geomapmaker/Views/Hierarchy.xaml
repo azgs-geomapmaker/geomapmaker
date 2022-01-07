@@ -1,50 +1,52 @@
-﻿<UserControl x:Class="Geomapmaker.Views.HierarchyView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"   
-             xmlns:ui="clr-namespace:Geomapmaker"
-             xmlns:models="clr-namespace:Geomapmaker.Models"
-             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
-             xmlns:dd="urn:gong-wpf-dragdrop"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{Binding Path=ui.HierarchyViewModel}">
-    <UserControl.Resources>
+﻿<controls:ProWindow x:Class="Geomapmaker.Views.Hierarchy"
+        x:Name="ProWindowDialogWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:controls="clr-namespace:ArcGIS.Desktop.Framework.Controls;assembly=ArcGIS.Desktop.Framework"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+        xmlns:models="clr-namespace:Geomapmaker.Models"            
+        xmlns:dd="urn:gong-wpf-dragdrop" xmlns:viewmodels="clr-namespace:Geomapmaker.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:HierarchyViewModel}"
+        mc:Ignorable="d"
+        Title="Hierarchy" 
+        Height="500" 
+        Width="300"
+        MinHeight="500" 
+        MinWidth="300"
+        WindowStartupLocation="CenterOwner"
+    >
+    
+    <controls:ProWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
-                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </UserControl.Resources>
+    </controls:ProWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" KeyboardNavigation.TabNavigation="Local" Height="30">
-            <TextBlock Grid.Column="1" Text="DMU Hierarchy" ToolTip="{Binding Tooltips[Heading]}" Style="{DynamicResource Esri_TextBlockDockPaneHeader}" />
-        </DockPanel>
-
-        <Label Grid.Row="2" Grid.Column="1" Content="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}"/>
-        <TreeView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Tree}" Padding="0,5,0,5" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}"/>
+        <TreeView Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
@@ -52,8 +54,8 @@
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:MapUnitTreeItem}" ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Visibility="{Binding ColorVisibility}" />
                         <TextBlock Text="{Binding FullName}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -85,8 +87,8 @@
             </Validation.ErrorTemplate>
         </TreeView>
 
-        <Label Grid.Row="4" Grid.Column="1" Content="Unassigned" ToolTip="{Binding Tooltips[Unassigned]}" />
-        <ListBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Unassigned}" ToolTip="{Binding Tooltips[Unassigned]}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" MinHeight="25">
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Unassigned" ToolTip="{Binding Tooltips[Unassigned]}" />
+        <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Unassigned}" ToolTip="{Binding Tooltips[Unassigned]}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" MinHeight="25">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -108,8 +110,10 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Button Grid.Row="6" Grid.Column="1" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandReset}" >Reset</Button>
-        <Button Grid.Row="6" Grid.Column="2" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSave}" >Save</Button>
+        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Close</Button>
+            <Button Margin="5" Padding="5" Command="{Binding CommandSave}">Save</Button>
+        </StackPanel>
 
     </Grid>
-</UserControl>
+</controls:ProWindow>

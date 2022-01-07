@@ -2,21 +2,25 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
+using Nelibur.ObjectMapper;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels
 {
-    internal class HierarchyViewModel : DockPane, IDropTarget
+    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
     {
-        private const string _dockPaneID = "Geomapmaker_Hierarchy";
-
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
         {
@@ -27,37 +31,93 @@ namespace Geomapmaker.ViewModels
             {"Unassigned", "TODO Unassigned" },
         };
 
-        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Tree);
+        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
 
-        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Unassigned);
+        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
 
         public ICommand CommandSave { get; }
-        public ICommand CommandReset { get; }
 
-        protected HierarchyViewModel()
+        public ICommand CommandCancel => new RelayCommand((proWindow) =>
+        {
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
+
+        }, () => true);
+
+        public HierarchyViewModel()
         {
             // Init submit command
-            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
-            CommandReset = new RelayCommand(() => ResetAsync());
+            CommandSave = new RelayCommand(() => SaveAsync());
         }
 
-        private bool CanSave()
+        // Build the tree stucture by looping over the dmus
+        public async Task BuildTree()
         {
-            return true;
-        }
+            // Temp list for unassigned DMUS
+            List<MapUnitTreeItem> tmpUnassigned = new List<MapUnitTreeItem>();
+            List<MapUnitTreeItem> tmpTree = new List<MapUnitTreeItem>();
 
-        private async Task ResetAsync()
-        {
-            await Data.DescriptionOfMapUnits.RefreshMapUnitsAsync();
+            TinyMapper.Bind<MapUnit, MapUnitTreeItem>();
 
-            Tree = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Tree);
+            List<MapUnit> DMUs = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
+
+            // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents 
+            List<MapUnitTreeItem> hierarchyList = DMUs.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).Select(a => TinyMapper.Map<MapUnitTreeItem>(a)).ToList();
+
+            // Loop over the DMUs
+            foreach (MapUnitTreeItem mu in hierarchyList)
+            {
+                // Check the HierarchyKey string for a dash
+                // Children will always have a dash (001-001 for example)
+                if (mu.HierarchyKey.IndexOf("-") != -1)
+                {
+                    // Remove the last dash and last index to find their parent's HierarchyKey (001-001 becomes 001)
+                    string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
+
+                    // Look for a map unit that matches the parent HierarchyKey
+                    MapUnitTreeItem parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
+
+                    if (parent == null)
+                    {
+                        // Parent not found. Add to the unassigned list.
+                        tmpUnassigned.Add(mu);
+                    }
+                    else
+                    {
+                        // Add child to parent
+                        parent.Children.Add(mu);
+                    }
+                }
+                else
+                {
+                    // Check if the HierarchyKey is empty
+                    if (string.IsNullOrWhiteSpace(mu.HierarchyKey))
+                    {
+                        // Add to the unassigned list.
+                        tmpUnassigned.Add(mu);
+                    }
+                    else
+                    {
+                        // Map Unit must be a root node
+                        tmpTree.Add(mu);
+                    }
+                }
+            }
+
+            // Sort unassigned
+            tmpUnassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
+
+            Tree = new ObservableCollection<MapUnitTreeItem>(tmpTree);
+            Unassigned = new ObservableCollection<MapUnitTreeItem>(tmpUnassigned);
+
             NotifyPropertyChanged("Tree");
-
-            Unassigned = new ObservableCollection<MapUnitTreeItem>(Data.DescriptionOfMapUnits.Unassigned);
             NotifyPropertyChanged("Unassigned");
         }
 
         private List<MapUnitTreeItem> HierarchyList = new List<MapUnitTreeItem>();
+
         // Recursively build out Hierarchy Keys
         private void SetHierarchyKeys(ObservableCollection<MapUnitTreeItem> collection, string prefix = "")
         {
@@ -95,64 +155,83 @@ namespace Geomapmaker.ViewModels
         // Write HierarchyKey to database
         private async Task SaveAsync()
         {
+            string errorMessage = null;
+
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (dmu == null)
+            {
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                return;
+            }
+
             HierarchyList = new List<MapUnitTreeItem>();
             SetHierarchyKeys(Tree);
 
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
-                EditOperation editOperation = new EditOperation();
-
-                using (Geodatabase geodatabase = new Geodatabase(Data.DbConnectionProperties.GetProperties()))
+                try
                 {
-                    using (Table enterpriseTable = geodatabase.OpenDataset<Table>("DescriptionOfMapUnits"))
+                    Table enterpriseTable = dmu.GetTable();
+
+                    EditOperation editOperation = new EditOperation();
+
+                    editOperation.Callback(context =>
                     {
-                        editOperation.Callback(context =>
+                        using (RowCursor rowCursor = enterpriseTable.Search(null, false))
                         {
-                            using (RowCursor rowCursor = enterpriseTable.Search(null, false))
+                            while (rowCursor.MoveNext())
                             {
-                                while (rowCursor.MoveNext())
+                                using (Row row = rowCursor.Current)
                                 {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        int ID = int.Parse(row["ObjectID"].ToString());
+                                    int ID = int.Parse(row["ObjectID"].ToString());
 
-                                        // In order to update the Map and/or the attribute table.
-                                        // Has to be called before any changes are made to the row.
-                                        context.Invalidate(row);
+                                    // In order to update the Map and/or the attribute table.
+                                    // Has to be called before any changes are made to the row.
+                                    context.Invalidate(row);
 
-                                        row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
+                                    row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
 
-                                        // After all the changes are done, persist it.
-                                        row.Store();
+                                    // After all the changes are done, persist it.
+                                    row.Store();
 
-                                        // Has to be called after the store too.
-                                        context.Invalidate(row);
-                                    }
+                                    // Has to be called after the store too.
+                                    context.Invalidate(row);
                                 }
                             }
-                        }, enterpriseTable);
-
-                        bool result = editOperation.Execute();
-
-                        if (!result)
-                        {
-                            MessageBox.Show(editOperation.ErrorMessage);
                         }
+                    }, enterpriseTable);
+
+                    bool result = editOperation.Execute();
+
+                    if (!result)
+                    {
+                        MessageBox.Show(editOperation.ErrorMessage);
                     }
+
+                }
+                catch (Exception ex)
+                {
+                    string innerEx = ex.InnerException?.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (innerEx.Contains("--->"))
+                    {
+                        innerEx = innerEx.Substring(0, innerEx.IndexOf("--->"));
+                    }
+
+                    errorMessage = innerEx;
                 }
             });
 
-            await ResetAsync();
-
-        }
-
-        /// <summary>
-        /// Show the DockPane.
-        /// </summary>
-        internal static void Show()
-        {
-            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-            pane?.Activate();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
+                // Reset
+            }
         }
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
@@ -163,7 +242,6 @@ namespace Geomapmaker.ViewModels
 
             bool isItemDropValid = sourceItem != null && targetItem != null && targetItem.CanAcceptChildren;
             bool isCollectionDropValid = sourceItem != null && targetCollection != null;
-
 
             if (sourceItem != null && targetItem != null)
             {
@@ -183,16 +261,40 @@ namespace Geomapmaker.ViewModels
             targetItem.Children.Add(sourceItem);
             sourceCollection.Remove(sourceItem);
         }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
-    /// <summary>
-    /// Button implementation to show the DockPane.
-    /// </summary>
-    internal class Hierarchy_ShowButton : Button
+    internal class ShowHierarchy : Button
     {
-        protected override void OnClick()
+
+        private Views.Hierarchy _hierarchy = null;
+
+        protected override async void OnClick()
         {
-            HierarchyViewModel.Show();
+            if (_hierarchy != null)
+            {
+                return;
+
+            }
+
+            _hierarchy = new Views.Hierarchy
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            await _hierarchy.hierarchyVM.BuildTree();
+
+            _hierarchy.Closed += (o, e) => { _hierarchy = null; };
+            _hierarchy.Show();
         }
     }
 }

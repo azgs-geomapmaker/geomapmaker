@@ -3,42 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"   
-             xmlns:ui="clr-namespace:Geomapmaker"
+             xmlns:ui="clr-namespace:Geomapmaker._helpers"
+             xmlns:conv="clr-namespace:Geomapmaker._helpers"
+             xmlns:data="clr-namespace:Geomapmaker.Data"           
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{Binding Path=ui.AddEditContactsAndFaultsDockPaneViewModel}">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
-                <ResourceDictionary Source="GlobalResourceDictionary.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <UserControl.CommandBindings>
-        <CommandBinding 
-			Command="ApplicationCommands.Save"
-			Executed="SaveCommandHandler"
-			CanExecute="SaveCanExecuteHandler"
-        />
-        <CommandBinding 
-			Command="ApplicationCommands.New"
-			Executed="NewCommandHandler"
-        />
-    </UserControl.CommandBindings>
-
     <Grid>
 
         <Grid.Resources>
-            <ui:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
-            <ui:SliderConverter x:Key="SliderConverter" />
-            <ui:ConcealedConverter x:Key="ConcealedConverter" />
+            <conv:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
+            <conv:SliderConverter x:Key="SliderConverter" />
+            <conv:ConcealedConverter x:Key="ConcealedConverter" />
         </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -58,13 +62,11 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" LastChildFill="true" KeyboardNavigation.TabNavigation="Local" >
+        <DockPanel Grid.Row="1" Grid.Column="1" KeyboardNavigation.TabNavigation="Local" >
             <TextBlock Grid.Column="1" Text="{Binding Heading}" FontSize="22" Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
                 <TextBlock.ToolTip>
                     <WrapPanel Orientation="Vertical" MaxWidth="300">
@@ -74,7 +76,7 @@
             </TextBlock>
         </DockPanel>
 
-        <ToggleButton Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate}" HorizontalAlignment="Center" Padding="5" Margin="10" >
+        <ToggleButton Grid.Row="2" Grid.Column="1" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate}" HorizontalAlignment="Center" Padding="5" Margin="10" >
             <ToggleButton.Template>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
@@ -90,26 +92,11 @@
             </ToggleButton.Template>
         </ToggleButton>
 
-        <TextBlock Grid.Row="3" Grid.Column="3" FontWeight="Bold" Text="Current Values" VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource Esri_TextBlockRegular}" />
-
-        <Label Grid.Row="4" Grid.Column="1" Content="Type:" VerticalAlignment="Top" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Specifies type of geologic feature represented by this database row." />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Examples of values are 'contact', 'fault', 'thrust fault', 'waterline', 'glacier boundary', 'map boundary'. Values must be defined in Glossary table. Null values not permitted." />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <ListBox
-                Grid.Row="4" Grid.Column="2" 
-	    		x:Name="ContactsAndFaultsComboBox" 
-	    		ItemsSource="{Binding Path=(ui:DataHelper.CFSymbols)}" 
-	    		SelectedItem ="{Binding SelectedCFSymbol}"
-                MaxHeight="150"
-	    		HorizontalAlignment="Stretch"
-            >
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Text="Type:" VerticalAlignment="Center" />
+            <Image Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" VerticalAlignment="Center"/>
+        </StackPanel>
+        <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding CFSymbolsOptions}" SelectedItem ="{Binding SelectedCFSymbol, UpdateSourceTrigger=PropertyChanged}" MaxHeight="150" MinHeight="50" HorizontalAlignment="Stretch">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -128,20 +115,12 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Image Grid.Row="4" Grid.Column="3"  Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-        <Label Grid.Row="5" Grid.Column="1"  Content="Identity Confidence:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates how confidently this line feature has been identified as a particular type." />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <Grid Grid.Row="5" Grid.Column="2" >
-
+        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Text="Identity Confidence: "/>
+            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+        </StackPanel>
+        <Grid Grid.Row="6" Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -160,7 +139,7 @@
               HorizontalAlignment="Left" 
               VerticalAlignment="Center" 
               Content="Low"
-              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
               >
             </RadioButton>
 
@@ -171,7 +150,7 @@
               HorizontalAlignment="Center" 
               VerticalAlignment="Center" 
               Content="Medium"
-              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
               >
             </RadioButton>
 
@@ -182,81 +161,50 @@
               HorizontalAlignment="Right" 
               VerticalAlignment="Center" 
               Content="High"
-              IsChecked="{Binding SelectedCF.IdentityConfidence, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
+              IsChecked="{Binding SelectedCF.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
               >
             </RadioButton>
         </Grid>
-        <TextBlock Grid.Row="5" Grid.Column="3" FontWeight="Bold" Text="{Binding SelectedCF.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-        <Label Grid.Row="6" Grid.Column="1"  Content="Existence Confidence:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates how confidently existence of this line feature has been determined." />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Typical values are 'certain', 'questionable', 'unspecified'. Values must be defined in Glossary table. Null values not permitted; suggest setting default value = 'certain'." />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <Slider Grid.Row="6" Grid.Column="2"  Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
-        <TextBlock Grid.Row="6" Grid.Column="3"  FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Text="Existence Confidence: " />
+            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+        </StackPanel>
+        <Slider Grid.Row="8" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding SelectedCF.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
 
-        <Label Grid.Row="7" Grid.Column="1" Content="Location Confidence:" >
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Half-width (in meters) of positional-uncertainty envelope around this line feature." />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Data type is float. Null values not permitted." />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
+        <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Text="Location Confidence: " />
+            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+        </StackPanel>
         <ComboBox 
-            Grid.Row="7" 
-            Grid.Column="2" 
-            ItemsSource="{Binding Path=(ui:DataHelper.LocationConfidenceMeters)}" 
-            SelectedValue="{Binding SelectedCF.LocationConfidenceMeters}"
+            Grid.Row="10" 
+            Grid.Column="1" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
+            SelectedValue="{Binding SelectedCF.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
-            IsEditable="True" 
-            HorizontalAlignment="Right" 
+            IsEditable="False" 
             >
         </ComboBox>
-        <TextBlock Grid.Row="7" Grid.Column="3"  FontWeight="Bold" VerticalAlignment="Center" Text="{Binding SelectedCF.LocationConfidenceMeters}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" />
 
-        <Label Grid.Row="8" Grid.Column="1"  Content="Concealed:">
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Indicates whether this contact or fault is concealed by an overlying map unit." />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Values = 'N' or 'Y'. Null values not permitted." />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <CheckBox Grid.Row="8" Grid.Column="2" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed}"  ></CheckBox>
-        <TextBlock Grid.Row="8" Grid.Column="3" FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal" >
+            <TextBlock Text="Concealed: " />
+            <TextBlock FontWeight="Bold" Text="{Binding SelectedCF.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" />
+        </StackPanel>
+        <CheckBox Grid.Row="12" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding SelectedCF.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Label Grid.Row="9" Grid.Column="1"  Content="Notes:">
-            <Label.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="Description:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Optional field." />
-                    <TextBlock Text="Notes:" Style = "{StaticResource TooltipLabel}"/>
-                    <TextBlock Style = "{StaticResource TooltipText}" Text="Free text for additional information specific to this line feature. Null values permitted." />
-                </StackPanel>
-            </Label.ToolTip>
-        </Label>
-        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" MinLines="3" Text="{Binding SelectedCF.Notes}" HorizontalAlignment="Stretch" TextWrapping="Wrap" MaxLength="250"  />
+        <TextBlock Grid.Row="13" Grid.Column="1" Text="Notes:" />
+        <TextBox Grid.Row="14" Grid.Column="1" MinLines="3" Text="{Binding SelectedCF.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
 
-        <Button Grid.Row="11" Grid.Column="1" Padding="5" Command="ApplicationCommands.New" Style="{DynamicResource Esri_Button}">Reset</Button>
-        <Button Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Padding="5" Command="ApplicationCommands.Save" Style="{DynamicResource Esri_Button}">Submit</Button>
+        <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Button Padding="5" Command="{Binding CommandReset}" Style="{DynamicResource Esri_Button}" >Reset</Button>
+            <Button Padding="5" Command="{Binding CommandSubmit}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Submit</Button>
+        </StackPanel>
 
-        <WrapPanel Grid.Row="12" Grid.Column="1" >
+        <WrapPanel Grid.Row="16" Grid.Column="1" >
             <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
-            <TextBlock FontStyle="Italic" Text="{Binding SelectedCF.DataSource}" Style="{DynamicResource Esri_TextBlockRegular}"/>
+            <TextBlock FontStyle="Italic" Text="{Binding SelectedCF.DataSource, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource Esri_TextBlockRegular}"/>
         </WrapPanel>
 
-        <TextBlock Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson}" TextWrapping="Wrap" VerticalAlignment="Top" />
-
+        <TextBlock Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding ShapeJson, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" />
     </Grid>
 </UserControl>

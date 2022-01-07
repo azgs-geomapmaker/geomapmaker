@@ -4,34 +4,32 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels.MapUnits
+namespace Geomapmaker.ViewModels.Headings
 {
-    public class DeleteMapUnitVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class EditHeadingVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        // Deletes's save button
-        public ICommand CommandDelete { get; }
+        public ICommand CommandUpdate { get; }
 
-        public MapUnitsViewModel ParentVM { get; set; }
+        public HeadingsViewModel ParentVM { get; set; }
 
-        public DeleteMapUnitVM(MapUnitsViewModel parentVM)
+        public EditHeadingVM(HeadingsViewModel parentVM)
         {
-            // Init commands
-            CommandDelete = new RelayCommand(() => DeleteAsync(), () => CanDelete());
-
             ParentVM = parentVM;
+            CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
         }
 
+        /// <summary>
+        /// Map Unit selected for edit
+        /// </summary>
         private MapUnit _selected;
         public MapUnit Selected
         {
@@ -39,70 +37,50 @@ namespace Geomapmaker.ViewModels.MapUnits
             set
             {
                 SetProperty(ref _selected, value, () => Selected);
-
-                MapUnit = Selected?.MU;
-                NotifyPropertyChanged("MapUnit");
-
                 Name = Selected?.Name;
-                NotifyPropertyChanged("Name");
-
-                FullName = Selected?.FullName;
-                NotifyPropertyChanged("FullName");
-
-                Age = Selected?.Age;
-                NotifyPropertyChanged("Age");
-
-                RelativeAge = Selected?.RelativeAge;
-                NotifyPropertyChanged("RelativeAge");
-
                 Description = Selected?.Description;
-                NotifyPropertyChanged("Description");
-
-                Label = Selected?.Label;
-                NotifyPropertyChanged("Label");
-
-                HexColor = ColorConverter.RGBtoHex(Selected?.AreaFillRGB);
-                NotifyPropertyChanged("HexColor");
-
-                GeoMaterial = Selected?.GeoMaterial;
-                NotifyPropertyChanged("GeoMaterial");
-
-                GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
-                NotifyPropertyChanged("GeoMaterialConfidence");
-
                 NotifyPropertyChanged("Visibility");
-
-                ValidateCanDelete();
             }
         }
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";
 
-        public string MapUnit { get; set; }
-        public string Name { get; set; }
-        public string FullName { get; set; }
-        public string Age { get; set; }
-        public string RelativeAge { get; set; }
-        public string Description { get; set; }
-        public string Label { get; set; }
-        public string HexColor { get; set; }
-        public string GeoMaterial { get; set; }
-        public string GeoMaterialConfidence { get; set; }
+        // Heading Name
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                SetProperty(ref _name, value, () => Name);
+                ValidateHeadingName(Name, "Name");
+                ValidateChangeWasMade();
+            }
+        }
 
-        private bool CanDelete()
+        // Heading Definition
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                SetProperty(ref _description, value, () => Description);
+                ValidateDescription(Description, "Description");
+                ValidateChangeWasMade();
+            }
+        }
+
+        private bool CanUpdate()
         {
             return Selected != null && !HasErrors;
         }
 
-        private async Task DeleteAsync()
+        /// <summary>
+        /// Execute the save command
+        /// </summary>
+        private async Task UpdateAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", MessageBoxButton.YesNo);
-
-            if (messageBoxResult == MessageBoxResult.No)
-            {
-                return;
-            }
-
             string errorMessage = null;
 
             StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
@@ -131,9 +109,21 @@ namespace Geomapmaker.ViewModels.MapUnits
                             {
                                 using (Row row = rowCursor.Current)
                                 {
+                                    // In order to update the Map and/or the attribute table.
+                                    // Has to be called before any changes are made to the row.
                                     context.Invalidate(row);
 
-                                    row.Delete();
+                                    row["Name"] = Name;
+                                    row["FullName"] = Name;
+                                    row["Description"] = Description;
+                                    row["ParagraphStyle"] = "Heading";
+                                    row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+
+                                    // After all the changes are done, persist it.
+                                    row.Store();
+
+                                    // Has to be called after the store too.
+                                    context.Invalidate(row);
                                 }
                             }
                         }
@@ -150,8 +140,6 @@ namespace Geomapmaker.ViewModels.MapUnits
                     {
                         errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
-
-                    errorMessage = errorMessage + Environment.NewLine + Environment.NewLine + "Check attribute rules.";
                 }
             });
 
@@ -190,14 +178,52 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public bool HasErrors => _validationErrors.Count > 0;
 
-        private void ValidateCanDelete()
+        private void ValidateChangeWasMade()
         {
-
-            // TODO: Prevent user from deleting any mapunits with mapunitpolys
-
+            // Error message isn't display on a field. Just prevents user from hitting update until a change is made.
             const string propertyKey = "SilentError";
 
             if (Selected == null)
+            {
+                _validationErrors.Remove(propertyKey);
+                return;
+            }
+
+            if (Selected.Name == Name && Selected.Description == Description)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        // Validate the Heading's name
+        private void ValidateHeadingName(string name, string propertyKey)
+        {
+            if (Selected != null && string.IsNullOrWhiteSpace(name))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        // Validate the Heading's definition
+        private void ValidateDescription(string definition, string propertyKey)
+        {
+            if (Selected != null && string.IsNullOrWhiteSpace(definition))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
