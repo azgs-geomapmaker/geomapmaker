@@ -11,7 +11,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 {
     public class ContactsFaultsViewModel : ProWindow, INotifyPropertyChanged
     {
-        public ICommand CommandCancel => new RelayCommand((proWindow) =>
+        public ICommand CommandSubmit => new RelayCommand(() => SubmitAsync(), () => CanSubmit());
+
+        public ICommand CommandClose => new RelayCommand((proWindow) =>
         {
             if (proWindow != null)
             {
@@ -19,6 +21,29 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
 
         }, () => true);
+
+        public ContactsFaultsViewModel()
+        {
+
+        }
+
+        /// <summary>
+        /// Determines the visibility (enabled state) of the button
+        /// </summary>
+        /// <returns>true if enabled</returns>
+        private bool CanSubmit()
+        {
+            // Can't submit if are any errors
+            return true;
+        }
+
+        /// <summary>
+        /// Execute the submit command
+        /// </summary>
+        private void SubmitAsync()
+        {
+            var fooo = "123";
+        }
 
         private List<CFSymbol> _cfSymbols { get; set; }
         public List<CFSymbol> CfSymbols

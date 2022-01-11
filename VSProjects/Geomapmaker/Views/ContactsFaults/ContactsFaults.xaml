@@ -1,4 +1,5 @@
 ﻿<controls:ProWindow x:Class="Geomapmaker.Views.ContactsFaults.ContactsFaults"
+        x:Name="ProWindowDialogWin"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:controls="clr-namespace:ArcGIS.Desktop.Framework.Controls;assembly=ArcGIS.Desktop.Framework"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -200,7 +201,7 @@
         <TextBox Grid.Row="14" Grid.Column="1" MinLines="3" Text="{Binding SelectedCF.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
 
         <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Button Padding="5" Command="{Binding CommandReset}" Style="{DynamicResource Esri_Button}" >Reset</Button>
+            <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding ElementName=ProWindowDialogWin}" Style="{DynamicResource Esri_Button}" >Close</Button>
             <Button Padding="5" Command="{Binding CommandSubmit}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Submit</Button>
         </StackPanel>
 
