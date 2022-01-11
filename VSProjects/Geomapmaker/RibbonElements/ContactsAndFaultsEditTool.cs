@@ -95,7 +95,7 @@ namespace Geomapmaker.RibbonElements
                                             using (Row row = rowCursor.Current)
                                             {
                                                 cf.ID = Int32.Parse(Convert.ToString(row["objectid"]));
-                                                cf.symbol = DataHelper.CFSymbols.Where(x => x.key == Convert.ToString(row["symbol"])).First();
+                                                cf.symbol = DataHelper.CFSymbols.Where(x => x.Key == Convert.ToString(row["symbol"])).First();
                                                 //cf.description = Convert.ToString(row["description"]);
                                                 //cf.symbol = Convert.ToString(row["symbol"]);
                                                 cf.Notes = Convert.ToString(row["notes"]);

@@ -85,7 +85,7 @@ namespace Geomapmaker
                                             {
                                                 //populate a CF from fields
                                                 var cf = new CF();
-                                                cf.symbol = DataHelper.CFSymbols.Where(cfs => cfs.key == row["symbol"].ToString()).First();
+                                                cf.symbol = DataHelper.CFSymbols.Where(cfs => cfs.Key == row["symbol"].ToString()).First();
                                                 cf.IdentityConfidence = row["identityconfidence"].ToString();
                                                 cf.ExistenceConfidence = row["existenceconfidence"].ToString();
                                                 cf.LocationConfidenceMeters = row["locationconfidencemeters"].ToString();

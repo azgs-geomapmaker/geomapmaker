@@ -171,8 +171,8 @@ namespace Geomapmaker
             Dictionary<string, object> attributes = new Dictionary<string, object>
             {
                 ["SHAPE"] = SelectedCF.Shape,//Geometry
-                ["TYPE"] = SelectedCF.symbol.description,
-                ["Symbol"] = SelectedCF.symbol.key,
+                ["TYPE"] = SelectedCF.symbol.Description,
+                ["Symbol"] = SelectedCF.symbol.Key,
                 ["IdentityConfidence"] = SelectedCF.IdentityConfidence,
                 ["ExistenceConfidence"] = SelectedCF.ExistenceConfidence,
                 ["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters,
@@ -206,16 +206,16 @@ namespace Geomapmaker
 
             List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                 new CIMUniqueValue {
-                    FieldValues = new string[] { SelectedCF.symbol.key }
+                    FieldValues = new string[] { SelectedCF.symbol.Key }
                 }
             };
 
             CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
             {
                 Editable = true,
-                Label = SelectedCF.symbol.key,
+                Label = SelectedCF.symbol.Key,
                 Patch = PatchShape.AreaPolygon,
-                Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.symbol, null),
+                Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.Symbol, null),
                 Visible = true,
                 Values = listUniqueValues.ToArray()
             };

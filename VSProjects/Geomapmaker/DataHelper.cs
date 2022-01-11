@@ -306,45 +306,45 @@ namespace Geomapmaker
                                 // Create and load map unit
                                 CFSymbol cfS = new CFSymbol
                                 {
-                                    key = row["key"].ToString(),
-                                    description = row["description"] == null ? "" : row["description"].ToString(),
-                                    symbol = row["symbol"].ToString()
+                                    Key = row["key"].ToString(),
+                                    Description = row["description"] == null ? "" : row["description"].ToString(),
+                                    Symbol = row["symbol"].ToString()
                                 };
 
                                 // Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
-                                cfS.symbol = cfS.symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
-                                cfS.symbol = cfS.symbol.Insert(cfS.symbol.Length, "}");
+                                cfS.Symbol = cfS.Symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
+                                cfS.Symbol = cfS.Symbol.Insert(cfS.Symbol.Length, "}");
 
                                 // Create the preview image used in the ComboBox
                                 SymbolStyleItem sSI = new SymbolStyleItem()
                                 {
-                                    Symbol = CIMSymbolReference.FromJson(cfS.symbol).Symbol,
+                                    Symbol = CIMSymbolReference.FromJson(cfS.Symbol).Symbol,
                                     PatchWidth = 50,
                                     PatchHeight = 25
                                 };
-                                cfS.preview = sSI.PreviewImage;
+                                cfS.Preview = sSI.PreviewImage;
 
                                 // Add it to our list
                                 cfSymbols.Add(cfS);
 
                                 // Only add to renderer if present in the feature class
-                                if (cfInFeatureClass.Contains(cfS.key))
+                                if (cfInFeatureClass.Contains(cfS.Key))
                                 {
                                     // Create a "CIMUniqueValueClass" for the cf and add it to the list of unique values.
                                     // This is what creates the mapping from cf derived attribute to symbol
                                     List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                                         new CIMUniqueValue {
-                                            FieldValues = new string[] { cfS.key }
+                                            FieldValues = new string[] { cfS.Key }
                                         }
                                     };
 
                                     CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                                     {
                                         Editable = true,
-                                        Label = cfS.key,
+                                        Label = cfS.Key,
                                         //Patch = PatchShape.Default,
                                         Patch = PatchShape.AreaPolygon,
-                                        Symbol = CIMSymbolReference.FromJson(cfS.symbol, null),
+                                        Symbol = CIMSymbolReference.FromJson(cfS.Symbol, null),
                                         Visible = true,
                                         Values = listUniqueValues.ToArray()
                                     };

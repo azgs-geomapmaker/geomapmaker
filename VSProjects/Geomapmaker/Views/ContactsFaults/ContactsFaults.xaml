@@ -9,9 +9,9 @@
         xmlns:data="clr-namespace:Geomapmaker.Data" 
         mc:Ignorable="d"
         Title="Contacts and Faults"
-        Height="500" 
+        Height="700" 
         Width="400"
-        MinHeight="500" 
+        MinHeight="700" 
         MinWidth="400"
         WindowStartupLocation="CenterOwner"
     >
@@ -98,9 +98,9 @@
 
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
             <TextBlock Text="Type:" VerticalAlignment="Center" />
-            <Image Source="{Binding SelectedCFSymbol.preview}" ToolTip="{Binding SelectedCFSymbol.description}" VerticalAlignment="Center"/>
+            <Image Source="{Binding SelectedCFSymbol.Preview}" ToolTip="{Binding SelectedCFSymbol.Description}" VerticalAlignment="Center"/>
         </StackPanel>
-        <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding CFSymbolsOptions}" SelectedItem ="{Binding SelectedCFSymbol, UpdateSourceTrigger=PropertyChanged}" MaxHeight="150" MinHeight="50" HorizontalAlignment="Stretch">
+        <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding CfSymbols}" SelectedItem ="{Binding SelectedCFSymbol, UpdateSourceTrigger=PropertyChanged}" MaxHeight="150" MinHeight="50" HorizontalAlignment="Stretch">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -108,13 +108,13 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid ToolTip="{Binding description}" >
+                    <Grid ToolTip="{Binding Description}" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="{Binding preview}" HorizontalAlignment="Left"  />
-                        <TextBlock Grid.Column="1" Text="{Binding key}" HorizontalAlignment="Right" />
+                        <Image Grid.Column="0" Source="{Binding Preview}" HorizontalAlignment="Left"  />
+                        <TextBlock Grid.Column="1" Text="{Binding Key}" HorizontalAlignment="Right" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
