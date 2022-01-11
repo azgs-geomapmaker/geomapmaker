@@ -52,7 +52,7 @@ namespace Geomapmaker.Data
                                 SymbolStyleItem sSI = new SymbolStyleItem()
                                 {
                                     Symbol = CIMSymbolReference.FromJson(cfS.Symbol).Symbol,
-                                    PatchWidth = 50,
+                                    PatchWidth = 150,
                                     PatchHeight = 25
                                 };
                                 cfS.Preview = sSI.PreviewImage;
