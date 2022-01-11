@@ -282,8 +282,8 @@ namespace Geomapmaker.ViewModels
         {
             if (_hierarchy != null)
             {
+                _hierarchy.Close();
                 return;
-
             }
 
             _hierarchy = new Views.Hierarchy

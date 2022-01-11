@@ -111,6 +111,7 @@ namespace Geomapmaker.ViewModels.Headings
         {
             if (_headings != null)
             {
+                _headings.Close();
                 return;
             }
 

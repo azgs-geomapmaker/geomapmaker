@@ -69,6 +69,7 @@ namespace Geomapmaker.ViewModels.DataSources
         {
             if (_datasources != null)
             {
+                _datasources.Close();
                 return;
             }
 

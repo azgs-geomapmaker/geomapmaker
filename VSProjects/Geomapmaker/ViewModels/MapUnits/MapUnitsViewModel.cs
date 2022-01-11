@@ -127,6 +127,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         {
             if (_mapunits != null)
             {
+                _mapunits.Close();
                 return;
             }
 
