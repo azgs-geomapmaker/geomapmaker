@@ -28,7 +28,7 @@ namespace Geomapmaker
             CommandReset = new RelayCommand(() => Reset());
             RefreshCFSymbolsAsync();
 
-            SelectedCF = new CF();
+            SelectedCF = new ContactFault();
             SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
             SelectedCF.DataSource = GeomapmakerModule.DataSourceId;
             ShapeJson = "{ }";
@@ -50,7 +50,7 @@ namespace Geomapmaker
         private bool CanSubmit()
         {
             return !(SelectedCF == null
-                || SelectedCF.symbol == null
+                || SelectedCF.Symbol == null
                 || string.IsNullOrWhiteSpace(SelectedCF.IdentityConfidence)
                 || string.IsNullOrWhiteSpace(SelectedCF.ExistenceConfidence)
                 || string.IsNullOrWhiteSpace(SelectedCF.LocationConfidenceMeters)
@@ -89,7 +89,7 @@ namespace Geomapmaker
             GeomapmakerModule.ContactsAndFaultsEditTool?.Clear();
 
             SelectedCFSymbol = CFSymbolsOptions.FirstOrDefault();
-            SelectedCF = new CF();
+            SelectedCF = new ContactFault();
             ShapeJson = "{ }";
             Prepopulate = false;
         }
@@ -127,13 +127,13 @@ namespace Geomapmaker
             set
             {
                 SetProperty(ref selectedCFSymbol, value, () => SelectedCFSymbol); // Have to do this to trigger stuff, I guess.
-                SelectedCF.symbol = selectedCFSymbol;
+                SelectedCF.Symbol = selectedCFSymbol;
             }
         }
 
         // TODO: Need to separate this from the Type (symbol) combobox. The interaction is not working correctly.
-        private CF selectedCF;
-        public CF SelectedCF
+        private ContactFault selectedCF;
+        public ContactFault SelectedCF
         {
             get => selectedCF;
             set
@@ -171,8 +171,8 @@ namespace Geomapmaker
             Dictionary<string, object> attributes = new Dictionary<string, object>
             {
                 ["SHAPE"] = SelectedCF.Shape,//Geometry
-                ["TYPE"] = SelectedCF.symbol.Description,
-                ["Symbol"] = SelectedCF.symbol.Key,
+                ["TYPE"] = SelectedCF.Symbol.Description,
+                ["Symbol"] = SelectedCF.Symbol.Key,
                 ["IdentityConfidence"] = SelectedCF.IdentityConfidence,
                 ["ExistenceConfidence"] = SelectedCF.ExistenceConfidence,
                 ["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters,
@@ -206,16 +206,16 @@ namespace Geomapmaker
 
             List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                 new CIMUniqueValue {
-                    FieldValues = new string[] { SelectedCF.symbol.Key }
+                    FieldValues = new string[] { SelectedCF.Symbol.Key }
                 }
             };
 
             CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
             {
                 Editable = true,
-                Label = SelectedCF.symbol.Key,
+                Label = SelectedCF.Symbol.Key,
                 Patch = PatchShape.AreaPolygon,
-                Symbol = CIMSymbolReference.FromJson(SelectedCF.symbol.Symbol, null),
+                Symbol = CIMSymbolReference.FromJson(SelectedCF.Symbol.Symbol, null),
                 Visible = true,
                 Values = listUniqueValues.ToArray()
             };

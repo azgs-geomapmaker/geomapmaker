@@ -280,7 +280,7 @@
     </Compile>
     <Compile Include="ViewModels\AddEditContactsAndFaultsDockPaneViewModel.cs" />
     <Compile Include="RibbonElements\ContactsAndFaultsAddTool.cs" />
-    <Compile Include="Models\CF.cs" />
+    <Compile Include="Models\ContactFault.cs" />
     <Compile Include="Views\AddEditMapUnitPolysDockPane.xaml.cs">
       <DependentUpon>AddEditMapUnitPolysDockPane.xaml</DependentUpon>
     </Compile>

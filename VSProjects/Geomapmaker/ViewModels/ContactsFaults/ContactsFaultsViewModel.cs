@@ -33,8 +33,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         /// <returns>true if enabled</returns>
         private bool CanSubmit()
         {
-            // Can't submit if are any errors
-            return true;
+            return Symbol != null &&
+                !string.IsNullOrEmpty(IdentityConfidence) &&
+                !string.IsNullOrEmpty(ExistenceConfidence) &&
+                !string.IsNullOrEmpty(LocationConfidenceMeters) &&
+                !string.IsNullOrEmpty(IsConcealedString);        
         }
 
         /// <summary>
@@ -42,16 +45,104 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         /// </summary>
         private void SubmitAsync()
         {
-            var fooo = "123";
+            //var foo1 = Symbol;
+            //var foo2 = IdentityConfidence;
+            //var foo3 = ExistenceConfidence;
+            //var foo4 = LocationConfidenceMeters;
+            //var foo5 = IsConcealed;
+            //var foo6 = Notes;
+            //var foo7 = DataSource;
+
+            // TODO create template
         }
 
-        private List<CFSymbol> _cfSymbols { get; set; }
-        public List<CFSymbol> CfSymbols
+        private List<CFSymbol> _symbolOptions { get; set; }
+        public List<CFSymbol> SymbolOptions
         {
-            get => _cfSymbols;
+            get => _symbolOptions;
             set
             {
-                _cfSymbols = value;
+                _symbolOptions = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private CFSymbol _symbol;
+        public CFSymbol Symbol
+        {
+            get => _symbol;
+            set
+            {
+                _symbol = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _identityConfidence;
+        public string IdentityConfidence
+        {
+            get => _identityConfidence;
+            set
+            {
+                _identityConfidence = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _existenceConfidence;
+        public string ExistenceConfidence
+        {
+            get => _existenceConfidence;
+            set
+            {
+                _existenceConfidence = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _locationConfidenceMeters;
+        public string LocationConfidenceMeters
+        {
+            get => _locationConfidenceMeters;
+            set
+            {
+                _locationConfidenceMeters = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _isConcealed;
+        public bool IsConcealed
+        {
+            get => _isConcealed;
+            set
+            {
+                _isConcealed = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        // Convert bool to a Y/N char
+        public string IsConcealedString => IsConcealed ? "Y" : "N";
+
+        private string _notes;
+        public string Notes
+        {
+            get => _notes;
+            set
+            {
+                _notes = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _dataSource;
+        public string DataSource
+        {
+            get => _dataSource;
+            set
+            {
+                _dataSource = value;
                 NotifyPropertyChanged();
             }
         }
@@ -59,7 +150,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         //Update collection of CF symbols
         public async void RefreshCFSymbols()
         {
-            CfSymbols = await Data.CFSymbolOptions.GetCFSymbolOptions();
+            SymbolOptions = await Data.CFSymbolOptions.GetCFSymbolOptions();
         }
 
         #region INotifyPropertyChanged
@@ -83,6 +174,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             //already open?
             if (_contactsfaults != null)
             {
+                _contactsfaults.Close();
                 return;
             }
 

@@ -87,7 +87,7 @@ namespace Geomapmaker.RibbonElements
                                     {
                                         WhereClause = "objectid = " + cfID
                                     };
-                                    var cf = new CF();
+                                    var cf = new ContactFault();
                                     using (RowCursor rowCursor = cfTable.Search(queryFilter, false))
                                     {
                                         if (rowCursor.MoveNext())
@@ -95,7 +95,7 @@ namespace Geomapmaker.RibbonElements
                                             using (Row row = rowCursor.Current)
                                             {
                                                 cf.ID = Int32.Parse(Convert.ToString(row["objectid"]));
-                                                cf.symbol = DataHelper.CFSymbols.Where(x => x.Key == Convert.ToString(row["symbol"])).First();
+                                                cf.Symbol = DataHelper.CFSymbols.Where(x => x.Key == Convert.ToString(row["symbol"])).First();
                                                 //cf.description = Convert.ToString(row["description"]);
                                                 //cf.symbol = Convert.ToString(row["symbol"]);
                                                 cf.Notes = Convert.ToString(row["notes"]);
@@ -112,7 +112,7 @@ namespace Geomapmaker.RibbonElements
 
                                     // Use the map unit to populate the view model for the form
                                     ContactAndFaultsVM.SelectedCF = cf;
-                                    ContactAndFaultsVM.SelectedCFSymbol = cf.symbol;
+                                    ContactAndFaultsVM.SelectedCFSymbol = cf.Symbol;
 
                                     //TODO: The line below forces a refresh on the object the UI is bound to for shape. But other than that,
                                     //it's redundant. There should be a better way to handle this.

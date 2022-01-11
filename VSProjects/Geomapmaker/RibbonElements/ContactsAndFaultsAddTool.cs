@@ -84,8 +84,8 @@ namespace Geomapmaker
                                             using (Row row = rowCursor.Current)
                                             {
                                                 //populate a CF from fields
-                                                var cf = new CF();
-                                                cf.symbol = DataHelper.CFSymbols.Where(cfs => cfs.Key == row["symbol"].ToString()).First();
+                                                var cf = new ContactFault();
+                                                cf.Symbol = DataHelper.CFSymbols.Where(cfs => cfs.Key == row["symbol"].ToString()).First();
                                                 cf.IdentityConfidence = row["identityconfidence"].ToString();
                                                 cf.ExistenceConfidence = row["existenceconfidence"].ToString();
                                                 cf.LocationConfidenceMeters = row["locationconfidencemeters"].ToString();
@@ -96,7 +96,7 @@ namespace Geomapmaker
 
                                                 //pass it to a method in the viewmodel called Populate, which will do just that
                                                 GeomapmakerModule.ContactsAndFaultsVM.SelectedCF = cf;
-                                                GeomapmakerModule.ContactsAndFaultsVM.SelectedCFSymbol = cf.symbol;
+                                                GeomapmakerModule.ContactsAndFaultsVM.SelectedCFSymbol = cf.Symbol;
 
                                                 //unset populate mode
                                                 SketchType = SketchGeometryType.Line;
