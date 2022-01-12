@@ -8,7 +8,7 @@ namespace Geomapmaker.Models
 
         public string Description { get; set; }
 
-        public string Symbol { get; set; }
+        public string SymbolJson { get; set; }
 
         public ImageSource Preview { get; set; }
     }

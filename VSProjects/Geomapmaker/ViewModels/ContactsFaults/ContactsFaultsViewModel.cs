@@ -43,7 +43,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 !string.IsNullOrEmpty(IdentityConfidence) &&
                 !string.IsNullOrEmpty(ExistenceConfidence) &&
                 !string.IsNullOrEmpty(LocationConfidenceMeters) &&
-                !string.IsNullOrEmpty(IsConcealedString);
+                !string.IsNullOrEmpty(IsConcealedString) &&
+                !string.IsNullOrEmpty(DataSource);
         }
 
         /// <summary>
@@ -62,66 +63,56 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             await QueuedTask.Run(() =>
             {
-                // Get the CIM layer definition
-                CIMFeatureLayer layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
 
-                // Create a CIM template 
-                CIMFeatureTemplate myTemplateDef = new CIMFeatureTemplate()
+                CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
+
+                List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
+
+                // Template Fields
+                string[] Fields = new string[] { "type", "symbol", "label", "identityconfidence", "existenceconfidence", "locationconfidencemeters", "isconcealed", "datasourceid" };
+                // Template Values
+                string[] FieldValues = new string[] { Symbol.Key, Symbol.Key, Symbol.Description.Substring(0, 50), IdentityConfidence, ExistenceConfidence, LocationConfidenceMeters, IsConcealedString, DataSource };
+
+                // Add note if not null
+                if (!string.IsNullOrEmpty(Notes))
                 {
-                    Name = Symbol.Key,
-                    Description = Symbol.Description,
-                };
-
-                myTemplateDef.WriteTags(new[] { "AZGS", "GeMS" });
-
-                // Set default attributes
-                myTemplateDef.DefaultValues = new Dictionary<string, object>
-                {
-                    { "Type", Symbol.Key },
-                    { "Symbol", Symbol.Key },
-                    { "IdentityConfidence", IdentityConfidence },
-                    { "ExistenceConfidence", ExistenceConfidence },
-                    { "LocationConfidenceMeters", LocationConfidenceMeters },
-                    { "IsConcealed", IsConcealedString },
-                    { "Notes", Notes },
-                    { "DataSourceID", DataSource }
-                };
-
-                // Set the default construction tool
-                myTemplateDef.SetDefaultToolDamlID("esri_editing_SketchPointTool");
-
-                // Remove construction tools from being available with this template
-                List<string> filter = new List<string>
-                {
-                    // esri_editing_ConstructPointsAlongLineCommand
-                    "BCCF295A-9C64-4ADC-903E-62D827C10EF7"
-                };
-
-                myTemplateDef.ToolFilter = filter.ToArray();
-
-                // Get all templates on this layer
-                // NOTE - layerDef.FeatureTemplates could be null 
-                //    if Create Features window hasn't been opened
-                List<CIMEditingTemplate> layerTemplates = layerDef.FeatureTemplates?.ToList();
-
-                if (layerTemplates == null)
-                {
-                    layerTemplates = new List<CIMEditingTemplate>();
+                    Fields.Append("notes");
+                    FieldValues.Append(Notes);
                 }
 
-                // Add the new template to the layer template list
-                layerTemplates.Add(myTemplateDef);
+                CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
+                    new CIMUniqueValue {
+                        FieldValues = FieldValues
+                    }
+                };
 
-                // Update the layerdefinition with the templates
-                layerDef.FeatureTemplates = layerTemplates.ToArray();
+                CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
+                {
+                    Editable = true,
+                    Label = Symbol.Key,
+                    Description = Symbol.Description,
+                    Patch = PatchShape.AreaPolygon,
+                    Symbol = CIMSymbolReference.FromJson(Symbol.SymbolJson, null),
+                    Visible = true,
+                    Values = listUniqueValues
+                };
+                listUniqueValueClasses.Add(uniqueValueClass);
 
-                // Check the AutoGenerateFeatureTemplates flag, 
-                //     set to false so our changes will stick
-                if (layerDef.AutoGenerateFeatureTemplates)
-                    layerDef.AutoGenerateFeatureTemplates = false;
+                CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
+                {
+                    Classes = listUniqueValueClasses.ToArray(),
+                };
+                CIMUniqueValueGroup[] listUniqueValueGroups = new CIMUniqueValueGroup[] { uvg };
 
-                // Commit
-                layer.SetDefinition(layerDef);
+                CIMUniqueValueRenderer updatedRenderer = new CIMUniqueValueRenderer
+                {
+                    UseDefaultSymbol = false,
+                    Groups = listUniqueValueGroups,
+                    Fields = Fields
+                };
+
+                layer.SetRenderer(updatedRenderer);
             });
         }
 

@@ -215,7 +215,7 @@ namespace Geomapmaker
                 Editable = true,
                 Label = SelectedCF.Symbol.Key,
                 Patch = PatchShape.AreaPolygon,
-                Symbol = CIMSymbolReference.FromJson(SelectedCF.Symbol.Symbol, null),
+                Symbol = CIMSymbolReference.FromJson(SelectedCF.Symbol.SymbolJson, null),
                 Visible = true,
                 Values = listUniqueValues.ToArray()
             };

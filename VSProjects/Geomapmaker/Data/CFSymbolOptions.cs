@@ -43,7 +43,7 @@ namespace Geomapmaker.Data
                             {
                                 Key = row["key"].ToString(),
                                 Description = row["description"] == null ? "" : row["description"].ToString(),
-                                Symbol = row["symbol"].ToString()
+                                SymbolJson = row["symbol"].ToString()
                             };
 
                             try
@@ -51,7 +51,7 @@ namespace Geomapmaker.Data
                                 // Create the preview image used in the ComboBox
                                 SymbolStyleItem sSI = new SymbolStyleItem()
                                 {
-                                    Symbol = CIMSymbolReference.FromJson(cfS.Symbol).Symbol,
+                                    Symbol = CIMSymbolReference.FromJson(cfS.SymbolJson).Symbol,
                                     PatchWidth = 250,
                                     PatchHeight = 25
                                 };

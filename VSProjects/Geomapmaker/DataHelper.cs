@@ -308,17 +308,17 @@ namespace Geomapmaker
                                 {
                                     Key = row["key"].ToString(),
                                     Description = row["description"] == null ? "" : row["description"].ToString(),
-                                    Symbol = row["symbol"].ToString()
+                                    SymbolJson = row["symbol"].ToString()
                                 };
 
                                 // Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
-                                cfS.Symbol = cfS.Symbol.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
-                                cfS.Symbol = cfS.Symbol.Insert(cfS.Symbol.Length, "}");
+                                cfS.SymbolJson = cfS.SymbolJson.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
+                                cfS.SymbolJson = cfS.SymbolJson.Insert(cfS.SymbolJson.Length, "}");
 
                                 // Create the preview image used in the ComboBox
                                 SymbolStyleItem sSI = new SymbolStyleItem()
                                 {
-                                    Symbol = CIMSymbolReference.FromJson(cfS.Symbol).Symbol,
+                                    Symbol = CIMSymbolReference.FromJson(cfS.SymbolJson).Symbol,
                                     PatchWidth = 50,
                                     PatchHeight = 25
                                 };
@@ -344,7 +344,7 @@ namespace Geomapmaker
                                         Label = cfS.Key,
                                         //Patch = PatchShape.Default,
                                         Patch = PatchShape.AreaPolygon,
-                                        Symbol = CIMSymbolReference.FromJson(cfS.Symbol, null),
+                                        Symbol = CIMSymbolReference.FromJson(cfS.SymbolJson, null),
                                         Visible = true,
                                         Values = listUniqueValues.ToArray()
                                     };
