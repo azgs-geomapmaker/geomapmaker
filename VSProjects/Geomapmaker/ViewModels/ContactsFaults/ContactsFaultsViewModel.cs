@@ -1,10 +1,16 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -37,23 +43,86 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 !string.IsNullOrEmpty(IdentityConfidence) &&
                 !string.IsNullOrEmpty(ExistenceConfidence) &&
                 !string.IsNullOrEmpty(LocationConfidenceMeters) &&
-                !string.IsNullOrEmpty(IsConcealedString);        
+                !string.IsNullOrEmpty(IsConcealedString);
         }
 
         /// <summary>
         /// Execute the submit command
         /// </summary>
-        private void SubmitAsync()
+        private async Task SubmitAsync()
         {
-            //var foo1 = Symbol;
-            //var foo2 = IdentityConfidence;
-            //var foo3 = ExistenceConfidence;
-            //var foo4 = LocationConfidenceMeters;
-            //var foo5 = IsConcealed;
-            //var foo6 = Notes;
-            //var foo7 = DataSource;
+            // Find the ContactsFaults layer
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
-            // TODO create template
+            if (layer == null)
+            {
+                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                return;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                // Get the CIM layer definition
+                CIMFeatureLayer layerDef = layer.GetDefinition() as CIMFeatureLayer;
+
+                // Create a CIM template 
+                CIMFeatureTemplate myTemplateDef = new CIMFeatureTemplate()
+                {
+                    Name = Symbol.Key,
+                    Description = Symbol.Description,
+                };
+
+                myTemplateDef.WriteTags(new[] { "AZGS", "GeMS" });
+
+                // Set default attributes
+                myTemplateDef.DefaultValues = new Dictionary<string, object>
+                {
+                    { "Type", Symbol.Key },
+                    { "Symbol", Symbol.Key },
+                    { "IdentityConfidence", IdentityConfidence },
+                    { "ExistenceConfidence", ExistenceConfidence },
+                    { "LocationConfidenceMeters", LocationConfidenceMeters },
+                    { "IsConcealed", IsConcealedString },
+                    { "Notes", Notes },
+                    { "DataSourceID", DataSource }
+                };
+
+                // Set the default construction tool
+                myTemplateDef.SetDefaultToolDamlID("esri_editing_SketchPointTool");
+
+                // Remove construction tools from being available with this template
+                List<string> filter = new List<string>
+                {
+                    // esri_editing_ConstructPointsAlongLineCommand
+                    "BCCF295A-9C64-4ADC-903E-62D827C10EF7"
+                };
+
+                myTemplateDef.ToolFilter = filter.ToArray();
+
+                // Get all templates on this layer
+                // NOTE - layerDef.FeatureTemplates could be null 
+                //    if Create Features window hasn't been opened
+                List<CIMEditingTemplate> layerTemplates = layerDef.FeatureTemplates?.ToList();
+
+                if (layerTemplates == null)
+                {
+                    layerTemplates = new List<CIMEditingTemplate>();
+                }
+
+                // Add the new template to the layer template list
+                layerTemplates.Add(myTemplateDef);
+
+                // Update the layerdefinition with the templates
+                layerDef.FeatureTemplates = layerTemplates.ToArray();
+
+                // Check the AutoGenerateFeatureTemplates flag, 
+                //     set to false so our changes will stick
+                if (layerDef.AutoGenerateFeatureTemplates)
+                    layerDef.AutoGenerateFeatureTemplates = false;
+
+                // Commit
+                layer.SetDefinition(layerDef);
+            });
         }
 
         private List<CFSymbol> _symbolOptions { get; set; }
@@ -136,7 +205,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
-        private string _dataSource;
+        private string _dataSource = GeomapmakerModule.DataSourceId;
         public string DataSource
         {
             get => _dataSource;
