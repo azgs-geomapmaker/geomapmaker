@@ -1,10 +1,12 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -43,7 +45,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         }
 
         //Update collection of CF symbols
-        public async void RefreshCFSymbols()
+        public async void RefreshCFSymbolsAsync()
         {
             SymbolOptions = await Data.CFSymbolOptions.GetCFSymbolOptions();
         }
@@ -64,7 +66,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         private Views.ContactsFaults.ContactsFaults _contactsfaults = null;
 
-        protected override void OnClick()
+        protected override async void OnClick()
         {
             //already open?
             if (_contactsfaults != null)
@@ -78,7 +80,10 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
-            _contactsfaults.contactsFaultsVM.RefreshCFSymbols();
+            await QueuedTask.Run(() =>
+            {
+                _contactsfaults.contactsFaultsVM.RefreshCFSymbolsAsync();
+            });
 
             _contactsfaults.Closed += (o, e) => { _contactsfaults = null; };
 

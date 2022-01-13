@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -17,6 +18,15 @@ namespace Geomapmaker.ViewModels.ContactsFaults
     public class CreateContactFaultVM : PropertyChangedBase, INotifyDataErrorInfo
     {
         public ICommand CommandSubmit => new RelayCommand(() => SubmitAsync(), () => CanSubmit());
+
+        public ICommand CommandClose => new RelayCommand((proWindow) =>
+        {
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
+
+        }, () => true);
 
         public ContactsFaultsViewModel ParentVM { get; set; }
 
@@ -59,7 +69,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
 
-                CIMUniqueValueClass[] listUniqueValueClasses = layerGroup == null ? new CIMUniqueValueClass[] { } : layerGroup.Classes;
+                List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
 
                 // Template Fields
                 string[] Fields = new string[] { "type", "symbol", "label", "identityconfidence", "existenceconfidence", "locationconfidencemeters", "isconcealed", "datasourceid" };
@@ -89,11 +99,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     Visible = true,
                     Values = listUniqueValues
                 };
-                listUniqueValueClasses.Append(uniqueValueClass);
+                listUniqueValueClasses.Add(uniqueValueClass);
 
                 CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
                 {
-                    Classes = listUniqueValueClasses,
+                    Classes = listUniqueValueClasses.ToArray(),
                 };
                 CIMUniqueValueGroup[] listUniqueValueGroups = new CIMUniqueValueGroup[] { uvg };
 
