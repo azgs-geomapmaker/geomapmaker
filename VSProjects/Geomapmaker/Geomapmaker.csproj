@@ -203,11 +203,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\CFSymbolOptions.cs" />
+    <Compile Include="ViewModels\ContactsFaults\CreateContactFaultVM.cs" />
+    <Compile Include="ViewModels\ContactsFaults\DeleteContactFault.cs" />
+    <Compile Include="ViewModels\ContactsFaults\EditContactFaultVM.cs" />
     <Compile Include="Views\ContactsFaults\ContactsFaults.xaml.cs">
       <DependentUpon>ContactsFaults.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\CFSymbols.cs" />
     <Compile Include="ViewModels\ContactsFaults\ContactsFaultsViewModel.cs" />
+    <Compile Include="Views\ContactsFaults\CreateContactFault.xaml.cs">
+      <DependentUpon>CreateContactFault.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ContactsFaults\DeleteContactFault.xaml.cs">
+      <DependentUpon>DeleteContactFault.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ContactsFaults\EditContactFault.xaml.cs">
+      <DependentUpon>EditContactFault.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Hierarchy.xaml.cs">
       <DependentUpon>Hierarchy.xaml</DependentUpon>
     </Compile>
@@ -304,6 +316,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ContactsFaults\ContactsFaults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ContactsFaults\CreateContactFault.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ContactsFaults\DeleteContactFault.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ContactsFaults\EditContactFault.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
