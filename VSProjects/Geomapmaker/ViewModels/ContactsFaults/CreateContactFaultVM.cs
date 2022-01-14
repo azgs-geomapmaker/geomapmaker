@@ -118,6 +118,37 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             });
         }
 
+
+
+
+
+        private bool prepopulate;
+        public bool Prepopulate
+        {
+            get => prepopulate;
+            set
+            {
+                SetProperty(ref prepopulate, value, () => Prepopulate); //Have to do this to trigger stuff, I guess.
+
+                // if the toggle-btn is active
+                if (value)
+                {
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateCFTool");
+                }
+                else
+                {
+                    FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+                }
+            }
+        }
+
+
+
+
+
+
+
+
         private CFSymbol _symbol;
         public CFSymbol Symbol
         {

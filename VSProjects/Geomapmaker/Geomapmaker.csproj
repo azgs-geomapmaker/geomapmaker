@@ -203,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\CFSymbolOptions.cs" />
+    <Compile Include="MapTools\PopulateCFTool.cs" />
     <Compile Include="ViewModels\ContactsFaults\CreateContactFaultVM.cs" />
     <Compile Include="ViewModels\ContactsFaults\DeleteContactFault.cs" />
     <Compile Include="ViewModels\ContactsFaults\EditContactFaultVM.cs" />

@@ -71,7 +71,7 @@
 
 
 
-            <ToggleButton Grid.Row="1" Grid.Column="1" Content="Populate values from an existing line" IsChecked="{Binding Prepopulate}" HorizontalAlignment="Center" Padding="5" Margin="10" >
+            <ToggleButton Grid.Row="1" Grid.Column="1" Content="Populate values from an existing line" IsChecked="{Binding Create.Prepopulate}" HorizontalAlignment="Center" Padding="5" Margin="10" >
                 <ToggleButton.Template>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                         <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">

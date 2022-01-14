@@ -104,6 +104,9 @@
         <button id="Geomapmaker_ContactsFaults" caption="Contacts and Faults Templates" className="Geomapmaker.ViewModels.ContactsFaults.ShowContactsFaults" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
+        <tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="esri_mapping_mapPane">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </tool>
       </controls>
       <!-- Dock Panes -->
       <dockPanes>
