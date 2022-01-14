@@ -1,21 +1,13 @@
-﻿using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Catalog;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Extensions;
 using ArcGIS.Desktop.Framework;
-using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Layouts;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
-using System;
+using Geomapmaker.ViewModels.ContactsFaults;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Geomapmaker.MapTools
@@ -41,6 +33,15 @@ namespace Geomapmaker.MapTools
                 return true;
             }
 
+            IEnumerable<ContactsFaultsViewModel> cfWindowVMs = FrameworkApplication.Current.Windows.OfType<ContactsFaultsViewModel>(); ;
+
+            if (cfWindowVMs.Count() < 1)
+            {
+                return true;
+            }
+
+            ContactsFaultsViewModel cfViewModel = cfWindowVMs.First();
+
             await QueuedTask.Run(() =>
             {
                 MapView mv = MapView.Active;
@@ -58,11 +59,11 @@ namespace Geomapmaker.MapTools
                 MapView.Active.FlashFeature(features);
 
                 // Filter out non-cf features
-                var cfFeatures = features.Where(x => x.Key.Name == "ContactsAndFaults");
+                IEnumerable<KeyValuePair<BasicFeatureLayer, List<long>>> cfFeatures = features.Where(x => x.Key.Name == "ContactsAndFaults");
 
                 if (cfFeatures.Count() > 0 && cfFeatures.First().Value.Count() > 0)
                 {
-                    var cfID = cfFeatures.First().Value.First();
+                    long cfID = cfFeatures.First().Value.First();
 
                     Table enterpriseTable = cfFeatureLayer.GetTable();
 
@@ -78,15 +79,18 @@ namespace Geomapmaker.MapTools
                             using (Row row = rowCursor.Current)
                             {
                                 //populate a CF from fields
-                                var cf = new ContactFault();
-                                //cf.Symbol = DataHelper.CFSymbols.Where(cfs => cfs.Key == row["symbol"].ToString()).First();
-                                cf.IdentityConfidence = row["identityconfidence"].ToString();
-                                cf.ExistenceConfidence = row["existenceconfidence"].ToString();
-                                cf.LocationConfidenceMeters = row["locationconfidencemeters"].ToString();
-                                cf.IsConcealed = row["isconcealed"].ToString() == "Y";
-                                cf.Notes = row["notes"] == null ? "" : row["notes"].ToString();
+                                ContactFault cf = new ContactFault
+                                {
+                                    //cf.Symbol = DataHelper.CFSymbols.Where(cfs => cfs.Key == row["symbol"].ToString()).First();
+                                    IdentityConfidence = row["identityconfidence"].ToString(),
+                                    ExistenceConfidence = row["existenceconfidence"].ToString(),
+                                    LocationConfidenceMeters = row["locationconfidencemeters"].ToString(),
+                                    IsConcealed = row["isconcealed"].ToString() == "Y",
+                                    Notes = row["notes"] == null ? "" : row["notes"].ToString()
+                                };
 
-
+                                // Pass values back to the ViewModel to prepop
+                                cfViewModel.Create.PrepopulateCF(cf);
                             }
                         }
                     }

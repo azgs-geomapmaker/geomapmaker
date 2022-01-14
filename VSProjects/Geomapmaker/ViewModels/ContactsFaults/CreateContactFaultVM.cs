@@ -72,20 +72,20 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
 
                 // Template Fields
-                string[] Fields = new string[] { "type", "symbol", "label", "identityconfidence", "existenceconfidence", "locationconfidencemeters", "isconcealed", "datasourceid" };
+                List<string> Fields = new List<string> { "type", "symbol", "label", "identityconfidence", "existenceconfidence", "locationconfidencemeters", "isconcealed", "datasourceid" };
                 // Template Values
-                string[] FieldValues = new string[] { Symbol.Key, Symbol.Key, Symbol.Description.Substring(0, 50), IdentityConfidence, ExistenceConfidence, LocationConfidenceMeters, IsConcealedString, DataSource };
+                List<string> FieldValues = new List<string> { Symbol.Key, Symbol.Key, Symbol.Description.Substring(0, 50), IdentityConfidence, ExistenceConfidence, LocationConfidenceMeters, IsConcealedString, DataSource };
 
                 // Add note if not null
                 if (!string.IsNullOrEmpty(Notes))
                 {
-                    Fields.Append("notes");
-                    FieldValues.Append(Notes);
+                    Fields.Add("notes");
+                    FieldValues.Add(Notes);
                 }
 
                 CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
                     new CIMUniqueValue {
-                        FieldValues = FieldValues
+                        FieldValues = FieldValues.ToArray()
                     }
                 };
 
@@ -111,16 +111,28 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 {
                     UseDefaultSymbol = false,
                     Groups = listUniqueValueGroups,
-                    Fields = Fields
+                    Fields = Fields.ToArray()
                 };
 
                 layer.SetRenderer(updatedRenderer);
             });
         }
 
+        public void PrepopulateCF(ContactFault cf)
+        {
+            Notes = "Test123123";
 
+            //Symbol = cf.Symbol;
+            //IdentityConfidence = cf.IdentityConfidence;
+            //ExistenceConfidence = cf.ExistenceConfidence;
+            //LocationConfidenceMeters = cf.LocationConfidenceMeters;
+            //IsConcealed = cf.IsConcealed;
+            //Notes = cf.Notes;
+            //DataSource = cf.DataSource;
 
-
+            // Turn off the togge button
+            Prepopulate = false;
+        }
 
         private bool prepopulate;
         public bool Prepopulate
@@ -141,13 +153,6 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 }
             }
         }
-
-
-
-
-
-
-
 
         private CFSymbol _symbol;
         public CFSymbol Symbol
