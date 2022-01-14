@@ -120,17 +120,17 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public void PrepopulateCF(ContactFault cf)
         {
-            Notes = "Test123123";
-
+            // TODO
             //Symbol = cf.Symbol;
-            //IdentityConfidence = cf.IdentityConfidence;
-            //ExistenceConfidence = cf.ExistenceConfidence;
-            //LocationConfidenceMeters = cf.LocationConfidenceMeters;
-            //IsConcealed = cf.IsConcealed;
-            //Notes = cf.Notes;
-            //DataSource = cf.DataSource;
 
-            // Turn off the togge button
+            IdentityConfidence = cf.IdentityConfidence;
+            ExistenceConfidence = cf.ExistenceConfidence;
+            LocationConfidenceMeters = cf.LocationConfidenceMeters;
+            IsConcealed = cf.IsConcealed;
+            Notes = cf.Notes;
+            DataSource = cf.DataSource;
+
+            // Turn off the toggle button
             Prepopulate = false;
         }
 

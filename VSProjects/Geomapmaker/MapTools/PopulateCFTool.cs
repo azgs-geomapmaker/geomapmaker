@@ -40,7 +40,8 @@ namespace Geomapmaker.MapTools
                 return true;
             }
 
-            ContactsFaultsViewModel cfViewModel = cfWindowVMs.First();
+            // Get the most recent window. GC takes some time to clean up the closed prowindows.
+            ContactsFaultsViewModel cfViewModel = cfWindowVMs.Last();
 
             await QueuedTask.Run(() =>
             {
