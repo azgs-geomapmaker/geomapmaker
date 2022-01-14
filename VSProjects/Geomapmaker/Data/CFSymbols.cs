@@ -28,7 +28,6 @@ namespace Geomapmaker.Data
 
                 using (RowCursor rowCursor = enterpriseTable.Search())
                 {
-
                     while (rowCursor.MoveNext())
                     {
                         using (Row row = rowCursor.Current)
