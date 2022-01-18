@@ -6,6 +6,8 @@
 
         public CFSymbol Symbol { get; set; }
 
+        public string Type { get; set; }
+
         public string IdentityConfidence { get; set; }
 
         public string ExistenceConfidence { get; set; }

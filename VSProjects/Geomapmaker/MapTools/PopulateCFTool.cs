@@ -82,7 +82,7 @@ namespace Geomapmaker.MapTools
                                 //populate a CF from fields
                                 ContactFault cf = new ContactFault
                                 {
-                                    //cf.Symbol = DataHelper.CFSymbols.Where(cfs => cfs.Key == row["symbol"].ToString()).First();
+                                    Type = row["type"].ToString(),
                                     IdentityConfidence = row["identityconfidence"].ToString(),
                                     ExistenceConfidence = row["existenceconfidence"].ToString(),
                                     LocationConfidenceMeters = row["locationconfidencemeters"].ToString(),
