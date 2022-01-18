@@ -8,7 +8,7 @@
              xmlns:data="clr-namespace:Geomapmaker.Data" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             >
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -107,7 +107,11 @@
 
             <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="Identity Confidence: "/>
-                <TextBlock FontWeight="Bold" Text="{Binding Create.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+                <TextBlock FontWeight="Bold" Text="{Binding Create.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
+                <Validation.ErrorTemplate>
+                        <ControlTemplate />
+                    </Validation.ErrorTemplate>
+                </TextBlock>
             </StackPanel>
             <Grid Grid.Row="5" Grid.Column="1" >
                 <Grid.RowDefinitions>
@@ -157,13 +161,21 @@
 
             <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="Existence Confidence: " />
-                <TextBlock FontWeight="Bold" Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+                <TextBlock FontWeight="Bold" Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
+                <Validation.ErrorTemplate>
+                        <ControlTemplate />
+                    </Validation.ErrorTemplate>
+                </TextBlock>
             </StackPanel>
             <Slider Grid.Row="7" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Create.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
 
             <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="Location Confidence: " />
-                <TextBlock FontWeight="Bold" Text="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}" />
+                <TextBlock FontWeight="Bold" Text="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate />
+                    </Validation.ErrorTemplate>
+                </TextBlock>
             </StackPanel>
             <ComboBox 
             Grid.Row="9" 

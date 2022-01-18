@@ -33,6 +33,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public CreateContactFaultVM(ContactsFaultsViewModel parentVM)
         {
             ParentVM = parentVM;
+
+            // Initialize required fields
+            Symbol = null;
+            IdentityConfidence = "";
+            ExistenceConfidence = "";
+            LocationConfidenceMeters = "";
         }
 
         /// <summary>
@@ -155,28 +161,44 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public CFSymbol Symbol
         {
             get => _symbol;
-            set => SetProperty(ref _symbol, value, () => Symbol);
+            set
+            {
+                SetProperty(ref _symbol, value, () => Symbol);
+                ValidateSymbol(Symbol, "Symbol");
+            }
         }
 
         private string _identityConfidence;
         public string IdentityConfidence
         {
             get => _identityConfidence;
-            set => SetProperty(ref _identityConfidence, value, () => IdentityConfidence);
+            set
+            {
+                SetProperty(ref _identityConfidence, value, () => IdentityConfidence);
+                ValidateRequiredString(IdentityConfidence, "IdentityConfidence");
+            }
         }
 
         private string _existenceConfidence;
         public string ExistenceConfidence
         {
             get => _existenceConfidence;
-            set => SetProperty(ref _existenceConfidence, value, () => ExistenceConfidence);
+            set
+            {
+                SetProperty(ref _existenceConfidence, value, () => ExistenceConfidence);
+                ValidateRequiredString(ExistenceConfidence, "ExistenceConfidence");
+            }
         }
 
         private string _locationConfidenceMeters;
         public string LocationConfidenceMeters
         {
             get => _locationConfidenceMeters;
-            set => SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
+            set
+            {
+                SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
+                ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+            }
         }
 
         private bool _isConcealed;
@@ -223,6 +245,37 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
+
+        // Validate symbol
+        private void ValidateSymbol(CFSymbol symbol, string propertyKey)
+        {
+            // Required field
+            if (symbol == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateRequiredString(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
 
         #endregion
 
