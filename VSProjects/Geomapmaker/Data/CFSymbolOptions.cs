@@ -11,7 +11,9 @@ namespace Geomapmaker.Data
 {
     public class CFSymbolOptions
     {
-        public static async Task<List<CFSymbol>> GetCFSymbolOptions()
+        public static List<CFSymbol> CFSymbolOptionsList;
+
+        public static async Task RefreshCFSymbolOptions()
         {
             List<CFSymbol> cfSymbols = new List<CFSymbol>();
 
@@ -20,7 +22,7 @@ namespace Geomapmaker.Data
             // Return an empty list if the cfsymbology table isn null
             if (CFSymbologyTable == null)
             {
-                return cfSymbols;
+                return;
             }
 
             // Process the cfsymbology table
@@ -70,7 +72,7 @@ namespace Geomapmaker.Data
                 }
             });
 
-            return cfSymbols;
+            CFSymbolOptionsList = cfSymbols;
         }
     }
 }

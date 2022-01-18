@@ -47,7 +47,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         //Update collection of CF symbols
         public async void RefreshCFSymbolsAsync()
         {
-            SymbolOptions = await Data.CFSymbolOptions.GetCFSymbolOptions();
+            // Get symbology options if the list is null
+            if (Data.CFSymbolOptions.CFSymbolOptionsList == null)
+            {
+                await Data.CFSymbolOptions.RefreshCFSymbolOptions();
+            }
+
+            SymbolOptions = Data.CFSymbolOptions.CFSymbolOptionsList;
         }
 
         #region INotifyPropertyChanged
