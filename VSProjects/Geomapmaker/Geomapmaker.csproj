@@ -287,12 +287,6 @@
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
-    <Compile Include="RibbonElements\ContactsAndFaultsEditTool.cs" />
-    <Compile Include="Views\AddEditContactsAndFaultsDockPane.xaml.cs">
-      <DependentUpon>AddEditContactsAndFaultsDockPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\AddEditContactsAndFaultsDockPaneViewModel.cs" />
-    <Compile Include="RibbonElements\ContactsAndFaultsAddTool.cs" />
     <Compile Include="Models\ContactFault.cs" />
     <Compile Include="Views\AddEditMapUnitPolysDockPane.xaml.cs">
       <DependentUpon>AddEditMapUnitPolysDockPane.xaml</DependentUpon>
@@ -385,10 +379,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MapUnits\EditMapUnit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddEditContactsAndFaultsDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

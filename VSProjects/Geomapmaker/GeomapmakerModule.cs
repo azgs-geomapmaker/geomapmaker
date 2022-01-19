@@ -41,11 +41,6 @@ namespace Geomapmaker
 
         public static string DataSourceId { get; set; }
 
-        //public DataHelper helper = new DataHelper();
-        internal static AddEditContactsAndFaultsDockPaneViewModel ContactsAndFaultsVM { get; set; }
-        internal static ContactsAndFaultsAddTool ContactsAndFaultsAddTool { get; set; }
-        internal static ContactsAndFaultsEditTool ContactsAndFaultsEditTool { get; set; }
-
         internal static AddEditMapUnitPolysDockPaneViewModel MapUnitPolysVM { get; set; }
         internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
         internal static MapUnitPolyEditTool EditMapUnitPolyTool { get; set; }
