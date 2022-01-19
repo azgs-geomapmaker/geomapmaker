@@ -127,7 +127,7 @@ namespace Geomapmaker
             set
             {
                 SetProperty(ref selectedCFSymbol, value, () => SelectedCFSymbol); // Have to do this to trigger stuff, I guess.
-                SelectedCF.Symbol = selectedCFSymbol;
+                //SelectedCF.Symbol = selectedCFSymbol;
             }
         }
 
@@ -171,8 +171,8 @@ namespace Geomapmaker
             Dictionary<string, object> attributes = new Dictionary<string, object>
             {
                 ["SHAPE"] = SelectedCF.Shape,//Geometry
-                ["TYPE"] = SelectedCF.Symbol.Description,
-                ["Symbol"] = SelectedCF.Symbol.Key,
+                //["TYPE"] = SelectedCF.Symbol.Description,
+                //["Symbol"] = SelectedCF.Symbol.Key,
                 ["IdentityConfidence"] = SelectedCF.IdentityConfidence,
                 ["ExistenceConfidence"] = SelectedCF.ExistenceConfidence,
                 ["LocationConfidenceMeters"] = SelectedCF.LocationConfidenceMeters,
@@ -206,16 +206,16 @@ namespace Geomapmaker
 
             List<CIMUniqueValue> listUniqueValues = new List<CIMUniqueValue> {
                 new CIMUniqueValue {
-                    FieldValues = new string[] { SelectedCF.Symbol.Key }
+                    //FieldValues = new string[] { SelectedCF.Symbol.Key }
                 }
             };
 
             CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
             {
                 Editable = true,
-                Label = SelectedCF.Symbol.Key,
+                //Label = SelectedCF.Symbol.Key,
                 Patch = PatchShape.AreaPolygon,
-                Symbol = CIMSymbolReference.FromJson(SelectedCF.Symbol.SymbolJson, null),
+                //Symbol = CIMSymbolReference.FromJson(SelectedCF.Symbol.SymbolJson, null),
                 Visible = true,
                 Values = listUniqueValues.ToArray()
             };

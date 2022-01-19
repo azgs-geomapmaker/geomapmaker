@@ -4,7 +4,7 @@
     {
         public long? ID { get; set; }
 
-        public CFSymbol Symbol { get; set; }
+        public string Symbol { get; set; }
 
         public string Type { get; set; }
 

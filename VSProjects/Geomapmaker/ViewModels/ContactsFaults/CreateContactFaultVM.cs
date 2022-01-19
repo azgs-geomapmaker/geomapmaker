@@ -35,6 +35,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             ParentVM = parentVM;
 
             // Initialize required fields
+            Type = "";
             Symbol = null;
             IdentityConfidence = "";
             ExistenceConfidence = "";
@@ -80,7 +81,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // Template Fields
                 List<string> Fields = new List<string> { "type", "symbol", "label", "identityconfidence", "existenceconfidence", "locationconfidencemeters", "isconcealed", "datasourceid" };
                 // Template Values
-                List<string> FieldValues = new List<string> { Symbol.Key, Symbol.Key, Symbol.Description.Substring(0, 50), IdentityConfidence, ExistenceConfidence, LocationConfidenceMeters, IsConcealedString, DataSource };
+                List<string> FieldValues = new List<string> { Type, Symbol.Key, Symbol.Description.Substring(0, 50), IdentityConfidence, ExistenceConfidence, LocationConfidenceMeters, IsConcealedString, DataSource };
 
                 // Add note if not null
                 if (!string.IsNullOrEmpty(Notes))
@@ -126,7 +127,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public void PrepopulateCF(ContactFault cf)
         {
-            Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == cf.Type);
+            Type = cf.Type;
+            Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == cf.Symbol);
             IdentityConfidence = cf.IdentityConfidence;
             ExistenceConfidence = cf.ExistenceConfidence;
             LocationConfidenceMeters = cf.LocationConfidenceMeters;
@@ -154,6 +156,17 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 {
                     FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
                 }
+            }
+        }
+
+        private string _type;
+        public string Type
+        {
+            get => _type;
+            set
+            {
+                SetProperty(ref _type, value, () => Type);
+                ValidateRequiredString(Type, "Type");
             }
         }
 

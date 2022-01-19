@@ -83,6 +83,7 @@ namespace Geomapmaker.MapTools
                                 ContactFault cf = new ContactFault
                                 {
                                     Type = row["type"].ToString(),
+                                    Symbol = row["symbol"].ToString(),
                                     IdentityConfidence = row["identityconfidence"].ToString(),
                                     ExistenceConfidence = row["existenceconfidence"].ToString(),
                                     LocationConfidenceMeters = row["locationconfidencemeters"].ToString(),
