@@ -10,9 +10,9 @@
         mc:Ignorable="d"
         Title="Contacts and Faults Templates"
         Height="700" 
-        Width="400"
+        Width="500"
         MinHeight="600" 
-        MinWidth="300"
+        MinWidth="400"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

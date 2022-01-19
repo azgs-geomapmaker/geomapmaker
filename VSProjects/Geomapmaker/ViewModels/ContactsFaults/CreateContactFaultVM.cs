@@ -17,7 +17,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 {
     public class CreateContactFaultVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandSubmit => new RelayCommand(() => SubmitAsync(), () => CanSubmit());
+        public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => CanCreateTemplate());
 
         public ICommand CommandClose => new RelayCommand((proWindow) =>
         {
@@ -46,7 +46,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         /// Determines the visibility (enabled state) of the button
         /// </summary>
         /// <returns>true if enabled</returns>
-        private bool CanSubmit()
+        private bool CanCreateTemplate()
         {
             return Symbol != null &&
                 !string.IsNullOrEmpty(IdentityConfidence) &&
@@ -59,7 +59,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         /// <summary>
         /// Execute the submit command
         /// </summary>
-        private async Task SubmitAsync()
+        private async Task CreateTemplateAsync()
         {
             // Find the ContactsFaults layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");

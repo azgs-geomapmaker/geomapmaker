@@ -100,11 +100,13 @@
                     <DataTemplate>
                         <Grid ToolTip="{Binding Description}" >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="0" Source="{Binding Preview}" HorizontalAlignment="Left"  />
-                            <TextBlock Grid.Column="1" Text="{Binding Key}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="0" Text="{Binding Key}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <Image Grid.Column="1" Source="{Binding Preview}" HorizontalAlignment="Left" />
+                            <TextBlock Grid.Column="2" Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -208,7 +210,10 @@
 
             <StackPanel Grid.Row="17" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
-                <Button Padding="5" Command="{Binding Create.CommandSubmit}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Submit</Button>
+
+                <Button Padding="5" Command="" Style="{DynamicResource Esri_Button}" MinWidth="150" >Tool</Button>
+
+                <Button Padding="5" Command="{Binding Create.CommandCreateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Create Template</Button>
             </StackPanel>
 
         </Grid>
