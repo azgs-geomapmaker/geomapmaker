@@ -19,6 +19,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
     {
         public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => CanCreateTemplate());
 
+        public ICommand CommandContactFaultTool => new RelayCommand(() => ContactFaultTool(), () => CanUseTool());
+
         public ICommand CommandClose => new RelayCommand((proWindow) =>
         {
             if (proWindow != null)
@@ -55,6 +57,22 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 !string.IsNullOrEmpty(IsConcealedString) &&
                 !string.IsNullOrEmpty(DataSource);
         }
+
+        private bool CanUseTool()
+        {
+            return Symbol != null &&
+                !string.IsNullOrEmpty(IdentityConfidence) &&
+                !string.IsNullOrEmpty(ExistenceConfidence) &&
+                !string.IsNullOrEmpty(LocationConfidenceMeters) &&
+                !string.IsNullOrEmpty(IsConcealedString) &&
+                !string.IsNullOrEmpty(DataSource);
+        }
+
+        private void ContactFaultTool()
+        {
+
+        }
+
 
         /// <summary>
         /// Execute the submit command
