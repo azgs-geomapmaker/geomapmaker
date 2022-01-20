@@ -104,11 +104,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 }
 
                 // set up tags
-                var tags = new[] { "Point", "tag2" };
+                var tags = new[] { "ContactFault", "GeMS" };
 
                 // default construction tool - use daml-id
                 string defaultTool = "esri_editing_LineConstructor";
 
+                // TODO remove tools below 
                 // filter - use daml-id
                 List<string> filter = new List<string>();
                 //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
@@ -126,6 +127,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
 
+                // Check if the renderer already has symbology for that key
+                if (listUniqueValueClasses.Any(a => a.Label == Symbol.Key))
+                {
+                    return;
+                }
 
                 // Template Fields
                 List<string> Fields = new List<string> { "symbol", };
