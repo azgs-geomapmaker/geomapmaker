@@ -202,6 +202,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapTools\ContactFaultTool.cs" />
     <Compile Include="Data\CFSymbolOptions.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
     <Compile Include="ViewModels\ContactsFaults\CreateContactFaultVM.cs" />

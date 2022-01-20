@@ -210,9 +210,7 @@
 
             <StackPanel Grid.Row="17" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
-
-                <Button Padding="5" Command="" Style="{DynamicResource Esri_Button}" MinWidth="150" >Tool</Button>
-
+                <Button Padding="5" Command="{Binding Create.CommandContactFaultTool}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Tool</Button>
                 <Button Padding="5" Command="{Binding Create.CommandCreateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Create Template</Button>
             </StackPanel>
 

@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
@@ -17,9 +18,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 {
     public class CreateContactFaultVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => CanCreateTemplate());
+        public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => IsValid());
 
-        public ICommand CommandContactFaultTool => new RelayCommand(() => ContactFaultTool(), () => CanUseTool());
+        public ICommand CommandContactFaultTool => new RelayCommand(() => CreateContactFault());
 
         public ICommand CommandClose => new RelayCommand((proWindow) =>
         {
@@ -48,7 +49,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         /// Determines the visibility (enabled state) of the button
         /// </summary>
         /// <returns>true if enabled</returns>
-        private bool CanCreateTemplate()
+        private bool IsValid()
         {
             return Symbol != null &&
                 !string.IsNullOrEmpty(IdentityConfidence) &&
@@ -58,21 +59,10 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 !string.IsNullOrEmpty(DataSource);
         }
 
-        private bool CanUseTool()
+        private void CreateContactFault()
         {
-            return Symbol != null &&
-                !string.IsNullOrEmpty(IdentityConfidence) &&
-                !string.IsNullOrEmpty(ExistenceConfidence) &&
-                !string.IsNullOrEmpty(LocationConfidenceMeters) &&
-                !string.IsNullOrEmpty(IsConcealedString) &&
-                !string.IsNullOrEmpty(DataSource);
+            FrameworkApplication.SetCurrentToolAsync("Geomapmaker_ContactFaultTool");
         }
-
-        private void ContactFaultTool()
-        {
-
-        }
-
 
         /// <summary>
         /// Execute the submit command
@@ -90,23 +80,57 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             await QueuedTask.Run(() =>
             {
+                //
+                // Create New Contact Fault Template
+                //
+
+                // load the schema
+                var insp = new Inspector();
+                insp.LoadSchema(layer);
+
+                // set some default attributes
+                insp["type"] = Type;
+                insp["symbol"] = Symbol.Key;
+                insp["label"] = "TODO";
+                insp["identityconfidence"] = IdentityConfidence;
+                insp["existenceconfidence"] = ExistenceConfidence;
+                insp["locationconfidencemeters"] = LocationConfidenceMeters;
+                insp["isconcealed"] = IsConcealedString;
+                insp["datasourceid"] = DataSource;
+
+                if (!string.IsNullOrEmpty(Notes))
+                {
+                    insp["notes"] = Notes;
+                }
+
+                // set up tags
+                var tags = new[] { "Point", "tag2" };
+
+                // default construction tool - use daml-id
+                string defaultTool = "esri_editing_LineConstructor";
+
+                // filter - use daml-id
+                List<string> filter = new List<string>();
+                //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
+
+                // create a new CIM template  - new extension method
+                var newTemplate = layer.CreateTemplate(Symbol.Key, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
+
+                //
+                // Update Renderer
+                //
+
                 CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
 
                 CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
 
                 List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
 
-                // Template Fields
-                List<string> Fields = new List<string> { "type", "symbol", "label", "identityconfidence", "existenceconfidence", "locationconfidencemeters", "isconcealed", "datasourceid" };
-                // Template Values
-                List<string> FieldValues = new List<string> { Type, Symbol.Key, Symbol.Description.Substring(0, 50), IdentityConfidence, ExistenceConfidence, LocationConfidenceMeters, IsConcealedString, DataSource };
 
-                // Add note if not null
-                if (!string.IsNullOrEmpty(Notes))
-                {
-                    Fields.Add("notes");
-                    FieldValues.Add(Notes);
-                }
+                // Template Fields
+                List<string> Fields = new List<string> { "symbol", };
+                // Template Values
+                List<string> FieldValues = new List<string> { Symbol.Key };
 
                 CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
                     new CIMUniqueValue {
@@ -116,13 +140,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                 {
-                    Editable = true,
+                    Editable = false,
                     Label = Symbol.Key,
                     Description = Symbol.Description,
                     Patch = PatchShape.AreaPolygon,
                     Symbol = CIMSymbolReference.FromJson(Symbol.SymbolJson, null),
                     Visible = true,
-                    Values = listUniqueValues
+                    Values = listUniqueValues,
                 };
                 listUniqueValueClasses.Add(uniqueValueClass);
 
@@ -157,13 +181,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             Prepopulate = false;
         }
 
-        private bool prepopulate;
+        private bool _prepopulate;
         public bool Prepopulate
         {
-            get => prepopulate;
+            get => _prepopulate;
             set
             {
-                SetProperty(ref prepopulate, value, () => Prepopulate); //Have to do this to trigger stuff, I guess.
+                SetProperty(ref _prepopulate, value, () => Prepopulate);
 
                 // if the toggle-btn is active
                 if (value)
