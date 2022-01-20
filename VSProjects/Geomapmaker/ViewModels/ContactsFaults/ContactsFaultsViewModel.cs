@@ -3,10 +3,10 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using Geomapmaker.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -91,9 +91,18 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 _contactsfaults.contactsFaultsVM.RefreshCFSymbolsAsync();
             });
 
-            _contactsfaults.Closed += (o, e) => { _contactsfaults = null; };
+            _contactsfaults.Closed += (o, e) =>
+            {
+                ResetMapTool(o, e);
+                _contactsfaults = null;
+            };
 
             _contactsfaults.Show();
+        }
+
+        private void ResetMapTool(object sender, EventArgs e)
+        {
+            FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
         }
     }
 }
