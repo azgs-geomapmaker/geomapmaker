@@ -90,6 +90,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     return;
                 }
 
+                if (currentTemplates.Any(a => a.Name == "ContactsAndFaults"))
+                {
+                    // Remove the default template
+                    layer.RemoveTemplate("ContactsAndFaults");
+                }
+
                 //
                 // Create New Contact Fault Template
                 //
@@ -114,7 +120,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 }
 
                 // set up tags
-                string[] tags = new[] { "ContactFault", "GeMS" };
+                string[] tags = new[] { "ContactFault" };
 
                 // default construction tool - use daml-id
                 string defaultTool = "esri_editing_LineConstructor";
