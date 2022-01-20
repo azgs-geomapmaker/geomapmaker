@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Desktop.Editing.Attributes;
+using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
@@ -39,6 +40,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             // Initialize required fields
             Type = "";
+            Label = "";
             Symbol = null;
             IdentityConfidence = "";
             ExistenceConfidence = "";
@@ -80,18 +82,25 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             await QueuedTask.Run(() =>
             {
+                IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
+
+                if (currentTemplates.Any(a => a.Name == Label))
+                {
+                    return;
+                }
+
                 //
                 // Create New Contact Fault Template
                 //
 
                 // load the schema
-                var insp = new Inspector();
+                Inspector insp = new Inspector();
                 insp.LoadSchema(layer);
 
                 // set some default attributes
                 insp["type"] = Type;
                 insp["symbol"] = Symbol.Key;
-                insp["label"] = "TODO";
+                insp["label"] = Label;
                 insp["identityconfidence"] = IdentityConfidence;
                 insp["existenceconfidence"] = ExistenceConfidence;
                 insp["locationconfidencemeters"] = LocationConfidenceMeters;
@@ -104,7 +113,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 }
 
                 // set up tags
-                var tags = new[] { "ContactFault", "GeMS" };
+                string[] tags = new[] { "ContactFault", "GeMS" };
 
                 // default construction tool - use daml-id
                 string defaultTool = "esri_editing_LineConstructor";
@@ -114,8 +123,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 List<string> filter = new List<string>();
                 //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
 
-                // create a new CIM template  - new extension method
-                var newTemplate = layer.CreateTemplate(Symbol.Key, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
+                // Create CIM template 
+                EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
 
                 //
                 // Update Renderer
@@ -215,6 +224,17 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 SetProperty(ref _type, value, () => Type);
                 ValidateRequiredString(Type, "Type");
+            }
+        }
+
+        private string _label;
+        public string Label
+        {
+            get => _label;
+            set
+            {
+                SetProperty(ref _label, value, () => Label);
+                ValidateRequiredString(Label, "Label");
             }
         }
 

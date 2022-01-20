@@ -8,6 +8,8 @@
 
         public string Type { get; set; }
 
+        public string Label { get; set; }
+
         public string IdentityConfidence { get; set; }
 
         public string ExistenceConfidence { get; set; }
