@@ -54,6 +54,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         private bool IsValid()
         {
             return Symbol != null &&
+                !string.IsNullOrEmpty(Type) &&
+                !string.IsNullOrEmpty(Label) &&
                 !string.IsNullOrEmpty(IdentityConfidence) &&
                 !string.IsNullOrEmpty(ExistenceConfidence) &&
                 !string.IsNullOrEmpty(LocationConfidenceMeters) &&
