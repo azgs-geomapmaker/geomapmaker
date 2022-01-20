@@ -86,6 +86,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 if (currentTemplates.Any(a => a.Name == Label))
                 {
+                    MessageBox.Show($"{Label} template already exists.");
                     return;
                 }
 
