@@ -75,11 +75,11 @@
                 </ToggleButton.Template>
             </ToggleButton>
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="Type:" VerticalAlignment="Center" />
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Label:" VerticalAlignment="Center" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Create.Label, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="Label:" VerticalAlignment="Center" />
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.Label, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Type:" VerticalAlignment="Center" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
 
             <GroupBox Grid.Row="6" Grid.Column="1" >
                 <GroupBox.Header>

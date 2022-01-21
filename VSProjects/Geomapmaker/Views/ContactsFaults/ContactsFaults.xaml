@@ -11,7 +11,7 @@
         Title="Contacts and Faults Templates"
         Height="700" 
         Width="500"
-        MinHeight="600" 
+        MinHeight="650" 
         MinWidth="450"
         WindowStartupLocation="CenterOwner"
     >
