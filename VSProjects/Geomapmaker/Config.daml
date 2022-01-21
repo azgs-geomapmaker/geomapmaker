@@ -93,9 +93,6 @@
         <tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" >
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </tool>
-        <tool id="Geomapmaker_ContactFaultTool" caption="ContactFaultTool" className="Geomapmaker.MapTools.ContactFaultTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" >
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
-        </tool>
       </controls>
       <!-- Dock Panes -->
       <dockPanes>

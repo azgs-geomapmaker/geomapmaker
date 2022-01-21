@@ -202,8 +202,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapTools\ContactFaultTool.cs" />
-    <Compile Include="Data\CFSymbolOptions.cs" />
+    <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
     <Compile Include="ViewModels\ContactsFaults\CreateContactFaultVM.cs" />
     <Compile Include="ViewModels\ContactsFaults\DeleteContactFault.cs" />
@@ -211,7 +210,6 @@
     <Compile Include="Views\ContactsFaults\ContactsFaults.xaml.cs">
       <DependentUpon>ContactsFaults.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\CFSymbols.cs" />
     <Compile Include="ViewModels\ContactsFaults\ContactsFaultsViewModel.cs" />
     <Compile Include="Views\ContactsFaults\CreateContactFault.xaml.cs">
       <DependentUpon>CreateContactFault.xaml</DependentUpon>

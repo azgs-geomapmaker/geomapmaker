@@ -48,12 +48,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public async void RefreshCFSymbolsAsync()
         {
             // Get symbology options if the list is null
-            if (Data.CFSymbolOptions.CFSymbolOptionsList == null)
+            if (Data.CFSymbology.CFSymbolOptionsList == null)
             {
-                await Data.CFSymbolOptions.RefreshCFSymbolOptions();
+                await Data.CFSymbology.RefreshCFSymbolOptions();
             }
 
-            SymbolOptions = Data.CFSymbolOptions.CFSymbolOptionsList;
+            SymbolOptions = Data.CFSymbology.CFSymbolOptionsList;
         }
 
         #region INotifyPropertyChanged

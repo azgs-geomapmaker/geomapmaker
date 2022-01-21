@@ -1,5 +1,4 @@
-﻿using ArcGIS.Core.CIM;
-using ArcGIS.Desktop.Editing.Attributes;
+﻿using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
@@ -21,16 +20,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
     {
         public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => IsValid());
 
-        public ICommand CommandContactFaultTool => new RelayCommand(() => CreateContactFault());
-
-        public ICommand CommandClose => new RelayCommand((proWindow) =>
-        {
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
-
-        }, () => true);
+        public ICommand CommandSketch => new RelayCommand(async (proWindow) => await CreateSketchAsync(proWindow), () => IsValid());
 
         public ContactsFaultsViewModel ParentVM { get; set; }
 
@@ -63,13 +53,88 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 !string.IsNullOrEmpty(DataSource);
         }
 
-        private void CreateContactFault()
+        private async Task CreateSketchAsync(Object proWindow)
         {
-            FrameworkApplication.SetCurrentToolAsync("Geomapmaker_ContactFaultTool");
+            // Find the ContactsFaults layer
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+            if (layer == null)
+            {
+                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                return;
+            }
+
+            // Close the window
+            if (proWindow != null)
+            {
+                (proWindow as ProWindow).Close();
+            }
+
+            await QueuedTask.Run(async () =>
+            {
+                IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
+
+                if (currentTemplates.Any(a => a.Name == "Sketch"))
+                {
+                    // Remove the temporary template
+                    layer.RemoveTemplate("Sketch");
+                }
+
+                if (currentTemplates.Any(a => a.Name == "ContactsAndFaults"))
+                {
+                    // Remove the default template
+                    layer.RemoveTemplate("ContactsAndFaults");
+                }
+
+                //
+                // Create the temp Template
+                //
+
+                // load the schema
+                Inspector insp = new Inspector();
+                insp.LoadSchema(layer);
+
+                // set some default attributes
+                insp["type"] = Type;
+                insp["symbol"] = Symbol.Key;
+                insp["label"] = Label;
+                insp["identityconfidence"] = IdentityConfidence;
+                insp["existenceconfidence"] = ExistenceConfidence;
+                insp["locationconfidencemeters"] = LocationConfidenceMeters;
+                insp["isconcealed"] = IsConcealedString;
+                insp["datasourceid"] = DataSource;
+
+                if (!string.IsNullOrEmpty(Notes))
+                {
+                    insp["notes"] = Notes;
+                }
+
+                // set up tags
+                string[] tags = new[] { "ContactFault" };
+
+                // default construction tool - use daml-id
+                string defaultTool = "esri_editing_LineConstructor";
+
+                // TODO remove tools below 
+                // filter - use daml-id
+                List<string> filter = new List<string>();
+                //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
+
+                // Create CIM template 
+                EditingTemplate newTemplate = layer.CreateTemplate("Sketch", "Sketch", insp, defaultTool, tags, filter.ToArray());
+
+                // Update Renderer
+                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+
+                EditingTemplate tempTemplate = layer.GetTemplate("Sketch");
+
+                // Activate tool for the temp template
+                await tempTemplate.ActivateDefaultToolAsync();
+            });
         }
 
         /// <summary>
-        /// Execute the submit command
+        /// Create a new template
         /// </summary>
         private async Task CreateTemplateAsync()
         {
@@ -82,7 +147,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 return;
             }
 
-            await QueuedTask.Run(() =>
+            await QueuedTask.Run(async () =>
             {
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
 
@@ -135,59 +200,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // Create CIM template 
                 EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
 
-                //
                 // Update Renderer
-                //
-
-                CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
-
-                CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
-
-                List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
-
-                // Check if the renderer already has symbology for that key
-                if (listUniqueValueClasses.Any(a => a.Label == Symbol.Key))
-                {
-                    return;
-                }
-
-                // Template Fields
-                List<string> Fields = new List<string> { "symbol", };
-                // Template Values
-                List<string> FieldValues = new List<string> { Symbol.Key };
-
-                CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
-                    new CIMUniqueValue {
-                        FieldValues = FieldValues.ToArray()
-                    }
-                };
-
-                CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
-                {
-                    Editable = false,
-                    Label = Symbol.Key,
-                    Description = Symbol.Description,
-                    Patch = PatchShape.AreaPolygon,
-                    Symbol = CIMSymbolReference.FromJson(Symbol.SymbolJson, null),
-                    Visible = true,
-                    Values = listUniqueValues,
-                };
-                listUniqueValueClasses.Add(uniqueValueClass);
-
-                CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
-                {
-                    Classes = listUniqueValueClasses.ToArray(),
-                };
-                CIMUniqueValueGroup[] listUniqueValueGroups = new CIMUniqueValueGroup[] { uvg };
-
-                CIMUniqueValueRenderer updatedRenderer = new CIMUniqueValueRenderer
-                {
-                    UseDefaultSymbol = false,
-                    Groups = listUniqueValueGroups,
-                    Fields = Fields.ToArray()
-                };
-
-                layer.SetRenderer(updatedRenderer);
+                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
             });
         }
 
