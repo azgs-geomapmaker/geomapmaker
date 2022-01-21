@@ -12,7 +12,7 @@
         Height="700" 
         Width="500"
         MinHeight="600" 
-        MinWidth="400"
+        MinWidth="450"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

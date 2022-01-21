@@ -35,7 +35,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -68,7 +67,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Background" Value="#35AB46" />
+                                <Setter Property="Background" Value="#2082D8" />
                                 <Setter Property="Foreground" Value="#FFFFFF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -82,33 +81,63 @@
             <TextBlock Grid.Row="4" Grid.Column="1" Text="Label:" VerticalAlignment="Center" />
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.Label, UpdateSourceTrigger=PropertyChanged}" />
 
-            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="Symbol:" VerticalAlignment="Center" />
-                <Image Source="{Binding Create.Symbol.Preview}" ToolTip="{Binding Create.Symbol.Description}" VerticalAlignment="Center"/>
-            </StackPanel>
-            <ListBox Grid.Row="7" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}" MinHeight="50" HorizontalAlignment="Stretch">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ToolTip="{Binding Description}" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="250" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{Binding Key}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <Image Grid.Column="1" Source="{Binding Preview}" HorizontalAlignment="Left" />
-                            <TextBlock Grid.Column="2" Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <GroupBox Grid.Row="6" Grid.Column="1" >
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Symbol:" VerticalAlignment="Center" />
+                        <Image Source="{Binding Create.Symbol.Preview}" ToolTip="{Binding Create.Symbol.Description}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0">Key</TextBlock>
+                        <TextBox Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1">Description</TextBlock>
+                        <TextBox Grid.Row="1" Grid.Column="1" />
+                    </Grid>
+                    
+                    <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}" MinHeight="50" HorizontalAlignment="Stretch">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ToolTip="{Binding Description}" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="250" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Key}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                    <Image Grid.Column="1" Source="{Binding Preview}" HorizontalAlignment="Left" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </GroupBox>
+
+            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="Identity Confidence: "/>
                 <TextBlock FontWeight="Bold" Text="{Binding Create.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
                 <Validation.ErrorTemplate>
@@ -116,7 +145,7 @@
                     </Validation.ErrorTemplate>
                 </TextBlock>
             </StackPanel>
-            <Grid Grid.Row="9" Grid.Column="1" >
+            <Grid Grid.Row="8" Grid.Column="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -162,7 +191,7 @@
                 </RadioButton>
             </Grid>
 
-            <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="Existence Confidence: " />
                 <TextBlock FontWeight="Bold" Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
                 <Validation.ErrorTemplate>
@@ -170,9 +199,9 @@
                     </Validation.ErrorTemplate>
                 </TextBlock>
             </StackPanel>
-            <Slider Grid.Row="11" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Create.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
+            <Slider Grid.Row="10" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Create.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
 
-            <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="Location Confidence: " />
                 <TextBlock FontWeight="Bold" Text="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
                     <Validation.ErrorTemplate>
@@ -181,7 +210,7 @@
                 </TextBlock>
             </StackPanel>
             <ComboBox 
-            Grid.Row="13" 
+            Grid.Row="12" 
             Grid.Column="1" 
             ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
             SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
@@ -190,21 +219,21 @@
             >
             </ComboBox>
 
-            <StackPanel Grid.Row="14" Grid.Column="1" Orientation="Horizontal" >
+            <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Horizontal" >
                 <TextBlock Text="Concealed: " />
                 <TextBlock FontWeight="Bold" Text="{Binding Create.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" />
             </StackPanel>
-            <CheckBox Grid.Row="15" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Create.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Grid.Row="14" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Create.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="16" Grid.Column="1" Text="Notes:" />
-            <TextBox Grid.Row="17" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Notes:" />
+            <TextBox Grid.Row="16" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
 
-            <WrapPanel Grid.Row="18" Grid.Column="1" >
+            <WrapPanel Grid.Row="17" Grid.Column="1" >
                 <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
                 <TextBlock FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource Esri_TextBlockRegular}"/>
             </WrapPanel>
 
-            <StackPanel Grid.Row="19" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <StackPanel Grid.Row="18" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
                 <Button Padding="5" Command="{Binding Create.CommandContactFaultTool}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Tool</Button>
                 <Button Padding="5" Command="{Binding Create.CommandCreateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Create Template</Button>
