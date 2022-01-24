@@ -261,6 +261,27 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
+        private string _keyFilter;
+        public string KeyFilter
+        {
+            get => _keyFilter;
+            set
+            {
+                SetProperty(ref _keyFilter, value, () => KeyFilter);
+            }
+        }
+
+        private string _descriptionFilter;
+        public string DescriptionFilter
+        {
+            get => _descriptionFilter;
+            set
+            {
+                SetProperty(ref _descriptionFilter, value, () => DescriptionFilter);
+            }
+        }
+
+
         private CFSymbol _symbol;
         public CFSymbol Symbol
         {

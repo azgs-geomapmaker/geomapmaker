@@ -109,10 +109,10 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Row="0" Grid.Column="0">Key</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="0"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1">Description</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="1" />
+                            <TextBlock Grid.Row="0" Grid.Column="0">Filter by Key</TextBlock>
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Create.KeyFilter, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1">Filter by Description</TextBlock>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Create.DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
 
                         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}" MinHeight="50" HorizontalAlignment="Stretch">
