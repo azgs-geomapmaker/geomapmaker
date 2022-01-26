@@ -202,6 +202,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 // Update Renderer
                 await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+
+                // Refresh list of templates
+                ParentVM.RefreshTemplates();
             });
         }
 
