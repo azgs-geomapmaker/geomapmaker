@@ -268,6 +268,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _keyFilter, value, () => KeyFilter);
+                FilterSymbols(KeyFilter, DescriptionFilter);
             }
         }
 
@@ -278,9 +279,41 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _descriptionFilter, value, () => DescriptionFilter);
+                FilterSymbols(KeyFilter, DescriptionFilter);
             }
         }
 
+        // Filter the Symbol options by key and description
+        private void FilterSymbols(string keyFilter, string DescriptionFilter)
+        {
+            // Start with all the symbols from the parent vm
+            List<CFSymbol> filteredSymbols = ParentVM.SymbolOptions;
+
+            // Filter by key
+            if (!string.IsNullOrEmpty(keyFilter))
+            {
+                filteredSymbols = filteredSymbols.Where(a => a.Key.StartsWith(keyFilter)).ToList();
+            }
+
+            // Filter by description
+            if (!string.IsNullOrEmpty(DescriptionFilter))
+            {
+                filteredSymbols = filteredSymbols.Where(a => a.Description.Contains(DescriptionFilter)).ToList();
+            }
+
+            SymbolOptions = filteredSymbols;
+        }
+
+        private List<CFSymbol> _symbolOptions { get; set; }
+        public List<CFSymbol> SymbolOptions
+        {
+            get => _symbolOptions;
+            set
+            {
+                _symbolOptions = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         private CFSymbol _symbol;
         public CFSymbol Symbol
