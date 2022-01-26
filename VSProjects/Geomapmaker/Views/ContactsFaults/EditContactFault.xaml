@@ -38,7 +38,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Edit" />
-            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Headings}" SelectedItem="{Binding Edit.Selected}" >
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Templates}" SelectedItem="{Binding Edit.Selected}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}" />

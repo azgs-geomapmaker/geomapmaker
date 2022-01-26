@@ -1,4 +1,5 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Editing.Templates;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -45,6 +46,17 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
+        private List<EditingTemplate> _templates { get; set; }
+        public List<EditingTemplate> Templates
+        {
+            get => _templates;
+            set
+            {
+                _templates = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         //Update collection of CF symbols
         public async void RefreshCFSymbolsAsync()
         {
@@ -56,6 +68,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             SymbolOptions = Data.CFSymbology.CFSymbolOptionsList;
             Create.SymbolOptions = SymbolOptions;
+        }
+
+        public async void RefreshTemplates()
+        {
+            Templates = await Data.CFTemplates.GetContactFaultTemplatesAsync();
         }
 
         #region INotifyPropertyChanged
@@ -91,6 +108,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             await QueuedTask.Run(() =>
             {
                 _contactsfaults.contactsFaultsVM.RefreshCFSymbolsAsync();
+                _contactsfaults.contactsFaultsVM.RefreshTemplates();
             });
 
             _contactsfaults.Closed += (o, e) =>

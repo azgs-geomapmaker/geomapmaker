@@ -1,4 +1,5 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Editing.Templates;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             ParentVM = parentVM;
         }
 
-        private string _selected;
-        public string Selected
+        private EditingTemplate _selected;
+        public EditingTemplate Selected
         {
             get => _selected;
             set
