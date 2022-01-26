@@ -28,6 +28,12 @@ namespace Geomapmaker.Data
                 templates = new List<EditingTemplate>(layer.GetTemplates());
             });
 
+            // Remove the default template from the list
+            if (templates.Any(a => a.Name == "ContactsAndFaults"))
+            {
+                templates.RemoveAll(a => a.Name == "ContactsAndFaults");
+            }
+
             return templates;
         }
     }
