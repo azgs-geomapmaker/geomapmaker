@@ -115,7 +115,7 @@
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Create.DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
 
-                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}" MinHeight="50" HorizontalAlignment="Stretch">
+                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Create.SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}" MinHeight="50" HorizontalAlignment="Stretch">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListBoxItem}">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

@@ -8,10 +8,12 @@ using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -268,6 +270,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _keyFilter, value, () => KeyFilter);
+                FilterSymbols(KeyFilter, DescriptionFilter);
             }
         }
 
@@ -278,9 +281,38 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _descriptionFilter, value, () => DescriptionFilter);
+                FilterSymbols(KeyFilter, DescriptionFilter);
             }
         }
 
+        // Filter the Symbol options by key and description
+        private void FilterSymbols(string keyFilter, string DescriptionFilter)
+        {
+            List<CFSymbol> filteredSymbols = ParentVM.SymbolOptions;
+
+            if (!string.IsNullOrEmpty(keyFilter))
+            {
+                filteredSymbols = filteredSymbols.Where(a => a.Key.StartsWith(keyFilter)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(DescriptionFilter))
+            {
+                filteredSymbols = filteredSymbols.Where(a => a.Description.Contains(DescriptionFilter)).ToList();
+            }
+
+            SymbolOptions = filteredSymbols;
+        }
+
+        private List<CFSymbol> _symbolOptions { get; set; }
+        public List<CFSymbol> SymbolOptions
+        {
+            get => _symbolOptions;
+            set
+            {
+                _symbolOptions = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         private CFSymbol _symbol;
         public CFSymbol Symbol
