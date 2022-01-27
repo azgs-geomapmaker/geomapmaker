@@ -34,6 +34,12 @@ namespace Geomapmaker.Data
                 templates.RemoveAll(a => a.Name == "ContactsAndFaults");
             }
 
+            // Remove the sketch template from the list
+            if (templates.Any(a => a.Name == "Sketch"))
+            {
+                templates.RemoveAll(a => a.Name == "Sketch");
+            }
+
             return templates;
         }
     }
