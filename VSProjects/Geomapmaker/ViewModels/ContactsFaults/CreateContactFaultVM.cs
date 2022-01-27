@@ -53,7 +53,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 !string.IsNullOrEmpty(DataSource);
         }
 
-        private async Task CreateSketchAsync(Object proWindow)
+        private async Task CreateSketchAsync(object proWindow)
         {
             // Find the ContactsFaults layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
@@ -439,6 +439,5 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         }
 
         #endregion
-
     }
 }

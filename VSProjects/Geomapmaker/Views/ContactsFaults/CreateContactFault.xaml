@@ -75,16 +75,16 @@
                 </ToggleButton.Template>
             </ToggleButton>
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="Label:" VerticalAlignment="Center" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Label" VerticalAlignment="Center" />
             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Create.Label, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="Type:" VerticalAlignment="Center" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Type" VerticalAlignment="Center" />
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
 
             <GroupBox Grid.Row="6" Grid.Column="1" >
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Symbol:" VerticalAlignment="Center" />
+                        <TextBlock Text="Symbol" VerticalAlignment="Center" />
                         <Image Source="{Binding Create.Symbol.Preview}" ToolTip="{Binding Create.Symbol.Description}" VerticalAlignment="Center" />
                     </StackPanel>
                 </GroupBox.Header>
@@ -141,14 +141,7 @@
 
             </GroupBox>
 
-            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="Identity Confidence: "/>
-                <TextBlock FontWeight="Bold" Text="{Binding Create.IdentityConfidence}" ToolTip="Identity Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
-                <Validation.ErrorTemplate>
-                        <ControlTemplate />
-                    </Validation.ErrorTemplate>
-                </TextBlock>
-            </StackPanel>
+            <TextBlock Grid.Row="7" Grid.Column="1"  Text="Identity Confidence "/>
             <Grid Grid.Row="8" Grid.Column="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -196,7 +189,7 @@
             </Grid>
 
             <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="Existence Confidence: " />
+                <TextBlock Text="Existence Confidence " />
                 <TextBlock FontWeight="Bold" Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
                 <Validation.ErrorTemplate>
                         <ControlTemplate />
@@ -205,14 +198,7 @@
             </StackPanel>
             <Slider Grid.Row="10" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Create.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
 
-            <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="Location Confidence: " />
-                <TextBlock FontWeight="Bold" Text="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}" ToolTip="Location Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
-                    <Validation.ErrorTemplate>
-                        <ControlTemplate />
-                    </Validation.ErrorTemplate>
-                </TextBlock>
-            </StackPanel>
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="Location Confidence " />
             <ComboBox 
             Grid.Row="12" 
             Grid.Column="1" 
@@ -224,12 +210,12 @@
             </ComboBox>
 
             <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Horizontal" >
-                <TextBlock Text="Concealed: " />
+                <TextBlock Text="Concealed " />
                 <TextBlock FontWeight="Bold" Text="{Binding Create.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" />
             </StackPanel>
             <CheckBox Grid.Row="14" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Create.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="15" Grid.Column="1" Text="Notes:" />
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Notes" />
             <TextBox Grid.Row="16" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
 
             <WrapPanel Grid.Row="17" Grid.Column="1" >
