@@ -69,17 +69,17 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            
-            <!-- TODO: Visibility="{Binding Edit.Visibility}"-->
-            <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="Label" VerticalAlignment="Center" />
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.Label, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="Type" VerticalAlignment="Center" />
-            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Edit.Type, UpdateSourceTrigger=PropertyChanged}" />
+            <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Edit.Visibility}" />
 
-            <GroupBox Grid.Row="8" Grid.Column="1" >
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Label" VerticalAlignment="Center" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.Label, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
+
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Type" VerticalAlignment="Center" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Edit.Type, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
+
+            <GroupBox Grid.Row="8" Grid.Column="1" Visibility="{Binding Edit.Visibility}" >
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Symbol" VerticalAlignment="Center" />
@@ -139,8 +139,8 @@
 
             </GroupBox>
 
-            <TextBlock Grid.Row="9" Grid.Column="1"  Text="Identity Confidence "/>
-            <Grid Grid.Row="10" Grid.Column="1" >
+            <TextBlock Grid.Row="9" Grid.Column="1"  Text="Identity Confidence "  Visibility="{Binding Edit.Visibility}"/>
+            <Grid Grid.Row="10" Grid.Column="1"  Visibility="{Binding Edit.Visibility}" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -186,7 +186,7 @@
                 </RadioButton>
             </Grid>
 
-            <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal" Visibility="{Binding Edit.Visibility}">
                 <TextBlock Text="Existence Confidence " />
                 <TextBlock FontWeight="Bold" Text="{Binding Edit.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
                 <Validation.ErrorTemplate>
@@ -194,9 +194,9 @@
                     </Validation.ErrorTemplate>
                 </TextBlock>
             </StackPanel>
-            <Slider Grid.Row="12" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Edit.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
+            <Slider Grid.Row="12" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Edit.ExistenceConfidence, Converter={StaticResource SliderConverter}}" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="13" Grid.Column="1" Text="Location Confidence " />
+            <TextBlock Grid.Row="13" Grid.Column="1" Text="Location Confidence " Visibility="{Binding Edit.Visibility}" />
             <ComboBox 
             Grid.Row="14" 
             Grid.Column="1" 
@@ -204,24 +204,25 @@
             SelectedValue="{Binding Edit.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
             IsEditable="False" 
+            Visibility="{Binding Edit.Visibility}"
             >
             </ComboBox>
 
-            <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" >
+            <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" Visibility="{Binding Edit.Visibility}" >
                 <TextBlock Text="Concealed " />
                 <TextBlock FontWeight="Bold" Text="{Binding Edit.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" />
             </StackPanel>
-            <CheckBox Grid.Row="16" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Edit.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Grid.Row="16" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Edit.IsConcealed, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="17" Grid.Column="1" Text="Notes" />
-            <TextBox Grid.Row="18" Grid.Column="1" MinLines="3" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
+            <TextBlock Grid.Row="17" Grid.Column="1" Text="Notes" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="18" Grid.Column="1" MinLines="3" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250" Visibility="{Binding Edit.Visibility}" />
 
-            <WrapPanel Grid.Row="19" Grid.Column="1" >
+            <WrapPanel Grid.Row="19" Grid.Column="1" Visibility="{Binding Edit.Visibility}" >
                 <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
                 <TextBlock FontStyle="Italic" Text="{Binding Edit.DataSource, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource Esri_TextBlockRegular}"/>
             </WrapPanel>
 
-            <StackPanel Grid.Row="20" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <StackPanel Grid.Row="20" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
                 <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
                 <Button Padding="5" Command="{Binding Edit.CommandUpdateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update Template</Button>
             </StackPanel>
