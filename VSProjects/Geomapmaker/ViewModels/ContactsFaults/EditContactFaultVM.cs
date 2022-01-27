@@ -223,6 +223,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             // Start with all the symbols from the parent vm
             List<CFSymbol> filteredSymbols = ParentVM.SymbolOptions;
 
+            // Count of all symbols
+            int totalSymbolsCount = filteredSymbols.Count();
+
             // Filter by key
             if (!string.IsNullOrEmpty(keyFilter))
             {
@@ -235,18 +238,28 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 filteredSymbols = filteredSymbols.Where(a => a.Description.Contains(DescriptionFilter)).ToList();
             }
 
+            // Count of filtered symbols
+            int filteredSymbolsCount = filteredSymbols.Count();
+
+            // Update options
             SymbolOptions = filteredSymbols;
+
+            // Update messsage
+            SymbolsFilteredMessage = totalSymbolsCount != filteredSymbolsCount ? $"{filteredSymbolsCount} of {totalSymbolsCount} symbols" : $"{totalSymbolsCount} symbols";
         }
 
-        private List<CFSymbol> _symbolOptions { get; set; }
+        private string _symbolsFilteredMessage;
+        public string SymbolsFilteredMessage
+        {
+            get => _symbolsFilteredMessage;
+            set => SetProperty(ref _symbolsFilteredMessage, value, () => SymbolsFilteredMessage);
+        }
+
+        private List<CFSymbol> _symbolOptions;
         public List<CFSymbol> SymbolOptions
         {
             get => _symbolOptions;
-            set
-            {
-                _symbolOptions = value;
-                NotifyPropertyChanged();
-            }
+            set => SetProperty(ref _symbolOptions, value, () => SymbolOptions);
         }
 
         private CFSymbol _symbol;

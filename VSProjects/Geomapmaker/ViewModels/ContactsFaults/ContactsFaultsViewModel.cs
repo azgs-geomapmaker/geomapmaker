@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -66,8 +67,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 await Data.CFSymbology.RefreshCFSymbolOptions();
             }
 
+            // ParentVM keeps a copy of the master list
             SymbolOptions = Data.CFSymbology.CFSymbolOptionsList;
+
+            // Push options to create vm
             Create.SymbolOptions = SymbolOptions;
+            Create.SymbolsFilteredMessage = $"{SymbolOptions.Count()} symbols";
         }
 
         public async void RefreshTemplates()

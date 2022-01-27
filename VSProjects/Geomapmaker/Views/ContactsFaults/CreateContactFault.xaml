@@ -94,6 +94,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -136,6 +137,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Create.SymbolsFilteredMessage}" HorizontalAlignment="Right" FontSize="11" FontWeight="Light"/>
                     </Grid>
                 </AdornerDecorator>
 
