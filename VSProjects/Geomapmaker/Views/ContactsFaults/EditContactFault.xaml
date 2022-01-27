@@ -2,13 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Geomapmaker.Views.ContactsFaults"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:conv="clr-namespace:Geomapmaker._helpers"
              xmlns:data="clr-namespace:Geomapmaker.Data" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" 
              xmlns:contactsfaults="clr-namespace:Geomapmaker.ViewModels.ContactsFaults" 
-             d:DataContext="{d:DesignInstance Type=contactsfaults:EditContactFaultVM}"
+             d:DataContext="{d:DesignInstance Type=contactsfaults:ContactsFaultsViewModel}"
              mc:Ignorable="d" 
              >
 
@@ -69,7 +68,6 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-
 
             <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Edit.Visibility}" />
 
@@ -224,7 +222,7 @@
 
             <StackPanel Grid.Row="20" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
                 <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
-                <Button Padding="5" Command="{Binding Edit.CommandUpdateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update Template</Button>
+                <Button Padding="5" Command="{Binding Edit.CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update Template</Button>
             </StackPanel>
 
         </Grid>

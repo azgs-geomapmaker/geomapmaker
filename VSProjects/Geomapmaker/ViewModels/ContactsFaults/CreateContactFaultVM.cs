@@ -43,14 +43,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         /// <returns>true if enabled</returns>
         private bool IsValid()
         {
-            return Symbol != null &&
-                !string.IsNullOrEmpty(Type) &&
-                !string.IsNullOrEmpty(Label) &&
-                !string.IsNullOrEmpty(IdentityConfidence) &&
-                !string.IsNullOrEmpty(ExistenceConfidence) &&
-                !string.IsNullOrEmpty(LocationConfidenceMeters) &&
-                !string.IsNullOrEmpty(IsConcealedString) &&
-                !string.IsNullOrEmpty(DataSource);
+            return !HasErrors;
         }
 
         private async Task CreateSketchAsync(object proWindow)
@@ -233,10 +226,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // if the toggle-btn is active
                 if (value)
                 {
+                    // Active the populate tool
                     FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateCFTool");
                 }
                 else
                 {
+                    // Switch back to map explore tool
                     FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
                 }
             }

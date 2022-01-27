@@ -4,11 +4,13 @@ using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -32,16 +34,69 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             LocationConfidenceMeters = "";
         }
 
-        private void UpdateTemplate()
+        private async void UpdateTemplate()
         {
-            // TODO
-            throw new NotImplementedException();
+            // Find the ContactsFaults layer
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+            if (layer == null)
+            {
+                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                return;
+            }
+
+            await QueuedTask.Run(async () =>
+            {
+                IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
+
+                // Remove the old template
+                layer.RemoveTemplate(originalValues.Label);
+
+                // load the schema
+                Inspector insp = new Inspector();
+                insp.LoadSchema(layer);
+
+                // set default attributes
+                insp["type"] = Type;
+                insp["symbol"] = Symbol.Key;
+                insp["label"] = Label;
+                insp["identityconfidence"] = IdentityConfidence;
+                insp["existenceconfidence"] = ExistenceConfidence;
+                insp["locationconfidencemeters"] = LocationConfidenceMeters;
+                insp["isconcealed"] = IsConcealedString;
+                insp["datasourceid"] = DataSource;
+
+                // Optional fields
+                if (!string.IsNullOrEmpty(Notes))
+                {
+                    insp["notes"] = Notes;
+                }
+
+                // Set up tags
+                string[] tags = new[] { "ContactFault" };
+
+                // Default construction tool - use daml-id
+                string defaultTool = "esri_editing_LineConstructor";
+
+                // TODO remove tools below 
+                // filter - use daml-id
+                List<string> filter = new List<string>();
+                //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
+
+                // Create CIM template 
+                EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
+
+                // Update Renderer
+                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+
+                // Refresh list of templates
+                ParentVM.RefreshTemplates();
+            });
         }
 
         private bool IsValid()
         {
-            // TODO
-            return true;
+            return Selected != null && !HasErrors;
         }
 
         private EditingTemplate _selected;
@@ -51,10 +106,22 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _selected, value, () => Selected);
-                SetEditValues(Selected);
+
+                if (Selected != null)
+                {
+                    SetEditValues(Selected);
+                }
+                else
+                {
+                    // Reset original values if nothing is selected
+                    originalValues = null;
+                }
                 NotifyPropertyChanged("Visibility");
             }
         }
+
+        // Used to store the values of a selected template to determine if a change was made
+        public ContactFault originalValues { get; set; }
 
         private async void SetEditValues(EditingTemplate template)
         {
@@ -69,7 +136,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // Find the symbol
                 Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == templateDef.DefaultValues["symbol"].ToString());
 
-                // Set values from template
+                // Set values from template for edit
                 Type = templateDef.DefaultValues["type"].ToString();
                 Label = templateDef.DefaultValues["label"].ToString();
                 IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString();
@@ -78,6 +145,17 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y";
                 DataSource = templateDef.DefaultValues["datasourceid"].ToString();
 
+                originalValues = new ContactFault()
+                {
+                    Type = templateDef.DefaultValues["type"].ToString(),
+                    Label = templateDef.DefaultValues["label"].ToString(),
+                    IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString(),
+                    ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString(),
+                    LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString(),
+                    IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y",
+                    DataSource = templateDef.DefaultValues["datasourceid"].ToString(),
+                };
+
                 // Notes is an optional field
                 if (templateDef.DefaultValues.ContainsKey("notes"))
                 {
@@ -85,6 +163,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 }
 
             });
+
+            ValidateChangeWasMade();
         }
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";
@@ -97,6 +177,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 SetProperty(ref _type, value, () => Type);
                 ValidateRequiredString(Type, "Type");
+                ValidateChangeWasMade();
             }
         }
 
@@ -108,9 +189,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 SetProperty(ref _label, value, () => Label);
                 ValidateRequiredString(Label, "Label");
+                ValidateChangeWasMade();
             }
         }
 
+        // Filter symbol options by key
         private string _keyFilter;
         public string KeyFilter
         {
@@ -122,6 +205,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
+        // Filter symbol options by description
         private string _descriptionFilter;
         public string DescriptionFilter
         {
@@ -173,6 +257,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 SetProperty(ref _symbol, value, () => Symbol);
                 ValidateSymbol(Symbol, "Symbol");
+                ValidateChangeWasMade();
             }
         }
 
@@ -184,6 +269,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 SetProperty(ref _identityConfidence, value, () => IdentityConfidence);
                 ValidateRequiredString(IdentityConfidence, "IdentityConfidence");
+                ValidateChangeWasMade();
             }
         }
 
@@ -195,6 +281,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 SetProperty(ref _existenceConfidence, value, () => ExistenceConfidence);
                 ValidateRequiredString(ExistenceConfidence, "ExistenceConfidence");
+                ValidateChangeWasMade();
             }
         }
 
@@ -206,6 +293,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
                 ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+                ValidateChangeWasMade();
             }
         }
 
@@ -213,7 +301,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public bool IsConcealed
         {
             get => _isConcealed;
-            set => SetProperty(ref _isConcealed, value, () => IsConcealed);
+            set
+            {
+                SetProperty(ref _isConcealed, value, () => IsConcealed);
+                ValidateChangeWasMade();
+            }
         }
 
         // Convert bool to a Y/N char
@@ -223,14 +315,22 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public string Notes
         {
             get => _notes;
-            set => SetProperty(ref _notes, value, () => Notes);
+            set
+            {
+                SetProperty(ref _notes, value, () => Notes);
+                ValidateChangeWasMade();
+            }
         }
 
         private string _dataSource;
         public string DataSource
         {
             get => _dataSource;
-            set => SetProperty(ref _dataSource, value, () => DataSource);
+            set
+            {
+                SetProperty(ref _dataSource, value, () => DataSource);
+                ValidateChangeWasMade();
+            }
         }
 
         #region ### Validation ####
@@ -277,6 +377,39 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             if (string.IsNullOrEmpty(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateChangeWasMade()
+        {
+            // Error message isn't display on a field. Just prevents user from hitting update until a change is made.
+            const string propertyKey = "SilentError";
+
+            if (Selected == null)
+            {
+                _validationErrors.Remove(propertyKey);
+                return;
+            }
+
+            // Compare current values with original
+            if (originalValues != null &&
+                Type == originalValues.Type &&
+                Label == originalValues.Label &&
+                IdentityConfidence == originalValues.IdentityConfidence &&
+                ExistenceConfidence == originalValues.ExistenceConfidence &&
+                LocationConfidenceMeters == originalValues.LocationConfidenceMeters &&
+                IsConcealed == originalValues.IsConcealed &&
+                Notes == originalValues.Notes &&
+                DataSource == originalValues.DataSource
+            )
+            {
+                _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
             }
             else
             {
