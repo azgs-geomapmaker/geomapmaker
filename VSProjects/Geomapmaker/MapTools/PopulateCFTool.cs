@@ -82,6 +82,7 @@ namespace Geomapmaker.MapTools
                                 //populate a CF from fields
                                 ContactFault cf = new ContactFault
                                 {
+                                    Label = row["label"].ToString(),
                                     Type = row["type"].ToString(),
                                     Symbol = row["symbol"].ToString(),
                                     IdentityConfidence = row["identityconfidence"].ToString(),

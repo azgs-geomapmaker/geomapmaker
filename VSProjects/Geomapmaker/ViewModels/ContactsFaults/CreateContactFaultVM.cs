@@ -203,6 +203,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public void PrepopulateCF(ContactFault cf)
         {
+            Label = cf.Label;
             Type = cf.Type;
             Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == cf.Symbol);
             IdentityConfidence = cf.IdentityConfidence;
