@@ -26,13 +26,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public CreateContactFaultVM Create { get; set; }
         public EditContactFaultVM Edit { get; set; }
-        public DeleteContactFault Delete { get; set; }
+        public DeleteContactFaultVM Delete { get; set; }
 
         public ContactsFaultsViewModel()
         {
             Create = new CreateContactFaultVM(this);
             Edit = new EditContactFaultVM(this);
-            Delete = new DeleteContactFault(this);
+            Delete = new DeleteContactFaultVM(this);
         }
 
         private List<CFSymbol> _symbolOptions { get; set; }
