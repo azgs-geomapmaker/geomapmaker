@@ -21,7 +21,6 @@
     </UserControl.Resources>
 
     <AdornerDecorator>
-
         <Grid>
             <Grid.Resources>
                 <conv:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
