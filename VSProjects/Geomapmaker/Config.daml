@@ -27,8 +27,6 @@
       <!-- Groups -->
       <groups>
         <group id="Geomapmaker_Admin" caption="Admin" keytip="A">
-          <button refID="Geomapmaker_ProjectSettings_ShowPropertySheet" size="large" />
-          <button refID="Geomapmaker_DataSourceButton" size="large" />
           <comboBox refID="Geomapmaker_DataSourceComboBox" />
         </group>
         <group id="Geomapmaker_Tables" caption="Tables" keytip="DS">
@@ -47,10 +45,6 @@
       </groups>
       <!-- Controls -->
       <controls>
-        <button id="Geomapmaker_DataSourceButton" caption="DataHelper Init" className="DataSourceButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="ds">
-          <tooltip heading="Datasource">
-            This is a stub: do not use yet<disabledText /></tooltip>
-        </button>
         <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="connectionPropertiesNotNull" keytip="todo">
           <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
           <tooltip heading="Map Unit Polys">
@@ -64,10 +58,6 @@
         <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
           <tooltip heading="Show Dockpane">
             Show Dockpane<disabledText /></tooltip>
-        </button>
-        <button id="Geomapmaker_ProjectSettings_ShowPropertySheet" caption="Settings" className="Geomapmaker.ViewModels.ProjectSettings_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
-          <tooltip heading="Show Property Sheet">
-            Show Property Sheet<disabledText /></tooltip>
         </button>
         <comboBox id="Geomapmaker_DataSourceComboBox" caption="Data Source" className="Geomapmaker.RibbonElements.DataSourceComboBox" itemWidth="120" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" keytip="todo">
           <tooltip heading="Tooltip Heading">

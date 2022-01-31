@@ -266,10 +266,6 @@
     <Compile Include="Data\GeoMaterials.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
-    <Compile Include="Views\ProjectSettings.xaml.cs">
-      <DependentUpon>ProjectSettings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModels\HierarchyViewModel.cs" />
     <Compile Include="ViewModels\MapUnits\CreateMapUnitVM.cs" />
     <Compile Include="ViewModels\MapUnits\DeleteMapUnitVM.cs" />
@@ -301,7 +297,6 @@
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RibbonElements\DataSourceButton.cs" />
     <Compile Include="_helpers\ColorConverter.cs" />
     <Compile Include="_helpers\ValueConverters.cs" />
   </ItemGroup>
@@ -363,10 +358,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DataSources\DataSources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ProjectSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
