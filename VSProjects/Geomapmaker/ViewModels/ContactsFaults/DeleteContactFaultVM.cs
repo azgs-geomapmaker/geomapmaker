@@ -41,7 +41,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 return;
             }
 
-            await QueuedTask.Run(async () =>
+            await QueuedTask.Run(() =>
             {
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
 
