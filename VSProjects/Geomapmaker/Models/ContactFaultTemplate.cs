@@ -1,6 +1,8 @@
-﻿namespace Geomapmaker.Models
+﻿using ArcGIS.Desktop.Editing.Templates;
+
+namespace Geomapmaker.Models
 {
-    public class ContactFault
+    public class ContactFaultTemplate
     {
         public long? ID { get; set; }
 
@@ -22,6 +24,6 @@
 
         public string DataSource { get; set; }
 
-        public ArcGIS.Core.Geometry.Geometry Shape { get; set; }
+        public EditingTemplate Template { get; set; }
     }
 }

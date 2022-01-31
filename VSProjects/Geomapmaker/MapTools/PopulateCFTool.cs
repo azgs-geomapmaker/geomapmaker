@@ -80,7 +80,7 @@ namespace Geomapmaker.MapTools
                             using (Row row = rowCursor.Current)
                             {
                                 //populate a CF from fields
-                                ContactFault cf = new ContactFault
+                                ContactFaultTemplate cf = new ContactFaultTemplate
                                 {
                                     Label = row["label"].ToString(),
                                     Type = row["type"].ToString(),

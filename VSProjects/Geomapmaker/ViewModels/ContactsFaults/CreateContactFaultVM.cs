@@ -201,7 +201,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             });
         }
 
-        public void PrepopulateCF(ContactFault cf)
+        public void PrepopulateCF(ContactFaultTemplate cf)
         {
             Label = cf.Label;
             Type = cf.Type;

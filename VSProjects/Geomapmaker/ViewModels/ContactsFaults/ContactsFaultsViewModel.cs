@@ -46,8 +46,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
-        private List<EditingTemplate> _templates { get; set; }
-        public List<EditingTemplate> Templates
+        private List<ContactFaultTemplate> _templates { get; set; }
+        public List<ContactFaultTemplate> Templates
         {
             get => _templates;
             set

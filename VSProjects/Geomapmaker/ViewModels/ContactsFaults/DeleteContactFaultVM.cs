@@ -1,5 +1,4 @@
-﻿using ArcGIS.Core.CIM;
-using ArcGIS.Desktop.Editing.Templates;
+﻿using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -55,8 +54,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";
 
-        private EditingTemplate _selected;
-        public EditingTemplate Selected
+        private ContactFaultTemplate _selected;
+        public ContactFaultTemplate Selected
         {
             get => _selected;
             set
@@ -65,52 +64,38 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 if (Selected != null)
                 {
-                    SetTemplateValuesAsync(Selected);
+                    // Set values from template for edit
+                    Type = Selected.Type;
+                    NotifyPropertyChanged("Type");
+
+                    Label = Selected.Label;
+                    NotifyPropertyChanged("Label");
+
+                    IdentityConfidence = Selected.IdentityConfidence;
+                    NotifyPropertyChanged("IdentityConfidence");
+
+                    ExistenceConfidence = Selected.ExistenceConfidence;
+                    NotifyPropertyChanged("ExistenceConfidence");
+
+                    LocationConfidenceMeters = Selected.LocationConfidenceMeters;
+                    NotifyPropertyChanged("LocationConfidenceMeters");
+
+                    IsConcealedString = Selected.IsConcealed ? "Y" : "N";
+                    NotifyPropertyChanged("IsConcealedString");
+
+                    Notes = Selected.Notes;
+                    NotifyPropertyChanged("Notes");
+
+                    DataSource = Selected.DataSource;
+                    NotifyPropertyChanged("DataSource");
+
+                    // Find CFSymbol from the key stored in symbol
+                    Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == Selected.Symbol);
+                    NotifyPropertyChanged("Symbol");
                 }
 
                 NotifyPropertyChanged("Visibility");
             }
-        }
-
-        private async void SetTemplateValuesAsync(EditingTemplate template)
-        {
-            await QueuedTask.Run(() =>
-            {
-                CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
-
-                // Find the symbol
-                Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == templateDef.DefaultValues["symbol"].ToString());
-                NotifyPropertyChanged("Symbol");
-
-                // Set values from template for edit
-                Type = templateDef.DefaultValues["type"].ToString();
-                NotifyPropertyChanged("Type");
-
-                Label = templateDef.DefaultValues["label"].ToString();
-                NotifyPropertyChanged("Label");
-
-                IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString();
-                NotifyPropertyChanged("IdentityConfidence");
-
-                ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString();
-                NotifyPropertyChanged("ExistenceConfidence");
-
-                LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString();
-                NotifyPropertyChanged("LocationConfidenceMeters");
-
-                IsConcealedString = templateDef.DefaultValues["isconcealed"].ToString();
-                NotifyPropertyChanged("IsConcealedString");
-
-                DataSource = templateDef.DefaultValues["datasourceid"].ToString();
-                NotifyPropertyChanged("DataSource");
-
-                // Notes is an optional field
-                if (templateDef.DefaultValues.ContainsKey("notes"))
-                {
-                    Notes = templateDef.DefaultValues["notes"].ToString();
-                    NotifyPropertyChanged("Notes");
-                }
-            });
         }
 
         public string Type { get; set; }

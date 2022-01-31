@@ -1,5 +1,4 @@
-﻿using ArcGIS.Core.CIM;
-using ArcGIS.Desktop.Editing.Attributes;
+﻿using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
@@ -50,7 +49,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
 
                 // Remove the old template
-                layer.RemoveTemplate(originalValues.Label);
+                layer.RemoveTemplate(OriginalValues.Label);
 
                 // load the schema
                 Inspector insp = new Inspector();
@@ -99,8 +98,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             return Selected != null && !HasErrors;
         }
 
-        private EditingTemplate _selected;
-        public EditingTemplate Selected
+        private ContactFaultTemplate _selected;
+        public ContactFaultTemplate Selected
         {
             get => _selected;
             set
@@ -109,63 +108,40 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 if (Selected != null)
                 {
-                    SetEditValues(Selected);
+                    // Clear out filters
+                    KeyFilter = "";
+                    DescriptionFilter = "";
+
+                    // Set values from template for edit
+                    Type = Selected.Type;
+                    Label = Selected.Label;
+                    IdentityConfidence = Selected.IdentityConfidence;
+                    ExistenceConfidence = Selected.ExistenceConfidence;
+                    LocationConfidenceMeters = Selected.LocationConfidenceMeters;
+                    IsConcealed = Selected.IsConcealed;
+                    Notes = Selected.Notes;
+                    DataSource = Selected.DataSource;
+
+                    // Find CFSymbol from the key stored in symbol
+                    Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == Selected.Symbol);
+
+                    // Keep a copy of the original values
+                    OriginalValues = Selected;
+
+                    ValidateChangeWasMade();
+
                 }
                 else
                 {
                     // Reset original values if nothing is selected
-                    originalValues = null;
+                    OriginalValues = null;
                 }
                 NotifyPropertyChanged("Visibility");
             }
         }
 
         // Used to store the values of a selected template to determine if a change was made
-        public ContactFault originalValues { get; set; }
-
-        private async void SetEditValues(EditingTemplate template)
-        {
-            await QueuedTask.Run(() =>
-            {
-                CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
-
-                // Clear out filters
-                KeyFilter = "";
-                DescriptionFilter = "";
-
-                // Find the symbol
-                Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == templateDef.DefaultValues["symbol"].ToString());
-
-                // Set values from template for edit
-                Type = templateDef.DefaultValues["type"].ToString();
-                Label = templateDef.DefaultValues["label"].ToString();
-                IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString();
-                ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString();
-                LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString();
-                IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y";
-                DataSource = templateDef.DefaultValues["datasourceid"].ToString();
-
-                originalValues = new ContactFault()
-                {
-                    Type = templateDef.DefaultValues["type"].ToString(),
-                    Label = templateDef.DefaultValues["label"].ToString(),
-                    IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString(),
-                    ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString(),
-                    LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString(),
-                    IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y",
-                    DataSource = templateDef.DefaultValues["datasourceid"].ToString(),
-                };
-
-                // Notes is an optional field
-                if (templateDef.DefaultValues.ContainsKey("notes"))
-                {
-                    Notes = templateDef.DefaultValues["notes"].ToString();
-                }
-
-            });
-
-            ValidateChangeWasMade();
-        }
+        public ContactFaultTemplate OriginalValues { get; set; }
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";
 
@@ -411,15 +387,16 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
 
             // Compare current values with original
-            if (originalValues != null &&
-                Type == originalValues.Type &&
-                Label == originalValues.Label &&
-                IdentityConfidence == originalValues.IdentityConfidence &&
-                ExistenceConfidence == originalValues.ExistenceConfidence &&
-                LocationConfidenceMeters == originalValues.LocationConfidenceMeters &&
-                IsConcealed == originalValues.IsConcealed &&
-                Notes == originalValues.Notes &&
-                DataSource == originalValues.DataSource
+            if (OriginalValues != null &&
+                Type == OriginalValues.Type &&
+                Label == OriginalValues.Label &&
+                Symbol.Key == OriginalValues.Symbol &&
+                IdentityConfidence == OriginalValues.IdentityConfidence &&
+                ExistenceConfidence == OriginalValues.ExistenceConfidence &&
+                LocationConfidenceMeters == OriginalValues.LocationConfidenceMeters &&
+                IsConcealed == OriginalValues.IsConcealed &&
+                Notes == OriginalValues.Notes &&
+                DataSource == OriginalValues.DataSource
             )
             {
                 _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };

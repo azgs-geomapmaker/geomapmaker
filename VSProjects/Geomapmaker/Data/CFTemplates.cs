@@ -1,6 +1,8 @@
-﻿using ArcGIS.Desktop.Editing.Templates;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,38 +11,59 @@ namespace Geomapmaker.Data
 {
     public class CFTemplates
     {
-        public static async Task<List<EditingTemplate>> GetContactFaultTemplatesAsync()
+        public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync()
         {
+            // Init the list
+            List<ContactFaultTemplate> contactFaultTemplates = new List<ContactFaultTemplate>();
 
-            List<EditingTemplate> templates = new List<EditingTemplate>();
+            IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
 
             // Find the ContactsFaults layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {
-                return templates;
+                return contactFaultTemplates;
             }
 
             await QueuedTask.Run(() =>
             {
                 // Get templates from CF layer
-                templates = new List<EditingTemplate>(layer.GetTemplates());
+                layerTemplates = layer.GetTemplates();
+
+                foreach (EditingTemplate template in layerTemplates)
+                {
+                    if (template.Name != "ContactsAndFaults" && template.Name != "Sketch")
+                    {
+                        // Get CIMFeatureTemplate
+                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+
+                        ContactFaultTemplate tmpTemplate = new ContactFaultTemplate()
+                        {
+                            Type = templateDef.DefaultValues["type"].ToString(),
+                            Label = templateDef.DefaultValues["label"].ToString(),
+                            Symbol = templateDef.DefaultValues["symbol"].ToString(),
+                            IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString(),
+                            ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString(),
+                            LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString(),
+                            IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y",
+                            DataSource = templateDef.DefaultValues["datasourceid"].ToString(),
+                            Template = template
+                        };
+
+                        // Notes is an optional field
+                        if (templateDef.DefaultValues.ContainsKey("notes"))
+                        {
+                            tmpTemplate.Notes = templateDef.DefaultValues["notes"].ToString();
+                        }
+
+                        contactFaultTemplates.Add(tmpTemplate);
+                    }
+                }
+
             });
 
-            // Remove the default template from the list
-            if (templates.Any(a => a.Name == "ContactsAndFaults"))
-            {
-                templates.RemoveAll(a => a.Name == "ContactsAndFaults");
-            }
-
-            // Remove the sketch template from the list
-            if (templates.Any(a => a.Name == "Sketch"))
-            {
-                templates.RemoveAll(a => a.Name == "Sketch");
-            }
-
-            return templates;
+            return contactFaultTemplates;
         }
     }
 }
