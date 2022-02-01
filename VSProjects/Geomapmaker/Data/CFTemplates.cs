@@ -33,7 +33,8 @@ namespace Geomapmaker.Data
 
                 foreach (EditingTemplate template in layerTemplates)
                 {
-                    if (template.Name != "ContactsAndFaults" && template.Name != "Sketch")
+                    // Skip over the default and the one-off sketch templates
+                    if (template.Name != "ContactsAndFaults" && template.Name != GeomapmakerModule.CF_SketchTemplateName)
                     {
                         // Get CIMFeatureTemplate
                         CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;

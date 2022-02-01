@@ -88,10 +88,10 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
 
-                if (currentTemplates.Any(a => a.Name == "Sketch"))
+                if (currentTemplates.Any(a => a.Name == GeomapmakerModule.CF_SketchTemplateName))
                 {
                     // Remove the temporary template
-                    layer.RemoveTemplate("Sketch");
+                    layer.RemoveTemplate(GeomapmakerModule.CF_SketchTemplateName);
                 }
 
                 if (currentTemplates.Any(a => a.Name == "ContactsAndFaults"))
@@ -135,12 +135,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
 
                 // Create CIM template 
-                EditingTemplate newTemplate = layer.CreateTemplate("Sketch", "Sketch", insp, defaultTool, tags, filter.ToArray());
+                EditingTemplate newTemplate = layer.CreateTemplate(GeomapmakerModule.CF_SketchTemplateName, GeomapmakerModule.CF_SketchTemplateName, insp, defaultTool, tags, filter.ToArray());
 
                 // Update Renderer
                 await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
 
-                EditingTemplate tempTemplate = layer.GetTemplate("Sketch");
+                EditingTemplate tempTemplate = layer.GetTemplate(GeomapmakerModule.CF_SketchTemplateName);
 
                 // Activate tool for the temp template
                 await tempTemplate.ActivateDefaultToolAsync();
@@ -219,6 +219,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 // Refresh list of templates
                 ParentVM.RefreshTemplates();
+
+                // Trigger validation
+                Label = Label;
             });
         }
 
@@ -459,6 +462,10 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             if (string.IsNullOrEmpty(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (Label.ToLower() == GeomapmakerModule.CF_SketchTemplateName.ToLower())
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Reserved template label." };
             }
             else if (ParentVM.Templates.Any(a => a.Label.ToLower() == Label.ToLower()))
             {

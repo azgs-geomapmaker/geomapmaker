@@ -13,6 +13,8 @@ namespace Geomapmaker
         internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
         internal static MapUnitPolyEditTool EditMapUnitPolyTool { get; set; }
 
+        public const string CF_SketchTemplateName = "Sketch";
+
         /// <summary>
         /// Retrieve the singleton instance to this module here
         /// </summary>
