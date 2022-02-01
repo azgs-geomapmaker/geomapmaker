@@ -13,7 +13,7 @@ namespace Geomapmaker.Data
     {
         public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync()
         {
-            // Init the list
+            // List of templates to return
             List<ContactFaultTemplate> contactFaultTemplates = new List<ContactFaultTemplate>();
 
             IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();

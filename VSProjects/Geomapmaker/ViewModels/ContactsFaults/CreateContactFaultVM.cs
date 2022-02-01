@@ -7,6 +7,7 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 {
     public class CreateContactFaultVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => IsValid());
+        public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => IsValidTemplate());
 
-        public ICommand CommandSketch => new RelayCommand(async (proWindow) => await CreateSketchAsync(proWindow), () => IsValid());
+        public ICommand CommandSketch => new RelayCommand(async (proWindow) => await CreateSketchAsync(proWindow), () => IsValidSketch());
 
         public ContactsFaultsViewModel ParentVM { get; set; }
 
@@ -41,9 +42,29 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         /// Determines the visibility (enabled state) of the button
         /// </summary>
         /// <returns>true if enabled</returns>
-        private bool IsValid()
+        private bool IsValidTemplate()
         {
             return !HasErrors;
+        }
+
+        private bool IsValidSketch()
+        {
+            // Sketch does not require the label to be unique!
+
+            // if label has any errors
+            if (_validationErrors.ContainsKey("Label"))
+            {
+                // Get collection of label errors
+                ICollection<string> labelErrors = _validationErrors["Label"];
+
+                // Check if the required string error (an empty string) is present
+                // Otherwise the error must be the uniqueness of the label
+                return !labelErrors.Any(a => a == "");
+            }
+            else
+            {
+                return !HasErrors;
+            }
         }
 
         private async Task CreateSketchAsync(object proWindow)
@@ -256,7 +277,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _label, value, () => Label);
-                ValidateRequiredString(Label, "Label");
+                ValidateLabel(Label, "Label");
             }
         }
 
@@ -406,12 +427,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
-        public System.Collections.IEnumerable GetErrors(string propertyName)
+        public IEnumerable GetErrors(string propertyName)
         {
             // Return null if parameters is null/empty OR there are no errors for that parameter
             // Otherwise, return the errors for that parameter.
             return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
-                null : (System.Collections.IEnumerable)_validationErrors[propertyName];
+                null : _validationErrors[propertyName];
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
@@ -423,6 +444,25 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             if (symbol == null)
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateLabel(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (ParentVM.Templates.Any(a => a.Label.ToLower() == Label.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Label is taken." };
             }
             else
             {
