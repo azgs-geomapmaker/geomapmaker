@@ -1,5 +1,4 @@
-﻿using ArcGIS.Desktop.Editing.Templates;
-using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -109,11 +108,14 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
+            // Symbology takes a few seconds to load. Display progress dialog
+            ProgressorSource ps = new ProgressorSource("Generating symbology for Contact Faults");
+
             await QueuedTask.Run(() =>
             {
                 _contactsfaults.contactsFaultsVM.RefreshCFSymbolsAsync();
                 _contactsfaults.contactsFaultsVM.RefreshTemplates();
-            });
+            }, ps.Progressor);
 
             _contactsfaults.Closed += (o, e) =>
             {
