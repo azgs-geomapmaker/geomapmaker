@@ -220,8 +220,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // Refresh list of templates
                 ParentVM.RefreshTemplates();
 
-                // Trigger validation
-                Label = Label;
+                // Reset label 
+                Label = "";
             });
         }
 

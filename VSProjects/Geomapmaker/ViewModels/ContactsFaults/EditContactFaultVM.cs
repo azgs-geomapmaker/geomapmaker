@@ -112,6 +112,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     KeyFilter = "";
                     DescriptionFilter = "";
 
+                    // Collection of all the other templates. (Used to validate uniqueness)
+                    AllOtherTemplates = ParentVM.Templates.Where(a => a.Label != Selected.Label).ToList();
+
                     // Set values from template for edit
                     Type = Selected.Type;
                     Label = Selected.Label;
@@ -128,20 +131,27 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     // Keep a copy of the original values
                     OriginalValues = Selected;
 
+                    // Trigger validation
                     ValidateChangeWasMade();
-
                 }
                 else
                 {
                     // Reset original values if nothing is selected
                     OriginalValues = null;
+
+                    // Reset collection
+                    AllOtherTemplates = new List<ContactFaultTemplate>();
                 }
+
                 NotifyPropertyChanged("Visibility");
             }
         }
 
         // Used to store the values of a selected template to determine if a change was made
         public ContactFaultTemplate OriginalValues { get; set; }
+
+        // All the templates, except the one we are editting
+        public List<ContactFaultTemplate> AllOtherTemplates { get; set; } = new List<ContactFaultTemplate>();
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";
 
@@ -164,7 +174,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _label, value, () => Label);
-                ValidateRequiredString(Label, "Label");
+                ValidateLabel(Label, "Label");
                 ValidateChangeWasMade();
             }
         }
@@ -366,6 +376,29 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             if (string.IsNullOrEmpty(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateLabel(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (Label.ToLower() == GeomapmakerModule.CF_SketchTemplateName.ToLower())
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Reserved template label." };
+            }
+            else if (AllOtherTemplates.Any(a => a.Label.ToLower() == Label.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Label is taken." };
             }
             else
             {
