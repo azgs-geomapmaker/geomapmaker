@@ -238,10 +238,9 @@ namespace Geomapmaker.ViewModels
         {
             MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
             MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
-            ICollection<MapUnitTreeItem> targetCollection = dropInfo.TargetCollection as ICollection<MapUnitTreeItem>;
 
             bool isItemDropValid = sourceItem != null && targetItem != null && targetItem.CanAcceptChildren;
-            bool isCollectionDropValid = sourceItem != null && targetCollection != null;
+            bool isCollectionDropValid = sourceItem != null && dropInfo.TargetCollection is ICollection<MapUnitTreeItem> targetCollection;
 
             if (sourceItem != null && targetItem != null)
             {
@@ -262,6 +261,17 @@ namespace Geomapmaker.ViewModels
             sourceCollection.Remove(sourceItem);
         }
 
+        void IDropTarget.DragEnter(IDropInfo dropInfo)
+        {
+            // TODO
+        }
+
+        void IDropTarget.DragLeave(IDropInfo dropInfo)
+        {
+            // TODO
+
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -270,6 +280,7 @@ namespace Geomapmaker.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         #endregion
     }
 
@@ -282,8 +293,8 @@ namespace Geomapmaker.ViewModels
         {
             if (_hierarchy != null)
             {
+                _hierarchy.Close();
                 return;
-
             }
 
             _hierarchy = new Views.Hierarchy

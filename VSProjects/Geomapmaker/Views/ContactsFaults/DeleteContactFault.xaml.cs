@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Geomapmaker.Views
+namespace Geomapmaker.Views.ContactsFaults
 {
     /// <summary>
-    /// Interaction logic for ProjectSettingsView.xaml
+    /// Interaction logic for DeleteContactFault.xaml
     /// </summary>
-    public partial class ProjectSettings : UserControl
+    public partial class DeleteContactFault : UserControl
     {
-        public ProjectSettings()
+        public DeleteContactFault()
         {
             InitializeComponent();
         }

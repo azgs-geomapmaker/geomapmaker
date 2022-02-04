@@ -4,12 +4,12 @@ namespace Geomapmaker.Models
 {
     public class CFSymbol
     {
-        public string key { get; set; }
+        public string Key { get; set; }
 
-        public string description { get; set; }
+        public string Description { get; set; }
 
-        public string symbol { get; set; }
+        public string SymbolJson { get; set; }
 
-        public ImageSource preview { get; set; }
+        public ImageSource Preview { get; set; }
     }
 }

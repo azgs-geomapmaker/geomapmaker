@@ -24,6 +24,11 @@ namespace Geomapmaker.Data
             {
                 Table enterpriseTable = dataSourcesTable.GetTable();
 
+                if (enterpriseTable == null)
+                {
+                    return;
+                }
+
                 QueryFilter queryFilter = new QueryFilter
                 {
                     PostfixClause = "ORDER BY datasources_id"

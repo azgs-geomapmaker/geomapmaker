@@ -1,0 +1,238 @@
+﻿<UserControl x:Class="Geomapmaker.Views.ContactsFaults.CreateContactFault"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Geomapmaker.Views.ContactsFaults"
+             xmlns:conv="clr-namespace:Geomapmaker._helpers"
+             xmlns:data="clr-namespace:Geomapmaker.Data" 
+             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+             mc:Ignorable="d" 
+             >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <AdornerDecorator>
+        <Grid>
+
+            <Grid.Resources>
+                <conv:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
+                <conv:SliderConverter x:Key="SliderConverter" />
+                <conv:ConcealedConverter x:Key="ConcealedConverter" />
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+
+            <ToggleButton Grid.Row="1" Grid.Column="1" Content="Populate values from an existing line" IsChecked="{Binding Create.Prepopulate, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Padding="5" Margin="10" >
+                <ToggleButton.Template>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
+                            <ContentPresenter Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" Value="#2082D8" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </ToggleButton.Template>
+            </ToggleButton>
+
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Label" VerticalAlignment="Center" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Create.Label, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Type" VerticalAlignment="Center" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
+
+            <GroupBox Grid.Row="6" Grid.Column="1" >
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Symbol" VerticalAlignment="Center" />
+                        <Image Source="{Binding Create.Symbol.Preview}" ToolTip="{Binding Create.Symbol.Description}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <AdornerDecorator>
+
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Row="0" Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0">Filter by Key</TextBlock>
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Create.KeyFilter, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1">Filter by Description</TextBlock>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Create.DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+
+                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Create.SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}" MinHeight="50" HorizontalAlignment="Stretch">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ToolTip="{Binding Description}" >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="250" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Key}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                        <Image Grid.Column="1" Source="{Binding Preview}" HorizontalAlignment="Left" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Create.SymbolsFilteredMessage}" HorizontalAlignment="Right" FontSize="11" FontWeight="Light"/>
+                    </Grid>
+                </AdornerDecorator>
+
+            </GroupBox>
+
+            <TextBlock Grid.Row="7" Grid.Column="1"  Text="Identity Confidence "/>
+            <Grid Grid.Row="8" Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <RadioButton 
+                    Grid.Row="0" 
+                    Grid.Column="1" 
+                    GroupName="IdentityConfidence" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center" 
+                    Content="Low"
+                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
+                    >
+                </RadioButton>
+
+                <RadioButton 
+                    Grid.Row="0" 
+                    Grid.Column="2" 
+                    GroupName="IdentityConfidence" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Content="Medium"
+                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
+                    >
+                </RadioButton>
+
+                <RadioButton 
+                    Grid.Row="0" 
+                    Grid.Column="3"
+                    GroupName="IdentityConfidence" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Content="High"
+                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
+                    >
+                </RadioButton>
+            </Grid>
+
+            <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="Existence Confidence " />
+                <TextBlock FontWeight="Bold" Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
+                <Validation.ErrorTemplate>
+                        <ControlTemplate />
+                    </Validation.ErrorTemplate>
+                </TextBlock>
+            </StackPanel>
+            <Slider Grid.Row="10" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Create.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
+
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="Location Confidence " />
+            <ComboBox 
+            Grid.Row="12" 
+            Grid.Column="1" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
+            SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+            IsReadOnly="False" 
+            IsEditable="False" 
+            >
+            </ComboBox>
+
+            <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Horizontal" >
+                <TextBlock Text="Concealed " />
+                <TextBlock FontWeight="Bold" Text="{Binding Create.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" />
+            </StackPanel>
+            <CheckBox Grid.Row="14" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Create.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Notes" />
+            <TextBox Grid.Row="16" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
+
+            <WrapPanel Grid.Row="17" Grid.Column="1" >
+                <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
+                <TextBlock FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource Esri_TextBlockRegular}"/>
+            </WrapPanel>
+
+            <StackPanel Grid.Row="18" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
+                <Button Padding="5" Command="{Binding Create.CommandCreateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save Template</Button>
+                <Button Padding="5" Command="{Binding Create.CommandSketch}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Sketch</Button>
+            </StackPanel>
+
+        </Grid>
+
+    </AdornerDecorator>
+
+</UserControl>

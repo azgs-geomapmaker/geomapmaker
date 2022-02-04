@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Geomapmaker.ViewModels.ContactsFaults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-
-namespace Geomapmaker
+namespace Geomapmaker.Views.ContactsFaults
 {
     /// <summary>
-    /// Interaction logic for AddEditContactsAndFaultsDockPaneView.xaml
+    /// Interaction logic for ContactsFaults.xaml
     /// </summary>
-    public partial class AddEditContactsAndFaultsDockPaneView : UserControl
+    public partial class ContactsFaults : ArcGIS.Desktop.Framework.Controls.ProWindow
     {
-        public AddEditContactsAndFaultsDockPaneView()
+        public ContactsFaultsViewModel contactsFaultsVM = new ContactsFaultsViewModel();
+
+        public ContactsFaults()
         {
             InitializeComponent();
+            DataContext = contactsFaultsVM;
         }
     }
 }
