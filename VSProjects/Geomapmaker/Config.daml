@@ -39,6 +39,7 @@
           <button refID="Geomapmaker_ContactsFaults" />
         </group>
         <group id="Geomapmaker_MapUnitPolyTool" caption="Map Unit Poly" keytip="MUP">
+          <button refID="Geomapmaker_MapUnitPolys" size="large" />
           <tool refID="Geomapmaker_MapUnitPolyAddTool" />
           <tool refID="Geomapmaker_MapUnitPolyEditTool" />
         </group>
@@ -80,9 +81,12 @@
         <button id="Geomapmaker_ContactsFaults" caption="Contacts and Faults Templates" className="Geomapmaker.ViewModels.ContactsFaults.ShowContactsFaults" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
-        <tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" >
+        <tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </tool>
+        <button id="Geomapmaker_MapUnitPolys" caption="Map Unit Polys" className="Geomapmaker.ViewModels.MapUnitPolys.ShowMapUnitPolys" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
       </controls>
       <!-- Dock Panes -->
       <dockPanes>

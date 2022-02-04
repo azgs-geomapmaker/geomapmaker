@@ -199,9 +199,13 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\MapUnitPolys\MapUnitPolysViewModel.cs" />
     <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="Data\CFTemplates.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
+    <Compile Include="Views\MapUnitPolys\MapUnitPolys.xaml.cs">
+      <DependentUpon>MapUnitPolys.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ContactsFaults\CreateContactFaultVM.cs" />
     <Compile Include="ViewModels\ContactsFaults\DeleteContactFaultVM.cs" />
     <Compile Include="ViewModels\ContactsFaults\EditContactFaultVM.cs" />
@@ -302,6 +306,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\MapUnitPolys\MapUnitPolys.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ContactsFaults\ContactsFaults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -379,9 +387,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\MapUnitPolys\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   PackageAction can be:
