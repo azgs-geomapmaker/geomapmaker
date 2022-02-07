@@ -5,11 +5,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+        xmlns:data="clr-namespace:Geomapmaker.Data" 
         mc:Ignorable="d"
         Title="Map Unit Polys"
-        Height="300" 
+        Height="400" 
         Width="300"
-        MinHeight="250" 
+        MinHeight="350" 
         MinWidth="250"
         WindowStartupLocation="CenterOwner"
     >
@@ -27,7 +28,13 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
@@ -45,8 +52,19 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+        
+        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding FieldVisibility}" />
 
-        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="Identity Confidence" Visibility="{Binding FieldVisibility}" />
+        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
+
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Notes" Visibility="{Binding FieldVisibility}"/>
+        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source" Visibility="{Binding FieldVisibility}"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" Visibility="{Binding FieldVisibility}" />
+
+        <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
             <Button Padding="5" Command="{Binding CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Tool</Button>
         </StackPanel>

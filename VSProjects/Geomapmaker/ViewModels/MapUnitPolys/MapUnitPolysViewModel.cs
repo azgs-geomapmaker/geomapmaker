@@ -2,6 +2,8 @@
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using Geomapmaker.Models;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +12,7 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnitPolys
 {
-    public class MapUnitPolysViewModel : ProWindow, INotifyPropertyChanged
+    public class MapUnitPolysViewModel : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
     {
         public ICommand CommandCancel => new RelayCommand((proWindow) =>
         {
@@ -25,27 +27,12 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         private bool CanSave()
         {
-            return Selected != null;
+            return Selected != null && HasErrors == false;
         }
 
         private void SubmitAsync()
         {
             //throw new NotImplementedException();
-        }
-
-        public MapUnitPolysViewModel()
-        {
-
-        }
-
-        private MapUnit _selected;
-        public MapUnit Selected
-        {
-            get => _selected;
-            set
-            {
-                _selected = value;
-            }
         }
 
         private List<MapUnit> _mapUnits { get; set; }
@@ -55,6 +42,56 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             set
             {
                 _mapUnits = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private MapUnit _selected;
+        public MapUnit Selected
+        {
+            get => _selected;
+            set
+            {
+                _selected = value;
+                NotifyPropertyChanged("FieldVisibility");
+
+                // Trigger validation
+                IdentityConfidence = null;
+            }
+        }
+
+        public string FieldVisibility => Selected == null ? "Hidden" : "Visible";
+
+        private string _identityConfidence;
+        public string IdentityConfidence
+        {
+            get => _identityConfidence;
+            set
+            {
+                _identityConfidence = value;
+                ValidateRequiredString(IdentityConfidence, "IdentityConfidence");
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _notes;
+        public string Notes
+        {
+            get => _notes;
+            set
+            {
+                _notes = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _dataSource = GeomapmakerModule.DataSourceId;
+        public string DataSource
+        {
+            get => _dataSource;
+            set
+            {
+                _notes = value;
                 NotifyPropertyChanged();
             }
         }
@@ -74,6 +111,44 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
+
+        #region Validation
+
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            // Return null if parameters is null/empty OR there are no errors for that parameter
+            // Otherwise, return the errors for that parameter.
+            return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
+                null : _validationErrors[propertyName];
+        }
+
+        public bool HasErrors => _validationErrors.Count > 0;
+
+        private void ValidateRequiredString(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
         #endregion
     }
 
