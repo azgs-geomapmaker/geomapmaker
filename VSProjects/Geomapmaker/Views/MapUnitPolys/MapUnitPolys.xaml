@@ -7,10 +7,10 @@
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
         Title="Map Unit Polys"
-        Height="700" 
-        Width="500"
-        MinHeight="650" 
-        MinWidth="450"
+        Height="300" 
+        Width="300"
+        MinHeight="250" 
+        MinWidth="250"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -24,20 +24,33 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <TabControl Grid.Row="0" Grid.Column="0">
-            <TabItem Header="Create" >
-            </TabItem>
-            <TabItem Header="Edit">
-            </TabItem>
-            <TabItem Header="Delete">
-            </TabItem>
-        </TabControl>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Map Unit" />
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding MapUnits}" SelectedItem="{Binding Selected}" >
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding MU}" ToolTip="{Binding Tooltip}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Button Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
+            <Button Padding="5" Command="{Binding CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Tool</Button>
+        </StackPanel>
+
     </Grid>
 
 </controls:ProWindow>
