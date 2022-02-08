@@ -56,7 +56,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 NotifyPropertyChanged("FieldVisibility");
 
                 // Trigger validation
-                IdentityConfidence = null;
+                IdentityConfidence = IdentityConfidence;
             }
         }
 
@@ -172,7 +172,14 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             _mapunitpolys.mapUnitPolysVM.RefreshMapUnitsAsync();
 
-            _mapunitpolys.Closed += (o, e) => { _mapunitpolys = null; };
+            _mapunitpolys.Closed += (o, e) =>
+            {
+                // Reset the map tool to explore
+                FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+
+                _mapunitpolys = null;
+            };
+
             _mapunitpolys.Show();
         }
 
