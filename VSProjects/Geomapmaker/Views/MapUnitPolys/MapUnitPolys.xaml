@@ -48,7 +48,10 @@
         <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding MapUnits}" SelectedItem="{Binding Selected}" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding MU}" ToolTip="{Binding Tooltip}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+                        <TextBlock Text="{Binding FullName}" ToolTip="{Binding Tooltip}" />
+                    </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
