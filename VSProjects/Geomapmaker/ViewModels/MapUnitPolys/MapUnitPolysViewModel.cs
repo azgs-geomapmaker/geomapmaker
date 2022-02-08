@@ -32,7 +32,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         private void SubmitAsync()
         {
-            //throw new NotImplementedException();
+            FrameworkApplication.SetCurrentToolAsync("Geomapmaker_MapUnitPolyTool");
         }
 
         private List<MapUnit> _mapUnits { get; set; }
