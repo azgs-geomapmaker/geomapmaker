@@ -26,92 +26,126 @@ namespace Geomapmaker.MapTools
 
         protected override Task OnToolActivateAsync(bool active)
         {
-            if (MapView.Active != null && MapView.Active.Map != null)
-            {
-                // Clear selection
-                QueuedTask.Run(() =>
-                {
-                    MapView.Active.Map.SetSelection(null);
-                });
-            }
-
             return base.OnToolActivateAsync(active);
         }
-
-        private List<long> lineOids = new List<long>();
 
         protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
+            IEnumerable<MapUnitPolysViewModel> mapUnitPolyVMs = FrameworkApplication.Current.Windows.OfType<MapUnitPolysViewModel>(); ;
+
+            // Get the most recent window. GC takes some time to clean up the closed prowindows.
+            MapUnitPolysViewModel mapUnitPolyVM = mapUnitPolyVMs.Last();
+
             await QueuedTask.Run(() =>
             {
                 // Get features that intersect the point
-                var selection = MapView.Active.GetFeatures(geometry);
+
+                Dictionary<BasicFeatureLayer, List<long>> selection = MapView.Active.GetFeatures(geometry);
 
                 // Filter anything not CF
-                var cfLayer = selection.Where(f => f.Key.Name == "ContactsAndFaults").FirstOrDefault().Key as FeatureLayer;
+                FeatureLayer cfLayer = selection.Where(f => f.Key.Name == "ContactsAndFaults").FirstOrDefault().Key as FeatureLayer;
 
                 // Select the oids
-                var oidsCF = selection[cfLayer];
+                List<long> oidsCF = selection[cfLayer];
 
-                foreach (long oid in oidsCF)
+                if (oidsCF.Count > 0)
                 {
-                    if (lineOids.Contains(oid))
-                    {
-                        lineOids.Remove(oid);
-                    }
-                    else
-                    {
-                        lineOids.Add(oid);
-                    }
+                    mapUnitPolyVM.Set_CF_Oids(oidsCF);
                 }
-
-                if (lineOids.Count == 0)
-                {
-                    cfLayer.ClearSelection();
-                }
-                else
-                {
-                    QueryFilter queryFilter = new QueryFilter
-                    {
-                        ObjectIDs = lineOids
-                    };
-
-                    var foo = cfLayer.Select(queryFilter);
-
-                    var op = new EditOperation
-                    {
-                        Name = string.Format("Create {0}", "MapUnitPolys")
-                    };
-
-                    var polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
-
-                    var tmpTemplate = polyLayer.GetTemplates().FirstOrDefault();
-
-                    op.ConstructPolygons(tmpTemplate, cfLayer, lineOids, null, false);
-
-                    try
-                    {
-                        op.Execute();
-
-                        if (op.IsSucceeded)
-                        {
-                            lineOids = new List<long>();
-                            cfLayer.ClearSelection();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        // Edit op failed
-                    }
-
-                }
-
             });
 
             return true;
         }
+
+
+
+
+
+
+
+
+        //private List<long> lineOids = new List<long>();
+
+        //protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
+        //{
+        //    FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+        //    await QueuedTask.Run(() =>
+        //    {
+        //        // Get features that intersect the point
+        //        var selection = MapView.Active.GetFeatures(geometry);
+
+        //        // Filter anything not CF
+        //        var cfLayer = selection.Where(f => f.Key.Name == "ContactsAndFaults").FirstOrDefault().Key as FeatureLayer;
+
+        //        // Select the oids
+        //        var oidsCF = selection[cfLayer];
+
+        //        foreach (long oid in oidsCF)
+        //        {
+        //            if (lineOids.Contains(oid))
+        //            {
+        //                lineOids.Remove(oid);
+        //            }
+        //            else
+        //            {
+        //                lineOids.Add(oid);
+        //            }
+        //        }
+
+        //        if (lineOids.Count == 0)
+        //        {
+        //            cfLayer.ClearSelection();
+        //        }
+        //        else
+        //        {
+        //            QueryFilter queryFilter = new QueryFilter
+        //            {
+        //                ObjectIDs = lineOids
+        //            };
+
+        //            var foo = cfLayer.Select(queryFilter);
+
+        //            var op = new EditOperation
+        //            {
+        //                Name = string.Format("Create {0}", "MapUnitPolys")
+        //            };
+
+        //            var polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+
+        //            var tmpTemplate = polyLayer.GetTemplates().FirstOrDefault();
+
+        //            op.ConstructPolygons(tmpTemplate, cfLayer, lineOids, null, false);
+
+        //            try
+        //            {
+        //                op.Execute();
+
+        //                if (op.IsSucceeded)
+        //                {
+        //                    lineOids = new List<long>();
+        //                    cfLayer.ClearSelection();
+        //                }
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                // Edit op failed
+        //            }
+
+        //        }
+
+        //    });
+
+        //    return true;
+        //}
+
+
+
+
+
+
 
         //private Geometry shape;
 

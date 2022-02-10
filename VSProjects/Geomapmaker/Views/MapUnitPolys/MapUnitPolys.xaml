@@ -32,7 +32,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -44,8 +47,11 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Map Unit" />
-        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding MapUnits}" SelectedItem="{Binding Selected}" >
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Contacts and Faults Lines" />
+        <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding OidsListBox}" MinHeight="50" IsEnabled="False" />
+
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Map Unit" />
+        <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding MapUnits}" SelectedItem="{Binding Selected}" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -56,21 +62,23 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         
-        <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding FieldVisibility}" />
+        <Separator Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding FieldVisibility}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="Identity Confidence" Visibility="{Binding FieldVisibility}" />
-        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Identity Confidence" Visibility="{Binding FieldVisibility}" />
+        <ComboBox Grid.Row="7" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
 
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Notes" Visibility="{Binding FieldVisibility}"/>
-        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="Notes" Visibility="{Binding FieldVisibility}"/>
+        <TextBox Grid.Row="9" Grid.Column="1" MinLines="3" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
 
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source" Visibility="{Binding FieldVisibility}"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" Visibility="{Binding FieldVisibility}" />
+        <TextBlock Grid.Row="10" Grid.Column="1" Text="Data Source" Visibility="{Binding FieldVisibility}"/>
+        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" Visibility="{Binding FieldVisibility}" />
 
-        <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
-            <Button Padding="5" Command="{Binding CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Tool</Button>
+            <Button Padding="5" Command="{Binding CommandCreate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Create</Button>
         </StackPanel>
+
+        <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" Text="Could not construct Map Unity Poly" Foreground="Red" Visibility="{Binding ConstructionError}" />
 
     </Grid>
 
