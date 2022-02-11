@@ -69,13 +69,6 @@ namespace Geomapmaker.MapTools
             return true;
         }
 
-
-
-
-
-
-
-
         //private List<long> lineOids = new List<long>();
 
         //protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)

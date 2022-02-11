@@ -9,10 +9,6 @@ namespace Geomapmaker
 
         public static string DataSourceId { get; set; }
 
-        internal static AddEditMapUnitPolysDockPaneViewModel MapUnitPolysVM { get; set; }
-        internal static MapUnitPolyAddTool AddMapUnitPolyTool { get; set; }
-        internal static MapUnitPolyEditTool EditMapUnitPolyTool { get; set; }
-
         public const string CF_SketchTemplateName = "Sketch";
 
         /// <summary>

@@ -20,6 +20,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 {
     public class MapUnitPolysViewModel : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
     {
+        // Close the window command
         public ICommand CommandCancel => new RelayCommand((proWindow) =>
         {
             if (proWindow != null)
@@ -29,8 +30,10 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         }, () => true);
 
+        // Create a Map Unit Polygon
         public ICommand CommandCreate => new RelayCommand(() => CreateAsync(), () => CanCreate());
 
+        // Reset Object ids
         public ICommand CommandClearOids => new RelayCommand(() => ClearOids(), () => ContactFaultOids != null && ContactFaultOids.Count > 0);
 
         private void ClearOids()
@@ -51,8 +54,10 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             return ContactFaultOids.Count() > 0 && Selected != null && HasErrors == false;
         }
 
+        // Create the Map Unit Polygons from the selected Contacts and Faults
         private async void CreateAsync()
         {
+            // Contacts and Faults layer
             FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
             EditOperation op = new EditOperation
@@ -60,35 +65,41 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 Name = "Create MapUnitPolys"
             };
 
+            // Map Unit Poly layer
             FeatureLayer polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
 
             EditingTemplate newTemplate;
 
             await QueuedTask.Run(() =>
             {
+                // Check if there is a Temporary template
                 EditingTemplate tmpTemplate = polyLayer.GetTemplate("Temporary");
 
                 if (tmpTemplate != null)
                 {
+                    // Remove the template
                     polyLayer.RemoveTemplate("Temporary");
                 }
 
                 Inspector insp = new Inspector();
                 insp.LoadSchema(polyLayer);
 
-                // set attributes
+                // Set attributes
                 insp["Symbol"] = Selected.Symbol;
                 insp["MapUnit"] = Selected.MU;
                 insp["IdentityConfidence"] = IdentityConfidence;
                 insp["Notes"] = Notes;
                 insp["DataSourceID"] = DataSource;
 
+                // Create the temporary template
                 newTemplate = polyLayer.CreateTemplate("Temporary", "Temporary", insp);
 
+                // Contruct polygons from cf lines
                 op.ConstructPolygons(newTemplate, cfLayer, ContactFaultOids.Keys, null, false);
 
                 op.Execute();
 
+                // Check if the polygon create was a success
                 if (op.IsSucceeded)
                 {
                     ContactFaultOids = new Dictionary<long, string>();

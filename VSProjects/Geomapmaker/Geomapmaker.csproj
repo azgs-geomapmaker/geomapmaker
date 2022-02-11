@@ -286,15 +286,8 @@
     <Compile Include="Models\Interval.cs" />
     <Compile Include="Models\CFSymbol.cs" />
     <Compile Include="Models\ContactFaultTemplate.cs" />
-    <Compile Include="Views\AddEditMapUnitPolysDockPane.xaml.cs">
-      <DependentUpon>AddEditMapUnitPolysDockPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\AddEditMapUnitPolysDockPaneViewModel.cs" />
     <Compile Include="Models\MapUnitPoly.cs" />
-    <Compile Include="RibbonElements\MapUnitPolyAddTool.cs" />
-    <Compile Include="RibbonElements\MapUnitPolyEditTool.cs" />
     <Compile Include="GeomapmakerConfiguration.cs" />
-    <Compile Include="DataHelper.cs" />
     <!--<Compile Include="Views\LoginDialogProWindow.xaml.cs" />-->
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
@@ -376,10 +369,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MapUnits\EditMapUnit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddEditMapUnitPolysDockPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
