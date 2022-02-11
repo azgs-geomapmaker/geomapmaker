@@ -66,6 +66,13 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             await QueuedTask.Run(() =>
             {
+                EditingTemplate tmpTemplate = polyLayer.GetTemplate("Temporary");
+
+                if (tmpTemplate != null)
+                {
+                    polyLayer.RemoveTemplate("Temporary");
+                }
+
                 Inspector insp = new Inspector();
                 insp.LoadSchema(polyLayer);
 
@@ -164,7 +171,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             set
             {
                 _selected = value;
-                NotifyPropertyChanged("FieldVisibility");
 
                 ValidateMapUnit(Selected, "Selected");
 
@@ -172,8 +178,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 IdentityConfidence = IdentityConfidence;
             }
         }
-
-        public string FieldVisibility => Selected == null ? "Hidden" : "Visible";
 
         private string _identityConfidence;
         public string IdentityConfidence

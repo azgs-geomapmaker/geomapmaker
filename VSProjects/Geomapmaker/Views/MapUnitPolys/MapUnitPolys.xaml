@@ -32,8 +32,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -51,7 +51,6 @@
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -60,9 +59,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Row="1" Grid.Column="1" Command="{Binding CommandTest}">Test</Button>
-
-                    <ListBox Grid.Row="2" Grid.Column="0" ItemsSource="{Binding OidsListBox}" SelectedItem ="{Binding SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15" MinHeight="50" IsEnabled="False">
+                    <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding OidsListBox}" SelectedItem ="{Binding SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15" MinHeight="50" IsEnabled="False">
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
@@ -81,7 +78,7 @@
                         </Validation.ErrorTemplate>
                     </ListBox>
 
-                    <Button Grid.Row="3" Grid.Column="1" Command="{Binding CommandClearOids}" >Clear Selections</Button>
+                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding CommandClearOids}" >Clear Selections</Button>
 
                 </Grid>
             </AdornerDecorator>
@@ -99,18 +96,16 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <Separator Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding FieldVisibility}" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="Identity Confidence" />
+        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="1" Text="Identity Confidence" Visibility="{Binding FieldVisibility}" />
-        <ComboBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Notes"/>
+        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" MinHeight="50" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="7" Grid.Column="1" Text="Notes" Visibility="{Binding FieldVisibility}"/>
-        <TextBox Grid.Row="8" Grid.Column="1" MinLines="3" MinHeight="50" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding FieldVisibility}" />
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" />
 
-        <TextBlock Grid.Row="9" Grid.Column="1" Text="Data Source" Visibility="{Binding FieldVisibility}"/>
-        <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" Visibility="{Binding FieldVisibility}" />
-
-        <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
             <Button Padding="5" Command="{Binding CommandCreate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Create</Button>
         </StackPanel>
