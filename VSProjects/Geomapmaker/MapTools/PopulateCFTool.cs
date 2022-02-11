@@ -6,9 +6,13 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using Geomapmaker.ViewModels.ContactsFaults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Geomapmaker.MapTools
 {
@@ -19,6 +23,20 @@ namespace Geomapmaker.MapTools
             IsSketchTool = true;
             SketchType = SketchGeometryType.Point;
             SketchOutputMode = SketchOutputMode.Map;
+
+            // Reflection
+            Assembly asm = Assembly.GetExecutingAssembly();
+
+            // Path to custom cursor
+            string uri = System.IO.Path.GetDirectoryName(Uri.UnescapeDataString(new Uri(asm.CodeBase).LocalPath)) + "\\Cursors\\eyedropper.cur";
+
+            System.Windows.Input.Cursor eyeDropper = new System.Windows.Input.Cursor(uri);
+
+            if (eyeDropper != null)
+            {
+                Cursor = eyeDropper;
+            }
+
         }
 
         protected override Task OnToolActivateAsync(bool active)
