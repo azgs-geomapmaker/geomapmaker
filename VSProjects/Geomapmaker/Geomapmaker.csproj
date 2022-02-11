@@ -389,7 +389,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Cursors\eyedropper.cur">
+    <Content Include="Cursors\ContactsFaults.cur">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Cursors\EyeDropper.cur">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

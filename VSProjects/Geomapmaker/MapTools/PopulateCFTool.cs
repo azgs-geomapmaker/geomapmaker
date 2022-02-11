@@ -8,11 +8,10 @@ using Geomapmaker.Models;
 using Geomapmaker.ViewModels.ContactsFaults;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace Geomapmaker.MapTools
 {
@@ -28,15 +27,13 @@ namespace Geomapmaker.MapTools
             Assembly asm = Assembly.GetExecutingAssembly();
 
             // Path to custom cursor
-            string uri = System.IO.Path.GetDirectoryName(Uri.UnescapeDataString(new Uri(asm.CodeBase).LocalPath)) + "\\Cursors\\eyedropper.cur";
+            string uri = Path.GetDirectoryName(Uri.UnescapeDataString(new Uri(asm.CodeBase).LocalPath)) + "\\Cursors\\EyeDropper.cur";
 
-            System.Windows.Input.Cursor eyeDropper = new System.Windows.Input.Cursor(uri);
-
-            if (eyeDropper != null)
+            if (File.Exists(uri))
             {
-                Cursor = eyeDropper;
+                // Create custom cursor from file
+                Cursor = new System.Windows.Input.Cursor(uri);
             }
-
         }
 
         protected override Task OnToolActivateAsync(bool active)

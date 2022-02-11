@@ -1,17 +1,15 @@
-﻿using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
-using ArcGIS.Core.Geometry;
+﻿using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker.Models;
 using Geomapmaker.ViewModels.MapUnitPolys;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Geomapmaker.MapTools
 {
@@ -22,6 +20,18 @@ namespace Geomapmaker.MapTools
             IsSketchTool = true;
             SketchType = SketchGeometryType.Point;
             SketchOutputMode = SketchOutputMode.Map;
+
+            // Reflection
+            Assembly asm = Assembly.GetExecutingAssembly();
+
+            // Path to custom cursor
+            string uri = Path.GetDirectoryName(Uri.UnescapeDataString(new Uri(asm.CodeBase).LocalPath)) + "\\Cursors\\ContactsFaults.cur";
+
+            if (File.Exists(uri))
+            {
+                // Create custom cursor from file
+                Cursor = new System.Windows.Input.Cursor(uri);
+            }
         }
 
         protected override Task OnToolActivateAsync(bool active)
