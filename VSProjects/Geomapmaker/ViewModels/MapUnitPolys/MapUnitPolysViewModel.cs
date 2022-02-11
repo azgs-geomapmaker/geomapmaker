@@ -38,10 +38,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         private async void CreateAsync()
         {
-            // Hide error if visible
-            HasConstructError = false;
-            NotifyPropertyChanged("ConstructionError");
-
             FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
             EditOperation op = new EditOperation
@@ -55,7 +51,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             await QueuedTask.Run(() =>
             {
-
                 Inspector insp = new Inspector();
                 insp.LoadSchema(polyLayer);
 
@@ -70,25 +65,24 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
                 op.ConstructPolygons(newTemplate, cfLayer, ContactFaultOids.Keys, null, false);
 
-                try
-                {
-                    op.Execute();
+                op.Execute();
 
-                    if (op.IsSucceeded)
-                    {
-                        ContactFaultOids = new Dictionary<long, string>();
-                        cfLayer.ClearSelection();
-                    }
-                }
-                catch (Exception e)
+                if (op.IsSucceeded)
                 {
-                    // Edit op failed
-                    HasConstructError = true;
-                    NotifyPropertyChanged("ConstructionError");
+                    ContactFaultOids = new Dictionary<long, string>();
+
+                    cfLayer.ClearSelection();
+                }
+                else
+                {
+                    // Display error
+                    _validationErrors["SelectedOid"] = new List<string>() { "Could not create polygon from CF lines. Select more lines." };
+                    RaiseErrorsChanged("SelectedOid");
                 }
 
                 polyLayer.RemoveTemplate(newTemplate);
             });
+
         }
 
         public MapUnitPolysViewModel()
@@ -110,13 +104,31 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
                 Set_CF_Oids(cfOids.ToList());
             });
+
+            // Trigger validation
+            Selected = Selected;
         }
 
         // Collection of ID/Labels for selected CF lines
-        public Dictionary<long, string> ContactFaultOids { get; set; } = new Dictionary<long, string>();
+        private Dictionary<long, string> _contactFaultOids { get; set; } = new Dictionary<long, string>();
+        public Dictionary<long, string> ContactFaultOids {
+            get => _contactFaultOids;
+            set
+            {
+                _contactFaultOids = value;
+                NotifyPropertyChanged("OidsListBox");
+                NotifyPropertyChanged("ContactFaultOids");
+
+                // Error is displayed on the selection
+                ValidateCFOids(ContactFaultOids, "SelectedOid");
+            }
+
+        }
 
         // Collection for displaying in View
         public List<string> OidsListBox => ContactFaultOids.Select(a => $"{a.Key} ({a.Value})").ToList();
+
+        public string SelectedOid { get; set; }
 
         private List<MapUnit> _mapUnits { get; set; }
         public List<MapUnit> MapUnits
@@ -138,15 +150,14 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 _selected = value;
                 NotifyPropertyChanged("FieldVisibility");
 
+                ValidateMapUnit(Selected, "Selected");
+
                 // Trigger validation
                 IdentityConfidence = IdentityConfidence;
             }
         }
 
         public string FieldVisibility => Selected == null ? "Hidden" : "Visible";
-
-        public bool HasConstructError = false;
-        public string ConstructionError => HasConstructError ? "Visible" : "Hidden";
 
         private string _identityConfidence;
         public string IdentityConfidence
@@ -191,6 +202,10 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 return;
             }
 
+            // Remove any errors from CF Lines
+            _validationErrors.Remove("SelectedOid");
+            RaiseErrorsChanged("SelectedOid");
+
             Inspector insp = new Inspector();
 
             await QueuedTask.Run(() =>
@@ -227,6 +242,9 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             }
 
             NotifyPropertyChanged("OidsListBox");
+
+            // Trigger Validation
+            ContactFaultOids = ContactFaultOids;
         }
 
         public async void RefreshMapUnitsAsync()
@@ -271,6 +289,36 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         {
             // Required field
             if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateMapUnit(MapUnit selected, string propertyKey)
+        {
+            // Required field
+            if (selected == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateCFOids(Dictionary<long, string> contactFaultOids, string propertyKey)
+        {
+            // Required field
+            if (contactFaultOids == null || contactFaultOids.Count == 0)
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
