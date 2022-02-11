@@ -31,6 +31,21 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         public ICommand CommandCreate => new RelayCommand(() => CreateAsync(), () => CanCreate());
 
+        public ICommand CommandClearOids => new RelayCommand(() => ClearOids(), () => ContactFaultOids != null && ContactFaultOids.Count > 0);
+
+        private void ClearOids()
+        {
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+            QueuedTask.Run(() =>
+            {
+                layer?.ClearSelection();
+            });
+
+            ContactFaultOids = new Dictionary<long, string>();
+            NotifyPropertyChanged("OidsListBox");
+        }
+
         private bool CanCreate()
         {
             return ContactFaultOids.Count() > 0 && Selected != null && HasErrors == false;
@@ -72,6 +87,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                     ContactFaultOids = new Dictionary<long, string>();
 
                     cfLayer.ClearSelection();
+                    polyLayer.ClearSelection();
                 }
                 else
                 {
@@ -126,7 +142,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         }
 
         // Collection for displaying in View
-        public List<string> OidsListBox => ContactFaultOids.Select(a => $"{a.Key} ({a.Value})").ToList();
+        public List<string> OidsListBox => ContactFaultOids.Select(a => $"{a.Value} ({a.Key})").ToList();
 
         public string SelectedOid { get; set; }
 
