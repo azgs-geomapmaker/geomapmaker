@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MapTools\MapUnitPolyTool.cs" />
+    <Compile Include="UpdateRenderers.cs" />
     <Compile Include="ViewModels\MapUnitPolys\MapUnitPolysViewModel.cs" />
     <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="Data\CFTemplates.cs" />
