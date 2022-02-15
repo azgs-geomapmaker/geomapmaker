@@ -207,7 +207,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 return;
             }
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(async () =>
             {
                 try
                 {
@@ -254,6 +254,9 @@ namespace Geomapmaker.ViewModels.MapUnits
                         errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
                 }
+
+                // Update MapUnitPoly renderer
+                await Data.MapUnitPolys.AddSymbolToRenderer(MapUnit, Color.Value.R, Color.Value.G, Color.Value.B);
             });
 
             if (!string.IsNullOrEmpty(errorMessage))
