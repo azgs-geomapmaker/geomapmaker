@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public static class DataSources
+    public class DataSources
     {
         public static async Task<List<DataSource>> GetDataSourcesAsync()
         {

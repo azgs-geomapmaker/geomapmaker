@@ -1,0 +1,100 @@
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Geomapmaker.Data
+{
+    public class MapUnitPolys
+    {
+        public static async Task AddSymbolToRenderer(string key, double R, double G, double B)
+        {
+            // Find the ContactsFaults layer
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (layer == null)
+            {
+                return;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                //
+                // Update Renderer
+                //
+
+                CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
+
+                CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
+
+                List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
+
+                // Check if the renderer already has symbology for that key
+                if (listUniqueValueClasses.Any(a => a.Label == key))
+                {
+                    return;
+                }
+
+                CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
+                        new CIMUniqueValue {
+                            FieldValues = new string[] { key }
+                        }
+                    };
+
+
+                CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
+
+                CIMFill fill = SymbolFactory.Instance.ConstructSolidFill(ColorFactory.Instance.CreateRGBColor(R, G, B));
+
+                CIMSymbolLayer[] symbolLayers = new CIMSymbolLayer[]
+                {
+                    outline,
+                    fill
+                };
+
+                var polySymbol = new CIMPolygonSymbol()
+                {
+                    SymbolLayers = symbolLayers
+                };
+
+                CIMSymbolReference symbolRef = new CIMSymbolReference()
+                {
+                    Symbol = polySymbol
+                };
+
+                CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
+                {
+                    Editable = false,
+                    Label = key,
+                    Description = key,
+                    Patch = PatchShape.AreaPolygon,
+                    Symbol = symbolRef,
+                    Visible = true,
+                    Values = listUniqueValues,
+                };
+                listUniqueValueClasses.Add(uniqueValueClass);
+
+                CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
+                {
+                    Classes = listUniqueValueClasses.ToArray(),
+                };
+                CIMUniqueValueGroup[] listUniqueValueGroups = new CIMUniqueValueGroup[] { uvg };
+
+                CIMUniqueValueRenderer updatedRenderer = new CIMUniqueValueRenderer
+                {
+                    UseDefaultSymbol = false,
+                    Groups = listUniqueValueGroups,
+                    Fields = new string[] { "MapUnit" }
+                };
+
+                layer.SetRenderer(updatedRenderer);
+            });
+        }
+
+
+
+
+    }
+}

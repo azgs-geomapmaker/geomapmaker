@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public class CFTemplates
+    public class ContactsAndFaults
     {
         public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync()
         {

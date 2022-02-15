@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Geomapmaker.Models
@@ -28,6 +29,20 @@ namespace Geomapmaker.Models
         public string Symbol { get; set; }
 
         public string AreaFillRGB { get; set; }
+
+        public (double, double, double) RGB
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(AreaFillRGB))
+                {
+                    return (Convert.ToDouble(AreaFillRGB.Split(',')[0]), Convert.ToDouble(AreaFillRGB.Split(',')[1]), Convert.ToDouble(AreaFillRGB.Split(',')[2]));
+                }
+
+                // black
+                return (0, 0, 0);
+            }
+        }
 
         public string HexColor { get; set; }
 
@@ -104,4 +119,5 @@ namespace Geomapmaker.Models
 
         public string ColorVisibility => ParagraphStyle == "Heading" ? "Collapsed" : "Visible";
     }
+
 }

@@ -7,6 +7,7 @@ using Geomapmaker.Data;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Geomapmaker.RibbonElements
@@ -19,13 +20,63 @@ namespace Geomapmaker.RibbonElements
             ResetMapUnitPolygonsSymbology();
         }
 
-        private void ResetMapUnitPolygonsSymbology()
+        private async void ResetMapUnitPolygonsSymbology()
         {
-            throw new NotImplementedException();
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (layer == null)
+            {
+                return;
+            }
+
+            List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
+
+            await QueuedTask.Run(async () =>
+           {
+               Table mupTable = layer.GetTable();
+
+               // Remove existing symbols
+               layer.SetRenderer(null);
+
+               QueryFilter queryFilter = new QueryFilter
+               {
+                   PrefixClause = "DISTINCT",
+                   PostfixClause = "ORDER BY MapUnit",
+                   SubFields = "MapUnit"
+               };
+
+               using (RowCursor rowCursor = mupTable.Search(queryFilter))
+               {
+                   while (rowCursor.MoveNext())
+                   {
+                       using (Row row = rowCursor.Current)
+                       {
+                           string mapUnitKey = row["MapUnit"]?.ToString();
+
+                           MapUnit mapUnit = DMU.FirstOrDefault(a => a.MU == mapUnitKey);
+
+                           if (mapUnit != null)
+                           {
+                               await MapUnitPolys.AddSymbolToRenderer(mapUnit.MU, mapUnit.RGB.Item1, mapUnit.RGB.Item2, mapUnit.RGB.Item3);
+                           }
+                       }
+                   }
+               }
+
+           });
+
         }
 
         private async void ResetContactsFaultsSymbology()
         {
+            // CF Layer
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+            if (layer == null)
+            {
+                return;
+            }
+
             // Check if the symbol list has been populated 
             if (CFSymbology.CFSymbolOptionsList == null)
             {
@@ -35,20 +86,11 @@ namespace Geomapmaker.RibbonElements
             // Get the CF Symbology Options
             List<CFSymbol> SymbolOptions = CFSymbology.CFSymbolOptionsList;
 
-            // CF Layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
-
-            if (layer == null)
-            {
-                return;
-            }
-
-            var cimList = new List<CIMUniqueValueClass>();
-
             await QueuedTask.Run(async () =>
             {
                 Table cfTable = layer.GetTable();
 
+                // Remove existing symbols
                 layer.SetRenderer(null);
 
                 QueryFilter queryFilter = new QueryFilter
