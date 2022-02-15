@@ -6,6 +6,7 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
+using Geomapmaker.RibbonElements;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -161,6 +162,9 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
+                // Add new symbology if needed. Remove old symbology if needed.
+                RebuildRenderers.ResetMapUnitPolygonsSymbology();
+
                 ParentVM.RefreshMapUnitsAsync();
 
                 // Reset values

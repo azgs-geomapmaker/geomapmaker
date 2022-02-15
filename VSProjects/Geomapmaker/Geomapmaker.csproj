@@ -201,7 +201,7 @@
   <ItemGroup>
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="MapTools\MapUnitPolyTool.cs" />
-    <Compile Include="RibbonElements\ResetRenderers.cs" />
+    <Compile Include="RibbonElements\RendererButton.cs" />
     <Compile Include="ViewModels\MapUnitPolys\MapUnitPolysViewModel.cs" />
     <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="Data\ContactsAndFaults.cs" />

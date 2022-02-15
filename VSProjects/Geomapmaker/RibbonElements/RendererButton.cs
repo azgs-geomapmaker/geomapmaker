@@ -12,15 +12,18 @@ using System.Linq;
 
 namespace Geomapmaker.RibbonElements
 {
-    internal class ResetRenderers : Button
+    internal class RendererButton : Button
     {
         protected override void OnClick()
         {
-            ResetContactsFaultsSymbology();
-            ResetMapUnitPolygonsSymbology();
+            RebuildRenderers.ResetContactsFaultsSymbology();
+            RebuildRenderers.ResetMapUnitPolygonsSymbology();
         }
+    }
 
-        private async void ResetMapUnitPolygonsSymbology()
+    public class RebuildRenderers {
+
+        public static async void ResetMapUnitPolygonsSymbology()
         {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
 
@@ -32,42 +35,42 @@ namespace Geomapmaker.RibbonElements
             List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
 
             await QueuedTask.Run(async () =>
-           {
-               Table mupTable = layer.GetTable();
+            {
+                Table mupTable = layer.GetTable();
 
-               // Remove existing symbols
-               layer.SetRenderer(null);
+                // Remove existing symbols
+                layer.SetRenderer(null);
 
-               QueryFilter queryFilter = new QueryFilter
-               {
-                   PrefixClause = "DISTINCT",
-                   PostfixClause = "ORDER BY MapUnit",
-                   SubFields = "MapUnit"
-               };
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    PrefixClause = "DISTINCT",
+                    PostfixClause = "ORDER BY MapUnit",
+                    SubFields = "MapUnit"
+                };
 
-               using (RowCursor rowCursor = mupTable.Search(queryFilter))
-               {
-                   while (rowCursor.MoveNext())
-                   {
-                       using (Row row = rowCursor.Current)
-                       {
-                           string mapUnitKey = row["MapUnit"]?.ToString();
+                using (RowCursor rowCursor = mupTable.Search(queryFilter))
+                {
+                    while (rowCursor.MoveNext())
+                    {
+                        using (Row row = rowCursor.Current)
+                        {
+                            string mapUnitKey = row["MapUnit"]?.ToString();
 
-                           MapUnit mapUnit = DMU.FirstOrDefault(a => a.MU == mapUnitKey);
+                            MapUnit mapUnit = DMU.FirstOrDefault(a => a.MU == mapUnitKey);
 
-                           if (mapUnit != null)
-                           {
-                               await MapUnitPolys.AddSymbolToRenderer(mapUnit.MU, mapUnit.RGB.Item1, mapUnit.RGB.Item2, mapUnit.RGB.Item3);
-                           }
-                       }
-                   }
-               }
+                            if (mapUnit != null)
+                            {
+                                await MapUnitPolys.AddSymbolToRenderer(mapUnit.MU, mapUnit.RGB.Item1, mapUnit.RGB.Item2, mapUnit.RGB.Item3);
+                            }
+                        }
+                    }
+                }
 
-           });
+            });
 
         }
 
-        private async void ResetContactsFaultsSymbology()
+        public static async void ResetContactsFaultsSymbology()
         {
             // CF Layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
@@ -119,5 +122,8 @@ namespace Geomapmaker.RibbonElements
                 }
             });
         }
+
+
     }
+
 }
