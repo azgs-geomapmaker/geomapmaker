@@ -27,7 +27,7 @@ namespace Geomapmaker.Data
             }
 
             // Process the cfsymbology table
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
                 Table enterpriseTable = CFSymbologyTable.GetTable();
 
