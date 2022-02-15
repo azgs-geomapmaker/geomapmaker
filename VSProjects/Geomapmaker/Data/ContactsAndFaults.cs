@@ -87,6 +87,8 @@ namespace Geomapmaker.Data
             // Get the CF Symbology Options
             List<CFSymbol> SymbolOptions = CFSymbology.CFSymbolOptionsList;
 
+            ProgressorSource ps = new ProgressorSource("Rebuilding Contacts And Faults Symbology...");
+
             await QueuedTask.Run(async () =>
             {
                 List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync();
@@ -132,7 +134,7 @@ namespace Geomapmaker.Data
                         }
                     }
                 }
-            });
+            }, ps.Progressor);
         }
 
         public static async Task AddSymbolToRenderer(string key, string symbolJson)

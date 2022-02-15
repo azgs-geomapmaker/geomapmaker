@@ -1,6 +1,8 @@
 ﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +11,56 @@ namespace Geomapmaker.Data
 {
     public class MapUnitPolys
     {
+
+        public static async void RebuildMapUnitPolygonsSymbology()
+        {
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (layer == null)
+            {
+                return;
+            }
+
+            List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
+
+            ProgressorSource ps = new ProgressorSource("Rebuilding Map Unit Poly Symbology...");
+
+            await QueuedTask.Run(async () =>
+            {
+                Table mupTable = layer.GetTable();
+
+                // Remove existing symbols
+                layer.SetRenderer(null);
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    PrefixClause = "DISTINCT",
+                    PostfixClause = "ORDER BY MapUnit",
+                    SubFields = "MapUnit"
+                };
+
+                using (RowCursor rowCursor = mupTable.Search(queryFilter))
+                {
+                    while (rowCursor.MoveNext())
+                    {
+                        using (Row row = rowCursor.Current)
+                        {
+                            string mapUnitKey = row["MapUnit"]?.ToString();
+
+                            MapUnit mapUnit = DMU.FirstOrDefault(a => a.MU == mapUnitKey);
+
+                            if (mapUnit != null)
+                            {
+                                await MapUnitPolys.AddSymbolToRenderer(mapUnit.MU, mapUnit.RGB.Item1, mapUnit.RGB.Item2, mapUnit.RGB.Item3);
+                            }
+                        }
+                    }
+                }
+
+            }, ps.Progressor);
+
+        }
+
         public static async Task AddSymbolToRenderer(string key, double R, double G, double B)
         {
             // Find the ContactsFaults layer
@@ -92,9 +144,5 @@ namespace Geomapmaker.Data
                 layer.SetRenderer(updatedRenderer);
             });
         }
-
-
-
-
     }
 }

@@ -45,7 +45,7 @@ namespace Geomapmaker.Data
                             CFSymbol cfS = new CFSymbol
                             {
                                 Key = row["key"].ToString(),
-                                Description = row["description"] == null ? "" : row["description"].ToString(),
+                                Description = row["description"]?.ToString(),
                                 SymbolJson = row["symbol"].ToString()
                             };
 
