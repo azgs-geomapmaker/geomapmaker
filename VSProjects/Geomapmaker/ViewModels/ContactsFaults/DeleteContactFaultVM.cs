@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using Geomapmaker.RibbonElements;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -50,6 +51,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // Refresh list of templates
                 ParentVM.RefreshTemplates();
             });
+
+            //Remove old symbology if needed.
+            Data.ContactsAndFaults.ResetContactsFaultsSymbology();
         }
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";

@@ -138,7 +138,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 EditingTemplate newTemplate = layer.CreateTemplate(GeomapmakerModule.CF_SketchTemplateName, GeomapmakerModule.CF_SketchTemplateName, insp, defaultTool, tags, filter.ToArray());
 
                 // Update Renderer
-                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                await Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
 
                 EditingTemplate tempTemplate = layer.GetTemplate(GeomapmakerModule.CF_SketchTemplateName);
 
@@ -215,7 +215,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
 
                 // Update Renderer
-                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                await Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
 
                 // Refresh list of templates
                 ParentVM.RefreshTemplates();

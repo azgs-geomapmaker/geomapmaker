@@ -5,6 +5,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using Geomapmaker.RibbonElements;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,7 +45,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 return;
             }
 
-            await QueuedTask.Run(async () =>
+            await QueuedTask.Run(() =>
             {
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
 
@@ -84,13 +85,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
                 // Create CIM template 
                 EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
-
-                // Update Renderer
-                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
-
-                // Refresh list of templates
-                ParentVM.RefreshTemplates();
             });
+
+            // Refresh list of templates
+            ParentVM.RefreshTemplates();
+
+            // Add new symbology if needed. Remove old symbology if needed.
+            Data.ContactsAndFaults.ResetContactsFaultsSymbology();
         }
 
         private bool IsValid()

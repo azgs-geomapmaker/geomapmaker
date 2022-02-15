@@ -16,12 +16,13 @@ namespace Geomapmaker.RibbonElements
     {
         protected override void OnClick()
         {
-            RebuildRenderers.ResetContactsFaultsSymbology();
-            RebuildRenderers.ResetMapUnitPolygonsSymbology();
+            ContactsAndFaults.ResetContactsFaultsSymbology();
+            //RebuildRenderers.ResetMapUnitPolygonsSymbology();
         }
     }
 
-    public class RebuildRenderers {
+    public class RebuildRenderers
+    {
 
         public static async void ResetMapUnitPolygonsSymbology()
         {
@@ -69,61 +70,5 @@ namespace Geomapmaker.RibbonElements
             });
 
         }
-
-        public static async void ResetContactsFaultsSymbology()
-        {
-            // CF Layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
-
-            if (layer == null)
-            {
-                return;
-            }
-
-            // Check if the symbol list has been populated 
-            if (CFSymbology.CFSymbolOptionsList == null)
-            {
-                await CFSymbology.RefreshCFSymbolOptions();
-            }
-
-            // Get the CF Symbology Options
-            List<CFSymbol> SymbolOptions = CFSymbology.CFSymbolOptionsList;
-
-            await QueuedTask.Run(async () =>
-            {
-                Table cfTable = layer.GetTable();
-
-                // Remove existing symbols
-                layer.SetRenderer(null);
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    PrefixClause = "DISTINCT",
-                    PostfixClause = "ORDER BY symbol",
-                    SubFields = "symbol"
-                };
-
-                using (RowCursor rowCursor = cfTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
-                    {
-                        using (Row row = rowCursor.Current)
-                        {
-                            string cfSymbolKey = row["symbol"]?.ToString();
-
-                            CFSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
-
-                            if (Symbol != null)
-                            {
-                                await CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-
     }
-
 }
