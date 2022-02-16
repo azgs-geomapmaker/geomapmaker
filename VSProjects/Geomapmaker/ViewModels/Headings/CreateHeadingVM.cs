@@ -15,14 +15,12 @@ namespace Geomapmaker.ViewModels.Headings
 {
     public class CreateHeadingVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandSave { get; }
+        public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
         public HeadingsViewModel ParentVM { get; set; }
 
         public CreateHeadingVM(HeadingsViewModel parentVM)
         {
-            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
-
             ParentVM = parentVM;
 
             // Initialize required values
@@ -127,11 +125,7 @@ namespace Geomapmaker.ViewModels.Headings
             }
             else
             {
-                ParentVM.RefreshMapUnitsAsync();
-
-                // Reset values
-                Name = "";
-                Description = "";
+                ParentVM.CloseProwindow();
             }
         }
 

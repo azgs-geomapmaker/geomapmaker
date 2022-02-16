@@ -41,7 +41,7 @@
             <TextBox Grid.Row="4" Grid.Column="1" MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
 
             <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Command="{Binding Create.CommandSave}">Save</Button>
             </StackPanel>
 

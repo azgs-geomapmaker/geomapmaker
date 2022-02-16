@@ -17,14 +17,13 @@ namespace Geomapmaker.ViewModels.Headings
 {
     public class EditHeadingVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandUpdate { get; }
+        public ICommand CommandUpdate => new RelayCommand(() => UpdateAsync(), () => CanUpdate());
 
         public HeadingsViewModel ParentVM { get; set; }
 
         public EditHeadingVM(HeadingsViewModel parentVM)
         {
             ParentVM = parentVM;
-            CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
         }
 
         /// <summary>
@@ -149,10 +148,7 @@ namespace Geomapmaker.ViewModels.Headings
             }
             else
             {
-                ParentVM.RefreshMapUnitsAsync();
-
-                // Reset values
-                Selected = null;
+                ParentVM.CloseProwindow();
             }
         }
 
