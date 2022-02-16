@@ -112,8 +112,8 @@
         </ListBox>
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}">Close</Button>
-            <Button Margin="5" Padding="5" Command="{Binding CommandSave}">Save</Button>
+            <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Close</Button>
+            <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSave}">Save</Button>
         </StackPanel>
 
     </Grid>

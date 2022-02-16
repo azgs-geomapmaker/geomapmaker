@@ -21,15 +21,14 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 {
     public class MapUnitPolysViewModel : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
     {
-        // Close the window command
-        public ICommand CommandCancel => new RelayCommand((proWindow) =>
-        {
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
+        public event EventHandler WindowCloseEvent;
 
-        }, () => true);
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public void CloseProwindow()
+        {
+            WindowCloseEvent(this, new EventArgs());
+        }
 
         // Create a Map Unit Polygon
         public ICommand CommandCreate => new RelayCommand(() => CreateAsync(), () => CanCreate());
@@ -252,7 +251,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                     {
                         insp.Load(layer, id);
 
-                        string label = insp["label"]?.ToString();
+                        string label = insp["type"]?.ToString();
 
                         ContactFaultOids.Add(id, label);
                     }
@@ -379,7 +378,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             _mapunitpolys = new Views.MapUnitPolys.MapUnitPolys
             {
-                Owner = FrameworkApplication.Current.MainWindow
+                Owner = System.Windows.Application.Current.MainWindow
             };
 
             _mapunitpolys.mapUnitPolysVM.RefreshMapUnitsAsync();
@@ -391,6 +390,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
                 _mapunitpolys = null;
             };
+
+            _mapunitpolys.mapUnitPolysVM.WindowCloseEvent += (s, e) => _mapunitpolys.Close();
 
             _mapunitpolys.Show();
         }

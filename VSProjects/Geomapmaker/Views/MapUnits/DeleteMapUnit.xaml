@@ -98,8 +98,8 @@
             <TextBox Grid.Row="23" Grid.Column="1" Text="{Binding Delete.GeoMaterialConfidence}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
             <StackPanel Grid.Row="24" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
-                <Button Margin="5" Padding="5" Command="{Binding Delete.CommandDelete}">Delete</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandDelete}">Delete</Button>
             </StackPanel>
 
         </Grid>
