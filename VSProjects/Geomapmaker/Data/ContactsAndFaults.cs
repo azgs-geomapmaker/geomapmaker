@@ -1,6 +1,8 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing.Templates;
+using ArcGIS.Desktop.Framework;
+using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -135,6 +137,15 @@ namespace Geomapmaker.Data
                         }
                     }
                 }
+
+                OperationManager opManager = MapView.Active.Map.OperationManager;
+
+                List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: ContactsAndFaults");
+                foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                {
+                    opManager.RemoveUndoOperation(undoOp);
+                }
+
             }, ps.Progressor);
         }
 
@@ -200,6 +211,5 @@ namespace Geomapmaker.Data
                 layer.SetRenderer(updatedRenderer);
             });
         }
-
     }
 }

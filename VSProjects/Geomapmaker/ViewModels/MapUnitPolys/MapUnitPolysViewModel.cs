@@ -97,6 +97,15 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                     templateDef.DefaultValues["Notes"] = null;
                     tmpTemplate.SetDefinition(templateDef);
 
+                    OperationManager opManager = MapView.Active.Map.OperationManager;
+
+                    // Remove Undo items we don't want users to be able to undo
+                    List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer definition: MapUnitPolys" || a.Name == "Update layer renderer: MapUnitPolys");
+                    foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                    {
+                        opManager.RemoveUndoOperation(undoOp);
+                    }
+
                     cfLayer.ClearSelection();
                     polyLayer.ClearSelection();
                 }

@@ -1,6 +1,8 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
+using ArcGIS.Desktop.Framework;
+using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -121,6 +123,20 @@ namespace Geomapmaker.Data
                 };
 
                 layer.SetRenderer(updatedRenderer);
+
+                OperationManager opManager = MapView.Active.Map.OperationManager;
+
+                List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer definition: MapUnitPolys" || a.Name == "Update layer renderer: MapUnitPolys");
+                foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                {
+                    opManager.RemoveUndoOperation(undoOp);
+                }
+
+                List<Operation> templateUndos = opManager.FindUndoOperations(a => a.Name == "New template" || a.Name == "Delete templates");
+                foreach (Operation undoOp in templateUndos)
+                {
+                    opManager.RemoveUndoOperation(undoOp);
+                }
 
             }, ps.Progressor);
         }
