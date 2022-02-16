@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels
+namespace Geomapmaker.ViewModels.Hierarchy
 {
     public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
     {
@@ -230,7 +230,7 @@ namespace Geomapmaker.ViewModels
             }
             else
             {
-                // Reset
+                // Close window
             }
         }
 
@@ -286,8 +286,7 @@ namespace Geomapmaker.ViewModels
 
     internal class ShowHierarchy : Button
     {
-
-        private Views.Hierarchy _hierarchy = null;
+        private Views.Hierarchy.Hierarchy _hierarchy = null;
 
         protected override async void OnClick()
         {
@@ -297,7 +296,7 @@ namespace Geomapmaker.ViewModels
                 return;
             }
 
-            _hierarchy = new Views.Hierarchy
+            _hierarchy = new Views.Hierarchy.Hierarchy
             {
                 Owner = Application.Current.MainWindow
             };
