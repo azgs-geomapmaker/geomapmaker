@@ -112,7 +112,7 @@
         </ListBox>
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding ElementName=ProWindowDialogWin}">Close</Button>
+            <Button Margin="5" Padding="5" Command="{Binding CommandCancel}">Close</Button>
             <Button Margin="5" Padding="5" Command="{Binding CommandSave}">Save</Button>
         </StackPanel>
 
