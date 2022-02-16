@@ -6,6 +6,7 @@ using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
@@ -122,7 +123,58 @@ namespace Geomapmaker.Data
                 layer.SetRenderer(updatedRenderer);
 
             }, ps.Progressor);
+        }
 
+        public static async Task<List<MapUnitPolyTemplate>> GetMapUnitPolyTemplatesAsync()
+        {
+            // List of templates to return
+            List<MapUnitPolyTemplate> mupTemplates = new List<MapUnitPolyTemplate>();
+
+            IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
+
+            // Find the ContactsFaults layer
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (layer == null)
+            {
+                return mupTemplates;
+            }
+
+            List<MapUnit> dmu = await DescriptionOfMapUnits.GetMapUnitsAsync();
+
+            await QueuedTask.Run(() =>
+            {
+                // Get templates from CF layer
+                layerTemplates = layer.GetTemplates();
+
+                foreach (EditingTemplate template in layerTemplates)
+                {
+                    // Skip over the default template
+                    if (template.Name != "MapUnitPolys")
+                    {
+                        // Get CIMFeatureTemplate
+                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+
+                        string muKey = templateDef.DefaultValues["mapunit"].ToString();
+
+                        MapUnit mapUnit = dmu.Where(a => a.MU == muKey).FirstOrDefault();
+
+                        MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
+                        {
+                            MapUnit = muKey,
+                            HexColor = mapUnit.HexColor,
+                            Tooltip = mapUnit.Tooltip,
+                            DataSourceID = templateDef.DefaultValues["datasourceid"].ToString(),
+                            Template = template
+                        };
+
+                        mupTemplates.Add(tmpTemplate);
+                    }
+                }
+
+            });
+
+            return mupTemplates;
         }
     }
 }

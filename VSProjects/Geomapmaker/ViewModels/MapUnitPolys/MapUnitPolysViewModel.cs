@@ -1,4 +1,5 @@
-﻿using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
@@ -68,34 +69,21 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             // Map Unit Poly layer
             FeatureLayer polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
 
-            EditingTemplate newTemplate;
-
             await QueuedTask.Run(() =>
             {
-                // Check if there is a Temporary template
-                EditingTemplate tmpTemplate = polyLayer.GetTemplate("Temporary");
+                EditingTemplate tmpTemplate = polyLayer.GetTemplate(Selected.MapUnit);
 
-                if (tmpTemplate != null)
-                {
-                    // Remove the template
-                    polyLayer.RemoveTemplate("Temporary");
-                }
+                CIMFeatureTemplate templateDef = tmpTemplate.GetDefinition() as CIMFeatureTemplate;
 
-                Inspector insp = new Inspector();
-                insp.LoadSchema(polyLayer);
+                templateDef.DefaultValues["IdentityConfidence"] = IdentityConfidence;
+                templateDef.DefaultValues["Notes"] = Notes;
 
-                // Set attributes
-                insp["Symbol"] = Selected.Symbol;
-                insp["MapUnit"] = Selected.MU;
-                insp["IdentityConfidence"] = IdentityConfidence;
-                insp["Notes"] = Notes;
-                insp["DataSourceID"] = DataSource;
+                tmpTemplate.SetDefinition(templateDef);
 
-                // Create the temporary template
-                newTemplate = polyLayer.CreateTemplate("Temporary", "Temporary", insp);
+                EditingTemplate updatedTemplate = polyLayer.GetTemplate(Selected.MapUnit);
 
                 // Contruct polygons from cf lines
-                op.ConstructPolygons(newTemplate, cfLayer, ContactFaultOids.Keys, null, false);
+                op.ConstructPolygons(updatedTemplate, cfLayer, ContactFaultOids.Keys, null, false);
 
                 op.Execute();
 
@@ -103,6 +91,11 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 if (op.IsSucceeded)
                 {
                     ContactFaultOids = new Dictionary<long, string>();
+
+                    // Reset default values
+                    templateDef.DefaultValues["IdentityConfidence"] = null;
+                    templateDef.DefaultValues["Notes"] = null;
+                    tmpTemplate.SetDefinition(templateDef);
 
                     cfLayer.ClearSelection();
                     polyLayer.ClearSelection();
@@ -114,7 +107,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                     RaiseErrorsChanged("SelectedOid");
                 }
 
-                polyLayer.RemoveTemplate(newTemplate);
             });
 
         }
@@ -164,8 +156,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         public string SelectedOid { get; set; }
 
-        private List<MapUnit> _mapUnits { get; set; }
-        public List<MapUnit> MapUnits
+        private List<MapUnitPolyTemplate> _mapUnits { get; set; }
+        public List<MapUnitPolyTemplate> MapUnits
         {
             get => _mapUnits;
             set
@@ -175,8 +167,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             }
         }
 
-        private MapUnit _selected;
-        public MapUnit Selected
+        private MapUnitPolyTemplate _selected;
+        public MapUnitPolyTemplate Selected
         {
             get => _selected;
             set
@@ -280,9 +272,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         public async void RefreshMapUnitsAsync()
         {
-            List<MapUnit> mapUnitList = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
-
-            MapUnits = mapUnitList.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name).ToList();
+            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+            MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
         }
 
         #region INotifyPropertyChanged
@@ -331,7 +322,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             RaiseErrorsChanged(propertyKey);
         }
 
-        private void ValidateMapUnit(MapUnit selected, string propertyKey)
+        private void ValidateMapUnit(MapUnitPolyTemplate selected, string propertyKey)
         {
             // Required field
             if (selected == null)

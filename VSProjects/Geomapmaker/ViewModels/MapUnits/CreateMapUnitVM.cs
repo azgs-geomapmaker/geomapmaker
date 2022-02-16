@@ -217,7 +217,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 return;
             }
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(async () =>
+            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
                 IEnumerable<EditingTemplate> currentTemplates = mup.GetTemplates();
 
