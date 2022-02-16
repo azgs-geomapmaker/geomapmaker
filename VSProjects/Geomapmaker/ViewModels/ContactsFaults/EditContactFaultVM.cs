@@ -87,11 +87,10 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
             });
 
-            // Refresh list of templates
-            ParentVM.RefreshTemplates();
-
             // Add new symbology if needed. Remove old symbology if needed.
             Data.ContactsAndFaults.ResetContactsFaultsSymbology();
+
+            ParentVM.CloseProwindow();
         }
 
         private bool IsValid()

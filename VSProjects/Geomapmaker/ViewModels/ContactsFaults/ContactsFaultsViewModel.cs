@@ -14,14 +14,14 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 {
     public class ContactsFaultsViewModel : ProWindow, INotifyPropertyChanged
     {
-        public ICommand CommandClose => new RelayCommand((proWindow) =>
-        {
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
+        public event EventHandler WindowCloseEvent;
 
-        }, () => true);
+        public ICommand CommandClose => new RelayCommand(() => CloseProwindow());
+
+        public void CloseProwindow()
+        {
+            WindowCloseEvent(this, new EventArgs());
+        }
 
         public CreateContactFaultVM Create { get; set; }
         public EditContactFaultVM Edit { get; set; }
@@ -119,16 +119,12 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             _contactsfaults.Closed += (o, e) =>
             {
-                ResetMapTool(o, e);
                 _contactsfaults = null;
             };
 
-            _contactsfaults.Show();
-        }
+            _contactsfaults.contactsFaultsVM.WindowCloseEvent += (s, e) => _contactsfaults.Close();
 
-        private void ResetMapTool(object sender, EventArgs e)
-        {
-            FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+            _contactsfaults.Show();
         }
     }
 }

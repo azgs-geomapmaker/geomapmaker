@@ -54,6 +54,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             //Remove old symbology if needed.
             Data.ContactsAndFaults.ResetContactsFaultsSymbology();
+
+            ParentVM.CloseProwindow();
         }
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";

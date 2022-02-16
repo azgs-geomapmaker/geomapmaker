@@ -2,7 +2,6 @@
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -21,7 +20,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
     {
         public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => IsValidTemplate());
 
-        public ICommand CommandSketch => new RelayCommand(async (proWindow) => await CreateSketchAsync(proWindow), () => IsValidSketch());
+        public ICommand CommandSketch => new RelayCommand(async () => await CreateSketchAsync(), () => IsValidSketch());
 
         public ContactsFaultsViewModel ParentVM { get; set; }
 
@@ -67,7 +66,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
-        private async Task CreateSketchAsync(object proWindow)
+        private async Task CreateSketchAsync()
         {
             // Find the ContactsFaults layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
@@ -76,12 +75,6 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 MessageBox.Show("ContactsAndFaults layer not found in active map.");
                 return;
-            }
-
-            // Close the window
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
             }
 
             await QueuedTask.Run(async () =>
@@ -144,6 +137,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // Activate tool for the temp template
                 await tempTemplate.ActivateDefaultToolAsync();
             });
+
+            ParentVM.CloseProwindow();
         }
 
         /// <summary>
@@ -216,12 +211,10 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 // Update Renderer
                 await Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
 
-                // Refresh list of templates
-                ParentVM.RefreshTemplates();
-
-                // Reset label 
-                Label = "";
+                await newTemplate.ActivateDefaultToolAsync();
             });
+
+            ParentVM.CloseProwindow();
         }
 
         public void PrepopulateCF(ContactFaultTemplate cf)
