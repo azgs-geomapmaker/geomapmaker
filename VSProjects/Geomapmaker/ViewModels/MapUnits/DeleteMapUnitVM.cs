@@ -163,7 +163,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             else
             {
                 // Add new symbology if needed. Remove old symbology if needed.
-                Data.MapUnitPolys.RebuildMapUnitPolygonsSymbology();
+                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
                 ParentVM.RefreshMapUnitsAsync();
 

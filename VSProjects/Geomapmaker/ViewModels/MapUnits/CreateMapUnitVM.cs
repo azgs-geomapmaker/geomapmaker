@@ -279,23 +279,8 @@ namespace Geomapmaker.ViewModels.MapUnits
                     return;
                 }
 
-                // Update MapUnitPoly renderer
-                await Data.MapUnitPolys.AddSymbolToRenderer(MapUnit, Color.Value.R, Color.Value.G, Color.Value.B);
-
-                // load the schema
-                Inspector insp = new Inspector();
-                insp.LoadSchema(mup);
-
-                insp["MapUnit"] = MapUnit;
-                insp["DataSourceID"] = GeomapmakerModule.DataSourceId;
-
-                // Tags
-                string[] tags = new[] { "MapUnitPoly" };
-
-                string defaultTool = "esri_editing_ConstructPolygonsTool";
-
-                // Create CIM template 
-                EditingTemplate newTemplate = mup.CreateTemplate(MapUnit, MapUnit, insp, defaultTool, tags);
+                // Update symbology and templates
+                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
                 ParentVM.RefreshMapUnitsAsync();
 

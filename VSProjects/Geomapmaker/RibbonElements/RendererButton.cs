@@ -17,7 +17,7 @@ namespace Geomapmaker.RibbonElements
         protected override void OnClick()
         {
             ContactsAndFaults.ResetContactsFaultsSymbology();
-            MapUnitPolys.RebuildMapUnitPolygonsSymbology();
+            MapUnitPolys.RebuildMUPSymbologyAndTemplates();
         }
     }
 }
