@@ -1,5 +1,4 @@
 ﻿using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -101,10 +100,10 @@ namespace Geomapmaker.Data
                 }
 
                 CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
-                        new CIMUniqueValue {
-                            FieldValues = new string[] { key }
-                        }
-                    };
+                    new CIMUniqueValue {
+                        FieldValues = new string[] { key }
+                    }
+                };
 
 
                 CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
@@ -117,7 +116,7 @@ namespace Geomapmaker.Data
                     fill
                 };
 
-                var polySymbol = new CIMPolygonSymbol()
+                CIMPolygonSymbol polySymbol = new CIMPolygonSymbol()
                 {
                     SymbolLayers = symbolLayers
                 };

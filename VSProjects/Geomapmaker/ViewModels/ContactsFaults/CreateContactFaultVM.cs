@@ -130,7 +130,6 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 string defaultTool = "esri_editing_LineConstructor";
 
                 // TODO remove tools below 
-                // filter - use daml-id
                 List<string> filter = new List<string>();
                 //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
 

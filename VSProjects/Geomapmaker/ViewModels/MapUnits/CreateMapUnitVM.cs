@@ -1,5 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
+using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
@@ -207,8 +209,24 @@ namespace Geomapmaker.ViewModels.MapUnits
                 return;
             }
 
+            FeatureLayer mup = MapView.Active?.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (mup == null)
+            {
+                MessageBox.Show("MapUnitPolys not found in active map.");
+                return;
+            }
+
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(async () =>
             {
+                IEnumerable<EditingTemplate> currentTemplates = mup.GetTemplates();
+
+                if (currentTemplates.Any(a => a.Name == "MapUnitPolys"))
+                {
+                    // Remove the default template
+                    mup.RemoveTemplate("MapUnitPolys");
+                }
+
                 try
                 {
                     Table enterpriseTable = dmu.GetTable();
@@ -255,16 +273,30 @@ namespace Geomapmaker.ViewModels.MapUnits
                     }
                 }
 
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    MessageBox.Show(errorMessage, "One or more errors occured.");
+                    return;
+                }
+
                 // Update MapUnitPoly renderer
                 await Data.MapUnitPolys.AddSymbolToRenderer(MapUnit, Color.Value.R, Color.Value.G, Color.Value.B);
-            });
 
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
-            }
-            else
-            {
+                // load the schema
+                Inspector insp = new Inspector();
+                insp.LoadSchema(mup);
+
+                insp["MapUnit"] = MapUnit;
+                insp["DataSourceID"] = GeomapmakerModule.DataSourceId;
+
+                // Tags
+                string[] tags = new[] { "MapUnitPoly" };
+
+                string defaultTool = "esri_editing_ConstructPolygonsTool";
+
+                // Create CIM template 
+                EditingTemplate newTemplate = mup.CreateTemplate(MapUnit, MapUnit, insp, defaultTool, tags);
+
                 ParentVM.RefreshMapUnitsAsync();
 
                 // Reset values
@@ -279,7 +311,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Color = null;
                 GeoMaterial = null;
                 GeoMaterialConfidence = null;
-            }
+            });
         }
 
         #region ### Validation ####
