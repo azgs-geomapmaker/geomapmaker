@@ -91,6 +91,10 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(async () =>
             {
+                // Remove existing symbols
+                layer.SetRenderer(null);
+
+                // Get all CF templates
                 List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync();
 
                 foreach (var template in cfTemplates)
@@ -105,9 +109,6 @@ namespace Geomapmaker.Data
                 }
 
                 Table cfTable = layer.GetTable();
-
-                // Remove existing symbols
-                layer.SetRenderer(null);
 
                 QueryFilter queryFilter = new QueryFilter
                 {

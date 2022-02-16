@@ -21,41 +21,52 @@ namespace Geomapmaker.Data
                 return;
             }
 
-            List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
-
             ProgressorSource ps = new ProgressorSource("Rebuilding Map Unit Poly Symbology...");
 
             await QueuedTask.Run(async () =>
             {
-                Table mupTable = layer.GetTable();
-
                 // Remove existing symbols
                 layer.SetRenderer(null);
 
-                QueryFilter queryFilter = new QueryFilter
+                // Get all DMUs
+                List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
+
+                foreach (MapUnit mu in DMU)
                 {
-                    PrefixClause = "DISTINCT",
-                    PostfixClause = "ORDER BY MapUnit",
-                    SubFields = "MapUnit"
-                };
-
-                using (RowCursor rowCursor = mupTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
-                    {
-                        using (Row row = rowCursor.Current)
-                        {
-                            string mapUnitKey = row["MapUnit"]?.ToString();
-
-                            MapUnit mapUnit = DMU.FirstOrDefault(a => a.MU == mapUnitKey);
-
-                            if (mapUnit != null)
-                            {
-                                await MapUnitPolys.AddSymbolToRenderer(mapUnit.MU, mapUnit.RGB.Item1, mapUnit.RGB.Item2, mapUnit.RGB.Item3);
-                            }
-                        }
-                    }
+                    // Add symbology for all the DMUs
+                    await AddSymbolToRenderer(mu.MU, mu.RGB.Item1, mu.RGB.Item2, mu.RGB.Item3);
                 }
+
+                //
+                // We only need to add symbology from DMU, not existing map units
+                //
+
+                //Table mupTable = layer.GetTable();
+
+                //QueryFilter queryFilter = new QueryFilter
+                //{
+                //    PrefixClause = "DISTINCT",
+                //    PostfixClause = "ORDER BY MapUnit",
+                //    SubFields = "MapUnit"
+                //};
+
+                //using (RowCursor rowCursor = mupTable.Search(queryFilter))
+                //{
+                //    while (rowCursor.MoveNext())
+                //    {
+                //        using (Row row = rowCursor.Current)
+                //        {
+                //            string mapUnitKey = row["MapUnit"]?.ToString();
+
+                //            MapUnit mapUnit = DMU.FirstOrDefault(a => a.MU == mapUnitKey);
+
+                //            if (mapUnit != null)
+                //            {
+                //                await AddSymbolToRenderer(mapUnit.MU, mapUnit.RGB.Item1, mapUnit.RGB.Item2, mapUnit.RGB.Item3);
+                //            }
+                //        }
+                //    }
+                //}
 
             }, ps.Progressor);
 
