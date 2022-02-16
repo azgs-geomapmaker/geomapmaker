@@ -3,24 +3,23 @@ using ArcGIS.Desktop.Framework.Contracts;
 using System.Windows.Input;
 using ArcGIS.Desktop.Framework;
 using Geomapmaker.Models;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System;
 
 namespace Geomapmaker.ViewModels.DataSources
 {
     public class DataSourcesViewModel : ProWindow, INotifyPropertyChanged
     {
-        public ICommand CommandCancel => new RelayCommand((proWindow) =>
-        {
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
+        public event EventHandler WindowCloseEvent;
 
-        }, () => true);
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public void CloseProwindow()
+        {
+            WindowCloseEvent(this, new EventArgs());
+        }
 
         public CreateDataSourceVM Create { get; set; }
         public EditDataSourceVM Edit { get; set; }
@@ -81,6 +80,8 @@ namespace Geomapmaker.ViewModels.DataSources
             _datasources.dataSourcesVM.RefreshDataSourcesAsync();
 
             _datasources.Closed += (o, e) => { _datasources = null; };
+
+            _datasources.dataSourcesVM.WindowCloseEvent += (s, e) => _datasources.Close();
 
             _datasources.Show();
         }

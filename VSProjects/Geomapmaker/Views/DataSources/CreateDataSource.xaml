@@ -54,7 +54,7 @@
             <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3"/>
 
             <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
+                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Command="{Binding Create.CommandSave}">Save</Button>
             </StackPanel>
 

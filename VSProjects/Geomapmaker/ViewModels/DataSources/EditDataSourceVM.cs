@@ -17,12 +17,11 @@ namespace Geomapmaker.ViewModels.DataSources
 {
     public class EditDataSourceVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandUpdate { get; }
+        public ICommand CommandUpdate => new RelayCommand(() => UpdateAsync(), () => CanUpdate());
 
         public EditDataSourceVM(DataSourcesViewModel parentVM)
         {
             ParentVM = parentVM;
-            CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
         }
 
         public DataSourcesViewModel ParentVM { get; set; }
@@ -165,9 +164,7 @@ namespace Geomapmaker.ViewModels.DataSources
             }
             else
             {
-                ParentVM.RefreshDataSourcesAsync();
-
-                Selected = null;
+                ParentVM.CloseProwindow();
             }
         }
 
