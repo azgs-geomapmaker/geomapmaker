@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Windows.Controls;
 
 namespace Geomapmaker.Models
 {
@@ -113,6 +114,10 @@ namespace Geomapmaker.Models
 
     public class MapUnitTreeItem : MapUnit
     {
+        public bool IsExpanded { get; set; }
+
+        public bool IsSelected { get; set; }
+
         public ObservableCollection<MapUnitTreeItem> Children { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
         public bool CanAcceptChildren => string.IsNullOrEmpty(ParagraphStyle) || ParagraphStyle == "Heading";
