@@ -126,7 +126,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             });
 
             // Update Renderer
-            await Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+            Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             });
 
             // Update Renderer
-            await Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+            Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
         }
 
         public void PrepopulateCF(ContactFaultTemplate cf)

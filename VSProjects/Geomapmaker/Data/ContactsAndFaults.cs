@@ -114,7 +114,7 @@ namespace Geomapmaker.Data
                     if (Symbol != null)
                     {
                         // Add symbology for templates
-                        await AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
                     }
                 }
 
@@ -140,7 +140,7 @@ namespace Geomapmaker.Data
                             if (Symbol != null)
                             {
                                 // Add symbology for existing CF polylines
-                                await AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
                             }
                         }
                     }
@@ -157,7 +157,7 @@ namespace Geomapmaker.Data
             }, ps.Progressor);
         }
 
-        public static async Task AddSymbolToRenderer(string key, string symbolJson)
+        public static async void AddSymbolToRenderer(string key, string symbolJson)
         {
             // Find the ContactsFaults layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
