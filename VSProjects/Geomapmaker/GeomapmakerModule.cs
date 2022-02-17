@@ -11,6 +11,8 @@ namespace Geomapmaker
 
         public const string CF_SketchTemplateName = "Sketch";
 
+        public const string MUP_UnassignedTemplateName = "Unassigned";
+
         /// <summary>
         /// Retrieve the singleton instance to this module here
         /// </summary>
