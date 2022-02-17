@@ -14,7 +14,7 @@ namespace Geomapmaker.Data
 {
     public class ContactsAndFaults
     {
-        public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync()
+        public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync(bool filter = false)
         {
             // List of templates to return
             List<ContactFaultTemplate> contactFaultTemplates = new List<ContactFaultTemplate>();
@@ -34,35 +34,43 @@ namespace Geomapmaker.Data
                 // Get templates from CF layer
                 layerTemplates = layer.GetTemplates();
 
+                if (filter)
+                {
+                    // Remove the sketch template
+                    layerTemplates = layerTemplates.Where(a => a.Name != GeomapmakerModule.CF_SketchTemplateName);
+
+                    // If there is more than one template remove the default template
+                    if (layerTemplates.Count() > 1)
+                    {
+                        layerTemplates = layerTemplates.Where(a => a.Name != "ContactsAndFaults");
+                    }
+                }
+
                 foreach (EditingTemplate template in layerTemplates)
                 {
-                    // Skip over the default and the one-off sketch templates
-                    if (template.Name != "ContactsAndFaults" && template.Name != GeomapmakerModule.CF_SketchTemplateName)
+                    // Get CIMFeatureTemplate
+                    CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+
+                    ContactFaultTemplate tmpTemplate = new ContactFaultTemplate()
                     {
-                        // Get CIMFeatureTemplate
-                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                        Type = templateDef.DefaultValues["type"].ToString(),
+                        Label = templateDef.DefaultValues["label"].ToString(),
+                        Symbol = templateDef.DefaultValues["symbol"].ToString(),
+                        IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString(),
+                        ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString(),
+                        LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString(),
+                        IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y",
+                        DataSource = templateDef.DefaultValues["datasourceid"].ToString(),
+                        Template = template
+                    };
 
-                        ContactFaultTemplate tmpTemplate = new ContactFaultTemplate()
-                        {
-                            Type = templateDef.DefaultValues["type"].ToString(),
-                            Label = templateDef.DefaultValues["label"].ToString(),
-                            Symbol = templateDef.DefaultValues["symbol"].ToString(),
-                            IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString(),
-                            ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString(),
-                            LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString(),
-                            IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y",
-                            DataSource = templateDef.DefaultValues["datasourceid"].ToString(),
-                            Template = template
-                        };
-
-                        // Notes is an optional field
-                        if (templateDef.DefaultValues.ContainsKey("notes"))
-                        {
-                            tmpTemplate.Notes = templateDef.DefaultValues["notes"].ToString();
-                        }
-
-                        contactFaultTemplates.Add(tmpTemplate);
+                    // Notes is an optional field
+                    if (templateDef.DefaultValues.ContainsKey("notes"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["notes"].ToString();
                     }
+
+                    contactFaultTemplates.Add(tmpTemplate);
                 }
 
             });
@@ -99,7 +107,7 @@ namespace Geomapmaker.Data
                 // Get all CF templates
                 List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync();
 
-                foreach (var template in cfTemplates)
+                foreach (ContactFaultTemplate template in cfTemplates)
                 {
                     CFSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == template.Symbol);
 
