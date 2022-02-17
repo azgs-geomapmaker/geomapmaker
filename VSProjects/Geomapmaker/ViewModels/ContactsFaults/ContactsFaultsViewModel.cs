@@ -76,7 +76,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public async void RefreshTemplates()
         {
             // Get templates except for default and sketch
-            Templates = await Data.ContactsAndFaults.GetContactFaultTemplatesAsync(true);
+            Templates = await Data.ContactsAndFaults.GetContactFaultTemplatesAsync(true, true);
         }
 
         #region INotifyPropertyChanged
