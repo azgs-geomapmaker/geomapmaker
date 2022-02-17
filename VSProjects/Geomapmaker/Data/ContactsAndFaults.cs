@@ -102,7 +102,7 @@ namespace Geomapmaker.Data
             await QueuedTask.Run(async () =>
             {
                 // Remove existing symbols
-                layer.SetRenderer(null);
+                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
                 // Get all CF templates
                 List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync();

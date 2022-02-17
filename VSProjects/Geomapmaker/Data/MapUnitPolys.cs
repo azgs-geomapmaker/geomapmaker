@@ -28,7 +28,7 @@ namespace Geomapmaker.Data
             await QueuedTask.Run(async () =>
             {
                 // Remove all existing symbols
-                layer.SetRenderer(null);
+                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
                 // Remove all templates
                 foreach (EditingTemplate temp in layer.GetTemplates())
