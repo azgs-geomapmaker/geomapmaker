@@ -61,11 +61,7 @@ namespace Geomapmaker.RibbonElements
 
                 op.Execute();
 
-                if (op.IsSucceeded)
-                {
-
-                }
-
+                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             });
         }
     }

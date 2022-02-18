@@ -27,17 +27,25 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(async () =>
             {
+                // Get all DMUs
+                List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
+
+                if (DMU.Count == 0)
+                {
+                    // No DMUs
+                    return;
+                }
+
                 // Remove all existing symbols
                 layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
-                // Remove all templates
-                foreach (EditingTemplate temp in layer.GetTemplates())
+                IEnumerable<EditingTemplate> mupTemplates = layer.GetTemplates();
+
+                // Loop over templates
+                foreach (EditingTemplate temp in mupTemplates)
                 {
                     layer.RemoveTemplate(temp);
                 }
-
-                // Get all DMUs
-                List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
 
                 // Init new list of Unique Value CIMs
                 List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
