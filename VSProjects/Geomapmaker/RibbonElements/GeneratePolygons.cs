@@ -1,10 +1,12 @@
 ﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Geomapmaker.RibbonElements
@@ -51,35 +53,18 @@ namespace Geomapmaker.RibbonElements
                     tmpTemplate = polyLayer.CreateTemplate(templateName, templateName, insp);
                 }
 
-                //CIMFeatureTemplate templateDef = tmpTemplate.GetDefinition() as CIMFeatureTemplate;
+                Selection cf_Collection = cfLayer.Select();
 
-                //templateDef.DefaultValues["IdentityConfidence"] = IdentityConfidence;
-                //templateDef.DefaultValues["Notes"] = Notes;
+                IReadOnlyList<long> ContactFaultOids = cf_Collection.GetObjectIDs();
 
-                //tmpTemplate.SetDefinition(templateDef);
+                op.ConstructPolygons(tmpTemplate, cfLayer, ContactFaultOids, null, true);
 
-                //EditingTemplate updatedTemplate = polyLayer.GetTemplate(Selected.MapUnit);
+                op.Execute();
 
+                if (op.IsSucceeded)
+                {
 
-
-                var foo = cfLayer.Select();
-
-
-
-                //// Contruct polygons from cf lines
-                //op.ConstructPolygons(tmpTemplate, cfLayer, ContactFaultOids.Keys, null, false);
-
-                //op.Execute();
-
-                //// Check if the polygon create was a success
-                //if (op.IsSucceeded)
-                //{
-
-                //}
-                //else
-                //{
-
-                //}
+                }
 
             });
         }
