@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
@@ -173,8 +174,8 @@ namespace Geomapmaker.Data
 
                 foreach (EditingTemplate template in layerTemplates)
                 {
-                    // Skip over the default template
-                    if (template.Name != "MapUnitPolys")
+                    // Skip over the default template and Unassigned (for now)
+                    if (template.Name != "MapUnitPolys" && template.Name != "Unassigned")
                     {
                         // Get CIMFeatureTemplate
                         CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
