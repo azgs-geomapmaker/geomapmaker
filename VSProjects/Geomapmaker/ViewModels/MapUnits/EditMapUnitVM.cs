@@ -21,16 +21,13 @@ namespace Geomapmaker.ViewModels.MapUnits
 {
     public class EditMapUnitVM : DockPane, INotifyDataErrorInfo
     {
-        // Edits's save button
-        public ICommand CommandUpdate { get; }
+        // Edits's save button 
+        public ICommand CommandUpdate => new RelayCommand(() => UpdateAsync(), () => CanUpdate());
 
         public MapUnitsViewModel ParentVM { get; set; }
 
         public EditMapUnitVM(MapUnitsViewModel parentVM)
         {
-            // Init commands
-            CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
-
             ParentVM = parentVM;
         }
 
@@ -326,10 +323,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 // Add new symbology/templates if needed. Remove old symbology/templates if needed.
                 Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
-                ParentVM.RefreshMapUnitsAsync();
-
-                // Reset values
-                Selected = null;
+                ParentVM.CloseProwindow();
             }
         }
 

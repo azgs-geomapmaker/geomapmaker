@@ -1,11 +1,9 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -272,31 +270,19 @@ namespace Geomapmaker.ViewModels.MapUnits
                         errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
                 }
+            });
 
-                if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    MessageBox.Show(errorMessage, "One or more errors occured.");
-                    return;
-                }
-
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
+            {
                 // Update symbology and templates
                 Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
-                ParentVM.RefreshMapUnitsAsync();
-
-                // Reset values
-                MapUnit = null;
-                Name = null;
-                FullName = null;
-                OlderInterval = null;
-                YoungerInterval = null;
-                RelativeAge = null;
-                Description = null;
-                Label = null;
-                Color = null;
-                GeoMaterial = null;
-                GeoMaterialConfidence = null;
-            });
+                ParentVM.CloseProwindow();
+            }
         }
 
         #region ### Validation ####

@@ -29,9 +29,11 @@ namespace Geomapmaker.Data
             await QueuedTask.Run(async () =>
             {
                 // Get all DMUs
-                List<MapUnit> DMU = await DescriptionOfMapUnits.GetMapUnitsAsync();
+                List<MapUnit> allDMUs = await DescriptionOfMapUnits.GetMapUnitsAsync();
 
-                if (DMU.Count == 0)
+                List<MapUnit> StandardDMUs = allDMUs.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name).ToList();
+
+                if (StandardDMUs.Count == 0)
                 {
                     // No DMUs
                     return;
@@ -51,7 +53,7 @@ namespace Geomapmaker.Data
                 // Init new list of Unique Value CIMs
                 List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
 
-                foreach (MapUnit mu in DMU)
+                foreach (MapUnit mu in StandardDMUs)
                 {
                     //
                     // Update Renderer
