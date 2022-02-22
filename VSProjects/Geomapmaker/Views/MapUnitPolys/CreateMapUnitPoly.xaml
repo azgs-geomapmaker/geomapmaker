@@ -1,50 +1,23 @@
-﻿<controls:ProWindow x:Class="Geomapmaker.Views.MapUnitPolys.MapUnitPolys"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:controls="clr-namespace:ArcGIS.Desktop.Framework.Controls;assembly=ArcGIS.Desktop.Framework"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
-        xmlns:tabData="clr-namespace:Geomapmaker.Views.MapUnitPolys"
-        mc:Ignorable="d"
-        Title="Map Unit Polys"
-        Height="600" 
-        Width="400"
-        MinHeight="550" 
-        MinWidth="350"
-        WindowStartupLocation="CenterOwner"
-    >
-    <controls:ProWindow.Resources>
+﻿<UserControl x:Class="Geomapmaker.Views.MapUnitPolys.CreateMapUnitPoly"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:data="clr-namespace:Geomapmaker.Data" 
+             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" 
+             xmlns:local="clr-namespace:Geomapmaker.Views.MapUnitPolys"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
                 <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </controls:ProWindow.Resources>
+    </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <TabControl Grid.Row="0" Grid.Column="0">
-            <TabItem Header="Create" >
-                <tabData:CreateMapUnitPoly />
-            </TabItem>
-            <TabItem Header="Edit">
-                <tabData:EditMapUnitPoly />
-            </TabItem>
-            <TabItem Header="Delete">
-                <tabData:DeleteMapUnitPoly />
-            </TabItem>
-        </TabControl>
-    </Grid>
-
-    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
@@ -99,7 +72,7 @@
                         </Validation.ErrorTemplate>
                     </ListBox>
 
-                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding CommandClearOids}" >Clear Selections</Button>
+                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding CommandClearOids}" >Clear</Button>
 
                 </Grid>
             </AdornerDecorator>
@@ -131,6 +104,6 @@
             <Button Padding="5" Command="{Binding CommandCreate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Create</Button>
         </StackPanel>
 
-    </Grid>-->
+    </Grid>
 
-</controls:ProWindow>
+</UserControl>

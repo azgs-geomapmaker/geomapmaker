@@ -204,10 +204,22 @@
     <Compile Include="MapTools\MapUnitPolyTool.cs" />
     <Compile Include="Models\MapUnitPolyTemplate.cs" />
     <Compile Include="RibbonElements\RendererButton.cs" />
+    <Compile Include="ViewModels\MapUnitPolys\DeleteMapUnitPolysVM.cs" />
+    <Compile Include="ViewModels\MapUnitPolys\EditMapUnitPolysVM.cs" />
+    <Compile Include="ViewModels\MapUnitPolys\CreateMapUnitPolysVM.cs" />
     <Compile Include="ViewModels\MapUnitPolys\MapUnitPolysViewModel.cs" />
     <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="Data\ContactsAndFaults.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
+    <Compile Include="Views\MapUnitPolys\CreateMapUnitPoly.xaml.cs">
+      <DependentUpon>CreateMapUnitPoly.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnitPolys\DeleteMapUnitPoly.xaml.cs">
+      <DependentUpon>DeleteMapUnitPoly.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapUnitPolys\EditMapUnitPoly.xaml.cs">
+      <DependentUpon>EditMapUnitPoly.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MapUnitPolys\MapUnitPolys.xaml.cs">
       <DependentUpon>MapUnitPolys.xaml</DependentUpon>
     </Compile>
@@ -304,6 +316,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\MapUnitPolys\CreateMapUnitPoly.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnitPolys\DeleteMapUnitPoly.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapUnitPolys\EditMapUnitPoly.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MapUnitPolys\MapUnitPolys.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

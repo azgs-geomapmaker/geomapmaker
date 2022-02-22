@@ -62,7 +62,7 @@ namespace Geomapmaker.MapTools
 
                 if (oidsCF.Count > 0)
                 {
-                    mapUnitPolyVM.Set_CF_Oids(oidsCF);
+                    mapUnitPolyVM.Create.Set_CF_Oids(oidsCF);
                 }
             });
 
