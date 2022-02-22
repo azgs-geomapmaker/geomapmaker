@@ -94,6 +94,10 @@ namespace Geomapmaker.Data
 
                 insp["MapUnit"] = unassignedMUP;
                 insp["DataSourceID"] = unassignedMUP;
+                insp["IdentityConfidence"] = unassignedMUP;
+                insp["Label"] = unassignedMUP;
+                insp["Symbol"] = unassignedMUP;
+                insp["Notes"] = unassignedMUP;
 
                 // Tags
                 string[] tags = new[] { "MapUnitPoly", unassignedMUP };
@@ -102,7 +106,6 @@ namespace Geomapmaker.Data
 
                 // Create CIM template 
                 EditingTemplate newTemplate = layer.CreateTemplate(unassignedMUP, unassignedMUP, insp, defaultTool, tags);
-
 
                 //
                 // LOOP OVER THE STANDARD DMUs

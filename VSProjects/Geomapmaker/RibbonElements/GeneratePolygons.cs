@@ -39,18 +39,7 @@ namespace Geomapmaker.RibbonElements
 
                 if (tmpTemplate == null)
                 {
-                    Inspector insp = new Inspector();
-                    insp.LoadSchema(polyLayer);
-
-                    // Set attributes
-                    insp["Symbol"] = templateName;
-                    insp["MapUnit"] = templateName;
-                    insp["IdentityConfidence"] = templateName;
-                    insp["Notes"] = templateName;
-                    insp["DataSourceID"] = templateName;
-
-                    // Create the temporary template
-                    tmpTemplate = polyLayer.CreateTemplate(templateName, templateName, insp);
+                    return;
                 }
 
                 Selection cf_Collection = cfLayer.Select();
