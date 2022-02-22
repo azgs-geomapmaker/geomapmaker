@@ -1,5 +1,4 @@
 ﻿using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
@@ -33,12 +32,6 @@ namespace Geomapmaker.Data
 
                 List<MapUnit> StandardDMUs = allDMUs.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name).ToList();
 
-                if (StandardDMUs.Count == 0)
-                {
-                    // No DMUs
-                    return;
-                }
-
                 // Remove all existing symbols
                 layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
@@ -53,6 +46,68 @@ namespace Geomapmaker.Data
                 // Init new list of Unique Value CIMs
                 List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
 
+                //
+                // Update Renderer for Unassigned MUPs
+                //
+
+                string unassignedMUP = GeomapmakerModule.MUP_UnassignedTemplateName;
+
+                CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
+                        new CIMUniqueValue {
+                            FieldValues = new string[] { unassignedMUP }
+                        }
+                };
+
+                CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
+
+                CIMColor color = CIMColor.CreateRGBColor(255, 0, 0);
+
+                SimpleFillStyle fillStyle = SimpleFillStyle.DiagonalCross;
+
+                CIMPolygonSymbol polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(color, fillStyle, outline);
+
+                CIMSymbolReference symbolRef = new CIMSymbolReference()
+                {
+                    Symbol = polySymbol
+                };
+
+                CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
+                {
+                    Editable = false,
+                    Label = unassignedMUP,
+                    Description = unassignedMUP,
+                    //Patch = PatchShape.AreaSquare,
+                    Patch = PatchShape.Default,
+                    Symbol = symbolRef,
+                    Visible = true,
+                    Values = listUniqueValues,
+                };
+                listUniqueValueClasses.Add(uniqueValueClass);
+
+                //
+                // Create Template
+                //
+
+                // load the schema
+                Inspector insp = new Inspector();
+                insp.LoadSchema(layer);
+
+                insp["MapUnit"] = unassignedMUP;
+                insp["DataSourceID"] = unassignedMUP;
+
+                // Tags
+                string[] tags = new[] { "MapUnitPoly", unassignedMUP };
+
+                string defaultTool = "esri_editing_ConstructPolygonsTool";
+
+                // Create CIM template 
+                EditingTemplate newTemplate = layer.CreateTemplate(unassignedMUP, unassignedMUP, insp, defaultTool, tags);
+
+
+                //
+                // LOOP OVER THE STANDARD DMUs
+                //
+
                 foreach (MapUnit mu in StandardDMUs)
                 {
                     //
@@ -62,13 +117,11 @@ namespace Geomapmaker.Data
                     // DMU's MapUnit field is the key
                     string key = mu.MU;
 
-                    CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
+                    listUniqueValues = new CIMUniqueValue[] {
                         new CIMUniqueValue {
                             FieldValues = new string[] { key }
                         }
                     };
-
-                    CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
 
                     CIMFill fill = SymbolFactory.Instance.ConstructSolidFill(ColorFactory.Instance.CreateRGBColor(mu.RGB.Item1, mu.RGB.Item2, mu.RGB.Item3));
 
@@ -78,17 +131,17 @@ namespace Geomapmaker.Data
                     fill
                     };
 
-                    CIMPolygonSymbol polySymbol = new CIMPolygonSymbol()
+                    polySymbol = new CIMPolygonSymbol()
                     {
                         SymbolLayers = symbolLayers
                     };
 
-                    CIMSymbolReference symbolRef = new CIMSymbolReference()
+                    symbolRef = new CIMSymbolReference()
                     {
                         Symbol = polySymbol
                     };
 
-                    CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
+                    uniqueValueClass = new CIMUniqueValueClass
                     {
                         Editable = false,
                         Label = key,
@@ -105,19 +158,11 @@ namespace Geomapmaker.Data
                     //
 
                     // load the schema
-                    Inspector insp = new Inspector();
-                    insp.LoadSchema(layer);
-
                     insp["MapUnit"] = mu.MU;
                     insp["DataSourceID"] = mu.DescriptionSourceID;
 
-                    // Tags
-                    string[] tags = new[] { "MapUnitPoly" };
-
-                    string defaultTool = "esri_editing_ConstructPolygonsTool";
-
                     // Create CIM template 
-                    EditingTemplate newTemplate = layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool, tags);
+                    layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool);
                 }
 
                 CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
