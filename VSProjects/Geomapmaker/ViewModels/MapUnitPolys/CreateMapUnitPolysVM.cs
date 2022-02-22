@@ -26,6 +26,28 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             ParentVM = parentVM;
         }
 
+        private bool _toggleMapUnitPolyTool;
+        public bool ToggleMapUnitPolyTool
+        {
+            get => _toggleMapUnitPolyTool;
+            set
+            {
+                SetProperty(ref _toggleMapUnitPolyTool, value, () => ToggleMapUnitPolyTool);
+
+                // if the toggle-btn is active
+                if (value)
+                {
+                    // Active the populate tool
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_MapUnitPolyTool");
+                }
+                else
+                {
+                    // Switch back to map explore tool
+                    FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+                }
+            }
+        }
+
         // Create a Map Unit Polygon
         public ICommand CommandCreate => new RelayCommand(() => CreateAsync(), () => CanCreate());
 
@@ -53,6 +75,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         // Create the Map Unit Polygons from the selected Contacts and Faults
         private async void CreateAsync()
         {
+            bool ConstructPolygonsSucceeded = false;
+
             // Contacts and Faults layer
             FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
@@ -83,18 +107,13 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 op.Execute();
 
                 // Check if the polygon create was a success
-                if (op.IsSucceeded)
+                ConstructPolygonsSucceeded = op.IsSucceeded;
+
+                if (ConstructPolygonsSucceeded)
                 {
-                    ContactFaultOids = new Dictionary<long, string>();
-
-                    // Reset default values
-                    templateDef.DefaultValues["IdentityConfidence"] = null;
-                    templateDef.DefaultValues["Notes"] = null;
-                    tmpTemplate.SetDefinition(templateDef);
-
                     OperationManager opManager = MapView.Active.Map.OperationManager;
 
-                    // Remove Undo items we don't want users to be able to undo
+                    // Remove Undo items we don't want users to be able to undo renderer update
                     List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer definition: MapUnitPolys" || a.Name == "Update layer renderer: MapUnitPolys");
                     foreach (Operation undoOp in mapUnitPolyLayerUndos)
                     {
@@ -104,15 +123,18 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                     cfLayer.ClearSelection();
                     polyLayer.ClearSelection();
                 }
-                else
-                {
-                    // Display error
-                    _validationErrors["SelectedOid"] = new List<string>() { "Could not create polygon from CF lines. Select more lines." };
-                    RaiseErrorsChanged("SelectedOid");
-                }
-
             });
 
+            if (ConstructPolygonsSucceeded)
+            {
+                ParentVM.CloseProwindow();
+            }
+            else
+            {
+                // Display error
+                _validationErrors["SelectedOid"] = new List<string>() { "Could not create polygon from CF lines. Select more lines." };
+                RaiseErrorsChanged("SelectedOid");
+            }
         }
 
         public CreateMapUnitPolysVM()
@@ -274,14 +296,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             // Trigger Validation
             ContactFaultOids = ContactFaultOids;
         }
-
-
-
-
-
-
-
-
 
         #region Validation
 

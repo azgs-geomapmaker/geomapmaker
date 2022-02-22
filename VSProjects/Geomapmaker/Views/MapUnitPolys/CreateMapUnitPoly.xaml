@@ -47,13 +47,28 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding OidsListBox}" SelectedItem ="{Binding SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15" MinHeight="50" IsEnabled="False">
+                    <ToggleButton Grid.Row="0" Grid.Column="0" Content="Select Lines" IsChecked="{Binding Create.ToggleMapUnitPolyTool, UpdateSourceTrigger=PropertyChanged}" >
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
+                                    <ContentPresenter Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Background" Value="#2082D8" />
+                                        <Setter Property="Foreground" Value="#FFFFFF" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+
+                    <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Create.OidsListBox}" SelectedItem ="{Binding Create.SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" MinHeight="50" IsEnabled="False">
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
@@ -72,14 +87,14 @@
                         </Validation.ErrorTemplate>
                     </ListBox>
 
-                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding CommandClearOids}" >Clear</Button>
+                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding Create.CommandClearOids}" Style="{DynamicResource Esri_Button}" >Clear</Button>
 
                 </Grid>
             </AdornerDecorator>
         </GroupBox>
 
         <TextBlock Grid.Row="2" Grid.Column="1" Text="Map Unit" />
-        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding MapUnits}" SelectedItem="{Binding Selected}" >
+        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding MapUnits}" SelectedItem="{Binding Create.Selected}" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -91,17 +106,17 @@
         </ComboBox>
 
         <TextBlock Grid.Row="4" Grid.Column="1" Text="Identity Confidence" />
-        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" />
+        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="6" Grid.Column="1" Text="Notes"/>
-        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" MinHeight="50" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" MinHeight="50" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" />
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Create.DataSource}" IsReadOnly="True" IsEnabled="False" />
 
         <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
-            <Button Padding="5" Command="{Binding CommandCreate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Create</Button>
+            <Button Padding="5" Command="{Binding Create.CommandCreate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Create</Button>
         </StackPanel>
 
     </Grid>

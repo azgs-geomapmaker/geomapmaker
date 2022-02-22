@@ -163,6 +163,10 @@ namespace Geomapmaker.Data
                     // load the schema
                     insp["MapUnit"] = mu.MU;
                     insp["DataSourceID"] = mu.DescriptionSourceID;
+                    insp["IdentityConfidence"] = null;
+                    insp["Label"] = null;
+                    insp["Symbol"] = null;
+                    insp["Notes"] = null;
 
                     // Create CIM template 
                     layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool);
