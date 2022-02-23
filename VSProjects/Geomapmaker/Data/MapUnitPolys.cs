@@ -206,7 +206,7 @@ namespace Geomapmaker.Data
             }, ps.Progressor);
         }
 
-        public static async Task<List<MapUnitPolyTemplate>> GetMapUnitPolyTemplatesAsync(bool filter = false)
+        public static async Task<List<MapUnitPolyTemplate>> GetMapUnitPolyTemplatesAsync()
         {
             // List of templates to return
             List<MapUnitPolyTemplate> mupTemplates = new List<MapUnitPolyTemplate>();

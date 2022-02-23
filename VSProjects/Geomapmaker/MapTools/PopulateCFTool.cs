@@ -48,15 +48,15 @@ namespace Geomapmaker.MapTools
                 return true;
             }
 
-            IEnumerable<ContactsFaultsViewModel> cfWindowVMs = FrameworkApplication.Current.Windows.OfType<ContactsFaultsViewModel>(); ;
-
-            if (cfWindowVMs.Count() < 1)
-            {
-                return true;
-            }
+            IEnumerable<ContactsFaultsViewModel> cfWindowVMs = System.Windows.Application.Current.Windows.OfType<ContactsFaultsViewModel>(); ;
 
             // Get the most recent window. GC takes some time to clean up the closed prowindows.
-            ContactsFaultsViewModel cfViewModel = cfWindowVMs.Last();
+            ContactsFaultsViewModel cfViewModel = cfWindowVMs.LastOrDefault();
+
+            if (cfViewModel == null)
+            {
+                return false;
+            }
 
             await QueuedTask.Run(() =>
             {

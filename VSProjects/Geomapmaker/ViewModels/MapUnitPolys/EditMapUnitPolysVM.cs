@@ -1,9 +1,14 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing.Attributes;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnitPolys
@@ -20,9 +25,12 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         // Update Map Unit Polygons
         public ICommand CommandUpdate => new RelayCommand(() => UpdateAsync(), () => CanUpdate());
 
+        // Reset Object ids
+        public ICommand CommandClearOids => new RelayCommand(() => ClearOids(), () => MapUnitPolysOids != null && MapUnitPolysOids.Count > 0);
+
         private bool CanUpdate()
         {
-            return true;
+            return MapUnitPolysOids.Count() > 0 && Selected != null && HasErrors == false;
         }
 
         private void UpdateAsync()
@@ -42,7 +50,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 if (value)
                 {
                     // Active the mup tool
-                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_SelectContactsFaultsTool");
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_SelectMapUnitPolysTool");
                 }
                 else
                 {
@@ -52,9 +60,17 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             }
         }
 
-        private void ClearMups()
+        private void ClearOids()
         {
- 
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            QueuedTask.Run(() =>
+            {
+                layer?.ClearSelection();
+            });
+
+            MapUnitPolysOids = new Dictionary<long, string>();
+            NotifyPropertyChanged("OidsListBox");
         }
 
         private Dictionary<long, string> _mapUnitPolysOids { get; set; } = new Dictionary<long, string>();
@@ -64,14 +80,20 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             set
             {
                 _mapUnitPolysOids = value;
-                //NotifyPropertyChanged("OidsListBox");
-                //NotifyPropertyChanged("ContactFaultOids");
+                NotifyPropertyChanged("OidsListBox");
+                NotifyPropertyChanged("MapUnitPolysOids");
 
                 // Error is displayed on the selection
-                //ValidateCFOids(ContactFaultOids, "SelectedOid");
+                ValidateMUPsOids(MapUnitPolysOids, "MapUnitPolysOids");
             }
 
         }
+
+        // Collection for displaying in View
+        public List<string> OidsListBox => MapUnitPolysOids.Select(a => $"{a.Value} ({a.Key})").ToList();
+
+        // Error is displayed on the selection
+        public string SelectedOid { get; set; }
 
         private MapUnitPolyTemplate _selected;
         public MapUnitPolyTemplate Selected
@@ -81,7 +103,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             {
                 _selected = value;
 
-                //ValidateMapUnit(Selected, "Selected");
+                ValidateMapUnit(Selected, "Selected");
 
                 // Trigger validation
                 IdentityConfidence = IdentityConfidence;
@@ -95,7 +117,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             set
             {
                 _identityConfidence = value;
-                //ValidateRequiredString(IdentityConfidence, "IdentityConfidence");
+                ValidateRequiredString(IdentityConfidence, "IdentityConfidence");
                 NotifyPropertyChanged();
             }
         }
@@ -122,58 +144,58 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             }
         }
 
-        public void Set_MUP_Oids(List<long> oids)
+        public async void Set_MUP_Oids(List<long> oids)
         {
-            //FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
 
-            //if (layer == null)
-            //{
-            //    return;
-            //}
+            if (layer == null)
+            {
+                return;
+            }
 
-            //// Remove any errors from CF Lines
-            //_validationErrors.Remove("SelectedOid");
-            //RaiseErrorsChanged("SelectedOid");
+            // Remove any errors from CF Lines
+            _validationErrors.Remove("SelectedOid");
+            RaiseErrorsChanged("SelectedOid");
 
-            //Inspector insp = new Inspector();
+            Inspector insp = new Inspector();
 
-            //await QueuedTask.Run(() =>
-            //{
-            //    foreach (long id in oids)
-            //    {
-            //        if (ContactFaultOids.ContainsKey(id))
-            //        {
-            //            ContactFaultOids.Remove(id);
-            //        }
-            //        else
-            //        {
-            //            insp.Load(layer, id);
+            await QueuedTask.Run(() =>
+            {
+                foreach (long id in oids)
+                {
+                    if (MapUnitPolysOids.ContainsKey(id))
+                    {
+                        MapUnitPolysOids.Remove(id);
+                    }
+                    else
+                    {
+                        insp.Load(layer, id);
 
-            //            string label = insp["type"]?.ToString();
+                        string label = insp["mapunit"]?.ToString();
 
-            //            ContactFaultOids.Add(id, label);
-            //        }
-            //    }
-            //});
+                        MapUnitPolysOids.Add(id, label);
+                    }
+                }
+            });
 
-            //if (ContactFaultOids.Count == 0)
-            //{
-            //    layer.ClearSelection();
-            //}
-            //else
-            //{
-            //    QueryFilter queryFilter = new QueryFilter
-            //    {
-            //        ObjectIDs = ContactFaultOids.Keys.ToList()
-            //    };
+            if (MapUnitPolysOids.Count == 0)
+            {
+                layer.ClearSelection();
+            }
+            else
+            {
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    ObjectIDs = MapUnitPolysOids.Keys.ToList()
+                };
 
-            //    layer.Select(queryFilter);
-            //}
+                layer.Select(queryFilter);
+            }
 
-            //NotifyPropertyChanged("OidsListBox");
+            NotifyPropertyChanged("OidsListBox");
 
-            //// Trigger Validation
-            //ContactFaultOids = ContactFaultOids;
+            // Trigger Validation
+            MapUnitPolysOids = MapUnitPolysOids;
         }
 
         #region Validation
@@ -227,7 +249,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             RaiseErrorsChanged(propertyKey);
         }
 
-        private void ValidateCFOids(Dictionary<long, string> contactFaultOids, string propertyKey)
+        private void ValidateMUPsOids(Dictionary<long, string> contactFaultOids, string propertyKey)
         {
             // Required field
             if (contactFaultOids == null || contactFaultOids.Count == 0)

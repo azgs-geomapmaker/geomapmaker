@@ -201,6 +201,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         // Collection for displaying in View
         public List<string> OidsListBox => ContactFaultOids.Select(a => $"{a.Value} ({a.Key})").ToList();
 
+        // Error is displayed on the selection
         public string SelectedOid { get; set; }
 
         private MapUnitPolyTemplate _selected;
