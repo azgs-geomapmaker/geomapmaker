@@ -46,19 +46,19 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         }
 
-        private bool _toggleMapUnitPolyTool;
-        public bool ToggleMapUnitPolyTool
+        private bool _toggleCFTool;
+        public bool ToggleCFTool
         {
-            get => _toggleMapUnitPolyTool;
+            get => _toggleCFTool;
             set
             {
-                SetProperty(ref _toggleMapUnitPolyTool, value, () => ToggleMapUnitPolyTool);
+                SetProperty(ref _toggleCFTool, value, () => ToggleCFTool);
 
                 // if the toggle-btn is active
                 if (value)
                 {
                     // Active the populate tool
-                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_MapUnitPolyTool");
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_SelectContactsFaultsTool");
                 }
                 else
                 {
@@ -159,7 +159,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         public CreateMapUnitPolysVM()
         {
-            FrameworkApplication.SetCurrentToolAsync("Geomapmaker_MapUnitPolyTool");
+            FrameworkApplication.SetCurrentToolAsync("Geomapmaker_SelectContactsFaultsTool");
 
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
 

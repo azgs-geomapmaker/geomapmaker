@@ -51,7 +51,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <ToggleButton Grid.Row="0" Grid.Column="0" Content="Select Lines" IsChecked="{Binding Create.ToggleMapUnitPolyTool, UpdateSourceTrigger=PropertyChanged}" >
+                    <ToggleButton Grid.Row="0" Grid.Column="0" Content="Select Lines" IsChecked="{Binding Create.ToggleCFTool, UpdateSourceTrigger=PropertyChanged}" >
                         <ToggleButton.Template>
                             <ControlTemplate TargetType="{x:Type ToggleButton}">
                                 <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">

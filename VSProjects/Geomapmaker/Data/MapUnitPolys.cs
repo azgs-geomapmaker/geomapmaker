@@ -71,7 +71,7 @@ namespace Geomapmaker.Data
                     Symbol = polySymbol
                 };
 
-                CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
+                CIMUniqueValueClass unassignedCIM = new CIMUniqueValueClass
                 {
                     Editable = false,
                     Label = unassignedMUP,
@@ -82,7 +82,6 @@ namespace Geomapmaker.Data
                     Visible = true,
                     Values = listUniqueValues,
                 };
-                listUniqueValueClasses.Add(uniqueValueClass);
 
                 //
                 // Create Template
@@ -144,7 +143,7 @@ namespace Geomapmaker.Data
                         Symbol = polySymbol
                     };
 
-                    uniqueValueClass = new CIMUniqueValueClass
+                    CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                     {
                         Editable = false,
                         Label = key,
@@ -171,6 +170,9 @@ namespace Geomapmaker.Data
                     // Create CIM template 
                     layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool);
                 }
+
+                // Add unassigned renderer last
+                listUniqueValueClasses.Add(unassignedCIM);
 
                 CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
                 {

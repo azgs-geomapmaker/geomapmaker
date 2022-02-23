@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.MapTools
 {
-    internal class MapUnitPolyTool : MapTool
+    internal class SelectContactsFaultsTool : MapTool
     {
-        public MapUnitPolyTool()
+        public SelectContactsFaultsTool()
         {
             IsSketchTool = true;
             SketchType = SketchGeometryType.Point;
