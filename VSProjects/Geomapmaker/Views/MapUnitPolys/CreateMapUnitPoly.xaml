@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:data="clr-namespace:Geomapmaker.Data" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" 
-             xmlns:local="clr-namespace:Geomapmaker.Views.MapUnitPolys"
              mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -75,7 +74,7 @@
                                     <AdornedElementPlaceholder >
                                         <Border BorderBrush="Red" BorderThickness="1" />
                                     </AdornedElementPlaceholder>
-                                    <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl ItemsSource="{Binding}" HorizontalAlignment="Center" >
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>

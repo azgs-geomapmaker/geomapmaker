@@ -24,6 +24,26 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         public CreateMapUnitPolysVM(MapUnitPolysViewModel parentVM)
         {
             ParentVM = parentVM;
+
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+            if (layer == null)
+            {
+                return;
+            }
+
+            QueuedTask.Run(() =>
+            {
+                Selection cfSelection = layer.GetSelection();
+
+                IReadOnlyList<long> cfOids = cfSelection.GetObjectIDs();
+
+                Set_CF_Oids(cfOids.ToList());
+            });
+
+            // Trigger validation
+            Selected = Selected;
+
         }
 
         private bool _toggleMapUnitPolyTool;
