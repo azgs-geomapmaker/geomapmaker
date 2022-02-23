@@ -92,7 +92,7 @@
             </AdornerDecorator>
         </GroupBox>
 
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="Map Unit" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="Description of Map Units" />
         <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding MapUnits}" SelectedItem="{Binding Create.Selected}" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>

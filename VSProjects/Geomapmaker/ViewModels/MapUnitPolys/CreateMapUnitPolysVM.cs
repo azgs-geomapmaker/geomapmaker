@@ -57,7 +57,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 // if the toggle-btn is active
                 if (value)
                 {
-                    // Active the populate tool
+                    // Active the cf tool
                     FrameworkApplication.SetCurrentToolAsync("Geomapmaker_SelectContactsFaultsTool");
                 }
                 else
@@ -202,17 +202,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         public List<string> OidsListBox => ContactFaultOids.Select(a => $"{a.Value} ({a.Key})").ToList();
 
         public string SelectedOid { get; set; }
-
-        private List<MapUnitPolyTemplate> _mapUnits { get; set; }
-        public List<MapUnitPolyTemplate> MapUnits
-        {
-            get => _mapUnits;
-            set
-            {
-                _mapUnits = value;
-                NotifyPropertyChanged();
-            }
-        }
 
         private MapUnitPolyTemplate _selected;
         public MapUnitPolyTemplate Selected
