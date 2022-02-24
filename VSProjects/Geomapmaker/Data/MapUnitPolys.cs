@@ -98,7 +98,7 @@ namespace Geomapmaker.Data
                 insp["Notes"] = unassignedMUP;
 
                 // Tags
-                string[] tags = new[] { "MapUnitPoly", unassignedMUP };
+                string[] tags = new[] { "MapUnitPoly" };
 
                 // Remove all default tools. Users should be using the geomapmaker tool.
                 var toolFilter = new[] {
@@ -183,8 +183,6 @@ namespace Geomapmaker.Data
                     insp["Label"] = null;
                     insp["Symbol"] = null;
                     insp["Notes"] = null;
-
-                    tags = new[] { "MapUnitPoly" };
 
                     // Create CIM template 
                     layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool, tags, toolFilter);

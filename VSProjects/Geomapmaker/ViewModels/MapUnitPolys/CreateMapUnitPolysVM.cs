@@ -18,7 +18,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 {
     public class CreateMapUnitPolysVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-
         public MapUnitPolysViewModel ParentVM { get; set; }
 
         public CreateMapUnitPolysVM(MapUnitPolysViewModel parentVM)

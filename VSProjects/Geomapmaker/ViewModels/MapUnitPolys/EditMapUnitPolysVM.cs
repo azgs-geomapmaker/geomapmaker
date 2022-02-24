@@ -20,6 +20,25 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         public EditMapUnitPolysVM(MapUnitPolysViewModel parentVM)
         {
             ParentVM = parentVM;
+
+            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (layer == null)
+            {
+                return;
+            }
+
+            QueuedTask.Run(() =>
+            {
+                Selection mupSelection = layer.GetSelection();
+
+                IReadOnlyList<long> Oids = mupSelection.GetObjectIDs();
+
+                Set_MUP_Oids(Oids.ToList());
+            });
+
+            // Trigger validation
+            Selected = Selected;
         }
 
         // Update Map Unit Polygons
@@ -35,7 +54,14 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         private void UpdateAsync()
         {
-            throw new NotImplementedException();
+            FeatureLayer polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+
+            QueuedTask.Run(() =>
+            {
+
+
+            });
+
         }
 
         private bool _toggleMupTool;
