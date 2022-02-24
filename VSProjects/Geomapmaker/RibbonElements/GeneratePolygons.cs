@@ -1,7 +1,5 @@
-﻿using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -15,6 +13,8 @@ namespace Geomapmaker.RibbonElements
     {
         protected override async void OnClick()
         {
+            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+
             // Contacts and Faults layer
             FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().FirstOrDefault((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 

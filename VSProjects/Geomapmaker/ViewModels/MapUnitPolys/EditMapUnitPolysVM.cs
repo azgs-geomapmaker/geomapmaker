@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
@@ -7,6 +8,7 @@ using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -39,6 +41,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             // Trigger validation
             Selected = Selected;
+            IdentityConfidence = IdentityConfidence;
         }
 
         // Update Map Unit Polygons
@@ -52,16 +55,64 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             return MapUnitPolysOids.Count() > 0 && Selected != null && HasErrors == false;
         }
 
-        private void UpdateAsync()
+        private async void UpdateAsync()
         {
+            bool editOperationSucceeded = false;
+
             FeatureLayer polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
 
-            QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
+                Table enterpriseTable = polyLayer.GetTable();
 
+                EditOperation editOperation = new EditOperation();
 
+                // Convert Dictionary Keys to a read-only list for queryFilter
+                ReadOnlyCollection<long> oids = new ReadOnlyCollection<long>(MapUnitPolysOids.Keys.ToList());
+
+                editOperation.Callback(context =>
+                {
+                    QueryFilter queryFilter = new QueryFilter
+                    {
+                        ObjectIDs = oids
+                    };
+
+                    using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
+                    {
+                        while (rowCursor.MoveNext())
+                        {
+                            using (Row row = rowCursor.Current)
+                            {
+                                // In order to update the Map and/or the attribute table.
+                                // Has to be called before any changes are made to the row.
+                                context.Invalidate(row);
+
+                                row["MapUnit"] = Selected.MapUnit;
+                                row["IdentityConfidence"] = IdentityConfidence;
+                                row["Label"] = null;
+                                row["Symbol"] = null;
+                                row["Notes"] = Notes;
+                                row["DataSourceID"] = DataSource;
+
+                                // After all the changes are done, persist it.
+                                row.Store();
+
+                                // Has to be called after the store too.
+                                context.Invalidate(row);
+                            }
+                        }
+                    }
+                }, enterpriseTable);
+
+                editOperation.Execute();
+
+                editOperationSucceeded = editOperation.IsSucceeded;
             });
 
+            if (editOperationSucceeded)
+            {
+                ParentVM.CloseProwindow();
+            }
         }
 
         private bool _toggleMupTool;
@@ -110,7 +161,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 NotifyPropertyChanged("MapUnitPolysOids");
 
                 // Error is displayed on the selection
-                ValidateMUPsOids(MapUnitPolysOids, "MapUnitPolysOids");
+                ValidateMUPsOids(MapUnitPolysOids, "SelectedOid");
             }
 
         }

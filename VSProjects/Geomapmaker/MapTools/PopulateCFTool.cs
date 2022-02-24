@@ -77,8 +77,8 @@ namespace Geomapmaker.MapTools
                     QueryFilter queryFilter = new QueryFilter
                     {
                          ObjectIDs = new List<long>{ cfID }
-                    };
-
+                    }
+;
                     using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
                     {
                         if (rowCursor.MoveNext())
