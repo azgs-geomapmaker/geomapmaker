@@ -1,7 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -43,30 +42,22 @@ namespace Geomapmaker.MapTools
 
         protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
-            if (!(MapView.Active?.Map.Layers.FirstOrDefault(a => a.Name == "ContactsAndFaults") is FeatureLayer cfFeatureLayer))
-            {
-                return true;
-            }
+            FeatureLayer cfFeatureLayer = (FeatureLayer)(MapView.Active?.Map.Layers.FirstOrDefault(a => a.Name == "ContactsAndFaults"));
 
             IEnumerable<ContactsFaultsViewModel> cfWindowVMs = System.Windows.Application.Current.Windows.OfType<ContactsFaultsViewModel>(); ;
 
             // Get the most recent window. GC takes some time to clean up the closed prowindows.
             ContactsFaultsViewModel cfViewModel = cfWindowVMs.LastOrDefault();
 
-            if (cfViewModel == null)
+            MapView mv = MapView.Active;
+            
+            if (mv == null || cfFeatureLayer == null || cfWindowVMs == null)
             {
                 return false;
             }
 
             await QueuedTask.Run(() =>
             {
-                MapView mv = MapView.Active;
-
-                if (mv == null)
-                {
-                    return;
-                }
-
                 // Get the features that intersect the sketch geometry. 
                 // GetFeatures() returns a dictionary of featurelayer and a list of Object ids for each
                 Dictionary<BasicFeatureLayer, List<long>> features = mv.GetFeatures(geometry);
@@ -85,7 +76,7 @@ namespace Geomapmaker.MapTools
 
                     QueryFilter queryFilter = new QueryFilter
                     {
-                        WhereClause = "objectid in (" + cfID + ")"
+                         ObjectIDs = new List<long>{ cfID }
                     };
 
                     using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
