@@ -76,7 +76,6 @@ namespace Geomapmaker.Data
                     Editable = false,
                     Label = unassignedMUP,
                     Description = unassignedMUP,
-                    //Patch = PatchShape.AreaSquare,
                     Patch = PatchShape.Default,
                     Symbol = symbolRef,
                     Visible = true,
@@ -101,10 +100,28 @@ namespace Geomapmaker.Data
                 // Tags
                 string[] tags = new[] { "MapUnitPoly", unassignedMUP };
 
-                string defaultTool = "esri_editing_ConstructPolygonsTool";
+                // Remove all default tools. Users should be using the geomapmaker tool.
+                var toolFilter = new[] {
+                                         "esri_editing_SketchPolygonTool",
+                                         "esri_editing_SketchAutoCompletePolygonTool",
+                                         "esri_editing_SketchRightPolygonTool",
+                                         "esri_editing_SketchCirclePolygonTool",
+                                         "esri_editing_SketchRectanglePolygonTool",
+                                         "esri_editing_SketchRegularPolygonTool",
+                                         "esri_editing_SketchEllipsePolygonTool",
+                                         "esri_editing_SketchFreehandPolygonTool",
+                                         "esri_editing_SketchAutoCompleteFreehandPolygonTool",
+                                         "esri_editing_SketchTracePolygonTool",
+                                         "esri_editing_SketchStreamPolygonTool",
+                                         "esri_editing_SketchParcelSeedTool",
+                                         "esri_defensemapping_createstructures",
+                                         "esri_defensemapping_differencepolygon",
+                };
+
+                string defaultTool = "";
 
                 // Create CIM template 
-                EditingTemplate newTemplate = layer.CreateTemplate(unassignedMUP, unassignedMUP, insp, defaultTool, tags);
+                EditingTemplate newTemplate = layer.CreateTemplate(unassignedMUP, unassignedMUP, insp, defaultTool, tags, toolFilter);
 
                 //
                 // LOOP OVER THE STANDARD DMUs
@@ -167,8 +184,10 @@ namespace Geomapmaker.Data
                     insp["Symbol"] = null;
                     insp["Notes"] = null;
 
+                    tags = new[] { "MapUnitPoly" };
+
                     // Create CIM template 
-                    layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool);
+                    layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool, tags, toolFilter);
                 }
 
                 // Add unassigned renderer last
