@@ -104,8 +104,8 @@ namespace Geomapmaker.Data
                 // Remove existing symbols
                 layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
-                // Get all CF templates
-                List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync();
+                // Get all CF templates except the default
+                List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false, true);
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
