@@ -121,7 +121,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 EditingTemplate updatedTemplate = polyLayer.GetTemplate(Selected.MapUnit);
 
                 // Contruct polygons from cf lines
-                op.ConstructPolygons(updatedTemplate, cfLayer, ContactFaultOids.Keys, null, false);
+                op.ConstructPolygons(updatedTemplate, cfLayer, ContactFaultOids.Keys, null, true);
 
                 op.Execute();
 
