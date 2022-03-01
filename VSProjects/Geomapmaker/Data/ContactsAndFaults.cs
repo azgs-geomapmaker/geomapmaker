@@ -14,7 +14,7 @@ namespace Geomapmaker.Data
 {
     public class ContactsAndFaults
     {
-        public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync(bool filterSketch = false, bool filterDefaultTemplate = false)
+        public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync(bool filterSketch = false)
         {
             // List of templates to return
             List<ContactFaultTemplate> contactFaultTemplates = new List<ContactFaultTemplate>();
@@ -36,15 +36,12 @@ namespace Geomapmaker.Data
 
                 if (filterSketch)
                 {
-                    // Remove the sketch template
+                    // Skip over the sketch template
                     layerTemplates = layerTemplates.Where(a => a.Name != GeomapmakerModule.CF_SketchTemplateName);
                 }
 
-                // If there is more than one template remove the default template
-                if (filterDefaultTemplate)
-                {
-                    layerTemplates = layerTemplates.Where(a => a.Name != "ContactsAndFaults");
-                }
+                // Skip the default template
+                layerTemplates = layerTemplates.Where(a => a.Name != "ContactsAndFaults");
 
                 foreach (EditingTemplate template in layerTemplates)
                 {
@@ -105,7 +102,7 @@ namespace Geomapmaker.Data
                 layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
                 // Get all CF templates except the default
-                List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false, true);
+                List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
