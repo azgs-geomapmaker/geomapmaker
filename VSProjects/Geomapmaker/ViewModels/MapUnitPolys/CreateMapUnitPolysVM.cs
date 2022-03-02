@@ -151,7 +151,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             else
             {
                 // Display error
-                _validationErrors["SelectedOid"] = new List<string>() { "Could not create polygon from CF lines. Select more lines." };
+                _validationErrors["SelectedOid"] = new List<string>() { "A new polygon cannot be constructed from these CF lines." };
                 RaiseErrorsChanged("SelectedOid");
             }
         }
