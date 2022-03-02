@@ -287,7 +287,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             // Filter by description
             if (!string.IsNullOrEmpty(DescriptionFilter))
             {
-                filteredSymbols = filteredSymbols.Where(a => a.Description.Contains(DescriptionFilter)).ToList();
+                filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.Contains(DescriptionFilter)).ToList();
             }
 
             // Count of filtered symbols
