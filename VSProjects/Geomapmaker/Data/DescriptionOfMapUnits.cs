@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public static class DescriptionOfMapUnits
+    public class DescriptionOfMapUnits
     {
         public static async Task<List<MapUnit>> GetMapUnitsAsync()
         {

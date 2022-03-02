@@ -2,7 +2,6 @@
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -21,7 +20,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
     {
         public ICommand CommandCreateTemplate => new RelayCommand(() => CreateTemplateAsync(), () => IsValidTemplate());
 
-        public ICommand CommandSketch => new RelayCommand(async (proWindow) => await CreateSketchAsync(proWindow), () => IsValidSketch());
+        public ICommand CommandSketch => new RelayCommand(async () => await CreateSketchAsync(), () => IsValidSketch());
 
         public ContactsFaultsViewModel ParentVM { get; set; }
 
@@ -67,7 +66,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
-        private async Task CreateSketchAsync(object proWindow)
+        private async Task CreateSketchAsync()
         {
             // Find the ContactsFaults layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
@@ -78,11 +77,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 return;
             }
 
-            // Close the window
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
+            ParentVM.CloseProwindow();
 
             await QueuedTask.Run(async () =>
             {
@@ -123,28 +118,15 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     insp["notes"] = Notes;
                 }
 
-                // set up tags
-                string[] tags = new[] { "ContactFault" };
-
-                // default construction tool - use daml-id
-                string defaultTool = "esri_editing_LineConstructor";
-
-                // TODO remove tools below 
-                // filter - use daml-id
-                List<string> filter = new List<string>();
-                //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
-
                 // Create CIM template 
-                EditingTemplate newTemplate = layer.CreateTemplate(GeomapmakerModule.CF_SketchTemplateName, GeomapmakerModule.CF_SketchTemplateName, insp, defaultTool, tags, filter.ToArray());
-
-                // Update Renderer
-                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
-
-                EditingTemplate tempTemplate = layer.GetTemplate(GeomapmakerModule.CF_SketchTemplateName);
+                EditingTemplate newTemplate = layer.CreateTemplate(GeomapmakerModule.CF_SketchTemplateName, GeomapmakerModule.CF_SketchTemplateName, insp);
 
                 // Activate tool for the temp template
-                await tempTemplate.ActivateDefaultToolAsync();
+                await newTemplate.ActivateDefaultToolAsync();
             });
+
+            // Update Renderer
+            Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
         }
 
         /// <summary>
@@ -161,15 +143,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 return;
             }
 
+            ParentVM.CloseProwindow();
+
             await QueuedTask.Run(async () =>
             {
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
-
-                if (currentTemplates.Any(a => a.Name == Label))
-                {
-                    MessageBox.Show($"{Label} template already exists.");
-                    return;
-                }
 
                 if (currentTemplates.Any(a => a.Name == "ContactsAndFaults"))
                 {
@@ -200,29 +178,14 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     insp["notes"] = Notes;
                 }
 
-                // set up tags
-                string[] tags = new[] { "ContactFault" };
-
-                // default construction tool - use daml-id
-                string defaultTool = "esri_editing_LineConstructor";
-
-                // TODO remove tools below 
-                // filter - use daml-id
-                List<string> filter = new List<string>();
-                //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
-
                 // Create CIM template 
-                EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
+                EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp);
 
-                // Update Renderer
-                await Data.CFSymbology.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
-
-                // Refresh list of templates
-                ParentVM.RefreshTemplates();
-
-                // Reset label 
-                Label = "";
+                await newTemplate.ActivateDefaultToolAsync();
             });
+
+            // Update Renderer
+            Data.ContactsAndFaults.AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
         }
 
         public void PrepopulateCF(ContactFaultTemplate cf)
@@ -324,7 +287,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             // Filter by description
             if (!string.IsNullOrEmpty(DescriptionFilter))
             {
-                filteredSymbols = filteredSymbols.Where(a => a.Description.Contains(DescriptionFilter)).ToList();
+                filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.Contains(DescriptionFilter)).ToList();
             }
 
             // Count of filtered symbols

@@ -55,8 +55,8 @@
             <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Delete.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
             <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
-                <Button Margin="5" Padding="5" Command="{Binding Delete.CommandDelete}">Delete</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Delete.CommandDelete}">Delete</Button>
             </StackPanel>
 
         </Grid>

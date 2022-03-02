@@ -1,13 +1,15 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using Geomapmaker.ViewModels.ContactsFaults;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Geomapmaker.MapTools
@@ -19,6 +21,18 @@ namespace Geomapmaker.MapTools
             IsSketchTool = true;
             SketchType = SketchGeometryType.Point;
             SketchOutputMode = SketchOutputMode.Map;
+
+            // Reflection
+            Assembly asm = Assembly.GetExecutingAssembly();
+
+            // Path to custom cursor
+            string uri = Path.GetDirectoryName(Uri.UnescapeDataString(new Uri(asm.CodeBase).LocalPath)) + "\\Cursors\\EyeDropper.cur";
+
+            if (File.Exists(uri))
+            {
+                // Create custom cursor from file
+                Cursor = new System.Windows.Input.Cursor(uri);
+            }
         }
 
         protected override Task OnToolActivateAsync(bool active)
@@ -28,30 +42,22 @@ namespace Geomapmaker.MapTools
 
         protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
-            if (!(MapView.Active?.Map.Layers.FirstOrDefault(a => a.Name == "ContactsAndFaults") is FeatureLayer cfFeatureLayer))
-            {
-                return true;
-            }
+            FeatureLayer cfFeatureLayer = (FeatureLayer)(MapView.Active?.Map.Layers.FirstOrDefault(a => a.Name == "ContactsAndFaults"));
 
-            IEnumerable<ContactsFaultsViewModel> cfWindowVMs = FrameworkApplication.Current.Windows.OfType<ContactsFaultsViewModel>(); ;
-
-            if (cfWindowVMs.Count() < 1)
-            {
-                return true;
-            }
+            IEnumerable<ContactsFaultsViewModel> cfWindowVMs = System.Windows.Application.Current.Windows.OfType<ContactsFaultsViewModel>(); ;
 
             // Get the most recent window. GC takes some time to clean up the closed prowindows.
-            ContactsFaultsViewModel cfViewModel = cfWindowVMs.Last();
+            ContactsFaultsViewModel cfViewModel = cfWindowVMs.LastOrDefault();
+
+            MapView mv = MapView.Active;
+            
+            if (mv == null || cfFeatureLayer == null || cfWindowVMs == null)
+            {
+                return false;
+            }
 
             await QueuedTask.Run(() =>
             {
-                MapView mv = MapView.Active;
-
-                if (mv == null)
-                {
-                    return;
-                }
-
                 // Get the features that intersect the sketch geometry. 
                 // GetFeatures() returns a dictionary of featurelayer and a list of Object ids for each
                 Dictionary<BasicFeatureLayer, List<long>> features = mv.GetFeatures(geometry);
@@ -70,9 +76,9 @@ namespace Geomapmaker.MapTools
 
                     QueryFilter queryFilter = new QueryFilter
                     {
-                        WhereClause = "objectid in (" + cfID + ")"
-                    };
-
+                         ObjectIDs = new List<long>{ cfID }
+                    }
+;
                     using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
                     {
                         if (rowCursor.MoveNext())

@@ -1,9 +1,9 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -207,8 +207,24 @@ namespace Geomapmaker.ViewModels.MapUnits
                 return;
             }
 
+            FeatureLayer mup = MapView.Active?.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (mup == null)
+            {
+                MessageBox.Show("MapUnitPolys not found in active map.");
+                return;
+            }
+
             await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
             {
+                IEnumerable<EditingTemplate> currentTemplates = mup.GetTemplates();
+
+                if (currentTemplates.Any(a => a.Name == "MapUnitPolys"))
+                {
+                    // Remove the default template
+                    mup.RemoveTemplate("MapUnitPolys");
+                }
+
                 try
                 {
                     Table enterpriseTable = dmu.GetTable();
@@ -262,20 +278,10 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
-                ParentVM.RefreshMapUnitsAsync();
+                // Update symbology and templates
+                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
-                // Reset values
-                MapUnit = null;
-                Name = null;
-                FullName = null;
-                OlderInterval = null;
-                YoungerInterval = null;
-                RelativeAge = null;
-                Description = null;
-                Label = null;
-                Color = null;
-                GeoMaterial = null;
-                GeoMaterialConfidence = null;
+                ParentVM.CloseProwindow();
             }
         }
 

@@ -8,7 +8,6 @@ using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,15 +19,12 @@ namespace Geomapmaker.ViewModels.MapUnits
     public class DeleteMapUnitVM : PropertyChangedBase, INotifyDataErrorInfo
     {
         // Deletes's save button
-        public ICommand CommandDelete { get; }
+        public ICommand CommandDelete => new RelayCommand(() => DeleteAsync(), () => CanDelete());
 
         public MapUnitsViewModel ParentVM { get; set; }
 
         public DeleteMapUnitVM(MapUnitsViewModel parentVM)
         {
-            // Init commands
-            CommandDelete = new RelayCommand(() => DeleteAsync(), () => CanDelete());
-
             ParentVM = parentVM;
         }
 
@@ -161,10 +157,10 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
-                ParentVM.RefreshMapUnitsAsync();
+                // Add new symbology if needed. Remove old symbology if needed.
+                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
-                // Reset values
-                Selected = null;
+                ParentVM.CloseProwindow();
             }
         }
 

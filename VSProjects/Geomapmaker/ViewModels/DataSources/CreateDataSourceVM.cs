@@ -16,14 +16,13 @@ namespace Geomapmaker.ViewModels.DataSources
 {
     public class CreateDataSourceVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandSave { get; }
+        public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
         public DataSourcesViewModel ParentVM { get; set; }
 
         public CreateDataSourceVM(DataSourcesViewModel parentVM)
         {
             ParentVM = parentVM;
-            CommandSave = new RelayCommand(() => SaveAsync(), () => CanSave());
             Id = "";
             Source = "";
         }
@@ -128,13 +127,7 @@ namespace Geomapmaker.ViewModels.DataSources
             }
             else
             {
-                ParentVM.RefreshDataSourcesAsync();
-
-                // Reset values
-                Id = "";
-                Source = "";
-                Url = "";
-                Notes = "";
+                ParentVM.CloseProwindow();
             }
         }
 

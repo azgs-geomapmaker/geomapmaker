@@ -1,6 +1,6 @@
-﻿using Geomapmaker.ViewModels;
+﻿using Geomapmaker.ViewModels.Hierarchy;
 
-namespace Geomapmaker.Views
+namespace Geomapmaker.Views.Hierarchy
 {
     /// <summary>
     /// Interaction logic for Hierarchy.xaml

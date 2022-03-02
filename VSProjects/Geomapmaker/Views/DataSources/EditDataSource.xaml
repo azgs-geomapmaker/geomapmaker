@@ -65,8 +65,8 @@
             <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" Visibility="{Binding Edit.Visibility}"/>
 
             <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5" >
-                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
-                <Button Margin="5" Padding="5" Command="{Binding Edit.CommandUpdate}">Update</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}">Update</Button>
             </StackPanel>
 
         </Grid>

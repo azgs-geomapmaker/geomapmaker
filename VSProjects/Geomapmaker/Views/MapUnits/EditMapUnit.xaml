@@ -56,7 +56,10 @@
             <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding StandardDMUs}" SelectedItem="{Binding Edit.Selected}" ToolTip="{Binding Tooltips[Edit]}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding MU}" ToolTip="{Binding Tooltip}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+                            <TextBlock Text="{Binding FullName}" ToolTip="{Binding Tooltip}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -137,8 +140,8 @@
             <ComboBox Grid.Row="22" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" Visibility="{Binding Edit.Visibility}" />
 
             <StackPanel Grid.Row="23" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Button Margin="5" Padding="5" Command="{Binding CommandCancel}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">Cancel</Button>
-                <Button Margin="5" Padding="5" Command="{Binding Edit.CommandUpdate}">Update</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
+                <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}">Update</Button>
             </StackPanel>
 
         </Grid>

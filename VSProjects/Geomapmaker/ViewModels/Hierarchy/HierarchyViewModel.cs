@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels
+namespace Geomapmaker.ViewModels.Hierarchy
 {
     public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
     {
@@ -35,22 +35,20 @@ namespace Geomapmaker.ViewModels
 
         public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
 
-        public ICommand CommandSave { get; }
+        public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
-        public ICommand CommandCancel => new RelayCommand((proWindow) =>
+        private bool CanSave()
         {
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
-
-        }, () => true);
-
-        public HierarchyViewModel()
-        {
-            // Init submit command
-            CommandSave = new RelayCommand(() => SaveAsync());
+            // TODO Check if a change was made!
+            return true;
         }
+
+        public event EventHandler WindowCloseEvent;
+
+        public ICommand CommandCancel => new RelayCommand(() =>
+        {
+            WindowCloseEvent(this, new EventArgs());
+        });
 
         // Build the tree stucture by looping over the dmus
         public async Task BuildTree()
@@ -230,7 +228,8 @@ namespace Geomapmaker.ViewModels
             }
             else
             {
-                // Reset
+                // Close window
+                WindowCloseEvent(this, new EventArgs());
             }
         }
 
@@ -286,8 +285,7 @@ namespace Geomapmaker.ViewModels
 
     internal class ShowHierarchy : Button
     {
-
-        private Views.Hierarchy _hierarchy = null;
+        private Views.Hierarchy.Hierarchy _hierarchy = null;
 
         protected override async void OnClick()
         {
@@ -297,7 +295,7 @@ namespace Geomapmaker.ViewModels
                 return;
             }
 
-            _hierarchy = new Views.Hierarchy
+            _hierarchy = new Views.Hierarchy.Hierarchy
             {
                 Owner = Application.Current.MainWindow
             };
@@ -305,6 +303,9 @@ namespace Geomapmaker.ViewModels
             await _hierarchy.hierarchyVM.BuildTree();
 
             _hierarchy.Closed += (o, e) => { _hierarchy = null; };
+
+            _hierarchy.hierarchyVM.WindowCloseEvent += (s, e) => _hierarchy.Close();
+
             _hierarchy.Show();
         }
     }

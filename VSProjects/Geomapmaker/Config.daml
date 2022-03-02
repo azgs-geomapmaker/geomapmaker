@@ -21,7 +21,8 @@
           <group refID="Geomapmaker_Admin" />
           <group refID="Geomapmaker_Tables" />
           <group refID="Geomapmaker_ContactsAndFaults" />
-          <group refID="Geomapmaker_MapUnitPolyTool" />
+          <group refID="Geomapmaker_MUPs" />
+          <group refID="Geomapmaker_Renderers" />
         </tab>
       </tabs>
       <!-- Groups -->
@@ -38,27 +39,16 @@
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts And Faults" keytip="CF">
           <button refID="Geomapmaker_ContactsFaults" />
         </group>
-        <group id="Geomapmaker_MapUnitPolyTool" caption="Map Unit Poly" keytip="MUP">
-          <tool refID="Geomapmaker_MapUnitPolyAddTool" />
-          <tool refID="Geomapmaker_MapUnitPolyEditTool" />
+        <group id="Geomapmaker_MUPs" caption="Map Unit Poly" keytip="MUP">
+          <button refID="Geomapmaker_MapUnitPolys" />
+          <button refID="Geomapmaker_GeneratePolygons" />
+        </group>
+        <group id="Geomapmaker_Renderers" caption="Symbology" keytip="todo">
+          <button refID="Geomapmaker_ResetRenderers" />
         </group>
       </groups>
       <!-- Controls -->
       <controls>
-        <tool id="Geomapmaker_MapUnitPolyAddTool" categoryRefID="esri_editing_construction_point" caption="Add Map Unit Poly" className="MapUnitPolyAddTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="connectionPropertiesNotNull" keytip="todo">
-          <!--note: use esri_editing_construction_polyline,  esri_editing_construction_polygon for categoryRefID as needed-->
-          <tooltip heading="Map Unit Polys">
-            Add a new map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
-          <content guid="17a27ef5-1084-4d46-abc8-11641bc5b871" />
-        </tool>
-        <tool id="Geomapmaker_MapUnitPolyEditTool" caption="Edit Map Unit Poly" className="MapUnitPolyEditTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="connectionPropertiesNotNull" keytip="todo">
-          <tooltip heading="Map Unit Polys">
-            Edit an existing map unit poly<disabledText>User must log in, then select a project and data source to enable.</disabledText></tooltip>
-        </tool>
-        <button id="Geomapmaker_AddEditMapUnitPolysDockPane_ShowButton" caption="Show AddEditMapUnitPolysDockPane" className="AddEditMapUnitPolysDockPane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
-          <tooltip heading="Show Dockpane">
-            Show Dockpane<disabledText /></tooltip>
-        </button>
         <comboBox id="Geomapmaker_DataSourceComboBox" caption="Data Source" className="Geomapmaker.RibbonElements.DataSourceComboBox" itemWidth="120" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" keytip="todo">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
@@ -74,22 +64,33 @@
         <button id="Geomapmaker_MapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.ShowMapUnits" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_Hierarchy" caption="Hierarchy" className="Geomapmaker.ViewModels.ShowHierarchy" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Hierarchy" caption="Hierarchy" className="Geomapmaker.ViewModels.Hierarchy.ShowHierarchy" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
         <button id="Geomapmaker_ContactsFaults" caption="Contacts and Faults Templates" className="Geomapmaker.ViewModels.ContactsFaults.ShowContactsFaults" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
-        <tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" >
+        <tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </tool>
+        <button id="Geomapmaker_MapUnitPolys" caption="Map Unit Polys" className="Geomapmaker.ViewModels.MapUnitPolys.ShowMapUnitPolys" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <tool id="Geomapmaker_SelectContactsFaultsTool" caption="SelectContactsFaultsTool" className="Geomapmaker.MapTools.SelectContactsFaultsTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="esri_mapping_mapPane">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </tool>
+        <button id="Geomapmaker_ResetRenderers" caption="Update Renderers" className="Geomapmaker.RibbonElements.RendererButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_GeneratePolygons" caption="Generate All Polygons" className="Geomapmaker.RibbonElements.GeneratePolygons" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <tool id="Geomapmaker_SelectMapUnitPolysTool" caption="SelectMapUnitPolysTool" className="Geomapmaker.MapTools.SelectMapUnitPolysTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="esri_mapping_mapPane">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </tool>
       </controls>
       <!-- Dock Panes -->
-      <dockPanes>
-        <dockPane id="Geomapmaker_AddEditMapUnitPolysDockPane" caption="Map Unit Polys" className="AddEditMapUnitPolysDockPaneViewModel" dock="group" dockWith="esri_core_contentsDockPane">
-          <content className="AddEditMapUnitPolysDockPaneView" />
-        </dockPane>
-      </dockPanes>
+      <dockPanes></dockPanes>
     </insertModule>
   </modules>
   <!-- Conditions -->

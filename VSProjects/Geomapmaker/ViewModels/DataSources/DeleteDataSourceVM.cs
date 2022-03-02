@@ -17,12 +17,11 @@ namespace Geomapmaker.ViewModels.DataSources
 {
     public class DeleteDataSourceVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandDelete { get; }
+        public ICommand CommandDelete => new RelayCommand(() => DeleteAsync(), () => CanDelete());
 
         public DeleteDataSourceVM(DataSourcesViewModel parentVM)
         {
             ParentVM = parentVM;
-            CommandDelete = new RelayCommand(() => DeleteAsync(), () => CanDelete());
         }
 
         public DataSourcesViewModel ParentVM { get; set; }
@@ -129,9 +128,7 @@ namespace Geomapmaker.ViewModels.DataSources
             }
             else
             {
-                ParentVM.RefreshDataSourcesAsync();
-
-                Selected = null;
+                ParentVM.CloseProwindow();
             }
         }
 

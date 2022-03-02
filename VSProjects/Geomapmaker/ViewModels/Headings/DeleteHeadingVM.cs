@@ -17,13 +17,12 @@ namespace Geomapmaker.ViewModels.Headings
 {
     public class DeleteHeadingVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandDelete { get; }
+        public ICommand CommandDelete => new RelayCommand(() => DeleteAsync(), () => CanDelete());
 
         public HeadingsViewModel ParentVM { get; set; }
 
         public DeleteHeadingVM(HeadingsViewModel parentVM)
         {
-            CommandDelete = new RelayCommand(() => DeleteAsync(), () => CanDelete());
             ParentVM = parentVM;
         }
 
@@ -130,10 +129,7 @@ namespace Geomapmaker.ViewModels.Headings
             }
             else
             {
-                ParentVM.RefreshMapUnitsAsync();
-
-                // Reset values
-                Selected = null;
+                ParentVM.CloseProwindow();
             }
         }
 

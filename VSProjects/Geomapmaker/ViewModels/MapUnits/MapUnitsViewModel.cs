@@ -7,22 +7,20 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Geomapmaker.ViewModels.MapUnits
 {
     public class MapUnitsViewModel : ProWindow, INotifyPropertyChanged
     {
-        public ICommand CommandCancel => new RelayCommand((proWindow) =>
-        {
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
+        public event EventHandler WindowCloseEvent;
 
-        }, () => true);
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public void CloseProwindow()
+        {
+            WindowCloseEvent(this, new EventArgs());
+        }
 
         public CreateMapUnitVM Create { get; set; }
         public EditMapUnitVM Edit { get; set; }
@@ -139,6 +137,9 @@ namespace Geomapmaker.ViewModels.MapUnits
             _mapunits.mapUnitsVM.RefreshMapUnitsAsync();
 
             _mapunits.Closed += (o, e) => { _mapunits = null; };
+
+            _mapunits.mapUnitsVM.WindowCloseEvent += (s, e) => _mapunits.Close();
+
             _mapunits.Show();
 
         }

@@ -6,6 +6,7 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
+using Geomapmaker.RibbonElements;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,16 +21,13 @@ namespace Geomapmaker.ViewModels.MapUnits
 {
     public class EditMapUnitVM : DockPane, INotifyDataErrorInfo
     {
-        // Edits's save button
-        public ICommand CommandUpdate { get; }
+        // Edits's save button 
+        public ICommand CommandUpdate => new RelayCommand(() => UpdateAsync(), () => CanUpdate());
 
         public MapUnitsViewModel ParentVM { get; set; }
 
         public EditMapUnitVM(MapUnitsViewModel parentVM)
         {
-            // Init commands
-            CommandUpdate = new RelayCommand(() => UpdateAsync(), () => CanUpdate());
-
             ParentVM = parentVM;
         }
 
@@ -322,10 +320,10 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
-                ParentVM.RefreshMapUnitsAsync();
+                // Add new symbology/templates if needed. Remove old symbology/templates if needed.
+                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
-                // Reset values
-                Selected = null;
+                ParentVM.CloseProwindow();
             }
         }
 

@@ -2,6 +2,7 @@
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using Geomapmaker.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,14 +14,14 @@ namespace Geomapmaker.ViewModels.Headings
 {
     public class HeadingsViewModel : ProWindow, INotifyPropertyChanged
     {
-        public ICommand CommandCancel => new RelayCommand((proWindow) =>
-        {
-            if (proWindow != null)
-            {
-                (proWindow as ProWindow).Close();
-            }
+        public event EventHandler WindowCloseEvent;
 
-        }, () => true);
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public void CloseProwindow()
+        {
+            WindowCloseEvent(this, new EventArgs());
+        }
 
         public CreateHeadingVM Create { get; set; }
         public EditHeadingVM Edit { get; set; }
@@ -123,6 +124,8 @@ namespace Geomapmaker.ViewModels.Headings
             _headings.headingsVM.RefreshMapUnitsAsync();
 
             _headings.Closed += (o, e) => { _headings = null; };
+
+            _headings.headingsVM.WindowCloseEvent += (s, e) => _headings.Close();
 
             _headings.Show();
         }

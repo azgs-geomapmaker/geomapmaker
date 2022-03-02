@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Text;
+using System.Windows.Controls;
 
 namespace Geomapmaker.Models
 {
@@ -28,6 +30,20 @@ namespace Geomapmaker.Models
         public string Symbol { get; set; }
 
         public string AreaFillRGB { get; set; }
+
+        public (double, double, double) RGB
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(AreaFillRGB))
+                {
+                    return (Convert.ToDouble(AreaFillRGB.Split(',')[0]), Convert.ToDouble(AreaFillRGB.Split(',')[1]), Convert.ToDouble(AreaFillRGB.Split(',')[2]));
+                }
+
+                // black
+                return (0, 0, 0);
+            }
+        }
 
         public string HexColor { get; set; }
 
@@ -98,10 +114,15 @@ namespace Geomapmaker.Models
 
     public class MapUnitTreeItem : MapUnit
     {
+        public bool IsExpanded { get; set; }
+
+        public bool IsSelected { get; set; }
+
         public ObservableCollection<MapUnitTreeItem> Children { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
         public bool CanAcceptChildren => string.IsNullOrEmpty(ParagraphStyle) || ParagraphStyle == "Heading";
 
         public string ColorVisibility => ParagraphStyle == "Heading" ? "Collapsed" : "Visible";
     }
+
 }

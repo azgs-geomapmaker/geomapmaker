@@ -226,9 +226,9 @@
             </WrapPanel>
 
             <StackPanel Grid.Row="18" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-                <Button Padding="5" Command="{Binding CommandClose}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" >Close</Button>
+                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Close</Button>
                 <Button Padding="5" Command="{Binding Create.CommandCreateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save Template</Button>
-                <Button Padding="5" Command="{Binding Create.CommandSketch}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Sketch</Button>
+                <Button Padding="5" Command="{Binding Create.CommandSketch}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Sketch</Button>
             </StackPanel>
 
         </Grid>
