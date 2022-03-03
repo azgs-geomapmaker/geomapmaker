@@ -48,11 +48,8 @@ namespace Geomapmaker.RibbonElements
                         {
                             DataSource dS = new DataSource
                             {
-                                ObjectId = long.Parse(row["objectid"].ToString()),
                                 Source = row["source"]?.ToString(),
                                 DataSource_ID = row["datasources_id"]?.ToString(),
-                                Url = row["url"]?.ToString(),
-                                Notes = row["notes"]?.ToString()
                             };
 
                             Add(new ComboBoxItem(dS.DataSource_ID, null, dS.Source));
