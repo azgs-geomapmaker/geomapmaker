@@ -22,6 +22,7 @@
           <group refID="Geomapmaker_Tables" />
           <group refID="Geomapmaker_ContactsAndFaults" />
           <group refID="Geomapmaker_MUPs" />
+          <group refID="Geomapmaker_Stations" />
           <group refID="Geomapmaker_Renderers" />
         </tab>
       </tabs>
@@ -42,6 +43,9 @@
         <group id="Geomapmaker_MUPs" caption="Map Unit Poly" keytip="MUP">
           <button refID="Geomapmaker_MapUnitPolys" />
           <button refID="Geomapmaker_GeneratePolygons" />
+        </group>
+        <group id="Geomapmaker_Stations" caption="Stations" keytip="todo">
+          <button refID="Geomapmaker_Stations_Btn" />
         </group>
         <group id="Geomapmaker_Renderers" caption="Symbology" keytip="todo">
           <button refID="Geomapmaker_ResetRenderers" />
@@ -88,6 +92,9 @@
         <tool id="Geomapmaker_SelectMapUnitPolysTool" caption="SelectMapUnitPolysTool" className="Geomapmaker.MapTools.SelectMapUnitPolysTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" condition="esri_mapping_mapPane">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </tool>
+        <button id="Geomapmaker_Stations_Btn" caption="Stations" className="Geomapmaker.ViewModels.Stations.ShowStations" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
       </controls>
       <!-- Dock Panes -->
       <dockPanes></dockPanes>

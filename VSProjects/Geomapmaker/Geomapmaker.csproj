@@ -212,6 +212,10 @@
     <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="Data\ContactsAndFaults.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
+    <Compile Include="ViewModels\Stations\Stations.cs" />
+    <Compile Include="Views\Stations\Stations.xaml.cs">
+      <DependentUpon>Stations.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MapUnitPolys\CreateMapUnitPoly.xaml.cs">
       <DependentUpon>CreateMapUnitPoly.xaml</DependentUpon>
     </Compile>
@@ -317,6 +321,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Stations\Stations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MapUnitPolys\CreateMapUnitPoly.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -414,6 +422,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   PackageAction can be:
