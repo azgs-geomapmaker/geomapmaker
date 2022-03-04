@@ -212,7 +212,11 @@
     <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="Data\ContactsAndFaults.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
-    <Compile Include="ViewModels\Stations\Stations.cs" />
+    <Compile Include="ViewModels\Stations\CreateStationsVM.cs" />
+    <Compile Include="ViewModels\Stations\StationsViewModel.cs" />
+    <Compile Include="Views\Stations\CreateStations.xaml.cs">
+      <DependentUpon>CreateStations.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Stations\Stations.xaml.cs">
       <DependentUpon>Stations.xaml</DependentUpon>
     </Compile>
@@ -321,6 +325,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Stations\CreateStations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Stations\Stations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
