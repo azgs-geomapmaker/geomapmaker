@@ -92,7 +92,7 @@ namespace Geomapmaker.Data
             }
 
             // Get the CF Symbology Options
-            List<CFSymbol> SymbolOptions = CFSymbology.CFSymbolOptionsList;
+            List<GemsSymbol> SymbolOptions = CFSymbology.CFSymbolOptionsList;
 
             if (SymbolOptions == null)
             {
@@ -111,7 +111,7 @@ namespace Geomapmaker.Data
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
-                    CFSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == template.Symbol);
+                    GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == template.Symbol);
 
                     if (Symbol != null)
                     {
@@ -137,7 +137,7 @@ namespace Geomapmaker.Data
                         {
                             string cfSymbolKey = row["symbol"]?.ToString();
 
-                            CFSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
+                            GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
 
                             if (Symbol != null)
                             {

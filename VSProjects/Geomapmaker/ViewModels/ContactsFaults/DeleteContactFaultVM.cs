@@ -108,7 +108,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public string Label { get; set; }
 
-        public CFSymbol Symbol { get; set; }
+        public GemsSymbol Symbol { get; set; }
         
         public string IdentityConfidence { get; set; }
         

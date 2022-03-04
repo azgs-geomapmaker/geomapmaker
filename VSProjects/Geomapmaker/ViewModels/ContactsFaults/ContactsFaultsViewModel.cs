@@ -34,8 +34,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             Delete = new DeleteContactFaultVM(this);
         }
 
-        private List<CFSymbol> _symbolOptions { get; set; }
-        public List<CFSymbol> SymbolOptions
+        private List<GemsSymbol> _symbolOptions { get; set; }
+        public List<GemsSymbol> SymbolOptions
         {
             get => _symbolOptions;
             set

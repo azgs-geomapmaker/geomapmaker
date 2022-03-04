@@ -12,11 +12,11 @@ namespace Geomapmaker.Data
 {
     public class CFSymbology
     {
-        public static List<CFSymbol> CFSymbolOptionsList;
+        public static List<GemsSymbol> CFSymbolOptionsList;
 
         public static async Task RefreshCFSymbolOptions()
         {
-            List<CFSymbol> cfSymbols = new List<CFSymbol>();
+            List<GemsSymbol> cfSymbols = new List<GemsSymbol>();
 
             StandaloneTable CFSymbologyTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "cfsymbology");
 
@@ -42,7 +42,7 @@ namespace Geomapmaker.Data
                     {
                         using (Row row = rowCursor.Current)
                         {
-                            CFSymbol cfS = new CFSymbol
+                            GemsSymbol cfS = new GemsSymbol
                             {
                                 Key = row["key"].ToString(),
                                 Description = row["description"]?.ToString(),

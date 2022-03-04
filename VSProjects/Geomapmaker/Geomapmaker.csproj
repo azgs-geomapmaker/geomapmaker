@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\MapUnitPolys.cs" />
+    <Compile Include="Data\OrientationSymbology.cs" />
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
     <Compile Include="RibbonElements\GeneratePolygons.cs" />
@@ -318,7 +319,7 @@
     <Compile Include="ViewModels\MapUnits\MapUnitsViewModel.cs" />
     <Compile Include="Models\DataSource.cs" />
     <Compile Include="Models\Interval.cs" />
-    <Compile Include="Models\CFSymbol.cs" />
+    <Compile Include="Models\GemsSymbol.cs" />
     <Compile Include="Models\ContactFaultTemplate.cs" />
     <Compile Include="Models\MapUnitPoly.cs" />
     <Compile Include="GeomapmakerConfiguration.cs" />
