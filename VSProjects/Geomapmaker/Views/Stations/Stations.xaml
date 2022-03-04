@@ -8,9 +8,9 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.Stations" 
         mc:Ignorable="d"
         Title="Stations"
-        Height="300" 
+        Height="600" 
         Width="300"
-        MinHeight="300" 
+        MinHeight="600" 
         MinWidth="300"
         WindowStartupLocation="CenterOwner"
     >

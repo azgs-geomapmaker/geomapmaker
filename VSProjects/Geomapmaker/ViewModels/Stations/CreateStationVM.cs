@@ -1,13 +1,27 @@
-﻿using ArcGIS.Desktop.Framework.Contracts;
+﻿using ArcGIS.Desktop.Framework;
+using ArcGIS.Desktop.Framework.Contracts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Stations
 {
     public class CreateStationVM : PropertyChangedBase, INotifyDataErrorInfo
     {
+        public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
+
+        private bool CanSave()
+        {
+            return true;
+        }
+
+        private void SaveAsync()
+        {
+            //throw new NotImplementedException();
+        }
+
         public StationsViewModel ParentVM { get; set; }
 
         public CreateStationVM(StationsViewModel parentVM)
