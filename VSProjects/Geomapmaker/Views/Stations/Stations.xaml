@@ -32,14 +32,14 @@
 
         <TabControl Grid.Row="0" Grid.Column="0">
             <TabItem Header="Create" >
-                <tabData:CreateStations />
+                <tabData:CreateStation />
             </TabItem>
-            <!--<TabItem Header="Edit">
-                <tabData:EditDataSource />
+            <TabItem Header="Edit">
+                <tabData:EditStation />
             </TabItem>
             <TabItem Header="Delete">
-                <tabData:DeleteDataSource />
-            </TabItem>-->
+                <tabData:DeleteStation />
+            </TabItem>
         </TabControl>
     </Grid>
 </controls:ProWindow>

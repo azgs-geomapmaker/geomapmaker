@@ -19,11 +19,15 @@ namespace Geomapmaker.ViewModels.Stations
             WindowCloseEvent(this, new EventArgs());
         }
 
-        public CreateStationsVM Create { get; set; }
+        public CreateStationVM Create { get; set; }
+        public EditStationVM Edit { get; set; }
+        public DeleteStationVM Delete { get; set; }
 
         public StationsViewModel()
         {
-            Create = new CreateStationsVM(this);
+            Create = new CreateStationVM(this);
+            Edit = new EditStationVM(this);
+            Delete = new DeleteStationVM(this);
         }
 
         #region INotifyPropertyChanged

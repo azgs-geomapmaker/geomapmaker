@@ -212,10 +212,18 @@
     <Compile Include="Data\CFSymbology.cs" />
     <Compile Include="Data\ContactsAndFaults.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
-    <Compile Include="ViewModels\Stations\CreateStationsVM.cs" />
+    <Compile Include="ViewModels\Stations\DeleteStationVM.cs" />
+    <Compile Include="ViewModels\Stations\EditStationVM.cs" />
+    <Compile Include="ViewModels\Stations\CreateStationVM.cs" />
     <Compile Include="ViewModels\Stations\StationsViewModel.cs" />
-    <Compile Include="Views\Stations\CreateStations.xaml.cs">
-      <DependentUpon>CreateStations.xaml</DependentUpon>
+    <Compile Include="Views\Stations\DeleteStation.xaml.cs">
+      <DependentUpon>DeleteStation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Stations\EditStation.xaml.cs">
+      <DependentUpon>EditStation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Stations\CreateStation.xaml.cs">
+      <DependentUpon>CreateStation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Stations\Stations.xaml.cs">
       <DependentUpon>Stations.xaml</DependentUpon>
@@ -325,7 +333,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\Stations\CreateStations.xaml">
+    <Page Include="Views\Stations\DeleteStation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Stations\EditStation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Stations\CreateStation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

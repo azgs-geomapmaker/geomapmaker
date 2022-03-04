@@ -6,11 +6,11 @@ using System.ComponentModel;
 
 namespace Geomapmaker.ViewModels.Stations
 {
-    public class CreateStationsVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class DeleteStationVM : PropertyChangedBase, INotifyDataErrorInfo
     {
         public StationsViewModel ParentVM { get; set; }
 
-        public CreateStationsVM(StationsViewModel parentVM)
+        public DeleteStationVM(StationsViewModel parentVM)
         {
             ParentVM = parentVM;
         }
