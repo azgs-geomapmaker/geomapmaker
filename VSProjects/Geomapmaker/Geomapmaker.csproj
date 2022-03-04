@@ -201,6 +201,7 @@
   <ItemGroup>
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
+    <Compile Include="Models\Station.cs" />
     <Compile Include="RibbonElements\GeneratePolygons.cs" />
     <Compile Include="MapTools\SelectContactsFaultsTool.cs" />
     <Compile Include="Models\MapUnitPolyTemplate.cs" />
