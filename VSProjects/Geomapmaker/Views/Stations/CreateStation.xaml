@@ -27,6 +27,10 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -41,9 +45,15 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Type" />
             <TextBox Grid.Row="2" Grid.Column="1" Text="" />
 
-            <TextBlock Grid.Row="3" Grid.Column="1" Text="Location Confidence Meters" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="X Coordinate" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="" />
+
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Y Coordinate" />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="" />
+
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="Location Confidence Meters" />
             <ComboBox 
-            Grid.Row="4" 
+            Grid.Row="8" 
             Grid.Column="1" 
             ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
             IsReadOnly="False" 
@@ -51,13 +61,13 @@
             >
             </ComboBox>
 
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="Plot At Scale" />
-            <TextBox Grid.Row="6" Grid.Column="1" Text="" />
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="Plot At Scale" />
+            <TextBox Grid.Row="10" Grid.Column="1" Text="" />
 
-            <TextBlock Grid.Row="7" Grid.Column="1" Text="Notes" />
-            <TextBox Grid.Row="8" Grid.Column="1" Text="" />
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="Notes" />
+            <TextBox Grid.Row="12" Grid.Column="1" Text="" />
 
-            <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
                 <Button Padding="5" Command="{Binding Create.CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save</Button>
             </StackPanel>

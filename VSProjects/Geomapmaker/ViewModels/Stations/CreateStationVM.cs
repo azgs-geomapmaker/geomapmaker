@@ -12,6 +12,63 @@ namespace Geomapmaker.ViewModels.Stations
     {
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
+        private string _type;
+        public string Type
+        {
+            get => _type;
+            set
+            {
+                SetProperty(ref _type, value, () => Type);
+            }
+        }
+
+        private string _xCoordinate;
+        public string XCoordinate
+        {
+            get => _xCoordinate;
+            set
+            {
+                SetProperty(ref _xCoordinate, value, () => XCoordinate);
+            }
+        }
+
+        private string _yCoordinate;
+        public string YCoordinate
+        {
+            get => _yCoordinate;
+            set
+            {
+                SetProperty(ref _yCoordinate, value, () => YCoordinate);
+            }
+        }
+
+        private string _locationConfidenceMeters;
+        public string LocationConfidenceMeters
+        {
+            get => _locationConfidenceMeters;
+            set
+            {
+                SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
+            }
+        }
+
+        private string _plotAtScale;
+        public string PlotAtScale
+        {
+            get => _plotAtScale;
+            set
+            {
+                SetProperty(ref _plotAtScale, value, () => PlotAtScale);
+            }
+        }
+
+        private string _notes;
+        public string Notes
+        {
+            get => _notes;
+            set => SetProperty(ref _notes, value, () => Notes);
+        }
+
         private bool CanSave()
         {
             return true;
