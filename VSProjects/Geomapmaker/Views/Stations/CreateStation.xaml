@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:data="clr-namespace:Geomapmaker.Data" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" >
 
@@ -22,19 +23,19 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -51,22 +52,28 @@
             <TextBox Grid.Row="2" Grid.Column="1" Text="" />
 
             <TextBlock Grid.Row="3" Grid.Column="1" Text="Symbol" />
-            <ListBox Grid.Row="4" Grid.Column="1" MinHeight="50" >
-            </ListBox>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="" />
 
             <TextBlock Grid.Row="5" Grid.Column="1" Text="Label" />
             <TextBox Grid.Row="6" Grid.Column="1" Text="" />
 
-            <TextBlock Grid.Row="7" Grid.Column="1" Text="LocationConfidenceMeters" />
-            <TextBox Grid.Row="8" Grid.Column="1" Text="" />
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="Location Confidence Meters" />
+            <ComboBox 
+            Grid.Row="8" 
+            Grid.Column="1" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
+            IsReadOnly="False" 
+            IsEditable="False" 
+            >
+            </ComboBox>
 
-            <TextBlock Grid.Row="9" Grid.Column="1" Text="PlotAtScale" />
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="Plot At Scale" />
             <TextBox Grid.Row="10" Grid.Column="1" Text="" />
 
             <TextBlock Grid.Row="11" Grid.Column="1" Text="StationsID" />
             <TextBox Grid.Row="12" Grid.Column="1" Text="" />
 
-            <TextBlock Grid.Row="13" Grid.Column="1" Text="MapUnit" />
+            <TextBlock Grid.Row="13" Grid.Column="1" Text="Map Unit" />
             <TextBox Grid.Row="14" Grid.Column="1" Text="" />
 
             <TextBlock Grid.Row="15" Grid.Column="1" Text="Notes" />

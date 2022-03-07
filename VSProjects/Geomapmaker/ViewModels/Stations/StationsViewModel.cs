@@ -54,15 +54,16 @@ namespace Geomapmaker.ViewModels.Stations
                 return;
             }
 
-            _stations = new Views.Stations.Stations();
-            _stations.Owner = FrameworkApplication.Current.MainWindow;
+            _stations = new Views.Stations.Stations
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
             _stations.Closed += (o, e) => { _stations = null; };
 
             _stations.stationsVM.WindowCloseEvent += (s, e) => _stations.Close();
 
             _stations.Show();
-
         }
-
     }
 }
