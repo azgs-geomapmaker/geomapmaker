@@ -43,29 +43,30 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Type" />
-            <TextBox Grid.Row="2" Grid.Column="1" Text="" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="3" Grid.Column="1" Text="X Coordinate" />
-            <TextBox Grid.Row="4" Grid.Column="1" Text="" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.XCoordinate, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="5" Grid.Column="1" Text="Y Coordinate" />
-            <TextBox Grid.Row="6" Grid.Column="1" Text="" />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.YCoordinate, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="7" Grid.Column="1" Text="Location Confidence Meters" />
             <ComboBox 
             Grid.Row="8" 
             Grid.Column="1" 
-            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
+            SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
             IsEditable="False" 
             >
             </ComboBox>
 
             <TextBlock Grid.Row="9" Grid.Column="1" Text="Plot At Scale" />
-            <TextBox Grid.Row="10" Grid.Column="1" Text="" />
+            <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Create.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="11" Grid.Column="1" Text="Notes" />
-            <TextBox Grid.Row="12" Grid.Column="1" Text="" />
+            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" />
 
             <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
