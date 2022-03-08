@@ -1,6 +1,5 @@
 ﻿using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -19,6 +18,19 @@ namespace Geomapmaker.ViewModels.Stations
     {
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
+        public StationsViewModel ParentVM { get; set; }
+
+        public CreateStationVM(StationsViewModel parentVM)
+        {
+            ParentVM = parentVM;
+
+            // Trigger validation
+            XCoordinate = "";
+            YCoordinate = "";
+            LocationConfidenceMeters = "";
+            PlotAtScale = "0";
+        }
+
         private string _fieldID;
         public string FieldID
         {
@@ -36,8 +48,10 @@ namespace Geomapmaker.ViewModels.Stations
             set
             {
                 SetProperty(ref _xCoordinate, value, () => XCoordinate);
+                ValidateXCoordinate(XCoordinate, "XCoordinate");
             }
         }
+        private double XCoordinateDouble;
 
         private string _yCoordinate;
         public string YCoordinate
@@ -46,16 +60,19 @@ namespace Geomapmaker.ViewModels.Stations
             set
             {
                 SetProperty(ref _yCoordinate, value, () => YCoordinate);
+                ValidateYCoordinate(YCoordinate, "YCoordinate");
             }
         }
+        private double YCoordinateeDouble;
 
-        private string _locationConfidenceMeters = "0";
+        private string _locationConfidenceMeters;
         public string LocationConfidenceMeters
         {
             get => _locationConfidenceMeters;
             set
             {
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
+                ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
             }
         }
 
@@ -66,8 +83,11 @@ namespace Geomapmaker.ViewModels.Stations
             set
             {
                 SetProperty(ref _plotAtScale, value, () => PlotAtScale);
+                ValidatePlotAtScale(PlotAtScale, "PlotAtScale");
             }
         }
+        // Holds the converted int value 
+        private int PlotAtScaleInt;
 
         private string _notes;
         public string Notes
@@ -76,14 +96,21 @@ namespace Geomapmaker.ViewModels.Stations
             set => SetProperty(ref _notes, value, () => Notes);
         }
 
-        private bool CanSave()
+        private string _dataSourceId = GeomapmakerModule.DataSourceId;
+        public string DataSourceId
         {
-            return true;
+            get => _dataSourceId;
+            set => SetProperty(ref _dataSourceId, value, () => DataSourceId);
         }
 
-        private void SaveAsync()
+        private bool CanSave()
         {
-            bool IsSucceeded;
+            return !HasErrors;
+        }
+
+        private async void SaveAsync()
+        {
+            bool IsSucceeded = false;
 
             FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
 
@@ -93,40 +120,43 @@ namespace Geomapmaker.ViewModels.Stations
                 return;
             }
 
-            QueuedTask.Run(() =>
+            await QueuedTask.Run(async () =>
             {
                 EditOperation createFeatures = new EditOperation
                 {
                     Name = "Create Station"
                 };
 
-                MapPointBuilder pointBuilder = new MapPointBuilder(100,100, MapView.Active.Map.SpatialReference);
+                MapPointBuilder pointBuilder = new MapPointBuilder(100, 100, MapView.Active.Map.SpatialReference);
 
                 // Get geometry from point builder
                 Geometry point = pointBuilder.ToGeometry();
 
                 // Create features and set attributes
-                Dictionary<string, object> attributes = new Dictionary<string, object>();
-                attributes.Add("SHAPE", point);
-                attributes.Add("FieldID", FieldID);
-                attributes.Add("LocationConfidenceMeters", LocationConfidenceMeters);
-                attributes.Add("PlotAtScale", PlotAtScale);
-                attributes.Add("Notes", Notes);
-                
+                Dictionary<string, object> attributes = new Dictionary<string, object>
+                {
+                    { "SHAPE", point },
+                    { "FieldID", FieldID },
+                    { "LocationConfidenceMeters", LocationConfidenceMeters },
+                    { "PlotAtScale", PlotAtScale },
+                    { "Notes", Notes },
+                    { "DataSourceId", DataSourceId },
+                };
+
                 createFeatures.Create(stationsLayer, attributes);
 
                 // Execute to execute the operation
-                createFeatures.Execute();
+                await createFeatures.ExecuteAsync();
 
                 IsSucceeded = createFeatures.IsSucceeded;
             });
-        }
 
-        public StationsViewModel ParentVM { get; set; }
+            if (IsSucceeded)
+            {
+                // Zoom into new point
 
-        public CreateStationVM(StationsViewModel parentVM)
-        {
-            ParentVM = parentVM;
+                ParentVM.CloseProwindow();
+            }
         }
 
         #region Validation
@@ -148,6 +178,82 @@ namespace Geomapmaker.ViewModels.Stations
             // Otherwise, return the errors for that parameter.
             return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
                 null : (IEnumerable)_validationErrors[propertyName];
+        }
+
+        private void ValidateRequiredString(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateXCoordinate(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out XCoordinateDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Coordinate must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateYCoordinate(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out YCoordinateeDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Coordinate must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidatePlotAtScale(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!int.TryParse(text, out PlotAtScaleInt))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+            }
+            else if (PlotAtScaleInt < 0)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         #endregion
