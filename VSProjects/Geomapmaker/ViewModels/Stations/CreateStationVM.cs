@@ -1,9 +1,16 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Templates;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Stations
@@ -12,13 +19,13 @@ namespace Geomapmaker.ViewModels.Stations
     {
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
-        private string _type;
-        public string Type
+        private string _fieldID;
+        public string FieldID
         {
-            get => _type;
+            get => _fieldID;
             set
             {
-                SetProperty(ref _type, value, () => Type);
+                SetProperty(ref _fieldID, value, () => FieldID);
             }
         }
 
@@ -42,7 +49,7 @@ namespace Geomapmaker.ViewModels.Stations
             }
         }
 
-        private string _locationConfidenceMeters;
+        private string _locationConfidenceMeters = "0";
         public string LocationConfidenceMeters
         {
             get => _locationConfidenceMeters;
@@ -76,7 +83,43 @@ namespace Geomapmaker.ViewModels.Stations
 
         private void SaveAsync()
         {
-            //throw new NotImplementedException();
+            bool IsSucceeded;
+
+            FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
+
+            if (stationsLayer == null)
+            {
+                MessageBox.Show("Stations layer not found in active map.");
+                return;
+            }
+
+            QueuedTask.Run(() =>
+            {
+                EditOperation createFeatures = new EditOperation
+                {
+                    Name = "Create Station"
+                };
+
+                MapPointBuilder pointBuilder = new MapPointBuilder(100,100, MapView.Active.Map.SpatialReference);
+
+                // Get geometry from point builder
+                Geometry point = pointBuilder.ToGeometry();
+
+                // Create features and set attributes
+                Dictionary<string, object> attributes = new Dictionary<string, object>();
+                attributes.Add("SHAPE", point);
+                attributes.Add("FieldID", FieldID);
+                attributes.Add("LocationConfidenceMeters", LocationConfidenceMeters);
+                attributes.Add("PlotAtScale", PlotAtScale);
+                attributes.Add("Notes", Notes);
+                
+                createFeatures.Create(stationsLayer, attributes);
+
+                // Execute to execute the operation
+                createFeatures.Execute();
+
+                IsSucceeded = createFeatures.IsSucceeded;
+            });
         }
 
         public StationsViewModel ParentVM { get; set; }

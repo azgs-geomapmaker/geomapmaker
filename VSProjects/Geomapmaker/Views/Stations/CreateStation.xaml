@@ -42,8 +42,8 @@
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Type" />
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Field ID" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.FieldID, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="3" Grid.Column="1" Text="X Coordinate" />
             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.XCoordinate, UpdateSourceTrigger=PropertyChanged}" />
