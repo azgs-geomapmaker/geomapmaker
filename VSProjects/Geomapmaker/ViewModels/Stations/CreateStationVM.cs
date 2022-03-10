@@ -25,6 +25,7 @@ namespace Geomapmaker.ViewModels.Stations
             ParentVM = parentVM;
 
             // Trigger validation
+            SpatialReference = "";
             XCoordinate = "";
             YCoordinate = "";
             LocationConfidenceMeters = "";
@@ -38,6 +39,17 @@ namespace Geomapmaker.ViewModels.Stations
             set
             {
                 SetProperty(ref _fieldID, value, () => FieldID);
+            }
+        }
+
+        private string _spatialReference;
+        public string SpatialReference
+        {
+            get => _spatialReference;
+            set
+            {
+                SetProperty(ref _spatialReference, value, () => SpatialReference);
+                ValidateRequiredString(SpatialReference, "SpatialReference");
             }
         }
 
@@ -127,7 +139,7 @@ namespace Geomapmaker.ViewModels.Stations
                     Name = "Create Station"
                 };
 
-                MapPointBuilder pointBuilder = new MapPointBuilder(100, 100, MapView.Active.Map.SpatialReference);
+                MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateeDouble, MapView.Active.Map.SpatialReference);
 
                 // Get geometry from point builder
                 Geometry point = pointBuilder.ToGeometry();
@@ -149,6 +161,12 @@ namespace Geomapmaker.ViewModels.Stations
                 await createFeatures.ExecuteAsync();
 
                 IsSucceeded = createFeatures.IsSucceeded;
+
+                if (IsSucceeded)
+                {
+                    MapView.Active.ZoomTo(point);
+                }
+
             });
 
             if (IsSucceeded)
