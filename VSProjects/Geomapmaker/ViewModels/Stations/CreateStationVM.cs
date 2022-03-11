@@ -25,14 +25,18 @@ namespace Geomapmaker.ViewModels.Stations
             ParentVM = parentVM;
 
             // Get the wkid for the current Spatial Reference
-            string wkid = MapView.Active?.Map.SpatialReference.Wkid.ToString();
+            string currentWkid = MapView.Active?.Map.SpatialReference.Wkid.ToString();
 
             // Trigger validation
-            //SpatialReferenceWkid = wkid;
-            SpatialReferenceWkid = "3857";
+            SpatialReferenceWkid = currentWkid;
+
+            //SpatialReferenceWkid = "3857";
+            //XCoordinate = "502059";
+            //YCoordinate = "3564966";
+
             XCoordinate = "";
             YCoordinate = "";
-            LocationConfidenceMeters = "";
+            LocationConfidenceMeters = "10";
             PlotAtScale = "0";
         }
 
@@ -144,7 +148,8 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 EditOperation createFeatures = new EditOperation
                 {
-                    Name = "Create Station"
+                    Name = "Create Station",
+                    SelectNewFeatures = true
                 };
 
                 MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
@@ -155,7 +160,6 @@ namespace Geomapmaker.ViewModels.Stations
                 // Create features and set attributes
                 Dictionary<string, object> attributes = new Dictionary<string, object>
                 {
-                    { "SHAPE", point },
                     { "FieldID", FieldID },
                     { "LocationConfidenceMeters", LocationConfidenceMeters },
                     { "PlotAtScale", PlotAtScale },
@@ -163,7 +167,7 @@ namespace Geomapmaker.ViewModels.Stations
                     { "DataSourceId", DataSourceId },
                 };
 
-                createFeatures.Create(stationsLayer, attributes);
+                RowToken token = createFeatures.CreateEx(stationsLayer, point, attributes);
 
                 // Execute to execute the operation
                 createFeatures.Execute();
@@ -172,7 +176,19 @@ namespace Geomapmaker.ViewModels.Stations
 
                 if (IsSucceeded)
                 {
-                    MapView.Active.ZoomTo(point);
+                    MapView.Active?.ZoomTo(point);
+                }
+
+                //
+                // Validate X, Y Coordinates by checking if a feature was created at that geometry point. 
+                // I haven't found a way to check prior to executing the editOperation
+                //
+                if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(stationsLayer))
+                {
+                    IsSucceeded = false;
+
+                    // Undo the edit operation
+                    await createFeatures.UndoAsync();
                 }
 
             });
@@ -180,6 +196,12 @@ namespace Geomapmaker.ViewModels.Stations
             if (IsSucceeded)
             {
                 ParentVM.CloseProwindow();
+            }
+            else
+            {
+                // Raise error
+                _validationErrors["SpatialReferenceWkid"] = new List<string>() { "Coordinates not valid for Spatial Reference." };
+                RaiseErrorsChanged("SpatialReferenceWkid");
             }
         }
 
