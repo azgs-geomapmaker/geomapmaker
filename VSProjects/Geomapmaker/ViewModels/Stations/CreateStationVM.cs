@@ -27,16 +27,13 @@ namespace Geomapmaker.ViewModels.Stations
             // Get the wkid for the current Spatial Reference
             string currentWkid = MapView.Active?.Map.SpatialReference.Wkid.ToString();
 
-            // Trigger validation
+            // Set as the current spaital ref
             SpatialReferenceWkid = currentWkid;
 
-            //SpatialReferenceWkid = "3857";
-            //XCoordinate = "502059";
-            //YCoordinate = "3564966";
-
+            // Trigger validation
             XCoordinate = "";
             YCoordinate = "";
-            LocationConfidenceMeters = "10";
+            LocationConfidenceMeters = "";
             PlotAtScale = "0";
         }
 
