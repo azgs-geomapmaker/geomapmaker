@@ -203,6 +203,10 @@
     <Compile Include="Data\OrientationSymbology.cs" />
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
+    <Compile Include="ViewModels\OrientationPoints\OrientationPointsViewModel.cs" />
+    <Compile Include="Views\OrientationPoints\OrientationPoints.xaml.cs">
+      <DependentUpon>OrientationPoints.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RibbonElements\GeneratePolygons.cs" />
     <Compile Include="MapTools\SelectContactsFaultsTool.cs" />
     <Compile Include="Models\MapUnitPolyTemplate.cs" />
@@ -335,6 +339,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\OrientationPoints\OrientationPoints.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Stations\DeleteStation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

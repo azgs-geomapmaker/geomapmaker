@@ -46,6 +46,7 @@
         </group>
         <group id="Geomapmaker_Stations" caption="Stations" keytip="todo">
           <button refID="Geomapmaker_Stations_Btn" />
+          <button refID="Geomapmaker_OrientationPoints_Btn" />
         </group>
         <group id="Geomapmaker_Renderers" caption="Symbology" keytip="todo">
           <button refID="Geomapmaker_ResetRenderers" />
@@ -93,6 +94,9 @@
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </tool>
         <button id="Geomapmaker_Stations_Btn" caption="Stations" className="Geomapmaker.ViewModels.Stations.ShowStations" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_OrientationPoints_Btn" caption="Orientation Points" className="Geomapmaker.ViewModels.OrientationPoints.ShowOrientationPoints" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
