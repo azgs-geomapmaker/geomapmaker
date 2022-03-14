@@ -1,10 +1,4 @@
-﻿using ArcGIS.Desktop.Framework;
-using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Controls;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
+﻿using ArcGIS.Desktop.Framework.Contracts;
 
 namespace Geomapmaker.ViewModels.OrientationPoints
 {

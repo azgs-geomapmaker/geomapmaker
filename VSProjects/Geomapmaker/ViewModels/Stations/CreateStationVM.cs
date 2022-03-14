@@ -31,9 +31,9 @@ namespace Geomapmaker.ViewModels.Stations
             SpatialReferenceWkid = currentWkid;
 
             // Trigger validation
-            XCoordinate = "";
-            YCoordinate = "";
-            LocationConfidenceMeters = "";
+            XCoordinate = "502059";
+            YCoordinate = "3564966";
+            LocationConfidenceMeters = "10";
             PlotAtScale = "0";
         }
 
@@ -85,6 +85,27 @@ namespace Geomapmaker.ViewModels.Stations
             }
         }
         private double YCoordinateDouble;
+
+        private string _timeDate;
+        public string TimeDate
+        {
+            get => _timeDate;
+            set => SetProperty(ref _timeDate, value, () => TimeDate);
+        }
+
+        private string _observer;
+        public string Observer
+        {
+            get => _observer;
+            set => SetProperty(ref _observer, value, () => Observer);
+        }
+
+        private string _locationMethod;
+        public string LocationMethod
+        {
+            get => _locationMethod;
+            set => SetProperty(ref _locationMethod, value, () => LocationMethod);
+        }
 
         private string _locationConfidenceMeters;
         public string LocationConfidenceMeters
@@ -158,6 +179,10 @@ namespace Geomapmaker.ViewModels.Stations
                 Dictionary<string, object> attributes = new Dictionary<string, object>
                 {
                     { "FieldID", FieldID },
+
+                    { "TimeDate", TimeDate },
+                    { "Observer", Observer },
+                    { "LocationMethod", LocationMethod },
                     { "LocationConfidenceMeters", LocationConfidenceMeters },
                     { "PlotAtScale", PlotAtScale },
                     { "Notes", Notes },
@@ -177,7 +202,7 @@ namespace Geomapmaker.ViewModels.Stations
                 }
 
                 //
-                // Validate X, Y Coordinates by checking if a feature was created at that geometry point. 
+                // Validate X, Y Coordinates by checking if a feature was actually created at that geometry point. 
                 // I haven't found a way to check prior to executing the editOperation
                 //
                 if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(stationsLayer))
