@@ -22,7 +22,7 @@
           <group refID="Geomapmaker_Tables" />
           <group refID="Geomapmaker_ContactsAndFaults" />
           <group refID="Geomapmaker_MUPs" />
-          <group refID="Geomapmaker_Stations" />
+          <group refID="Geomapmaker_Points" />
           <group refID="Geomapmaker_Renderers" />
         </tab>
       </tabs>
@@ -44,7 +44,7 @@
           <button refID="Geomapmaker_MapUnitPolys" />
           <button refID="Geomapmaker_GeneratePolygons" />
         </group>
-        <group id="Geomapmaker_Stations" caption="Stations" keytip="todo">
+        <group id="Geomapmaker_Points" caption="Points" keytip="todo">
           <button refID="Geomapmaker_Stations_Btn" />
           <button refID="Geomapmaker_OrientationPoints_Btn" />
         </group>
