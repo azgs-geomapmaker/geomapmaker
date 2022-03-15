@@ -1,9 +1,27 @@
-﻿using ArcGIS.Desktop.Framework.Contracts;
+﻿using ArcGIS.Desktop.Framework;
+using ArcGIS.Desktop.Framework.Contracts;
+using System;
+using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.OrientationPoints
 {
     public class OrientationPointsViewModel
     {
+        public event EventHandler WindowCloseEvent;
+
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public void CloseProwindow()
+        {
+            WindowCloseEvent(this, new EventArgs());
+        }
+
+        public CreateOrientationPointVM Create { get; set; }
+
+        public OrientationPointsViewModel()
+        {
+            Create = new CreateOrientationPointVM(this);
+        }
     }
 
     internal class ShowOrientationPoints : Button
@@ -26,7 +44,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             _orientationpoints.Closed += (o, e) => { _orientationpoints = null; };
 
-            //_orientationpoints.stationsVM.WindowCloseEvent += (s, e) => _stations.Close();
+            _orientationpoints.orientationPointsViewModelVM.WindowCloseEvent += (s, e) => _orientationpoints.Close();
 
             _orientationpoints.Show();
         }

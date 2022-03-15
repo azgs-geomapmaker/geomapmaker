@@ -1,5 +1,4 @@
-﻿using Geomapmaker.ViewModels.OrientationPoints;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,16 +16,13 @@ using System.Windows.Shapes;
 namespace Geomapmaker.Views.OrientationPoints
 {
     /// <summary>
-    /// Interaction logic for OrientationPoints.xaml
+    /// Interaction logic for CreateOrientationPoint.xaml
     /// </summary>
-    public partial class OrientationPoints : ArcGIS.Desktop.Framework.Controls.ProWindow
+    public partial class CreateOrientationPoint : UserControl
     {
-        public OrientationPointsViewModel orientationPointsViewModelVM = new OrientationPointsViewModel();
-
-        public OrientationPoints()
+        public CreateOrientationPoint()
         {
             InitializeComponent();
-            DataContext = orientationPointsViewModelVM;
         }
     }
 }

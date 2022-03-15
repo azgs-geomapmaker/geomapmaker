@@ -5,8 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+        xmlns:tabData="clr-namespace:Geomapmaker.Views.OrientationPoints" 
         mc:Ignorable="d"
-        Title="OrientationPoints" Height="300" Width="300"
+        Title="Orientation Points" Height="300" Width="300"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -16,7 +17,25 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:ProWindow.Resources>
-    <Grid>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Row="0" Grid.Column="0">
+            <TabItem Header="Create" >
+                <tabData:CreateOrientationPoint />
+            </TabItem>
+            <!--<TabItem Header="Edit">
+                <tabData:EditStation />
+            </TabItem>
+            <TabItem Header="Delete">
+                <tabData:DeleteStation />
+            </TabItem>-->
+        </TabControl>
     </Grid>
 </controls:ProWindow>
