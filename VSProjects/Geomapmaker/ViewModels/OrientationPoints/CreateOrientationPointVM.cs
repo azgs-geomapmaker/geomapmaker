@@ -27,8 +27,8 @@ namespace Geomapmaker.ViewModels.OrientationPoints
         public CreateOrientationPointVM(OrientationPointsViewModel parentVM)
         {
             ParentVM = parentVM;
-            XCoordinate = "X";
-            YCoordinate = "Y";
+            XCoordinate = "";
+            YCoordinate = "";
         }
 
         private bool _stationPicker;
@@ -71,6 +71,11 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             {
                 SetProperty(ref _yCoordinate, value, () => YCoordinate);
             }
+        }
+
+        internal void SetStation(long oid)
+        {
+            throw new NotImplementedException();
         }
 
         #region Validation
