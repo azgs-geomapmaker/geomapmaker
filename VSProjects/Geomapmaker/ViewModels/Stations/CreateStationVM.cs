@@ -179,7 +179,6 @@ namespace Geomapmaker.ViewModels.Stations
                 Dictionary<string, object> attributes = new Dictionary<string, object>
                 {
                     { "FieldID", FieldID },
-
                     { "TimeDate", TimeDate },
                     { "Observer", Observer },
                     { "LocationMethod", LocationMethod },

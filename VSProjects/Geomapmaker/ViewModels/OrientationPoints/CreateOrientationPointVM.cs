@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,8 +28,9 @@ namespace Geomapmaker.ViewModels.OrientationPoints
         public CreateOrientationPointVM(OrientationPointsViewModel parentVM)
         {
             ParentVM = parentVM;
-            XCoordinate = "";
-            YCoordinate = "";
+            Type = "";
+            PlotAtScale = "0";
+            LocationConfidenceMeters = "";
         }
 
         private bool _stationPicker;
@@ -73,9 +75,48 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
-        internal void SetStation(long oid)
+        private string _type;
+        public string Type
         {
-            throw new NotImplementedException();
+            get => _type;
+            set
+            {
+                SetProperty(ref _type, value, () => Type);
+                ValidateRequiredString(Type, "Type");
+            }
+        }
+
+        private string _plotAtScale;
+        public string PlotAtScale
+        {
+            get => _plotAtScale;
+            set
+            {
+                SetProperty(ref _plotAtScale, value, () => PlotAtScale);
+                ValidatePlotAtScale(PlotAtScale, "PlotAtScale");
+            }
+        }
+        // Holds the converted int value 
+        private int PlotAtScaleInt;
+
+        private string _locationConfidenceMeters;
+        public string LocationConfidenceMeters
+        {
+            get => _locationConfidenceMeters;
+            set
+            {
+                SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
+                ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+            }
+        }
+
+        internal void SetStation(Station station)
+        {
+            XCoordinate = "123";
+            YCoordinate = "456";
+
+            // Turn off the toggle button
+            StationPicker = false;
         }
 
         #region Validation
@@ -105,6 +146,29 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             if (string.IsNullOrEmpty(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidatePlotAtScale(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!int.TryParse(text, out PlotAtScaleInt))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+            }
+            else if (PlotAtScaleInt < 0)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
             }
             else
             {

@@ -1,6 +1,8 @@
-﻿using ArcGIS.Core.Geometry;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
 using Geomapmaker.ViewModels.OrientationPoints;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +26,14 @@ namespace Geomapmaker.MapTools
 
         protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
+            FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
+
             IEnumerable<OrientationPointsViewModel> orientationPointsVMs = System.Windows.Application.Current.Windows.OfType<OrientationPointsViewModel>(); ;
 
             // Get the most recent window. GC takes some time to clean up the closed prowindows.
             OrientationPointsViewModel opVM = orientationPointsVMs.LastOrDefault();
 
-            if (opVM == null)
+            if (stationsLayer == null || opVM == null)
             {
                 return false;
             }
@@ -39,15 +43,46 @@ namespace Geomapmaker.MapTools
                 // Get features that intersect the point
                 Dictionary<BasicFeatureLayer, List<long>> selection = MapView.Active.GetFeatures(geometry);
 
-                // Filter anything not stations
-                FeatureLayer stationsLayer = selection.Where(f => f.Key.Name == "Stations").FirstOrDefault().Key as FeatureLayer;
-
                 // Select the oids
                 List<long> oids = selection[stationsLayer];
 
                 if (oids.Count > 0)
                 {
-                    opVM.Create.SetStation(oids.First());
+                    long stationOid = oids.First();
+
+                    Table enterpriseTable = stationsLayer.GetTable();
+
+                    QueryFilter queryFilter = new QueryFilter
+                    {
+                        ObjectIDs = new List<long> { stationOid }
+                    }
+;
+                    using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
+                    {
+                        if (rowCursor.MoveNext())
+                        {
+                            using (Row row = rowCursor.Current)
+                            {
+                                var LocationConfidenceMeters = row["locationconfidencemeters"].ToString();
+
+                               // create a station from fields
+                               Station station = new Station
+                               {
+                                   FieldID = row["fieldid"]?.ToString(),
+                                   TimeDate = row["timedate"]?.ToString(),
+                                   Observer = row["observer"]?.ToString(),
+                                   LocationMethod = row["locationmethod"]?.ToString(),
+                                   LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
+                                   PlotAtScale = row["plotatscale"]?.ToString(),
+                                   Notes = row["notes"]?.ToString(),
+                                   DataSourceId = row["datasourceid"]?.ToString(),
+                               };
+
+                                // Pass values back to the ViewModel to prepop
+                                opVM.Create.SetStation(station);
+                            }
+                        }
+                    }
                 }
             });
 

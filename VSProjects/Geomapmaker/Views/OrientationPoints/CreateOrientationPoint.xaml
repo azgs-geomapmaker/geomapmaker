@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Geomapmaker.Views.OrientationPoints" 
+             xmlns:local="clr-namespace:Geomapmaker.Views.OrientationPoints"
+             xmlns:data="clr-namespace:Geomapmaker.Data" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" >
 
@@ -24,7 +25,16 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -58,7 +68,11 @@
         <TextBlock Grid.Row="4" Grid.Column="1" Text="Y Coordinate" />
         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.YCoordinate, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
 
-        <ListBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}">
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Type" />
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="Symbol" />
+        <ListBox Grid.Row="9" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -80,7 +94,21 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <TextBlock Grid.Row="10" Grid.Column="1" Text="Location Confidence Meters" />
+        <ComboBox 
+            Grid.Row="11" 
+            Grid.Column="1" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
+            SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+            IsReadOnly="False" 
+            IsEditable="False" 
+            >
+        </ComboBox>
+
+        <TextBlock Grid.Row="12" Grid.Column="1" Text="Plot At Scale" />
+        <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Create.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" />
+
+        <StackPanel Grid.Row="14" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
             <Button Padding="5" Command="{Binding Create.CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save</Button>
         </StackPanel>
