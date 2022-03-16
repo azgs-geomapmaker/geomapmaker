@@ -33,7 +33,7 @@ namespace Geomapmaker.Data
 
                 QueryFilter queryFilter = new QueryFilter  
                 {
-                    PostfixClause = "ORDER BY key"
+                    //PostfixClause = "ORDER BY key"
                 };
 
                 using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
@@ -42,31 +42,41 @@ namespace Geomapmaker.Data
                     {
                         using (Row row = rowCursor.Current)
                         {
-                            GemsSymbol newSymbol = new GemsSymbol
+                            if (row["key"] != null)
                             {
-                                Key = row["key"].ToString(),
-                                Description = row["description"]?.ToString(),
-                                SymbolJson = row["symbol"].ToString()
-                            };
 
-                            try
-                            {
-                                // Create the preview image used in the ComboBox
-                                SymbolStyleItem sSI = new SymbolStyleItem()
+                                var json = row["symbol"].ToString();
+
+                                // Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
+                                json = json.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
+                                json = json.Insert(json.Length, "}");
+
+                                GemsSymbol newSymbol = new GemsSymbol
                                 {
-                                    Symbol = CIMSymbolReference.FromJson(newSymbol.SymbolJson).Symbol,
-                                    PatchWidth = 250,
-                                    PatchHeight = 25
+                                    Key = row["key"].ToString(),
+                                    Description = row["description"]?.ToString(),
+                                    SymbolJson = json
                                 };
-                                newSymbol.Preview = sSI.PreviewImage;
 
-                                // Add to list
-                                orientationSymbols.Add(newSymbol);
-                            }
-                            catch
-                            {
-                                // Invalid CIM Symbol JSON
-                                Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                try
+                                {
+                                    // Create the preview image used in the ComboBox
+                                    SymbolStyleItem sSI = new SymbolStyleItem()
+                                    {
+                                        Symbol = CIMSymbolReference.FromJson(newSymbol.SymbolJson).Symbol,
+                                        PatchWidth = 25,
+                                        PatchHeight = 25
+                                    };
+                                    newSymbol.Preview = sSI.PreviewImage;
+
+                                    // Add to list
+                                    orientationSymbols.Add(newSymbol);
+                                }
+                                catch
+                                {
+                                    // Invalid CIM Symbol JSON
+                                    Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                }
                             }
                         }
                     }

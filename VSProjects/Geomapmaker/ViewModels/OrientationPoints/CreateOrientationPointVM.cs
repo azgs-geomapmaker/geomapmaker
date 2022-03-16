@@ -29,6 +29,28 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             ParentVM = parentVM;
         }
 
+        private bool _stationPicker;
+        public bool StationPicker
+        {
+            get => _stationPicker;
+            set
+            {
+                SetProperty(ref _stationPicker, value, () => StationPicker);
+
+                // if the toggle-btn is active
+                if (value)
+                {
+                    // Active the station picker tool
+                    //FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateCFTool");
+                }
+                else
+                {
+                    // Switch back to map explore tool
+                    FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+                }
+            }
+        }
+
         #region Validation
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
