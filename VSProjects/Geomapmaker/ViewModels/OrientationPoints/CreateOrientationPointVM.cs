@@ -27,6 +27,8 @@ namespace Geomapmaker.ViewModels.OrientationPoints
         public CreateOrientationPointVM(OrientationPointsViewModel parentVM)
         {
             ParentVM = parentVM;
+            XCoordinate = "X";
+            YCoordinate = "Y";
         }
 
         private bool _stationPicker;
@@ -41,13 +43,33 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 if (value)
                 {
                     // Active the station picker tool
-                    //FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateCFTool");
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_MapTools_SelectStationMapTool");
                 }
                 else
                 {
                     // Switch back to map explore tool
                     FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
                 }
+            }
+        }
+
+        private string _xCoordinate;
+        public string XCoordinate
+        {
+            get => _xCoordinate;
+            set
+            {
+                SetProperty(ref _xCoordinate, value, () => XCoordinate);
+            }
+        }
+
+        private string _yCoordinate;
+        public string YCoordinate
+        {
+            get => _yCoordinate;
+            set
+            {
+                SetProperty(ref _yCoordinate, value, () => YCoordinate);
             }
         }
 

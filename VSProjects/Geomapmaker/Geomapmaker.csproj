@@ -202,6 +202,7 @@
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationSymbology.cs" />
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
+    <Compile Include="MapTools\SelectStationMapTool.cs" />
     <Compile Include="Models\Station.cs" />
     <Compile Include="ViewModels\OrientationPoints\CreateOrientationPointVM.cs" />
     <Compile Include="ViewModels\OrientationPoints\OrientationPointsViewModel.cs" />

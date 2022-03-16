@@ -20,7 +20,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
@@ -47,7 +52,13 @@
             </ToggleButton.Template>
         </ToggleButton>
 
-        <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}" MaxHeight="300">
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="X Coordinate" />
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Create.XCoordinate, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
+
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="Y Coordinate" />
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.YCoordinate, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
+
+        <ListBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -69,7 +80,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
             <Button Padding="5" Command="{Binding Create.CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save</Button>
         </StackPanel>
