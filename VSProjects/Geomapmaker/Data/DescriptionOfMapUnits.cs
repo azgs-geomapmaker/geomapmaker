@@ -40,20 +40,32 @@ namespace Geomapmaker.Data
                                 Name = RowValueToString(row["Name"]),
                                 FullName = RowValueToString(row["FullName"]),
                                 Age = RowValueToString(row["Age"]),
-                                RelativeAge = RowValueToString(row["RelativeAge"]),
                                 Description = RowValueToString(row["Description"]),
                                 HierarchyKey = RowValueToString(row["HierarchyKey"]),
                                 ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
                                 Label = RowValueToString(row["Label"]),
                                 AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
                                 DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
-                                GeoMaterial = RowValueToString(row["GeoMaterial"]),
-                                GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
                             };
+
+                            if (dmuFields.Any(a => a.Name == "RelativeAge"))
+                            {
+                                mapUnit.RelativeAge = RowValueToString(row["RelativeAge"]);
+                            }
 
                             if (dmuFields.Any(a => a.Name == "hexcolor"))
                             {
                                 mapUnit.HexColor = RowValueToString(row["HexColor"]);
+                            }
+
+                            if (dmuFields.Any(a => a.Name == "GeoMaterial"))
+                            {
+                                mapUnit.GeoMaterial = RowValueToString(row["GeoMaterial"]);
+                            }
+
+                            if (dmuFields.Any(a => a.Name == "GeoMaterialConfidence"))
+                            {
+                                mapUnit.GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]);
                             }
 
                             // Add it to temp list

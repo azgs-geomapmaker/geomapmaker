@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Geomapmaker.Data
 {
@@ -23,6 +24,7 @@ namespace Geomapmaker.Data
             // Return an empty list if the cfsymbology table isn null
             if (CFSymbologyTable == null)
             {
+                MessageBox.Show("cfsymbology table not found.");
                 return;
             }
 
