@@ -31,8 +31,9 @@ namespace Geomapmaker.ViewModels.Stations
             SpatialReferenceWkid = currentWkid;
 
             // Trigger validation
-            XCoordinate = "502059";
-            YCoordinate = "3564966";
+            FieldID = "";
+            XCoordinate = "";
+            YCoordinate = "";
             LocationConfidenceMeters = "10";
             PlotAtScale = "0";
         }
@@ -44,6 +45,7 @@ namespace Geomapmaker.ViewModels.Stations
             set
             {
                 SetProperty(ref _fieldID, value, () => FieldID);
+                ValidateRequiredString(FieldID, "FieldID");
             }
         }
 
