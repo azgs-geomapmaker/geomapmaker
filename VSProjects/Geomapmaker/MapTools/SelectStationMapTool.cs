@@ -63,19 +63,17 @@ namespace Geomapmaker.MapTools
                         {
                             using (Row row = rowCursor.Current)
                             {
-                                var LocationConfidenceMeters = row["locationconfidencemeters"].ToString();
-
-                               // create a station from fields
-                               Station station = new Station
-                               {
-                                   FieldID = row["fieldid"]?.ToString(),
-                                   TimeDate = row["timedate"]?.ToString(),
-                                   Observer = row["observer"]?.ToString(),
-                                   LocationMethod = row["locationmethod"]?.ToString(),
-                                   LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
-                                   PlotAtScale = row["plotatscale"]?.ToString(),
-                                   Notes = row["notes"]?.ToString(),
-                                   DataSourceId = row["datasourceid"]?.ToString(),
+                                // create a station from fields
+                                Station station = new Station
+                                {
+                                    FieldID = row["fieldid"]?.ToString(),
+                                    TimeDate = row["timedate"]?.ToString(),
+                                    Observer = row["observer"]?.ToString(),
+                                    LocationMethod = row["locationmethod"]?.ToString(),
+                                    LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
+                                    PlotAtScale = row["plotatscale"]?.ToString(),
+                                    Notes = row["notes"]?.ToString(),
+                                    DataSourceId = row["datasourceid"]?.ToString(),
                                };
 
                                 // Pass values back to the ViewModel to prepop
