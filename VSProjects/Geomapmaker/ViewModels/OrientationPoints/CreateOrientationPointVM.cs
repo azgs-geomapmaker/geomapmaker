@@ -19,6 +19,27 @@ namespace Geomapmaker.ViewModels.OrientationPoints
     {
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
+        public OrientationPointsViewModel ParentVM { get; set; }
+
+        public CreateOrientationPointVM(OrientationPointsViewModel parentVM)
+        {
+            ParentVM = parentVM;
+
+            // Get the wkid for the current Spatial Reference
+            string currentWkid = MapView.Active?.Map.SpatialReference.Wkid.ToString();
+
+            // Set as the current spaital ref
+            SpatialReferenceWkid = currentWkid;
+
+            // Trigger validation
+            Type = "";
+            Symbol = null;
+            XCoordinate = "";
+            YCoordinate = "";
+            PlotAtScale = "0";
+            LocationConfidenceMeters = "";
+        }
+
         private bool CanSave()
         {
             return !HasErrors;
@@ -52,14 +73,12 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 // Create features and set attributes
                 Dictionary<string, object> attributes = new Dictionary<string, object>
                 {
-                    //{ "FieldID", FieldID },
-                    //{ "TimeDate", TimeDate },
-                    //{ "Observer", Observer },
-                    //{ "LocationMethod", LocationMethod },
-                    //{ "LocationConfidenceMeters", LocationConfidenceMeters },
-                    //{ "PlotAtScale", PlotAtScale },
-                    //{ "Notes", Notes },
-                    //{ "DataSourceId", DataSourceId },
+                    { "StationsID", StationFieldId },
+                    { "Type", Type },
+                    { "Symbol", Symbol.Key },
+                    { "LocationConfidenceMeters", LocationConfidenceMeters },
+                    { "PlotAtScale", PlotAtScale },
+                    { "Notes", Notes },
                 };
 
                 RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
@@ -100,30 +119,24 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
-        public OrientationPointsViewModel ParentVM { get; set; }
-
-        public CreateOrientationPointVM(OrientationPointsViewModel parentVM)
+        private string _stationFieldId;
+        public string StationFieldId
         {
-            ParentVM = parentVM;
-
-            // Get the wkid for the current Spatial Reference
-            string currentWkid = MapView.Active?.Map.SpatialReference.Wkid.ToString();
-
-            // Set as the current spaital ref
-            SpatialReferenceWkid = currentWkid;
-
-            Type = "";
-            PlotAtScale = "0";
-            LocationConfidenceMeters = "";
-        }
-
-        private string _selectedStation;
-        public string SelectedStation
-        {
-            get => _selectedStation;
+            get => _stationFieldId;
             set
             {
-                SetProperty(ref _selectedStation, value, () => SelectedStation);
+                SetProperty(ref _stationFieldId, value, () => StationFieldId);
+            }
+        }
+
+        private GemsSymbol _symbol;
+        public GemsSymbol Symbol
+        {
+            get => _symbol;
+            set
+            {
+                SetProperty(ref _symbol, value, () => Symbol);
+                ValidateSymbol(Symbol, "Symbol");
             }
         }
 
@@ -299,6 +312,22 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             else if (!double.TryParse(text, out YCoordinateDouble))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Coordinate must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        // Validate symbol
+        private void ValidateSymbol(GemsSymbol symbol, string propertyKey)
+        {
+            // Required field
+            if (symbol == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
             }
             else
             {

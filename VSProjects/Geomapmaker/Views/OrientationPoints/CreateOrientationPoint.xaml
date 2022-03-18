@@ -17,93 +17,94 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Station Field ID" />
-        <ComboBox 
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Station Field ID" />
+            <ComboBox 
             Grid.Row="2" 
             Grid.Column="1" 
             ItemsSource="{Binding StationFieldIdOptions}"
-            SelectedValue="{Binding Create.SelectedStation, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValue="{Binding Create.StationFieldId, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
             IsEditable="False" 
             >
-        </ComboBox>
+            </ComboBox>
 
-        <TextBlock Grid.Row="3" Grid.Column="1" Text="Coordinate System WKID" />
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.SpatialReferenceWkid, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="Coordinate System WKID" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.SpatialReferenceWkid, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="1" Text="Coordinate System" />
-        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.SpatialReferenceName, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Coordinate System" />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.SpatialReferenceName, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
 
-        <TextBlock Grid.Row="7" Grid.Column="1" Text="X Coordinate" />
-        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Create.XCoordinate, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="X Coordinate" />
+            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Create.XCoordinate, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="9" Grid.Column="1" Text="Y Coordinate" />
-        <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Create.YCoordinate, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="Y Coordinate" />
+            <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Create.YCoordinate, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="11" Grid.Column="1" Text="Type" />
-        <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="Type" />
+            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="13" Grid.Column="1" Text="Symbol" />
-        <ListBox Grid.Row="14" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid ToolTip="{Binding Description}" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Key}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                        <Image Grid.Column="1" Source="{Binding Preview}" HorizontalAlignment="Left" />
-                        <TextBlock Grid.Column="2" Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            <TextBlock Grid.Row="13" Grid.Column="1" Text="Symbol" />
+            <ListBox Grid.Row="14" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ToolTip="{Binding Description}" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Key}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <Image Grid.Column="1" Source="{Binding Preview}" HorizontalAlignment="Left" />
+                            <TextBlock Grid.Column="2" Text="{Binding Description}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-        <TextBlock Grid.Row="15" Grid.Column="1" Text="Location Confidence Meters" />
-        <ComboBox 
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Location Confidence Meters" />
+            <ComboBox 
             Grid.Row="16" 
             Grid.Column="1" 
             ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
@@ -111,17 +112,19 @@
             IsReadOnly="False" 
             IsEditable="False" 
             >
-        </ComboBox>
+            </ComboBox>
 
-        <TextBlock Grid.Row="17" Grid.Column="1" Text="Plot At Scale" />
-        <TextBox Grid.Row="18" Grid.Column="1" Text="{Binding Create.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="17" Grid.Column="1" Text="Plot At Scale" />
+            <TextBox Grid.Row="18" Grid.Column="1" Text="{Binding Create.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="19" Grid.Column="1" Text="Notes" />
-        <TextBox Grid.Row="20" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="19" Grid.Column="1" Text="Notes" />
+            <TextBox Grid.Row="20" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Grid.Row="21" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
-            <Button Padding="5" Command="{Binding Create.CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save</Button>
-        </StackPanel>
-    </Grid>
+            <StackPanel Grid.Row="21" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
+                <Button Padding="5" Command="{Binding Create.CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save</Button>
+            </StackPanel>
+        </Grid>
+    </AdornerDecorator>
+
 </UserControl>
