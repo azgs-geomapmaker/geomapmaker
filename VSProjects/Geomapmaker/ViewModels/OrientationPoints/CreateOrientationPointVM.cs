@@ -1,12 +1,16 @@
 ﻿using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Dialogs;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.OrientationPoints
@@ -20,9 +24,80 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             return !HasErrors;
         }
 
-        private void SaveAsync()
+        private async void SaveAsync()
         {
-            throw new NotImplementedException();
+            bool IsSucceeded = false;
+
+            FeatureLayer opLayer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
+
+            if (opLayer == null)
+            {
+                MessageBox.Show("OrientationPoints layer not found in active map.");
+                return;
+            }
+
+            await QueuedTask.Run(async () =>
+            {
+                EditOperation createFeatures = new EditOperation
+                {
+                    Name = "Create Orientation Point",
+                    SelectNewFeatures = true
+                };
+
+                MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+
+                // Get geometry from point builder
+                Geometry point = pointBuilder.ToGeometry();
+
+                // Create features and set attributes
+                Dictionary<string, object> attributes = new Dictionary<string, object>
+                {
+                    //{ "FieldID", FieldID },
+                    //{ "TimeDate", TimeDate },
+                    //{ "Observer", Observer },
+                    //{ "LocationMethod", LocationMethod },
+                    //{ "LocationConfidenceMeters", LocationConfidenceMeters },
+                    //{ "PlotAtScale", PlotAtScale },
+                    //{ "Notes", Notes },
+                    //{ "DataSourceId", DataSourceId },
+                };
+
+                RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
+
+                // Execute to execute the operation
+                createFeatures.Execute();
+
+                IsSucceeded = createFeatures.IsSucceeded;
+
+                if (IsSucceeded)
+                {
+                    MapView.Active?.ZoomTo(point);
+                }
+
+                //
+                // Validate X, Y Coordinates by checking if a feature was actually created at that geometry point. 
+                // I haven't found a way to check prior to executing the editOperation
+                //
+                if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(opLayer))
+                {
+                    IsSucceeded = false;
+
+                    // Undo the edit operation
+                    await createFeatures.UndoAsync();
+                }
+
+            });
+
+            if (IsSucceeded)
+            {
+                ParentVM.CloseProwindow();
+            }
+            else
+            {
+                // Raise error
+                _validationErrors["SpatialReferenceWkid"] = new List<string>() { "Coordinates not valid for Spatial Reference." };
+                RaiseErrorsChanged("SpatialReferenceWkid");
+            }
         }
 
         public OrientationPointsViewModel ParentVM { get; set; }
@@ -74,8 +149,10 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set
             {
                 SetProperty(ref _xCoordinate, value, () => XCoordinate);
+                ValidateXCoordinate(XCoordinate, "XCoordinate");
             }
         }
+        private double XCoordinateDouble;
 
         private string _yCoordinate;
         public string YCoordinate
@@ -84,8 +161,10 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set
             {
                 SetProperty(ref _yCoordinate, value, () => YCoordinate);
+                ValidateYCoordinate(YCoordinate, "YCoordinate");
             }
         }
+        private double YCoordinateDouble;
 
         private string _type;
         public string Type
@@ -119,6 +198,16 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             {
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
                 ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+            }
+        }
+
+        private string _notes;
+        public string Notes
+        {
+            get => _notes;
+            set
+            {
+                SetProperty(ref _notes, value, () => Notes);
             }
         }
 
@@ -172,6 +261,44 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             else if (StationSpatialRef == null)
             {
                 _validationErrors[propertyKey] = new List<string>() { "Spatial Reference not found." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateXCoordinate(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out XCoordinateDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Coordinate must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateYCoordinate(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out YCoordinateDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Coordinate must be numerical." };
             }
             else
             {
