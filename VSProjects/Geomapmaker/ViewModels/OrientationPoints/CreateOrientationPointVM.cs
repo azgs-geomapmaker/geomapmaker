@@ -33,25 +33,13 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             LocationConfidenceMeters = "";
         }
 
-        private bool _stationPicker;
-        public bool StationPicker
+        private string _selectedStation;
+        public string SelectedStation
         {
-            get => _stationPicker;
+            get => _selectedStation;
             set
             {
-                SetProperty(ref _stationPicker, value, () => StationPicker);
-
-                // if the toggle-btn is active
-                if (value)
-                {
-                    // Active the station picker tool
-                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_MapTools_SelectStationMapTool");
-                }
-                else
-                {
-                    // Switch back to map explore tool
-                    FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
-                }
+                SetProperty(ref _selectedStation, value, () => SelectedStation);
             }
         }
 
@@ -108,15 +96,6 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
                 ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
             }
-        }
-
-        internal void SetStation(Station station)
-        {
-            XCoordinate = "123";
-            YCoordinate = "456";
-
-            // Turn off the toggle button
-            StationPicker = false;
         }
 
         #region Validation

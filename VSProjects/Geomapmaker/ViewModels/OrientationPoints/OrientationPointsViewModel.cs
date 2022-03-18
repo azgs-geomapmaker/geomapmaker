@@ -40,6 +40,22 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
+        private List<string> _stationFieldIdOptions { get; set; }
+        public List<string> StationFieldIdOptions
+        {
+            get => _stationFieldIdOptions;
+            set
+            {
+                _stationFieldIdOptions = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public void RefreshStationFieldIds()
+        {
+            StationFieldIdOptions = Data.Stations.GetStationFieldIds();
+        }
+
         public async void RefreshSymbolsAsync()
         {
             // Get symbology options if the list is null
@@ -88,6 +104,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             await QueuedTask.Run(() =>
             {
                 _orientationpoints.orientationPointsViewModelVM.RefreshSymbolsAsync();
+                _orientationpoints.orientationPointsViewModelVM.RefreshStationFieldIds();
             }, ps.Progressor);
 
             _orientationpoints.Closed += (o, e) => { _orientationpoints = null; };

@@ -25,9 +25,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -46,33 +43,22 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <ToggleButton Grid.Row="1" Grid.Column="1" Content="Select Station" IsChecked="{Binding Create.StationPicker, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Padding="5" Margin="10" >
-            <ToggleButton.Template>
-                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
-                        <ContentPresenter Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="#2082D8" />
-                            <Setter Property="Foreground" Value="#FFFFFF" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </ToggleButton.Template>
-        </ToggleButton>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Station Field ID" />
+        <ComboBox 
+            Grid.Row="2" 
+            Grid.Column="1" 
+            ItemsSource="{Binding StationFieldIdOptions}"
+            SelectedValue="{Binding Create.SelectedStation, UpdateSourceTrigger=PropertyChanged}"
+            IsReadOnly="False" 
+            IsEditable="False" 
+            >
+        </ComboBox>
+        
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Type" />
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="X Coordinate" />
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Create.XCoordinate, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
-
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="Y Coordinate" />
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Create.YCoordinate, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
-
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Type" />
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
-
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="Symbol" />
-        <ListBox Grid.Row="9" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}">
+        <TextBlock Grid.Row="5" Grid.Column="1" Text="Symbol" />
+        <ListBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding SymbolOptions}" SelectedItem ="{Binding Create.Symbol, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -94,9 +80,9 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <TextBlock Grid.Row="10" Grid.Column="1" Text="Location Confidence Meters" />
+        <TextBlock Grid.Row="7" Grid.Column="1" Text="Location Confidence Meters" />
         <ComboBox 
-            Grid.Row="11" 
+            Grid.Row="8" 
             Grid.Column="1" 
             ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
             SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
@@ -105,10 +91,10 @@
             >
         </ComboBox>
 
-        <TextBlock Grid.Row="12" Grid.Column="1" Text="Plot At Scale" />
-        <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Create.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="9" Grid.Column="1" Text="Plot At Scale" />
+        <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Create.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Grid.Row="14" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
             <Button Padding="5" Command="{Binding Create.CommandSave}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save</Button>
         </StackPanel>

@@ -201,6 +201,7 @@
   <ItemGroup>
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationSymbology.cs" />
+    <Compile Include="Data\Stations.cs" />
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
     <Compile Include="ViewModels\OrientationPoints\CreateOrientationPointVM.cs" />
