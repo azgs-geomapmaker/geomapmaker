@@ -1,5 +1,7 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections;
@@ -28,6 +30,13 @@ namespace Geomapmaker.ViewModels.OrientationPoints
         public CreateOrientationPointVM(OrientationPointsViewModel parentVM)
         {
             ParentVM = parentVM;
+
+            // Get the wkid for the current Spatial Reference
+            string currentWkid = MapView.Active?.Map.SpatialReference.Wkid.ToString();
+
+            // Set as the current spaital ref
+            SpatialReferenceWkid = currentWkid;
+
             Type = "";
             PlotAtScale = "0";
             LocationConfidenceMeters = "";
@@ -42,6 +51,21 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 SetProperty(ref _selectedStation, value, () => SelectedStation);
             }
         }
+
+        private string _spatialReferenceWkid;
+        public string SpatialReferenceWkid
+        {
+            get => _spatialReferenceWkid;
+            set
+            {
+                SetProperty(ref _spatialReferenceWkid, value, () => SpatialReferenceWkid);
+                ValidateWkid(SpatialReferenceWkid, "SpatialReferenceWkid");
+                NotifyPropertyChanged("SpatialReferenceName");
+            }
+        }
+        private SpatialReference StationSpatialRef;
+
+        public string SpatialReferenceName => StationSpatialRef == null ? "" : StationSpatialRef.Name;
 
         private string _xCoordinate;
         public string XCoordinate
@@ -117,6 +141,44 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             // Otherwise, return the errors for that parameter.
             return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
                 null : (IEnumerable)_validationErrors[propertyName];
+        }
+
+        private void ValidateWkid(string text, string propertyKey)
+        {
+            if (!int.TryParse(text, out int WKIDint))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Invalid WKID." };
+                StationSpatialRef = null;
+                RaiseErrorsChanged(propertyKey);
+                return;
+            }
+
+            // Try finding spatial ref by wkid
+            try
+            {
+                StationSpatialRef = SpatialReferenceBuilder.CreateSpatialReference(WKIDint);
+            }
+            catch
+            {
+                // Spatial ref not found by wkid
+                StationSpatialRef = null;
+            }
+
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (StationSpatialRef == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Spatial Reference not found." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         private void ValidateRequiredString(string text, string propertyKey)

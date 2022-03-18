@@ -34,7 +34,7 @@ namespace Geomapmaker.ViewModels.Stations
             FieldID = "";
             XCoordinate = "";
             YCoordinate = "";
-            LocationConfidenceMeters = "10";
+            LocationConfidenceMeters = "";
             PlotAtScale = "0";
         }
 

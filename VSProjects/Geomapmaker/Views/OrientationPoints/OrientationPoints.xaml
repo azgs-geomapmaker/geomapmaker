@@ -8,9 +8,9 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.OrientationPoints" 
         mc:Ignorable="d"
         Title="Orientation Points" 
-        Height="600" 
+        Height="700" 
         Width="300"
-        MinHeight="500" 
+        MinHeight="600" 
         MinWidth="300"
         WindowStartupLocation="CenterOwner"
     >
