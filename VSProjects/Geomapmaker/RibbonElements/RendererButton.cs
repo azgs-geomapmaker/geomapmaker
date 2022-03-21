@@ -7,8 +7,9 @@ namespace Geomapmaker.RibbonElements
     {
         protected override void OnClick()
         {
-            ContactsAndFaults.ResetContactsFaultsSymbology();
+            ContactsAndFaults.RebuildContactsFaultsSymbology();
             MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+            OrientationPoints.RebuildOrientationPointsSymbology();
         }
     }
 }

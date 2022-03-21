@@ -75,7 +75,7 @@ namespace Geomapmaker.Data
             return contactFaultTemplates;
         }
 
-        public static async void ResetContactsFaultsSymbology()
+        public static async void RebuildContactsFaultsSymbology()
         {
             // CF Layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");

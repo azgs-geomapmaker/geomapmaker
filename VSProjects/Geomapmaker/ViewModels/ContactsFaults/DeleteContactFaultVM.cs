@@ -53,7 +53,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             });
 
             //Remove old symbology if needed.
-            Data.ContactsAndFaults.ResetContactsFaultsSymbology();
+            Data.ContactsAndFaults.RebuildContactsFaultsSymbology();
 
             ParentVM.CloseProwindow();
         }
