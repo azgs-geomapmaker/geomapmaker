@@ -109,6 +109,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             if (IsSucceeded)
             {
+                Data.OrientationPoints.RebuildOrientationPointsSymbology();
                 ParentVM.CloseProwindow();
             }
             else
