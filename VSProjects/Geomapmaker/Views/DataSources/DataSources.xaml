@@ -8,10 +8,10 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.DataSources" 
         mc:Ignorable="d"
         Title="Data Sources"
-        Height="400" 
-        Width="300"
+        Height="450" 
+        Width="450"
         MinHeight="400"
-        MinWidth="300"
+        MinWidth="400"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

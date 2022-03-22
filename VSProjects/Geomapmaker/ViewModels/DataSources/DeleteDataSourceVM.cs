@@ -164,29 +164,27 @@ namespace Geomapmaker.ViewModels.DataSources
                 return;
             }
 
-            //FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+            // Remove any existing errors
+            _validationErrors.Remove(propertyKey);
 
-            //await QueuedTask.Run(() =>
-            //{
-            //    Table MapUnitPolyTable = mup.GetTable();
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
-            //    QueryFilter queryFilter = new QueryFilter
-            //    {
-            //        WhereClause = $"mapunit = '{MapUnit}'"
-            //    };
+            await QueuedTask.Run(() =>
+            {
+                Table dmuTable = dmu.GetTable();
 
-            //    int rowCount = MapUnitPolyTable.GetCount(queryFilter);
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DescriptionSourceID = '{Id}'"
+                };
 
-            //    if (rowCount > 0)
-            //    {
-            //        _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPolys with this MapUnit" };
-            //    }
-            //    else
-            //    {
-            //        _validationErrors.Remove(propertyKey);
-            //    }
+                int rowCount = dmuTable.GetCount(queryFilter);
 
-            //});
+                if (rowCount > 0)
+                {
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} DescriptionOfMapUnits with this DescriptionSourceID" };
+                }
+            });
 
             RaiseErrorsChanged(propertyKey);
         }
