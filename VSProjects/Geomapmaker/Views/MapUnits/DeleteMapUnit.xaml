@@ -65,7 +65,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Delete.Visibility}" />
+            <Separator Grid.Row="3" Grid.Column="1" Margin="0,5,0,5" Visibility="{Binding Delete.Visibility}" />
 
             <TextBlock Grid.Row="4" Grid.Column="1" Text="Map Unit" ToolTip="{Binding Tooltips[MapUnit]}" Visibility="{Binding Delete.Visibility}" />
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Delete.MapUnit, UpdateSourceTrigger=PropertyChanged }" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />

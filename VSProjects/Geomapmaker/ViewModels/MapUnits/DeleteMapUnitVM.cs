@@ -186,21 +186,40 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public bool HasErrors => _validationErrors.Count > 0;
 
-        private void ValidateCanDelete()
+        private async void ValidateCanDelete()
         {
-
-            // TODO: Prevent user from deleting any mapunits with mapunitpolys
-
-            const string propertyKey = "SilentError";
+            const string propertyKey = "Selected";
 
             if (Selected == null)
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+                RaiseErrorsChanged(propertyKey);
+                return;
             }
-            else
+
+            FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
             {
-                _validationErrors.Remove(propertyKey);
-            }
+                Table MapUnitPolyTable = mup.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"mapunit = '{MapUnit}'"
+                };
+
+                int rowCount = MapUnitPolyTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPolys with this MapUnit" };
+                }
+                else
+                {
+                    _validationErrors.Remove(propertyKey);
+                }
+
+            });
 
             RaiseErrorsChanged(propertyKey);
         }
