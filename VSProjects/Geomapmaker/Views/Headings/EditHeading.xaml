@@ -56,7 +56,7 @@
             <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" Visibility="{Binding Edit.Visibility}" />
 
-            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}">Update</Button>
             </StackPanel>

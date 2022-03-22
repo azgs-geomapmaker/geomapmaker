@@ -139,7 +139,7 @@
             <TextBlock Grid.Row="21" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" Visibility="{Binding Edit.Visibility}" />
             <ComboBox Grid.Row="22" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" Visibility="{Binding Edit.Visibility}" />
 
-            <StackPanel Grid.Row="23" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <StackPanel Grid.Row="23" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}">Update</Button>
             </StackPanel>
