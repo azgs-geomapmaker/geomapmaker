@@ -38,6 +38,7 @@ namespace Geomapmaker.ViewModels.Headings
                 SetProperty(ref _selected, value, () => Selected);
                 Name = Selected?.Name;
                 Description = Selected?.Description;
+                DescriptionSourceID = Selected?.DescriptionSourceID;
                 NotifyPropertyChanged("Visibility");
             }
         }
@@ -67,6 +68,16 @@ namespace Geomapmaker.ViewModels.Headings
                 SetProperty(ref _description, value, () => Description);
                 ValidateDescription(Description, "Description");
                 ValidateChangeWasMade();
+            }
+        }
+
+        private string _descriptionSourceID;
+        public string DescriptionSourceID
+        {
+            get => _descriptionSourceID;
+            set
+            {
+                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
             }
         }
 

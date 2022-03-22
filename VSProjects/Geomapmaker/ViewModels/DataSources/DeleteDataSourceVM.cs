@@ -153,20 +153,40 @@ namespace Geomapmaker.ViewModels.DataSources
                 null : (IEnumerable)_validationErrors[propertyName];
         }
 
-        private void ValidateCanDelete()
+        private async void ValidateCanDelete()
         {
-            const string propertyKey = "SilentError";
+            const string propertyKey = "Selected";
 
-            // TODO: Prevent delete if the datasource id is used in any tables?
+            if (Selected == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+                RaiseErrorsChanged(propertyKey);
+                return;
+            }
 
-            //if ()
+            //FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+            //await QueuedTask.Run(() =>
             //{
-            //    _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
-            //}
-            //else
-            //{
-            //    _validationErrors.Remove(propertyKey);
-            //}
+            //    Table MapUnitPolyTable = mup.GetTable();
+
+            //    QueryFilter queryFilter = new QueryFilter
+            //    {
+            //        WhereClause = $"mapunit = '{MapUnit}'"
+            //    };
+
+            //    int rowCount = MapUnitPolyTable.GetCount(queryFilter);
+
+            //    if (rowCount > 0)
+            //    {
+            //        _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPolys with this MapUnit" };
+            //    }
+            //    else
+            //    {
+            //        _validationErrors.Remove(propertyKey);
+            //    }
+
+            //});
 
             RaiseErrorsChanged(propertyKey);
         }

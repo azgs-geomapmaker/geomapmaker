@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Geomapmaker.Views.Headings" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" 
              xmlns:headings="clr-namespace:Geomapmaker.ViewModels.Headings" 
              d:DataContext="{d:DesignInstance Type=headings:EditHeadingVM}"
@@ -31,6 +30,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -56,7 +57,10 @@
             <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" Visibility="{Binding Edit.Visibility}" />
 
-            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" Margin="5">
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Edit.DescriptionSourceID}" Visibility="{Binding Edit.Visibility}" IsReadOnly="True" IsEnabled="False" />
+
+            <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}">Update</Button>
             </StackPanel>

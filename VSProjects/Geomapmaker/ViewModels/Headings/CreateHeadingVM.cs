@@ -52,6 +52,16 @@ namespace Geomapmaker.ViewModels.Headings
             }
         }
 
+        private string _descriptionSourceID = GeomapmakerModule.DataSourceId;
+        public string DescriptionSourceID
+        {
+            get => _descriptionSourceID;
+            set
+            {
+                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
+            }
+        }
+
         /// <summary>
         /// Determines the visibility (enabled state) of the button
         /// </summary>
@@ -95,7 +105,7 @@ namespace Geomapmaker.ViewModels.Headings
                             rowBuffer["FullName"] = Name;
                             rowBuffer["Description"] = Description;
                             rowBuffer["ParagraphStyle"] = "Heading";
-                            rowBuffer["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+                            rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
 
                             using (Row row = enterpriseTable.CreateRow(rowBuffer))
                             {
