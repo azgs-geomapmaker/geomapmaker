@@ -45,6 +45,8 @@ namespace Geomapmaker.Data
                                 ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
                                 Label = RowValueToString(row["Label"]),
                                 AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
+                                GeoMaterial = RowValueToString(row["GeoMaterial"]),
+                                GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
                                 DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
                             };
 
