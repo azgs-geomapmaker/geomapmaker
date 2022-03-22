@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -320,6 +321,54 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
+                // Update the MapUnit value in MUPS if it has changed
+                if (Selected.MU != MapUnit)
+                {
+
+                    await QueuedTask.Run(() =>
+                    {
+                        FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+                        // Search by attribute
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            // Where MapUnit is set to the original MapUnit value
+                            WhereClause = $"mapunit = '{Selected.MU}'"
+                        };
+
+                        //Create list of oids to update
+                        List<long> oidSet = new List<long>();
+
+                        using (RowCursor rc = mup.Search(queryFilter))
+                        {
+                            while (rc.MoveNext())
+                            {
+                                using (Row record = rc.Current)
+                                {
+                                    oidSet.Add(record.GetObjectID());
+                                }
+                            }
+                        }
+
+                        //create and execute the edit operation
+                        EditOperation modifyFeatures = new EditOperation
+                        {
+                            Name = "Update MapUnitPolys",
+                            ShowProgressor = true
+                        };
+
+                        Inspector multipleFeaturesInsp = new Inspector();
+
+                        multipleFeaturesInsp.Load(mup, oidSet);
+
+                        multipleFeaturesInsp["mapunit"] = MapUnit;
+
+                        modifyFeatures.Modify(multipleFeaturesInsp);
+
+                        modifyFeatures.Execute();
+                    });
+                }
+
                 // Add new symbology/templates if needed. Remove old symbology/templates if needed.
                 Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
@@ -418,7 +467,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Alphabet chars only
-            else if (!name.All(Char.IsLetter))
+            else if (!name.All(char.IsLetter))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Alphabetical letters only." };
             }
