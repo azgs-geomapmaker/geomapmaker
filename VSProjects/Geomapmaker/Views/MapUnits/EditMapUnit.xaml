@@ -142,7 +142,7 @@
             <ComboBox Grid.Row="22" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" Visibility="{Binding Edit.Visibility}" />
 
             <TextBlock Grid.Row="23" Grid.Column="1" Text="Data Source" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="24" Grid.Column="1" Text="{Binding Edit.DescriptionSourceID}" Visibility="{Binding Edit.Visibility}" IsReadOnly="True" IsEnabled="False" />
+            <TextBox Grid.Row="24" Grid.Column="1" Text="{Binding Edit.DescriptionSourceID}" Visibility="{Binding Edit.Visibility}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="25" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>

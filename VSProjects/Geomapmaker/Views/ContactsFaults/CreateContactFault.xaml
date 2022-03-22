@@ -51,6 +51,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -220,12 +222,10 @@
             <TextBlock Grid.Row="15" Grid.Column="1" Text="Notes" />
             <TextBox Grid.Row="16" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
 
-            <WrapPanel Grid.Row="17" Grid.Column="1" >
-                <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
-                <TextBlock FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource Esri_TextBlockRegular}"/>
-            </WrapPanel>
+            <TextBlock Grid.Row="17" Grid.Column="1" Text="Data Source" Style="{DynamicResource Esri_TextBlockRegular}"/>
+            <TextBox Grid.Row="18" Grid.Column="1" FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsEnabled="False"/>
 
-            <StackPanel Grid.Row="18" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <StackPanel Grid.Row="19" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Close</Button>
                 <Button Padding="5" Command="{Binding Create.CommandCreateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save Template</Button>
                 <Button Padding="5" Command="{Binding Create.CommandSketch}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Sketch</Button>

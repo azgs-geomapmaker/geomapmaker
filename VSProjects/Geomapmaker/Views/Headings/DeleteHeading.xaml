@@ -57,7 +57,7 @@
             <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Delete.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
             <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source" Visibility="{Binding Delete.Visibility}" />
-            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.DescriptionSourceID}" Visibility="{Binding Delete.Visibility}" IsReadOnly="True" IsEnabled="False" />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Delete.DescriptionSourceID}" Visibility="{Binding Delete.Visibility}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Delete.Visibility}" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
