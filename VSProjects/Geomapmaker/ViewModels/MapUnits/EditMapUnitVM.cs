@@ -49,6 +49,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Color = _helpers.ColorConverter.RGBtoColor(Selected?.AreaFillRGB);
                 GeoMaterial = Selected?.GeoMaterial;
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
+                DescriptionSourceID = Selected?.DescriptionSourceID;
                 NotifyPropertyChanged("Visibility");
             }
         }
@@ -236,6 +237,16 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
+        private string _descriptionSourceID;
+        public string DescriptionSourceID
+        {
+            get => _descriptionSourceID;
+            set
+            {
+                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
+            }
+        }
+
         private bool CanUpdate()
         {
             return Selected != null && !HasErrors;
@@ -287,7 +298,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                                     row["GeoMaterial"] = GeoMaterial;
                                     row["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                     row["ParagraphStyle"] = "Standard";
-                                    row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+                                    row["DescriptionSourceID"] = DescriptionSourceID;
 
                                     // After all the changes are done, persist it.
                                     row.Store();

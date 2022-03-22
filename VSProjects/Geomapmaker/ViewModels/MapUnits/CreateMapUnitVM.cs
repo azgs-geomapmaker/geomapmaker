@@ -183,6 +183,16 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
+        private string _descriptionSourceID = GeomapmakerModule.DataSourceId;
+        public string DescriptionSourceID
+        {
+            get => _descriptionSourceID;
+            set
+            {
+                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
+            }
+        }
+
         /// <summary>
         /// Determines the visibility (enabled state) of the button
         /// </summary>
@@ -248,7 +258,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                             rowBuffer["GeoMaterial"] = GeoMaterial;
                             rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
                             rowBuffer["ParagraphStyle"] = "Standard";
-                            rowBuffer["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+                            rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
 
                             using (Row row = enterpriseTable.CreateRow(rowBuffer))
                             {

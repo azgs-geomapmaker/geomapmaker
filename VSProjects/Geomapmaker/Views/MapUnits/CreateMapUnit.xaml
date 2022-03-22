@@ -57,6 +57,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -74,7 +76,7 @@
             <TextBlock Grid.Row="5" Grid.Column="1" Text="Full Name" ToolTip="{Binding Tooltips[FullName]}" />
             <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.FullName, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" />
 
-            <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="10" ToolTip="{Binding Tooltips[Age]}">
+            <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="5,0,5,5" ToolTip="{Binding Tooltips[Age]}">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -138,7 +140,10 @@
             <TextBlock Grid.Row="18" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
             <ComboBox Grid.Row="19" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" />
 
-            <StackPanel Grid.Row="20" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <TextBlock Grid.Row="20" Grid.Column="1" Text="Data Source"/>
+            <TextBox Grid.Row="21" Grid.Column="1" Text="{Binding Create.DescriptionSourceID}" IsReadOnly="True" IsEnabled="False" />
+
+            <StackPanel Grid.Row="22" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSave}">Save</Button>
             </StackPanel>

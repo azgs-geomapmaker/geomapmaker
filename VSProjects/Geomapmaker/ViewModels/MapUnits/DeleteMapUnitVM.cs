@@ -66,6 +66,9 @@ namespace Geomapmaker.ViewModels.MapUnits
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
                 NotifyPropertyChanged("GeoMaterialConfidence");
 
+                DescriptionSourceID = Selected?.DescriptionSourceID;
+                NotifyPropertyChanged("DescriptionSourceID");
+
                 NotifyPropertyChanged("Visibility");
 
                 ValidateCanDelete();
@@ -84,6 +87,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         public string HexColor { get; set; }
         public string GeoMaterial { get; set; }
         public string GeoMaterialConfidence { get; set; }
+        public string DescriptionSourceID { get; set; }
 
         private bool CanDelete()
         {
