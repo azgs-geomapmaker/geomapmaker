@@ -99,6 +99,10 @@
         <Setter Property="Margin" Value="0,0,0,10"/>
     </Style>
 
+    <Style TargetType="DatePicker" >
+        <Setter Property="Margin" Value="0,0,0,10"/>
+    </Style>
+
     <Style TargetType="Button" >
         <!--<Setter Property="Style" Value="{DynamicResource Esri_Button}"/>-->
         <!--<Setter Property="Margin" Value="10"/>
