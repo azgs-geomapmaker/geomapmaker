@@ -45,7 +45,7 @@ namespace Geomapmaker.ViewModels.Stations
             set
             {
                 SetProperty(ref _fieldID, value, () => FieldID);
-                ValidateRequiredString(FieldID, "FieldID");
+                ValidateFieldID(FieldID, "FieldID");
             }
         }
 
@@ -301,6 +301,27 @@ namespace Geomapmaker.ViewModels.Stations
 
             RaiseErrorsChanged(propertyKey);
         }
+
+
+        private void ValidateFieldID(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (ParentVM.StationFieldIdOptions.Any(a => a.ToLower() == FieldID.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Field ID is taken." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
 
         private void ValidateXCoordinate(string text, string propertyKey)
         {

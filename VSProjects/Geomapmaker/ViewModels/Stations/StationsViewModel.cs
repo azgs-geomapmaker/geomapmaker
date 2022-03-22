@@ -1,7 +1,9 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -30,6 +32,22 @@ namespace Geomapmaker.ViewModels.Stations
             Delete = new DeleteStationVM(this);
         }
 
+        private List<string> _stationFieldIdOptions { get; set; }
+        public List<string> StationFieldIdOptions
+        {
+            get => _stationFieldIdOptions;
+            set
+            {
+                _stationFieldIdOptions = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public void RefreshStationFieldIds()
+        {
+            StationFieldIdOptions = Data.Stations.GetStationFieldIds();
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,7 +63,7 @@ namespace Geomapmaker.ViewModels.Stations
     {
         private Views.Stations.Stations _stations = null;
 
-        protected override void OnClick()
+        protected override async void OnClick()
         {
             //already open?
             if (_stations != null)
@@ -58,6 +76,11 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
+
+            await QueuedTask.Run(() =>
+            {
+                _stations.stationsVM.RefreshStationFieldIds();
+            });
 
             _stations.Closed += (o, e) => { _stations = null; };
 
