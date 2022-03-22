@@ -367,8 +367,12 @@ namespace Geomapmaker.ViewModels.MapUnits
                     });
                 }
 
-                // Add new symbology/templates if needed. Remove old symbology/templates if needed.
-                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+                // Check if symbology needs to be updated.
+                if (Selected.MU != MapUnit || Selected.HexColor != HexColor)
+                {
+                    // Add new symbology/templates if needed. Remove old symbology/templates if needed.
+                    Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+                }
 
                 ParentVM.CloseProwindow();
             }
