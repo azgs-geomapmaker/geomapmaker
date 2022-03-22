@@ -96,7 +96,7 @@
             <TextBox Grid.Row="22" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" />
 
             <TextBlock Grid.Row="23" Grid.Column="1" Text="Data Source"/>
-            <TextBox Grid.Row="24" Grid.Column="1" Text="{Binding Create.DataSourceId}" IsReadOnly="True" IsEnabled="False" />
+            <TextBox Grid.Row="24" Grid.Column="1" Text="{Binding Create.DataSourceId}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="25" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
