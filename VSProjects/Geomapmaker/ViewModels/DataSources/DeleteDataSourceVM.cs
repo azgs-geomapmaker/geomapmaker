@@ -267,6 +267,49 @@ namespace Geomapmaker.ViewModels.DataSources
                 }
             });
 
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer op = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table opTable = op.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"LocationSourceID = '{Id}'"
+                };
+
+                int rowCount = opTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this LocationSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+
+                // Stop checking if we've found an error
+                if (isError) return;
+
+                queryFilter = new QueryFilter
+                {
+                    WhereClause = $"OrientationSourceID = '{Id}'"
+                };
+
+                rowCount = opTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this OrientationSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
         }
 
         #endregion
