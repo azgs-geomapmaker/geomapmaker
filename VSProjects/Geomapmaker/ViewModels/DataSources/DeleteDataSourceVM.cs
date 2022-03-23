@@ -156,6 +156,7 @@ namespace Geomapmaker.ViewModels.DataSources
         private async void ValidateCanDelete()
         {
             const string propertyKey = "Selected";
+            bool isError = false;
 
             if (Selected == null)
             {
@@ -166,6 +167,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
             // Remove any existing errors
             _validationErrors.Remove(propertyKey);
+            RaiseErrorsChanged(propertyKey);
 
             StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
@@ -182,11 +184,89 @@ namespace Geomapmaker.ViewModels.DataSources
 
                 if (rowCount > 0)
                 {
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} DescriptionOfMapUnits with this DescriptionSourceID" };
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s"; 
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} DescriptionOfMapUnit{plural} with this DescriptionSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+
                 }
             });
 
-            RaiseErrorsChanged(propertyKey);
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer cf = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table cfTable = cf.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DataSourceID = '{Id}'"
+                };
+
+                int rowCount = cfTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} ContactsAndFault{plural} with this DataSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table mupTable = mup.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DataSourceID = '{Id}'"
+                };
+
+                int rowCount = mupTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{plural} with this DataSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer station = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table stationTable = station.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DataSourceID = '{Id}'"
+                };
+
+                int rowCount = stationTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Station{plural} with this DataSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
         }
 
         #endregion
