@@ -42,7 +42,7 @@
             <TextBlock Grid.Row="3" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" />
             <TextBox Grid.Row="4" Grid.Column="1" MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
 
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="Data Source"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Description Source"/>
             <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.DescriptionSourceID}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">

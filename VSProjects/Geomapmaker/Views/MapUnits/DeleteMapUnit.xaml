@@ -99,7 +99,7 @@
             <TextBlock Grid.Row="22" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" Visibility="{Binding Delete.Visibility}" />
             <TextBox Grid.Row="23" Grid.Column="1" Text="{Binding Delete.GeoMaterialConfidence}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
-            <TextBlock Grid.Row="24" Grid.Column="1" Text="Data Source" Visibility="{Binding Delete.Visibility}" />
+            <TextBlock Grid.Row="24" Grid.Column="1" Text="Description Source" Visibility="{Binding Delete.Visibility}" />
             <TextBox Grid.Row="25" Grid.Column="1" Text="{Binding Delete.DescriptionSourceID}" Visibility="{Binding Delete.Visibility}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="26" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Delete.Visibility}" Margin="5">

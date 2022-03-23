@@ -140,7 +140,7 @@
             <TextBlock Grid.Row="18" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
             <ComboBox Grid.Row="19" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" />
 
-            <TextBlock Grid.Row="20" Grid.Column="1" Text="Data Source"/>
+            <TextBlock Grid.Row="20" Grid.Column="1" Text="Description Source"/>
             <TextBox Grid.Row="21" Grid.Column="1" Text="{Binding Create.DescriptionSourceID}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="22" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">

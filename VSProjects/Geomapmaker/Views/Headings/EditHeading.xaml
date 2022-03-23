@@ -57,7 +57,7 @@
             <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Description Source" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Edit.DescriptionSourceID}" Visibility="{Binding Edit.Visibility}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" Margin="5">
