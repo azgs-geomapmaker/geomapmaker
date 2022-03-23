@@ -51,12 +51,18 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
-        public void RefreshStationFieldIds()
+        private List<string> _dataSourceOptions { get; set; }
+        public List<string> DataSourceOptions
         {
-            StationFieldIdOptions = Data.Stations.GetStationFieldIds();
+            get => _dataSourceOptions;
+            set
+            {
+                _dataSourceOptions = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        public async void RefreshSymbolsAsync()
+        public async void RefreshOptions()
         {
             // Get symbology options if the list is null
             if (Data.OrientationPoints.OrientationPointSymbols == null)
@@ -66,6 +72,12 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             // ParentVM keeps a copy of the master list
             SymbolOptions = Data.OrientationPoints.OrientationPointSymbols;
+
+            // Field ID Options
+            StationFieldIdOptions = Data.Stations.GetStationFieldIds();
+
+            // Data Source Options
+            DataSourceOptions = await Data.DataSources.GetDataSourceIdsAsync();
         }
 
         #region INotifyPropertyChanged
@@ -103,8 +115,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             await QueuedTask.Run(() =>
             {
-                _orientationpoints.orientationPointsViewModelVM.RefreshSymbolsAsync();
-                _orientationpoints.orientationPointsViewModelVM.RefreshStationFieldIds();
+                _orientationpoints.orientationPointsViewModelVM.RefreshOptions();
             }, ps.Progressor);
 
             _orientationpoints.Closed += (o, e) => { _orientationpoints = null; };

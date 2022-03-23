@@ -79,7 +79,8 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                     { "LocationConfidenceMeters", LocationConfidenceMeters },
                     { "PlotAtScale", PlotAtScale },
                     { "Notes", Notes },
-                    { "DataSourceId", DataSourceId },
+                    { "LocationSourceID", LocationSourceID },
+                    { "OrientationSourceID", OrientationSourceID },
                 };
 
                 RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
@@ -226,11 +227,18 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
-        private string _dataSourceId = GeomapmakerModule.DataSourceId;
-        public string DataSourceId
+        private string _locationSourceID = GeomapmakerModule.DataSourceId;
+        public string LocationSourceID
         {
-            get => _dataSourceId;
-            set => SetProperty(ref _dataSourceId, value, () => DataSourceId);
+            get => _locationSourceID;
+            set => SetProperty(ref _locationSourceID, value, () => LocationSourceID);
+        }
+
+        private string _orientationSourceID = GeomapmakerModule.DataSourceId;
+        public string OrientationSourceID
+        {
+            get => _orientationSourceID;
+            set => SetProperty(ref _orientationSourceID, value, () => OrientationSourceID);
         }
 
         #region Validation

@@ -1,11 +1,7 @@
-﻿using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Mapping;
-using Geomapmaker.Models;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Geomapmaker.RibbonElements
 {
@@ -16,45 +12,16 @@ namespace Geomapmaker.RibbonElements
     {
         protected override void OnDropDownOpened()
         {
-            StandaloneTable dataSources = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
-
-            if (dataSources == null)
-            {
-                FrameworkApplication.State.Deactivate("datasource_selected");
-                return;
-            }
-
+            // Clear existing datasource options
             Clear();
 
-            QueuedTask.Run(() =>
+            QueuedTask.Run(async () =>
             {
-                Table enterpriseTable = dataSources.GetTable();
+                List<string> DataSourceIds = await Data.DataSources.GetDataSourceIdsAsync();
 
-                if (enterpriseTable == null)
+                foreach (string id in DataSourceIds)
                 {
-                    return;
-                }
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    PostfixClause = "ORDER BY datasources_id"
-                };
-
-                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
-                    {
-                        using (Row row = rowCursor.Current)
-                        {
-                            DataSource dS = new DataSource
-                            {
-                                Source = row["source"]?.ToString(),
-                                DataSource_ID = row["datasources_id"]?.ToString(),
-                            };
-
-                            Add(new ComboBoxItem(dS.DataSource_ID, null, dS.Source));
-                        }
-                    }
+                    Add(new ComboBoxItem(id, null, id));
                 }
             });
         }

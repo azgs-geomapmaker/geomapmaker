@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
@@ -9,6 +10,47 @@ namespace Geomapmaker.Data
 {
     public class DataSources
     {
+
+        public static async Task<List<string>> GetDataSourceIdsAsync()
+        {
+            List<string> DataSourcesIds = new List<string>();
+
+            StandaloneTable dataSourcesTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
+
+            if (dataSourcesTable == null)
+            {
+                return DataSourcesIds;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                Table enterpriseTable = dataSourcesTable.GetTable();
+
+                if (enterpriseTable == null)
+                {
+                    return;
+                }
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    PostfixClause = "ORDER BY datasources_id"
+                };
+
+                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
+                {
+                    while (rowCursor.MoveNext())
+                    {
+                        using (Row row = rowCursor.Current)
+                        {
+                            DataSourcesIds.Add(row["datasources_id"]?.ToString());
+                        }
+                    }
+                }
+            });
+
+            return DataSourcesIds;
+        }
+
         public static async Task<List<DataSource>> GetDataSourcesAsync()
         {
             List<DataSource> DataSourcesList = new List<DataSource>();
@@ -49,8 +91,8 @@ namespace Geomapmaker.Data
                                 Notes = row["notes"]?.ToString()
                             };
 
-                            //add it to our list
-                            DataSourcesList.Add(dS);
+                        //add it to our list
+                        DataSourcesList.Add(dS);
                         }
                     }
                 }

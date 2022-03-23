@@ -8,10 +8,10 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.OrientationPoints" 
         mc:Ignorable="d"
         Title="Orientation Points" 
-        Height="700" 
-        Width="300"
-        MinHeight="600" 
-        MinWidth="300"
+        Height="800" 
+        Width="400"
+        MinHeight="750" 
+        MinWidth="350"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
