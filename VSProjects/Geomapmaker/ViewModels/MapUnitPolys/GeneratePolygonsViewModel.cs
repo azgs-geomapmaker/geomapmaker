@@ -1,17 +1,26 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Templates;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
-namespace Geomapmaker.RibbonElements
+namespace Geomapmaker.ViewModels.MapUnitPolys
 {
-    internal class GeneratePolygons : Button
+    public class GeneratePolygonsViewModel
     {
-        protected override async void OnClick()
+        public event EventHandler WindowCloseEvent;
+
+        public ICommand CommandGeneratePolygons => new RelayCommand(() => GenerateAllPolygons());
+
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public async void GenerateAllPolygons()
         {
             Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
 
@@ -52,6 +61,40 @@ namespace Geomapmaker.RibbonElements
 
                 Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             });
+
+            CloseProwindow();
+        }
+
+        public void CloseProwindow()
+        {
+            WindowCloseEvent(this, new EventArgs());
+        }
+    }
+
+    internal class ShowGeneratePolygons : Button
+    {
+        private Views.MapUnitPolys.GeneratePolygons _generatepolygons = null;
+
+        protected override void OnClick()
+        {
+            // already open?
+            if (_generatepolygons != null)
+            {
+                _generatepolygons.Close();
+                return;
+            }
+
+            _generatepolygons = new Views.MapUnitPolys.GeneratePolygons
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            
+            _generatepolygons.Closed += (o, e) => { _generatepolygons = null; };
+
+            _generatepolygons.generatePolygonsVM.WindowCloseEvent += (s, e) => _generatepolygons.Close();
+
+            _generatepolygons.Show();
+
         }
     }
 }

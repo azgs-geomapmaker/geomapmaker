@@ -42,7 +42,7 @@
         </group>
         <group id="Geomapmaker_MUPs" caption="Map Unit Poly" keytip="MUP">
           <button refID="Geomapmaker_MapUnitPolys" />
-          <button refID="Geomapmaker_GeneratePolygons" />
+          <button refID="Geomapmaker_GeneratePolygons_Btn" />
         </group>
         <group id="Geomapmaker_Points" caption="Points" keytip="todo">
           <button refID="Geomapmaker_Stations_Btn" />
@@ -97,6 +97,9 @@
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
         <button id="Geomapmaker_RebuildRenderers" caption="Rebuild Renderers" className="Geomapmaker.ViewModels.RebuildRenderers.ShowRebuildRenderers" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_GeneratePolygons_Btn" caption="Generate All Polygons" className="Geomapmaker.ViewModels.MapUnitPolys.ShowGeneratePolygons" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>

@@ -202,8 +202,12 @@
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationSymbology.cs" />
     <Compile Include="Data\Stations.cs" />
+    <Compile Include="Views\MapUnitPolys\GeneratePolygons.xaml.cs">
+      <DependentUpon>GeneratePolygons.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
+    <Compile Include="ViewModels\MapUnitPolys\GeneratePolygonsViewModel.cs" />
     <Compile Include="Views\RebuildRenderers\RebuildRenderers.xaml.cs">
       <DependentUpon>RebuildRenderers.xaml</DependentUpon>
     </Compile>
@@ -216,10 +220,8 @@
     <Compile Include="Views\OrientationPoints\OrientationPoints.xaml.cs">
       <DependentUpon>OrientationPoints.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RibbonElements\GeneratePolygons.cs" />
     <Compile Include="MapTools\SelectContactsFaultsTool.cs" />
     <Compile Include="Models\MapUnitPolyTemplate.cs" />
-    <Compile Include="RibbonElements\RendererButton.cs" />
     <Compile Include="ViewModels\MapUnitPolys\DeleteMapUnitPolysVM.cs" />
     <Compile Include="ViewModels\MapUnitPolys\EditMapUnitPolysVM.cs" />
     <Compile Include="ViewModels\MapUnitPolys\CreateMapUnitPolysVM.cs" />
@@ -348,6 +350,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\MapUnitPolys\GeneratePolygons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RebuildRenderers\RebuildRenderers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
