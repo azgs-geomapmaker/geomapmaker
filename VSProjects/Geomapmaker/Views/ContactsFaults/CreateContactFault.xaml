@@ -226,7 +226,7 @@
             <TextBox Grid.Row="18" Grid.Column="1" FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsEnabled="False"/>
 
             <StackPanel Grid.Row="19" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Close</Button>
+                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding Create.CommandCreateTemplate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Save Template</Button>
                 <Button Padding="5" Command="{Binding Create.CommandSketch}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Sketch</Button>
             </StackPanel>

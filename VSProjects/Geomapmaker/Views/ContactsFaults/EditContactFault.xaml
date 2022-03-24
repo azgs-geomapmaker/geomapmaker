@@ -220,7 +220,7 @@
             <TextBox Grid.Row="20" Grid.Column="1" FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" IsReadOnly="True" IsEnabled="False"/>
 
             <StackPanel Grid.Row="21" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
-                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Close</Button>
+                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding Edit.CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update Template</Button>
             </StackPanel>
 

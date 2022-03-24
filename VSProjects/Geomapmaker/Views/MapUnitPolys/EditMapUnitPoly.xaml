@@ -115,7 +115,7 @@
             <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Edit.DataSource}" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-                <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
+                <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding Edit.CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Save</Button>
             </StackPanel>
 

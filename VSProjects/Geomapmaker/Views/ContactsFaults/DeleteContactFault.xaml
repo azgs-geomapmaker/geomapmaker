@@ -103,7 +103,7 @@
             <TextBox Grid.Row="21" Grid.Column="1" Text="{Binding Delete.DataSource}" Visibility="{Binding Delete.Visibility}" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="22" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Delete.Visibility}" >
-                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Close</Button>
+                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding Delete.CommandDelete}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Delete Template</Button>
             </StackPanel>
 
