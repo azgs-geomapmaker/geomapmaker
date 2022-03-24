@@ -49,7 +49,6 @@
           <button refID="Geomapmaker_OrientationPoints_Btn" />
         </group>
         <group id="Geomapmaker_Renderers" caption="Symbology" keytip="todo">
-          <button refID="Geomapmaker_ResetRenderers" />
           <button refID="Geomapmaker_RebuildRenderers" size="large" />
         </group>
       </groups>
@@ -85,9 +84,6 @@
         <tool id="Geomapmaker_SelectContactsFaultsTool" caption="SelectContactsFaultsTool" className="Geomapmaker.MapTools.SelectContactsFaultsTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="todo" condition="esri_mapping_mapPane">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </tool>
-        <button id="Geomapmaker_ResetRenderers" caption="Update Renderers" className="Geomapmaker.RibbonElements.RendererButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
-          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
-        </button>
         <button id="Geomapmaker_GeneratePolygons" caption="Generate All Polygons" className="Geomapmaker.RibbonElements.GeneratePolygons" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
@@ -100,7 +96,7 @@
         <button id="Geomapmaker_OrientationPoints_Btn" caption="Orientation Points" className="Geomapmaker.ViewModels.OrientationPoints.ShowOrientationPoints" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_RebuildRenderers" caption="RebuildRenderers" className="Geomapmaker.ViewModels.RebuildRenderers.ShowRebuildRenderers" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png">
+        <button id="Geomapmaker_RebuildRenderers" caption="Rebuild Renderers" className="Geomapmaker.ViewModels.RebuildRenderers.ShowRebuildRenderers" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>

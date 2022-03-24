@@ -204,10 +204,9 @@
     <Compile Include="Data\Stations.cs" />
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
-    <Compile Include="RebuildRenderers.xaml.cs">
+    <Compile Include="Views\RebuildRenderers\RebuildRenderers.xaml.cs">
       <DependentUpon>RebuildRenderers.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShowRebuildRenderers.cs" />
     <Compile Include="ViewModels\OrientationPoints\CreateOrientationPointVM.cs" />
     <Compile Include="ViewModels\OrientationPoints\OrientationPointsViewModel.cs" />
     <Compile Include="ViewModels\RebuildRenderers\RebuildRenderersViewModel.cs" />
@@ -349,7 +348,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="RebuildRenderers.xaml">
+    <Page Include="Views\RebuildRenderers\RebuildRenderers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -474,9 +473,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\RebuildRenderers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   PackageAction can be:
