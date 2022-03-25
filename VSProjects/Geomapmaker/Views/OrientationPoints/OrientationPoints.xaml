@@ -9,9 +9,9 @@
         mc:Ignorable="d"
         Title="Orientation Points" 
         Height="800" 
-        Width="400"
-        MinHeight="750" 
-        MinWidth="350"
+        MinHeight="750"                    
+        Width="500"
+        MinWidth="450"                               
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

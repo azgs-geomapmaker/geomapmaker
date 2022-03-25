@@ -10,8 +10,8 @@
         mc:Ignorable="d"
         Title="Contacts and Faults Templates"
         Height="700" 
-        Width="500"
         MinHeight="650" 
+        Width="500"
         MinWidth="450"
         WindowStartupLocation="CenterOwner"
     >

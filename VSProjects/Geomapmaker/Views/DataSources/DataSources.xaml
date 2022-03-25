@@ -9,9 +9,9 @@
         mc:Ignorable="d"
         Title="Data Sources"
         Height="450" 
-        Width="450"
         MinHeight="400"
-        MinWidth="400"
+        Width="500"
+        MinWidth="450"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

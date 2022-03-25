@@ -9,9 +9,9 @@
         mc:Ignorable="d"
         Title="Headings" 
         Height="400" 
-        Width="300"
         MinHeight="350" 
-        MinWidth="300"
+        Width="500"
+        MinWidth="450"                    
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

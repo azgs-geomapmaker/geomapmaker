@@ -13,9 +13,9 @@
         mc:Ignorable="d"
         Title="Hierarchy" 
         Height="500" 
-        Width="300"
         MinHeight="500" 
-        MinWidth="300"
+        Width="500"
+        MinWidth="450"                      
         WindowStartupLocation="CenterOwner"
     >
     
