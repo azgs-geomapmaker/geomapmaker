@@ -1,6 +1,8 @@
-﻿using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Attributes;
+using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -231,6 +233,26 @@ namespace Geomapmaker.Data
                 modifyFeatures.Modify(multipleFeaturesInsp);
 
                 modifyFeatures.Execute();
+            });
+
+            QueuedTask.Run(() =>
+            {
+                FeatureLayer cf = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+
+                IEnumerable<EditingTemplate> cfTemplates = cf.GetTemplates();
+
+                foreach (var template in cfTemplates)
+                {
+                    var templateDef = template.GetDefinition() as CIMFeatureTemplate;
+
+                    if (templateDef.DefaultValues["datasourceid"]?.ToString() == originalDataSourceID)
+                    {
+                        // Update datasourceid
+                        templateDef.DefaultValues["datasourceid"] = newDataSourceID;
+
+                        template.SetDefinition(templateDef);
+                    }
+                }
             });
 
             // Update Stations
