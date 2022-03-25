@@ -70,7 +70,7 @@
             <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Create.YCoordinate, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="11" Grid.Column="1" Text="Time Date" />
-            <DatePicker Grid.Row="12" Grid.Column="1" SelectedDate="{Binding Create.TimeDate, UpdateSourceTrigger=PropertyChanged}" />
+            <DatePicker Grid.Row="12" Grid.Column="1" SelectedDate="{Binding Create.TimeDate, UpdateSourceTrigger=PropertyChanged}" SelectedDateFormat="Long" />
 
             <TextBlock Grid.Row="13" Grid.Column="1" Text="Observer" />
             <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding Create.Observer, UpdateSourceTrigger=PropertyChanged}" />
