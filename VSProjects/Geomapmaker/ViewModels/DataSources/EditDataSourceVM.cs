@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -117,7 +118,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
                     editOperation.Callback(context =>
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectId };
+                        QueryFilter filter = new QueryFilter { ObjectIDs = new List<long> { Selected.ObjectId } };
 
                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
@@ -164,6 +165,12 @@ namespace Geomapmaker.ViewModels.DataSources
             }
             else
             {
+                // Check if the Data Source ID has changed
+                if (Selected.DataSource_ID != Id)
+                {
+                    Data.DataSources.UpdateDataSourceForeignKeys(Selected.DataSource_ID, Id);
+                }
+
                 ParentVM.CloseProwindow();
             }
         }
