@@ -111,7 +111,7 @@ namespace Geomapmaker.ViewModels.Headings
 
                     editOperation.Callback(context =>
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
 
                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
@@ -215,7 +215,7 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.Name.ToLower() == name?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.Name.ToLower() == name?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
             }

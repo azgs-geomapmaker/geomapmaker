@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
 using Nelibur.ObjectMapper;
@@ -182,13 +183,13 @@ namespace Geomapmaker.ViewModels.Hierarchy
                             {
                                 using (Row row = rowCursor.Current)
                                 {
-                                    int ID = int.Parse(row["ObjectID"].ToString());
+                                    string ID = Helpers.RowValueToString(row["ObjectID"]);
 
                                     // In order to update the Map and/or the attribute table.
                                     // Has to be called before any changes are made to the row.
                                     context.Invalidate(row);
 
-                                    row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ID == ID)?.HierarchyKey ?? "";
+                                    row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey ?? "";
 
                                     // After all the changes are done, persist it.
                                     row.Store();

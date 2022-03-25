@@ -343,6 +343,7 @@
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_helpers\ColorConverter.cs" />
+    <Compile Include="_helpers\Helpers.cs" />
     <Compile Include="_helpers\ValueConverters.cs" />
   </ItemGroup>
   <ItemGroup>

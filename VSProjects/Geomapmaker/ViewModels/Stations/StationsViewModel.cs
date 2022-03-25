@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Geomapmaker.Models;
 
 namespace Geomapmaker.ViewModels.Stations
 {
@@ -32,20 +33,20 @@ namespace Geomapmaker.ViewModels.Stations
             Delete = new DeleteStationVM(this);
         }
 
-        private List<string> _stationFieldIdOptions { get; set; }
-        public List<string> StationFieldIdOptions
+        private List<Station> _stationOptions { get; set; }
+        public List<Station> StationOptions
         {
-            get => _stationFieldIdOptions;
+            get => _stationOptions;
             set
             {
-                _stationFieldIdOptions = value;
+                _stationOptions = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public void RefreshStationFieldIds()
+        public void RefreshStationOptions()
         {
-            StationFieldIdOptions = Data.Stations.GetStationFieldIds();
+            StationOptions = Data.Stations.GetStations();
         }
 
         #region INotifyPropertyChanged
@@ -79,7 +80,7 @@ namespace Geomapmaker.ViewModels.Stations
 
             await QueuedTask.Run(() =>
             {
-                _stations.stationsVM.RefreshStationFieldIds();
+                _stations.stationsVM.RefreshStationOptions();
             });
 
             _stations.Closed += (o, e) => { _stations = null; };

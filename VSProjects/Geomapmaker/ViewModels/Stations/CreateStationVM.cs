@@ -310,7 +310,7 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.StationFieldIdOptions.Any(a => a.ToLower() == FieldID.ToLower()))
+            else if (ParentVM.StationOptions.Any(a => a.FieldID.ToLower() == FieldID.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Field ID is taken." };
             }

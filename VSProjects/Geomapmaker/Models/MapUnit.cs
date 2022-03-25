@@ -8,7 +8,7 @@ namespace Geomapmaker.Models
 {
     public class MapUnit
     {
-        public int ID { get; set; }
+        public string ObjectID { get; set; }
 
         public string MU { get; set; }
 
@@ -66,7 +66,7 @@ namespace Geomapmaker.Models
             {
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append($"<b>ID: </b>{ID}<br>");
+                sb.Append($"<b>ID: </b>{ObjectID}<br>");
 
                 if (!string.IsNullOrEmpty(MU))
                 {

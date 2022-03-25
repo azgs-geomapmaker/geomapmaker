@@ -34,10 +34,10 @@
             <TabItem Header="Create" >
                 <tabData:CreateStation />
             </TabItem>
-            <!--<TabItem Header="Edit">
+            <TabItem Header="Edit">
                 <tabData:EditStation />
             </TabItem>
-            <TabItem Header="Delete">
+            <!--<TabItem Header="Delete">
                 <tabData:DeleteStation />
             </TabItem>-->
         </TabControl>

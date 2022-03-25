@@ -30,6 +30,7 @@ namespace Geomapmaker.Data
                     {
                         Station newStation = new Station
                         {
+                            ObjectID = Helpers.RowValueToString(row["ObjectID"]),
                             FieldID = Helpers.RowValueToString(row["FieldID"]),
                             TimeDate = Helpers.RowValueToString(row["TimeDate"]),
                             Observer = Helpers.RowValueToString(row["Observer"]),

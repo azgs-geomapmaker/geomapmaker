@@ -274,7 +274,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                     editOperation.Callback(context =>
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
 
                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
@@ -458,7 +458,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
             }
             // Name must be unique 
-            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
@@ -501,7 +501,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Full Name must be unique 
-            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Full name is taken." };
             }
@@ -552,7 +552,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.AreaFillRGB == AreaFillRGB))
+            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.AreaFillRGB == AreaFillRGB))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }

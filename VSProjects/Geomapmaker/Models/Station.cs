@@ -2,6 +2,8 @@
 {
     public class Station
     {
+        public string ObjectID { get; set; }
+
         // Station number assigned by person who originally located this station. Commonly, key to field sheet and (or) field notebook
         public string FieldID { get; set; }
 
