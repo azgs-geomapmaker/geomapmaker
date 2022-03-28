@@ -27,9 +27,9 @@ namespace Geomapmaker.ViewModels.Stations
                 SetProperty(ref _selected, value, () => Selected);
 
                 FieldID = Selected?.FieldID;
-                //SpatialReferenceWkid = Selected?.SpatialReferenceWkid;
-                //XCoordinate = Selected?.XCoordinate;
-                //YCoordinate = Selected?.YCoordinate;
+                SpatialReferenceWkid = Selected?.SpatialReferenceWkid;
+                XCoordinate = Selected?.XCoordinate;
+                YCoordinate = Selected?.YCoordinate;
                 TimeDate = Selected?.TimeDate;
                 Observer = Selected?.Observer;
                 LocationMethod = Selected?.LocationMethod;
