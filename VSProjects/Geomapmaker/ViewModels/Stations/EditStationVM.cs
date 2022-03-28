@@ -1,12 +1,17 @@
 ﻿using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Stations
@@ -187,9 +192,82 @@ namespace Geomapmaker.ViewModels.Stations
             return Selected != null && !HasErrors;
         }
 
-        private void UpdateAsync()
+        private async void UpdateAsync()
         {
-            throw new NotImplementedException();
+            bool IsSucceeded = false;
+
+            FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
+
+            if (stationsLayer == null)
+            {
+                MessageBox.Show("Stations layer not found in active map.");
+                return;
+            }
+
+            await QueuedTask.Run(async () =>
+            {
+                EditOperation modifyFeature = new EditOperation
+                {
+                    Name = "Station Edit",
+                };
+
+                MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+
+                // Get geometry from point builder
+                Geometry point = pointBuilder.ToGeometry();
+
+                var modifyInspector = new Inspector();
+                modifyInspector.Load(stationsLayer, Selected.ObjectID);
+
+                // Create features and set attributes
+                Dictionary<string, object> attributes = new Dictionary<string, object>
+                {
+                    { "FieldID", FieldID },
+                    { "TimeDate", TimeDate },
+                    { "Observer", Observer },
+                    { "LocationMethod", LocationMethod },
+                    { "LocationConfidenceMeters", LocationConfidenceMeters },
+                    { "PlotAtScale", PlotAtScale },
+                    { "Notes", Notes },
+                    { "DataSourceId", DataSourceId },
+                };
+
+                modifyFeature.Modify(stationsLayer, Selected.ObjectID, point, attributes);
+
+                // Execute to execute the operation
+                modifyFeature.Execute();
+
+                IsSucceeded = modifyFeature.IsSucceeded;
+
+                if (IsSucceeded)
+                {
+                    MapView.Active?.ZoomTo(point);
+                }
+
+                //
+                // Validate X, Y Coordinates by checking if a feature was actually created at that geometry point. 
+                // I haven't found a way to check prior to executing the editOperation
+                //
+                if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(stationsLayer))
+                {
+                    IsSucceeded = false;
+
+                    // Undo the edit operation
+                    await modifyFeature.UndoAsync();
+                }
+
+            });
+
+            if (IsSucceeded)
+            {
+                ParentVM.CloseProwindow();
+            }
+            else
+            {
+                // Raise error
+                _validationErrors["SpatialReferenceWkid"] = new List<string>() { "Coordinates not valid for Spatial Reference." };
+                RaiseErrorsChanged("SpatialReferenceWkid");
+            }
         }
 
         #region Validation

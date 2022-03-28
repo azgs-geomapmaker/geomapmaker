@@ -33,9 +33,9 @@ namespace Geomapmaker.Data
 
                         Station newStation = new Station
                         {
-                            ObjectID = Helpers.RowValueToString(row["ObjectID"]),
+                            ObjectID = Helpers.RowValueToLong(row["ObjectID"]),
                             FieldID = Helpers.RowValueToString(row["FieldID"]),
-                            TimeDate = Helpers.RowValueToString(row["TimeDate"]),
+                            TimeDate = row["TimeDate"]?.ToString(),
                             Observer = Helpers.RowValueToString(row["Observer"]),
                             LocationMethod = Helpers.RowValueToString(row["LocationMethod"]),
                             LocationConfidenceMeters = Helpers.RowValueToString(row["LocationConfidenceMeters"]),
