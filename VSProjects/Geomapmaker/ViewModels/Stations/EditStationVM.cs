@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Models;
 using System;
@@ -6,11 +7,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Stations
 {
     public class EditStationVM : PropertyChangedBase, INotifyDataErrorInfo
     {
+        public ICommand CommandUpdate => new RelayCommand(() => UpdateAsync(), () => CanUpdate());
+
         public StationsViewModel ParentVM { get; set; }
 
         public EditStationVM(StationsViewModel parentVM)
@@ -52,6 +56,7 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 SetProperty(ref _fieldID, value, () => FieldID);
                 ValidateFieldID(FieldID, "FieldID");
+                ValidateChangeWasMade();
             }
         }
 
@@ -64,6 +69,7 @@ namespace Geomapmaker.ViewModels.Stations
                 SetProperty(ref _spatialReferenceWkid, value, () => SpatialReferenceWkid);
                 ValidateWkid(SpatialReferenceWkid, "SpatialReferenceWkid");
                 NotifyPropertyChanged("SpatialReferenceName");
+                ValidateChangeWasMade();
             }
         }
         private SpatialReference StationSpatialRef;
@@ -78,6 +84,7 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 SetProperty(ref _xCoordinate, value, () => XCoordinate);
                 ValidateXCoordinate(XCoordinate, "XCoordinate");
+                ValidateChangeWasMade();
             }
         }
         private double XCoordinateDouble;
@@ -90,6 +97,7 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 SetProperty(ref _yCoordinate, value, () => YCoordinate);
                 ValidateYCoordinate(YCoordinate, "YCoordinate");
+                ValidateChangeWasMade();
             }
         }
         private double YCoordinateDouble;
@@ -98,21 +106,33 @@ namespace Geomapmaker.ViewModels.Stations
         public string TimeDate
         {
             get => _timeDate;
-            set => SetProperty(ref _timeDate, value, () => TimeDate);
+            set
+            {
+                SetProperty(ref _timeDate, value, () => TimeDate);
+                ValidateChangeWasMade();
+            }
         }
 
         private string _observer;
         public string Observer
         {
             get => _observer;
-            set => SetProperty(ref _observer, value, () => Observer);
+            set
+            {
+                SetProperty(ref _observer, value, () => Observer);
+                ValidateChangeWasMade();
+            }
         }
 
         private string _locationMethod;
         public string LocationMethod
         {
             get => _locationMethod;
-            set => SetProperty(ref _locationMethod, value, () => LocationMethod);
+            set
+            {
+                SetProperty(ref _locationMethod, value, () => LocationMethod);
+                ValidateChangeWasMade();
+            }
         }
 
         private string _locationConfidenceMeters;
@@ -123,6 +143,7 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
                 ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+                ValidateChangeWasMade();
             }
         }
 
@@ -134,6 +155,7 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 SetProperty(ref _plotAtScale, value, () => PlotAtScale);
                 ValidatePlotAtScale(PlotAtScale, "PlotAtScale");
+                ValidateChangeWasMade();
             }
         }
         private int PlotAtScaleInt;
@@ -142,14 +164,32 @@ namespace Geomapmaker.ViewModels.Stations
         public string Notes
         {
             get => _notes;
-            set => SetProperty(ref _notes, value, () => Notes);
+            set
+            {
+                SetProperty(ref _notes, value, () => Notes);
+                ValidateChangeWasMade();
+            }
         }
 
         private string _dataSourceId;
         public string DataSourceId
         {
             get => _dataSourceId;
-            set => SetProperty(ref _dataSourceId, value, () => DataSourceId);
+            set
+            {
+                SetProperty(ref _dataSourceId, value, () => DataSourceId);
+                ValidateChangeWasMade();
+            }
+        }
+
+        private bool CanUpdate()
+        {
+            return Selected != null && !HasErrors;
+        }
+
+        private void UpdateAsync()
+        {
+            throw new NotImplementedException();
         }
 
         #region Validation
@@ -171,6 +211,42 @@ namespace Geomapmaker.ViewModels.Stations
             // Otherwise, return the errors for that parameter.
             return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
                 null : (IEnumerable)_validationErrors[propertyName];
+        }
+
+        private void ValidateChangeWasMade()
+        {
+            // Silent error message
+            // Just prevents update until a map unit is selected and a change is made.
+            const string propertyKey = "SilentError";
+
+            if (Selected == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Select a station unit to edit." };
+                RaiseErrorsChanged(propertyKey);
+                return;
+            }
+
+            if (Selected.FieldID == FieldID &&
+                Selected.SpatialReferenceWkid == SpatialReferenceWkid &&
+                Selected.XCoordinate == XCoordinate &&
+                Selected.YCoordinate == YCoordinate &&
+                Selected.TimeDate == TimeDate &&
+                Selected.Observer == Observer &&
+                Selected.LocationMethod == LocationMethod &&
+                Selected.LocationConfidenceMeters == LocationConfidenceMeters &&
+                Selected.PlotAtScale == PlotAtScale &&
+                Selected.Notes == Notes &&
+                Selected.DataSourceId == DataSourceId
+                )
+            {
+                _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         private void ValidateWkid(string text, string propertyKey)

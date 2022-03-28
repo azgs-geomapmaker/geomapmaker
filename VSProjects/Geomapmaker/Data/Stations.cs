@@ -29,19 +29,20 @@ namespace Geomapmaker.Data
                 {
                     using (Row row = rowCursor.Current)
                     {
-                        MapPoint Shape = (ArcGIS.Core.Geometry.MapPoint)row["SHAPE"];
+                        MapPoint Shape = (MapPoint)row["SHAPE"];
 
                         Station newStation = new Station
                         {
-                            ObjectID = row["ObjectID"]?.ToString(),
-                            FieldID = row["FieldID"]?.ToString(),
-                            TimeDate = row["TimeDate"]?.ToString(),
-                            Observer = row["Observer"]?.ToString(),
-                            LocationMethod = row["LocationMethod"]?.ToString(),
-                            LocationConfidenceMeters = row["LocationConfidenceMeters"]?.ToString(),
-                            PlotAtScale = row["PlotAtScale"]?.ToString(),
-                            Notes = row["Notes"]?.ToString(),
-                            DataSourceId = row["DataSourceId"]?.ToString(),
+                            ObjectID = Helpers.RowValueToString(row["ObjectID"]),
+                            FieldID = Helpers.RowValueToString(row["FieldID"]),
+                            TimeDate = Helpers.RowValueToString(row["TimeDate"]),
+                            Observer = Helpers.RowValueToString(row["Observer"]),
+                            LocationMethod = Helpers.RowValueToString(row["LocationMethod"]),
+                            LocationConfidenceMeters = Helpers.RowValueToString(row["LocationConfidenceMeters"]),
+                            PlotAtScale = Helpers.RowValueToString(row["PlotAtScale"]),
+                            Notes = Helpers.RowValueToString(row["Notes"]),
+                            DataSourceId = Helpers.RowValueToString(row["DataSourceId"]),
+
                             SpatialReferenceWkid = Shape?.SpatialReference?.Wkid.ToString(),
                             XCoordinate = Shape?.X.ToString(),
                             YCoordinate = Shape?.Y.ToString(),
