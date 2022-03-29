@@ -125,18 +125,18 @@
             <TextBox Grid.Row="20" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="21" Grid.Column="1" Text="Location Source"/>
-            <TextBox Grid.Row="22" Grid.Column="1" Text="{Binding Create.LocationSourceID}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
-
-            <TextBlock Grid.Row="23" Grid.Column="1" Text="Orientation Source"/>
             <ComboBox 
-            Grid.Row="24" 
+            Grid.Row="22" 
             Grid.Column="1" 
             ItemsSource="{Binding DataSourceOptions}"
-            SelectedValue="{Binding Create.OrientationSourceID, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValue="{Binding Create.LocationSourceID, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
             IsEditable="False" 
             >
             </ComboBox>
+
+            <TextBlock Grid.Row="23" Grid.Column="1" Text="Orientation Source"/>
+            <TextBox Grid.Row="24" Grid.Column="1" Text="{Binding Create.OrientationSourceID}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
 
             <StackPanel Grid.Row="25" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
