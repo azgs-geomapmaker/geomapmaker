@@ -1,4 +1,5 @@
-﻿using ArcGIS.Core.Geometry;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
@@ -262,13 +263,50 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (string.IsNullOrEmpty(errorMessage))
             {
-                if (Selected.FieldID == FieldID)
+                if (Selected.FieldID != FieldID)
                 {
+                    await QueuedTask.Run(() =>
+                    {
+                        FeatureLayer op = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
 
+                        // Search by attribute
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            // Where StationsID is set to the original StationsID value
+                            WhereClause = $"StationsID = '{Selected.FieldID}'"
+                        };
 
+                        //Create list of oids to update
+                        List<long> oidSet = new List<long>();
 
+                        using (RowCursor rc = op.Search(queryFilter))
+                        {
+                            while (rc.MoveNext())
+                            {
+                                using (Row record = rc.Current)
+                                {
+                                    oidSet.Add(record.GetObjectID());
+                                }
+                            }
+                        }
 
+                        // Edit operation
+                        EditOperation modifyFeatures = new EditOperation
+                        {
+                            Name = "Update OrientationPoints",
+                            ShowProgressor = true
+                        };
 
+                        Inspector multipleFeaturesInsp = new Inspector();
+
+                        multipleFeaturesInsp.Load(op, oidSet);
+
+                        multipleFeaturesInsp["StationsID"] = FieldID;
+
+                        modifyFeatures.Modify(multipleFeaturesInsp);
+
+                        modifyFeatures.Execute();
+                    });
                 }
 
                 ParentVM.CloseProwindow();

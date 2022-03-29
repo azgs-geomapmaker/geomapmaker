@@ -154,7 +154,7 @@ namespace Geomapmaker.ViewModels.Stations
 
         private async void SaveAsync()
         {
-            bool IsSucceeded = false;
+            string errorMessage = null;
 
             FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
 
@@ -195,9 +195,7 @@ namespace Geomapmaker.ViewModels.Stations
                 // Execute to execute the operation
                 createFeatures.Execute();
 
-                IsSucceeded = createFeatures.IsSucceeded;
-
-                if (IsSucceeded)
+                if (createFeatures.IsSucceeded)
                 {
                     MapView.Active?.ZoomTo(point);
                 }
@@ -208,7 +206,7 @@ namespace Geomapmaker.ViewModels.Stations
                 //
                 if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(stationsLayer))
                 {
-                    IsSucceeded = false;
+                    errorMessage = "Coordinates not valid for Spatial Reference.";
 
                     // Undo the edit operation
                     await createFeatures.UndoAsync();
@@ -216,15 +214,13 @@ namespace Geomapmaker.ViewModels.Stations
 
             });
 
-            if (IsSucceeded)
+            if (string.IsNullOrEmpty(errorMessage))
             {
                 ParentVM.CloseProwindow();
             }
             else
             {
-                // Raise error
-                _validationErrors["SpatialReferenceWkid"] = new List<string>() { "Coordinates not valid for Spatial Reference." };
-                RaiseErrorsChanged("SpatialReferenceWkid");
+                MessageBox.Show(errorMessage, "One or more errors occured.");
             }
         }
 
