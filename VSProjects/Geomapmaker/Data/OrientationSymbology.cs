@@ -14,80 +14,6 @@ namespace Geomapmaker.Data
 {
     public class OrientationPoints
     {
-        public static List<GemsSymbol> OrientationPointSymbols;
-
-        public static async Task RefreshOPSymbolOptions()
-        {
-            List<GemsSymbol> orientationSymbols = new List<GemsSymbol>();
-
-            StandaloneTable orientationSymbologyTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "orientationsymbology");
-
-            // Check if the table exists
-            if (orientationSymbologyTable == null)
-            {
-                return;
-            }
-
-            // Process the cfsymbology table
-            await QueuedTask.Run(() =>
-            {
-                Table enterpriseTable = orientationSymbologyTable.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    //PostfixClause = "ORDER BY key"
-                };
-
-                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
-                    {
-                        using (Row row = rowCursor.Current)
-                        {
-                            if (row["key"] != null)
-                            {
-
-                                var json = row["symbol"].ToString();
-
-                                // Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
-                                json = json.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
-                                json = json.Insert(json.Length, "}");
-
-                                GemsSymbol newSymbol = new GemsSymbol
-                                {
-                                    Key = row["key"].ToString(),
-                                    Description = row["description"]?.ToString(),
-                                    SymbolJson = json
-                                };
-
-                                try
-                                {
-                                    // Create the preview image used in the ComboBox
-                                    SymbolStyleItem sSI = new SymbolStyleItem()
-                                    {
-                                        Symbol = CIMSymbolReference.FromJson(newSymbol.SymbolJson).Symbol,
-                                        PatchWidth = 25,
-                                        PatchHeight = 25
-                                    };
-                                    newSymbol.Preview = sSI.PreviewImage;
-
-                                    // Add to list
-                                    orientationSymbols.Add(newSymbol);
-                                }
-                                catch
-                                {
-                                    // Invalid CIM Symbol JSON
-                                    Debug.WriteLine("Error prrocessing CIM Symbol JSON");
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            OrientationPointSymbols = orientationSymbols;
-        }
-
         public static async void RebuildOrientationPointsSymbology()
         {
             FeatureLayer opLayer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
@@ -98,9 +24,9 @@ namespace Geomapmaker.Data
             }
 
             // Check if the symbol list has been populated 
-            if (OrientationPointSymbols == null)
+            if (Symbology.OrientationPointSymbols == null)
             {
-                await RefreshOPSymbolOptions();
+                await Symbology.RefreshOPSymbolOptions();
             }
 
             ProgressorSource ps = new ProgressorSource("Rebuilding Orientation Points Symbology...");
@@ -124,7 +50,7 @@ namespace Geomapmaker.Data
                         {
                             string cfSymbolKey = row["symbol"]?.ToString();
 
-                            GemsSymbol Symbol = OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
+                            GemsSymbol Symbol = Symbology.OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
 
                             if (Symbol != null)
                             {

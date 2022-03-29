@@ -226,7 +226,7 @@
     <Compile Include="ViewModels\MapUnitPolys\EditMapUnitPolysVM.cs" />
     <Compile Include="ViewModels\MapUnitPolys\CreateMapUnitPolysVM.cs" />
     <Compile Include="ViewModels\MapUnitPolys\MapUnitPolysViewModel.cs" />
-    <Compile Include="Data\CFSymbology.cs" />
+    <Compile Include="Data\Symbology.cs" />
     <Compile Include="Data\ContactsAndFaults.cs" />
     <Compile Include="MapTools\PopulateCFTool.cs" />
     <Compile Include="ViewModels\Stations\DeleteStationVM.cs" />

@@ -65,13 +65,13 @@ namespace Geomapmaker.ViewModels.OrientationPoints
         public async void RefreshOptions()
         {
             // Get symbology options if the list is null
-            if (Data.OrientationPoints.OrientationPointSymbols == null)
+            if (Data.Symbology.OrientationPointSymbols == null)
             {
-                await Data.OrientationPoints.RefreshOPSymbolOptions();
+                await Data.Symbology.RefreshOPSymbolOptions();
             }
 
             // ParentVM keeps a copy of the master list
-            SymbolOptions = Data.OrientationPoints.OrientationPointSymbols;
+            SymbolOptions = Data.Symbology.OrientationPointSymbols;
 
             // Field ID Options
             StationFieldIdOptions = Data.Stations.GetStationFieldIds();
