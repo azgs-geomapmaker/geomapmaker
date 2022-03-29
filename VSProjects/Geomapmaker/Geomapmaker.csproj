@@ -200,7 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\MapUnitPolys.cs" />
-    <Compile Include="Data\OrientationSymbology.cs" />
+    <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="Views\MapUnitPolys\GeneratePolygons.xaml.cs">
       <DependentUpon>GeneratePolygons.xaml</DependentUpon>

@@ -134,6 +134,5 @@ namespace Geomapmaker.Data
                 layer.SetRenderer(updatedRenderer);
             });
         }
-
     }
 }
