@@ -216,7 +216,8 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                 if (rowCount > 0)
                 {
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPolys with this MapUnit" };
+                    string pural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{pural} with this MapUnit" };
                 }
                 else
                 {
