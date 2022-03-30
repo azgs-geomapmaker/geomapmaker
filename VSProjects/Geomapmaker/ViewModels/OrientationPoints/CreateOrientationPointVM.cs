@@ -132,6 +132,77 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
+        private string _keyFilter;
+        public string KeyFilter
+        {
+            get => _keyFilter;
+            set
+            {
+                SetProperty(ref _keyFilter, value, () => KeyFilter);
+                FilterSymbols(KeyFilter, DescriptionFilter);
+            }
+        }
+
+        private string _descriptionFilter;
+        public string DescriptionFilter
+        {
+            get => _descriptionFilter;
+            set
+            {
+                SetProperty(ref _descriptionFilter, value, () => DescriptionFilter);
+                FilterSymbols(KeyFilter, DescriptionFilter);
+            }
+        }
+
+        // Filter the Symbol options by key and description
+        private void FilterSymbols(string keyFilter, string DescriptionFilter)
+        {
+            // Start with all the symbols from the parent vm
+            List<GemsSymbol> filteredSymbols = ParentVM.SymbolOptions;
+
+            // Count of all symbols
+            int totalSymbolsCount = filteredSymbols.Count();
+
+            // Filter by key
+            if (!string.IsNullOrEmpty(keyFilter))
+            {
+                filteredSymbols = filteredSymbols.Where(a => a.Key.StartsWith(keyFilter)).ToList();
+            }
+
+            // Filter by description
+            if (!string.IsNullOrEmpty(DescriptionFilter))
+            {
+                filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.Contains(DescriptionFilter)).ToList();
+            }
+
+            // Count of filtered symbols
+            int filteredSymbolsCount = filteredSymbols.Count();
+
+            // Update options
+            SymbolOptions = filteredSymbols;
+
+            // Update messsage
+            SymbolsFilteredMessage = totalSymbolsCount != filteredSymbolsCount ? $"{filteredSymbolsCount} of {totalSymbolsCount} symbols" : $"{totalSymbolsCount} symbols";
+        }
+
+        private string _symbolsFilteredMessage;
+        public string SymbolsFilteredMessage
+        {
+            get => _symbolsFilteredMessage;
+            set => SetProperty(ref _symbolsFilteredMessage, value, () => SymbolsFilteredMessage);
+        }
+
+        private List<GemsSymbol> _symbolOptions { get; set; }
+        public List<GemsSymbol> SymbolOptions
+        {
+            get => _symbolOptions;
+            set
+            {
+                _symbolOptions = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private GemsSymbol _symbol;
         public GemsSymbol Symbol
         {

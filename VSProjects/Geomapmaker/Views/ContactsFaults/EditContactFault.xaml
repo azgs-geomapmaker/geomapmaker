@@ -106,7 +106,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0">Filter by Key</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Edit.KeyFilter, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Edit.KeyFilter, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,10" />
                             <TextBlock Grid.Row="0" Grid.Column="1">Filter by Description</TextBlock>
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Edit.DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>

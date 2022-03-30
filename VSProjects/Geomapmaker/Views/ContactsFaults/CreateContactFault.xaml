@@ -113,7 +113,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0">Filter by Key</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Create.KeyFilter, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Create.KeyFilter, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,10" />
                             <TextBlock Grid.Row="0" Grid.Column="1">Filter by Description</TextBlock>
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Create.DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
@@ -142,7 +142,6 @@
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Create.SymbolsFilteredMessage}" HorizontalAlignment="Right" FontSize="11" FontWeight="Light"/>
                     </Grid>
                 </AdornerDecorator>
-
             </GroupBox>
 
             <TextBlock Grid.Row="7" Grid.Column="1"  Text="Identity Confidence "/>

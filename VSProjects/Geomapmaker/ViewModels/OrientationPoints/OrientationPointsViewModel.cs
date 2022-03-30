@@ -6,6 +6,7 @@ using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -72,6 +73,10 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             // ParentVM keeps a copy of the master list
             SymbolOptions = Data.Symbology.OrientationPointSymbols;
+
+            // Push options to create vm
+            Create.SymbolOptions = SymbolOptions;
+            Create.SymbolsFilteredMessage = $"{SymbolOptions.Count()} symbols";
 
             // Field ID Options
             StationFieldIdOptions = Data.Stations.GetStationFieldIds();
