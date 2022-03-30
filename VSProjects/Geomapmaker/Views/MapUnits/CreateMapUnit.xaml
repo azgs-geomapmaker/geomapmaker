@@ -88,7 +88,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0" Text="Older Interval" ToolTip="{Binding Tooltips[OlderInterval]}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" Text="Older Interval" ToolTip="{Binding Tooltips[OlderInterval]}"/>
                     <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Create.OlderIntervalOptions}" SelectedItem="{Binding Create.OlderInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -102,7 +102,7 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
 
-                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0" Text="Younger Interval" ToolTip="{Binding Tooltips[YoungerInterval]}" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="5,0,0,0" Text="Younger Interval" ToolTip="{Binding Tooltips[YoungerInterval]}" />
                     <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Create.YoungerIntervalOptions}" SelectedItem="{Binding Create.YoungerInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}"  >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>

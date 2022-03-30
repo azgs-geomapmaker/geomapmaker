@@ -2,6 +2,8 @@
                     xmlns:htmlControls="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
                     xmlns:wpftk="http://schemas.xceed.com/wpf/xaml/toolkit">
 
+    <!--Margin: left, top, right, and bottom-->
+
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="0,0,0,10"/>
         <Setter Property="Validation.ErrorTemplate">
