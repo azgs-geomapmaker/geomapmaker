@@ -41,7 +41,6 @@ namespace Geomapmaker.Data
                 {
                     PostfixClause = "ORDER BY key"
                 };
-
                 using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
                 {
                     while (rowCursor.MoveNext())
@@ -51,7 +50,7 @@ namespace Geomapmaker.Data
                             GemsSymbol cfS = new GemsSymbol
                             {
                                 Key = row["key"].ToString(),
-                                Description = row["description"]?.ToString(),
+                                Description = _helpers.Helpers.RowValueToString(row["description"]),
                                 SymbolJson = row["symbol"].ToString()
                             };
 
@@ -77,14 +76,11 @@ namespace Geomapmaker.Data
                         }
                     }
                 }
+
             });
 
             CFSymbolOptionsList = cfSymbols;
         }
-
-
-
-
 
         public static List<GemsSymbol> OrientationPointSymbols;
 
@@ -97,6 +93,7 @@ namespace Geomapmaker.Data
             // Check if the table exists
             if (orientationSymbologyTable == null)
             {
+                OrientationPointSymbols = orientationSymbols;
                 return;
             }
 
@@ -119,7 +116,7 @@ namespace Geomapmaker.Data
                             if (row["key"] != null)
                             {
 
-                                var json = row["symbol"].ToString();
+                                string json = row["symbol"].ToString();
 
                                 // Wrap the symbol JSON in CIMSymbolReference, so we can use that class to deserialize it.
                                 json = json.Insert(0, "{\"type\": \"CIMSymbolReference\", \"symbol\": ");
@@ -128,7 +125,7 @@ namespace Geomapmaker.Data
                                 GemsSymbol newSymbol = new GemsSymbol
                                 {
                                     Key = row["key"].ToString(),
-                                    Description = row["description"]?.ToString(),
+                                    Description = _helpers.Helpers.RowValueToString(row["description"]),
                                     SymbolJson = json
                                 };
 
@@ -147,7 +144,7 @@ namespace Geomapmaker.Data
                                     orientationSymbols.Add(newSymbol);
                                 }
                                 catch
-                                {
+                                { 
                                     // Invalid CIM Symbol JSON
                                     Debug.WriteLine("Error prrocessing CIM Symbol JSON");
                                 }

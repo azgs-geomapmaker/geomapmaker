@@ -281,13 +281,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             // Filter by key
             if (!string.IsNullOrEmpty(keyFilter))
             {
-                filteredSymbols = filteredSymbols.Where(a => a.Key.StartsWith(keyFilter)).ToList();
+                filteredSymbols = filteredSymbols.Where(a => a.Key.ToLower().StartsWith(keyFilter.ToLower())).ToList();
             }
 
             // Filter by description
             if (!string.IsNullOrEmpty(DescriptionFilter))
             {
-                filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.Contains(DescriptionFilter)).ToList();
+                filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.ToLower().Contains(DescriptionFilter.ToLower())).ToList();
             }
 
             // Count of filtered symbols
