@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~P:Geomapmaker.ViewModels.OrientationPoints.OrientationPointsViewModel._dataSourceOptions")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~P:Geomapmaker.ViewModels.OrientationPoints.OrientationPointsViewModel._stationFieldIdOptions")]
