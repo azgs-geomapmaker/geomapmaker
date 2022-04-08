@@ -23,8 +23,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         public async void GenerateAllPolygons()
         {
-            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
-
             // Contacts and Faults layer
             FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().FirstOrDefault((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
@@ -33,7 +31,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             if (cfLayer == null || polyLayer == null)
             {
-
                 return;
             }
 
