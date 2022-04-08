@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
@@ -32,6 +33,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             if (cfLayer == null || polyLayer == null)
             {
+
                 return;
             }
 
@@ -42,13 +44,29 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             await QueuedTask.Run(() =>
             {
-                string templateName = GeomapmakerModule.MUP_UnassignedTemplateName;
+                string tempTemplateName = GeomapmakerModule.MUP_UnassignedTemplateName;
 
-                EditingTemplate tmpTemplate = polyLayer.GetTemplate(templateName);
+                // Get the temp template
+                EditingTemplate tmpTemplate = polyLayer.GetTemplate(tempTemplateName);
 
+                // Check if null
                 if (tmpTemplate == null)
                 {
-                    return;
+                    Inspector insp = new Inspector();
+                    insp.LoadSchema(polyLayer);
+
+                    insp["MapUnit"] = tempTemplateName;
+                    insp["DataSourceID"] = tempTemplateName;
+                    insp["IdentityConfidence"] = tempTemplateName;
+                    insp["Label"] = null;
+                    insp["Symbol"] = null;
+                    insp["Notes"] = tempTemplateName;
+
+                    // Create an empty template 
+                    EditingTemplate newTemplate = polyLayer.CreateTemplate(tempTemplateName, tempTemplateName, insp);
+                    
+                    // Get the empty template
+                    tmpTemplate = polyLayer.GetTemplate(tempTemplateName);
                 }
 
                 Selection cf_Collection = cfLayer.Select();
@@ -59,6 +77,10 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
                 op.Execute();
 
+                // Remove the temp template
+                polyLayer.RemoveTemplate(tempTemplateName);
+
+                // Rebuild symbology
                 Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             });
 
