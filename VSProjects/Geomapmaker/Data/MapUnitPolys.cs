@@ -50,58 +50,50 @@ namespace Geomapmaker.Data
                 // Update Renderer for Unassigned MUPs
                 //
 
-                string unassignedMUP = GeomapmakerModule.MUP_UnassignedTemplateName;
+                //string unassignedMUP = GeomapmakerModule.MUP_UnassignedTemplateName;
 
-                CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
-                        new CIMUniqueValue {
-                            FieldValues = new string[] { unassignedMUP }
-                        }
-                };
+                //CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
+                //        //new CIMUniqueValue {
+                //        //    FieldValues = new string[] { unassignedMUP }
+                //        //}
+                //};
 
-                CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
 
-                CIMColor color = CIMColor.CreateRGBColor(255, 0, 0);
+                //CIMColor color = CIMColor.CreateRGBColor(255, 0, 0);
 
-                SimpleFillStyle fillStyle = SimpleFillStyle.DiagonalCross;
+                //SimpleFillStyle fillStyle = SimpleFillStyle.DiagonalCross;
 
-                CIMPolygonSymbol polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(color, fillStyle, outline);
+                //CIMPolygonSymbol polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(color, fillStyle, outline);
 
-                CIMSymbolReference symbolRef = new CIMSymbolReference()
-                {
-                    Symbol = polySymbol
-                };
+                //CIMSymbolReference symbolRef = new CIMSymbolReference()
+                //{
+                //    Symbol = polySymbol
+                //};
 
-                CIMUniqueValueClass unassignedCIM = new CIMUniqueValueClass
-                {
-                    Editable = false,
-                    Label = unassignedMUP,
-                    Description = unassignedMUP,
-                    Patch = PatchShape.Default,
-                    Symbol = symbolRef,
-                    Visible = true,
-                    Values = listUniqueValues,
-                };
+                //CIMUniqueValueClass unassignedCIM = new CIMUniqueValueClass
+                //{
+                //    Editable = false,
+                //    Label = unassignedMUP,
+                //    Description = unassignedMUP,
+                //    Patch = PatchShape.Default,
+                //    Symbol = symbolRef,
+                //    Visible = true,
+                //    Values = listUniqueValues,
+                //};
 
                 //
-                // Create Template
+                // Create Templates
                 //
 
                 // load the schema
                 Inspector insp = new Inspector();
                 insp.LoadSchema(layer);
 
-                insp["MapUnit"] = unassignedMUP;
-                insp["DataSourceID"] = unassignedMUP;
-                insp["IdentityConfidence"] = unassignedMUP;
-                insp["Label"] = null;
-                insp["Symbol"] = null;
-                insp["Notes"] = unassignedMUP;
-
                 // Tags
                 string[] tags = new[] { "MapUnitPoly" };
 
                 // Remove all default tools. Users should be using the geomapmaker tool.
-                var toolFilter = new[] {
+                string[] toolFilter = new[] {
                                          "esri_editing_SketchPolygonTool",
                                          "esri_editing_SketchAutoCompletePolygonTool",
                                          "esri_editing_SketchRightPolygonTool",
@@ -120,8 +112,11 @@ namespace Geomapmaker.Data
 
                 string defaultTool = "";
 
+                CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
+
+
                 // Create CIM template 
-                EditingTemplate newTemplate = layer.CreateTemplate(unassignedMUP, unassignedMUP, insp, defaultTool, tags, toolFilter);
+                //EditingTemplate newTemplate = layer.CreateTemplate(unassignedMUP, unassignedMUP, insp, defaultTool, tags, toolFilter);
 
                 //
                 // LOOP OVER THE STANDARD DMUs
@@ -136,7 +131,7 @@ namespace Geomapmaker.Data
                     // DMU's MapUnit field is the key
                     string key = mu.MU;
 
-                    listUniqueValues = new CIMUniqueValue[] {
+                    CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
                         new CIMUniqueValue {
                             FieldValues = new string[] { key }
                         }
@@ -150,12 +145,12 @@ namespace Geomapmaker.Data
                     fill
                     };
 
-                    polySymbol = new CIMPolygonSymbol()
+                    CIMPolygonSymbol polySymbol = new CIMPolygonSymbol()
                     {
                         SymbolLayers = symbolLayers
                     };
 
-                    symbolRef = new CIMSymbolReference()
+                    CIMSymbolReference symbolRef = new CIMSymbolReference()
                     {
                         Symbol = polySymbol
                     };
@@ -188,9 +183,6 @@ namespace Geomapmaker.Data
                     layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool, tags, toolFilter);
                 }
 
-                // Add unassigned renderer last
-                listUniqueValueClasses.Add(unassignedCIM);
-
                 CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
                 {
                     Classes = listUniqueValueClasses.ToArray(),
@@ -199,10 +191,25 @@ namespace Geomapmaker.Data
 
                 CIMUniqueValueRenderer updatedRenderer = new CIMUniqueValueRenderer
                 {
-                    UseDefaultSymbol = false,
+                    UseDefaultSymbol = true,
+                    DefaultLabel = GeomapmakerModule.MUP_UnassignedTemplateName,
                     Groups = listUniqueValueGroups,
                     Fields = new string[] { "MapUnit" }
                 };
+
+                // Set default color fill for unassigned Map Units
+                CIMColor defaultColor = CIMColor.CreateRGBColor(255, 0, 0);
+
+                SimpleFillStyle fillStyle = SimpleFillStyle.DiagonalCross;
+
+                CIMPolygonSymbol defaultPolySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(defaultColor, fillStyle, outline);
+
+                CIMSymbolReference defaultSymbolRef = new CIMSymbolReference()
+                {
+                    Symbol = defaultPolySymbol
+                };
+
+                updatedRenderer.DefaultSymbol = defaultSymbolRef;
 
                 layer.SetRenderer(updatedRenderer);
 
