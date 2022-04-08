@@ -40,46 +40,12 @@ namespace Geomapmaker.Data
                 // Loop over templates
                 foreach (EditingTemplate temp in mupTemplates)
                 {
+                    // Remove each template
                     layer.RemoveTemplate(temp);
                 }
 
                 // Init new list of Unique Value CIMs
                 List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
-
-                //
-                // Update Renderer for Unassigned MUPs
-                //
-
-                //string unassignedMUP = GeomapmakerModule.MUP_UnassignedTemplateName;
-
-                //CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
-                //        //new CIMUniqueValue {
-                //        //    FieldValues = new string[] { unassignedMUP }
-                //        //}
-                //};
-
-
-                //CIMColor color = CIMColor.CreateRGBColor(255, 0, 0);
-
-                //SimpleFillStyle fillStyle = SimpleFillStyle.DiagonalCross;
-
-                //CIMPolygonSymbol polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(color, fillStyle, outline);
-
-                //CIMSymbolReference symbolRef = new CIMSymbolReference()
-                //{
-                //    Symbol = polySymbol
-                //};
-
-                //CIMUniqueValueClass unassignedCIM = new CIMUniqueValueClass
-                //{
-                //    Editable = false,
-                //    Label = unassignedMUP,
-                //    Description = unassignedMUP,
-                //    Patch = PatchShape.Default,
-                //    Symbol = symbolRef,
-                //    Visible = true,
-                //    Values = listUniqueValues,
-                //};
 
                 //
                 // Create Templates
@@ -112,11 +78,8 @@ namespace Geomapmaker.Data
 
                 string defaultTool = "";
 
+                // No Color for polygon outine
                 CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
-
-
-                // Create CIM template 
-                //EditingTemplate newTemplate = layer.CreateTemplate(unassignedMUP, unassignedMUP, insp, defaultTool, tags, toolFilter);
 
                 //
                 // LOOP OVER THE STANDARD DMUs
