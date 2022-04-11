@@ -4,6 +4,12 @@
 
     <!--Margin: left, top, right, and bottom-->
 
+    <!--- 
+    Auto = size to column content
+    * = size proportional to grid
+    -->
+
+
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="0,0,0,10"/>
         <Setter Property="Validation.ErrorTemplate">
