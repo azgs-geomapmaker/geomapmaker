@@ -273,7 +273,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         private void FilterSymbols(string keyFilter, string DescriptionFilter)
         {
             // Start with all the symbols from the parent vm
-            List<CFSymbol> filteredSymbols = ParentVM.SymbolOptions;
+            List<GemsSymbol> filteredSymbols = ParentVM.SymbolOptions;
 
             // Count of all symbols
             int totalSymbolsCount = filteredSymbols.Count();
@@ -281,13 +281,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             // Filter by key
             if (!string.IsNullOrEmpty(keyFilter))
             {
-                filteredSymbols = filteredSymbols.Where(a => a.Key.StartsWith(keyFilter)).ToList();
+                filteredSymbols = filteredSymbols.Where(a => a.Key.ToLower().StartsWith(keyFilter.ToLower())).ToList();
             }
 
             // Filter by description
             if (!string.IsNullOrEmpty(DescriptionFilter))
             {
-                filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.Contains(DescriptionFilter)).ToList();
+                filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.ToLower().Contains(DescriptionFilter.ToLower())).ToList();
             }
 
             // Count of filtered symbols
@@ -307,15 +307,15 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set => SetProperty(ref _symbolsFilteredMessage, value, () => SymbolsFilteredMessage);
         }
 
-        private List<CFSymbol> _symbolOptions;
-        public List<CFSymbol> SymbolOptions
+        private List<GemsSymbol> _symbolOptions;
+        public List<GemsSymbol> SymbolOptions
         {
             get => _symbolOptions;
             set => SetProperty(ref _symbolOptions, value, () => SymbolOptions);
         }
 
-        private CFSymbol _symbol;
-        public CFSymbol Symbol
+        private GemsSymbol _symbol;
+        public GemsSymbol Symbol
         {
             get => _symbol;
             set
@@ -404,7 +404,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public bool HasErrors => _validationErrors.Count > 0;
 
         // Validate symbol
-        private void ValidateSymbol(CFSymbol symbol, string propertyKey)
+        private void ValidateSymbol(GemsSymbol symbol, string propertyKey)
         {
             // Required field
             if (symbol == null)

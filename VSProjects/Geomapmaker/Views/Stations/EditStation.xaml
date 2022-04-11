@@ -1,0 +1,148 @@
+﻿<UserControl x:Class="Geomapmaker.Views.Stations.EditStation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:data="clr-namespace:Geomapmaker.Data" 
+             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+             mc:Ignorable="d" >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <AdornerDecorator>
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Edit " />
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding StationOptions}" SelectedItem="{Binding Edit.Selected}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding FieldID}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Visibility="{Binding Edit.Visibility}" />
+
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Field ID"  Visibility="{Binding Edit.Visibility}"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.FieldID, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}"/>
+            
+            <GroupBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3"  Visibility="{Binding Edit.Visibility}" >
+                <GroupBox.Header>
+                    <TextBlock Text="Point Location" VerticalAlignment="Center" />
+                </GroupBox.Header>
+                <AdornerDecorator>
+
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Row="0" Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Coordinate System WKID" />
+                            <TextBox Margin="0,0,5,10" Grid.Row="1" Grid.Column="0" Text="{Binding Edit.SpatialReferenceWkid, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="Coordinate System" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Edit.SpatialReferenceName, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="X Coordinate" />
+                            <TextBox Margin="0,0,5,10"  Grid.Row="3" Grid.Column="0" Text="{Binding Edit.XCoordinate, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="Y Coordinate" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Edit.YCoordinate, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </Grid>
+                    </Grid>
+                </AdornerDecorator>
+            </GroupBox>
+
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="Time Date" Visibility="{Binding Edit.Visibility}" />
+            <DatePicker Grid.Row="8" Grid.Column="1" SelectedDate="{Binding Edit.TimeDate, UpdateSourceTrigger=PropertyChanged}" SelectedDateFormat="Long" Visibility="{Binding Edit.Visibility}" />
+
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="Observer" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Edit.Observer, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
+
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="Location Method" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Edit.LocationMethod, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
+
+            <TextBlock Grid.Row="13" Grid.Column="1" Text="Location Confidence Meters" Visibility="{Binding Edit.Visibility}" />
+            <ComboBox 
+            Grid.Row="14" 
+            Grid.Column="1" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
+            SelectedValue="{Binding Edit.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+            IsReadOnly="False" 
+            IsEditable="False"
+            Visibility="{Binding Edit.Visibility}"
+            >
+            </ComboBox>
+
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Plot At Scale" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding Edit.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
+
+            <TextBlock Grid.Row="17" Grid.Column="1" Text="Notes" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="18" Grid.Column="1" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" Visibility="{Binding Edit.Visibility}" />
+
+            <TextBlock Grid.Row="19" Grid.Column="1" Text="Data Source" Visibility="{Binding Edit.Visibility}"/>
+            <TextBox Grid.Row="20" Grid.Column="1" Text="{Binding Edit.DataSourceId}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" Visibility="{Binding Edit.Visibility}" />
+
+            <StackPanel Grid.Row="21" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
+                <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+                <Button Padding="5" Command="{Binding Edit.CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update</Button>
+            </StackPanel>
+
+        </Grid>
+    </AdornerDecorator>
+</UserControl>

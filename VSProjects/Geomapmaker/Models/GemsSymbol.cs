@@ -2,7 +2,7 @@
 
 namespace Geomapmaker.Models
 {
-    public class CFSymbol
+    public class GemsSymbol
     {
         public string Key { get; set; }
 

@@ -8,10 +8,10 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.Headings"
         mc:Ignorable="d"
         Title="Headings" 
-        Height="300" 
-        Width="300"
-        MinHeight="300" 
-        MinWidth="300"
+        Height="400" 
+        MinHeight="350" 
+        Width="500"
+        MinWidth="450"                    
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

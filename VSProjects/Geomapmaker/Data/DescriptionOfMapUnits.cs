@@ -4,6 +4,7 @@ using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Geomapmaker._helpers;
 
 namespace Geomapmaker.Data
 {
@@ -35,25 +36,39 @@ namespace Geomapmaker.Data
                             // Create map unit from row 
                             MapUnit mapUnit = new MapUnit
                             {
-                                ID = int.Parse(row["ObjectID"].ToString()),
-                                MU = RowValueToString(row["MapUnit"]),
-                                Name = RowValueToString(row["Name"]),
-                                FullName = RowValueToString(row["FullName"]),
-                                Age = RowValueToString(row["Age"]),
-                                RelativeAge = RowValueToString(row["RelativeAge"]),
-                                Description = RowValueToString(row["Description"]),
-                                HierarchyKey = RowValueToString(row["HierarchyKey"]),
-                                ParagraphStyle = RowValueToString(row["ParagraphStyle"]),
-                                Label = RowValueToString(row["Label"]),
-                                AreaFillRGB = RowValueToString(row["AreaFillRGB"]),
-                                DescriptionSourceID = RowValueToString(row["DescriptionSourceID"]),
-                                GeoMaterial = RowValueToString(row["GeoMaterial"]),
-                                GeoMaterialConfidence = RowValueToString(row["GeoMaterialConfidence"]),
+                                ObjectID = Helpers.RowValueToString(row["ObjectID"]),
+                                MU = Helpers.RowValueToString(row["MapUnit"]),
+                                Name = Helpers.RowValueToString(row["Name"]),
+                                FullName = Helpers.RowValueToString(row["FullName"]),
+                                Age = Helpers.RowValueToString(row["Age"]),
+                                Description = Helpers.RowValueToString(row["Description"]),
+                                HierarchyKey = Helpers.RowValueToString(row["HierarchyKey"]),
+                                ParagraphStyle = Helpers.RowValueToString(row["ParagraphStyle"]),
+                                Label = Helpers.RowValueToString(row["Label"]),
+                                AreaFillRGB = Helpers.RowValueToString(row["AreaFillRGB"]),
+                                GeoMaterial = Helpers.RowValueToString(row["GeoMaterial"]),
+                                GeoMaterialConfidence = Helpers.RowValueToString(row["GeoMaterialConfidence"]),
+                                DescriptionSourceID = Helpers.RowValueToString(row["DescriptionSourceID"]),
                             };
+
+                            if (dmuFields.Any(a => a.Name == "RelativeAge"))
+                            {
+                                mapUnit.RelativeAge = Helpers.RowValueToString(row["RelativeAge"]);
+                            }
 
                             if (dmuFields.Any(a => a.Name == "hexcolor"))
                             {
-                                mapUnit.HexColor = RowValueToString(row["HexColor"]);
+                                mapUnit.HexColor = Helpers.RowValueToString(row["HexColor"]);
+                            }
+
+                            if (dmuFields.Any(a => a.Name == "GeoMaterial"))
+                            {
+                                mapUnit.GeoMaterial = Helpers.RowValueToString(row["GeoMaterial"]);
+                            }
+
+                            if (dmuFields.Any(a => a.Name == "GeoMaterialConfidence"))
+                            {
+                                mapUnit.GeoMaterialConfidence = Helpers.RowValueToString(row["GeoMaterialConfidence"]);
                             }
 
                             // Add it to temp list
@@ -67,13 +82,6 @@ namespace Geomapmaker.Data
         }
 
         public static List<Field> Fields { get; set; }
-
-        // Convert row object to a string. 
-        private static string RowValueToString(object value)
-        {
-            // Nulls are converted to an empty string
-            return value == null ? "" : value.ToString();
-        }
 
         public static async Task<List<Field>> GetFieldsAsync()
         {

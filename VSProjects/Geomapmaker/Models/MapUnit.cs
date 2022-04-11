@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 
@@ -7,7 +8,7 @@ namespace Geomapmaker.Models
 {
     public class MapUnit
     {
-        public int ID { get; set; }
+        public string ObjectID { get; set; }
 
         public string MU { get; set; }
 
@@ -35,9 +36,15 @@ namespace Geomapmaker.Models
         {
             get
             {
-                if (!string.IsNullOrEmpty(AreaFillRGB))
+                // If the RGB values are seperated by commas
+                if (!string.IsNullOrEmpty(AreaFillRGB) && AreaFillRGB.Count(a => a == ',') == 2)
                 {
                     return (Convert.ToDouble(AreaFillRGB.Split(',')[0]), Convert.ToDouble(AreaFillRGB.Split(',')[1]), Convert.ToDouble(AreaFillRGB.Split(',')[2]));
+                }
+                // If the RGB values are seperated by semi-colons
+                else if (!string.IsNullOrEmpty(AreaFillRGB) && AreaFillRGB.Count(a => a == ';') == 2)
+                {
+                    return (Convert.ToDouble(AreaFillRGB.Split(';')[0]), Convert.ToDouble(AreaFillRGB.Split(';')[1]), Convert.ToDouble(AreaFillRGB.Split(';')[2]));
                 }
 
                 // black
@@ -59,7 +66,7 @@ namespace Geomapmaker.Models
             {
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append($"<b>ID: </b>{ID}<br>");
+                sb.Append($"<b>ID: </b>{ObjectID}<br>");
 
                 if (!string.IsNullOrEmpty(MU))
                 {

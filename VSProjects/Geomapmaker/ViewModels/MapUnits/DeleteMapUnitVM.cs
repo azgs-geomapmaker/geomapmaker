@@ -66,6 +66,9 @@ namespace Geomapmaker.ViewModels.MapUnits
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
                 NotifyPropertyChanged("GeoMaterialConfidence");
 
+                DescriptionSourceID = Selected?.DescriptionSourceID;
+                NotifyPropertyChanged("DescriptionSourceID");
+
                 NotifyPropertyChanged("Visibility");
 
                 ValidateCanDelete();
@@ -84,6 +87,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         public string HexColor { get; set; }
         public string GeoMaterial { get; set; }
         public string GeoMaterialConfidence { get; set; }
+        public string DescriptionSourceID { get; set; }
 
         private bool CanDelete()
         {
@@ -119,7 +123,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                     editOperation.Callback(context =>
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
 
                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
@@ -186,21 +190,41 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public bool HasErrors => _validationErrors.Count > 0;
 
-        private void ValidateCanDelete()
+        private async void ValidateCanDelete()
         {
-
-            // TODO: Prevent user from deleting any mapunits with mapunitpolys
-
-            const string propertyKey = "SilentError";
+            const string propertyKey = "Selected";
 
             if (Selected == null)
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+                RaiseErrorsChanged(propertyKey);
+                return;
             }
-            else
+
+            FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
             {
-                _validationErrors.Remove(propertyKey);
-            }
+                Table MapUnitPolyTable = mup.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"mapunit = '{MapUnit}'"
+                };
+
+                int rowCount = MapUnitPolyTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    string pural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{pural} with this MapUnit" };
+                }
+                else
+                {
+                    _validationErrors.Remove(propertyKey);
+                }
+
+            });
 
             RaiseErrorsChanged(propertyKey);
         }

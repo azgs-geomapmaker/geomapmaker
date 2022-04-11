@@ -75,7 +75,7 @@ namespace Geomapmaker.Data
             return contactFaultTemplates;
         }
 
-        public static async void ResetContactsFaultsSymbology()
+        public static async void RebuildContactsFaultsSymbology()
         {
             // CF Layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
@@ -86,13 +86,18 @@ namespace Geomapmaker.Data
             }
 
             // Check if the symbol list has been populated 
-            if (CFSymbology.CFSymbolOptionsList == null)
+            if (Symbology.CFSymbolOptionsList == null)
             {
-                await CFSymbology.RefreshCFSymbolOptions();
+                await Symbology.RefreshCFSymbolOptions();
             }
 
             // Get the CF Symbology Options
-            List<CFSymbol> SymbolOptions = CFSymbology.CFSymbolOptionsList;
+            List<GemsSymbol> SymbolOptions = Symbology.CFSymbolOptionsList;
+
+            if (SymbolOptions == null)
+            {
+                return;
+            }
 
             ProgressorSource ps = new ProgressorSource("Rebuilding Contacts And Faults Symbology...");
 
@@ -106,7 +111,7 @@ namespace Geomapmaker.Data
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
-                    CFSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == template.Symbol);
+                    GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == template.Symbol);
 
                     if (Symbol != null)
                     {
@@ -132,7 +137,7 @@ namespace Geomapmaker.Data
                         {
                             string cfSymbolKey = row["symbol"]?.ToString();
 
-                            CFSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
+                            GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
 
                             if (Symbol != null)
                             {

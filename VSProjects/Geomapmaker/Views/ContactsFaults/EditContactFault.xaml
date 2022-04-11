@@ -106,7 +106,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0">Filter by Key</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Edit.KeyFilter, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Edit.KeyFilter, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,10" />
                             <TextBlock Grid.Row="0" Grid.Column="1">Filter by Description</TextBlock>
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Edit.DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
@@ -216,13 +216,11 @@
             <TextBlock Grid.Row="17" Grid.Column="1" Text="Notes" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="18" Grid.Column="1" MinLines="3" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250" Visibility="{Binding Edit.Visibility}" />
 
-            <WrapPanel Grid.Row="19" Grid.Column="1" Visibility="{Binding Edit.Visibility}" >
-                <TextBlock Text="Data Source: " Style="{DynamicResource Esri_TextBlockRegular}"/>
-                <TextBlock FontStyle="Italic" Text="{Binding Edit.DataSource, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource Esri_TextBlockRegular}"/>
-            </WrapPanel>
+            <TextBlock Grid.Row="19" Grid.Column="1" Text="Data Source" Style="{DynamicResource Esri_TextBlockRegular}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="20" Grid.Column="1" FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" IsReadOnly="True" IsEnabled="False"/>
 
-            <StackPanel Grid.Row="20" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
-                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Close</Button>
+            <StackPanel Grid.Row="21" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
+                <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding Edit.CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update Template</Button>
             </StackPanel>
 

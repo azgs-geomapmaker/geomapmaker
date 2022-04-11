@@ -153,22 +153,163 @@ namespace Geomapmaker.ViewModels.DataSources
                 null : (IEnumerable)_validationErrors[propertyName];
         }
 
-        private void ValidateCanDelete()
+        private async void ValidateCanDelete()
         {
-            const string propertyKey = "SilentError";
+            const string propertyKey = "Selected";
+            bool isError = false;
 
-            // TODO: Prevent delete if the datasource id is used in any tables?
+            if (Selected == null)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+                RaiseErrorsChanged(propertyKey);
+                return;
+            }
 
-            //if ()
-            //{
-            //    _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
-            //}
-            //else
-            //{
-            //    _validationErrors.Remove(propertyKey);
-            //}
-
+            // Remove any existing errors
+            _validationErrors.Remove(propertyKey);
             RaiseErrorsChanged(propertyKey);
+
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            await QueuedTask.Run(() =>
+            {
+                Table dmuTable = dmu.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DescriptionSourceID = '{Id}'"
+                };
+
+                int rowCount = dmuTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s"; 
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} DescriptionOfMapUnit{plural} with this DescriptionSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+
+                }
+            });
+
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer cf = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table cfTable = cf.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DataSourceID = '{Id}'"
+                };
+
+                int rowCount = cfTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} ContactsAndFault{plural} with this DataSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table mupTable = mup.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DataSourceID = '{Id}'"
+                };
+
+                int rowCount = mupTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{plural} with this DataSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer station = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table stationTable = station.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"DataSourceID = '{Id}'"
+                };
+
+                int rowCount = stationTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Station{plural} with this DataSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
+            // Stop checking if we've found an error
+            if (isError) return;
+
+            FeatureLayer op = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                Table opTable = op.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    WhereClause = $"LocationSourceID = '{Id}'"
+                };
+
+                int rowCount = opTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this LocationSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+
+                // Stop checking if we've found an error
+                if (isError) return;
+
+                queryFilter = new QueryFilter
+                {
+                    WhereClause = $"OrientationSourceID = '{Id}'"
+                };
+
+                rowCount = opTable.GetCount(queryFilter);
+
+                if (rowCount > 0)
+                {
+                    isError = true;
+                    string plural = rowCount == 1 ? "" : "s";
+                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this OrientationSourceID" };
+                    RaiseErrorsChanged(propertyKey);
+                }
+            });
+
         }
 
         #endregion

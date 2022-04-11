@@ -1,12 +1,11 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker._helpers;
 using Geomapmaker.Models;
-using Geomapmaker.RibbonElements;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,6 +49,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Color = _helpers.ColorConverter.RGBtoColor(Selected?.AreaFillRGB);
                 GeoMaterial = Selected?.GeoMaterial;
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
+                DescriptionSourceID = Selected?.DescriptionSourceID;
                 NotifyPropertyChanged("Visibility");
             }
         }
@@ -237,6 +237,16 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
         }
 
+        private string _descriptionSourceID;
+        public string DescriptionSourceID
+        {
+            get => _descriptionSourceID;
+            set
+            {
+                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
+            }
+        }
+
         private bool CanUpdate()
         {
             return Selected != null && !HasErrors;
@@ -264,7 +274,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                     editOperation.Callback(context =>
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
 
                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
@@ -288,7 +298,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                                     row["GeoMaterial"] = GeoMaterial;
                                     row["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                     row["ParagraphStyle"] = "Standard";
-                                    row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+                                    row["DescriptionSourceID"] = DescriptionSourceID;
 
                                     // After all the changes are done, persist it.
                                     row.Store();
@@ -320,8 +330,60 @@ namespace Geomapmaker.ViewModels.MapUnits
             }
             else
             {
-                // Add new symbology/templates if needed. Remove old symbology/templates if needed.
-                Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+                // Update the MapUnit value in MUPS if it has changed
+                if (Selected.MU != MapUnit)
+                {
+
+                    await QueuedTask.Run(() =>
+                    {
+                        FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+                        // Search by attribute
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            // Where MapUnit is set to the original MapUnit value
+                            WhereClause = $"mapunit = '{Selected.MU}'"
+                        };
+
+                        //Create list of oids to update
+                        List<long> oidSet = new List<long>();
+
+                        using (RowCursor rc = mup.Search(queryFilter))
+                        {
+                            while (rc.MoveNext())
+                            {
+                                using (Row record = rc.Current)
+                                {
+                                    oidSet.Add(record.GetObjectID());
+                                }
+                            }
+                        }
+
+                        //create and execute the edit operation
+                        EditOperation modifyFeatures = new EditOperation
+                        {
+                            Name = "Update MapUnitPolys",
+                            ShowProgressor = true
+                        };
+
+                        Inspector multipleFeaturesInsp = new Inspector();
+
+                        multipleFeaturesInsp.Load(mup, oidSet);
+
+                        multipleFeaturesInsp["mapunit"] = MapUnit;
+
+                        modifyFeatures.Modify(multipleFeaturesInsp);
+
+                        modifyFeatures.Execute();
+                    });
+                }
+
+                // Check if symbology needs to be updated.
+                if (Selected.MU != MapUnit || Selected.HexColor != HexColor)
+                {
+                    // Add new symbology/templates if needed. Remove old symbology/templates if needed.
+                    Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+                }
 
                 ParentVM.CloseProwindow();
             }
@@ -396,7 +458,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
             }
             // Name must be unique 
-            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
             }
@@ -418,7 +480,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Alphabet chars only
-            else if (!name.All(Char.IsLetter))
+            else if (!name.All(char.IsLetter))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Alphabetical letters only." };
             }
@@ -439,7 +501,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Full Name must be unique 
-            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.FullName?.ToLower() == FullName?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Full name is taken." };
             }
@@ -490,7 +552,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Color must be unique 
-            else if (ParentVM.MapUnits.Where(a => a.ID != Selected?.ID).Any(a => a.AreaFillRGB == AreaFillRGB))
+            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.AreaFillRGB == AreaFillRGB))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Color is taken." };
             }

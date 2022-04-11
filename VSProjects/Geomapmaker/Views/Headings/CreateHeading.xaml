@@ -26,6 +26,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -40,7 +42,10 @@
             <TextBlock Grid.Row="3" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" />
             <TextBox Grid.Row="4" Grid.Column="1" MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
 
-            <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Description Source"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.DescriptionSourceID}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
+
+            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Create.CommandSave}">Save</Button>
             </StackPanel>

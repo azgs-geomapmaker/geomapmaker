@@ -34,8 +34,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             Delete = new DeleteContactFaultVM(this);
         }
 
-        private List<CFSymbol> _symbolOptions { get; set; }
-        public List<CFSymbol> SymbolOptions
+        private List<GemsSymbol> _symbolOptions { get; set; }
+        public List<GemsSymbol> SymbolOptions
         {
             get => _symbolOptions;
             set
@@ -60,13 +60,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public async void RefreshCFSymbolsAsync()
         {
             // Get symbology options if the list is null
-            if (Data.CFSymbology.CFSymbolOptionsList == null)
+            if (Data.Symbology.CFSymbolOptionsList == null)
             {
-                await Data.CFSymbology.RefreshCFSymbolOptions();
+                await Data.Symbology.RefreshCFSymbolOptions();
             }
 
             // ParentVM keeps a copy of the master list
-            SymbolOptions = Data.CFSymbology.CFSymbolOptionsList;
+            SymbolOptions = Data.Symbology.CFSymbolOptionsList;
 
             // Push options to create vm
             Create.SymbolOptions = SymbolOptions;

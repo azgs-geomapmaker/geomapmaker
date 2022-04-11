@@ -53,7 +53,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             });
 
             //Remove old symbology if needed.
-            Data.ContactsAndFaults.ResetContactsFaultsSymbology();
+            Data.ContactsAndFaults.RebuildContactsFaultsSymbology();
 
             ParentVM.CloseProwindow();
         }
@@ -108,7 +108,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public string Label { get; set; }
 
-        public CFSymbol Symbol { get; set; }
+        public GemsSymbol Symbol { get; set; }
         
         public string IdentityConfidence { get; set; }
         

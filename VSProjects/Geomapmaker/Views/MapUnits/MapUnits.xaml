@@ -9,9 +9,9 @@
         mc:Ignorable="d"
         Title="Map Units" 
         Height="750" 
-        Width="400"
         MinHeight="750"
-        MinWidth="400"            
+        Width="500"
+        MinWidth="450"                   
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

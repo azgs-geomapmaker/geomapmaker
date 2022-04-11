@@ -13,9 +13,9 @@
         mc:Ignorable="d"
         Title="Hierarchy" 
         Height="500" 
-        Width="300"
         MinHeight="500" 
-        MinWidth="300"
+        Width="500"
+        MinWidth="450"                      
         WindowStartupLocation="CenterOwner"
     >
     
@@ -112,7 +112,7 @@
         </ListBox>
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Close</Button>
+            <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
             <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSave}">Save</Button>
         </StackPanel>
 

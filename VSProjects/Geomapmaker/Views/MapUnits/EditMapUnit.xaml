@@ -44,6 +44,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -87,7 +89,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0" Text="Older Interval" ToolTip="{Binding Tooltips[OlderInterval]}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" Text="Older Interval" ToolTip="{Binding Tooltips[OlderInterval]}"/>
                     <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Edit.OlderIntervalOptions}" SelectedItem="{Binding Edit.OlderInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -101,7 +103,7 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
 
-                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0" Text="Younger Interval" ToolTip="{Binding Tooltips[YoungerInterval]}" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="5,0,0,0" Text="Younger Interval" ToolTip="{Binding Tooltips[YoungerInterval]}" />
                     <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Edit.YoungerIntervalOptions}" SelectedItem="{Binding Edit.YoungerInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}"  >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -122,13 +124,13 @@
             <TextBox Grid.Row="14" Grid.Column="1"  MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" Visibility="{Binding Edit.Visibility}" />
 
             <TextBlock Grid.Row="15" Grid.Column="1" Text="Label" ToolTip="{Binding Tooltips[Label]}" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding Edit.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" MinHeight="20" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding Edit.Label, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" MinHeight="20" Visibility="{Binding Edit.Visibility}" />
 
             <TextBlock Grid.Row="17" Grid.Column="1" Text="Color" ToolTip="{Binding Tooltips[Color]}" Visibility="{Binding Edit.Visibility}" />
-            <wpftk:ColorPicker Grid.Row="18" Grid.Column="1" SelectedColor="{Binding Edit.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" Margin="0,0,0,10" Visibility="{Binding Edit.Visibility}" />
+            <wpftk:ColorPicker Grid.Row="18" Grid.Column="1" SelectedColor="{Binding Edit.Color, UpdateSourceTrigger=PropertyChanged}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" Margin="0,0,0,10" Visibility="{Binding Edit.Visibility}" />
 
             <TextBlock Grid.Row="19" Grid.Column="1" Text="GeoMaterial" ToolTip="{Binding Tooltips[GeoMaterial]}" Visibility="{Binding Edit.Visibility}" />
-            <ComboBox Grid.Row="20" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialOptions}" SelectedValue="{Binding Edit.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" Visibility="{Binding Edit.Visibility}" >
+            <ComboBox Grid.Row="20" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialOptions, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding Edit.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" Visibility="{Binding Edit.Visibility}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding IndentedName}" ToolTip="{Binding Definition}" />
@@ -137,9 +139,12 @@
             </ComboBox>
 
             <TextBlock Grid.Row="21" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" Visibility="{Binding Edit.Visibility}" />
-            <ComboBox Grid.Row="22" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" Visibility="{Binding Edit.Visibility}" />
+            <ComboBox Grid.Row="22" Grid.Column="1" ItemsSource="{Binding Edit.GeoMaterialConfidenceOptions, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding Edit.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" Visibility="{Binding Edit.Visibility}" />
 
-            <StackPanel Grid.Row="23" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <TextBlock Grid.Row="23" Grid.Column="1" Text="Description Source" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="24" Grid.Column="1" Text="{Binding Edit.DescriptionSourceID}" Visibility="{Binding Edit.Visibility}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
+
+            <StackPanel Grid.Row="25" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" Margin="5">
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
                 <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding Edit.CommandUpdate}">Update</Button>
             </StackPanel>

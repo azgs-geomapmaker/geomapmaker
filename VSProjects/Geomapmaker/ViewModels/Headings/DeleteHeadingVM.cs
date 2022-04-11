@@ -43,6 +43,9 @@ namespace Geomapmaker.ViewModels.Headings
                 Description = Selected?.Description;
                 NotifyPropertyChanged("Description");
 
+                DescriptionSourceID = Selected?.DescriptionSourceID;
+                NotifyPropertyChanged("DescriptionSourceID");
+
                 NotifyPropertyChanged("Visibility");
 
                 ValidateCanDelete();
@@ -53,6 +56,7 @@ namespace Geomapmaker.ViewModels.Headings
 
         public string Name { get; set; }
         public string Description { get; set; }
+        public string DescriptionSourceID { get; set; }
 
         private bool CanDelete()
         {
@@ -91,7 +95,7 @@ namespace Geomapmaker.ViewModels.Headings
 
                     editOperation.Callback(context =>
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ID };
+                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
 
                         using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                         {
