@@ -481,7 +481,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModels\Validation\" />
+    <Folder Include="Views\Validation\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   PackageAction can be:
