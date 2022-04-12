@@ -1,31 +1,47 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Validation
 {
-    public class ValidationViewModel
+    public class ValidationViewModel : ProWindow, INotifyPropertyChanged
     {
         public event EventHandler WindowCloseEvent;
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
-        public ICommand CommandValidate => new RelayCommand(() => Validate());
 
-        public void Validate()
+        public AZGSVM AZGSVM { get; set; }
+        public Stage1VM Stage1VM { get; set; }
+        public Stage2VM Stage2VM { get; set; }
+        public Stage3VM Stage3VM { get; set; }
+
+        public ValidationViewModel()
         {
-
-
-
-
-
+            AZGSVM = new AZGSVM(this);
+            Stage1VM = new Stage1VM(this);
+            Stage2VM = new Stage2VM(this);
+            Stage3VM = new Stage3VM(this);
         }
 
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
         }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
     internal class ShowValidation : Button
