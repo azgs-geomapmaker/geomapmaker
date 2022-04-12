@@ -203,7 +203,8 @@
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ViewModels\Validation\AZGSVM.cs" />
+    <Compile Include="ViewModels\Validation\AzgsVM.cs" />
+    <Compile Include="ViewModels\Validation\OverviewVM.cs" />
     <Compile Include="ViewModels\Validation\Stage1VM.cs" />
     <Compile Include="ViewModels\Validation\Stage2VM.cs" />
     <Compile Include="ViewModels\Validation\Stage3VM.cs" />
@@ -348,8 +349,8 @@
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Validation\AZGS.xaml.cs">
-      <DependentUpon>AZGS.xaml</DependentUpon>
+    <Compile Include="Views\Validation\Azgs.xaml.cs">
+      <DependentUpon>Azgs.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Validation\Level1.xaml.cs">
       <DependentUpon>Level1.xaml</DependentUpon>
@@ -495,7 +496,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Validation\AZGS.xaml">
+    <Page Include="Views\Validation\Azgs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

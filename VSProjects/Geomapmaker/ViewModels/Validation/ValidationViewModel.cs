@@ -14,18 +14,19 @@ namespace Geomapmaker.ViewModels.Validation
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
-
-        public AZGSVM AZGSVM { get; set; }
-        public Stage1VM Stage1VM { get; set; }
-        public Stage2VM Stage2VM { get; set; }
-        public Stage3VM Stage3VM { get; set; }
+        public OverviewVM Overview { get; set; }
+        public Stage1VM Stage1 { get; set; }
+        public Stage2VM Stage2 { get; set; }
+        public Stage3VM Stage3 { get; set; }
+        public AzgsVM AZGS { get; set; }
 
         public ValidationViewModel()
         {
-            AZGSVM = new AZGSVM(this);
-            Stage1VM = new Stage1VM(this);
-            Stage2VM = new Stage2VM(this);
-            Stage3VM = new Stage3VM(this);
+            Overview = new OverviewVM(this);
+            Stage1 = new Stage1VM(this);
+            Stage2 = new Stage2VM(this);
+            Stage3 = new Stage3VM(this);
+            AZGS = new AzgsVM(this);
         }
 
         public void CloseProwindow()
