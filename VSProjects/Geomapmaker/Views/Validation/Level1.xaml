@@ -37,13 +37,13 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="1" Grid.Column="1" Text="1.1 No overlaps or internal gaps in map-unit polygon layer" />
-            <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level1.Results_1_1}" />
+            <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level1.Check1}" />
 
             <TextBlock Grid.Row="2" Grid.Column="1" Text="1.2 Contacts and faults in single feature class" />
-            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level1.Results_1_2}" />
+            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level1.Check2}" />
 
             <TextBlock Grid.Row="3" Grid.Column="1" Text="1.3 Map-unit polygon boundaries are covered by contacts and faults lines" />
-            <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level1.Results_1_3}" />
+            <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level1.Check3}" />
 
         </Grid>
     </AdornerDecorator>

@@ -15,7 +15,68 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Grid>
-    </Grid>
+
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="2.1 Has required elements: nonspatial tables DataSources, DescriptionOfMapUnits, GeoMaterialDict; feature dataset GeologicMap with feature classes ContactsAndFaults and MapUnitPolys" />
+            <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check1}" />
+
+
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="2.2 Required fields within required elements are present and correctly defined" />
+            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check2}" />
+
+
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="2.3 GeologicMap topology: no internal gaps or overlaps in MapUnitPolys, boundaries of MapUnitPolys are covered by ContactsAndFaults" />
+            <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check3}" />
+
+
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="2.4 All map units in MapUnitPolys have entries in DescriptionOfMapUnits table" />
+            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check4}" />
+
+
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="2.5 No duplicate MapUnit values in DescriptionOfMapUnit table" />
+            <TextBlock Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check5}" />
+
+
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="2.6 Certain field values within required elements have entries in Glossary table" />
+            <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check6}" />
+
+
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="2.7 No duplicate Term values in Glossary table" />
+            <TextBlock Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check7}" />
+
+
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="2.8 All xxxSourceID values in required elements have entries in DataSources table" />
+            <TextBlock Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check8}" />
+
+
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="2.9 No duplicate DataSources_ID values in DataSources table" />
+            <TextBlock Grid.Row="9" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check9}" />
+
+        </Grid>
+    </AdornerDecorator>
 </UserControl>

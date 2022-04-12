@@ -13,6 +13,78 @@ namespace Geomapmaker.ViewModels.Validation
         public Level2VM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
+            Check1 = "1";
+            Check2 = "2";
+            Check3 = "3";
+            Check4 = "4";
+            Check5 = "5";
+            Check6 = "6";
+            Check7 = "7";
+            Check8 = "8";
+            Check9 = "9";
+        }
+
+        private string _check1 = "Checking..";
+        public string Check1
+        {
+            get => _check1;
+            set => SetProperty(ref _check1, value, () => Check1);
+        }
+
+        private string _check2 = "Checking..";
+        public string Check2
+        {
+            get => _check2;
+            set => SetProperty(ref _check2, value, () => Check2);
+        }
+
+        private string _check3 = "Checking..";
+        public string Check3
+        {
+            get => _check3;
+            set => SetProperty(ref _check3, value, () => Check3);
+        }
+
+        private string _check4 = "Checking..";
+        public string Check4
+        {
+            get => _check4;
+            set => SetProperty(ref _check4, value, () => Check4);
+        }
+
+        private string _check5 = "Checking..";
+        public string Check5
+        {
+            get => _check5;
+            set => SetProperty(ref _check5, value, () => Check5);
+        }
+
+        private string _check6 = "Checking..";
+        public string Check6
+        {
+            get => _check6;
+            set => SetProperty(ref _check6, value, () => Check6);
+        }
+
+        private string _check7 = "Checking..";
+        public string Check7
+        {
+            get => _check7;
+            set => SetProperty(ref _check7, value, () => Check7);
+        }
+
+        private string _check8 = "Checking..";
+        public string Check8
+        {
+            get => _check8;
+            set => SetProperty(ref _check8, value, () => Check8);
+        }
+
+        private string _check9 = "Checking..";
+        public string Check9
+        {
+            get => _check9;
+            set => SetProperty(ref _check9, value, () => Check9);
         }
 
         #region Validation
