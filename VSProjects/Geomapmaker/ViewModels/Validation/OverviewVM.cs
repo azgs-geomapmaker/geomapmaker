@@ -13,31 +13,31 @@ namespace Geomapmaker.ViewModels.Validation
         public OverviewVM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
-            Stage1Results = "Skipped";
-            Stage2Results = "Skipped";
-            Stage3Results = "Skipped";
+            Level1Results = "Skipped";
+            Level2Results = "Skipped";
+            Level3Results = "Skipped";
             AzgsResults = "Skipped";
         }
 
-        private string _stage1Results = "Checking..";
-        public string Stage1Results
+        private string _level1Results = "Checking..";
+        public string Level1Results
         {
-            get => _stage1Results;
-            set => SetProperty(ref _stage1Results, value, () => Stage1Results);
+            get => _level1Results;
+            set => SetProperty(ref _level1Results, value, () => Level1Results);
         }
 
-        private string _stage2Results = "Checking..";
-        public string Stage2Results
+        private string _level2Results = "Checking..";
+        public string Level2Results
         {
-            get => _stage2Results;
-            set => SetProperty(ref _stage2Results, value, () => Stage2Results);
+            get => _level2Results;
+            set => SetProperty(ref _level2Results, value, () => Level2Results);
         }
 
-        private string _stage3Results = "Checking..";
-        public string Stage3Results
+        private string _level3Results = "Checking..";
+        public string Level3Results
         {
-            get => _stage3Results;
-            set => SetProperty(ref _stage3Results, value, () => Stage3Results);
+            get => _level3Results;
+            set => SetProperty(ref _level3Results, value, () => Level3Results);
         }
 
         private string _azgsResults = "Checking..";

@@ -6,11 +6,11 @@ using System.ComponentModel;
 
 namespace Geomapmaker.ViewModels.Validation
 {
-    public class Stage2VM : PropertyChangedBase, INotifyDataErrorInfo
+    public class Level2VM : PropertyChangedBase, INotifyDataErrorInfo
     {
         public ValidationViewModel ParentVM { get; set; }
 
-        public Stage2VM(ValidationViewModel parentVM)
+        public Level2VM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
         }

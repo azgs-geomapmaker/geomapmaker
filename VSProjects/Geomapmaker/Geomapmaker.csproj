@@ -205,9 +205,9 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ViewModels\Validation\AzgsVM.cs" />
     <Compile Include="ViewModels\Validation\OverviewVM.cs" />
-    <Compile Include="ViewModels\Validation\Stage1VM.cs" />
-    <Compile Include="ViewModels\Validation\Stage2VM.cs" />
-    <Compile Include="ViewModels\Validation\Stage3VM.cs" />
+    <Compile Include="ViewModels\Validation\Level1VM.cs" />
+    <Compile Include="ViewModels\Validation\Level2VM.cs" />
+    <Compile Include="ViewModels\Validation\Level3VM.cs" />
     <Compile Include="ViewModels\Validation\ValidationViewModel.cs" />
     <Compile Include="Views\MapUnitPolys\GeneratePolygons.xaml.cs">
       <DependentUpon>GeneratePolygons.xaml</DependentUpon>
