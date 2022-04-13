@@ -13,15 +13,15 @@ namespace Geomapmaker.ViewModels.Validation
         public Level2VM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
-            Check1 = "1";
-            Check2 = "2";
-            Check3 = "3";
-            Check4 = "4";
-            Check5 = "5";
-            Check6 = "6";
-            Check7 = "7";
-            Check8 = "8";
-            Check9 = "9";
+            Check1 = "Skipped";
+            Check2 = "Skipped";
+            Check3 = "Skipped";
+            Check4 = "Skipped";
+            Check5 = "Skipped";
+            Check6 = "Skipped";
+            Check7 = "Skipped";
+            Check8 = "Skipped";
+            Check9 = "Skipped";
         }
 
         private string _check1 = "Checking..";
