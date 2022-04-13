@@ -13,6 +13,30 @@ namespace Geomapmaker.ViewModels.Validation
         public Level1VM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
+            Check1 = "Skipped";
+            Check2 = "Skipped";
+            Check3 = "Skipped";
+        }
+
+        private string _check1 = "Checking..";
+        public string Check1
+        {
+            get => _check1;
+            set => SetProperty(ref _check1, value, () => Check1);
+        }
+
+        private string _check2 = "Checking..";
+        public string Check2
+        {
+            get => _check2;
+            set => SetProperty(ref _check2, value, () => Check2);
+        }
+
+        private string _check3 = "Checking..";
+        public string Check3
+        {
+            get => _check3;
+            set => SetProperty(ref _check3, value, () => Check3);
         }
 
         #region Validation
