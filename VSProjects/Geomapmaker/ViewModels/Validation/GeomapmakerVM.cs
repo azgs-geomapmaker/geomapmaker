@@ -6,11 +6,11 @@ using System.ComponentModel;
 
 namespace Geomapmaker.ViewModels.Validation
 {
-    public class AzgsVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class GeomapmakerVM : PropertyChangedBase, INotifyDataErrorInfo
     {
         public ValidationViewModel ParentVM { get; set; }
 
-        public AzgsVM(ValidationViewModel parentVM)
+        public GeomapmakerVM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
         }

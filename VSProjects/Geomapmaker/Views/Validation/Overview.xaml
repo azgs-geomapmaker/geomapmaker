@@ -36,17 +36,17 @@
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Stage 1:" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 1:" />
             <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level1Results}" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="Stage 2:" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Level 2:" />
             <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level2Results}" />
 
-            <TextBlock Grid.Row="3" Grid.Column="1" Text="Stage 3:" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="Level 3:" />
             <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level3Results}" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="AZGS:" />
-            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.AzgsResults}" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Geomapmaker:" />
+            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.GeomapmakerResults}" />
 
         </Grid>
     </AdornerDecorator>

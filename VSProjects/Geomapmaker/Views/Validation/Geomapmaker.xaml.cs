@@ -18,9 +18,9 @@ namespace Geomapmaker.Views.Validation
     /// <summary>
     /// Interaction logic for AZGS.xaml
     /// </summary>
-    public partial class AZGS : UserControl
+    public partial class Geomapmaker : UserControl
     {
-        public AZGS()
+        public Geomapmaker()
         {
             InitializeComponent();
         }

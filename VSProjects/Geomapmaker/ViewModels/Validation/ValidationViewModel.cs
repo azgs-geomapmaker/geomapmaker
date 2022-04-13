@@ -18,7 +18,7 @@ namespace Geomapmaker.ViewModels.Validation
         public Level1VM Level1 { get; set; }
         public Level2VM Level2 { get; set; }
         public Level3VM Level3 { get; set; }
-        public AzgsVM AZGS { get; set; }
+        public GeomapmakerVM AZGS { get; set; }
 
         public ValidationViewModel()
         {
@@ -26,7 +26,7 @@ namespace Geomapmaker.ViewModels.Validation
             Level1 = new Level1VM(this);
             Level2 = new Level2VM(this);
             Level3 = new Level3VM(this);
-            AZGS = new AzgsVM(this);
+            AZGS = new GeomapmakerVM(this);
         }
 
         public void CloseProwindow()

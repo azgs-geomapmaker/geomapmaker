@@ -43,8 +43,8 @@
             <TabItem Header="Level 3">
                 <tabData:Level3 />
             </TabItem>
-            <TabItem Header="AZGS">
-                <tabData:AZGS />
+            <TabItem Header="Geomapmaker">
+                <tabData:Geomapmaker />
             </TabItem>
         </TabControl>
     </Grid>

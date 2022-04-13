@@ -16,7 +16,7 @@ namespace Geomapmaker.ViewModels.Validation
             Level1Results = "Skipped";
             Level2Results = "Skipped";
             Level3Results = "Skipped";
-            AzgsResults = "Skipped";
+            GeomapmakerResults = "Skipped";
         }
 
         private string _level1Results = "Checking..";
@@ -40,11 +40,11 @@ namespace Geomapmaker.ViewModels.Validation
             set => SetProperty(ref _level3Results, value, () => Level3Results);
         }
 
-        private string _azgsResults = "Checking..";
-        public string AzgsResults
+        private string _geoResults = "Checking..";
+        public string GeomapmakerResults
         {
-            get => _azgsResults;
-            set => SetProperty(ref _azgsResults, value, () => AzgsResults);
+            get => _geoResults;
+            set => SetProperty(ref _geoResults, value, () => GeomapmakerResults);
         }
 
         #region Validation
