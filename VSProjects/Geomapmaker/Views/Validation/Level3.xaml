@@ -16,7 +16,74 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
-        <TextBlock>Level3</TextBlock>
-    </Grid>
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="3.1 Table and field definitions conform to GeMS schema" />
+            <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check1}" />
+
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="3.2 All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps. No ContactsAndFaults overlaps, self-overlaps, or self-intersections. MapUnitPoly boundaries covered by ContactsAndFaults" />
+            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check2}" />
+
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="3.3 No missing required values" />
+            <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check3}" />
+
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="3.4 No missing terms in Glossary" />
+            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check4}" />
+
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="3.5 No unnecessary terms in Glossary" />
+            <TextBlock Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check5}" />
+
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="3.6 No missing sources in DataSources" />
+            <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check6}" />
+
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="3.7 No unnecessary sources in DataSources" />
+            <TextBlock Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check7}" />
+
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="3.8 No map units without entries in DescriptionOfMapUnits" />
+            <TextBlock Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check8}" />
+
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="3.9 No unnecessary map units in DescriptionOfMapUnits" />
+            <TextBlock Grid.Row="9" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check9}" />
+
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="3.10 HierarchyKey values in DescriptionOfMapUnits are unique and well formed" />
+            <TextBlock Grid.Row="10" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check10}" />
+
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="3.11 All values of GeoMaterial are defined in GeoMaterialDict. GeoMaterialDict is as specified in the GeMS standard" />
+            <TextBlock Grid.Row="11" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check11}" />
+
+            <TextBlock Grid.Row="12" Grid.Column="1" Text="3.12 No duplicate _ID values" />
+            <TextBlock Grid.Row="12" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check12}" />
+
+            <TextBlock Grid.Row="13" Grid.Column="1" Text="3.13 No zero-length or whitespace-only strings" />
+            <TextBlock Grid.Row="13" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level3.Check13}" />
+
+
+
+        </Grid>
+    </AdornerDecorator>
+
 </UserControl>

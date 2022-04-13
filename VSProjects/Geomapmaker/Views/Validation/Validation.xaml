@@ -10,8 +10,8 @@
         Title="Validation" 
         Height="300" 
         MinHeight="250" 
-        Width="500"
-        MinWidth="450"  
+        Width="700"
+        MinWidth="650"  
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
