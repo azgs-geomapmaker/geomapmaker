@@ -8,10 +8,10 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.Validation" 
         mc:Ignorable="d"
         Title="Validation" 
-        Height="300" 
-        MinHeight="250" 
-        Width="700"
-        MinWidth="650"  
+        Height="400" 
+        MinHeight="350" 
+        Width="600"
+        MinWidth="150"  
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>

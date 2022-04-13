@@ -43,14 +43,14 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 2: " FontWeight="Bold" Margin="0,0,0,10" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="2.1 Has required elements: nonspatial tables DataSources, DescriptionOfMapUnits, GeoMaterialDict; feature dataset GeologicMap with feature classes ContactsAndFaults and MapUnitPolys" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="2.1 Required elements: DataSources, DescriptionOfMapUnits, GeoMaterialDict, ContactsAndFaults, and MapUnitPolys" TextWrapping="Wrap" />
             <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check1}" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" />
 
@@ -58,7 +58,7 @@
             <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check2}" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="2.3 GeologicMap topology: no internal gaps or overlaps in MapUnitPolys, boundaries of MapUnitPolys are covered by ContactsAndFaults" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="2.3 No internal gaps or overlaps in MapUnitPolys, boundaries of MapUnitPolys are covered by ContactsAndFaults" />
             <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check3}" />
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" />
 
