@@ -9,27 +9,13 @@
     * = size proportional to grid
     -->
 
-    <!--<Style TargetType="TextBlock">
-        <Setter Property="Margin" Value="0,0,0,10"/>
-        <Setter Property="Validation.ErrorTemplate">
-            <Setter.Value>
-                <ControlTemplate>
-                    <StackPanel>
-                        <AdornedElementPlaceholder >
-                            <Border BorderBrush="Red" BorderThickness="1" />
-                        </AdornedElementPlaceholder>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>-->
+    <Style TargetType="TextBlock">
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="0,0,0,10"/>
@@ -99,6 +85,7 @@
 
     <!-- Render HTML in tooltips -->
     <Style TargetType="ToolTip">
+        <!-- Set show duration to max int -->
         <Setter Property="ToolTipService.ShowDuration" Value="2147483647"/>
         <Setter Property="ContentTemplate">
             <Setter.Value>
