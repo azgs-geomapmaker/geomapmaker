@@ -61,68 +61,68 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 3: " Grid.ColumnSpan="3" FontWeight="Bold" Margin="0,0,0,10" />
 
             <TextBlock Grid.Row="2" Grid.Column="1" Text="3.1" FontWeight="Bold" />
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="Table and field definitions conform to GeMS schema" />
-            <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result1}" />
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Table and field definitions conform to GeMS schema" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result1}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="4" Grid.Column="1" Text="3.2" FontWeight="Bold" />
-            <TextBlock Grid.Row="4" Grid.Column="2" Text="All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps. No ContactsAndFaults overlaps, self-overlaps, or self-intersections. MapUnitPoly boundaries covered by ContactsAndFaults" />
-            <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result2}" />
+            <TextBlock Grid.Row="4" Grid.Column="2" Text="All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps. No ContactsAndFaults overlaps, self-overlaps, or self-intersections. MapUnitPoly boundaries covered by ContactsAndFaults" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result2}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="6" Grid.Column="1" Text="3.3" FontWeight="Bold" />
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="No missing required values" />
-            <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result3}" />
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="No missing required values" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result3}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="8" Grid.Column="1" Text="3.4" FontWeight="Bold" />
-            <TextBlock Grid.Row="8" Grid.Column="2" Text="No missing terms in Glossary" />
-            <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result4}" />
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="No missing terms in Glossary" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result4}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="10" Grid.Column="1" Text="3.5" FontWeight="Bold" />
-            <TextBlock Grid.Row="10" Grid.Column="2" Text="No unnecessary terms in Glossary" />
-            <TextBlock Grid.Row="10" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result5}" />
+            <TextBlock Grid.Row="10" Grid.Column="2" Text="No unnecessary terms in Glossary" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="10" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result5}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="12" Grid.Column="1" Text="3.6" FontWeight="Bold" />
-            <TextBlock Grid.Row="12" Grid.Column="2" Text="No missing sources in DataSources" />
-            <TextBlock Grid.Row="12" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result6}" />
+            <TextBlock Grid.Row="12" Grid.Column="2" Text="No missing sources in DataSources" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="12" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result6}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="14" Grid.Column="1" Text="3.7" FontWeight="Bold" />
-            <TextBlock Grid.Row="14" Grid.Column="2" Text="No unnecessary sources in DataSources" />
-            <TextBlock Grid.Row="14" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result7}" />
+            <TextBlock Grid.Row="14" Grid.Column="2" Text="No unnecessary sources in DataSources" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="14" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result7}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="16" Grid.Column="1" Text="3.8" FontWeight="Bold" />
-            <TextBlock Grid.Row="16" Grid.Column="2" Text="No map units without entries in DescriptionOfMapUnits" />
-            <TextBlock Grid.Row="16" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result8}" />
+            <TextBlock Grid.Row="16" Grid.Column="2" Text="No map units without entries in DescriptionOfMapUnits" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="16" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result8}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="18" Grid.Column="1" Text="3.9" FontWeight="Bold" />
-            <TextBlock Grid.Row="18" Grid.Column="2" Text="No unnecessary map units in DescriptionOfMapUnits" />
-            <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result9}" />
+            <TextBlock Grid.Row="18" Grid.Column="2" Text="No unnecessary map units in DescriptionOfMapUnits" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result9}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="19" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="20" Grid.Column="1" Text="3.10" FontWeight="Bold" />
-            <TextBlock Grid.Row="20" Grid.Column="2" Text="HierarchyKey values in DescriptionOfMapUnits are unique and well formed" />
-            <TextBlock Grid.Row="20" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result10}" />
+            <TextBlock Grid.Row="20" Grid.Column="2" Text="HierarchyKey values in DescriptionOfMapUnits are unique and well formed" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="20" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result10}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="21" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="22" Grid.Column="1" Text="3.11" FontWeight="Bold" />
-            <TextBlock Grid.Row="22" Grid.Column="2" Text="All values of GeoMaterial are defined in GeoMaterialDict. GeoMaterialDict is as specified in the GeMS standard" />
-            <TextBlock Grid.Row="22" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result11}" />
+            <TextBlock Grid.Row="22" Grid.Column="2" Text="All values of GeoMaterial are defined in GeoMaterialDict. GeoMaterialDict is as specified in the GeMS standard" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="22" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result11}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="23" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="24" Grid.Column="1" Text="3.12" FontWeight="Bold" />
-            <TextBlock Grid.Row="24" Grid.Column="2" Text="No duplicate _ID values" />
-            <TextBlock Grid.Row="24" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result12}" />
+            <TextBlock Grid.Row="24" Grid.Column="2" Text="No duplicate _ID values" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="24" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result12}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="25" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="26" Grid.Column="1" Text="3.13" FontWeight="Bold" />
-            <TextBlock Grid.Row="26" Grid.Column="2" Text="No zero-length or whitespace-only strings" />
-            <TextBlock Grid.Row="26" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result13}" />
+            <TextBlock Grid.Row="26" Grid.Column="2" Text="No zero-length or whitespace-only strings" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="26" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level3.Result13}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="27" Grid.Column="1" Grid.ColumnSpan="3" />
 
         </Grid>
