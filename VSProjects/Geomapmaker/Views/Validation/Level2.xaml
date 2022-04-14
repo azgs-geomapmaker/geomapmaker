@@ -43,47 +43,57 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="25" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 2: " FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 2: " Grid.ColumnSpan="3" FontWeight="Bold" Margin="0,0,0,10" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="2.1 Required elements: DataSources, DescriptionOfMapUnits, GeoMaterialDict, ContactsAndFaults, and MapUnitPolys" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check1}" />
-            <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="2.1" FontWeight="Bold" />
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Required elements: DataSources, DescriptionOfMapUnits, GeoMaterialDict, ContactsAndFaults, and MapUnitPolys" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check1}" Margin="10,0,0,0" />
+            <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="2.2 Required fields within required elements are present and correctly defined" />
-            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check2}" />
-            <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="2.2" FontWeight="Bold" />
+            <TextBlock Grid.Row="4" Grid.Column="2" Text="Required fields within required elements are present and correctly defined" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check2}" Margin="10,0,0,0" />
+            <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="2.3 No internal gaps or overlaps in MapUnitPolys, boundaries of MapUnitPolys are covered by ContactsAndFaults" />
-            <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check3}" />
-            <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="2.3" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="No internal gaps or overlaps in MapUnitPolys, boundaries of MapUnitPolys are covered by ContactsAndFaults" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check3}" Margin="10,0,0,0" />
+            <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="2.4 All map units in MapUnitPolys have entries in DescriptionOfMapUnits table" />
-            <TextBlock Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check4}" />
-            <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="2.4" FontWeight="Bold" />
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="All map units in MapUnitPolys have entries in DescriptionOfMapUnits table" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check4}" Margin="10,0,0,0" />
+            <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="10" Grid.Column="1" Text="2.5 No duplicate MapUnit values in DescriptionOfMapUnit table" />
-            <TextBlock Grid.Row="10" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check5}" />
-            <Separator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="2.5" FontWeight="Bold" />
+            <TextBlock Grid.Row="10" Grid.Column="2" Text="No duplicate MapUnit values in DescriptionOfMapUnit table" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="10" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check5}" Margin="10,0,0,0" />
+            <Separator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="12" Grid.Column="1" Text="2.6 Certain field values within required elements have entries in Glossary table" />
-            <TextBlock Grid.Row="12" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check6}" />
-            <Separator Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="12" Grid.Column="1" Text="2.6" FontWeight="Bold" />
+            <TextBlock Grid.Row="12" Grid.Column="2" Text="Certain field values within required elements have entries in Glossary table" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="12" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check6}" Margin="10,0,0,0" />
+            <Separator Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="14" Grid.Column="1" Text="2.7 No duplicate Term values in Glossary table" />
-            <TextBlock Grid.Row="14" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check7}" />
-            <Separator Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="14" Grid.Column="1" Text="2.7" FontWeight="Bold" />
+            <TextBlock Grid.Row="14" Grid.Column="2" Text="No duplicate Term values in Glossary table" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="14" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check7}" Margin="10,0,0,0" />
+            <Separator Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="16" Grid.Column="1" Text="2.8 All xxxSourceID values in required elements have entries in DataSources table" />
-            <TextBlock Grid.Row="16" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check8}" />
-            <Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="2" />
+            <TextBlock Grid.Row="16" Grid.Column="1" Text="2.8" FontWeight="Bold" />
+            <TextBlock Grid.Row="16" Grid.Column="2" Text="All xxxSourceID values in required elements have entries in DataSources table" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="16" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check8}"  Margin="10,0,0,0" />
+            <Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="18" Grid.Column="1" Text="2.9 No duplicate DataSources_ID values in DataSources table" />
-            <TextBlock Grid.Row="18" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Level2.Check9}" />
+            <TextBlock Grid.Row="18" Grid.Column="1" Text="2.9" FontWeight="Bold" />
+            <TextBlock Grid.Row="18" Grid.Column="2" Text="No duplicate DataSources_ID values in DataSources table" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check9}" Margin="10,0,0,0" />
 
         </Grid>
     </AdornerDecorator>
