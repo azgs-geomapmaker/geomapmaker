@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels.Validation
             errors.Add("Error 2");
             errors.Add("Error 3");
 
-            _validationErrors["Result1"] = Geomapmaker._helpers.Helpers.ErrorListTooltip(errors);
+            _validationErrors["Result1"] = Geomapmaker._helpers.Helpers.ErrorListToTooltip(errors);
 
             RaiseErrorsChanged("Result1");
 

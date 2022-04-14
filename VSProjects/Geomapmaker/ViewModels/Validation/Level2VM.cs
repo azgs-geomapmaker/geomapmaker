@@ -13,16 +13,80 @@ namespace Geomapmaker.ViewModels.Validation
         public Level2VM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
-            ValidateCheck1();
+            Result1 = Check1();
+            Result2 = Check2();
+            Result3 = Check3();
+            Result4 = Check4();
+            Result5 = Check5();
+            Result6 = Check6();
+            Result7 = Check7();
+            Result8 = Check8();
+            Result9 = Check9();
         }
 
-        public string Check1Result { get; set; } = "Checking..";
+        public string Result1 { get; set; } = "Checking..";
+        public string Result2 { get; set; } = "Checking..";
+        public string Result3 { get; set; } = "Checking..";
+        public string Result4 { get; set; } = "Checking..";
+        public string Result5 { get; set; } = "Checking..";
+        public string Result6 { get; set; } = "Checking..";
+        public string Result7 { get; set; } = "Checking..";
+        public string Result8 { get; set; } = "Checking..";
+        public string Result9 { get; set; } = "Checking..";
 
-        private void ValidateCheck1()
+        private string Check1()
         {
-            _validationErrors["Check1Result"] = new List<string>() { "Error 1", "Error 2" };
+            List<string> errors = new List<string>();
 
-            RaiseErrorsChanged("Check1");
+            errors.Add("Error 1");
+            errors.Add("Error 2");
+            errors.Add("Error 3");
+
+            _validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
+
+            RaiseErrorsChanged("Result1");
+
+            return "Failed";
+        }
+
+        private string Check2()
+        {
+            return "Skipped";
+        }
+
+        private string Check3()
+        {
+            return "Skipped";
+        }
+
+        private string Check4()
+        {
+            return "Skipped";
+        }
+
+        private string Check5()
+        {
+            return "Skipped";
+        }
+
+        private string Check6()
+        {
+            return "Skipped";
+        }
+
+        private string Check7()
+        {
+            return "Skipped";
+        }
+
+        private string Check8()
+        {
+            return "Skipped";
+        }
+
+        private string Check9()
+        {
+            return "Skipped";
         }
 
         #region Validation

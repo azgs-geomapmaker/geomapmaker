@@ -21,7 +21,7 @@ namespace Geomapmaker._helpers
 
         // Convert a list of strings into an HTML string in a list
         // Used to display errors in a HTML tooltip
-        public static List<string> ErrorListTooltip(List<string> errorList)
+        public static List<string> ErrorListToTooltip(List<string> errorList)
         {
             StringBuilder sb = new StringBuilder();
 
