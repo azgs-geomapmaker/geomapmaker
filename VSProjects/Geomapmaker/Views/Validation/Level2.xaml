@@ -52,17 +52,17 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 2: " Grid.ColumnSpan="3" FontWeight="Bold" Margin="0,0,0,10" />
 
             <TextBlock Grid.Row="2" Grid.Column="1" Text="2.1" FontWeight="Bold" />
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="Required elements: DataSources, DescriptionOfMapUnits, GeoMaterialDict, ContactsAndFaults, and MapUnitPolys" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check1}" Margin="10,0,0,0" />
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Has required elements: nonspatial tables DataSources, DescriptionOfMapUnits, GeoMaterialDict; feature dataset GeologicMap with feature classes ContactsAndFaults and MapUnitPolys" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check1Result}" ToolTip="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)/ErrorContent}" Margin="10,0,0,0" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="2.2" FontWeight="Bold" />
+            <!--<TextBlock Grid.Row="4" Grid.Column="1" Text="2.2" FontWeight="Bold" />
             <TextBlock Grid.Row="4" Grid.Column="2" Text="Required fields within required elements are present and correctly defined" TextWrapping="Wrap"  />
             <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check2}" Margin="10,0,0,0" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="6" Grid.Column="1" Text="2.3" FontWeight="Bold" />
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="No internal gaps or overlaps in MapUnitPolys, boundaries of MapUnitPolys are covered by ContactsAndFaults" TextWrapping="Wrap"  />
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="GeologicMap topology: no internal gaps or overlaps in MapUnitPolys, boundaries of MapUnitPolys are covered by ContactsAndFaults" TextWrapping="Wrap"  />
             <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check3}" Margin="10,0,0,0" />
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />
 
@@ -93,7 +93,7 @@
 
             <TextBlock Grid.Row="18" Grid.Column="1" Text="2.9" FontWeight="Bold" />
             <TextBlock Grid.Row="18" Grid.Column="2" Text="No duplicate DataSources_ID values in DataSources table" TextWrapping="Wrap"  />
-            <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check9}" Margin="10,0,0,0" />
+            <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Level2.Check9}" Margin="10,0,0,0" />-->
 
         </Grid>
     </AdornerDecorator>
