@@ -14,6 +14,13 @@ namespace Geomapmaker.Data
 {
     public class MapUnitPolys
     {
+        public static bool MapUnitPolysExists()
+        {
+            Layer layer = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault();
+
+            return layer != null;
+        }
+
         public static async void RebuildMUPSymbologyAndTemplates()
         {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");

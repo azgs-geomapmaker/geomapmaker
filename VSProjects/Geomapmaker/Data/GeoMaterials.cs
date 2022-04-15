@@ -1,10 +1,19 @@
-﻿using Geomapmaker.Models;
+﻿using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Geomapmaker.Data
 {
     public class GeoMaterials
     {
+        public static bool GeoMaterialDictTableExists()
+        {
+            StandaloneTable table = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "GeoMaterialDict");
+
+            return table != null;
+        }
+
         public static ObservableCollection<Geomaterial> GeoMaterialOptions => new ObservableCollection<Geomaterial>()
         {
             new Geomaterial { HierarchyKey="01", GeoMaterial="Sedimentary material", IndentedName="Sedimentary material", Definition="An aggregation of particles deposited by gravity, air, water, or ice, or as accumulated by other natural agents operating at Earth's surface such as chemical precipitation or secretion by organisms.  May include unconsolidated material (sediment) and (or) sedimentary rock.  Does not include sedimentary material directly deposited as a result of volcanic activity.", },

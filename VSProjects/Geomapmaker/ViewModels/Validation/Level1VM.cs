@@ -29,9 +29,9 @@ namespace Geomapmaker.ViewModels.Validation
         {
             List<string> errors = new List<string>();
 
-            errors.Add("Error 1");
-            errors.Add("Error 2");
-            errors.Add("Error 3");
+            errors.Add("Test Error 1");
+            errors.Add("Test Error 2");
+            errors.Add("Test Error 3");
 
             _validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
 

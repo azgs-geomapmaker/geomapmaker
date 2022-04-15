@@ -40,19 +40,43 @@ namespace Geomapmaker.ViewModels.Validation
         // feature dataset GeologicMap with feature classes ContactsAndFaults and MapUnitPolys
         private string Check1()
         {
-            //List<string> errors = new List<string>();
+            List<string> errors = new List<string>();
 
-            //errors.Add("Error 1");
-            //errors.Add("Error 2");
-            //errors.Add("Error 3");
+            if (Data.DataSources.DataSourceTableExists() == false)
+            {
+                errors.Add("DataSources not found.");
+            }
 
-            //_validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
+            if (Data.DescriptionOfMapUnits.DmuTableExists() == false)
+            {
+                errors.Add("DescriptionOfMapUnits not found.");
+            }
 
-            //RaiseErrorsChanged("Result1");
+            if (Data.GeoMaterials.GeoMaterialDictTableExists() == false)
+            {
+                errors.Add("GeoMaterialDict not found.");
+            }
 
-            //return "Failed";
+            if (Data.ContactsAndFaults.ContactsAndFaultsExists() == false)
+            {
+                errors.Add("ContactsAndFaults not found.");
+            }
 
-            return "Skipped";
+            if (Data.MapUnitPolys.MapUnitPolysExists() == false)
+            {
+                errors.Add("MapUnitPolys not found.");
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged("Result1");
+                return "Failed";
+            }
         }
 
         // 2.2 Required fields within required elements are present and correctly defined

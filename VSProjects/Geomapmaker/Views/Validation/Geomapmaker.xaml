@@ -18,6 +18,6 @@
     </UserControl.Resources>
 
     <Grid>
-        <TextBlock>AZGS</TextBlock>
+        <TextBlock Text="Geomapmaker: Extra validation specific to this toolbar" FontWeight="Bold" Margin="0,0,0,10" />
     </Grid>
 </UserControl>

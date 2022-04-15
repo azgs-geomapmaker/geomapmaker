@@ -14,6 +14,13 @@ namespace Geomapmaker.Data
 {
     public class ContactsAndFaults
     {
+        public static bool ContactsAndFaultsExists()
+        {
+            Layer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault();
+
+            return layer != null;
+        }
+
         public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync(bool filterSketch = false)
         {
             // List of templates to return

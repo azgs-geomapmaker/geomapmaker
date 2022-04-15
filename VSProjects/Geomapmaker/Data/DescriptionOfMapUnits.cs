@@ -10,6 +10,14 @@ namespace Geomapmaker.Data
 {
     public class DescriptionOfMapUnits
     {
+
+        public static bool DmuTableExists()
+        {
+            StandaloneTable table = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            return table != null;
+        }
+
         public static async Task<List<MapUnit>> GetMapUnitsAsync()
         {
             List<Field> dmuFields = await GetFieldsAsync();

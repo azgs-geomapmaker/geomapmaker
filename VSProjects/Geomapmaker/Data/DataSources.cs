@@ -14,6 +14,13 @@ namespace Geomapmaker.Data
 {
     public class DataSources
     {
+        public static bool DataSourceTableExists()
+        {
+            StandaloneTable dataSourcesTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
+
+            return dataSourcesTable != null;
+        }
+
         public static async Task<List<string>> GetDataSourceIdsAsync()
         {
             List<string> DataSourcesIds = new List<string>();
