@@ -21,6 +21,14 @@ namespace Geomapmaker.Data
             return dataSourcesTable != null;
         }
 
+        public static async Task<List<string>> GetDuplicateIdsAsync()
+        {
+            List<string> dataSourceIds = await GetDataSourceIdsAsync();
+
+            // Return duplicate ids
+            return dataSourceIds.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+        }
+
         public static async Task<List<string>> GetDataSourceIdsAsync()
         {
             List<string> DataSourcesIds = new List<string>();

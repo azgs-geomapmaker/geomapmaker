@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.ViewModels.Validation
 {
@@ -13,15 +14,36 @@ namespace Geomapmaker.ViewModels.Validation
         public Level2VM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
+        }
+
+        public async Task Validate()
+        {
             Result1 = Check1();
+            NotifyPropertyChanged("Result1");
+
             Result2 = Check2();
+            NotifyPropertyChanged("Result2");
+
             Result3 = Check3();
+            NotifyPropertyChanged("Result3");
+
             Result4 = Check4();
+            NotifyPropertyChanged("Result4");
+
             Result5 = Check5();
+            NotifyPropertyChanged("Result5");
+
             Result6 = Check6();
+            NotifyPropertyChanged("Result6");
+
             Result7 = Check7();
+            NotifyPropertyChanged("Result7");
+
             Result8 = Check8();
-            Result9 = Check9();
+            NotifyPropertyChanged("Result8");
+
+            Result9 = await Check9Async();
+            NotifyPropertyChanged("Result9");
 
             ParentVM.UpdateLevel2Results(_validationErrors.Count);
         }
@@ -123,9 +145,28 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 2.9 No duplicate DataSources_ID values in DataSources table
-        private string Check9()
+        private async Task<string> Check9Async()
         {
-            return "Skipped";
+            List<string> duplicates = await Data.DataSources.GetDuplicateIdsAsync();
+
+            if (duplicates.Count > 0)
+            {
+                List<string> errors = new List<string>() { "Duplicated:" };
+
+                foreach (var id in duplicates)
+                {
+                    errors.Add(id);
+                }
+
+                _validationErrors["Result9"] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged("Result9");
+                return "Failed";
+            }
+            else
+            {
+                return "Passed";
+            }
+
         }
 
         #region Validation

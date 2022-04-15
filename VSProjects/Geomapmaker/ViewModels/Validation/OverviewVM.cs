@@ -38,6 +38,7 @@ namespace Geomapmaker.ViewModels.Validation
                 _validationErrors["Level1Results"] = new List<string> { Level1Results };
                 RaiseErrorsChanged("Level1Results");
             }
+            NotifyPropertyChanged("Level1Results");
         }
 
         public void UpdateLevel2Results(int errorCount)
@@ -58,6 +59,7 @@ namespace Geomapmaker.ViewModels.Validation
                 _validationErrors["Level2Results"] = new List<string> { Level2Results };
                 RaiseErrorsChanged("Level2Results");
             }
+            NotifyPropertyChanged("Level2Results");
         }
 
         public void UpdateLevel3Results(int errorCount)
@@ -78,6 +80,7 @@ namespace Geomapmaker.ViewModels.Validation
                 _validationErrors["Level3Results"] = new List<string> { Level3Results };
                 RaiseErrorsChanged("Level3Results");
             }
+            NotifyPropertyChanged("Level3Results");
         }
 
         #region Validation

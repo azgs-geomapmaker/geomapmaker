@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework.Controls;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Validation
@@ -29,16 +30,24 @@ namespace Geomapmaker.ViewModels.Validation
             AZGS = new GeomapmakerVM(this);
         }
 
+        // Async validation
+        public async void ValidateAsync(){
+            await Level2.Validate();
+        }
+
+        // Pass errors down to overview viewmodel
         public void UpdateLevel1Results(int errorCount)
         {
             Overview.UpdateLevel1Results(errorCount);
         }
 
+        // Pass errors down to overview viewmodel
         public void UpdateLevel2Results(int errorCount)
         {
             Overview.UpdateLevel2Results(errorCount);
         }
 
+        // Pass errors down to overview viewmodel
         public void UpdateLevel3Results(int errorCount)
         {
             Overview.UpdateLevel3Results(errorCount);
@@ -77,6 +86,8 @@ namespace Geomapmaker.ViewModels.Validation
             {
                 Owner = FrameworkApplication.Current.MainWindow
             };
+
+            _validation.validationVM.ValidateAsync();
 
             _validation.Closed += (o, e) => { _validation = null; };
 
