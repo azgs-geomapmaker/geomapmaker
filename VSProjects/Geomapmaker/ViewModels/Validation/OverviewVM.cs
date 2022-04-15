@@ -18,28 +18,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Level1Results { get; set; } = "Checking..";
         public string Level2Results { get; set; } = "Checking..";
         public string Level3Results { get; set; } = "Checking..";
-        public string GeomapmakerResults { get; set; } = "Checking..";
-
-        private void UpdateLevel1Results()
-        {
-            Level1Results = ParentVM.Level1.GetErrorCount == 0
-                ? "Passed"
-                : ParentVM.Level1.GetErrorCount == 1 ? "1 Error" : $"{ParentVM.Level1.GetErrorCount} Errors";
-        }
-
-        private void UpdateLevel2Results()
-        {
-            Level1Results = ParentVM.Level2.GetErrorCount == 0
-                ? "Passed"
-                : ParentVM.Level1.GetErrorCount == 1 ? "1 Error" : $"{ParentVM.Level1.GetErrorCount} Errors";
-        }
-
-        private void UpdateLevel3Results()
-        {
-            Level1Results = ParentVM.Level3.GetErrorCount == 0
-                ? "Passed"
-                : ParentVM.Level1.GetErrorCount == 1 ? "1 Error" : $"{ParentVM.Level1.GetErrorCount} Errors";
-        }
+        public string GeomapmakerResults { get; set; } = "Skipped";
 
         #region Validation
 

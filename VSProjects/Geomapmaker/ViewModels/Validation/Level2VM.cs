@@ -22,6 +22,8 @@ namespace Geomapmaker.ViewModels.Validation
             Result7 = Check7();
             Result8 = Check8();
             Result9 = Check9();
+
+            ParentVM.UpdateLevel2Results(_validationErrors.Count);
         }
 
         public string Result1 { get; set; } = "Checking..";
@@ -109,8 +111,6 @@ namespace Geomapmaker.ViewModels.Validation
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
         public bool HasErrors => _validationErrors.Count > 0;
-
-        public int GetErrorCount => _validationErrors.Count;
 
         private void RaiseErrorsChanged(string propertyName)
         {

@@ -16,6 +16,8 @@ namespace Geomapmaker.ViewModels.Validation
             Result1 = Check1();
             Result2 = Check2();
             Result3 = Check3();
+
+            ParentVM.UpdateLevel1Results(_validationErrors.Count);
         }
 
         public string Result1 { get; set; } = "Checking..";
@@ -25,7 +27,19 @@ namespace Geomapmaker.ViewModels.Validation
         // 1.1 No overlaps or internal gaps in map-unit polygon layer
         private string Check1()
         {
-            return "Skipped";
+            List<string> errors = new List<string>();
+
+            errors.Add("Error 1");
+            errors.Add("Error 2");
+            errors.Add("Error 3");
+
+            _validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
+
+            RaiseErrorsChanged("Result1");
+
+            return "Failed";
+
+            //return "Skipped";
         }
 
         // 1.2 Contacts and faults in single feature class
@@ -47,8 +61,6 @@ namespace Geomapmaker.ViewModels.Validation
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
         public bool HasErrors => _validationErrors.Count > 0;
-
-        public int GetErrorCount => _validationErrors.Count;
 
         private void RaiseErrorsChanged(string propertyName)
         {
