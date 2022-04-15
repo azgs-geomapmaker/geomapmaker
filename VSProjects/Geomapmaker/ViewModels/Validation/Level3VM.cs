@@ -47,17 +47,18 @@ namespace Geomapmaker.ViewModels.Validation
         // 3.1 Table and field definitions conform to GeMS schema
         private string Check1()
         {
-            List<string> errors = new List<string>();
+            //List<string> errors = new List<string>();
 
-            errors.Add("Error 1");
-            errors.Add("Error 2");
-            errors.Add("Error 3");
+            //errors.Add("Error 1");
+            //errors.Add("Error 2");
+            //errors.Add("Error 3");
 
-            _validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
+            //_validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
 
-            RaiseErrorsChanged("Result1");
+            //RaiseErrorsChanged("Result1");
 
-            return "Failed";
+            //return "Failed";
+            return "Skipped";
         }
 
         // 3.2 All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps.

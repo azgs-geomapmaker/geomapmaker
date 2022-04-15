@@ -31,50 +31,17 @@ namespace Geomapmaker.ViewModels.Validation
 
         public void UpdateLevel1Results(int errorCount)
         {
-            if (errorCount == 0)
-            {
-                Overview.Level1Results = "Passed";
-            }
-            else if (errorCount == 1)
-            {
-                Overview.Level1Results = "1 Error";
-            }
-            else
-            {
-                Overview.Level1Results = $"{errorCount} Errors";
-            }
+            Overview.UpdateLevel1Results(errorCount);
         }
 
         public void UpdateLevel2Results(int errorCount)
         {
-            if (errorCount == 0)
-            {
-                Overview.Level2Results = "Passed";
-            }
-            else if (errorCount == 1)
-            {
-                Overview.Level2Results = "1 Error";
-            }
-            else
-            {
-                Overview.Level2Results = $"{errorCount} Errors";
-            }
+            Overview.UpdateLevel2Results(errorCount);
         }
 
         public void UpdateLevel3Results(int errorCount)
         {
-            if (errorCount == 0)
-            {
-                Overview.Level3Results = "Passed";
-            }
-            else if (errorCount == 1)
-            {
-                Overview.Level3Results = "1 Error";
-            }
-            else
-            {
-                Overview.Level3Results = $"{errorCount} Errors";
-            }
+            Overview.UpdateLevel3Results(errorCount);
         }
 
         public void CloseProwindow()
