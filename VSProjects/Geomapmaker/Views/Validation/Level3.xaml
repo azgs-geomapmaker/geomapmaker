@@ -58,7 +58,7 @@
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 3: " Grid.ColumnSpan="3" FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Level 3: Fully Compliant" Grid.ColumnSpan="3" FontWeight="Bold" Margin="0,0,0,10" />
 
             <TextBlock Grid.Row="2" Grid.Column="1" Text="3.1" FontWeight="Bold" />
             <TextBlock Grid.Row="2" Grid.Column="2" Text="Table and field definitions conform to GeMS schema" TextWrapping="Wrap" />

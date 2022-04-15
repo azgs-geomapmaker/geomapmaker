@@ -22,26 +22,19 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result2 { get; set; } = "Checking..";
         public string Result3 { get; set; } = "Checking..";
 
+        // 1.1 No overlaps or internal gaps in map-unit polygon layer
         private string Check1()
         {
-            List<string> errors = new List<string>();
-
-            errors.Add("Error 1");
-            errors.Add("Error 2");
-            errors.Add("Error 3");
-
-            _validationErrors["Result1"] = Geomapmaker._helpers.Helpers.ErrorListToTooltip(errors);
-
-            RaiseErrorsChanged("Result1");
-
-            return "Failed";
+            return "Skipped";
         }
 
+        // 1.2 Contacts and faults in single feature class
         private string Check2()
         {
             return "Skipped";
         }
 
+        // 1.3 Map-unit polygon boundaries are covered by contacts and faults lines
         private string Check3()
         {
             return "Skipped";

@@ -42,6 +42,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result12 { get; set; } = "Checking..";
         public string Result13 { get; set; } = "Checking..";
 
+        // 3.1 Table and field definitions conform to GeMS schema
         private string Check1()
         {
             List<string> errors = new List<string>();
@@ -57,58 +58,74 @@ namespace Geomapmaker.ViewModels.Validation
             return "Failed";
         }
 
+        // 3.2 All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps.
+        // No ContactsAndFaults overlaps, self-overlaps, or self-intersections. MapUnitPoly boundaries covered by ContactsAndFaults
         private string Check2()
         {
             return "Skipped";
         }
 
+        // 3.3 No missing required values
         private string Check3()
         {
             return "Skipped";
         }
 
+        // 3.4 No missing terms in Glossary
         private string Check4()
         {
             return "Skipped";
         }
 
+        // 3.5 No unnecessary terms in Glossary
         private string Check5()
         {
             return "Skipped";
         }
 
+        // 3.6 No missing sources in DataSources
         private string Check6()
         {
             return "Skipped";
         }
 
+        // 3.7 No unnecessary sources in DataSources
         private string Check7()
         {
             return "Skipped";
         }
 
+        // 3.8 No map units without entries in DescriptionOfMapUnits
         private string Check8()
         {
             return "Skipped";
         }
 
+        // 3.9 No unnecessary map units in DescriptionOfMapUnits
         private string Check9()
         {
             return "Skipped";
         }
 
+        // 3.10 HierarchyKey values in DescriptionOfMapUnits are unique and well formed
         private string Check10()
         {
             return "Skipped";
         }
+
+        // 3.11 All values of GeoMaterial are defined in GeoMaterialDict. GeoMaterialDict is as specified in the GeMS standard
         private string Check11()
         {
             return "Skipped";
         }
+
+        // 3.12 No duplicate _ID values
         private string Check12()
         {
             return "Skipped";
         }
+
+        // 3.13 No zero-length or whitespace-only strings
         private string Check13()
         {
             return "Skipped";

@@ -34,56 +34,69 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result8 { get; set; } = "Checking..";
         public string Result9 { get; set; } = "Checking..";
 
+        // 2.1 Has required elements: nonspatial tables DataSources, DescriptionOfMapUnits, GeoMaterialDict;
+        // feature dataset GeologicMap with feature classes ContactsAndFaults and MapUnitPolys
         private string Check1()
         {
-            List<string> errors = new List<string>();
+            //List<string> errors = new List<string>();
 
-            errors.Add("Error 1");
-            errors.Add("Error 2");
-            errors.Add("Error 3");
+            //errors.Add("Error 1");
+            //errors.Add("Error 2");
+            //errors.Add("Error 3");
 
-            _validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
+            //_validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
 
-            RaiseErrorsChanged("Result1");
+            //RaiseErrorsChanged("Result1");
 
-            return "Failed";
+            //return "Failed";
+
+            return "Skipped";
         }
 
+        // 2.2 Required fields within required elements are present and correctly defined
         private string Check2()
         {
             return "Skipped";
         }
 
+        // 2.3 GeologicMap topology: no internal gaps or overlaps in MapUnitPolys,
+        // boundaries of MapUnitPolys are covered by ContactsAndFaults
         private string Check3()
         {
             return "Skipped";
         }
 
+        // 2.4 All map units in MapUnitPolys have entries in DescriptionOfMapUnits table
         private string Check4()
         {
             return "Skipped";
         }
 
+        // 2.5 No duplicate MapUnit values in DescriptionOfMapUnit table
         private string Check5()
         {
             return "Skipped";
         }
 
+        // 2.6 Certain field values within required elements have entries in Glossary table
         private string Check6()
         {
             return "Skipped";
         }
 
+        // 2.7 No duplicate Term values in Glossary table
         private string Check7()
         {
             return "Skipped";
         }
 
+        // 2.8 All xxxSourceID values in required elements have entries in DataSources table
         private string Check8()
         {
             return "Skipped";
         }
 
+        // 2.9 No duplicate DataSources_ID values in DataSources table
         private string Check9()
         {
             return "Skipped";
