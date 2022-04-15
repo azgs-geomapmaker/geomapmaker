@@ -48,6 +48,8 @@ namespace Geomapmaker.ViewModels.Validation
 
         public bool HasErrors => _validationErrors.Count > 0;
 
+        public int GetErrorCount => _validationErrors.Count;
+
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));

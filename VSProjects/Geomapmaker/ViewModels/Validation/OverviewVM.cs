@@ -13,38 +13,32 @@ namespace Geomapmaker.ViewModels.Validation
         public OverviewVM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
-            Level1Results = "Skipped";
-            Level2Results = "Skipped";
-            Level3Results = "Skipped";
-            GeomapmakerResults = "Skipped";
         }
 
-        private string _level1Results = "Checking..";
-        public string Level1Results
+        public string Level1Results { get; set; } = "Checking..";
+        public string Level2Results { get; set; } = "Checking..";
+        public string Level3Results { get; set; } = "Checking..";
+        public string GeomapmakerResults { get; set; } = "Checking..";
+
+        private void UpdateLevel1Results()
         {
-            get => _level1Results;
-            set => SetProperty(ref _level1Results, value, () => Level1Results);
+            Level1Results = ParentVM.Level1.GetErrorCount == 0
+                ? "Passed"
+                : ParentVM.Level1.GetErrorCount == 1 ? "1 Error" : $"{ParentVM.Level1.GetErrorCount} Errors";
         }
 
-        private string _level2Results = "Checking..";
-        public string Level2Results
+        private void UpdateLevel2Results()
         {
-            get => _level2Results;
-            set => SetProperty(ref _level2Results, value, () => Level2Results);
+            Level1Results = ParentVM.Level2.GetErrorCount == 0
+                ? "Passed"
+                : ParentVM.Level1.GetErrorCount == 1 ? "1 Error" : $"{ParentVM.Level1.GetErrorCount} Errors";
         }
 
-        private string _level3Results = "Checking..";
-        public string Level3Results
+        private void UpdateLevel3Results()
         {
-            get => _level3Results;
-            set => SetProperty(ref _level3Results, value, () => Level3Results);
-        }
-
-        private string _geoResults = "Checking..";
-        public string GeomapmakerResults
-        {
-            get => _geoResults;
-            set => SetProperty(ref _geoResults, value, () => GeomapmakerResults);
+            Level1Results = ParentVM.Level3.GetErrorCount == 0
+                ? "Passed"
+                : ParentVM.Level1.GetErrorCount == 1 ? "1 Error" : $"{ParentVM.Level1.GetErrorCount} Errors";
         }
 
         #region Validation
