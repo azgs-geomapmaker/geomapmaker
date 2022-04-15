@@ -5,17 +5,59 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Geomapmaker._helpers;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
     public class DescriptionOfMapUnits
     {
-
         public static bool DmuTableExists()
         {
             StandaloneTable table = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
             return table != null;
+        }
+
+        public static async Task<List<string>> GetDuplicateMapUnitsAsync()
+        {
+            List<string> mapUnits = await GetAllMapUnitValuesAsync();
+
+            // Return duplicates
+            return mapUnits.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+        }
+
+        public static async Task<List<string>> GetAllMapUnitValuesAsync()
+        {
+            List<string> mapUnits = new List<string>();
+
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            await QueuedTask.Run(() =>
+            {
+                Table enterpriseTable = dmu.GetTable();
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    SubFields = "MapUnit"
+                };
+
+                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
+                {
+                    while (rowCursor.MoveNext())
+                    {
+                        using (Row row = rowCursor.Current)
+                        {
+                            if (row["MapUnit"] != null)
+                            {
+                                mapUnits.Add(row["MapUnit"]?.ToString());
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            return mapUnits;
         }
 
         public static async Task<List<MapUnit>> GetMapUnitsAsync()
@@ -24,7 +66,7 @@ namespace Geomapmaker.Data
 
             List<MapUnit> MapUnitList = new List<MapUnit>();
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
                 StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
@@ -89,13 +131,11 @@ namespace Geomapmaker.Data
             return MapUnitList;
         }
 
-        public static List<Field> Fields { get; set; }
-
         public static async Task<List<Field>> GetFieldsAsync()
         {
             List<Field> dmuFields = null;
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
                 StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 

@@ -30,7 +30,7 @@ namespace Geomapmaker.ViewModels.Validation
             Result4 = Check4();
             NotifyPropertyChanged("Result4");
 
-            Result5 = Check5();
+            Result5 = await Check5Async();
             NotifyPropertyChanged("Result5");
 
             Result6 = Check6();
@@ -121,9 +121,27 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 2.5 No duplicate MapUnit values in DescriptionOfMapUnit table
-        private string Check5()
+        private async Task<string> Check5Async()
         {
-            return "Skipped";
+            List<string> duplicates = await Data.DescriptionOfMapUnits.GetDuplicateMapUnitsAsync();
+
+            if (duplicates.Count > 0)
+            {
+                List<string> errors = new List<string>() { "Duplicated:" };
+
+                foreach (var id in duplicates)
+                {
+                    errors.Add(id);
+                }
+
+                _validationErrors["Result5"] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged("Result5");
+                return "Failed";
+            }
+            else
+            {
+                return "Passed";
+            }
         }
 
         // 2.6 Certain field values within required elements have entries in Glossary table
@@ -166,7 +184,6 @@ namespace Geomapmaker.ViewModels.Validation
             {
                 return "Passed";
             }
-
         }
 
         #region Validation
