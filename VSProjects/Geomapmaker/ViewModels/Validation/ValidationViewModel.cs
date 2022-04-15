@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -74,7 +75,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         private Views.Validation.Validation _validation = null;
 
-        protected override void OnClick()
+        protected override async void OnClick()
         {
             if (_validation != null)
             {
@@ -87,7 +88,13 @@ namespace Geomapmaker.ViewModels.Validation
                 Owner = FrameworkApplication.Current.MainWindow
             };
 
-            _validation.validationVM.ValidateAsync();
+            // Progress dialog
+            ProgressorSource ps = new ProgressorSource("Validating GeMS Project");
+
+            await QueuedTask.Run(() =>
+            {
+                _validation.validationVM.ValidateAsync();
+            }, ps.Progressor);
 
             _validation.Closed += (o, e) => { _validation = null; };
 
