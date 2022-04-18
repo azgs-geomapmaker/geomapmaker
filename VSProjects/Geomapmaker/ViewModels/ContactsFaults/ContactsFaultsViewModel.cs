@@ -120,6 +120,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             _contactsfaults.Closed += (o, e) =>
             {
+                // Switch back to map explore tool
+                FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+
                 _contactsfaults = null;
             };
 
