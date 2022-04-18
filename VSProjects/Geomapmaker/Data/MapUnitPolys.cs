@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
@@ -251,5 +252,48 @@ namespace Geomapmaker.Data
 
             return mupTemplates;
         }
+
+        public static async Task<List<string>> GetDistinctMapUnitsAsync()
+        {
+            List<string> MapUnits = new List<string>();
+
+            FeatureLayer layer = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+            if (layer == null)
+            {
+                return MapUnits;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                Table table = layer.GetTable();
+
+                if (table == null)
+                {
+                    return;
+                }
+
+                QueryFilter queryFilter = new QueryFilter
+                {
+                    PrefixClause = "DISTINCT",
+                    SubFields = "mapunit"
+                };
+
+                using (RowCursor rowCursor = table.Search(queryFilter))
+                {
+                    while (rowCursor.MoveNext())
+                    {
+                        using (Row row = rowCursor.Current)
+                        {
+                            MapUnits.Add(row["mapunit"]?.ToString());
+                        }
+                    }
+                }
+            });
+
+            return MapUnits;
+        }
+
+
     }
 }

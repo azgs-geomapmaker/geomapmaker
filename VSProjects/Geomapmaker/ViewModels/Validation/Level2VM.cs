@@ -27,7 +27,7 @@ namespace Geomapmaker.ViewModels.Validation
             Result3 = Check3();
             NotifyPropertyChanged("Result3");
 
-            Result4 = Check4();
+            Result4 = await Check4Async();
             NotifyPropertyChanged("Result4");
 
             Result5 = await Check5Async();
@@ -115,9 +115,37 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 2.4 All map units in MapUnitPolys have entries in DescriptionOfMapUnits table
-        private string Check4()
+        private async Task<string> Check4Async()
         {
-            return "Skipped";
+            // List of missing map units
+            List<string> missingMapUnits = new List<string>();
+
+            // Get all the distinct MapUnits from MapUnitPolys
+            List<string> mapUnits = await Data.MapUnitPolys.GetDistinctMapUnitsAsync();
+
+            // Get all the MapUnits from DescriptionOfMapUnits
+            List<string> dmuMapUnits = await Data.DescriptionOfMapUnits.GetAllMapUnitValuesAsync();
+
+            foreach (string mu in mapUnits)
+            {
+                // Check if DMU contains the map unit
+                if (!dmuMapUnits.Contains(mu))
+                {
+                    missingMapUnits.Add(mu);
+                }
+            }
+
+            // If any missing map units
+            if (missingMapUnits.Count != 0)
+            {
+                _validationErrors["Result4"] = _helpers.Helpers.ErrorListToTooltip(missingMapUnits);
+                RaiseErrorsChanged("Result4");
+                return "Failed";
+            }
+            else
+            {
+                return "Passesd";
+            }
         }
 
         // 2.5 No duplicate MapUnit values in DescriptionOfMapUnit table
