@@ -79,7 +79,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             Create.SymbolsFilteredMessage = $"{SymbolOptions.Count()} symbols";
 
             // Field ID Options
-            StationFieldIdOptions = Data.Stations.GetStationFieldIds();
+            StationFieldIdOptions = await Data.Stations.GetStationFieldIdsAsync();
 
             // Data Source Options
             DataSourceOptions = await Data.DataSources.GetDataSourceIdsAsync();
