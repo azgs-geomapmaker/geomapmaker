@@ -45,21 +45,14 @@ namespace Geomapmaker.ViewModels.Headings
         public string Description
         {
             get => _description;
-            set
-            {
-                SetProperty(ref _description, value, () => Description);
-                ValidateDescription(Description, "Description");
-            }
+            set => SetProperty(ref _description, value, () => Description);
         }
 
         private string _descriptionSourceID = GeomapmakerModule.DataSourceId;
         public string DescriptionSourceID
         {
             get => _descriptionSourceID;
-            set
-            {
-                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
-            }
+            set => SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
         }
 
         /// <summary>
@@ -172,22 +165,6 @@ namespace Geomapmaker.ViewModels.Headings
             else if (ParentVM.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
-
-        // Validate the Heading's definition
-        private void ValidateDescription(string definition, string propertyKey)
-        {
-            // Required field
-            if (string.IsNullOrWhiteSpace(definition))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
             }
             else
             {
