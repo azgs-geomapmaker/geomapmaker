@@ -453,9 +453,9 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Alphabet chars only
-            else if (!mapUnit.All(char.IsLetter))
+            else if (!mapUnit.All(char.IsLetterOrDigit))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
+                _validationErrors[propertyKey] = new List<string>() { "Alphabet and number characters only." };
             }
             // Name must be unique 
             else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
