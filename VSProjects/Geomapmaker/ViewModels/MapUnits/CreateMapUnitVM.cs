@@ -325,9 +325,9 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Alphabet chars only
-            else if (!mapUnit.All(Char.IsLetter))
+            else if (!mapUnit.All(char.IsLetter))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Alphabetical letters only." };
+                _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
             }
             // Name must be unique 
             else if (ParentVM.MapUnits.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
@@ -351,10 +351,10 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            // Alphabet chars only
-            else if (!name.All(char.IsLetter))
+            // Alphabet chars or spaces only
+            else if (!name.All(c => char.IsLetter(c) || c == ' '))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
+                        _validationErrors[propertyKey] = new List<string>() { "Alphabet characters or spaces only." };
             }
             else
             {
