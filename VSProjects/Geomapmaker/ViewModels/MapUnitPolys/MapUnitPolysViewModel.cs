@@ -16,6 +16,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
+        public ICommand CommandRefreshDMU => new RelayCommand(() => RefreshDMU());
+
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
@@ -39,8 +41,14 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             set
             {
                 _mapUnits = value;
-                NotifyPropertyChanged();
+                NotifyPropertyChanged("MapUnits");
             }
+        }
+
+        public async void RefreshDMU()
+        {
+            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+            MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
         }
 
         public async void RefreshMapUnitsAsync()
