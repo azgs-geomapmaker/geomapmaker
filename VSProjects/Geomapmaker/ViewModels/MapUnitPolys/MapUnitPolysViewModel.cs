@@ -41,17 +41,11 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             set
             {
                 _mapUnits = value;
-                NotifyPropertyChanged("MapUnits");
+                NotifyPropertyChanged();
             }
         }
 
         public async void RefreshDMU()
-        {
-            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
-            MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
-        }
-
-        public async void RefreshMapUnitsAsync()
         {
             Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
@@ -86,8 +80,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
-
-            _mapunitpolys.mapUnitPolysVM.RefreshMapUnitsAsync();
 
             _mapunitpolys.Closed += (o, e) =>
             {
