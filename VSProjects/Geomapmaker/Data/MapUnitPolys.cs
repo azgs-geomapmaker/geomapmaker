@@ -238,7 +238,7 @@ namespace Geomapmaker.Data
                         MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
                         {
                             MapUnit = muKey,
-                            HexColor = mapUnit.HexColor,
+                            HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
                             Tooltip = mapUnit.Tooltip,
                             DataSourceID = templateDef.DefaultValues["datasourceid"].ToString(),
                             Template = template
