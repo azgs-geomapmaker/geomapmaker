@@ -208,7 +208,7 @@ namespace Geomapmaker.Data
 
             IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
 
-            // Find the ContactsFaults layer
+            // Find the MapUnitPolys layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             if (layer == null)
@@ -220,21 +220,21 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-                // Get templates from CF layer
+                // Get templates from layer
                 layerTemplates = layer.GetTemplates();
 
                 foreach (EditingTemplate template in layerTemplates)
                 {
-                    // Skip over the default template and Unassigned (for now)
-                    if (template.Name != "MapUnitPolys" && template.Name != "Unassigned")
+                    // Get CIMFeatureTemplate
+                    CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+
+                    string muKey = templateDef.DefaultValues["mapunit"].ToString();
+
+                    MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
+
+                    // Check if the mapUnt was found
+                    if (mapUnit != null)
                     {
-                        // Get CIMFeatureTemplate
-                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
-
-                        string muKey = templateDef.DefaultValues["mapunit"].ToString();
-
-                        MapUnit mapUnit = dmu.Where(a => a.MU == muKey).FirstOrDefault();
-
                         MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
                         {
                             MapUnit = muKey,
