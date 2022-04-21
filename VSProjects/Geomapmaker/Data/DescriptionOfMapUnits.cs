@@ -101,14 +101,11 @@ namespace Geomapmaker.Data
                                 DescriptionSourceID = Helpers.RowValueToString(row["DescriptionSourceID"]),
                             };
 
+                            mapUnit.HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB);
+
                             if (dmuFields.Any(a => a.Name == "RelativeAge"))
                             {
                                 mapUnit.RelativeAge = Helpers.RowValueToString(row["RelativeAge"]);
-                            }
-
-                            if (dmuFields.Any(a => a.Name == "hexcolor"))
-                            {
-                                mapUnit.HexColor = Helpers.RowValueToString(row["HexColor"]);
                             }
 
                             if (dmuFields.Any(a => a.Name == "GeoMaterial"))
