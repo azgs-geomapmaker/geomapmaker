@@ -21,7 +21,7 @@ namespace Geomapmaker.Data
 
             return layer != null;
         }
-
+        
         public static async void RebuildMUPSymbologyAndTemplates()
         {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
@@ -228,26 +228,29 @@ namespace Geomapmaker.Data
                     // Get CIMFeatureTemplate
                     CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
-                    string muKey = templateDef.DefaultValues["mapunit"].ToString();
-
-                    MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
-
-                    // Check if the mapUnt was found
-                    if (mapUnit != null)
+                    // If the template has a mapunit value
+                    if (templateDef.DefaultValues.ContainsKey("MapUnit") && templateDef.DefaultValues.ContainsKey("DataSourceID"))
                     {
-                        MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
-                        {
-                            MapUnit = muKey,
-                            HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
-                            Tooltip = mapUnit.Tooltip,
-                            DataSourceID = templateDef.DefaultValues["datasourceid"].ToString(),
-                            Template = template
-                        };
+                        string muKey = templateDef.DefaultValues["MapUnit"].ToString();
 
-                        mupTemplates.Add(tmpTemplate);
+                        MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
+
+                        // Check if the mapUnt was found
+                        if (mapUnit != null)
+                        {
+                            MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
+                            {
+                                MapUnit = muKey,
+                                HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
+                                Tooltip = mapUnit.Tooltip,
+                                DataSourceID = templateDef.DefaultValues["DataSourceID"].ToString(),
+                                Template = template
+                            };
+
+                            mupTemplates.Add(tmpTemplate);
+                        }
                     }
                 }
-
             });
 
             return mupTemplates;

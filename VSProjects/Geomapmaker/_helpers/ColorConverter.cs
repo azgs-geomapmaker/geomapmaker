@@ -26,8 +26,18 @@ namespace Geomapmaker._helpers
                 return null;
             }
 
-            // Split by comma 
-            string[] strArray = rgb.Split(',');
+            string[] strArray = { };
+
+            if (rgb.Contains(","))
+            {
+                // Split by comma 
+                strArray = rgb.Split(',');
+            }
+            else if (rgb.Contains(";"))
+            {
+                // Split by semicolon 
+                strArray = rgb.Split(';');
+            }
 
             // Color from RGB bytes
             return strArray.Length != 3 ? null : (Color?)Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2]));
@@ -42,8 +52,18 @@ namespace Geomapmaker._helpers
                 return null;
             }
 
-            // Split by comma 
-            string[] strArray = rgb.Split(',');
+            string[] strArray = { };
+
+            if (rgb.Contains(","))
+            {
+                // Split by comma 
+                strArray = rgb.Split(',');
+            }
+            else if (rgb.Contains(";"))
+            {
+                // Split by semicolon 
+                strArray = rgb.Split(';');
+            }
 
             if (strArray.Length != 3)
             {

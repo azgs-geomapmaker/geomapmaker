@@ -47,7 +47,7 @@ namespace Geomapmaker.Models
                     return (Convert.ToDouble(AreaFillRGB.Split(';')[0]), Convert.ToDouble(AreaFillRGB.Split(';')[1]), Convert.ToDouble(AreaFillRGB.Split(';')[2]));
                 }
 
-                // black
+                // default to black
                 return (0, 0, 0);
             }
         }
