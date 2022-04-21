@@ -32,30 +32,33 @@ namespace Geomapmaker.Data
 
             StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
-            await QueuedTask.Run(() =>
+            if (dmu != null)
             {
-                Table enterpriseTable = dmu.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                await QueuedTask.Run(() =>
                 {
-                    SubFields = "MapUnit"
-                };
-
-                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
+                    using (Table table = dmu.GetTable())
                     {
-                        using (Row row = rowCursor.Current)
+                        QueryFilter queryFilter = new QueryFilter
                         {
-                            if (row["MapUnit"] != null)
+                            SubFields = "MapUnit"
+                        };
+
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
                             {
-                                mapUnits.Add(row["MapUnit"]?.ToString());
+                                using (Row row = rowCursor.Current)
+                                {
+                                    if (row["MapUnit"] != null)
+                                    {
+                                        mapUnits.Add(row["MapUnit"]?.ToString());
+                                    }
+                                }
                             }
                         }
                     }
-                }
-
-            });
+                });
+            }
 
             return mapUnits;
         }
