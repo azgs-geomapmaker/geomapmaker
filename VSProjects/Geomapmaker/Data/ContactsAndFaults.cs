@@ -93,13 +93,13 @@ namespace Geomapmaker.Data
             }
 
             // Check if the symbol list has been populated 
-            if (Symbology.CFSymbolOptionsList == null)
+            if (Symbology.ContactsAndFaultsSymbols == null)
             {
                 await Symbology.RefreshCFSymbolOptions();
             }
 
             // Get the CF Symbology Options
-            List<GemsSymbol> SymbolOptions = Symbology.CFSymbolOptionsList;
+            List<GemsSymbol> SymbolOptions = Symbology.ContactsAndFaultsSymbols;
 
             if (SymbolOptions == null)
             {

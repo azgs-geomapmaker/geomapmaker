@@ -13,7 +13,7 @@ namespace Geomapmaker.Data
 {
     public class Symbology
     {
-        public static List<GemsSymbol> CFSymbolOptionsList;
+        public static List<GemsSymbol> ContactsAndFaultsSymbols;
 
         public static List<GemsSymbol> OrientationPointSymbols;
 
@@ -27,7 +27,7 @@ namespace Geomapmaker.Data
             if (SymbologyTable == null)
             {
                 MessageBox.Show("Symbology table not found.");
-                CFSymbolOptionsList = cfSymbols;
+                ContactsAndFaultsSymbols = cfSymbols;
                 return;
             }
 
@@ -39,7 +39,7 @@ namespace Geomapmaker.Data
                     if (enterpriseTable == null)
                     {
                         MessageBox.Show("Symbology table not found.");
-                        CFSymbolOptionsList = cfSymbols;
+                        ContactsAndFaultsSymbols = cfSymbols;
                         return;
                     }
 
@@ -87,7 +87,7 @@ namespace Geomapmaker.Data
                 }
             });
 
-            CFSymbolOptionsList = cfSymbols;
+            ContactsAndFaultsSymbols = cfSymbols;
         }
 
         public static async Task RefreshOPSymbolOptions()
