@@ -14,6 +14,10 @@ namespace Geomapmaker.Data
 {
     public class ContactsAndFaults
     {
+        /// <summary>
+        /// Check if the ContactsAndFaults layer exists in Active Map
+        /// </summary>
+        /// <returns>Returns true if layer exists</returns>
         public static bool ContactsAndFaultsExists()
         {
             Layer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault();
@@ -21,6 +25,11 @@ namespace Geomapmaker.Data
             return layer != null;
         }
 
+        /// <summary>
+        /// Get Templates for Contacts and Faults
+        /// </summary>
+        /// <param name="filterSketch"></param>
+        /// <returns>ContactFaultTemplate List</returns>
         public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync(bool filterSketch = false)
         {
             // List of templates to return
@@ -82,6 +91,9 @@ namespace Geomapmaker.Data
             return contactFaultTemplates;
         }
 
+        /// <summary>
+        /// Rebuld the symbology renderer for ContactsAndFaults
+        /// </summary>
         public static async void RebuildContactsFaultsSymbology()
         {
             // CF Layer
@@ -127,29 +139,30 @@ namespace Geomapmaker.Data
                     }
                 }
 
-                Table cfTable = layer.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table table = layer.GetTable())
                 {
-                    PrefixClause = "DISTINCT",
-                    PostfixClause = "ORDER BY symbol",
-                    SubFields = "symbol"
-                };
-
-                using (RowCursor rowCursor = cfTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
+                    QueryFilter queryFilter = new QueryFilter
                     {
-                        using (Row row = rowCursor.Current)
+                        PrefixClause = "DISTINCT",
+                        PostfixClause = "ORDER BY symbol",
+                        SubFields = "symbol"
+                    };
+
+                    using (RowCursor rowCursor = table.Search(queryFilter))
+                    {
+                        while (rowCursor.MoveNext())
                         {
-                            string cfSymbolKey = row["symbol"]?.ToString();
-
-                            GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
-
-                            if (Symbol != null)
+                            using (Row row = rowCursor.Current)
                             {
-                                // Add symbology for existing CF polylines
-                                AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                string cfSymbolKey = row["symbol"]?.ToString();
+
+                                GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
+
+                                if (Symbol != null)
+                                {
+                                    // Add symbology for existing CF polylines
+                                    AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                }
                             }
                         }
                     }
@@ -166,6 +179,11 @@ namespace Geomapmaker.Data
             }, ps.Progressor);
         }
 
+        /// <summary>
+        /// Add a symbol to the CF renderer 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="symbolJson"></param>
         public static async void AddSymbolToRenderer(string key, string symbolJson)
         {
             // Find the ContactsFaults layer
@@ -195,10 +213,10 @@ namespace Geomapmaker.Data
                 }
 
                 CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
-                        new CIMUniqueValue {
-                            FieldValues = new string[] { key }
-                        }
-                    };
+                    new CIMUniqueValue {
+                        FieldValues = new string[] { key }
+                    }
+                };
 
                 CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                 {
