@@ -3,6 +3,7 @@ using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
@@ -167,7 +168,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
             HierarchyList = new List<MapUnitTreeItem>();
             SetHierarchyKeys(Tree);
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
                 try
                 {
@@ -301,7 +302,13 @@ namespace Geomapmaker.ViewModels.Hierarchy
                 Owner = Application.Current.MainWindow
             };
 
-            await _hierarchy.hierarchyVM.BuildTree();
+            // Tree takes a few seconds to load. Display progress dialog
+            ProgressorSource ps = new ProgressorSource("Building hierarchy tree from DMU");
+
+            await QueuedTask.Run(async () =>
+            {
+                await _hierarchy.hierarchyVM.BuildTree();
+            }, ps.Progressor);
 
             _hierarchy.Closed += (o, e) => { _hierarchy = null; };
 
