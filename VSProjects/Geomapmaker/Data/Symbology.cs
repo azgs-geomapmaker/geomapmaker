@@ -26,7 +26,6 @@ namespace Geomapmaker.Data
             // Return an empty list if the cfsymbology table isn null
             if (SymbologyTable == null)
             {
-                MessageBox.Show("Symbology table not found.");
                 ContactsAndFaultsSymbols = cfSymbols;
                 return;
             }
@@ -38,7 +37,6 @@ namespace Geomapmaker.Data
                 {
                     if (enterpriseTable == null)
                     {
-                        MessageBox.Show("Symbology table not found.");
                         ContactsAndFaultsSymbols = cfSymbols;
                         return;
                     }
@@ -99,7 +97,6 @@ namespace Geomapmaker.Data
             // Check if the table exists
             if (orientationSymbologyTable == null)
             {
-                MessageBox.Show("Symbology table not found.");
                 OrientationPointSymbols = orientationSymbols;
                 return;
             }

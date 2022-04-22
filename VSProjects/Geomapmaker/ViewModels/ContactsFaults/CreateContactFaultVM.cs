@@ -311,7 +311,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public List<GemsSymbol> SymbolOptions
         {
             get => _symbolOptions;
-            set => SetProperty(ref _symbolOptions, value, () => SymbolOptions);
+            set
+            {
+                SetProperty(ref _symbolOptions, value, () => SymbolOptions);
+                ValidateSymbolOptions(SymbolOptions, "SymbolOptions");
+            }
         }
 
         private GemsSymbol _symbol;
@@ -403,12 +407,27 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public bool HasErrors => _validationErrors.Count > 0;
 
+        // Validate symbol options
+        public void ValidateSymbolOptions(List<GemsSymbol> symbolOptions, string propertyKey)
+        {
+            if (symbolOptions?.Count == 0)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Symbology table not found." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
         // Validate symbol
         private void ValidateSymbol(GemsSymbol symbol, string propertyKey)
         {
-            // Required field
             if (symbol == null)
             {
+                // Required field
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             else
