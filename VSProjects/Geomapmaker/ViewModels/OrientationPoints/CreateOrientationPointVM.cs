@@ -192,14 +192,14 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set => SetProperty(ref _symbolsFilteredMessage, value, () => SymbolsFilteredMessage);
         }
 
-        private List<GemsSymbol> _symbolOptions { get; set; }
+        private List<GemsSymbol> _symbolOptions;
         public List<GemsSymbol> SymbolOptions
         {
             get => _symbolOptions;
             set
             {
-                _symbolOptions = value;
-                NotifyPropertyChanged();
+                SetProperty(ref _symbolOptions, value, () => SymbolOptions);
+                ValidateSymbolOptions(SymbolOptions, "SymbolOptions");
             }
         }
 
@@ -400,6 +400,31 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             else if (!double.TryParse(text, out YCoordinateDouble))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Coordinate must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+
+
+
+
+
+
+
+
+
+
+        // Validate symbol options
+        public void ValidateSymbolOptions(List<GemsSymbol> symbolOptions, string propertyKey)
+        {
+            if (symbolOptions?.Count == 0)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Symbology table not found." };
             }
             else
             {
