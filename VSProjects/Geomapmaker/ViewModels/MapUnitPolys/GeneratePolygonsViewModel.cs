@@ -66,16 +66,21 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                     tmpTemplate = polyLayer.GetTemplate(tempTemplateName);
                 }
 
-                Selection cf_Collection = cfLayer.Select();
+                using (Selection cf_Collection = cfLayer.Select())
+                {
+                    IReadOnlyList<long> ContactFaultOids = cf_Collection.GetObjectIDs();
 
-                IReadOnlyList<long> ContactFaultOids = cf_Collection.GetObjectIDs();
+                    op.ConstructPolygons(tmpTemplate, cfLayer, ContactFaultOids, null, true);
 
-                op.ConstructPolygons(tmpTemplate, cfLayer, ContactFaultOids, null, true);
-
-                op.Execute();
+                    op.Execute();
+                }
 
                 // Remove the temp template
                 polyLayer.RemoveTemplate(tempTemplateName);
+
+                // Clear selection
+                cfLayer.ClearSelection();
+                polyLayer.ClearSelection();
 
                 // Rebuild symbology
                 Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();

@@ -39,7 +39,7 @@
 
         <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">Generate Map Unit Polygons from Contacts and Faults</TextBlock>
 
-        <Button Grid.Column="1" Grid.Row="2" Command="{Binding CommandGeneratePolygons}" Style="{DynamicResource Esri_Button}" Background="#2082D8" Foreground="#FFF" MinHeight="50" >Create Polygons</Button>
+        <Button Grid.Column="1" Grid.Row="2" Command="{Binding CommandGeneratePolygons}" Style="{DynamicResource Esri_Button}" Background="#2082D8" Foreground="#FFF" MinHeight="50" >Generate Polygons</Button>
 
         <Button Grid.Column="1" Grid.Row="4" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
     </Grid>
