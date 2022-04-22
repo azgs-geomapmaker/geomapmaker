@@ -88,14 +88,14 @@ namespace Geomapmaker.MapTools
                                 //populate a CF from fields
                                 ContactFaultTemplate cf = new ContactFaultTemplate
                                 {
-                                    Label = row["label"].ToString(),
-                                    Type = row["type"].ToString(),
-                                    Symbol = row["symbol"].ToString(),
-                                    IdentityConfidence = row["identityconfidence"].ToString(),
-                                    ExistenceConfidence = row["existenceconfidence"].ToString(),
-                                    LocationConfidenceMeters = row["locationconfidencemeters"].ToString(),
-                                    IsConcealed = row["isconcealed"].ToString() == "Y",
-                                    Notes = row["notes"] == null ? "" : row["notes"].ToString()
+                                    Label = row["label"]?.ToString(),
+                                    Type = row["type"]?.ToString(),
+                                    Symbol = row["symbol"]?.ToString(),
+                                    IdentityConfidence = row["identityconfidence"]?.ToString(),
+                                    ExistenceConfidence = row["existenceconfidence"]?.ToString(),
+                                    LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
+                                    IsConcealed = row["isconcealed"]?.ToString() == "Y",
+                                    Notes = row["notes"]?.ToString()
                                 };
 
                                 // Pass values back to the ViewModel to prepop
