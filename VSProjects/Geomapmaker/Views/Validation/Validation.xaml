@@ -34,6 +34,12 @@
             <TabItem Header="Overview" >
                 <tabData:Overview />
             </TabItem>
+            <TabItem Header="GeMS">
+                <tabData:Gems />
+            </TabItem>
+            <TabItem Header="Geomapmaker">
+                <tabData:Geomapmaker />
+            </TabItem>
             <TabItem Header="Level 1">
                 <tabData:Level1 />
             </TabItem>
@@ -42,9 +48,6 @@
             </TabItem>
             <TabItem Header="Level 3">
                 <tabData:Level3 />
-            </TabItem>
-            <TabItem Header="Geomapmaker">
-                <tabData:Geomapmaker />
             </TabItem>
         </TabControl>
     </Grid>

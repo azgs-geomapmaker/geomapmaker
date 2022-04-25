@@ -17,14 +17,16 @@ namespace Geomapmaker.ViewModels.Validation
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
         public OverviewVM Overview { get; set; }
+        public GemsVM Gems { get; set; }
+        public GeomapmakerVM AZGS { get; set; }
         public Level1VM Level1 { get; set; }
         public Level2VM Level2 { get; set; }
         public Level3VM Level3 { get; set; }
-        public GeomapmakerVM AZGS { get; set; }
 
         public ValidationViewModel()
         {
             Overview = new OverviewVM(this);
+            Gems = new GemsVM(this);
             Level1 = new Level1VM(this);
             Level2 = new Level2VM(this);
             Level3 = new Level3VM(this);
@@ -36,6 +38,12 @@ namespace Geomapmaker.ViewModels.Validation
             await Level2.Validate();
         }
 
+        // Pass errors down to overview viewmodel
+        public void UpdateGemsResults(int errorCount)
+        {
+            Overview.UpdateGemsResults(errorCount);
+        }
+        
         // Pass errors down to overview viewmodel
         public void UpdateLevel1Results(int errorCount)
         {

@@ -29,6 +29,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
@@ -40,24 +43,28 @@
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="GeMS Validation" FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Validation Overview" FontWeight="Bold" Margin="0,0,0,10" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="Level 1:" FontWeight="Bold" />
-            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level1Results}" FontWeight="Bold" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="GeMS:" FontWeight="Bold" />
+            <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.GemsResults}" FontWeight="Bold" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="Level 2:" FontWeight="Bold" />
-            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level2Results}" FontWeight="Bold" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Geomapmaker:" FontWeight="Bold" />
+            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.GeomapmakerResults}" FontWeight="Bold" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="Level 3:" FontWeight="Bold" />
-            <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level3Results}" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Level 1:" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level1Results}" FontWeight="Bold" />
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="Geomapmaker:" FontWeight="Bold" />
-            <TextBlock Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.GeomapmakerResults}" FontWeight="Bold" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Level 2:" FontWeight="Bold" />
+            <TextBlock Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level2Results}" FontWeight="Bold" />
+            <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <Button Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" HorizontalAlignment="Center" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="Level 3:" FontWeight="Bold" />
+            <TextBlock Grid.Row="10" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.Level3Results}" FontWeight="Bold" />
+
+            <Button Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" HorizontalAlignment="Center" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
 
         </Grid>
     </AdornerDecorator>

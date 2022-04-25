@@ -204,6 +204,7 @@
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ViewModels\Validation\GeomapmakerVM.cs" />
+    <Compile Include="ViewModels\Validation\GemsVM.cs" />
     <Compile Include="ViewModels\Validation\OverviewVM.cs" />
     <Compile Include="ViewModels\Validation\Level1VM.cs" />
     <Compile Include="ViewModels\Validation\Level2VM.cs" />
@@ -349,6 +350,9 @@
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Validation\Gems.xaml.cs">
+      <DependentUpon>Gems.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Validation\Geomapmaker.xaml.cs">
       <DependentUpon>Geomapmaker.xaml</DependentUpon>
     </Compile>
@@ -493,6 +497,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GlobalResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Validation\Gems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

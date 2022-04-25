@@ -15,10 +15,32 @@ namespace Geomapmaker.ViewModels.Validation
             ParentVM = parentVM;
         }
 
+        public string GemsResults { get; set; } = "Checking..";
+        public string GeomapmakerResults { get; set; } = "Skipped";
         public string Level1Results { get; set; } = "Checking..";
         public string Level2Results { get; set; } = "Checking..";
         public string Level3Results { get; set; } = "Checking..";
-        public string GeomapmakerResults { get; set; } = "Skipped";
+
+        public void UpdateGemsResults(int errorCount)
+        {
+            if (errorCount == 0)
+            {
+                GemsResults = "Passed";
+            }
+            else if (errorCount == 1)
+            {
+                GemsResults = "1 Error";
+                _validationErrors["GemsResults"] = new List<string> { Level1Results };
+                RaiseErrorsChanged("GemsResults");
+            }
+            else
+            {
+                GemsResults = $"{errorCount} Errors";
+                _validationErrors["GemsResults"] = new List<string> { Level1Results };
+                RaiseErrorsChanged("GemsResults");
+            }
+            NotifyPropertyChanged("GemsResults");
+        }
 
         public void UpdateLevel1Results(int errorCount)
         {
