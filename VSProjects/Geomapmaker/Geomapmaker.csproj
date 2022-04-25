@@ -205,6 +205,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ViewModels\Validation\GeomapmakerVM.cs" />
     <Compile Include="ViewModels\Validation\GemsVM.cs" />
+    <Compile Include="ViewModels\Validation\TopoVM.cs" />
     <Compile Include="ViewModels\Validation\OverviewVM.cs" />
     <Compile Include="ViewModels\Validation\Level1VM.cs" />
     <Compile Include="ViewModels\Validation\Level2VM.cs" />
@@ -355,6 +356,9 @@
     </Compile>
     <Compile Include="Views\Validation\Geomapmaker.xaml.cs">
       <DependentUpon>Geomapmaker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Validation\Topo.xaml.cs">
+      <DependentUpon>Topo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Validation\Level1.xaml.cs">
       <DependentUpon>Level1.xaml</DependentUpon>
@@ -507,6 +511,10 @@
     <Page Include="Views\Validation\Geomapmaker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Validation\Topo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Validation\Level1.xaml">
       <SubType>Designer</SubType>

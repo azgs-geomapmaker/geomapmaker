@@ -16,10 +16,11 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         public string GemsResults { get; set; } = "Checking..";
+        public string TopoResults { get; set; } = "Checking..";
         public string GeomapmakerResults { get; set; } = "Skipped";
-        public string Level1Results { get; set; } = "Checking..";
-        public string Level2Results { get; set; } = "Checking..";
-        public string Level3Results { get; set; } = "Checking..";
+        public string Level1Results { get; set; } = "Skipped";
+        public string Level2Results { get; set; } = "Skipped";
+        public string Level3Results { get; set; } = "Skipped";
 
         public void UpdateGemsResults(int errorCount)
         {
@@ -30,16 +31,37 @@ namespace Geomapmaker.ViewModels.Validation
             else if (errorCount == 1)
             {
                 GemsResults = "1 Error";
-                _validationErrors["GemsResults"] = new List<string> { Level1Results };
+                _validationErrors["GemsResults"] = new List<string> { GeomapmakerResults };
                 RaiseErrorsChanged("GemsResults");
             }
             else
             {
                 GemsResults = $"{errorCount} Errors";
-                _validationErrors["GemsResults"] = new List<string> { Level1Results };
+                _validationErrors["GemsResults"] = new List<string> { GeomapmakerResults };
                 RaiseErrorsChanged("GemsResults");
             }
             NotifyPropertyChanged("GemsResults");
+        }
+
+        public void UpdateTopoResults(int errorCount)
+        {
+            if (errorCount == 0)
+            {
+                TopoResults = "Passed";
+            }
+            else if (errorCount == 1)
+            {
+                TopoResults = "1 Error";
+                _validationErrors["TopoResults"] = new List<string> { TopoResults };
+                RaiseErrorsChanged("TopoResults");
+            }
+            else
+            {
+                TopoResults = $"{errorCount} Errors";
+                _validationErrors["TopoResults"] = new List<string> { TopoResults };
+                RaiseErrorsChanged("TopoResults");
+            }
+            NotifyPropertyChanged("TopoResults");
         }
 
         public void UpdateLevel1Results(int errorCount)

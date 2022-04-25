@@ -6,18 +6,18 @@ using System.ComponentModel;
 
 namespace Geomapmaker.ViewModels.Validation
 {
-    public class Level1VM : PropertyChangedBase, INotifyDataErrorInfo
+    public class TopoVM : PropertyChangedBase, INotifyDataErrorInfo
     {
         public ValidationViewModel ParentVM { get; set; }
 
-        public Level1VM(ValidationViewModel parentVM)
+        public TopoVM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
             Result1 = Check1();
             Result2 = Check2();
             Result3 = Check3();
 
-            ParentVM.UpdateLevel1Results(_validationErrors.Count);
+            ParentVM.UpdateTopoResults(_validationErrors.Count);
         }
 
         public string Result1 { get; set; } = "Checking..";
@@ -29,9 +29,9 @@ namespace Geomapmaker.ViewModels.Validation
         {
             //List<string> errors = new List<string>();
 
-            //errors.Add("Test Error 1");
-            //errors.Add("Test Error 2");
-            //errors.Add("Test Error 3");
+            //errors.Add("Topo Error 1");
+            //errors.Add("Topo Error 2");
+            //errors.Add("Topo Error 3");
 
             //_validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
 
