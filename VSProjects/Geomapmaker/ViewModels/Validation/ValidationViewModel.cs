@@ -37,6 +37,8 @@ namespace Geomapmaker.ViewModels.Validation
 
         // Async validation
         public async void ValidateAsync(){
+            await Geomapmaker.Validate();
+
             await Level2.Validate();
         }
 
@@ -49,6 +51,11 @@ namespace Geomapmaker.ViewModels.Validation
         public void UpdateTopoResults(int errorCount)
         {
             Overview.UpdateTopoResults(errorCount);
+        }
+
+        public void UpdateGeomapmakerResults(int errorCount)
+        {
+            Overview.UpdateGeomapmakerResults(errorCount);
         }
 
         // Pass errors down to overview viewmodel

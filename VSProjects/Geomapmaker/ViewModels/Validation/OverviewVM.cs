@@ -64,6 +64,27 @@ namespace Geomapmaker.ViewModels.Validation
             NotifyPropertyChanged("TopoResults");
         }
 
+        public void UpdateGeomapmakerResults(int errorCount)
+        {
+            if (errorCount == 0)
+            {
+                GeomapmakerResults = "Passed";
+            }
+            else if (errorCount == 1)
+            {
+                GeomapmakerResults = "1 Error";
+                _validationErrors["GeomapmakerResults"] = new List<string> { GeomapmakerResults };
+                RaiseErrorsChanged("GeomapmakerResults");
+            }
+            else
+            {
+                GeomapmakerResults = $"{errorCount} Errors";
+                _validationErrors["GeomapmakerResults"] = new List<string> { GeomapmakerResults };
+                RaiseErrorsChanged("GeomapmakerResults");
+            }
+            NotifyPropertyChanged("GeomapmakerResults");
+        }
+        
         public void UpdateLevel1Results(int errorCount)
         {
             if (errorCount == 0)

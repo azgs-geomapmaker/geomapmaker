@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.ViewModels.Validation
 {
@@ -13,6 +14,38 @@ namespace Geomapmaker.ViewModels.Validation
         public GeomapmakerVM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
+        }
+
+        public async Task Validate()
+        {
+            Result1 = await Check1Async("Result1");
+            NotifyPropertyChanged("Result1");
+
+            ParentVM.UpdateGeomapmakerResults(_validationErrors.Count);
+        }
+
+        public string Result1 { get; set; } = "Checking..";
+
+        // 1 Symbology table exists
+        private async Task<string> Check1Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            if (await Data.Symbology.SymbologyExistsAsync() == false)
+            {
+                errors.Add("Symbology table not found.");
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
         }
 
         #region Validation

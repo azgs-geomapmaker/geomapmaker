@@ -202,6 +202,7 @@
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
+    <Compile Include="Data\Validation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ViewModels\Validation\GeomapmakerVM.cs" />
     <Compile Include="ViewModels\Validation\GemsVM.cs" />

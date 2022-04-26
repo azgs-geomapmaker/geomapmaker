@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Geomapmaker.Data
 {
@@ -16,6 +15,11 @@ namespace Geomapmaker.Data
         public static List<GemsSymbol> ContactsAndFaultsSymbols;
 
         public static List<GemsSymbol> OrientationPointSymbols;
+
+        public static async Task<bool> SymbologyExistsAsync()
+        {
+            return await Validation.CheckStandaloneTableExistsAsync("Symbology");
+        }
 
         public static async Task RefreshCFSymbolOptions()
         {
