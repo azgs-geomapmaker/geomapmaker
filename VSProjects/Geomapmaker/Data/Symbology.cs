@@ -18,7 +18,14 @@ namespace Geomapmaker.Data
 
         public static async Task<bool> SymbologyExistsAsync()
         {
-            return await Validation.CheckStandaloneTableExistsAsync("Symbology");
+            return await Validation.StandaloneTableExistsAsync("Symbology");
+        }
+
+        public static async Task<List<string>> GetMissingRequiredFields()
+        {
+            List<string> requiredFields = new List<string>() { "type", "key_", "description", "symbol" };
+
+            return await Data.Validation.StandaloneTableFieldsExistAsync("Symbology", requiredFields);
         }
 
         public static async Task RefreshCFSymbolOptions()

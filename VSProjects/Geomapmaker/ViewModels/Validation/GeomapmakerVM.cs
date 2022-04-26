@@ -35,6 +35,20 @@ namespace Geomapmaker.ViewModels.Validation
             {
                 errors.Add("Symbology table not found.");
             }
+            else
+            {
+                // Check for any missing fields 
+                List<string> missingFields = await Data.Symbology.GetMissingRequiredFields();
+
+                // Add errors for any missing fields
+                if (missingFields.Count != 0)
+                {
+                    foreach (string field in missingFields)
+                    {
+                        errors.Add($"{field} field not found.");
+                    }
+                }
+            }
 
             if (errors.Count == 0)
             {
