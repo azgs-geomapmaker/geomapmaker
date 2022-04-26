@@ -60,7 +60,7 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" />
-                            <TextBlock Text="{Binding FullName}" ToolTip="{Binding Tooltip}" />
+                            <TextBlock Text="{Binding DisplayName}" ToolTip="{Binding Tooltip}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

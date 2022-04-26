@@ -60,21 +60,22 @@ namespace Geomapmaker.Models
 
         public string GeoMaterialConfidence { get; set; }
 
+        public string DisplayName => $"{MU} - {FullName}";
+
         public string Tooltip
         {
             get
             {
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append($"<b>ID: </b>{ObjectID}<br>");
-
                 if (!string.IsNullOrEmpty(MU))
                 {
                     sb.Append($"<b>MapUnit: </b>{MU}<br>");
                 }
-
-                sb.Append($"<b>Name: </b>{Name}<br>");
-
+                if (!string.IsNullOrEmpty(Name))
+                {
+                    sb.Append($"<b>Name: </b>{Name}<br>");
+                }
                 if (!string.IsNullOrEmpty(FullName))
                 {
                     sb.Append($"<b>FullName: </b>{FullName}<br>");
@@ -111,8 +112,14 @@ namespace Geomapmaker.Models
                 {
                     sb.Append($"<b>GeoMaterialConfidence: </b>{GeoMaterialConfidence}<br>");
                 }
-
-                sb.Append($"<b>DescriptionSourceID: </b>{DescriptionSourceID}<br>");
+                if (!string.IsNullOrEmpty(DescriptionSourceID))
+                {
+                    sb.Append($"<b>DescriptionSourceID: </b>{DescriptionSourceID}<br>");
+                }
+                if (!string.IsNullOrEmpty(ObjectID))
+                {
+                    sb.Append($"<b>ID: </b>{ObjectID}<br>");
+                }
 
                 return sb.ToString();
             }
