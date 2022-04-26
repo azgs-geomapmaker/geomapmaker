@@ -20,26 +20,18 @@ namespace Geomapmaker.ViewModels.Validation
         public GemsVM Gems { get; set; }
         public TopoVM Topo { get; set; }
         public GeomapmakerVM Geomapmaker { get; set; }
-        public Level1VM Level1 { get; set; }
-        public Level2VM Level2 { get; set; }
-        public Level3VM Level3 { get; set; }
 
         public ValidationViewModel()
         {
             Overview = new OverviewVM(this);
             Gems = new GemsVM(this);
             Topo = new TopoVM(this);
-            Level1 = new Level1VM(this);
-            Level2 = new Level2VM(this);
-            Level3 = new Level3VM(this);
             Geomapmaker = new GeomapmakerVM(this);
         }
 
         // Async validation
         public async void ValidateAsync(){
             await Geomapmaker.Validate();
-
-            await Level2.Validate();
         }
 
         // Pass errors down to overview viewmodel
@@ -48,33 +40,18 @@ namespace Geomapmaker.ViewModels.Validation
             Overview.UpdateGemsResults(errorCount);
         }
 
+        // Pass errors down to overview viewmodel
         public void UpdateTopoResults(int errorCount)
         {
             Overview.UpdateTopoResults(errorCount);
         }
 
+        // Pass errors down to overview viewmodel
         public void UpdateGeomapmakerResults(int errorCount)
         {
             Overview.UpdateGeomapmakerResults(errorCount);
         }
 
-        // Pass errors down to overview viewmodel
-        public void UpdateLevel1Results(int errorCount)
-        {
-            Overview.UpdateLevel1Results(errorCount);
-        }
-
-        // Pass errors down to overview viewmodel
-        public void UpdateLevel2Results(int errorCount)
-        {
-            Overview.UpdateLevel2Results(errorCount);
-        }
-
-        // Pass errors down to overview viewmodel
-        public void UpdateLevel3Results(int errorCount)
-        {
-            Overview.UpdateLevel3Results(errorCount);
-        }
 
         public void CloseProwindow()
         {

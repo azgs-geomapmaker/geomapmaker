@@ -208,9 +208,6 @@
     <Compile Include="ViewModels\Validation\GemsVM.cs" />
     <Compile Include="ViewModels\Validation\TopoVM.cs" />
     <Compile Include="ViewModels\Validation\OverviewVM.cs" />
-    <Compile Include="ViewModels\Validation\Level1VM.cs" />
-    <Compile Include="ViewModels\Validation\Level2VM.cs" />
-    <Compile Include="ViewModels\Validation\Level3VM.cs" />
     <Compile Include="ViewModels\Validation\ValidationViewModel.cs" />
     <Compile Include="Views\MapUnitPolys\GeneratePolygons.xaml.cs">
       <DependentUpon>GeneratePolygons.xaml</DependentUpon>
@@ -361,15 +358,6 @@
     <Compile Include="Views\Validation\Topo.xaml.cs">
       <DependentUpon>Topo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Validation\Level1.xaml.cs">
-      <DependentUpon>Level1.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Validation\Level2.xaml.cs">
-      <DependentUpon>Level2.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Validation\Level3.xaml.cs">
-      <DependentUpon>Level3.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Validation\Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>
@@ -516,18 +504,6 @@
     <Page Include="Views\Validation\Topo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Validation\Level1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Validation\Level2.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Validation\Level3.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Validation\Overview.xaml">
       <SubType>Designer</SubType>

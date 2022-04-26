@@ -43,15 +43,6 @@
             <TabItem Header="Geomapmaker">
                 <tabData:Geomapmaker />
             </TabItem>
-            <TabItem Header="Level 1">
-                <tabData:Level1 />
-            </TabItem>
-            <TabItem Header="Level 2">
-                <tabData:Level2 />
-            </TabItem>
-            <TabItem Header="Level 3">
-                <tabData:Level3 />
-            </TabItem>
         </TabControl>
     </Grid>
 </controls:ProWindow>
