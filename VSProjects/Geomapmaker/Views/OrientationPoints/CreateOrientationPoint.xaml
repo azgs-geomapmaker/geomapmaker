@@ -183,7 +183,7 @@
             <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Create.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="11" Grid.Column="1" Text="Notes" />
-            <TextBox Grid.Row="12" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250" />
+            <TextBox Grid.Row="12" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MaxLength="250" />
 
             <TextBlock Grid.Row="13" Grid.Column="1" Text="Location Source"/>
             <ComboBox 

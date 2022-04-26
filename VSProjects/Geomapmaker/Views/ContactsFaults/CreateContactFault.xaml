@@ -219,7 +219,7 @@
             <CheckBox Grid.Row="14" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Create.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="15" Grid.Column="1" Text="Notes" />
-            <TextBox Grid.Row="16" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" MaxLength="250"  />
+            <TextBox Grid.Row="16" Grid.Column="1" MinLines="3" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MaxLength="250"  />
 
             <TextBlock Grid.Row="17" Grid.Column="1" Text="Data Source" Style="{DynamicResource Esri_TextBlockRegular}"/>
             <TextBox Grid.Row="18" Grid.Column="1" FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsEnabled="False"/>
