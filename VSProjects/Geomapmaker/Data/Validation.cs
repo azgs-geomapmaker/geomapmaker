@@ -105,5 +105,75 @@ namespace Geomapmaker.Data
 
             return missingFields;
         }
+
+        /// <summary>
+        /// Verify the required fields are not null
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="requiredFields"></param>
+        /// <returns>List of required fields with a null value</returns>
+        public static async Task<List<string>> StandaloneTableRequiredNullCountAsync(string tableName, List<string> fieldsToCheck)
+        {
+            List<string> fieldsWithNull = new List<string>();
+
+            // Check for active map
+            if (MapView.Active == null)
+            {
+                // Missing all required fields
+                return fieldsWithNull;
+            }
+
+            // Get standalone table by name
+            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+
+            // Check if the table was null
+            if (standaloneTable == null)
+            {
+                // Missing all required fields
+                return fieldsWithNull;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table table = standaloneTable.GetTable())
+                {
+                    // Underlying table found
+                    if (table != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            // Limit the query to just the fields we need to check
+                            // Join the fields as a comma-delimited string
+                            SubFields = string.Join(",", fieldsToCheck) 
+                        };
+
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    foreach (string field in fieldsToCheck)
+                                    {
+                                        // Check if value is empty or null
+                                        if (row[field] == null || string.IsNullOrEmpty(row[field].ToString()))
+                                        {
+                                            // Check if the field is already in the list
+                                            if (!fieldsWithNull.Contains(field))
+                                            {
+                                                // Add field to list
+                                                fieldsWithNull.Add(field);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            return fieldsWithNull;
+        }
     }
 }
