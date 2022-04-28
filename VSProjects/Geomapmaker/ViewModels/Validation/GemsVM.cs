@@ -53,7 +53,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for any missing fields 
                 //
-                List<string> missingFields = await Data.DataSources.GetMissingRequiredFieldsAsync();
+                List<string> missingFields = await Data.DataSources.GetMissingFieldsAsync();
                 if (missingFields.Count != 0)
                 {
                     foreach (string field in missingFields)
@@ -70,7 +70,19 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string id in duplicateIds)
                     {
-                        errors.Add($"Duplicate datasources_id: {id}");
+                        errors.Add($"Duplicate datasources_id: {id}.");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await Data.DataSources.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in {field} field.");
                     }
                 }
 

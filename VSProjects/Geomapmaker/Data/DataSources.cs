@@ -23,11 +23,18 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableExistsAsync("DataSources");
         }
 
-        public static async Task<List<string>> GetMissingRequiredFieldsAsync()
+        public static async Task<List<string>> GetMissingFieldsAsync()
         {
             List<string> requiredFields = new List<string>() { "objectid", "source", "datasources_id", "url", "notes" };
 
             return await Validation.StandaloneTableFieldsExistAsync("DataSources", requiredFields);
+        }
+
+        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
+        {
+            List<string> fieldsToCheck = new List<string>() { "source", "datasources_id" };
+
+            return await Validation.StandaloneTableRequiredNullCountAsync("DataSources", fieldsToCheck);
         }
 
         /// <summary>
@@ -38,8 +45,8 @@ namespace Geomapmaker.Data
         {
             List<string> dataSourceIds = await GetDataSourceIdsAsync();
 
-            // Return duplicate ids
-            return dataSourceIds.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+            // Remove null-values and return duplicate ids
+            return dataSourceIds.GroupBy(a => a).Where(b => !string.IsNullOrEmpty(b.Key) && b.Count() > 1).Select(c => c.Key).ToList();
         }
 
         /// <summary>
