@@ -15,12 +15,17 @@ namespace Geomapmaker.Data
         /// Check if the DescriptionOfMapUnits table exists
         /// </summary>
         /// <returns>True if the table exists</returns>
-        public static bool DmuTableExists()
+        public static async Task<bool> DmuTableExistsAsync()
         {
-            StandaloneTable table = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-            return table != null;
+            return await Validation.StandaloneTableExistsAsync("DescriptionOfMapUnits");
         }
+
+
+
+
+
+
+
 
         /// <summary>
         /// Get duplicate MapUnits from DMU table
