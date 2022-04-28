@@ -45,7 +45,7 @@
                     <Grid >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -68,7 +68,7 @@
                             </ToggleButton.Template>
                         </ToggleButton>
 
-                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Edit.OidsListBox}" SelectedItem="{Binding Edit.SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" MinHeight="50" IsEnabled="False">
+                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Edit.OidsListBox}" SelectedItem="{Binding Edit.SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" MinHeight="50" MaxHeight="100" >
                             <Validation.ErrorTemplate>
                                 <ControlTemplate>
                                     <StackPanel>
