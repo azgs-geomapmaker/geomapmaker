@@ -9,16 +9,35 @@ namespace Geomapmaker.Data
 {
     public class Validation
     {
-        public static bool FeatureLayerExists(string layerName)
+        public static async Task<bool> FeatureLayerExistsAsync(string layerName)
         {
             if (MapView.Active == null)
             {
                 return false;
             }
 
-            Layer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault();
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
 
-            return layer != null;
+            if (layer == null)
+            {
+                return false;
+            }
+
+            // Check for underyling table
+            bool underlyingTableExists = false;
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table table = layer.GetTable())
+                {
+                    if (table != null)
+                    {
+                        underlyingTableExists = true;
+                    }
+                }
+            });
+
+            return underlyingTableExists;
         }
 
         public static async Task<bool> StandaloneTableExistsAsync(string tableName)
@@ -37,7 +56,7 @@ namespace Geomapmaker.Data
                 return false;
             }
 
-            // Check for the underyling table
+            // Check for underyling table
             bool underlyingTableExists = false;
 
             await QueuedTask.Run(() =>

@@ -86,6 +86,8 @@ namespace Geomapmaker.ViewModels.Validation
                     }
                 }
 
+                var fooooo = await Data.DataSources.GetUnnecessaryDataSources();
+
             }
 
             if (errors.Count == 0)

@@ -23,6 +23,10 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableExistsAsync("DataSources");
         }
 
+        /// <summary>
+        /// Check the table for any missing fieldss
+        /// </summary>
+        /// <returns>Returns a list of fieldnames missing from the table</returns>
         public static async Task<List<string>> GetMissingFieldsAsync()
         {
             List<string> requiredFields = new List<string>() { "objectid", "source", "datasources_id", "url", "notes" };
@@ -30,11 +34,28 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableFieldsExistAsync("DataSources", requiredFields);
         }
 
+        /// <summary>
+        /// Check the required fields for any missing values.
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
         public static async Task<List<string>> GetRequiredFieldsWithNullValues()
         {
             List<string> fieldsToCheck = new List<string>() { "source", "datasources_id" };
 
             return await Validation.StandaloneTableRequiredNullCountAsync("DataSources", fieldsToCheck);
+        }
+
+
+        public static async Task<List<string>> GetUnnecessaryDataSources()
+        {
+            List<string> dataSourceIds = await GetDataSourceIdsAsync();
+
+            List<string> dmuDataSources = await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues();
+
+            List<string> cfDataSources = await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync();
+
+
+            return null;
         }
 
         /// <summary>

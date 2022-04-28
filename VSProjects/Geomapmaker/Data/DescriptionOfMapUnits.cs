@@ -20,12 +20,47 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableExistsAsync("DescriptionOfMapUnits");
         }
 
+        public static async Task<List<string>> GetUniqueDescriptionSourceIDValues()
+        {
+            List<string> DescriptionSourceIDs = new List<string>();
 
+            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
+            if (dmu != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = dmu.GetTable())
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            SubFields = "DescriptionSourceID"
+                        };
 
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    if (row["DescriptionSourceID"] != null)
+                                    {
+                                        string descriptionId = row["DescriptionSourceID"]?.ToString();
 
+                                        if (!DescriptionSourceIDs.Contains(descriptionId))
+                                        {
+                                            DescriptionSourceIDs.Add(descriptionId);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
 
-
+            return DescriptionSourceIDs;
+        }
 
         /// <summary>
         /// Get duplicate MapUnits from DMU table
@@ -55,20 +90,23 @@ namespace Geomapmaker.Data
                 {
                     using (Table table = dmu.GetTable())
                     {
-                        QueryFilter queryFilter = new QueryFilter
+                        if (table != null)
                         {
-                            SubFields = "MapUnit"
-                        };
-
-                        using (RowCursor rowCursor = table.Search(queryFilter))
-                        {
-                            while (rowCursor.MoveNext())
+                            QueryFilter queryFilter = new QueryFilter
                             {
-                                using (Row row = rowCursor.Current)
+                                SubFields = "MapUnit"
+                            };
+
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
                                 {
-                                    if (row["MapUnit"] != null)
+                                    using (Row row = rowCursor.Current)
                                     {
-                                        mapUnits.Add(row["MapUnit"]?.ToString());
+                                        if (row["MapUnit"] != null)
+                                        {
+                                            mapUnits.Add(row["MapUnit"]?.ToString());
+                                        }
                                     }
                                 }
                             }
@@ -101,7 +139,9 @@ namespace Geomapmaker.Data
 
                 using (Table table = dmu.GetTable())
                 {
-                    using (RowCursor rowCursor = table.Search())
+                    if (table != null)
+                    {
+                                            using (RowCursor rowCursor = table.Search())
                     {
                         while (rowCursor.MoveNext())
                         {
@@ -146,6 +186,7 @@ namespace Geomapmaker.Data
                                 MapUnitList.Add(mapUnit);
                             }
                         }
+                    }
                     }
                 }
             });

@@ -18,11 +18,51 @@ namespace Geomapmaker.Data
         /// Check if the ContactsAndFaults layer exists in Active Map
         /// </summary>
         /// <returns>Returns true if layer exists</returns>
-        public static bool ContactsAndFaultsExists()
+        public static async Task<bool> ContactsAndFaultsExistsAsync()
         {
-            Layer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault();
+            return await Validation.FeatureLayerExistsAsync("ContactsAndFaults");
+        }
 
-            return layer != null;
+        public static async Task<List<string>> GetUniqueDataSourceIDValuesAsync()
+        {
+            List<string> DataSourceIDs = new List<string>();
+
+            FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+
+            if (layer != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = layer.GetTable())
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            SubFields = "DataSourceID"
+                        };
+
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    if (row["DataSourceID"] != null)
+                                    {
+                                        string datasourceId = row["DataSourceID"]?.ToString();
+
+                                        if (!DataSourceIDs.Contains(datasourceId))
+                                        {
+                                            DataSourceIDs.Add(datasourceId);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            return DataSourceIDs;
         }
 
         /// <summary>
