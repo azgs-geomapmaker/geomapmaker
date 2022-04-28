@@ -31,6 +31,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // Async validation
         public async void ValidateAsync(){
+            await Gems.Validate();
             await Geomapmaker.Validate();
         }
 

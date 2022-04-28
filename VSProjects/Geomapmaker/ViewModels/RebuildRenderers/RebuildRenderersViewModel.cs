@@ -24,8 +24,8 @@ namespace Geomapmaker.ViewModels.RebuildRenderers
 
         public async void RebuildAll()
         {
-            await Symbology.RefreshCFSymbolOptions();
-            await Symbology.RefreshOPSymbolOptions();
+            await Symbology.RefreshCFSymbolOptionsAsync();
+            await Symbology.RefreshOPSymbolOptionsAsync();
             Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             ContactsAndFaults.RebuildContactsFaultsSymbology();
             Data.OrientationPoints.RebuildOrientationPointsSymbology();
@@ -34,8 +34,8 @@ namespace Geomapmaker.ViewModels.RebuildRenderers
 
         public async void RebuildCIMSymbols()
         {
-            await Symbology.RefreshCFSymbolOptions();
-            await Symbology.RefreshOPSymbolOptions();
+            await Symbology.RefreshCFSymbolOptionsAsync();
+            await Symbology.RefreshOPSymbolOptionsAsync();
             CloseProwindow();
         }
 

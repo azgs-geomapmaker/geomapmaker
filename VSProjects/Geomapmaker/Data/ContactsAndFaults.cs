@@ -107,7 +107,7 @@ namespace Geomapmaker.Data
             // Check if the symbol list has been populated 
             if (Symbology.ContactsAndFaultsSymbols == null)
             {
-                await Symbology.RefreshCFSymbolOptions();
+                await Symbology.RefreshCFSymbolOptionsAsync();
             }
 
             // Get the CF Symbology Options

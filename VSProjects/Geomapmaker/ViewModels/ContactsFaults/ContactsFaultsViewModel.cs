@@ -62,7 +62,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             // Get symbology options if the list is null
             if (Data.Symbology.ContactsAndFaultsSymbols == null)
             {
-                await Data.Symbology.RefreshCFSymbolOptions();
+                await Data.Symbology.RefreshCFSymbolOptionsAsync();
             }
 
             // ParentVM keeps a copy of the master list

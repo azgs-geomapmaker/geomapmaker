@@ -26,7 +26,7 @@ namespace Geomapmaker.Data
             // Check if the symbol list has been populated 
             if (Symbology.OrientationPointSymbols == null)
             {
-                await Symbology.RefreshOPSymbolOptions();
+                await Symbology.RefreshOPSymbolOptionsAsync();
             }
 
             ProgressorSource ps = new ProgressorSource("Rebuilding Orientation Points Symbology...");

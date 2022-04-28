@@ -18,11 +18,16 @@ namespace Geomapmaker.Data
         /// Check if the DataSources table exists
         /// </summary>
         /// <returns>Returns true if the table exists</returns>
-        public static bool DataSourceTableExists()
+        public static async Task<bool> DataSourceExistsAsync()
         {
-            StandaloneTable dataSourcesTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
+            return await Validation.StandaloneTableExistsAsync("DataSources");
+        }
 
-            return dataSourcesTable != null;
+        public static async Task<List<string>> GetMissingRequiredFieldsAsync()
+        {
+            List<string> requiredFields = new List<string>() { "objectid", "source", "datasources_id", "url", "notes" };
+
+            return await Validation.StandaloneTableFieldsExistAsync("DataSources", requiredFields);
         }
 
         /// <summary>

@@ -62,11 +62,11 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="GeMS: Fully Compliant" Grid.ColumnSpan="3" FontWeight="Bold" Margin="0,0,0,10" />
 
             <TextBlock Grid.Row="2" Grid.Column="1" Text="1" FontWeight="Bold" />
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="Table and field definitions conform to GeMS schema" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Validate DataSources table" TextWrapping="Wrap" />
             <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result1}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="2" FontWeight="Bold" />
+            <!--<TextBlock Grid.Row="4" Grid.Column="1" Text="2" FontWeight="Bold" />
             <TextBlock Grid.Row="4" Grid.Column="2" Text="All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps. No ContactsAndFaults overlaps, self-overlaps, or self-intersections. MapUnitPoly boundaries covered by ContactsAndFaults" TextWrapping="Wrap" />
             <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result2}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
@@ -119,12 +119,12 @@
             <TextBlock Grid.Row="24" Grid.Column="1" Text="12" FontWeight="Bold" />
             <TextBlock Grid.Row="24" Grid.Column="2" Text="No duplicate _ID values" TextWrapping="Wrap" />
             <TextBlock Grid.Row="24" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result12}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="25" Grid.Column="1" Grid.ColumnSpan="3" />
+            <Separator Grid.Row="25" Grid.Column="1" Grid.ColumnSpan="3" />-->
 
-            <TextBlock Grid.Row="26" Grid.Column="1" Text="13" FontWeight="Bold" />
+            <!--<TextBlock Grid.Row="26" Grid.Column="1" Text="13" FontWeight="Bold" />
             <TextBlock Grid.Row="26" Grid.Column="2" Text="No zero-length or whitespace-only strings" TextWrapping="Wrap" />
             <TextBlock Grid.Row="26" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result13}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="27" Grid.Column="1" Grid.ColumnSpan="3" />
+            <Separator Grid.Row="27" Grid.Column="1" Grid.ColumnSpan="3" />-->
 
         </Grid>
     </AdornerDecorator>

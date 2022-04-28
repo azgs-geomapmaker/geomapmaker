@@ -21,14 +21,14 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableExistsAsync("Symbology");
         }
 
-        public static async Task<List<string>> GetMissingRequiredFields()
+        public static async Task<List<string>> GetMissingRequiredFieldsAsync()
         {
             List<string> requiredFields = new List<string>() { "type", "key_", "description", "symbol" };
 
-            return await Data.Validation.StandaloneTableFieldsExistAsync("Symbology", requiredFields);
+            return await Validation.StandaloneTableFieldsExistAsync("Symbology", requiredFields);
         }
 
-        public static async Task RefreshCFSymbolOptions()
+        public static async Task RefreshCFSymbolOptionsAsync()
         {
             List<GemsSymbol> cfSymbols = new List<GemsSymbol>();
 
@@ -99,7 +99,7 @@ namespace Geomapmaker.Data
             ContactsAndFaultsSymbols = cfSymbols;
         }
 
-        public static async Task RefreshOPSymbolOptions()
+        public static async Task RefreshOPSymbolOptionsAsync()
         {
             List<GemsSymbol> orientationSymbols = new List<GemsSymbol>();
 

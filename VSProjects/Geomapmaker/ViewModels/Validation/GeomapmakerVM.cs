@@ -31,21 +31,23 @@ namespace Geomapmaker.ViewModels.Validation
         {
             List<string> errors = new List<string>();
 
+            // Check if the table exists
             if (await Data.Symbology.SymbologyExistsAsync() == false)
             {
                 errors.Add("Symbology table not found.");
             }
-            else
+            else // Table was found
             {
+                //
                 // Check for any missing fields 
-                List<string> missingFields = await Data.Symbology.GetMissingRequiredFields();
-
+                //
+                List<string> missingFields = await Data.Symbology.GetMissingRequiredFieldsAsync();
                 // Add errors for any missing fields
                 if (missingFields.Count != 0)
                 {
                     foreach (string field in missingFields)
                     {
-                        errors.Add($"{field} field not found.");
+                        errors.Add($"Field '{field}' not found.");
                     }
                 }
             }

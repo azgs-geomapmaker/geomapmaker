@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.ViewModels.Validation
 {
@@ -13,21 +14,6 @@ namespace Geomapmaker.ViewModels.Validation
         public GemsVM(ValidationViewModel parentVM)
         {
             ParentVM = parentVM;
-            Result1 = Check1();
-            Result2 = Check2();
-            Result3 = Check3();
-            Result4 = Check4();
-            Result5 = Check5();
-            Result6 = Check6();
-            Result7 = Check7();
-            Result8 = Check8();
-            Result9 = Check9();
-            Result10 = Check10();
-            Result11 = Check11();
-            Result12 = Check12();
-            Result13 = Check13();
-
-            ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
         public string Result1 { get; set; } = "Checking..";
@@ -44,21 +30,62 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result12 { get; set; } = "Checking..";
         public string Result13 { get; set; } = "Checking..";
 
-        // 3.1 Table and field definitions conform to GeMS schema
-        private string Check1()
+        public async Task Validate()
         {
-            //List<string> errors = new List<string>();
+            Result1 = await Check1Async("Result1");
+            NotifyPropertyChanged("Result1");
 
-            //errors.Add("Gems 1");
-            //errors.Add("Error 2");
-            //errors.Add("Error 3");
+            ParentVM.UpdateGemsResults(_validationErrors.Count);
+        }
 
-            //_validationErrors["Result1"] = _helpers.Helpers.ErrorListToTooltip(errors);
+        // 1. Validate DataSources table
+        private async Task<string> Check1Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
 
-            //RaiseErrorsChanged("Result1");
+            // Check if the table exists
+            if (await Data.DataSources.DataSourceExistsAsync() == false)
+            {
+                errors.Add("DataSources table not found.");
+            }
+            else // Table was found
+            {
+                //
+                // Check for any missing fields 
+                //
+                List<string> missingFields = await Data.DataSources.GetMissingRequiredFieldsAsync();
+                if (missingFields.Count != 0)
+                {
+                    foreach (string field in missingFields)
+                    {
+                        errors.Add($"Field '{field}' not found.");
+                    }
+                }
 
-            //return "Failed";
-            return "Skipped";
+                //
+                // Check for any duplicate ids
+                //
+                List<string> duplicateIds = await Data.DataSources.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate datasources_id: {id}");
+                    }
+                }
+
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
         }
 
         // 3.2 All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps.
