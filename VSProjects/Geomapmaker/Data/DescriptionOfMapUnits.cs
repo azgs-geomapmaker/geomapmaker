@@ -26,7 +26,7 @@ namespace Geomapmaker.Data
         /// <returns>Returns list of DescriptionSourceID values</returns>
         public static async Task<List<string>> GetUniqueDescriptionSourceIDValues()
         {
-            return await General.StandaloneTableGetUniqueValuesForFieldAsync("DescriptionSourceID", "DescriptionOfMapUnits");
+            return await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionSourceID", "DescriptionOfMapUnits");
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace Geomapmaker.Data
 {
     public class General
     {
-        public static async Task<List<string>> FeatureLayerGetUniqueValuesForFieldAsync(string fieldName, string layerName)
+        public static async Task<List<string>> FeatureLayerGetDistinctValuesForFieldAsync(string fieldName, string layerName)
         {
             List<string> uniqueValues = new List<string>();
 
@@ -25,6 +25,9 @@ namespace Geomapmaker.Data
                         {
                             QueryFilter queryFilter = new QueryFilter
                             {
+                                PrefixClause = "DISTINCT",
+                                // Where not null or empty
+                                WhereClause = $"{fieldName} <> ''",
                                 SubFields = fieldName
                             };
 
@@ -34,15 +37,9 @@ namespace Geomapmaker.Data
                                 {
                                     using (Row row = rowCursor.Current)
                                     {
-                                        if (row[fieldName] != null)
-                                        {
-                                            string fieldValue = row[fieldName]?.ToString();
+                                        string fieldValue = row[fieldName]?.ToString();
 
-                                            if (!string.IsNullOrEmpty(fieldValue) && !uniqueValues.Contains(fieldValue))
-                                            {
-                                                uniqueValues.Add(fieldValue);
-                                            }
-                                        }
+                                        uniqueValues.Add(fieldValue);
                                     }
                                 }
                             }
@@ -54,7 +51,7 @@ namespace Geomapmaker.Data
             return uniqueValues;
         }
 
-        public static async Task<List<string>> StandaloneTableGetUniqueValuesForFieldAsync(string fieldName, string tableName)
+        public static async Task<List<string>> StandaloneTableGetDistinctValuesForFieldAsync(string fieldName, string tableName)
         {
             List<string> uniqueValues = new List<string>();
 
@@ -70,6 +67,9 @@ namespace Geomapmaker.Data
                         {
                             QueryFilter queryFilter = new QueryFilter
                             {
+                                PrefixClause = "DISTINCT",
+                                // Where not null or empty
+                                WhereClause = $"{fieldName} <> ''",
                                 SubFields = fieldName
                             };
 
@@ -79,15 +79,9 @@ namespace Geomapmaker.Data
                                 {
                                     using (Row row = rowCursor.Current)
                                     {
-                                        if (row[fieldName] != null)
-                                        {
-                                            string fieldValue = row[fieldName]?.ToString();
+                                        string fieldValue = row[fieldName]?.ToString();
 
-                                            if (!string.IsNullOrEmpty(fieldValue) && !uniqueValues.Contains(fieldValue))
-                                            {
-                                                uniqueValues.Add(fieldValue);
-                                            }
-                                        }
+                                        uniqueValues.Add(fieldValue);
                                     }
                                 }
                             }
@@ -98,7 +92,5 @@ namespace Geomapmaker.Data
 
             return uniqueValues;
         }
-
-
     }
 }

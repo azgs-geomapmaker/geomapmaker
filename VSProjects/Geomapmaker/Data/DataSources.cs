@@ -29,6 +29,7 @@ namespace Geomapmaker.Data
         /// <returns>Returns a list of fieldnames missing from the table</returns>
         public static async Task<List<string>> GetMissingFieldsAsync()
         {
+            // List of fields to check for
             List<string> requiredFields = new List<string>() { "objectid", "source", "datasources_id", "url", "notes" };
 
             return await Validation.StandaloneTableFieldsExistAsync("DataSources", requiredFields);
@@ -47,12 +48,13 @@ namespace Geomapmaker.Data
 
         public static async Task<List<string>> GetUnnecessaryDataSources()
         {
-            List<string> dataSourceIds = await GetDataSourceIdsAsync();
+            List<string> dataSources = await GetDataSourceIdsAsync();
 
-            List<string> dmuDataSources = await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues();
+            List<string> dmu = await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues();
 
-            List<string> cfDataSources = await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync();
+            List<string> cf = await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync();
 
+            List<string> mup = await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync();
 
             return null;
         }
@@ -76,7 +78,7 @@ namespace Geomapmaker.Data
         /// <returns>List of datasources_id</returns>
         public static async Task<List<string>> GetDataSourceIdsAsync()
         {
-            return await General.StandaloneTableGetUniqueValuesForFieldAsync("datasources_id", "DataSources");
+            return await General.StandaloneTableGetDistinctValuesForFieldAsync("datasources_id", "DataSources");
         }
 
         /// <summary>
