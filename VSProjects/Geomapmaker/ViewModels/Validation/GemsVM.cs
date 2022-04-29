@@ -38,7 +38,7 @@ namespace Geomapmaker.ViewModels.Validation
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
-        public string Check1Tooltip => "Check if the table exists.<br>Check table for any missing fields.<br>Check for empty/null values in required fields.<br>Check for any duplicate IDs.<br>Check for unused data sources.<br>Check for missing data sources.";
+        public string Check1Tooltip => "Check the table exists.<br>Check table for any missing fields.<br>Check for empty/null values in required fields.<br>Check for any duplicate IDs.<br>Check for unused data sources.<br>Check for missing data sources.";
 
         // 1. Validate DataSources table
         private async Task<string> Check1Async(string propertyKey)

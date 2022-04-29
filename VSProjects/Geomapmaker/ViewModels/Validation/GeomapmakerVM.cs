@@ -26,6 +26,8 @@ namespace Geomapmaker.ViewModels.Validation
 
         public string Result1 { get; set; } = "Checking..";
 
+        public string Check1Tooltip => "Check the table exists.<br>Check table for any missing fields.";
+
         // 1 Symbology table exists
         private async Task<string> Check1Async(string propertyKey)
         {
