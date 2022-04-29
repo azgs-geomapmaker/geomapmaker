@@ -12,22 +12,36 @@ namespace Geomapmaker.Data
 {
     public class Symbology
     {
+        // List of CF symbols
         public static List<GemsSymbol> ContactsAndFaultsSymbols;
 
+        // List of OP symbols
         public static List<GemsSymbol> OrientationPointSymbols;
 
+        /// <summary>
+        /// Check if the Symbology table exists
+        /// </summary>
+        /// <returns>True if the table exists</returns>
         public static async Task<bool> SymbologyExistsAsync()
         {
             return await Validation.StandaloneTableExistsAsync("Symbology");
         }
 
+        /// <summary>
+        /// Verify the required fields exist in table
+        /// </summary>
+        /// <returns>Returns list of missing fields</returns>
         public static async Task<List<string>> GetMissingRequiredFieldsAsync()
         {
             List<string> requiredFields = new List<string>() { "type", "key_", "description", "symbol" };
 
             return await Validation.StandaloneTableFieldsExistAsync("Symbology", requiredFields);
         }
-
+        
+        /// <summary>
+        /// Rebuild the CF symbols from the symbology table
+        /// </summary>
+        /// <returns>Returns async task</returns>
         public static async Task RefreshCFSymbolOptionsAsync()
         {
             List<GemsSymbol> cfSymbols = new List<GemsSymbol>();
@@ -96,6 +110,10 @@ namespace Geomapmaker.Data
             ContactsAndFaultsSymbols = cfSymbols;
         }
 
+        /// <summary>
+        /// Rebuild the OP symbols from the symbology table
+        /// </summary>
+        /// <returns>Returns async task</returns>
         public static async Task RefreshOPSymbolOptionsAsync()
         {
             List<GemsSymbol> orientationSymbols = new List<GemsSymbol>();
