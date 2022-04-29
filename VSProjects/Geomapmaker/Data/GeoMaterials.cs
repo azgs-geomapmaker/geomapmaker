@@ -1,17 +1,18 @@
-﻿using ArcGIS.Desktop.Mapping;
-using Geomapmaker.Models;
+﻿using Geomapmaker.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
     public class GeoMaterials
     {
-        public static bool GeoMaterialDictTableExists()
+        /// <summary>
+        /// Check if the GeoMaterialDict table exists
+        /// </summary>
+        /// <returns>True if the table exists</returns>
+        public static async Task<bool> GeoMaterialDictTableExistsAsync()
         {
-            StandaloneTable table = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "GeoMaterialDict");
-
-            return table != null;
+            return await Validation.StandaloneTableExistsAsync("GeoMaterialDict");
         }
 
         public static ObservableCollection<Geomaterial> GeoMaterialOptions => new ObservableCollection<Geomaterial>()
