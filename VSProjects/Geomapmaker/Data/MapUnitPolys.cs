@@ -33,6 +33,9 @@ namespace Geomapmaker.Data
             return await General.FeatureLayerGetDistinctValuesForFieldAsync("datasourceid", "MapUnitPolys");
         }
 
+        /// <summary>
+        /// Rebuild the renderer for MapUnitPolys from the DMU table. Rebuild templates for the MUP layer from the DMU table
+        /// </summary>
         public static async void RebuildMUPSymbologyAndTemplates()
         {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
@@ -212,6 +215,10 @@ namespace Geomapmaker.Data
             }, ps.Progressor);
         }
 
+        /// <summary>
+        /// Get templates for the MapUnitPolys layer
+        /// </summary>
+        /// <returns>List of MapUnitPolys template</returns>
         public static async Task<List<MapUnitPolyTemplate>> GetMapUnitPolyTemplatesAsync()
         {
             // List of templates to return
@@ -244,6 +251,7 @@ namespace Geomapmaker.Data
                     {
                         string muKey = templateDef.DefaultValues["mapunit"]?.ToString();
 
+                        // Find the matching DMU row
                         MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
 
                         // Check if the mapUnt was found
