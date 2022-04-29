@@ -20,46 +20,13 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableExistsAsync("DescriptionOfMapUnits");
         }
 
+        /// <summary>
+        /// Get the unique, non-null DescriptionSourceID values from the DescriptionOfMapUnits table
+        /// </summary>
+        /// <returns>Returns list of DescriptionSourceID values</returns>
         public static async Task<List<string>> GetUniqueDescriptionSourceIDValues()
         {
-            List<string> DescriptionSourceIDs = new List<string>();
-
-            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-            if (dmu != null)
-            {
-                await QueuedTask.Run(() =>
-                {
-                    using (Table table = dmu.GetTable())
-                    {
-                        QueryFilter queryFilter = new QueryFilter
-                        {
-                            SubFields = "DescriptionSourceID"
-                        };
-
-                        using (RowCursor rowCursor = table.Search(queryFilter))
-                        {
-                            while (rowCursor.MoveNext())
-                            {
-                                using (Row row = rowCursor.Current)
-                                {
-                                    if (row["DescriptionSourceID"] != null)
-                                    {
-                                        string descriptionId = row["DescriptionSourceID"]?.ToString();
-
-                                        if (!DescriptionSourceIDs.Contains(descriptionId))
-                                        {
-                                            DescriptionSourceIDs.Add(descriptionId);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            return DescriptionSourceIDs;
+            return await General.StandaloneTableGetUniqueValuesForFieldAsync("DescriptionSourceID", "DescriptionOfMapUnits");
         }
 
         /// <summary>

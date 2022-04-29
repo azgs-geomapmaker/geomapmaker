@@ -9,11 +9,11 @@ namespace Geomapmaker.Data
 {
     public class General
     {
-        public static async Task<List<string>> GetUniqueValuesForFieldAsync(string fieldName, string tableName)
+        public static async Task<List<string>> FeatureLayerGetUniqueValuesForFieldAsync(string fieldName, string layerName)
         {
             List<string> uniqueValues = new List<string>();
 
-            FeatureLayer layer = MapView.Active?.Map.FindLayers(tableName).FirstOrDefault() as FeatureLayer;
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
 
             if (layer != null)
             {
@@ -21,24 +21,27 @@ namespace Geomapmaker.Data
                 {
                     using (Table table = layer.GetTable())
                     {
-                        QueryFilter queryFilter = new QueryFilter
+                        if (table != null)
                         {
-                            SubFields = fieldName
-                        };
-
-                        using (RowCursor rowCursor = table.Search(queryFilter))
-                        {
-                            while (rowCursor.MoveNext())
+                            QueryFilter queryFilter = new QueryFilter
                             {
-                                using (Row row = rowCursor.Current)
-                                {
-                                    if (row[fieldName] != null)
-                                    {
-                                        string fieldValue = row[fieldName]?.ToString();
+                                SubFields = fieldName
+                            };
 
-                                        if (!string.IsNullOrEmpty(fieldValue) && !uniqueValues.Contains(fieldValue))
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        if (row[fieldName] != null)
                                         {
-                                            uniqueValues.Add(fieldValue);
+                                            string fieldValue = row[fieldName]?.ToString();
+
+                                            if (!string.IsNullOrEmpty(fieldValue) && !uniqueValues.Contains(fieldValue))
+                                            {
+                                                uniqueValues.Add(fieldValue);
+                                            }
                                         }
                                     }
                                 }
@@ -50,5 +53,52 @@ namespace Geomapmaker.Data
 
             return uniqueValues;
         }
+
+        public static async Task<List<string>> StandaloneTableGetUniqueValuesForFieldAsync(string fieldName, string tableName)
+        {
+            List<string> uniqueValues = new List<string>();
+
+            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+
+            if (standaloneTable != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = standaloneTable.GetTable())
+                    {
+                        if (table != null)
+                        {
+                            QueryFilter queryFilter = new QueryFilter
+                            {
+                                SubFields = fieldName
+                            };
+
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        if (row[fieldName] != null)
+                                        {
+                                            string fieldValue = row[fieldName]?.ToString();
+
+                                            if (!string.IsNullOrEmpty(fieldValue) && !uniqueValues.Contains(fieldValue))
+                                            {
+                                                uniqueValues.Add(fieldValue);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            return uniqueValues;
+        }
+
+
     }
 }
