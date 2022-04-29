@@ -27,8 +27,8 @@ namespace Geomapmaker.Data
         public static async Task<List<string>> GetMissingFieldsAsync()
         {
             // List of fields to check for
-            List<string> requiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb", "areafillpatterndescription",
-                "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
+            List<string> requiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb",
+                                                               "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
 
             return await Validation.StandaloneTableFieldsExistAsync("DescriptionOfMapUnits", requiredFields);
         }
@@ -39,13 +39,22 @@ namespace Geomapmaker.Data
         /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
         public static async Task<List<string>> GetRequiredFieldsWithNullValues()
         {
-            // Null values only permitted in rows that correspond to headings
-            // "mapunit", "fullname", "age", "label", "symbol", "areafillrgb", "areafillpatterndescription",
-            // "geomaterial", "geomaterialconfidence", "globalid", "relativeage", "hexcolor"
-
             List<string> fieldsToCheck = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
 
             return await Validation.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck);
+        }
+
+        /// <summary>
+        /// Check the required fields for MapUnits (Different requirements than headings)
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value for MapUnits</returns>
+        public static async Task<List<string>> GetMapUnitRequiredFieldsWithNullValues()
+        {
+            List<string> fieldsToCheck = new List<string>() { "mapunit", "fullname", "age", "areafillrgb",
+                                                              "geomaterial", "geomaterialconfidence" };
+
+            // Pass along the where clause to filter out heading DMU rows
+            return await Validation.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck, "MapUnit IS NOT NULL");
         }
 
         /// <summary>

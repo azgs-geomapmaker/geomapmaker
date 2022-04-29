@@ -97,7 +97,7 @@ namespace Geomapmaker.ViewModels.Headings
                                 using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                                 {
                                     rowBuffer["Name"] = Name;
-                                    rowBuffer["DescriptionOfMapUnits_ID"] = Guid.NewGuid();
+                                    rowBuffer["DescriptionOfMapUnits_ID"] = Guid.NewGuid().ToString();
                                     rowBuffer["FullName"] = Name;
                                     rowBuffer["Description"] = Description;
                                     rowBuffer["ParagraphStyle"] = "Heading";

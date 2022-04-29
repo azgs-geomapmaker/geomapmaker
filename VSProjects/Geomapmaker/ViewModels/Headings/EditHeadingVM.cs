@@ -122,7 +122,6 @@ namespace Geomapmaker.ViewModels.Headings
                                             context.Invalidate(row);
 
                                             row["Name"] = Name;
-                                            row["DescriptionOfMapUnits_ID"] = Guid.NewGuid();
                                             row["FullName"] = Name;
                                             row["Description"] = Description;
                                             row["ParagraphStyle"] = "Heading";

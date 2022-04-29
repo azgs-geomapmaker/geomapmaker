@@ -156,12 +156,24 @@ namespace Geomapmaker.ViewModels.Validation
                 }
 
                 //
-                // Check for empty/null values in required fields
+                // Check for empty/null values in required fields for ALL DMU ROWS
                 //
                 List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
                 if (fieldsWithMissingValues.Count != 0)
                 {
                     foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in {field} field");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
+                //
+                List<string> mapUnitfieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetMapUnitRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in mapUnitfieldsWithMissingValues)
                     {
                         errors.Add($"Null value found in {field} field");
                     }

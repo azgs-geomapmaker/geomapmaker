@@ -141,7 +141,7 @@ namespace Geomapmaker.Data
         /// <param name="tableName"></param>
         /// <param name="requiredFields"></param>
         /// <returns>List of required fields with a null value</returns>
-        public static async Task<List<string>> StandaloneTableRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck)
+        public static async Task<List<string>> StandaloneTableRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck, string whereClause = "")
         {
             List<string> fieldsWithNull = new List<string>();
 
@@ -173,7 +173,9 @@ namespace Geomapmaker.Data
                         {
                             // Limit the query to just the fields we need to check
                             // Join the fields as a comma-delimited string
-                            SubFields = string.Join(",", fieldsToCheck) 
+                            SubFields = string.Join(",", fieldsToCheck),
+                            
+                            WhereClause = whereClause
                         };
 
                         using (RowCursor rowCursor = table.Search(queryFilter))
