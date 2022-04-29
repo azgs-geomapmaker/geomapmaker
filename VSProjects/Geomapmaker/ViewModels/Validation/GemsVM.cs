@@ -35,6 +35,9 @@ namespace Geomapmaker.ViewModels.Validation
             Result1 = await Check1Async("Result1");
             NotifyPropertyChanged("Result1");
 
+            Result2 = await Check2Async("Result2");
+            NotifyPropertyChanged("Result2");
+
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
@@ -126,11 +129,56 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 3.2 All map-like feature datasets obey topology rules. No MapUnitPolys gaps or overlaps.
-        // No ContactsAndFaults overlaps, self-overlaps, or self-intersections. MapUnitPoly boundaries covered by ContactsAndFaults
-        private string Check2()
+        public string Check2Tooltip => "Check the table exists.<br>Check table for any missing fields.";
+
+        // Validate DescriptionOfMapUnits table
+        private async Task<string> Check2Async(string propertyKey)
         {
-            return "Skipped";
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await Data.DescriptionOfMapUnits.DmuTableExistsAsync() == false)
+            {
+                errors.Add("DescriptionOfMapUnits table not found");
+            }
+            else // Table was found
+            {
+                //
+                // Check table for any missing fields 
+                //
+                List<string> missingFields = await Data.DescriptionOfMapUnits.GetMissingFieldsAsync();
+                if (missingFields.Count != 0)
+                {
+                    foreach (string field in missingFields)
+                    {
+                        errors.Add($"Field '{field}' not found");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in {field} field");
+                    }
+                }
+
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
         }
 
         // 3.3 No missing required values

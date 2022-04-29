@@ -141,7 +141,7 @@ namespace Geomapmaker.Data
         /// <param name="tableName"></param>
         /// <param name="requiredFields"></param>
         /// <returns>List of required fields with a null value</returns>
-        public static async Task<List<string>> StandaloneTableRequiredNullCountAsync(string tableName, List<string> fieldsToCheck)
+        public static async Task<List<string>> StandaloneTableRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck)
         {
             List<string> fieldsWithNull = new List<string>();
 

@@ -21,6 +21,34 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Check the table for any missing fieldss
+        /// </summary>
+        /// <returns>Returns a list of fieldnames missing from the table</returns>
+        public static async Task<List<string>> GetMissingFieldsAsync()
+        {
+            // List of fields to check for
+            List<string> requiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb", "areafillpatterndescription",
+                "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
+
+            return await Validation.StandaloneTableFieldsExistAsync("DescriptionOfMapUnits", requiredFields);
+        }
+
+        /// <summary>
+        /// Check the required fields for any missing values.
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
+        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
+        {
+            // Null values only permitted in rows that correspond to headings
+            // "mapunit", "fullname", "age", "label", "symbol", "areafillrgb", "areafillpatterndescription",
+            // "geomaterial", "geomaterialconfidence", "globalid", "relativeage", "hexcolor"
+
+            List<string> fieldsToCheck = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
+
+            return await Validation.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck);
+        }
+
+        /// <summary>
         /// Get the unique, non-null DescriptionSourceID values from the DescriptionOfMapUnits table
         /// </summary>
         /// <returns>Returns list of DescriptionSourceID values</returns>
@@ -108,52 +136,52 @@ namespace Geomapmaker.Data
                 {
                     if (table != null)
                     {
-                                            using (RowCursor rowCursor = table.Search())
-                    {
-                        while (rowCursor.MoveNext())
+                        using (RowCursor rowCursor = table.Search())
                         {
-                            using (Row row = rowCursor.Current)
+                            while (rowCursor.MoveNext())
                             {
-                                // Create map unit from row 
-                                MapUnit mapUnit = new MapUnit
+                                using (Row row = rowCursor.Current)
                                 {
-                                    ObjectID = Helpers.RowValueToString(row["ObjectID"]),
-                                    MU = Helpers.RowValueToString(row["MapUnit"]),
-                                    Name = Helpers.RowValueToString(row["Name"]),
-                                    FullName = Helpers.RowValueToString(row["FullName"]),
-                                    Age = Helpers.RowValueToString(row["Age"]),
-                                    Description = Helpers.RowValueToString(row["Description"]),
-                                    HierarchyKey = Helpers.RowValueToString(row["HierarchyKey"]),
-                                    ParagraphStyle = Helpers.RowValueToString(row["ParagraphStyle"]),
-                                    Label = Helpers.RowValueToString(row["Label"]),
-                                    AreaFillRGB = Helpers.RowValueToString(row["AreaFillRGB"]),
-                                    GeoMaterial = Helpers.RowValueToString(row["GeoMaterial"]),
-                                    GeoMaterialConfidence = Helpers.RowValueToString(row["GeoMaterialConfidence"]),
-                                    DescriptionSourceID = Helpers.RowValueToString(row["DescriptionSourceID"]),
-                                };
+                                    // Create map unit from row 
+                                    MapUnit mapUnit = new MapUnit
+                                    {
+                                        ObjectID = Helpers.RowValueToString(row["ObjectID"]),
+                                        MU = Helpers.RowValueToString(row["MapUnit"]),
+                                        Name = Helpers.RowValueToString(row["Name"]),
+                                        FullName = Helpers.RowValueToString(row["FullName"]),
+                                        Age = Helpers.RowValueToString(row["Age"]),
+                                        Description = Helpers.RowValueToString(row["Description"]),
+                                        HierarchyKey = Helpers.RowValueToString(row["HierarchyKey"]),
+                                        ParagraphStyle = Helpers.RowValueToString(row["ParagraphStyle"]),
+                                        Label = Helpers.RowValueToString(row["Label"]),
+                                        AreaFillRGB = Helpers.RowValueToString(row["AreaFillRGB"]),
+                                        GeoMaterial = Helpers.RowValueToString(row["GeoMaterial"]),
+                                        GeoMaterialConfidence = Helpers.RowValueToString(row["GeoMaterialConfidence"]),
+                                        DescriptionSourceID = Helpers.RowValueToString(row["DescriptionSourceID"]),
+                                    };
 
-                                mapUnit.HexColor = ColorConverter.RGBtoHex(mapUnit.AreaFillRGB);
+                                    mapUnit.HexColor = ColorConverter.RGBtoHex(mapUnit.AreaFillRGB);
 
-                                if (dmuFields.Any(a => a.Name == "RelativeAge"))
-                                {
-                                    mapUnit.RelativeAge = Helpers.RowValueToString(row["RelativeAge"]);
+                                    if (dmuFields.Any(a => a.Name == "RelativeAge"))
+                                    {
+                                        mapUnit.RelativeAge = Helpers.RowValueToString(row["RelativeAge"]);
+                                    }
+
+                                    if (dmuFields.Any(a => a.Name == "GeoMaterial"))
+                                    {
+                                        mapUnit.GeoMaterial = Helpers.RowValueToString(row["GeoMaterial"]);
+                                    }
+
+                                    if (dmuFields.Any(a => a.Name == "GeoMaterialConfidence"))
+                                    {
+                                        mapUnit.GeoMaterialConfidence = Helpers.RowValueToString(row["GeoMaterialConfidence"]);
+                                    }
+
+                                    // Add it to temp list
+                                    MapUnitList.Add(mapUnit);
                                 }
-
-                                if (dmuFields.Any(a => a.Name == "GeoMaterial"))
-                                {
-                                    mapUnit.GeoMaterial = Helpers.RowValueToString(row["GeoMaterial"]);
-                                }
-
-                                if (dmuFields.Any(a => a.Name == "GeoMaterialConfidence"))
-                                {
-                                    mapUnit.GeoMaterialConfidence = Helpers.RowValueToString(row["GeoMaterialConfidence"]);
-                                }
-
-                                // Add it to temp list
-                                MapUnitList.Add(mapUnit);
                             }
                         }
-                    }
                     }
                 }
             });
