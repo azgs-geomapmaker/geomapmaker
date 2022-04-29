@@ -46,6 +46,10 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableRequiredNullCountAsync("DataSources", fieldsToCheck);
         }
 
+        /// <summary>
+        /// Checks the data sources for any unused data sources
+        /// </summary>
+        /// <returns>List of unused data sources</returns>
         public static async Task<List<string>> GetUnnecessaryDataSources()
         {
             // List of all foreign keys
@@ -76,6 +80,42 @@ namespace Geomapmaker.Data
             List<string> unusedDataSources = dataSources.Except(foreignKeys.Distinct()).ToList();
 
             return unusedDataSources;
+        }
+
+        /// <summary>
+        /// Checks the data source table for any missing data sources
+        /// </summary>
+        /// <returns>List of missing data sources</returns>
+        public static async Task<List<string>> GetMissingDataSources()
+        {
+            // List of all foreign keys
+            List<string> foreignKeys = new List<string>();
+
+            // Add DMU data sources
+            foreignKeys.AddRange(await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues());
+
+            // Add CF data sources
+            foreignKeys.AddRange(await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync());
+
+            // Add MUP data sources
+            foreignKeys.AddRange(await MapUnitPolys.GetDistinctDataSourceIDValuesAsync());
+
+            // Add Stations data sources
+            foreignKeys.AddRange(await Stations.GetDistinctDataSourceIdValuesAsync());
+
+            // Add OP data sources (location)
+            foreignKeys.AddRange(await OrientationPoints.GetDistinctLocationSourceIDValuesAsync());
+
+            // Add OP data sources (orientation)
+            foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
+
+            // Get all datasources from Data Source table
+            List<string> dataSources = await GetDataSourceIdsAsync();
+
+            // Find missing data sources
+            List<string> missingDataSources = foreignKeys.Except(dataSources).ToList();
+
+            return missingDataSources;
         }
 
         /// <summary>

@@ -46,7 +46,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the table exists
             if (await Data.DataSources.DataSourceExistsAsync() == false)
             {
-                errors.Add("DataSources table not found.");
+                errors.Add("DataSources table not found");
             }
             else // Table was found
             {
@@ -58,7 +58,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in missingFields)
                     {
-                        errors.Add($"Field '{field}' not found.");
+                        errors.Add($"Field '{field}' not found");
                     }
                 }
 
@@ -70,7 +70,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string id in duplicateIds)
                     {
-                        errors.Add($"Duplicate datasources_id: {id}.");
+                        errors.Add($"Duplicate datasources_id: {id}");
                     }
                 }
 
@@ -82,7 +82,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in fieldsWithMissingValues)
                     {
-                        errors.Add($"Null value found in {field} field.");
+                        errors.Add($"Null value found in {field} field");
                     }
                 }
 
@@ -94,7 +94,19 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string ds in unusedDataSources)
                     {
-                        errors.Add($"Unused data source: {ds}.");
+                        errors.Add($"Unused data source: {ds}");
+                    }
+                }
+
+                //
+                // Check for missing data sources
+                //
+                List<string> missingDataSources = await Data.DataSources.GetMissingDataSources();
+                if (missingDataSources.Count != 0)
+                {
+                    foreach (string ds in missingDataSources)
+                    {
+                        errors.Add($"Missing data source: {ds}");
                     }
                 }
 

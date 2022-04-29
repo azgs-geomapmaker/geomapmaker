@@ -34,7 +34,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the table exists
             if (await Data.Symbology.SymbologyExistsAsync() == false)
             {
-                errors.Add("Symbology table not found.");
+                errors.Add("Symbology table not found");
             }
             else // Table was found
             {
@@ -47,7 +47,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in missingFields)
                     {
-                        errors.Add($"Field '{field}' not found.");
+                        errors.Add($"Field '{field}' not found");
                     }
                 }
             }

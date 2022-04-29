@@ -88,27 +88,30 @@ namespace Geomapmaker.ViewModels.DataSources
                 {
                     using (Table table = ds.GetTable())
                     {
-                        EditOperation editOperation = new EditOperation();
-
-                        editOperation.Callback(context =>
+                        if (table != null)
                         {
-                            QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectId };
+                            EditOperation editOperation = new EditOperation();
 
-                            using (RowCursor rowCursor = table.Search(filter, false))
+                            editOperation.Callback(context =>
                             {
-                                while (rowCursor.MoveNext())
-                                {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        context.Invalidate(row);
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectId };
 
-                                        row.Delete();
+                                using (RowCursor rowCursor = table.Search(filter, false))
+                                {
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            context.Invalidate(row);
+
+                                            row.Delete();
+                                        }
                                     }
                                 }
-                            }
-                        }, table);
+                            }, table);
 
-                        bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
                     }
                 }
                 catch (Exception ex)
