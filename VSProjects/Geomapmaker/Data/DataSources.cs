@@ -63,10 +63,11 @@ namespace Geomapmaker.Data
         /// <returns>List of duplicate datasources_id</returns>
         public static async Task<List<string>> GetDuplicateIdsAsync()
         {
+            // Get datasources_id values
             List<string> dataSourceIds = await GetDataSourceIdsAsync();
 
-            // Remove null-values and return duplicate ids
-            return dataSourceIds.GroupBy(a => a).Where(b => !string.IsNullOrEmpty(b.Key) && b.Count() > 1).Select(c => c.Key).ToList();
+            // Return duplicate ids
+            return dataSourceIds.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
         }
 
         /// <summary>
@@ -75,44 +76,7 @@ namespace Geomapmaker.Data
         /// <returns>List of datasources_id</returns>
         public static async Task<List<string>> GetDataSourceIdsAsync()
         {
-            List<string> DataSourcesIds = new List<string>();
-
-            StandaloneTable dataSourcesTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
-
-            if (dataSourcesTable == null)
-            {
-                return DataSourcesIds;
-            }
-
-            await QueuedTask.Run(() =>
-            {
-                using (Table table = dataSourcesTable.GetTable())
-                {
-                    if (table == null)
-                    {
-                        return;
-                    }
-
-                    QueryFilter queryFilter = new QueryFilter
-                    {
-                        PostfixClause = "ORDER BY datasources_id"
-                    };
-
-                    using (RowCursor rowCursor = table.Search(queryFilter))
-                    {
-                        while (rowCursor.MoveNext())
-                        {
-                            using (Row row = rowCursor.Current)
-                            {
-                                DataSourcesIds.Add(row["datasources_id"]?.ToString());
-                            }
-                        }
-                    }
-                }
-
-            });
-
-            return DataSourcesIds;
+            return await General.StandaloneTableGetUniqueValuesForFieldAsync("datasources_id", "DataSources");
         }
 
         /// <summary>
