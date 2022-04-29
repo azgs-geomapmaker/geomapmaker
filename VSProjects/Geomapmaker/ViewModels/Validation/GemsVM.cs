@@ -86,7 +86,17 @@ namespace Geomapmaker.ViewModels.Validation
                     }
                 }
 
-                var fooooo = await Data.DataSources.GetUnnecessaryDataSources();
+                //
+                // Check for unused data sources
+                //
+                List<string> unusedDataSources = await Data.DataSources.GetUnnecessaryDataSources();
+                if (unusedDataSources.Count != 0)
+                {
+                    foreach (string ds in unusedDataSources)
+                    {
+                        errors.Add($"Unused data source: {ds}.");
+                    }
+                }
 
             }
 

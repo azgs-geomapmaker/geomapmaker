@@ -48,21 +48,34 @@ namespace Geomapmaker.Data
 
         public static async Task<List<string>> GetUnnecessaryDataSources()
         {
+            // List of all foreign keys
+            List<string> foreignKeys = new List<string>();
+
+            // Add DMU data sources
+            foreignKeys.AddRange(await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues());
+
+            // Add CF data sources
+            foreignKeys.AddRange(await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync());
+
+            // Add MUP data sources
+            foreignKeys.AddRange(await MapUnitPolys.GetDistinctDataSourceIDValuesAsync());
+
+            // Add Stations data sources
+            foreignKeys.AddRange(await Stations.GetDistinctDataSourceIdValuesAsync());
+
+            // Add OP data sources (location)
+            foreignKeys.AddRange(await OrientationPoints.GetDistinctLocationSourceIDValuesAsync());
+
+            // Add OP data sources (orientation)
+            foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
+
+            // Get all datasources from Data Source table
             List<string> dataSources = await GetDataSourceIdsAsync();
 
-            List<string> dmu = await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues();
+            // Find unused data sources
+            List<string> unusedDataSources = dataSources.Except(foreignKeys.Distinct()).ToList();
 
-            List<string> cf = await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync();
-
-            List<string> mup = await MapUnitPolys.GetDistinctDataSourceIDValuesAsync();
-
-            List<string> stations = await Stations.GetDistinctDataSourceIdValuesAsync();
-
-            List<string> opLocationId = await OrientationPoints.GetDistinctLocationSourceIDValuesAsync();
-
-            List<string> opOrientationId = await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync();
-
-            return null;
+            return unusedDataSources;
         }
 
         /// <summary>

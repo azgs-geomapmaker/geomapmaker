@@ -1,6 +1,5 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -64,7 +63,7 @@ namespace Geomapmaker.ViewModels.DataSources
             set
             {
                 SetProperty(ref _source, value, () => Source);
-                ValidateSource(Source, "Source");
+                ValidateRequiredString(Source, "Source");
                 ValidateChangeWasMade();
             }
         }
@@ -112,40 +111,44 @@ namespace Geomapmaker.ViewModels.DataSources
             {
                 try
                 {
-                    Table enterpriseTable = ds.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = ds.GetTable())
                     {
-                        QueryFilter filter = new QueryFilter { ObjectIDs = new List<long> { Selected.ObjectId } };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                QueryFilter filter = new QueryFilter { ObjectIDs = new List<long> { Selected.ObjectId } };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    // In order to update the Map and/or the attribute table.
-                                    // Has to be called before any changes are made to the row.
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                    row["DataSources_ID"] = Id;
-                                    row["Source"] = Source;
-                                    row["Url"] = Url;
-                                    row["Notes"] = Notes;
+                                            row["DataSources_ID"] = Id;
+                                            row["Source"] = Source;
+                                            row["Url"] = Url;
+                                            row["Notes"] = Notes;
 
-                                    // After all the changes are done, persist it.
-                                    row.Store();
+                                            // After all the changes are done, persist it.
+                                            row.Store();
 
-                                    // Has to be called after the store too.
-                                    context.Invalidate(row);
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -204,7 +207,7 @@ namespace Geomapmaker.ViewModels.DataSources
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.DataSources.Where(a => a.ObjectId != Selected?.ObjectId).Any(a => a.DataSource_ID.ToLower() == Id?.ToLower()))
+            else if (ParentVM.DataSources.Where(a => a.ObjectId != Selected?.ObjectId).Any(a => a.DataSource_ID?.ToLower() == Id?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "ID is taken." };
             }
@@ -216,8 +219,8 @@ namespace Geomapmaker.ViewModels.DataSources
             RaiseErrorsChanged(propertyKey);
         }
 
-        // Validate source
-        private void ValidateSource(string name, string propertyKey)
+        // Validate required field
+        private void ValidateRequiredString(string name, string propertyKey)
         {
             // Required field
             if (string.IsNullOrWhiteSpace(name))

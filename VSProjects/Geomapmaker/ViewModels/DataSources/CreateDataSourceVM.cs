@@ -45,7 +45,7 @@ namespace Geomapmaker.ViewModels.DataSources
             set
             {
                 SetProperty(ref _source, value, () => Source);
-                ValidateSource(Source, "Source");
+                ValidateRequiredString(Source, "Source");
             }
         }
 
@@ -84,30 +84,34 @@ namespace Geomapmaker.ViewModels.DataSources
             {
                 try
                 {
-                    Table enterpriseTable = ds.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = ds.GetTable())
                     {
-                        TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-
-                        using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                        if (enterpriseTable != null)
                         {
-                            rowBuffer["DataSources_ID"] = Id;
-                            rowBuffer["Source"] = Source;
-                            rowBuffer["Url"] = Url;
-                            rowBuffer["Notes"] = Notes;
+                            EditOperation editOperation = new EditOperation();
 
-                            using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                            editOperation.Callback(context =>
                             {
-                                // To Indicate that the attribute table has to be updated.
-                                context.Invalidate(row);
-                            }
-                        }
-                    }, enterpriseTable);
+                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
 
-                    bool result = editOperation.Execute();
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    rowBuffer["DataSources_ID"] = Id;
+                                    rowBuffer["Source"] = Source;
+                                    rowBuffer["Url"] = Url;
+                                    rowBuffer["Notes"] = Notes;
+
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                        // To Indicate that the attribute table has to be updated.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -152,7 +156,6 @@ namespace Geomapmaker.ViewModels.DataSources
                 null : (IEnumerable)_validationErrors[propertyName];
         }
 
-        // TODO - Validate unique
         // Validate id
         private void ValidateId(string name, string propertyKey)
         {
@@ -161,7 +164,7 @@ namespace Geomapmaker.ViewModels.DataSources
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.DataSources.Any(a => a.DataSource_ID.ToLower() == Id?.ToLower()))
+            else if (ParentVM.DataSources.Any(a => a.DataSource_ID?.ToLower() == Id?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "ID is taken." };
             }
@@ -173,8 +176,8 @@ namespace Geomapmaker.ViewModels.DataSources
             RaiseErrorsChanged(propertyKey);
         }
 
-        // Validate source
-        private void ValidateSource(string name, string propertyKey)
+        // Validate required field
+        private void ValidateRequiredString(string name, string propertyKey)
         {
             // Required field
             if (string.IsNullOrWhiteSpace(name))
