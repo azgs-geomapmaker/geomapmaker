@@ -23,50 +23,17 @@ namespace Geomapmaker.Data
             return await Validation.FeatureLayerExistsAsync("ContactsAndFaults");
         }
 
+        /// <summary>
+        /// Get a list of unique, non-null values for the field DataSourceID in the ContactsAndFaults layer
+        /// </summary>
+        /// <returns>List of DataSourceID values</returns>
         public static async Task<List<string>> GetUniqueDataSourceIDValuesAsync()
         {
-            List<string> DataSourceIDs = new List<string>();
-
-            FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
-
-            if (layer != null)
-            {
-                await QueuedTask.Run(() =>
-                {
-                    using (Table table = layer.GetTable())
-                    {
-                        QueryFilter queryFilter = new QueryFilter
-                        {
-                            SubFields = "DataSourceID"
-                        };
-
-                        using (RowCursor rowCursor = table.Search(queryFilter))
-                        {
-                            while (rowCursor.MoveNext())
-                            {
-                                using (Row row = rowCursor.Current)
-                                {
-                                    if (row["DataSourceID"] != null)
-                                    {
-                                        string datasourceId = row["DataSourceID"]?.ToString();
-
-                                        if (!DataSourceIDs.Contains(datasourceId))
-                                        {
-                                            DataSourceIDs.Add(datasourceId);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            return DataSourceIDs;
+            return await General.GetUniqueValuesForFieldAsync("DataSourceID", "ContactsAndFaults");
         }
 
         /// <summary>
-        /// Get Templates for Contacts and Faults
+        /// Get Templates for Contacts and Faults layer
         /// </summary>
         /// <param name="filterSketch"></param>
         /// <returns>ContactFaultTemplate List</returns>

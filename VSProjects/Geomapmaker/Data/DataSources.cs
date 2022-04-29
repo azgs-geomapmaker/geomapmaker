@@ -45,7 +45,6 @@ namespace Geomapmaker.Data
             return await Validation.StandaloneTableRequiredNullCountAsync("DataSources", fieldsToCheck);
         }
 
-
         public static async Task<List<string>> GetUnnecessaryDataSources()
         {
             List<string> dataSourceIds = await GetDataSourceIdsAsync();
