@@ -84,31 +84,36 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-
-                        using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                        if (enterpriseTable != null)
                         {
-                            rowBuffer["Name"] = Name;
-                            rowBuffer["FullName"] = Name;
-                            rowBuffer["Description"] = Description;
-                            rowBuffer["ParagraphStyle"] = "Heading";
-                            rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
+                            EditOperation editOperation = new EditOperation();
 
-                            using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                            editOperation.Callback(context =>
                             {
-                                // To Indicate that the attribute table has to be updated.
-                                context.Invalidate(row);
-                            }
-                        }
-                    }, enterpriseTable);
+                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
 
-                    bool result = editOperation.Execute();
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    rowBuffer["Name"] = Name;
+                                    rowBuffer["DescriptionOfMapUnits_ID"] = Guid.NewGuid();
+                                    rowBuffer["FullName"] = Name;
+                                    rowBuffer["Description"] = Description;
+                                    rowBuffer["ParagraphStyle"] = "Heading";
+                                    rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
+
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                        // To Indicate that the attribute table has to be updated.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

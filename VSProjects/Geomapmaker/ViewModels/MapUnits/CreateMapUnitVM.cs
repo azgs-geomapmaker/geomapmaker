@@ -249,7 +249,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                                 using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                                 {
                                     rowBuffer["MapUnit"] = MapUnit;
-                                    rowBuffer["DescriptionOfMapUnits_ID"] = MapUnit;
+                                    rowBuffer["DescriptionOfMapUnits_ID"] = Guid.NewGuid();
                                     rowBuffer["Name"] = Name;
                                     rowBuffer["FullName"] = FullName;
                                     rowBuffer["Age"] = Age;

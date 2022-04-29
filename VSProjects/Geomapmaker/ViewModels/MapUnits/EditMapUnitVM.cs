@@ -289,7 +289,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                                             context.Invalidate(row);
 
                                             row["MapUnit"] = MapUnit;
-                                            row["DescriptionOfMapUnits_ID"] = MapUnit;
+                                            row["DescriptionOfMapUnits_ID"] = Guid.NewGuid();
                                             row["Name"] = Name;
                                             row["FullName"] = FullName;
                                             row["Age"] = Age;
