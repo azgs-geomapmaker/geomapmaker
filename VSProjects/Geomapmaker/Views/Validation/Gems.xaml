@@ -62,7 +62,7 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="GeMS: Fully Compliant" Grid.ColumnSpan="3" FontWeight="Bold" Margin="0,0,0,10" />
 
             <TextBlock Grid.Row="2" Grid.Column="1" Text="1" FontWeight="Bold" />
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="Validate DataSources table" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Validate DataSources table" ToolTip="{Binding Gems.Check1Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result1}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 

@@ -38,6 +38,8 @@ namespace Geomapmaker.ViewModels.Validation
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
+        public string Check1Tooltip => "Check if the table exists.<br>Check table for any missing fields.<br>Check for empty/null values in required fields.<br>Check for any duplicate IDs.<br>Check for unused data sources.<br>Check for missing data sources.";
+
         // 1. Validate DataSources table
         private async Task<string> Check1Async(string propertyKey)
         {
@@ -51,7 +53,7 @@ namespace Geomapmaker.ViewModels.Validation
             else // Table was found
             {
                 //
-                // Check for any missing fields 
+                // Check table for any missing fields 
                 //
                 List<string> missingFields = await Data.DataSources.GetMissingFieldsAsync();
                 if (missingFields.Count != 0)
@@ -59,18 +61,6 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string field in missingFields)
                     {
                         errors.Add($"Field '{field}' not found");
-                    }
-                }
-
-                //
-                // Check for any duplicate ids
-                //
-                List<string> duplicateIds = await Data.DataSources.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
-                {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate datasources_id: {id}");
                     }
                 }
 
@@ -83,6 +73,18 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string field in fieldsWithMissingValues)
                     {
                         errors.Add($"Null value found in {field} field");
+                    }
+                }
+
+                //
+                // Check for any duplicate ids
+                //
+                List<string> duplicateIds = await Data.DataSources.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate datasources_id: {id}");
                     }
                 }
 
