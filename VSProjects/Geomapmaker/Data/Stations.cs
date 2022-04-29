@@ -12,6 +12,37 @@ namespace Geomapmaker.Data
 {
     public class Stations
     {
+        /// <summary>
+        /// Check if the Stations layer exists in Active Map
+        /// </summary>
+        /// <returns>Returns true if layer exists</returns>
+        public static async Task<bool> StationsExistsAsync()
+        {
+            return await Validation.FeatureLayerExistsAsync("Stations");
+        }
+
+        /// <summary>
+        /// Get a list of unique, non-null values for the field DataSourceId in the Stations layer
+        /// </summary>
+        /// <returns>List of DataSourceID values</returns>
+        public static async Task<List<string>> GetDistinctDataSourceIdValuesAsync()
+        {
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("datasourceid", "Stations");
+        }
+
+        /// <summary>
+        /// Get a list of unique, non-null values for the field FieldId in the Stations layer
+        /// </summary>
+        /// <returns>List of FieldId values</returns>
+        public static async Task<List<string>> GetStationFieldIdsAsync()
+        {
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("fieldid", "Stations");
+        }
+
+        /// <summary>
+        /// Get all stations
+        /// </summary>
+        /// <returns>Returns a list of stations</returns>
         public static async Task<List<Station>> GetStationsAsync()
         {
             List<Station> StationsList = new List<Station>();
@@ -25,76 +56,45 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-                Table enterpriseTable = stationsLayer.GetTable();
-
-                using (RowCursor rowCursor = enterpriseTable.Search())
+                using (Table table = stationsLayer.GetTable())
                 {
-                    while (rowCursor.MoveNext())
+                    if (table != null)
                     {
-                        using (Row row = rowCursor.Current)
+                        using (RowCursor rowCursor = table.Search())
                         {
-                            MapPoint Shape = (MapPoint)row["SHAPE"];
-
-                            Station newStation = new Station
+                            while (rowCursor.MoveNext())
                             {
-                                ObjectID = Helpers.RowValueToLong(row["ObjectID"]),
-                                FieldID = Helpers.RowValueToString(row["FieldID"]),
-                                TimeDate = row["TimeDate"]?.ToString(),
-                                Observer = Helpers.RowValueToString(row["Observer"]),
-                                LocationMethod = Helpers.RowValueToString(row["LocationMethod"]),
-                                LocationConfidenceMeters = Helpers.RowValueToString(row["LocationConfidenceMeters"]),
-                                PlotAtScale = Helpers.RowValueToString(row["PlotAtScale"]),
-                                Notes = Helpers.RowValueToString(row["Notes"]),
-                                DataSourceId = Helpers.RowValueToString(row["DataSourceId"]),
+                                using (Row row = rowCursor.Current)
+                                {
+                                    MapPoint Shape = (MapPoint)row["SHAPE"];
 
-                                SpatialReferenceWkid = Shape?.SpatialReference?.Wkid.ToString(),
-                                XCoordinate = Shape?.X.ToString(),
-                                YCoordinate = Shape?.Y.ToString(),
-                            };
+                                    Station newStation = new Station
+                                    {
+                                        ObjectID = Helpers.RowValueToLong(row["ObjectID"]),
+                                        FieldID = Helpers.RowValueToString(row["FieldID"]),
+                                        TimeDate = row["TimeDate"]?.ToString(),
+                                        Observer = Helpers.RowValueToString(row["Observer"]),
+                                        LocationMethod = Helpers.RowValueToString(row["LocationMethod"]),
+                                        LocationConfidenceMeters = Helpers.RowValueToString(row["LocationConfidenceMeters"]),
+                                        PlotAtScale = Helpers.RowValueToString(row["PlotAtScale"]),
+                                        Notes = Helpers.RowValueToString(row["Notes"]),
+                                        DataSourceId = Helpers.RowValueToString(row["DataSourceId"]),
 
-                            StationsList.Add(newStation);
+                                        SpatialReferenceWkid = Shape?.SpatialReference?.Wkid.ToString(),
+                                        XCoordinate = Shape?.X.ToString(),
+                                        YCoordinate = Shape?.Y.ToString(),
+                                    };
+
+                                    StationsList.Add(newStation);
+                                }
+                            }
                         }
                     }
                 }
-
             });
 
             return StationsList;
         }
 
-        public static async Task<List<string>> GetStationFieldIdsAsync()
-        {
-            List<string> FieldIds = new List<string>();
-
-            FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
-
-            if (stationsLayer == null)
-            {
-                return FieldIds;
-            }
-
-            await QueuedTask.Run(() =>
-            {
-
-                Table enterpriseTable = stationsLayer.GetTable();
-
-                using (RowCursor rowCursor = enterpriseTable.Search())
-                {
-                    while (rowCursor.MoveNext())
-                    {
-                        using (Row row = rowCursor.Current)
-                        {
-                            string rowFieldId = row["FieldID"]?.ToString();
-
-                            // Add it to temp list
-                            FieldIds.Add(rowFieldId);
-                        }
-                    }
-                }
-
-            });
-
-            return FieldIds;
-        }
     }
 }

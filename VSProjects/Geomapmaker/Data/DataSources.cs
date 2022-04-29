@@ -56,6 +56,8 @@ namespace Geomapmaker.Data
 
             List<string> mup = await MapUnitPolys.GetDistinctDataSourceIDValuesAsync();
 
+            List<string> stations = await Stations.GetDistinctDataSourceIdValuesAsync();
+
             List<string> opLocationId = await OrientationPoints.GetDistinctLocationSourceIDValuesAsync();
 
             List<string> opOrientationId = await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync();
