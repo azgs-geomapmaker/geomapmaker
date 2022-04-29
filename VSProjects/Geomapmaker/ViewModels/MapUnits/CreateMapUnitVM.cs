@@ -237,38 +237,43 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-                        using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                        if (enterpriseTable != null)
                         {
-                            rowBuffer["MapUnit"] = MapUnit;
-                            rowBuffer["Name"] = Name;
-                            rowBuffer["FullName"] = FullName;
-                            rowBuffer["Age"] = Age;
-                            rowBuffer["RelativeAge"] = RelativeAge;
-                            rowBuffer["Description"] = Description;
-                            rowBuffer["Label"] = Label;
-                            rowBuffer["AreaFillRGB"] = AreaFillRGB;
-                            rowBuffer["HexColor"] = HexColor;
-                            rowBuffer["GeoMaterial"] = GeoMaterial;
-                            rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
-                            rowBuffer["ParagraphStyle"] = "Standard";
-                            rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
+                            EditOperation editOperation = new EditOperation();
 
-                            using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                            editOperation.Callback(context =>
                             {
-                                // To Indicate that the attribute table has to be updated.
-                                context.Invalidate(row);
-                            }
-                        }
-                    }, enterpriseTable);
+                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    rowBuffer["MapUnit"] = MapUnit;
+                                    rowBuffer["DescriptionOfMapUnits_ID"] = MapUnit;
+                                    rowBuffer["Name"] = Name;
+                                    rowBuffer["FullName"] = FullName;
+                                    rowBuffer["Age"] = Age;
+                                    rowBuffer["RelativeAge"] = RelativeAge;
+                                    rowBuffer["Description"] = Description;
+                                    rowBuffer["Label"] = Label;
+                                    rowBuffer["AreaFillRGB"] = AreaFillRGB;
+                                    rowBuffer["HexColor"] = HexColor;
+                                    rowBuffer["GeoMaterial"] = GeoMaterial;
+                                    rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
+                                    rowBuffer["ParagraphStyle"] = "Standard";
+                                    rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
 
-                    bool result = editOperation.Execute();
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                        // To Indicate that the attribute table has to be updated.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

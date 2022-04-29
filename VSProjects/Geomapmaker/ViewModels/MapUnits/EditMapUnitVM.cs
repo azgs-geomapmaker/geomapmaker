@@ -268,49 +268,54 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    // In order to update the Map and/or the attribute table.
-                                    // Has to be called before any changes are made to the row.
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                    row["MapUnit"] = MapUnit;
-                                    row["Name"] = Name;
-                                    row["FullName"] = FullName;
-                                    row["Age"] = Age;
-                                    row["RelativeAge"] = RelativeAge;
-                                    row["Description"] = Description;
-                                    row["Label"] = Label;
-                                    row["AreaFillRGB"] = AreaFillRGB;
-                                    row["HexColor"] = HexColor;
-                                    row["GeoMaterial"] = GeoMaterial;
-                                    row["GeoMaterialConfidence"] = GeoMaterialConfidence;
-                                    row["ParagraphStyle"] = "Standard";
-                                    row["DescriptionSourceID"] = DescriptionSourceID;
+                                            row["MapUnit"] = MapUnit;
+                                            row["DescriptionOfMapUnits_ID"] = MapUnit;
+                                            row["Name"] = Name;
+                                            row["FullName"] = FullName;
+                                            row["Age"] = Age;
+                                            row["RelativeAge"] = RelativeAge;
+                                            row["Description"] = Description;
+                                            row["Label"] = Label;
+                                            row["AreaFillRGB"] = AreaFillRGB;
+                                            row["HexColor"] = HexColor;
+                                            row["GeoMaterial"] = GeoMaterial;
+                                            row["GeoMaterialConfidence"] = GeoMaterialConfidence;
+                                            row["ParagraphStyle"] = "Standard";
+                                            row["DescriptionSourceID"] = DescriptionSourceID;
 
-                                    // After all the changes are done, persist it.
-                                    row.Store();
+                                            // After all the changes are done, persist it.
+                                            row.Store();
 
-                                    // Has to be called after the store too.
-                                    context.Invalidate(row);
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
