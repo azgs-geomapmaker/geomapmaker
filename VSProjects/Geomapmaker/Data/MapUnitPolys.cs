@@ -15,13 +15,24 @@ namespace Geomapmaker.Data
 {
     public class MapUnitPolys
     {
-        public static bool MapUnitPolysExists()
+        /// <summary>
+        /// Check if the MapUnitPolys layer exists in Active Map
+        /// </summary>
+        /// <returns>Returns true if layer exists</returns>
+        public static async Task<bool> MapUnitPolysExistsAsync()
         {
-            Layer layer = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault();
-
-            return layer != null;
+            return await Validation.FeatureLayerExistsAsync("MapUnitPolys");
         }
-        
+
+        /// <summary>
+        /// Get a list of unique, non-null values for the field DataSourceID in the MapUnitPolys layer
+        /// </summary>
+        /// <returns>List of DataSourceID values</returns>
+        public static async Task<List<string>> GetDistinctDataSourceIDValuesAsync()
+        {
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("datasourceid", "MapUnitPolys");
+        }
+
         public static async void RebuildMUPSymbologyAndTemplates()
         {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
@@ -229,9 +240,9 @@ namespace Geomapmaker.Data
                     CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
                     // If the template has a mapunit value
-                    if (templateDef.DefaultValues.ContainsKey("MapUnit") && templateDef.DefaultValues.ContainsKey("DataSourceID"))
+                    if (templateDef.DefaultValues.ContainsKey("mapunit") && templateDef.DefaultValues.ContainsKey("datasourceid"))
                     {
-                        string muKey = templateDef.DefaultValues["MapUnit"].ToString();
+                        string muKey = templateDef.DefaultValues["mapunit"]?.ToString();
 
                         MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
 
@@ -243,7 +254,7 @@ namespace Geomapmaker.Data
                                 MapUnit = muKey,
                                 HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
                                 Tooltip = mapUnit.Tooltip,
-                                DataSourceID = templateDef.DefaultValues["DataSourceID"].ToString(),
+                                DataSourceID = templateDef.DefaultValues["datasourceid"]?.ToString(),
                                 Template = template
                             };
 
@@ -255,48 +266,5 @@ namespace Geomapmaker.Data
 
             return mupTemplates;
         }
-
-        public static async Task<List<string>> GetDistinctMapUnitsAsync()
-        {
-            List<string> MapUnits = new List<string>();
-
-            FeatureLayer layer = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
-
-            if (layer == null)
-            {
-                return MapUnits;
-            }
-
-            await QueuedTask.Run(() =>
-            {
-                Table table = layer.GetTable();
-
-                if (table == null)
-                {
-                    return;
-                }
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    PrefixClause = "DISTINCT",
-                    SubFields = "mapunit"
-                };
-
-                using (RowCursor rowCursor = table.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
-                    {
-                        using (Row row = rowCursor.Current)
-                        {
-                            MapUnits.Add(row["mapunit"]?.ToString());
-                        }
-                    }
-                }
-            });
-
-            return MapUnits;
-        }
-
-
     }
 }

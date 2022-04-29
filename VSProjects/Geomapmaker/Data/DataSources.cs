@@ -54,7 +54,7 @@ namespace Geomapmaker.Data
 
             List<string> cf = await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync();
 
-            List<string> mup = await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync();
+            List<string> mup = await MapUnitPolys.GetDistinctDataSourceIDValuesAsync();
 
             return null;
         }
