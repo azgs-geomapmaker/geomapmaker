@@ -9,6 +9,11 @@ namespace Geomapmaker.Data
 {
     public class Validation
     {
+        /// <summary>
+        /// Check if a feature layer exists
+        /// </summary>
+        /// <param name="layerName"></param>
+        /// <returns>Returns true if layer exists</returns>
         public static async Task<bool> FeatureLayerExistsAsync(string layerName)
         {
             if (MapView.Active == null)
@@ -40,6 +45,11 @@ namespace Geomapmaker.Data
             return underlyingTableExists;
         }
 
+        /// <summary>
+        /// Check if standalone table exists
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns>Returns true if table exists</returns>
         public static async Task<bool> StandaloneTableExistsAsync(string tableName)
         {
             // Check for active map
