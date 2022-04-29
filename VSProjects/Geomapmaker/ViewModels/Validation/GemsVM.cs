@@ -129,7 +129,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        public string Check2Tooltip => "Check the table exists.<br>Check table for any missing fields.";
+        public string Check2Tooltip => "Check the table exists.<br>Check table for any missing fields.<br>Check for empty/null values in required fields.";
 
         // Validate DescriptionOfMapUnits table
         private async Task<string> Check2Async(string propertyKey)
