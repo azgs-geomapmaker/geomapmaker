@@ -67,6 +67,16 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Get duplicate mapunit values in the DMU table
+        /// </summary>
+        /// <returns>List of duplicate valuessss</returns>
+        public static async Task<List<string>> GetDuplicateMapUnitValues()
+        {
+            // return duplicate map units 
+            return await Validation.StandaloneTableFindDuplicateValuesInFieldAsync("MapUnit", "DescriptionOfMapUnits", "MapUnit IS NOT NULL");
+        }
+
+        /// <summary>
         /// Get duplicate MapUnits from DMU table
         /// </summary>
         /// <returns>List of any duplicate MapUnits in the DMU table</returns>
@@ -78,7 +88,7 @@ namespace Geomapmaker.Data
             return mapUnits.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
         }
 
-        /// <summary>
+        /// <summary>s
         /// Get all MapUnits string value from DMU table
         /// </summary>
         /// <returns>List of MapUnits (string)</returns>

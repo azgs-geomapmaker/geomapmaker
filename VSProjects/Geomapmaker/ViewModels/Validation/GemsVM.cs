@@ -137,6 +137,7 @@ namespace Geomapmaker.ViewModels.Validation
         // Tooltip
         public string Check2Tooltip => "Check the table exists.<br>" +
                                        "Check table for any missing fields.<br>" +
+                                       "Check for duplicate MapUnit values.<br>" +
                                        "Check for empty/null values in required fields.";
 
         // Validate DescriptionOfMapUnits table
@@ -176,6 +177,18 @@ namespace Geomapmaker.ViewModels.Validation
                 }
 
                 //
+                // Check for duplicate mapunit values
+                //
+                List<string> duplicateMapUnits = await Data.DescriptionOfMapUnits.GetDuplicateMapUnitsAsync();
+                if (duplicateMapUnits.Count != 0)
+                {
+                    foreach (string duplicate in duplicateMapUnits)
+                    {
+                        errors.Add($"Duplicate MapUnit value: {duplicate}");
+                    }
+                }
+
+                //
                 // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
                 //
                 List<string> mapUnitfieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetMapUnitRequiredFieldsWithNullValues();
@@ -186,7 +199,6 @@ namespace Geomapmaker.ViewModels.Validation
                         errors.Add($"Null value found in field: {field}");
                     }
                 }
-
             }
 
             if (errors.Count == 0)
