@@ -71,10 +71,10 @@
             <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result2}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <!--<TextBlock Grid.Row="6" Grid.Column="1" Text="3" FontWeight="Bold" />
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="No missing required values" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="3" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="Validate MapUnitPolys layer" ToolTip="{Binding Gems.Check3Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result3}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />-->
+            <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <!--<TextBlock Grid.Row="8" Grid.Column="1" Text="4" FontWeight="Bold" />
             <TextBlock Grid.Row="8" Grid.Column="2" Text="No missing terms in Glossary" TextWrapping="Wrap" />

@@ -38,6 +38,9 @@ namespace Geomapmaker.ViewModels.Validation
             Result2 = await Check2Async("Result2");
             NotifyPropertyChanged("Result2");
 
+            Result3 = await Check3Async("Result3");
+            NotifyPropertyChanged("Result3");
+
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
@@ -140,7 +143,7 @@ namespace Geomapmaker.ViewModels.Validation
                                        "Check for duplicate MapUnit values.<br>" +
                                        "Check for empty/null values in required fields.";
 
-        // Validate DescriptionOfMapUnits table
+        // 2. Validate DescriptionOfMapUnits table
         private async Task<string> Check2Async(string propertyKey)
         {
             List<string> errors = new List<string>();
@@ -213,10 +216,34 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 3.3 No missing required values
-        private string Check3()
+        // Tooltip
+        public string Check3Tooltip => "Check that the layer exists.<br>";
+
+        // 3. Validate MapUnitPolys layer
+        private async Task<string> Check3Async(string propertyKey)
         {
-            return "Skipped";
+            List<string> errors = new List<string>();
+
+            // Check if the layer exists
+            if (await Data.MapUnitPolys.MapUnitPolysExistsAsync() == false)
+            {
+                errors.Add("Feature layer not found: MapUnitPolys");
+            }
+            else // Layer was found
+            {
+
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
         }
 
         // 3.4 No missing terms in Glossary
