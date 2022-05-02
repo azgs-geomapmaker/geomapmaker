@@ -353,7 +353,8 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 6. Tooltip
-        public string Check6Tooltip => "Check that the layer exists.<br>";
+        public string Check6Tooltip => "Check that the layer exists.<br>" +
+                                       "Check layer for any missing fields.<br>";
 
         // 6. Validate Stations layer
         private async Task<string> Check6Async(string propertyKey)
@@ -394,7 +395,8 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 7. Tooltip
-        public string Check7Tooltip => "Check that the layer exists.<br>";
+        public string Check7Tooltip => "Check that the layer exists.<br>" +
+                                       "Check layer for any missing fields.<br>";
 
         // 7. Validate OrientationPoints layer
         private async Task<string> Check7Async(string propertyKey)
@@ -408,6 +410,19 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Layer was found
             {
+                //
+                // Check table for any missing fields 
+                //
+                List<string> missingFields = await Data.OrientationPoints.GetMissingFieldsAsync();
+                if (missingFields.Count != 0)
+                {
+                    foreach (string field in missingFields)
+                    {
+                        errors.Add($"Field not found: {field}");
+                    }
+                }
+
+
 
             }
 

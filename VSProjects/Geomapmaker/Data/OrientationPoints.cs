@@ -6,7 +6,6 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +20,20 @@ namespace Geomapmaker.Data
         public static async Task<bool> OrientationPointsExistsAsync()
         {
             return await General.FeatureLayerExistsAsync("OrientationPoints");
+        }
+
+        /// <summary>
+        /// Check the layer for any missing fieldss
+        /// </summary>
+        /// <returns>Returns a list of fieldnames missing from the layer</returns>
+        public static async Task<List<string>> GetMissingFieldsAsync()
+        {
+            // List of fields to check for
+            List<string> requiredFields = new List<string>() { "type", "azimuth", "inclination", "symbol", "label", "locationconfidencemeters",
+                "identityconfidence", "orientationconfidencedegrees", "plotatscale", "stationsid", "mapunit", "locationsourceid",
+                "orientationsourceid", "notes", "orientationpoints_id", "globalid" };
+
+            return await General.FeatureLayerFieldsExistAsync("OrientationPoints", requiredFields);
         }
 
         /// <summary>
