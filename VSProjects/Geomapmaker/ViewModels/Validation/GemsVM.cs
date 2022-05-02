@@ -41,6 +41,9 @@ namespace Geomapmaker.ViewModels.Validation
             Result3 = await Check3Async("Result3");
             NotifyPropertyChanged("Result3");
 
+            Result4 = await Check4Async("Result4");
+            NotifyPropertyChanged("Result4");
+
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
@@ -246,10 +249,34 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 3.4 No missing terms in Glossary
-        private string Check4()
+        // Tooltip
+        public string Check4Tooltip => "Check that the layer exists.<br>";
+
+        // 4. Validate ContactsAndFaults layer
+        private async Task<string> Check4Async(string propertyKey)
         {
-            return "Skipped";
+            List<string> errors = new List<string>();
+
+            // Check if the layer exists
+            if (await Data.ContactsAndFaults.ContactsAndFaultsExistsAsync() == false)
+            {
+                errors.Add("Feature layer not found: ContactsAndFaults");
+            }
+            else // Layer was found
+            {
+
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
         }
 
         // 3.5 No unnecessary terms in Glossary

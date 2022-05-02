@@ -76,10 +76,10 @@
             <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result3}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <!--<TextBlock Grid.Row="8" Grid.Column="1" Text="4" FontWeight="Bold" />
-            <TextBlock Grid.Row="8" Grid.Column="2" Text="No missing terms in Glossary" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="4" FontWeight="Bold" />
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="Validate ContactsAndFaults layer" ToolTip="{Binding Gems.Check4Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result4}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" />-->
+            <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <!--<TextBlock Grid.Row="10" Grid.Column="1" Text="5" FontWeight="Bold" />
             <TextBlock Grid.Row="10" Grid.Column="2" Text="No unnecessary terms in Glossary" TextWrapping="Wrap" />
