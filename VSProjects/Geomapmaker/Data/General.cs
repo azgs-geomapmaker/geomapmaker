@@ -83,6 +83,70 @@ namespace Geomapmaker.Data
             return underlyingTableExists;
         }
 
+        /// <summary>
+        /// Check if a feature layer has the required fields.
+        /// </summary>
+        /// <param name="layerName">Name of the layer</param>
+        /// <param name="requiredFields">List of fields to check</param>
+        /// <returns>Returns list of missing fields</returns>
+        public static async Task<List<string>> FeatureLayerFieldsExistAsync(string layerName, List<string> requiredFields)
+        {
+            List<string> missingFields = new List<string>();
+
+            // Check for active map
+            if (MapView.Active == null)
+            {
+                // Missing all required fields
+                return requiredFields;
+            }
+
+            // Get feature layer by name
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
+
+            // Check if layer was null
+            if (layer == null)
+            {
+                // Missing all required fields
+                return requiredFields;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table table = layer.GetTable())
+                {
+                    // Underlying table not found
+                    if (table == null)
+                    {
+                        // All fields are missing
+                        missingFields = requiredFields;
+                    }
+                    else
+                    {
+                        // Get table fields
+                        List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
+
+                        foreach (string field in requiredFields)
+                        {
+                            // Check if the field exists. Lowercase both names for case-insensitive check
+                            if (!tableFields.Any(a => a.Name.ToLower() == field.ToLower()))
+                            {
+                                // Add to list of missing fields
+                                missingFields.Add(field);
+                            }
+                        }
+                    }
+                }
+            });
+
+            return missingFields;
+        }
+
+        /// <summary>
+        /// Check if a standalone table has the required fields.
+        /// </summary>
+        /// <param name="tableName">Name of the table</param>
+        /// <param name="requiredFields">List of fields to check</param>
+        /// <returns>Returns list of missing fields</returns>
         public static async Task<List<string>> StandaloneTableFieldsExistAsync(string tableName, List<string> requiredFields)
         {
             List<string> missingFields = new List<string>();
@@ -117,7 +181,7 @@ namespace Geomapmaker.Data
                     else
                     {
                         // Get table fields
-                        List<Field> tableFields = table.GetDefinition().GetFields().ToList();
+                        List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
 
                         foreach (string field in requiredFields)
                         {
