@@ -17,10 +17,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         public string GemsResults { get; set; } = "Checking..";
         public string TopoResults { get; set; } = "Checking..";
-        public string GeomapmakerResults { get; set; } = "Skipped";
-        public string Level1Results { get; set; } = "Skipped";
-        public string Level2Results { get; set; } = "Skipped";
-        public string Level3Results { get; set; } = "Skipped";
+        public string GeomapmakerResults { get; set; } = "Checking..";
 
         public void UpdateGemsResults(int errorCount)
         {
