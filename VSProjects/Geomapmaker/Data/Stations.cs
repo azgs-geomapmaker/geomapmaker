@@ -22,6 +22,19 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Check the layer for any missing fieldss
+        /// </summary>
+        /// <returns>Returns a list of fieldnames missing from the layer</returns>
+        public static async Task<List<string>> GetMissingFieldsAsync()
+        {
+            // List of fields to check for
+            List<string> requiredFields = new List<string>() { "fieldid", "locationconfidencemeters", "observedmapunit", "mapunit", "symbol", "label", "plotatscale",
+                "datasourceid", "notes", "locationmethod", "timedate", "observer", "significantdimensionmeters", "gpsx", "gpsy", "pdop", "mapx", "mapy", "stations_id", "globalid" };
+
+            return await General.FeatureLayerFieldsExistAsync("Stations", requiredFields);
+        }
+
+        /// <summary>
         /// Get a list of unique, non-null values for the field DataSourceId in the Stations layer
         /// </summary>
         /// <returns>List of DataSourceID values</returns>

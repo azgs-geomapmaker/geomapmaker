@@ -367,6 +367,17 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Layer was found
             {
+                //
+                // Check table for any missing fields 
+                //
+                List<string> missingFields = await Data.Stations.GetMissingFieldsAsync();
+                if (missingFields.Count != 0)
+                {
+                    foreach (string field in missingFields)
+                    {
+                        errors.Add($"Field not found: {field}");
+                    }
+                }
 
             }
 
