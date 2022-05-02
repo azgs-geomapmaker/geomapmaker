@@ -216,6 +216,13 @@ namespace Geomapmaker.Data
                 return fieldsWithNull;
             }
 
+            // Avoid any errors from trying to check fields that don't exist 
+            List<string> missingFields = await StandaloneTableFieldsExistAsync(tableName, fieldsToCheck);
+            if (missingFields.Count > 0)
+            {
+                return missingFields;
+            }
+
             // Get standalone table by name
             StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
 
@@ -275,10 +282,10 @@ namespace Geomapmaker.Data
         /// Find duplicate values in a standalone table
         /// </summary>
         /// <param name="tableName">Name of table</param>
-        /// <param name="fieldToCheck">Name of fields</param>
+        /// <param name="fieldName">Name of field</param>
         /// <param name="whereClause">Where-clause</param>
         /// <returns>Returns list of duplicate values</returns>
-        public static async Task<List<string>> StandaloneTableFindDuplicateValuesInFieldAsync(string tableName, string fieldToCheck, string whereClause = "")
+        public static async Task<List<string>> StandaloneTableFindDuplicateValuesInFieldAsync(string tableName, string fieldName, string whereClause = "")
         {
             List<string> allValues = new List<string>();
 
@@ -304,23 +311,30 @@ namespace Geomapmaker.Data
                     // Underlying table found
                     if (table != null)
                     {
-                        QueryFilter queryFilter = new QueryFilter
-                        {
-                            SubFields = fieldToCheck,
-                            WhereClause = whereClause
-                        };
+                        // Get fields for the table
+                        List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
 
-                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        // Check if the table has the field
+                        if (tableFields.Any(a => a.Name.ToLower() == fieldName.ToLower()))
                         {
-                            while (rowCursor.MoveNext())
+                            QueryFilter queryFilter = new QueryFilter
                             {
-                                using (Row row = rowCursor.Current)
+                                SubFields = fieldName,
+                                WhereClause = whereClause
+                            };
+
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
                                 {
-                                    // Check if value is empty or null
-                                    if (row[fieldToCheck] != null || !string.IsNullOrEmpty(row[fieldToCheck].ToString()))
+                                    using (Row row = rowCursor.Current)
                                     {
-                                        // Add field to list
-                                        allValues.Add(row[fieldToCheck].ToString());
+                                        // Check if value is empty or null
+                                        if (row[fieldName] != null || !string.IsNullOrEmpty(row[fieldName].ToString()))
+                                        {
+                                            // Add field to list
+                                            allValues.Add(row[fieldName].ToString());
+                                        }
                                     }
                                 }
                             }
@@ -353,23 +367,30 @@ namespace Geomapmaker.Data
                     {
                         if (table != null)
                         {
-                            QueryFilter queryFilter = new QueryFilter
-                            {
-                                PrefixClause = "DISTINCT",
-                                // Where not null or empty
-                                WhereClause = $"{fieldName} <> ''",
-                                SubFields = fieldName
-                            };
+                            // Get fields for the table
+                            List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
 
-                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            // Check if the table has the field
+                            if (tableFields.Any(a => a.Name.ToLower() == fieldName.ToLower()))
                             {
-                                while (rowCursor.MoveNext())
+                                QueryFilter queryFilter = new QueryFilter
                                 {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        string fieldValue = row[fieldName]?.ToString();
+                                    PrefixClause = "DISTINCT",
+                                    // Where not null or empty
+                                    WhereClause = $"{fieldName} <> ''",
+                                    SubFields = fieldName
+                                };
 
-                                        uniqueValues.Add(fieldValue);
+                                using (RowCursor rowCursor = table.Search(queryFilter))
+                                {
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            string fieldValue = row[fieldName]?.ToString();
+
+                                            uniqueValues.Add(fieldValue);
+                                        }
                                     }
                                 }
                             }
@@ -401,23 +422,30 @@ namespace Geomapmaker.Data
                     {
                         if (table != null)
                         {
-                            QueryFilter queryFilter = new QueryFilter
-                            {
-                                PrefixClause = "DISTINCT",
-                                // Where not null or empty
-                                WhereClause = $"{fieldName} <> ''",
-                                SubFields = fieldName
-                            };
+                            // Get fields for the table
+                            List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
 
-                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            // Check if the table has the field
+                            if (tableFields.Any(a => a.Name.ToLower() == fieldName.ToLower()))
                             {
-                                while (rowCursor.MoveNext())
+                                QueryFilter queryFilter = new QueryFilter
                                 {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        string fieldValue = row[fieldName]?.ToString();
+                                    PrefixClause = "DISTINCT",
+                                    // Where not null or empty
+                                    WhereClause = $"{fieldName} <> ''",
+                                    SubFields = fieldName
+                                };
 
-                                        uniqueValues.Add(fieldValue);
+                                using (RowCursor rowCursor = table.Search(queryFilter))
+                                {
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            string fieldValue = row[fieldName]?.ToString();
+
+                                            uniqueValues.Add(fieldValue);
+                                        }
                                     }
                                 }
                             }
