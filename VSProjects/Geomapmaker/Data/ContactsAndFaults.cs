@@ -29,7 +29,7 @@ namespace Geomapmaker.Data
         /// <returns>List of DataSourceID values</returns>
         public static async Task<List<string>> GetUniqueDataSourceIDValuesAsync()
         {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("DataSourceID", "ContactsAndFaults");
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID");
         }
 
         /// <summary>

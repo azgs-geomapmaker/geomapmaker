@@ -29,7 +29,7 @@ namespace Geomapmaker.Data
         /// <returns>List of LocationSourceID values</returns>
         public static async Task<List<string>> GetDistinctLocationSourceIDValuesAsync()
         {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("locationsourceid", "OrientationPoints");
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid");
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Geomapmaker.Data
         /// <returns>List of OrientationSourceID values</returns>
         public static async Task<List<string>> GetDistinctOrientationSourceIDValuesAsync()
         {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("orientationsourceid", "OrientationPoints");
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid");
         }
 
         /// <summary>

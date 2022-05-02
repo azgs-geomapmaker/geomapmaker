@@ -30,7 +30,7 @@ namespace Geomapmaker.Data
         /// <returns>List of DataSourceID values</returns>
         public static async Task<List<string>> GetDistinctDataSourceIDValuesAsync()
         {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("datasourceid", "MapUnitPolys");
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid");
         }
 
         /// <summary>

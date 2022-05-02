@@ -27,7 +27,7 @@ namespace Geomapmaker.Data
         /// <returns>List of DataSourceID values</returns>
         public static async Task<List<string>> GetDistinctDataSourceIdValuesAsync()
         {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("datasourceid", "Stations");
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid");
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Geomapmaker.Data
         /// <returns>List of FieldId values</returns>
         public static async Task<List<string>> GetStationFieldIdsAsync()
         {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("fieldid", "Stations");
+            return await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "fieldid");
         }
 
         /// <summary>

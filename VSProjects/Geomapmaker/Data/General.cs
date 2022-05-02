@@ -269,21 +269,13 @@ namespace Geomapmaker.Data
             return allValues.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public static async Task<List<string>> FeatureLayerGetDistinctValuesForFieldAsync(string fieldName, string layerName)
+        /// <summary>
+        /// Get distinct values for a field from a feature layer
+        /// </summary>
+        /// <param name="layerName">Name of layer</param>
+        /// <param name="fieldName">Name of field</param>
+        /// <returns>List of distinct values</returns>
+        public static async Task<List<string>> FeatureLayerGetDistinctValuesForFieldAsync(string layerName, string fieldName)
         {
             List<string> uniqueValues = new List<string>();
 
@@ -325,7 +317,13 @@ namespace Geomapmaker.Data
             return uniqueValues;
         }
 
-        public static async Task<List<string>> StandaloneTableGetDistinctValuesForFieldAsync(string fieldName, string tableName)
+        /// <summary>
+        /// Get dictinct values for a specific field from a standalone table
+        /// </summary>
+        /// <param name="tableName">Name of the table</param>
+        /// <param name="fieldName">Name of the field</param>
+        /// <returns>List of distinct values</returns>
+        public static async Task<List<string>> StandaloneTableGetDistinctValuesForFieldAsync(string tableName, string fieldName)
         {
             List<string> uniqueValues = new List<string>();
 
@@ -367,7 +365,4 @@ namespace Geomapmaker.Data
             return uniqueValues;
         }
     }
-
-
-
 }
