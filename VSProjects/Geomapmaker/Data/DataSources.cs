@@ -20,7 +20,7 @@ namespace Geomapmaker.Data
         /// <returns>Returns true if the table exists</returns>
         public static async Task<bool> DataSourceExistsAsync()
         {
-            return await Validation.StandaloneTableExistsAsync("DataSources");
+            return await General.StandaloneTableExistsAsync("DataSources");
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Geomapmaker.Data
             // List of fields to check for
             List<string> requiredFields = new List<string>() { "objectid", "globalid", "source", "datasources_id", "url", "notes" };
 
-            return await Validation.StandaloneTableFieldsExistAsync("DataSources", requiredFields);
+            return await General.StandaloneTableFieldsExistAsync("DataSources", requiredFields);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Geomapmaker.Data
         {
             List<string> fieldsToCheck = new List<string>() { "source", "datasources_id" };
 
-            return await Validation.StandaloneTableRequiredFieldIsNullAsync("DataSources", fieldsToCheck);
+            return await General.StandaloneTableRequiredFieldIsNullAsync("DataSources", fieldsToCheck);
         }
 
         /// <summary>

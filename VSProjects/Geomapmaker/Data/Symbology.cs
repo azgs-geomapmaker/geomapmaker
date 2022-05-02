@@ -24,7 +24,7 @@ namespace Geomapmaker.Data
         /// <returns>True if the table exists</returns>
         public static async Task<bool> SymbologyExistsAsync()
         {
-            return await Validation.StandaloneTableExistsAsync("Symbology");
+            return await General.StandaloneTableExistsAsync("Symbology");
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Geomapmaker.Data
         {
             List<string> requiredFields = new List<string>() { "type", "key_", "description", "symbol" };
 
-            return await Validation.StandaloneTableFieldsExistAsync("Symbology", requiredFields);
+            return await General.StandaloneTableFieldsExistAsync("Symbology", requiredFields);
         }
         
         /// <summary>

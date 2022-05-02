@@ -18,7 +18,7 @@ namespace Geomapmaker.Data
         /// <returns>Returns true if layer exists</returns>
         public static async Task<bool> StationsExistsAsync()
         {
-            return await Validation.FeatureLayerExistsAsync("Stations");
+            return await General.FeatureLayerExistsAsync("Stations");
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace Geomapmaker.Data
         /// <returns>Returns true if layer exists</returns>
         public static async Task<bool> OrientationPointsExistsAsync()
         {
-            return await Validation.FeatureLayerExistsAsync("OrientationPoints");
+            return await General.FeatureLayerExistsAsync("OrientationPoints");
         }
 
         /// <summary>

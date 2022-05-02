@@ -17,7 +17,7 @@ namespace Geomapmaker.Data
         /// <returns>True if the table exists</returns>
         public static async Task<bool> DmuTableExistsAsync()
         {
-            return await Validation.StandaloneTableExistsAsync("DescriptionOfMapUnits");
+            return await General.StandaloneTableExistsAsync("DescriptionOfMapUnits");
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Geomapmaker.Data
             List<string> requiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb",
                                                                "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
 
-            return await Validation.StandaloneTableFieldsExistAsync("DescriptionOfMapUnits", requiredFields);
+            return await General.StandaloneTableFieldsExistAsync("DescriptionOfMapUnits", requiredFields);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Geomapmaker.Data
         {
             List<string> fieldsToCheck = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
 
-            return await Validation.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck);
+            return await General.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Geomapmaker.Data
                                                               "geomaterial", "geomaterialconfidence" };
 
             // Pass along the where clause to filter out heading DMU rows
-            return await Validation.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck, "MapUnit IS NOT NULL");
+            return await General.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck, "MapUnit IS NOT NULL");
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Geomapmaker.Data
         public static async Task<List<string>> GetDuplicateMapUnitValues()
         {
             // return duplicate map units 
-            return await Validation.StandaloneTableFindDuplicateValuesInFieldAsync("MapUnit", "DescriptionOfMapUnits", "MapUnit IS NOT NULL");
+            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("MapUnit", "DescriptionOfMapUnits", "MapUnit IS NOT NULL");
         }
 
         /// <summary>

@@ -21,7 +21,7 @@ namespace Geomapmaker.Data
         /// <returns>Returns true if layer exists</returns>
         public static async Task<bool> MapUnitPolysExistsAsync()
         {
-            return await Validation.FeatureLayerExistsAsync("MapUnitPolys");
+            return await General.FeatureLayerExistsAsync("MapUnitPolys");
         }
 
         /// <summary>
