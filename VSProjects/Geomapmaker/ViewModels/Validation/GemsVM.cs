@@ -42,7 +42,7 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // Tooltip
-        public string Check1Tooltip => "Check the table exists.<br>" +
+        public string Check1Tooltip => "Check that the table exists.<br>" +
                                        "Check table for any missing fields.<br>" +
                                        "Check for empty/null values in required fields.<br>" +
                                        "Check for any duplicate IDs.<br>Check for unused data sources.<br>" +
@@ -135,7 +135,7 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // Tooltip
-        public string Check2Tooltip => "Check the table exists.<br>" +
+        public string Check2Tooltip => "Check that the table exists.<br>" +
                                        "Check table for any missing fields.<br>" +
                                        "Check for duplicate MapUnit values.<br>" +
                                        "Check for empty/null values in required fields.";
@@ -165,18 +165,6 @@ namespace Geomapmaker.ViewModels.Validation
                 }
 
                 //
-                // Check for empty/null values in required fields for ALL DMU ROWS
-                //
-                List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
-                {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
-                }
-
-                //
                 // Check for duplicate mapunit values
                 //
                 List<string> duplicateMapUnits = await Data.DescriptionOfMapUnits.GetDuplicateMapUnitsAsync();
@@ -185,6 +173,18 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string duplicate in duplicateMapUnits)
                     {
                         errors.Add($"Duplicate MapUnit value: {duplicate}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields for ALL DMU ROWS
+                //
+                List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in field: {field}");
                     }
                 }
 

@@ -28,7 +28,7 @@ namespace Geomapmaker.ViewModels.Validation
             else
             {
                 GemsResults = $"{errorCount} Failed";
-                _validationErrors["GemsResults"] = new List<string> { GeomapmakerResults };
+                _validationErrors["GemsResults"] = new List<string> { "Failed" };
                 RaiseErrorsChanged("GemsResults");
             }
             NotifyPropertyChanged("GemsResults");
@@ -43,7 +43,7 @@ namespace Geomapmaker.ViewModels.Validation
             else
             {
                 TopoResults = $"{errorCount} Failed";
-                _validationErrors["TopoResults"] = new List<string> { TopoResults };
+                _validationErrors["TopoResults"] = new List<string> { "Failed" };
                 RaiseErrorsChanged("TopoResults");
             }
             NotifyPropertyChanged("TopoResults");
@@ -58,7 +58,7 @@ namespace Geomapmaker.ViewModels.Validation
             else
             {
                 GeomapmakerResults = $"{errorCount} Failed";
-                _validationErrors["GeomapmakerResults"] = new List<string> { GeomapmakerResults };
+                _validationErrors["GeomapmakerResults"] = new List<string> { "Failed" };
                 RaiseErrorsChanged("GeomapmakerResults");
             }
             NotifyPropertyChanged("GeomapmakerResults");
