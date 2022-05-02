@@ -229,7 +229,8 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 2. Tooltip
-        public string Check3Tooltip => "Check that the table exists.<br>";
+        public string Check3Tooltip => "Check that the table exists.<br>" +
+                                       "Check table for any missing fields.<br>";
 
         // 3. Validate Glossary
         private async Task<string> Check3Async(string propertyKey)
@@ -243,7 +244,17 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Table was found
             {
-
+                //
+                // Check table for any missing fields 
+                //
+                List<string> missingFields = await Data.Glossary.GetMissingFieldsAsync();
+                if (missingFields.Count != 0)
+                {
+                    foreach (string field in missingFields)
+                    {
+                        errors.Add($"Field not found: {field}");
+                    }
+                }
             }
 
             if (errors.Count == 0)
