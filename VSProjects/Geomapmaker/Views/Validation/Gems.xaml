@@ -81,10 +81,10 @@
             <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result4}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <!--<TextBlock Grid.Row="10" Grid.Column="1" Text="5" FontWeight="Bold" />
-            <TextBlock Grid.Row="10" Grid.Column="2" Text="No unnecessary terms in Glossary" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="5" FontWeight="Bold" />
+            <TextBlock Grid.Row="10" Grid.Column="2" Text="Validate Stations layer" ToolTip="{Binding Gems.Check5Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="10" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result5}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" />-->
+            <Separator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <!--<TextBlock Grid.Row="12" Grid.Column="1" Text="6" FontWeight="Bold" />
             <TextBlock Grid.Row="12" Grid.Column="2" Text="No missing sources in DataSources" TextWrapping="Wrap" />
