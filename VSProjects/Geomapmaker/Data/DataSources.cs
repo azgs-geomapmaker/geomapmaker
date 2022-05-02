@@ -74,7 +74,7 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
 
             // Get all datasources from Data Source table
-            List<string> dataSources = await GetDataSourceIdsAsync();
+            List<string> dataSources = await GetDistinctDataSourceIdsAsync();
 
             // Find unused data sources
             List<string> unusedDataSources = dataSources.Except(foreignKeys.Distinct()).ToList();
@@ -110,7 +110,7 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
 
             // Get all datasources from Data Source table
-            List<string> dataSources = await GetDataSourceIdsAsync();
+            List<string> dataSources = await GetDistinctDataSourceIdsAsync();
 
             // Find missing data sources
             List<string> missingDataSources = foreignKeys.Except(dataSources).ToList();
@@ -124,18 +124,14 @@ namespace Geomapmaker.Data
         /// <returns>List of duplicate datasources_id</returns>
         public static async Task<List<string>> GetDuplicateIdsAsync()
         {
-            // Get datasources_id values
-            List<string> dataSourceIds = await GetDataSourceIdsAsync();
-
-            // Return duplicate ids
-            return dataSourceIds.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("datasources_id", "DataSources");
         }
 
         /// <summary>
-        /// Get datasources_id from DataSources table
+        /// Get distinct datasources_id from DataSources table
         /// </summary>
-        /// <returns>List of datasources_id</returns>
-        public static async Task<List<string>> GetDataSourceIdsAsync()
+        /// <returns>List of distinct datasources_ids</returns>
+        public static async Task<List<string>> GetDistinctDataSourceIdsAsync()
         {
             return await General.StandaloneTableGetDistinctValuesForFieldAsync("datasources_id", "DataSources");
         }

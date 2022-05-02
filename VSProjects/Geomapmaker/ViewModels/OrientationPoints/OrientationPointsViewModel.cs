@@ -82,7 +82,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             StationFieldIdOptions = await Data.Stations.GetStationFieldIdsAsync();
 
             // Data Source Options
-            DataSourceOptions = await Data.DataSources.GetDataSourceIdsAsync();
+            DataSourceOptions = await Data.DataSources.GetDistinctDataSourceIdsAsync();
         }
 
         #region INotifyPropertyChanged

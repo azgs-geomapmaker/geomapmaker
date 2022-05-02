@@ -17,7 +17,7 @@ namespace Geomapmaker.RibbonElements
 
             QueuedTask.Run(async () =>
             {
-                List<string> DataSourceIds = await Data.DataSources.GetDataSourceIdsAsync();
+                List<string> DataSourceIds = await Data.DataSources.GetDistinctDataSourceIdsAsync();
 
                 foreach (string id in DataSourceIds)
                 {
