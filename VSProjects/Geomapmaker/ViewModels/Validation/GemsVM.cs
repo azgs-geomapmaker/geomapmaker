@@ -41,7 +41,12 @@ namespace Geomapmaker.ViewModels.Validation
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
-        public string Check1Tooltip => "Check the table exists.<br>Check table for any missing fields.<br>Check for empty/null values in required fields.<br>Check for any duplicate IDs.<br>Check for unused data sources.<br>Check for missing data sources.";
+        // Tooltip
+        public string Check1Tooltip => "Check the table exists.<br>" +
+                                       "Check table for any missing fields.<br>" +
+                                       "Check for empty/null values in required fields.<br>" +
+                                       "Check for any duplicate IDs.<br>Check for unused data sources.<br>" +
+                                       "Check for missing data sources.";
 
         // 1. Validate DataSources table
         private async Task<string> Check1Async(string propertyKey)
@@ -51,7 +56,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the table exists
             if (await Data.DataSources.DataSourceExistsAsync() == false)
             {
-                errors.Add("DataSources table not found");
+                errors.Add("Table not found: DataSources");
             }
             else // Table was found
             {
@@ -63,7 +68,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in missingFields)
                     {
-                        errors.Add($"Field '{field}' not found");
+                        errors.Add($"Field not found: {field}");
                     }
                 }
 
@@ -75,7 +80,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in fieldsWithMissingValues)
                     {
-                        errors.Add($"Null value found in {field} field");
+                        errors.Add($"Null value found in field: {field}");
                     }
                 }
 
@@ -129,7 +134,10 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        public string Check2Tooltip => "Check the table exists.<br>Check table for any missing fields.<br>Check for empty/null values in required fields.";
+        // Tooltip
+        public string Check2Tooltip => "Check the table exists.<br>" +
+                                       "Check table for any missing fields.<br>" +
+                                       "Check for empty/null values in required fields.";
 
         // Validate DescriptionOfMapUnits table
         private async Task<string> Check2Async(string propertyKey)
@@ -139,7 +147,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the table exists
             if (await Data.DescriptionOfMapUnits.DmuTableExistsAsync() == false)
             {
-                errors.Add("DescriptionOfMapUnits table not found");
+                errors.Add("Table not found: DescriptionOfMapUnits");
             }
             else // Table was found
             {
@@ -151,7 +159,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in missingFields)
                     {
-                        errors.Add($"Field '{field}' not found");
+                        errors.Add($"Field not found: {field}");
                     }
                 }
 
@@ -163,7 +171,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in fieldsWithMissingValues)
                     {
-                        errors.Add($"Null value found in {field} field");
+                        errors.Add($"Null value found in field: {field}");
                     }
                 }
 
@@ -175,7 +183,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (string field in mapUnitfieldsWithMissingValues)
                     {
-                        errors.Add($"Null value found in {field} field");
+                        errors.Add($"Null value found in field: {field}");
                     }
                 }
 
