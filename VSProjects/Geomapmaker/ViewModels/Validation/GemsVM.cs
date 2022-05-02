@@ -226,7 +226,8 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 3. Tooltip
-        public string Check3Tooltip => "Check that the layer exists.<br>";
+        public string Check3Tooltip => "Check that the layer exists.<br>" +
+                                       "Check layer for any missing fields.<br>";
 
         // 3. Validate MapUnitPolys layer
         private async Task<string> Check3Async(string propertyKey)
@@ -271,7 +272,8 @@ namespace Geomapmaker.ViewModels.Validation
         }
 
         // 4. Tooltip
-        public string Check4Tooltip => "Check that the layer exists.<br>";
+        public string Check4Tooltip => "Check that the layer exists.<br>" +
+                                       "Check layer for any missing fields.<br>";
 
         // 4. Validate ContactsAndFaults layer
         private async Task<string> Check4Async(string propertyKey)
@@ -285,6 +287,17 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Layer was found
             {
+                //
+                // Check table for any missing fields 
+                //
+                List<string> missingFields = await Data.ContactsAndFaults.GetMissingFieldsAsync();
+                if (missingFields.Count != 0)
+                {
+                    foreach (string field in missingFields)
+                    {
+                        errors.Add($"Field not found: {field}");
+                    }
+                }
 
             }
 

@@ -40,7 +40,8 @@ namespace Geomapmaker.Data
         public static async Task<List<string>> GetMissingFieldsAsync()
         {
             // List of fields to check for
-            List<string> requiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes", "mapunitpolys_id", "globalid", "st_area(shape)", "st_length(shape)" };
+            List<string> requiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
+                "mapunitpolys_id", "globalid", "st_area(shape)", "st_length(shape)" };
 
             return await General.FeatureLayerFieldsExistAsync("MapUnitPolys", requiredFields);
         }

@@ -33,6 +33,19 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Check the layer for any missing fieldss
+        /// </summary>
+        /// <returns>Returns a list of fieldnames missing from the layer</returns>
+        public static async Task<List<string>> GetMissingFieldsAsync()
+        {
+            // List of fields to check for
+            List<string> requiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
+                "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id", "globalid", "st_length(shape)" };
+
+            return await General.FeatureLayerFieldsExistAsync("ContactsAndFaults", requiredFields);
+        }
+
+        /// <summary>
         /// Get Templates for Contacts and Faults layer
         /// </summary>
         /// <param name="filterSketch"></param>
