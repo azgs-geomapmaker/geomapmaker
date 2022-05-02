@@ -47,6 +47,9 @@ namespace Geomapmaker.ViewModels.Validation
             Result5 = await Check5Async("Result5");
             NotifyPropertyChanged("Result5");
 
+            Result6 = await Check6Async("Result6");
+            NotifyPropertyChanged("Result6");
+
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
@@ -293,7 +296,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the layer exists
             if (await Data.Stations.StationsExistsAsync() == false)
             {
-                errors.Add("Feature layer not found: Stations");
+                return "Skipped";
             }
             else // Layer was found
             {
@@ -312,10 +315,34 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 3.6 No missing sources in DataSources
-        private string Check6()
+        // 6. Tooltip
+        public string Check6Tooltip => "Check that the layer exists.<br>";
+
+        // 6. Validate OrientationPoints layer
+        private async Task<string> Check6Async(string propertyKey)
         {
-            return "Skipped";
+            List<string> errors = new List<string>();
+
+            // Check if the layer exists
+            if (await Data.OrientationPoints.OrientationPointsExistsAsync() == false)
+            {
+                return "Skipped";
+            }
+            else // Layer was found
+            {
+
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
         }
 
         // 3.7 No unnecessary sources in DataSources
