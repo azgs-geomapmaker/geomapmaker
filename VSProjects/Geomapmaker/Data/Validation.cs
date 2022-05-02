@@ -174,7 +174,7 @@ namespace Geomapmaker.Data
                             // Limit the query to just the fields we need to check
                             // Join the fields as a comma-delimited string
                             SubFields = string.Join(",", fieldsToCheck),
-                            
+
                             WhereClause = whereClause
                         };
 
@@ -205,6 +205,68 @@ namespace Geomapmaker.Data
             });
 
             return fieldsWithNull;
+        }
+
+        /// <summary>
+        /// Find duplicate values in a standalone table
+        /// </summary>
+        /// <param name="tableName">Name of table</param>
+        /// <param name="fieldToCheck">Name of fields</param>
+        /// <param name="whereClause">Where-clause</param>
+        /// <returns>Returns list of duplicate values</returns>
+        public static async Task<List<string>> StandaloneTableFindDuplicateValuesInFieldAsync(string tableName, string fieldToCheck, string whereClause = "")
+        {
+            List<string> allValues = new List<string>();
+
+            // Check for active map
+            if (MapView.Active == null)
+            {
+                return allValues;
+            }
+
+            // Get standalone table by name
+            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+
+            // Check if the table was null
+            if (standaloneTable == null)
+            {
+                return allValues;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table table = standaloneTable.GetTable())
+                {
+                    // Underlying table found
+                    if (table != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            SubFields = fieldToCheck,
+                            WhereClause = whereClause
+                        };
+
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    // Check if value is empty or null
+                                    if (row[fieldToCheck] != null || !string.IsNullOrEmpty(row[fieldToCheck].ToString()))
+                                    {
+                                        // Add field to list
+                                        allValues.Add(row[fieldToCheck].ToString());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Return duplicates
+            return allValues.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
         }
     }
 }
