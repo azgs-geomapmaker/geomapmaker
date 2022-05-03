@@ -1,4 +1,5 @@
 ﻿using Geomapmaker.Models;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -13,6 +14,18 @@ namespace Geomapmaker.Data
         public static async Task<bool> StandaloneTableExistsAsync()
         {
             return await General.StandaloneTableExistsAsync("GeoMaterialDict");
+        }
+
+        /// <summary>
+        /// Check the table for any missing fieldss
+        /// </summary>
+        /// <returns>Returns a list of fieldnames missing from the table</returns>
+        public static async Task<List<string>> GetMissingFieldsAsync()
+        {
+            // List of fields to check for
+            List<string> requiredFields = new List<string>() { "hierarchykey", "geomaterial", "indentedname", "definition" };
+
+            return await General.StandaloneTableFieldsExistAsync("GeoMaterialDict", requiredFields);
         }
 
         public static ObservableCollection<Geomaterial> GeoMaterialOptions => new ObservableCollection<Geomaterial>()
