@@ -231,6 +231,18 @@ namespace Geomapmaker.ViewModels.Validation
                         errors.Add($"Null value found in field: {field}");
                     }
                 }
+
+                //
+                // Check for any MapUnits defined in DMU, but not used in MapUnitPolys
+                //
+                List<string> unusedDMU = await Data.DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
+                if (unusedDMU.Count != 0)
+                {
+                    foreach (string mu in unusedDMU)
+                    {
+                        errors.Add($"Unused MapUnit: {mu}");
+                    }
+                }
             }
 
             if (errors.Count == 0)

@@ -87,6 +87,19 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Compare the MapUnitPolys layer with the DescriptionOfMapUnits table. Return any unused MapUnits from DescriptionOfMapUnits. 
+        /// </summary>
+        /// <returns>List of MapUnits not used</returns>
+        public static async Task<List<string>> GetUnusedMapUnitsAsync()
+        {
+            List<string> mapUnitPolys = await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
+
+            List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
+
+            return mapUnitDescriptions.Except(mapUnitPolys).ToList();
+        }
+
+        /// <summary>
         /// Get list of MapUnit (objects) from DMU
         /// </summary>
         /// <returns>List of MapUnits</returns>
