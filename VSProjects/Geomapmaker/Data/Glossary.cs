@@ -9,7 +9,7 @@ namespace Geomapmaker.Data
         /// Check if the DataSources table exists
         /// </summary>
         /// <returns>Returns true if the table exists</returns>
-        public static async Task<bool> TableExistsAsync()
+        public static async Task<bool> StandaloneTableExistsAsync()
         {
             return await General.StandaloneTableExistsAsync("Glossary");
         }

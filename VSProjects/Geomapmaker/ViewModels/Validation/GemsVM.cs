@@ -73,7 +73,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.DataSources.DataSourceExistsAsync() == false)
+            if (await Data.DataSources.StandaloneTableExistsAsync() == false)
             {
                 errors.Add("Table not found: DataSources");
             }
@@ -166,7 +166,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.DescriptionOfMapUnits.DmuTableExistsAsync() == false)
+            if (await Data.DescriptionOfMapUnits.StandaloneTableExistsAsync() == false)
             {
                 errors.Add("Table not found: DescriptionOfMapUnits");
             }
@@ -258,7 +258,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.Glossary.TableExistsAsync() == false)
+            if (await Data.Glossary.StandaloneTableExistsAsync() == false)
             {
                 errors.Add("Table not found: Glossary");
             }
@@ -335,7 +335,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.GeoMaterialDict.GeoMaterialDictTableExistsAsync() == false)
+            if (await Data.GeoMaterialDict.StandaloneTableExistsAsync() == false)
             {
                 errors.Add("Table not found: GeoMaterialDict");
             }
@@ -366,7 +366,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.MapUnitPolys.MapUnitPolysExistsAsync() == false)
+            if (await Data.MapUnitPolys.FeatureLayerExistsAsync() == false)
             {
                 errors.Add("Feature layer not found: MapUnitPolys");
             }
@@ -407,7 +407,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.ContactsAndFaults.ContactsAndFaultsExistsAsync() == false)
+            if (await Data.ContactsAndFaults.FeatureLayerExistsAsync() == false)
             {
                 errors.Add("Feature layer not found: ContactsAndFaults");
             }
@@ -449,7 +449,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.Stations.StationsExistsAsync() == false)
+            if (await Data.Stations.FeatureLayerExistsAsync() == false)
             {
                 return "Skipped";
             }
@@ -491,7 +491,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.OrientationPoints.OrientationPointsExistsAsync() == false)
+            if (await Data.OrientationPoints.FeatureLayerExistsAsync() == false)
             {
                 return "Skipped";
             }

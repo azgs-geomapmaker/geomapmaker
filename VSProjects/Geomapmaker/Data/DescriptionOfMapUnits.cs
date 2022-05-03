@@ -15,7 +15,7 @@ namespace Geomapmaker.Data
         /// Check if the DescriptionOfMapUnits table exists
         /// </summary>
         /// <returns>True if the table exists</returns>
-        public static async Task<bool> DmuTableExistsAsync()
+        public static async Task<bool> StandaloneTableExistsAsync()
         {
             return await General.StandaloneTableExistsAsync("DescriptionOfMapUnits");
         }

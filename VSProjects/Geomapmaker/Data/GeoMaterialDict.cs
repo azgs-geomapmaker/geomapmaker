@@ -10,7 +10,7 @@ namespace Geomapmaker.Data
         /// Check if the GeoMaterialDict table exists
         /// </summary>
         /// <returns>True if the table exists</returns>
-        public static async Task<bool> GeoMaterialDictTableExistsAsync()
+        public static async Task<bool> StandaloneTableExistsAsync()
         {
             return await General.StandaloneTableExistsAsync("GeoMaterialDict");
         }

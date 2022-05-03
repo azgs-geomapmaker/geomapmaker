@@ -22,7 +22,7 @@ namespace Geomapmaker.Data
         /// Check if the Symbology table exists
         /// </summary>
         /// <returns>True if the table exists</returns>
-        public static async Task<bool> SymbologyExistsAsync()
+        public static async Task<bool> StandaloneTableExistsAsync()
         {
             return await General.StandaloneTableExistsAsync("Symbology");
         }

@@ -19,7 +19,7 @@ namespace Geomapmaker.Data
         /// Check if the MapUnitPolys layer exists in Active Map
         /// </summary>
         /// <returns>Returns true if layer exists</returns>
-        public static async Task<bool> MapUnitPolysExistsAsync()
+        public static async Task<bool> FeatureLayerExistsAsync()
         {
             return await General.FeatureLayerExistsAsync("MapUnitPolys");
         }

@@ -35,7 +35,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.Symbology.SymbologyExistsAsync() == false)
+            if (await Data.Symbology.StandaloneTableExistsAsync() == false)
             {
                 errors.Add("Symbology table not found");
             }

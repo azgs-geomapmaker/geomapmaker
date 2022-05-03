@@ -18,7 +18,7 @@ namespace Geomapmaker.Data
         /// Check if the ContactsAndFaults layer exists in Active Map
         /// </summary>
         /// <returns>Returns true if layer exists</returns>
-        public static async Task<bool> ContactsAndFaultsExistsAsync()
+        public static async Task<bool> FeatureLayerExistsAsync()
         {
             return await General.FeatureLayerExistsAsync("ContactsAndFaults");
         }
