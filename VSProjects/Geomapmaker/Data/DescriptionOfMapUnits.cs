@@ -70,22 +70,20 @@ namespace Geomapmaker.Data
         /// Get duplicate mapunit values in the DMU table
         /// </summary>
         /// <returns>List of duplicate valuessss</returns>
-        public static async Task<List<string>> GetDuplicateMapUnitValues()
+        public static async Task<List<string>> GetDuplicateMapUnitsAsync()
         {
             // return duplicate map units 
-            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("MapUnit", "DescriptionOfMapUnits", "MapUnit IS NOT NULL");
+            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
         }
 
         /// <summary>
-        /// Get duplicate MapUnits from DMU table
+        /// Get duplicate DescriptionOfMapUnits_ID from DMU table
         /// </summary>
-        /// <returns>List of any duplicate MapUnits in the DMU table</returns>
-        public static async Task<List<string>> GetDuplicateMapUnitsAsync()
+        /// <returns>List of any duplicate DescriptionOfMapUnits_ID in the DMU table</returns>
+        public static async Task<List<string>> GetDuplicateIdsAsync()
         {
-            List<string> mapUnits = await GetAllMapUnitValuesAsync();
-
-            // Return duplicates
-            return mapUnits.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+            // return duplicate ids
+            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
         }
 
         /// <summary>s

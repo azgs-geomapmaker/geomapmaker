@@ -154,6 +154,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Check2Tooltip => "Check that the table exists.<br>" +
                                        "Check table for any missing fields.<br>" +
                                        "Check for duplicate MapUnit values.<br>" +
+                                       "Check for duplicate DescriptionOfMapUnits_ID values.<br>" +
                                        "Check for empty/null values in required fields.";
 
         // 2. Validate DescriptionOfMapUnits table
@@ -189,6 +190,18 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string duplicate in duplicateMapUnits)
                     {
                         errors.Add($"Duplicate MapUnit value: {duplicate}");
+                    }
+                }
+
+                //
+                // Check for duplicate DescriptionOfMapUnits_ID values
+                //
+                List<string> duplicateIds = await Data.DescriptionOfMapUnits.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
                     }
                 }
 
@@ -232,7 +245,9 @@ namespace Geomapmaker.ViewModels.Validation
         // 2. Glossary Tooltip
         public string Check3Tooltip => "Check that the table exists.<br>" +
                                        "Check table for any missing fields.<br>" +
-                                       "Check for empty/null values in required fields.";
+                                       "Check for empty/null values in required fields.<br>" +
+                                       "Check table for duplicate Glossary_ID values.<br>" +
+                                       "Check table for duplicate Term values.<br>";
 
         // 3. Validate Glossary
         private async Task<string> Check3Async(string propertyKey)
@@ -267,6 +282,30 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string field in fieldsWithMissingValues)
                     {
                         errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for any duplicate ids
+                //
+                List<string> duplicateIds = await Data.Glossary.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate glossary_id: {id}");
+                    }
+                }
+
+                //
+                // Check for any duplicate terms
+                //
+                List<string> duplicateTerms = await Data.Glossary.GetDuplicateTermsAsync();
+                if (duplicateTerms.Count != 0)
+                {
+                    foreach (string term in duplicateTerms)
+                    {
+                        errors.Add($"Duplicate term: {term}");
                     }
                 }
 

@@ -37,5 +37,27 @@ namespace Geomapmaker.Data
             return await General.StandaloneTableRequiredFieldIsNullAsync("Glossary", fieldsToCheck);
         }
 
+        /// <summary>
+        /// Get duplicate terms
+        /// </summary>
+        /// <returns>List of duplicate terms</returns>
+        public static async Task<List<string>> GetDuplicateTermsAsync()
+        {
+            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("Glossary", "term");
+        }
+
+        /// <summary>
+        /// Get duplicate terms
+        /// </summary>
+        /// <returns>List of duplicate terms</returns>
+        public static async Task<List<string>> GetDuplicateIdsAsync()
+        {
+            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
+        }
+
+
+
+
+
     }
 }
