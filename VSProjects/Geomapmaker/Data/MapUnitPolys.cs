@@ -41,7 +41,7 @@ namespace Geomapmaker.Data
         {
             // List of fields to check for
             List<string> requiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
-                "mapunitpolys_id", "globalid", "st_area(shape)", "st_length(shape)" };
+                "mapunitpolys_id" };
 
             return await General.FeatureLayerFieldsExistAsync("MapUnitPolys", requiredFields);
         }

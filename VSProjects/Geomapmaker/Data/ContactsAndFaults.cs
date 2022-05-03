@@ -40,7 +40,7 @@ namespace Geomapmaker.Data
         {
             // List of fields to check for
             List<string> requiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
-                "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id", "globalid", "st_length(shape)" };
+                "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id" };
 
             return await General.FeatureLayerFieldsExistAsync("ContactsAndFaults", requiredFields);
         }
