@@ -409,6 +409,19 @@ namespace Geomapmaker.ViewModels.Validation
                         errors.Add($"Field not found: {field}");
                     }
                 }
+
+                //
+                // Check for any missing MapUnit definitions in the DMU
+                //
+                List<string> missingDMU = await Data.MapUnitPolys.GetMapUnitsNotDefinedInDMUTableAsync();
+                if (missingDMU.Count != 0)
+                {
+                    foreach (string mu in missingDMU)
+                    {
+                        errors.Add($"MapUnit not defined in DMU: {mu}");
+                    }
+                }
+
             }
 
             if (errors.Count == 0)

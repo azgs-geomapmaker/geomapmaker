@@ -124,7 +124,7 @@ namespace Geomapmaker.Data
         /// <returns>List of duplicate datasources_id</returns>
         public static async Task<List<string>> GetDuplicateIdsAsync()
         {
-            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("DataSources", "datasources_id");
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
         }
 
         /// <summary>

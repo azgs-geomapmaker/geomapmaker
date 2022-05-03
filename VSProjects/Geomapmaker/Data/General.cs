@@ -285,7 +285,7 @@ namespace Geomapmaker.Data
         /// <param name="fieldName">Name of field</param>
         /// <param name="whereClause">Where-clause</param>
         /// <returns>Returns list of duplicate values</returns>
-        public static async Task<List<string>> StandaloneTableFindDuplicateValuesInFieldAsync(string tableName, string fieldName, string whereClause = "")
+        public static async Task<List<string>> StandaloneTableGetDuplicateValuesInFieldAsync(string tableName, string fieldName, string whereClause = "")
         {
             List<string> allValues = new List<string>();
 

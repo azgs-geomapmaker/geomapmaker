@@ -43,7 +43,7 @@ namespace Geomapmaker.Data
         /// <returns>List of duplicate terms</returns>
         public static async Task<List<string>> GetDuplicateTermsAsync()
         {
-            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("Glossary", "term");
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "term");
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Geomapmaker.Data
         /// <returns>List of duplicate terms</returns>
         public static async Task<List<string>> GetDuplicateIdsAsync()
         {
-            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
         }
 
 

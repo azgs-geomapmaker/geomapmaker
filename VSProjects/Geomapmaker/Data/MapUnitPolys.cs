@@ -47,6 +47,19 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Compare the MapUnitPolys layer with the DescriptionOfMapUnits table. Return any MapUnitPolys not defined in DescriptionOfMapUnits. 
+        /// </summary>
+        /// <returns>List of MapUnits not defined</returns>
+        public static async Task<List<string>> GetMapUnitsNotDefinedInDMUTableAsync()
+        {
+            List<string> mapUnitPolys = await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
+
+            List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
+
+            return mapUnitPolys.Except(mapUnitDescriptions).ToList();
+        }
+
+        /// <summary>
         /// Rebuild the renderer for MapUnitPolys from the DMU table. Rebuild templates for the MUP layer from the DMU table
         /// </summary>
         public static async void RebuildMUPSymbologyAndTemplates()

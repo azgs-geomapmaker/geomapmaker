@@ -59,7 +59,7 @@ namespace Geomapmaker.Data
 
         /// <summary>
         /// Get the unique, non-null DescriptionSourceID values from the DescriptionOfMapUnits table
-        /// </summary>
+        /// </summary> 
         /// <returns>Returns list of DescriptionSourceID values</returns>
         public static async Task<List<string>> GetUniqueDescriptionSourceIDValues()
         {
@@ -73,7 +73,7 @@ namespace Geomapmaker.Data
         public static async Task<List<string>> GetDuplicateMapUnitsAsync()
         {
             // return duplicate map units 
-            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
         }
 
         /// <summary>
@@ -83,51 +83,7 @@ namespace Geomapmaker.Data
         public static async Task<List<string>> GetDuplicateIdsAsync()
         {
             // return duplicate ids
-            return await General.StandaloneTableFindDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
-        }
-
-        /// <summary>s
-        /// Get all MapUnits string value from DMU table
-        /// </summary>
-        /// <returns>List of MapUnits (string)</returns>
-        public static async Task<List<string>> GetAllMapUnitValuesAsync()
-        {
-            List<string> mapUnits = new List<string>();
-
-            StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-            if (dmu != null)
-            {
-                await QueuedTask.Run(() =>
-                {
-                    using (Table table = dmu.GetTable())
-                    {
-                        if (table != null)
-                        {
-                            QueryFilter queryFilter = new QueryFilter
-                            {
-                                SubFields = "MapUnit"
-                            };
-
-                            using (RowCursor rowCursor = table.Search(queryFilter))
-                            {
-                                while (rowCursor.MoveNext())
-                                {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        if (row["MapUnit"] != null)
-                                        {
-                                            mapUnits.Add(row["MapUnit"]?.ToString());
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            return mapUnits;
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
         }
 
         /// <summary>
