@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public class GeoMaterials
+    public class GeoMaterialDict
     {
         /// <summary>
         /// Check if the GeoMaterialDict table exists

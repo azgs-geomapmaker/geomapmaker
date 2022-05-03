@@ -323,7 +323,7 @@
     <Compile Include="Data\Confidence.cs" />
     <Compile Include="Data\DataSources.cs" />
     <Compile Include="Data\DescriptionOfMapUnits.cs" />
-    <Compile Include="Data\GeoMaterials.cs" />
+    <Compile Include="Data\GeoMaterialDict.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
     <Compile Include="ViewModels\Hierarchy\HierarchyViewModel.cs" />

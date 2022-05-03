@@ -53,6 +53,9 @@ namespace Geomapmaker.ViewModels.Validation
             Result7 = await Check7Async("Result7");
             NotifyPropertyChanged("Result7");
 
+            Result8 = await Check8Async("Result8");
+            NotifyPropertyChanged("Result8");
+
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
@@ -323,12 +326,42 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 4. MapUnitPolys Tooltip
-        public string Check4Tooltip => "Check that the layer exists.<br>" +
+        // 4. GeoMaterialDict Tooltip
+        public string Check4Tooltip => "Check that the table exists.<br>";
+
+        // 4. Validate GeoMaterialDict
+        private async Task<string> Check4Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await Data.GeoMaterialDict.GeoMaterialDictTableExistsAsync() == false)
+            {
+                errors.Add("Table not found: GeoMaterialDict");
+            }
+            else // Table was found
+            {
+
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        // 5. MapUnitPolys Tooltip
+        public string Check5Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 
-        // 4. Validate MapUnitPolys layer
-        private async Task<string> Check4Async(string propertyKey)
+        // 5. Validate MapUnitPolys layer
+        private async Task<string> Check5Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -364,12 +397,12 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 5. ContactsAndFaults Tooltip
-        public string Check5Tooltip => "Check that the layer exists.<br>" +
+        // 6. ContactsAndFaults Tooltip
+        public string Check6Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 
-        // 5. Validate ContactsAndFaults layer
-        private async Task<string> Check5Async(string propertyKey)
+        // 6. Validate ContactsAndFaults layer
+        private async Task<string> Check6Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -406,12 +439,12 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 6. Stations Tooltip
-        public string Check6Tooltip => "Check that the layer exists.<br>" +
+        // 7. Stations Tooltip
+        public string Check7Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 
-        // 6. Validate Stations layer
-        private async Task<string> Check6Async(string propertyKey)
+        // 7. Validate Stations layer
+        private async Task<string> Check7Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -448,12 +481,12 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 7. OrientationPoints Tooltip
-        public string Check7Tooltip => "Check that the layer exists.<br>" +
+        // 8. OrientationPoints Tooltip
+        public string Check8Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 
-        // 7. Validate OrientationPoints layer
-        private async Task<string> Check7Async(string propertyKey)
+        // 8. Validate OrientationPoints layer
+        private async Task<string> Check8Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -490,12 +523,6 @@ namespace Geomapmaker.ViewModels.Validation
                 RaiseErrorsChanged(propertyKey);
                 return "Failed";
             }
-        }
-
-        // 3.8 No map units without entries in DescriptionOfMapUnits
-        private string Check8()
-        {
-            return "Skipped";
         }
 
         // 3.9 No unnecessary map units in DescriptionOfMapUnits

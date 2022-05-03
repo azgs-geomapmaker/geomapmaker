@@ -155,7 +155,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public string HexColor => Color?.ToString();
 
-        public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
+        public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterialDict.GeoMaterialOptions;
 
         // GeoMaterial
         private string _geoMaterial;
