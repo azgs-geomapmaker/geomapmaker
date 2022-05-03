@@ -56,11 +56,12 @@ namespace Geomapmaker.ViewModels.Validation
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
-        // 1. Tooltip
+        // 1. DataSources Tooltip
         public string Check1Tooltip => "Check that the table exists.<br>" +
                                        "Check table for any missing fields.<br>" +
                                        "Check for empty/null values in required fields.<br>" +
-                                       "Check for any duplicate IDs.<br>Check for unused data sources.<br>" +
+                                       "Check for any duplicate datasources_id values.<br>" +
+                                       "Check for unused data sources.<br>" +
                                        "Check for missing data sources.";
 
         // 1. Validate DataSources table
@@ -149,7 +150,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 2. Tooltip
+        // 2. DescriptionOfMapUnits Tooltip
         public string Check2Tooltip => "Check that the table exists.<br>" +
                                        "Check table for any missing fields.<br>" +
                                        "Check for duplicate MapUnit values.<br>" +
@@ -228,9 +229,10 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 2. Tooltip
+        // 2. Glossary Tooltip
         public string Check3Tooltip => "Check that the table exists.<br>" +
-                                       "Check table for any missing fields.<br>";
+                                       "Check table for any missing fields.<br>" +
+                                       "Check for empty/null values in required fields.";
 
         // 3. Validate Glossary
         private async Task<string> Check3Async(string propertyKey)
@@ -255,6 +257,19 @@ namespace Geomapmaker.ViewModels.Validation
                         errors.Add($"Field not found: {field}");
                     }
                 }
+
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await Data.Glossary.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
             }
 
             if (errors.Count == 0)
@@ -269,7 +284,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 4. Tooltip
+        // 4. MapUnitPolys Tooltip
         public string Check4Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 
@@ -310,7 +325,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 5. Tooltip
+        // 5. ContactsAndFaults Tooltip
         public string Check5Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 
@@ -352,7 +367,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 6. Tooltip
+        // 6. Stations Tooltip
         public string Check6Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 
@@ -394,7 +409,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 7. Tooltip
+        // 7. OrientationPoints Tooltip
         public string Check7Tooltip => "Check that the layer exists.<br>" +
                                        "Check layer for any missing fields.<br>";
 

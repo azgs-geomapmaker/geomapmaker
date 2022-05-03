@@ -26,5 +26,16 @@ namespace Geomapmaker.Data
             return await General.StandaloneTableFieldsExistAsync("Glossary", requiredFields);
         }
 
+        /// <summary>
+        /// Check the required fields for any missing values.
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
+        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
+        {
+            List<string> fieldsToCheck = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
+
+            return await General.StandaloneTableRequiredFieldIsNullAsync("Glossary", fieldsToCheck);
+        }
+
     }
 }
