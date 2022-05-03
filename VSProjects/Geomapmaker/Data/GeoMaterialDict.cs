@@ -28,6 +28,18 @@ namespace Geomapmaker.Data
             return await General.StandaloneTableFieldsExistAsync("GeoMaterialDict", requiredFields);
         }
 
+        /// <summary>
+        /// Check the required fields for any missing values.
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
+        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
+        {
+            // List of fields to check for null values
+            List<string> fieldsToCheck = new List<string>() { "hierarchykey", "geomaterial", "indentedname" };
+
+            return await General.StandaloneTableRequiredFieldIsNullAsync("GeoMaterialDict", fieldsToCheck);
+        }
+
         public static ObservableCollection<Geomaterial> GeoMaterialOptions => new ObservableCollection<Geomaterial>()
         {
             new Geomaterial { HierarchyKey="01", GeoMaterial="Sedimentary material", IndentedName="Sedimentary material", Definition="An aggregation of particles deposited by gravity, air, water, or ice, or as accumulated by other natural agents operating at Earth's surface such as chemical precipitation or secretion by organisms.  May include unconsolidated material (sediment) and (or) sedimentary rock.  Does not include sedimentary material directly deposited as a result of volcanic activity.", },

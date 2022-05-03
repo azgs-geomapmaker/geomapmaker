@@ -328,7 +328,8 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 4. GeoMaterialDict Tooltip
         public string Check4Tooltip => "Check that the table exists.<br>" +
-                                       "Check table for any missing fields.<br>";
+                                       "Check table for any missing fields.<br>" +
+                                       "Check for empty/null values in required fields.<br>";
 
         // 4. Validate GeoMaterialDict
         private async Task<string> Check4Async(string propertyKey)
@@ -354,7 +355,17 @@ namespace Geomapmaker.ViewModels.Validation
                     }
                 }
 
-
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await Data.GeoMaterialDict.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in field: {field}");
+                    }
+                }
 
 
             }
