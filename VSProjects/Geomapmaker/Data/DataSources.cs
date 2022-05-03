@@ -30,7 +30,7 @@ namespace Geomapmaker.Data
         public static async Task<List<string>> GetMissingFieldsAsync()
         {
             // List of fields to check for
-            List<string> requiredFields = new List<string>() { "objectid", "globalid", "source", "datasources_id", "url", "notes" };
+            List<string> requiredFields = new List<string>() { "source", "datasources_id", "url", "notes" };
 
             return await General.StandaloneTableFieldsExistAsync("DataSources", requiredFields);
         }

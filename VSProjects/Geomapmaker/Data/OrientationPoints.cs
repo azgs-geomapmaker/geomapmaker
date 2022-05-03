@@ -31,7 +31,7 @@ namespace Geomapmaker.Data
             // List of fields to check for
             List<string> requiredFields = new List<string>() { "type", "azimuth", "inclination", "symbol", "label", "locationconfidencemeters",
                 "identityconfidence", "orientationconfidencedegrees", "plotatscale", "stationsid", "mapunit", "locationsourceid",
-                "orientationsourceid", "notes", "orientationpoints_id", "globalid" };
+                "orientationsourceid", "notes", "orientationpoints_id" };
 
             return await General.FeatureLayerFieldsExistAsync("OrientationPoints", requiredFields);
         }
