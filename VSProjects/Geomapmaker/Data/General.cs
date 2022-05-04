@@ -220,7 +220,7 @@ namespace Geomapmaker.Data
             List<string> missingFields = await StandaloneTableGetMissingFieldsAsync(tableName, fieldsToCheck);
             if (missingFields.Count > 0)
             {
-                return missingFields;
+                return fieldsWithNull;
             }
 
             // Get standalone table by name
@@ -300,7 +300,7 @@ namespace Geomapmaker.Data
             List<string> missingFields = await FeatureLayerGetMissingFieldsAsync(layerName, fieldsToCheck);
             if (missingFields.Count > 0)
             {
-                return missingFields;
+                return fieldsWithNull;
             }
 
             // Get layer by name

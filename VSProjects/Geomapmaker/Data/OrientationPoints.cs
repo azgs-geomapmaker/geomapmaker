@@ -37,6 +37,18 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Check the required fields for any missing values.
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
+        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
+        {
+            // List of fields to check for null values
+            List<string> fieldsToCheck = new List<string>() { "type", "azimuth", "inclination", "locationconfidencemeters", "identityconfidence", "orientationconfidencedegrees", "plotatscale", "mapunit", "locationsourceid", "orientationsourceid", "orientationpoints_id" };
+
+            return await General.FeatureLayerGetRequiredFieldIsNullAsync("OrientationPoints", fieldsToCheck);
+        }
+
+        /// <summary>
         /// Get a list of unique, non-null values for the field LocationSourceID in the OrientationPoints layer
         /// </summary>
         /// <returns>List of LocationSourceID values</returns>

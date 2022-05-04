@@ -616,7 +616,8 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 8. OrientationPoints Tooltip
         public string Check8Tooltip => "Layer exists.<br>" +
-                                       "No missing fields.<br>";
+                                       "No missing fields.<br>" +
+                                       "No empty/null values in required fields.<br>";
 
         // 8. Validate OrientationPoints layer
         private async Task<string> Check8Async(string propertyKey)
@@ -643,6 +644,17 @@ namespace Geomapmaker.ViewModels.Validation
                     }
                 }
 
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await Data.OrientationPoints.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in field: {field}");
+                    }
+                }
 
 
             }
