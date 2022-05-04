@@ -477,7 +477,8 @@ namespace Geomapmaker.ViewModels.Validation
         // 6. ContactsAndFaults Tooltip
         public string Check6Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>";
+                                       "No empty/null values in required fields.<br>" +
+                                       "No duplicate ContactsAndFaults_ID values";
 
         // 6. Validate ContactsAndFaults layer
         private async Task<string> Check6Async(string propertyKey)
@@ -514,6 +515,20 @@ namespace Geomapmaker.ViewModels.Validation
                         errors.Add($"Null value found in field: {field}");
                     }
                 }
+
+                //
+                // Check for duplicate ContactsAndFaults_ID values
+                //
+                List<string> duplicateIds = await Data.ContactsAndFaults.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
+                    }
+                }
+
+
 
 
             }

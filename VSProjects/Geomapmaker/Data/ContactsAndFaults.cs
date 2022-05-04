@@ -58,6 +58,16 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Get duplicate ContactsAndFaults_ID
+        /// </summary>
+        /// <returns>List of any duplicate ContactsAndFaults_ID</returns>
+        public static async Task<List<string>> GetDuplicateIdsAsync()
+        {
+            // return duplicate ids
+            return await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
+        }
+
+        /// <summary>
         /// Get Templates for Contacts and Faults layer
         /// </summary>
         /// <param name="filterSketch"></param>
