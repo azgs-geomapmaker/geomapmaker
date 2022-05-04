@@ -8,7 +8,6 @@ using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
-using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,67 +51,16 @@ namespace Geomapmaker.ViewModels.Hierarchy
             WindowCloseEvent(this, new EventArgs());
         });
 
-        // Build the tree stucture by looping over the dmus
+        // Build the tree stucture
         public async Task BuildTree()
         {
-            // Temp list for unassigned DMUS
-            List<MapUnitTreeItem> tmpUnassigned = new List<MapUnitTreeItem>();
-            List<MapUnitTreeItem> tmpTree = new List<MapUnitTreeItem>();
+            // Get the hierarchy tree and unassigned list
+            Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> hierarchyTuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
 
-            TinyMapper.Bind<MapUnit, MapUnitTreeItem>();
-
-            List<MapUnit> DMUs = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
-
-            // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents 
-            List<MapUnitTreeItem> hierarchyList = DMUs.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).Select(a => TinyMapper.Map<MapUnitTreeItem>(a)).ToList();
-
-            // Loop over the DMUs
-            foreach (MapUnitTreeItem mu in hierarchyList)
-            {
-                // Check the HierarchyKey string for a dash
-                // Children will always have a dash (001-001 for example)
-                if (mu.HierarchyKey.IndexOf("-") != -1)
-                {
-                    // Remove the last dash and last index to find their parent's HierarchyKey (001-001 becomes 001)
-                    string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
-
-                    // Look for a map unit that matches the parent HierarchyKey
-                    MapUnitTreeItem parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
-
-                    if (parent == null)
-                    {
-                        // Parent not found. Add to the unassigned list.
-                        tmpUnassigned.Add(mu);
-                    }
-                    else
-                    {
-                        // Add child to parent
-                        parent.Children.Add(mu);
-                    }
-                }
-                else
-                {
-                    // Check if the HierarchyKey is empty
-                    if (string.IsNullOrWhiteSpace(mu.HierarchyKey))
-                    {
-                        // Add to the unassigned list.
-                        tmpUnassigned.Add(mu);
-                    }
-                    else
-                    {
-                        // Map Unit must be a root node
-                        tmpTree.Add(mu);
-                    }
-                }
-            }
-
-            // Sort unassigned
-            tmpUnassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
-
-            Tree = new ObservableCollection<MapUnitTreeItem>(tmpTree);
-            Unassigned = new ObservableCollection<MapUnitTreeItem>(tmpUnassigned);
-
+            Tree = new ObservableCollection<MapUnitTreeItem>(hierarchyTuple.Item1);
             NotifyPropertyChanged("Tree");
+
+            Unassigned = new ObservableCollection<MapUnitTreeItem>(hierarchyTuple.Item2);
             NotifyPropertyChanged("Unassigned");
         }
 
@@ -172,43 +120,46 @@ namespace Geomapmaker.ViewModels.Hierarchy
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        using (RowCursor rowCursor = enterpriseTable.Search(null, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                using (RowCursor rowCursor = enterpriseTable.Search(null, false))
                                 {
-                                    string ID = Helpers.RowValueToString(row["ObjectID"]);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            string ID = Helpers.RowValueToString(row["ObjectID"]);
 
-                                    // In order to update the Map and/or the attribute table.
-                                    // Has to be called before any changes are made to the row.
-                                    context.Invalidate(row);
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                    row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey ?? "";
+                                            row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey ?? "";
 
-                                    // After all the changes are done, persist it.
-                                    row.Store();
+                                            // After all the changes are done, persist it.
+                                            row.Store();
 
-                                    // Has to be called after the store too.
-                                    context.Invalidate(row);
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
+                                        }
+                                    }
                                 }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+
+                            if (!result)
+                            {
+                                MessageBox.Show(editOperation.ErrorMessage);
                             }
                         }
-                    }, enterpriseTable);
-
-                    bool result = editOperation.Execute();
-
-                    if (!result)
-                    {
-                        MessageBox.Show(editOperation.ErrorMessage);
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -270,7 +221,6 @@ namespace Geomapmaker.ViewModels.Hierarchy
         void IDropTarget.DragLeave(IDropInfo dropInfo)
         {
             // TODO
-
         }
 
         #region INotifyPropertyChanged

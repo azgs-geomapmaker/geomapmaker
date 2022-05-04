@@ -57,13 +57,13 @@
                 <HierarchicalDataTemplate DataType="{x:Type models:MapUnitTreeItem}" ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" Visibility="{Binding ColorVisibility}" />
-                        <TextBlock Text="{Binding FullName}" ToolTip="{Binding Tooltip}">
+                        <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="FontWeight" Value="Normal"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ParagraphStyle}" Value="Standard">
-                                            <Setter Property="FontWeight" Value="Normal"/>
+                                        <DataTrigger Binding="{Binding MU}" Value="">
+                                            <Setter Property="FontWeight" Value="Bold"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -94,13 +94,13 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" Visibility="{Binding ColorVisibility}" />
-                        <TextBlock Text="{Binding FullName}" ToolTip="{Binding Tooltip}">
+                        <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="FontWeight" Value="Normal"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ParagraphStyle}" Value="Standard">
-                                            <Setter Property="FontWeight" Value="Normal"/>
+                                        <DataTrigger Binding="{Binding MU}" Value="">
+                                            <Setter Property="FontWeight" Value="Bold"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

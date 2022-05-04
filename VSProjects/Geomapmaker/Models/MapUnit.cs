@@ -134,9 +134,8 @@ namespace Geomapmaker.Models
 
         public ObservableCollection<MapUnitTreeItem> Children { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
-        public bool CanAcceptChildren => string.IsNullOrEmpty(ParagraphStyle) || ParagraphStyle == "Heading";
+        public bool CanAcceptChildren => string.IsNullOrEmpty(MU);
 
-        public string ColorVisibility => ParagraphStyle == "Heading" ? "Collapsed" : "Visible";
+        public string ColorVisibility => string.IsNullOrEmpty(MU) ? "Collapsed" : "Visible";
     }
-
 }

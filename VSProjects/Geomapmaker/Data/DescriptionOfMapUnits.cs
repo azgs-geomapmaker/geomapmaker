@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Geomapmaker._helpers;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using Nelibur.ObjectMapper;
+using System;
 
 namespace Geomapmaker.Data
 {
@@ -221,12 +223,81 @@ namespace Geomapmaker.Data
                 {
                     using (Table table = dmu.GetTable())
                     {
-                        dmuFields = table.GetDefinition().GetFields().ToList();
+                        dmuFields = table.GetDefinition()?.GetFields()?.ToList();
                     }
                 }
             });
 
             return dmuFields;
+        }
+
+        /// <summary>
+        /// Build a tree using HierarchyKeys from the DMU rows 
+        /// </summary>
+        /// <returns>Returns a tuple with the built tree and unassigned units</returns>
+        public static async Task<Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>>> GetHierarchyTreeAsync()
+        {
+            // Temp list for unassigned DMUS
+            List<MapUnitTreeItem> tmpUnassigned = new List<MapUnitTreeItem>();
+
+            // Temp list for the tree
+            List<MapUnitTreeItem> tmpTree = new List<MapUnitTreeItem>();
+
+            // Create a mapper for converting MapUnits to MapUnitTreeItems
+            TinyMapper.Bind<MapUnit, MapUnitTreeItem>();
+
+            // Get all the rows
+            List<MapUnit> DMUs = await GetMapUnitsAsync();
+
+            // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents
+            // Convert MapUnit to MapUnitTreeItem
+            List<MapUnitTreeItem> hierarchyList = DMUs.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).Select(a => TinyMapper.Map<MapUnitTreeItem>(a)).ToList();
+
+            // Loop over the DMUs
+            foreach (MapUnitTreeItem mu in hierarchyList)
+            {
+                // Check the HierarchyKey string for a dash
+                // Children will always have a dash (001-001 for example)
+                if (mu.HierarchyKey.IndexOf("-") != -1)
+                {
+                    // Remove the last dash and last index to find their parent's HierarchyKey (001-001 becomes 001)
+                    string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
+
+                    // Look for a map unit that matches the parent HierarchyKey
+                    MapUnitTreeItem parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
+
+                    if (parent == null)
+                    {
+                        // Parent not found. Add to the unassigned list.
+                        tmpUnassigned.Add(mu);
+                    }
+                    else
+                    {
+                        // Add child to parent
+                        parent.Children.Add(mu);
+                    }
+                }
+                else
+                {
+                    // Check if the HierarchyKey is empty
+                    if (string.IsNullOrWhiteSpace(mu.HierarchyKey))
+                    {
+                        // Add to the unassigned list.
+                        tmpUnassigned.Add(mu);
+                    }
+                    else
+                    {
+                        // Map Unit must be a root node
+                        tmpTree.Add(mu);
+                    }
+                }
+            }
+
+            // Sort unassigned
+            tmpUnassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
+
+            // Combine the lists into a single tuple
+            return Tuple.Create(tmpTree, tmpUnassigned);
         }
     }
 }
