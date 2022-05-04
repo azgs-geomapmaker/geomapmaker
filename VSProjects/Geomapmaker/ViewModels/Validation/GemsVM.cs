@@ -156,8 +156,11 @@ namespace Geomapmaker.ViewModels.Validation
         // 2. DescriptionOfMapUnits Tooltip
         public string Check2Tooltip => "Table exists.<br>" +
                                        "No missing fields.<br>" +
-                                       "No empty/null values in required fields." +
+                                       "No empty/null values in required fields.<br>" +
                                        "No duplicate MapUnit values.<br>" +
+                                       "No duplicate Name values.<br>" +
+                                       "No duplicate FullName values.<br>" +
+                                       "No duplicate AreaFillRGB values.<br>" +
                                        "No duplicate DescriptionOfMapUnits_ID values.<br>";
 
         // 2. Validate DescriptionOfMapUnits table
@@ -209,6 +212,42 @@ namespace Geomapmaker.ViewModels.Validation
                 }
 
                 //
+                // Check for duplicate name values
+                //
+                List<string> duplicateNames = await Data.DescriptionOfMapUnits.GetDuplicateNamesAsync();
+                if (duplicateNames.Count != 0)
+                {
+                    foreach (string name in duplicateNames)
+                    {
+                        errors.Add($"Duplicate Name value: {name}");
+                    }
+                }
+
+                //
+                // Check for duplicate fullname values
+                //
+                List<string> duplicateFullNames = await Data.DescriptionOfMapUnits.GetDuplicateFullNamesAsync();
+                if (duplicateFullNames.Count != 0)
+                {
+                    foreach (string fullName in duplicateFullNames)
+                    {
+                        errors.Add($"Duplicate FullName value: {fullName}");
+                    }
+                }
+
+                //
+                // Check for duplicate rgb values
+                //
+                List<string> duplicateRGB = await Data.DescriptionOfMapUnits.GetDuplicateRGBAsync();
+                if (duplicateRGB.Count != 0)
+                {
+                    foreach (string rgb in duplicateRGB)
+                    {
+                        errors.Add($"Duplicate AreaFillRGB value: {rgb}");
+                    }   
+                }
+
+                //
                 // Check for empty/null values in required fields for ALL DMU ROWS
                 //
                 List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
@@ -257,7 +296,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 2. Glossary Tooltip
+        // 3. Glossary Tooltip
         public string Check3Tooltip => "Table exists.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +

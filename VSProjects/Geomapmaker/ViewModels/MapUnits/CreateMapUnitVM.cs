@@ -334,7 +334,7 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 _validationErrors[propertyKey] = new List<string>() { "Alphabet and number characters only." };
             }
-            // Name must be unique 
+            // MapUnit must be unique 
             else if (ParentVM.MapUnits.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };

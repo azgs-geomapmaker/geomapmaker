@@ -69,11 +69,41 @@ namespace Geomapmaker.Data
         /// <summary>
         /// Get duplicate mapunit values in the DMU table
         /// </summary>
-        /// <returns>List of duplicate valuessss</returns>
+        /// <returns>List of duplicate values</returns>
         public static async Task<List<string>> GetDuplicateMapUnitsAsync()
         {
             // return duplicate map units 
             return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
+        }
+
+        /// <summary>
+        /// Get duplicate name values in the DMU table
+        /// </summary>
+        /// <returns>List of duplicate values</returns>
+        public static async Task<List<string>> GetDuplicateNamesAsync()
+        {
+            // return duplicates
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
+        }
+
+        /// <summary>
+        /// Get duplicate fullname values in the DMU table
+        /// </summary>
+        /// <returns>List of duplicate values</returns>
+        public static async Task<List<string>> GetDuplicateFullNamesAsync()
+        {
+            // return duplicates
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
+        }
+
+        /// <summary>
+        /// Get duplicate rgb values in the DMU table
+        /// </summary>
+        /// <returns>List of duplicate values</returns>
+        public static async Task<List<string>> GetDuplicateRGBAsync()
+        {
+            // return duplicates 
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
         }
 
         /// <summary>
