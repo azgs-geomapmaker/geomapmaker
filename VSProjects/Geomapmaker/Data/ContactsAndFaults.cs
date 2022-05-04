@@ -46,6 +46,18 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Check the required fields for any missing values.
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
+        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
+        {
+            // List of fields to check for null values
+            List<string> fieldsToCheck = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence", "identityconfidence", "datasourceid", "contactsandfaults_id" };
+
+            return await General.FeatureLayerGetRequiredFieldIsNullAsync("ContactsAndFaults", fieldsToCheck);
+        }
+
+        /// <summary>
         /// Get Templates for Contacts and Faults layer
         /// </summary>
         /// <param name="filterSketch"></param>
