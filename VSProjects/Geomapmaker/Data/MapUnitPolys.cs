@@ -72,6 +72,16 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Get duplicate MapUnitPolys_ID
+        /// </summary>
+        /// <returns>List of any duplicate MapUnitPolys_ID</returns>
+        public static async Task<List<string>> GetDuplicateIdsAsync()
+        {
+            // return duplicate ids
+            return await General.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
+        }
+
+        /// <summary>
         /// Rebuild the renderer for MapUnitPolys from the DMU table. Rebuild templates for the MUP layer from the DMU table
         /// </summary>
         public static async void RebuildMUPSymbologyAndTemplates()

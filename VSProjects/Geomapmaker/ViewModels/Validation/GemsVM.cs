@@ -397,7 +397,8 @@ namespace Geomapmaker.ViewModels.Validation
         // 5. MapUnitPolys Tooltip
         public string Check5Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>";
+                                       "No empty/null values in required fields.<br>" +
+                                       "No duplicate MapUnitPolys_ID values";
 
         // 5. Validate MapUnitPolys layer
         private async Task<string> Check5Async(string propertyKey)
@@ -444,6 +445,18 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string field in fieldsWithMissingValues)
                     {
                         errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for duplicate MapUnitPolys_ID values
+                //
+                List<string> duplicateIds = await Data.MapUnitPolys.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate MapUnitPolys_ID value: {id}");
                     }
                 }
 

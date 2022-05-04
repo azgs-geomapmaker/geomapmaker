@@ -12,7 +12,7 @@ namespace Geomapmaker.Data
         /// <summary>
         /// Check if a feature layer exists
         /// </summary>
-        /// <param name="layerName"></param>
+        /// <param name="layerName">Name of layer</param>
         /// <returns>Returns true if layer exists</returns>
         public static async Task<bool> FeatureLayerExistsAsync(string layerName)
         {
@@ -48,7 +48,7 @@ namespace Geomapmaker.Data
         /// <summary>
         /// Check if standalone table exists
         /// </summary>
-        /// <param name="tableName"></param>
+        /// <param name="tableName">Name of table</param>
         /// <returns>Returns true if table exists</returns>
         public static async Task<bool> StandaloneTableExistsAsync(string tableName)
         {
@@ -202,8 +202,8 @@ namespace Geomapmaker.Data
         /// <summary>
         /// Verify the required fields are not null
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="requiredFields"></param>
+        /// <param name="tableName">Name of table</param>
+        /// <param name="fieldsToCheck">List of fields to check</param>
         /// <returns>List of required fields with a null value</returns>
         public static async Task<List<string>> StandaloneTableGetRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck, string whereClause = "")
         {
@@ -282,8 +282,8 @@ namespace Geomapmaker.Data
         /// <summary>
         /// Verify the required fields are not null
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="requiredFields"></param>
+        /// <param name="layerName">Name of layer</param>
+        /// <param name="fieldsToCheck">List of fields to check</param>
         /// <returns>List of required fields with a null value</returns>
         public static async Task<List<string>> FeatureLayerGetRequiredFieldIsNullAsync(string layerName, List<string> fieldsToCheck, string whereClause = "")
         {
@@ -387,6 +387,75 @@ namespace Geomapmaker.Data
             await QueuedTask.Run(() =>
             {
                 using (Table table = standaloneTable.GetTable())
+                {
+                    // Underlying table found
+                    if (table != null)
+                    {
+                        // Get fields for the table
+                        List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
+
+                        // Check if the table has the field
+                        if (tableFields.Any(a => a.Name.ToLower() == fieldName.ToLower()))
+                        {
+                            QueryFilter queryFilter = new QueryFilter
+                            {
+                                SubFields = fieldName,
+                                WhereClause = whereClause
+                            };
+
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        // Check if value is empty or null
+                                        if (row[fieldName] != null || !string.IsNullOrEmpty(row[fieldName]?.ToString()))
+                                        {
+                                            // Add field to list
+                                            allValues.Add(row[fieldName].ToString());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Return duplicates
+            return allValues.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+        }
+
+        /// <summary>
+        /// Find duplicate values in a feature layer
+        /// </summary>
+        /// <param name="layerName">Name of layer</param>
+        /// <param name="fieldName">Name of field</param>
+        /// <param name="whereClause">Where-clause</param>
+        /// <returns>Returns list of duplicate values</returns>
+        public static async Task<List<string>> FeatureLayerGetDuplicateValuesInFieldAsync(string layerName, string fieldName, string whereClause = "")
+        {
+            List<string> allValues = new List<string>();
+
+            // Check for active map
+            if (MapView.Active == null)
+            {
+                return allValues;
+            }
+
+            // Get layer by name
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
+
+            // Check if the layer was null
+            if (layer == null)
+            {
+                return allValues;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table table = layer.GetTable())
                 {
                     // Underlying table found
                     if (table != null)
