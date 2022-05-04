@@ -413,7 +413,7 @@ namespace Geomapmaker.ViewModels.Validation
             else // Layer was found
             {
                 //
-                // Check table for any missing fields 
+                // Check layer for any missing fields 
                 //
                 List<string> missingFields = await Data.MapUnitPolys.GetMissingFieldsAsync();
                 if (missingFields.Count != 0)
@@ -493,7 +493,7 @@ namespace Geomapmaker.ViewModels.Validation
             else // Layer was found
             {
                 //
-                // Check table for any missing fields 
+                // Check layer for any missing fields 
                 //
                 List<string> missingFields = await Data.ContactsAndFaults.GetMissingFieldsAsync();
                 if (missingFields.Count != 0)
@@ -547,7 +547,9 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 7. Stations Tooltip
         public string Check7Tooltip => "Layer exists.<br>" +
-                                       "No missing fields.<br>";
+                                       "No missing fields.<br>" +
+                                       "No empty/null values in required fields.<br>" +
+                                       "No duplicate ContactsAndFaults_ID values";
 
         // 7. Validate Stations layer
         private async Task<string> Check7Async(string propertyKey)
@@ -557,6 +559,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the layer exists
             if (await Data.Stations.FeatureLayerExistsAsync() == false)
             {
+                // Optional layer. No error if not found
                 return "Skipped";
             }
             else // Layer was found
@@ -570,6 +573,30 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string field in missingFields)
                     {
                         errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await Data.Stations.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for duplicate Stations_ID values
+                //
+                List<string> duplicateIds = await Data.Stations.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate Stations_ID value: {id}");
                     }
                 }
 
@@ -599,6 +626,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the layer exists
             if (await Data.OrientationPoints.FeatureLayerExistsAsync() == false)
             {
+                // Optional layer. No error if not found
                 return "Skipped";
             }
             else // Layer was found
