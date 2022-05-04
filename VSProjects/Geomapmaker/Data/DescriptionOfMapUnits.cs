@@ -30,7 +30,7 @@ namespace Geomapmaker.Data
             List<string> requiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb",
                                                                "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
 
-            return await General.StandaloneTableFieldsExistAsync("DescriptionOfMapUnits", requiredFields);
+            return await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", requiredFields);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Geomapmaker.Data
         {
             List<string> fieldsToCheck = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
 
-            return await General.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck);
+            return await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Geomapmaker.Data
                                                               "geomaterial", "geomaterialconfidence" };
 
             // Pass along the where clause to filter out heading DMU rows
-            return await General.StandaloneTableRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck, "MapUnit IS NOT NULL");
+            return await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", fieldsToCheck, "MapUnit IS NOT NULL");
         }
 
         /// <summary>

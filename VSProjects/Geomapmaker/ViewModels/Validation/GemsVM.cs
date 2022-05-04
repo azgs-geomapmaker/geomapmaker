@@ -396,7 +396,8 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 5. MapUnitPolys Tooltip
         public string Check5Tooltip => "Layer exists.<br>" +
-                                       "No missing fields.<br>";
+                                       "No missing fields.<br>" +
+                                       "No empty/null values in required fields.<br>";
 
         // 5. Validate MapUnitPolys layer
         private async Task<string> Check5Async(string propertyKey)
@@ -431,6 +432,18 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string mu in missingDMU)
                     {
                         errors.Add($"MapUnit not defined in DMU: {mu}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await Data.MapUnitPolys.GetRequiredFieldsWithNullValues();
+                if (fieldsWithMissingValues.Count != 0)
+                {
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        errors.Add($"Null value found in field: {field}");
                     }
                 }
 

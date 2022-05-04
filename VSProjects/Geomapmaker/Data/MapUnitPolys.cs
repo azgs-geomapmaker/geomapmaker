@@ -43,7 +43,19 @@ namespace Geomapmaker.Data
             List<string> requiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
                 "mapunitpolys_id" };
 
-            return await General.FeatureLayerFieldsExistAsync("MapUnitPolys", requiredFields);
+            return await General.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", requiredFields);
+        }
+
+        /// <summary>
+        /// Check the required fields for any missing values.
+        /// </summary>
+        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
+        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
+        {
+            // List of fields to check for null values
+            List<string> fieldsToCheck = new List<string>() { "mapunit", "identityconfidence", "datasourceid", "mapunitpolys_id" };
+
+            return await General.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", fieldsToCheck);
         }
 
         /// <summary>

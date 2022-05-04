@@ -33,7 +33,7 @@ namespace Geomapmaker.Data
                 "identityconfidence", "orientationconfidencedegrees", "plotatscale", "stationsid", "mapunit", "locationsourceid",
                 "orientationsourceid", "notes", "orientationpoints_id" };
 
-            return await General.FeatureLayerFieldsExistAsync("OrientationPoints", requiredFields);
+            return await General.FeatureLayerGetMissingFieldsAsync("OrientationPoints", requiredFields);
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace Geomapmaker.Data
             // List of fields to check for
             List<string> requiredFields = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
 
-            return await General.StandaloneTableFieldsExistAsync("Glossary", requiredFields);
+            return await General.StandaloneTableGetMissingFieldsAsync("Glossary", requiredFields);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Geomapmaker.Data
         {
             List<string> fieldsToCheck = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
 
-            return await General.StandaloneTableRequiredFieldIsNullAsync("Glossary", fieldsToCheck);
+            return await General.StandaloneTableGetRequiredFieldIsNullAsync("Glossary", fieldsToCheck);
         }
 
         /// <summary>

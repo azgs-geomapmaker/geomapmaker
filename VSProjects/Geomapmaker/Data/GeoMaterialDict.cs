@@ -25,7 +25,7 @@ namespace Geomapmaker.Data
             // List of fields to check for
             List<string> requiredFields = new List<string>() { "hierarchykey", "geomaterial", "indentedname", "definition" };
 
-            return await General.StandaloneTableFieldsExistAsync("GeoMaterialDict", requiredFields);
+            return await General.StandaloneTableGetMissingFieldsAsync("GeoMaterialDict", requiredFields);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Geomapmaker.Data
             // List of fields to check for null values
             List<string> fieldsToCheck = new List<string>() { "hierarchykey", "geomaterial", "indentedname" };
 
-            return await General.StandaloneTableRequiredFieldIsNullAsync("GeoMaterialDict", fieldsToCheck);
+            return await General.StandaloneTableGetRequiredFieldIsNullAsync("GeoMaterialDict", fieldsToCheck);
         }
 
         public static ObservableCollection<Geomaterial> GeoMaterialOptions => new ObservableCollection<Geomaterial>()

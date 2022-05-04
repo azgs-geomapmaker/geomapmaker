@@ -35,7 +35,7 @@ namespace Geomapmaker.Data
         {
             List<string> requiredFields = new List<string>() { "type", "key_", "description", "symbol" };
 
-            return await General.StandaloneTableFieldsExistAsync("Symbology", requiredFields);
+            return await General.StandaloneTableGetMissingFieldsAsync("Symbology", requiredFields);
         }
         
         /// <summary>

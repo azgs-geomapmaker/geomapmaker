@@ -89,7 +89,7 @@ namespace Geomapmaker.Data
         /// <param name="layerName">Name of the layer</param>
         /// <param name="requiredFields">List of fields to check</param>
         /// <returns>Returns list of missing fields</returns>
-        public static async Task<List<string>> FeatureLayerFieldsExistAsync(string layerName, List<string> requiredFields)
+        public static async Task<List<string>> FeatureLayerGetMissingFieldsAsync(string layerName, List<string> requiredFields)
         {
             List<string> missingFields = new List<string>();
 
@@ -147,7 +147,7 @@ namespace Geomapmaker.Data
         /// <param name="tableName">Name of the table</param>
         /// <param name="requiredFields">List of fields to check</param>
         /// <returns>Returns list of missing fields</returns>
-        public static async Task<List<string>> StandaloneTableFieldsExistAsync(string tableName, List<string> requiredFields)
+        public static async Task<List<string>> StandaloneTableGetMissingFieldsAsync(string tableName, List<string> requiredFields)
         {
             List<string> missingFields = new List<string>();
 
@@ -205,7 +205,7 @@ namespace Geomapmaker.Data
         /// <param name="tableName"></param>
         /// <param name="requiredFields"></param>
         /// <returns>List of required fields with a null value</returns>
-        public static async Task<List<string>> StandaloneTableRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck, string whereClause = "")
+        public static async Task<List<string>> StandaloneTableGetRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck, string whereClause = "")
         {
             List<string> fieldsWithNull = new List<string>();
 
@@ -217,7 +217,7 @@ namespace Geomapmaker.Data
             }
 
             // Avoid any errors from trying to check fields that don't exist 
-            List<string> missingFields = await StandaloneTableFieldsExistAsync(tableName, fieldsToCheck);
+            List<string> missingFields = await StandaloneTableGetMissingFieldsAsync(tableName, fieldsToCheck);
             if (missingFields.Count > 0)
             {
                 return missingFields;
@@ -236,6 +236,86 @@ namespace Geomapmaker.Data
             await QueuedTask.Run(() =>
             {
                 using (Table table = standaloneTable.GetTable())
+                {
+                    // Underlying table found
+                    if (table != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            // Limit the query to just the fields we need to check
+                            // Join the fields as a comma-delimited string
+                            SubFields = string.Join(",", fieldsToCheck),
+
+                            WhereClause = whereClause
+                        };
+
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    foreach (string field in fieldsToCheck)
+                                    {
+                                        // Check if value is empty or null
+                                        if (row[field] == null || string.IsNullOrEmpty(row[field].ToString()))
+                                        {
+                                            // Check if the field is already in the list
+                                            if (!fieldsWithNull.Contains(field))
+                                            {
+                                                // Add field to list
+                                                fieldsWithNull.Add(field);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            return fieldsWithNull;
+        }
+
+
+        /// <summary>
+        /// Verify the required fields are not null
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="requiredFields"></param>
+        /// <returns>List of required fields with a null value</returns>
+        public static async Task<List<string>> FeatureLayerGetRequiredFieldIsNullAsync(string layerName, List<string> fieldsToCheck, string whereClause = "")
+        {
+            List<string> fieldsWithNull = new List<string>();
+
+            // Check for active map
+            if (MapView.Active == null)
+            {
+                // Missing all required fields
+                return fieldsWithNull;
+            }
+
+            // Avoid any errors from trying to check fields that don't exist 
+            List<string> missingFields = await FeatureLayerGetMissingFieldsAsync(layerName, fieldsToCheck);
+            if (missingFields.Count > 0)
+            {
+                return missingFields;
+            }
+
+            // Get layer by name
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
+
+            // Check if the table was null
+            if (layer == null)
+            {
+                // Missing all required fields
+                return fieldsWithNull;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table table = layer.GetTable())
                 {
                     // Underlying table found
                     if (table != null)

@@ -42,7 +42,7 @@ namespace Geomapmaker.Data
             List<string> requiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
                 "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id" };
 
-            return await General.FeatureLayerFieldsExistAsync("ContactsAndFaults", requiredFields);
+            return await General.FeatureLayerGetMissingFieldsAsync("ContactsAndFaults", requiredFields);
         }
 
         /// <summary>

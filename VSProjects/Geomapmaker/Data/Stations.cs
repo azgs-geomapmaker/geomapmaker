@@ -31,7 +31,7 @@ namespace Geomapmaker.Data
             List<string> requiredFields = new List<string>() { "fieldid", "locationconfidencemeters", "observedmapunit", "mapunit", "symbol", "label", "plotatscale",
                 "datasourceid", "notes", "locationmethod", "timedate", "observer", "significantdimensionmeters", "gpsx", "gpsy", "pdop", "mapx", "mapy", "stations_id" };
 
-            return await General.FeatureLayerFieldsExistAsync("Stations", requiredFields);
+            return await General.FeatureLayerGetMissingFieldsAsync("Stations", requiredFields);
         }
 
         /// <summary>
