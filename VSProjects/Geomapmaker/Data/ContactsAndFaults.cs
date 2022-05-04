@@ -58,6 +58,16 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Get duplicate Label
+        /// </summary>
+        /// <returns>List of any duplicate Label</returns>
+        public static async Task<List<string>> GetDuplicateLabelsAsync()
+        {
+            // return duplicate ids
+            return await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
+        }
+
+        /// <summary>
         /// Get duplicate ContactsAndFaults_ID
         /// </summary>
         /// <returns>List of any duplicate ContactsAndFaults_ID</returns>
