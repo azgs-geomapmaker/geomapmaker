@@ -224,11 +224,11 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
                 //
                 List<string> mapUnitfieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetMapUnitRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                if (mapUnitfieldsWithMissingValues.Count != 0)
                 {
                     foreach (string field in mapUnitfieldsWithMissingValues)
                     {
-                        errors.Add($"Null value found in field: {field}");
+                        errors.Add($"Null value found in MapUnit field: {field}");
                     }
                 }
 
