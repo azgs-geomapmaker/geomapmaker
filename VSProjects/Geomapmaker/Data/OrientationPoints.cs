@@ -49,6 +49,16 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Get duplicate ContactsAndFaults_ID
+        /// </summary>
+        /// <returns>List of any duplicate ContactsAndFaults_ID</returns>
+        public static async Task<List<string>> GetDuplicateIdsAsync()
+        {
+            // return duplicate ids
+            return await General.FeatureLayerGetDuplicateValuesInFieldAsync("OrientationPoints", "orientationpoints_id");
+        }
+
+        /// <summary>
         /// Get a list of unique, non-null values for the field LocationSourceID in the OrientationPoints layer
         /// </summary>
         /// <returns>List of LocationSourceID values</returns>

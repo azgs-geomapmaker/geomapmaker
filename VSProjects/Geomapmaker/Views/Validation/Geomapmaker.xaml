@@ -45,7 +45,7 @@
             <TextBlock Grid.Row="2" Grid.Column="1" Text="1" FontWeight="Bold" />
             <TextBlock Grid.Row="2" Grid.Column="2" Text="Symbology table exists." ToolTip="{Binding Geomapmaker.Check1Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result1}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
+            <!--<Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />-->
 
         </Grid>
     </AdornerDecorator>

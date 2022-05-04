@@ -99,7 +99,7 @@
             <TextBlock Grid.Row="16" Grid.Column="1" Text="8" FontWeight="Bold" />
             <TextBlock Grid.Row="16" Grid.Column="2" Text="OrientationPoints layer" ToolTip="{Binding Gems.Check8Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="16" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result8}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />
+            <!--<Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />-->
 
             <!--<TextBlock Grid.Row="18" Grid.Column="1" Text="9" FontWeight="Bold" />
             <TextBlock Grid.Row="18" Grid.Column="2" Text="No unnecessary map units in DescriptionOfMapUnits" TextWrapping="Wrap" />

@@ -527,10 +527,6 @@ namespace Geomapmaker.ViewModels.Validation
                         errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
                     }
                 }
-
-
-
-
             }
 
             if (errors.Count == 0)
@@ -549,7 +545,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Check7Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
-                                       "No duplicate ContactsAndFaults_ID values";
+                                       "No duplicate Stations_ID values";
 
         // 7. Validate Stations layer
         private async Task<string> Check7Async(string propertyKey)
@@ -617,7 +613,8 @@ namespace Geomapmaker.ViewModels.Validation
         // 8. OrientationPoints Tooltip
         public string Check8Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>";
+                                       "No empty/null values in required fields.<br>" +
+                                       "No duplicate OrientationPoints_ID values";
 
         // 8. Validate OrientationPoints layer
         private async Task<string> Check8Async(string propertyKey)
@@ -656,6 +653,17 @@ namespace Geomapmaker.ViewModels.Validation
                     }
                 }
 
+                //
+                // Check for duplicate OrientationPoints_ID values
+                //
+                List<string> duplicateIds = await Data.OrientationPoints.GetDuplicateIdsAsync();
+                if (duplicateIds.Count != 0)
+                {
+                    foreach (string id in duplicateIds)
+                    {
+                        errors.Add($"Duplicate OrientationPoints_ID value: {id}");
+                    }
+                }
 
             }
 
