@@ -1,8 +1,10 @@
 ﻿using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Geomapmaker.ViewModels.Validation
@@ -161,7 +163,8 @@ namespace Geomapmaker.ViewModels.Validation
                                        "No duplicate Name values.<br>" +
                                        "No duplicate FullName values.<br>" +
                                        "No duplicate AreaFillRGB values.<br>" +
-                                       "No duplicate DescriptionOfMapUnits_ID values.<br>";
+                                       "No duplicate DescriptionOfMapUnits_ID values.<br>" +
+                                       "HierarchyKeys unique and well-formed";
 
         // 2. Validate DescriptionOfMapUnits table
         private async Task<string> Check2Async(string propertyKey)
@@ -244,7 +247,7 @@ namespace Geomapmaker.ViewModels.Validation
                     foreach (string rgb in duplicateRGB)
                     {
                         errors.Add($"Duplicate AreaFillRGB value: {rgb}");
-                    }   
+                    }
                 }
 
                 //
@@ -282,6 +285,22 @@ namespace Geomapmaker.ViewModels.Validation
                         errors.Add($"Unused MapUnit: {mu}");
                     }
                 }
+
+
+                //
+                // Check for HierarchyKey values that don't fit in the tree 
+                //
+                Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> tuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
+                // Filter out the null/empty HierarchyKeys from the list of unsassigned rows
+                List<MapUnitTreeItem> unassignedNotNull = tuple.Item2.Where(a => !string.IsNullOrEmpty(a.HierarchyKey)).ToList();
+                if (unassignedNotNull.Count != 0)
+                {
+                    foreach (MapUnitTreeItem row in unassignedNotNull)
+                    {
+                        errors.Add($"HierarchyKey Issue: {row.HierarchyKey}");
+                    }
+                }
+
             }
 
             if (errors.Count == 0)
@@ -517,7 +536,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Check6Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
-                                       "No duplicate Label values" + 
+                                       "No duplicate Label values" +
                                        "No duplicate ContactsAndFaults_ID values";
 
         // 6. Validate ContactsAndFaults layer

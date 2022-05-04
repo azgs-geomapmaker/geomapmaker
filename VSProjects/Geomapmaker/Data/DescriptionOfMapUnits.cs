@@ -260,7 +260,7 @@ namespace Geomapmaker.Data
                 // Children will always have a dash (001-001 for example)
                 if (mu.HierarchyKey.IndexOf("-") != -1)
                 {
-                    // Remove the last dash and last index to find their parent's HierarchyKey (001-001 becomes 001)
+                    // Remove the last dash and last index to find their parent's HierarchyKey (002-001 becomes 002)
                     string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
 
                     // Look for a map unit that matches the parent HierarchyKey
