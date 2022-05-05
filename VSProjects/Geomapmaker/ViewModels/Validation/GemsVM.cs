@@ -388,7 +388,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.GeoMaterialDict.StandaloneTableExistsAsync() == false)
+            if (await General.StandaloneTableExistsAsync("GeoMaterialDict") == false)
             {
                 errors.Add("Table not found: GeoMaterialDict");
             }
@@ -397,7 +397,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check table for any missing fields 
                 //
-                List<string> missingFields = await Data.GeoMaterialDict.GetMissingFieldsAsync();
+
+                // List of required fields
+                List<string> geoMaterialRequiredFields = new List<string>() { "hierarchykey", "geomaterial", "indentedname", "definition" };
+
+                // Get list of missing required fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("GeoMaterialDict", geoMaterialRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -406,7 +411,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await Data.GeoMaterialDict.GetRequiredFieldsWithNullValues();
+
+                // List of fields to check for null values
+                List<string> geoMaterialNotNull = new List<string>() { "hierarchykey", "geomaterial", "indentedname" };
+
+                // Check the required fields for any missing values.
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("GeoMaterialDict", geoMaterialNotNull);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
