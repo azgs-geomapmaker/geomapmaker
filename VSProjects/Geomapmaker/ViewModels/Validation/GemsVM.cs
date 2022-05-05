@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using System;
 using System.Collections;
@@ -482,7 +483,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.ContactsAndFaults.FeatureLayerExistsAsync() == false)
+            if (await General.FeatureLayerExistsAsync("ContactsAndFaults") == false)
             {
                 errors.Add("Feature layer not found: ContactsAndFaults");
             }
@@ -491,7 +492,10 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check layer for any missing fields 
                 //
-                List<string> missingFields = await Data.ContactsAndFaults.GetMissingFieldsAsync();
+                List<string> cfRequiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
+                "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id" };
+
+                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("ContactsAndFaults", cfRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -500,7 +504,8 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await Data.ContactsAndFaults.GetRequiredFieldsWithNullValues();
+                List<string> cfNotNullFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence", "identityconfidence", "datasourceid", "contactsandfaults_id" };
+                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("ContactsAndFaults", cfNotNullFields);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
@@ -509,7 +514,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate Label values
                 //
-                List<string> duplicateLabels = await Data.ContactsAndFaults.GetDuplicateLabelsAsync();
+                List<string> duplicateLabels = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
                 foreach (string label in duplicateLabels)
                 {
                     errors.Add($"Duplicate Label value: {label}");
@@ -518,7 +523,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate ContactsAndFaults_ID values
                 //
-                List<string> duplicateIds = await Data.ContactsAndFaults.GetDuplicateIdsAsync();
+                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
                 foreach (string id in duplicateIds)
                 {
                     errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");

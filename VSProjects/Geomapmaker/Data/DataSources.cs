@@ -59,7 +59,7 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues());
 
             // Add CF data sources
-            foreignKeys.AddRange(await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
 
             // Add MUP data sources
             foreignKeys.AddRange(await MapUnitPolys.GetDistinctDataSourceIDValuesAsync());
@@ -95,7 +95,7 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues());
 
             // Add CF data sources
-            foreignKeys.AddRange(await ContactsAndFaults.GetUniqueDataSourceIDValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
 
             // Add MUP data sources
             foreignKeys.AddRange(await MapUnitPolys.GetDistinctDataSourceIDValuesAsync());
