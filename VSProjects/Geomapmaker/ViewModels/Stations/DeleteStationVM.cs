@@ -116,30 +116,34 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 try
                 {
-                    Table enterpriseTable = stationsLayer.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = stationsLayer.GetTable())
                     {
-
-                        QueryFilter filter = new QueryFilter { ObjectIDs = new List<long>{ Selected.ObjectID } };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+
+                                QueryFilter filter = new QueryFilter { ObjectIDs = new List<long> { Selected.ObjectID } };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            context.Invalidate(row);
 
-                                    row.Delete();
+                                            row.Delete();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -199,25 +203,28 @@ namespace Geomapmaker.ViewModels.Stations
 
             await QueuedTask.Run(() =>
             {
-                Table OrientationPointsTable = op.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table OrientationPointsTable = op.GetTable())
                 {
-                    WhereClause = $"StationsID = '{FieldID}'"
-                };
+                    if (OrientationPointsTable != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"StationsID = '{FieldID}'"
+                        };
 
-                int rowCount = OrientationPointsTable.GetCount(queryFilter);
+                        int rowCount = OrientationPointsTable.GetCount(queryFilter);
 
-                if (rowCount > 0)
-                {
-                    string pural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} OrientationPoint{pural} with this StationsID" };
+                        if (rowCount > 0)
+                        {
+                            string pural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} OrientationPoint{pural} with this StationsID" };
+                        }
+                        else
+                        {
+                            _validationErrors.Remove(propertyKey);
+                        }
+                    }
                 }
-                else
-                {
-                    _validationErrors.Remove(propertyKey);
-                }
-
             });
 
             RaiseErrorsChanged(propertyKey);

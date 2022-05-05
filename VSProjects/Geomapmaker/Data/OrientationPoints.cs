@@ -36,38 +36,41 @@ namespace Geomapmaker.Data
             {
                 using (Table opTable = opLayer.GetTable())
                 {
-                    QueryFilter queryFilter = new QueryFilter
+                    if (opTable != null)
                     {
-                        PrefixClause = "DISTINCT",
-                        PostfixClause = "ORDER BY symbol",
-                        SubFields = "symbol"
-                    };
-
-                    using (RowCursor rowCursor = opTable.Search(queryFilter))
-                    {
-                        while (rowCursor.MoveNext())
+                        QueryFilter queryFilter = new QueryFilter
                         {
-                            using (Row row = rowCursor.Current)
+                            PrefixClause = "DISTINCT",
+                            PostfixClause = "ORDER BY symbol",
+                            SubFields = "symbol"
+                        };
+
+                        using (RowCursor rowCursor = opTable.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
                             {
-                                string cfSymbolKey = row["symbol"]?.ToString();
-
-                                GemsSymbol Symbol = Symbology.OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
-
-                                if (Symbol != null)
+                                using (Row row = rowCursor.Current)
                                 {
-                                    // Add symbology for existing CF polylines
-                                    AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                    string cfSymbolKey = row["symbol"]?.ToString();
+
+                                    GemsSymbol Symbol = Symbology.OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
+
+                                    if (Symbol != null)
+                                    {
+                                        // Add symbology for existing CF polylines
+                                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    OperationManager opManager = MapView.Active.Map.OperationManager;
+                        OperationManager opManager = MapView.Active.Map.OperationManager;
 
-                    List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: OrientationPoints");
-                    foreach (Operation undoOp in mapUnitPolyLayerUndos)
-                    {
-                        opManager.RemoveUndoOperation(undoOp);
+                        List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: OrientationPoints");
+                        foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                        {
+                            opManager.RemoveUndoOperation(undoOp);
+                        }
                     }
                 }
 

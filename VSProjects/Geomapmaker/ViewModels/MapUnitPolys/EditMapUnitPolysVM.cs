@@ -63,50 +63,55 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             await QueuedTask.Run(() =>
             {
-                Table enterpriseTable = polyLayer.GetTable();
-
-                EditOperation editOperation = new EditOperation();
-
-                // Convert Dictionary Keys to a read-only list for queryFilter
-                ReadOnlyCollection<long> oids = new ReadOnlyCollection<long>(MapUnitPolysOids.Keys.ToList());
-
-                editOperation.Callback(context =>
+                using (Table enterpriseTable = polyLayer.GetTable())
                 {
-                    QueryFilter queryFilter = new QueryFilter
+                    if (enterpriseTable != null)
                     {
-                        ObjectIDs = oids
-                    };
+                        EditOperation editOperation = new EditOperation();
 
-                    using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
-                    {
-                        while (rowCursor.MoveNext())
+                        // Convert Dictionary Keys to a read-only list for queryFilter
+                        ReadOnlyCollection<long> oids = new ReadOnlyCollection<long>(MapUnitPolysOids.Keys.ToList());
+
+                        editOperation.Callback(context =>
                         {
-                            using (Row row = rowCursor.Current)
+                            QueryFilter queryFilter = new QueryFilter
                             {
-                                // In order to update the Map and/or the attribute table.
-                                // Has to be called before any changes are made to the row.
-                                context.Invalidate(row);
+                                ObjectIDs = oids
+                            };
 
-                                row["MapUnit"] = Selected.MapUnit;
-                                row["IdentityConfidence"] = IdentityConfidence;
-                                row["Label"] = null;
-                                row["Symbol"] = null;
-                                row["Notes"] = Notes;
-                                row["DataSourceID"] = DataSource;
+                            using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        // In order to update the Map and/or the attribute table.
+                                        // Has to be called before any changes are made to the row.
+                                        context.Invalidate(row);
 
-                                // After all the changes are done, persist it.
-                                row.Store();
+                                        row["MapUnit"] = Selected.MapUnit;
+                                        row["IdentityConfidence"] = IdentityConfidence;
+                                        row["Label"] = null;
+                                        row["Symbol"] = null;
+                                        row["Notes"] = Notes;
+                                        row["DataSourceID"] = DataSource;
 
-                                // Has to be called after the store too.
-                                context.Invalidate(row);
+                                        // After all the changes are done, persist it.
+                                        row.Store();
+
+                                        // Has to be called after the store too.
+                                        context.Invalidate(row);
+                                    }
+                                }
                             }
-                        }
+                        }, enterpriseTable);
+
+                        editOperation.Execute();
+
+                        editOperationSucceeded = editOperation.IsSucceeded;
                     }
-                }, enterpriseTable);
+                }
 
-                editOperation.Execute();
-
-                editOperationSucceeded = editOperation.IsSucceeded;
             });
 
             if (editOperationSucceeded)

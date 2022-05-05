@@ -89,31 +89,35 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    // In order to update the Map and/or the attribute table.
-                                    // Has to be called before any changes are made to the row.
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                    row.Delete();
+                                            row.Delete();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

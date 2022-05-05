@@ -130,27 +130,30 @@ namespace Geomapmaker.Data
 
                 using (Table table = layer.GetTable())
                 {
-                    QueryFilter queryFilter = new QueryFilter
+                    if (table != null)
                     {
-                        PrefixClause = "DISTINCT",
-                        PostfixClause = "ORDER BY symbol",
-                        SubFields = "symbol"
-                    };
-
-                    using (RowCursor rowCursor = table.Search(queryFilter))
-                    {
-                        while (rowCursor.MoveNext())
+                        QueryFilter queryFilter = new QueryFilter
                         {
-                            using (Row row = rowCursor.Current)
+                            PrefixClause = "DISTINCT",
+                            PostfixClause = "ORDER BY symbol",
+                            SubFields = "symbol"
+                        };
+
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
                             {
-                                string cfSymbolKey = row["symbol"]?.ToString();
-
-                                GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
-
-                                if (Symbol != null)
+                                using (Row row = rowCursor.Current)
                                 {
-                                    // Add symbology for existing CF polylines
-                                    AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                    string cfSymbolKey = row["symbol"]?.ToString();
+
+                                    GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
+
+                                    if (Symbol != null)
+                                    {
+                                        // Add symbology for existing CF polylines
+                                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                    }
                                 }
                             }
                         }

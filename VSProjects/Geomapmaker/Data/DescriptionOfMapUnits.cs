@@ -118,7 +118,10 @@ namespace Geomapmaker.Data
                 {
                     using (Table table = dmu.GetTable())
                     {
-                        dmuFields = table.GetDefinition()?.GetFields()?.ToList();
+                        if (table != null)
+                        {
+                            dmuFields = table.GetDefinition()?.GetFields()?.ToList();
+                        }
                     }
                 }
             });

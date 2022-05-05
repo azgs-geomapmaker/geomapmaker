@@ -117,29 +117,33 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            context.Invalidate(row);
 
-                                    row.Delete();
+                                            row.Delete();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -205,25 +209,28 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             await QueuedTask.Run(() =>
             {
-                Table MapUnitPolyTable = mup.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table MapUnitPolyTable = mup.GetTable())
                 {
-                    WhereClause = $"mapunit = '{MapUnit}'"
-                };
+                    if (MapUnitPolyTable != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"mapunit = '{MapUnit}'"
+                        };
 
-                int rowCount = MapUnitPolyTable.GetCount(queryFilter);
+                        int rowCount = MapUnitPolyTable.GetCount(queryFilter);
 
-                if (rowCount > 0)
-                {
-                    string pural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{pural} with this MapUnit" };
+                        if (rowCount > 0)
+                        {
+                            string pural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{pural} with this MapUnit" };
+                        }
+                        else
+                        {
+                            _validationErrors.Remove(propertyKey);
+                        }
+                    }
                 }
-                else
-                {
-                    _validationErrors.Remove(propertyKey);
-                }
-
             });
 
             RaiseErrorsChanged(propertyKey);

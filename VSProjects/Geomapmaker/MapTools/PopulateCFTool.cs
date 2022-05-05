@@ -72,34 +72,38 @@ namespace Geomapmaker.MapTools
                 {
                     long cfID = cfFeatures.First().Value.First();
 
-                    Table enterpriseTable = cfFeatureLayer.GetTable();
-
-                    QueryFilter queryFilter = new QueryFilter
+                    using (Table enterpriseTable = cfFeatureLayer.GetTable())
                     {
-                         ObjectIDs = new List<long>{ cfID }
-                    }
-;
-                    using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
-                    {
-                        if (rowCursor.MoveNext())
+                        if (enterpriseTable != null)
                         {
-                            using (Row row = rowCursor.Current)
+                            QueryFilter queryFilter = new QueryFilter
                             {
-                                //populate a CF from fields
-                                ContactFaultTemplate cf = new ContactFaultTemplate
+                                ObjectIDs = new List<long> { cfID }
+                            }
+;
+                            using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
+                            {
+                                if (rowCursor.MoveNext())
                                 {
-                                    Label = row["label"]?.ToString(),
-                                    Type = row["type"]?.ToString(),
-                                    Symbol = row["symbol"]?.ToString(),
-                                    IdentityConfidence = row["identityconfidence"]?.ToString(),
-                                    ExistenceConfidence = row["existenceconfidence"]?.ToString(),
-                                    LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
-                                    IsConcealed = row["isconcealed"]?.ToString() == "Y",
-                                    Notes = row["notes"]?.ToString()
-                                };
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        //populate a CF from fields
+                                        ContactFaultTemplate cf = new ContactFaultTemplate
+                                        {
+                                            Label = row["label"]?.ToString(),
+                                            Type = row["type"]?.ToString(),
+                                            Symbol = row["symbol"]?.ToString(),
+                                            IdentityConfidence = row["identityconfidence"]?.ToString(),
+                                            ExistenceConfidence = row["existenceconfidence"]?.ToString(),
+                                            LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
+                                            IsConcealed = row["isconcealed"]?.ToString() == "Y",
+                                            Notes = row["notes"]?.ToString()
+                                        };
 
-                                // Pass values back to the ViewModel to prepop
-                                cfViewModel.Create.PrepopulateCF(cf);
+                                        // Pass values back to the ViewModel to prepop
+                                        cfViewModel.Create.PrepopulateCF(cf);
+                                    }
+                                }
                             }
                         }
                     }
