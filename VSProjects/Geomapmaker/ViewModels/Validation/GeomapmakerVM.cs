@@ -22,15 +22,19 @@ namespace Geomapmaker.ViewModels.Validation
             Result1 = await Check1Async("Result1");
             NotifyPropertyChanged("Result1");
 
+            Result2 = await Check2Async("Result2");
+            NotifyPropertyChanged("Result2");
+
             ParentVM.UpdateGeomapmakerResults(_validationErrors.Count);
         }
 
         public string Result1 { get; set; } = "Checking..";
+        public string Result2 { get; set; } = "Checking..";
 
         public string Check1Tooltip => "Check that the table exists.<br>" +
                                        "Check table for any missing fields.";
 
-        // 1 Symbology table exists
+        // 1 Symbology table
         private async Task<string> Check1Async(string propertyKey)
         {
             List<string> errors = new List<string>();
@@ -75,6 +79,47 @@ namespace Geomapmaker.ViewModels.Validation
                     errors.Add($"Missing point symbology: {key}");
                 }
 
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        public string Check2Tooltip => "Check table for missing fields.";
+
+        // 2 Symbology table
+        private async Task<string> Check2Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits") == false)
+            {
+                errors.Add("Table not found: DescriptionOfMapUnits");
+            }
+            else // Table was found
+            {
+                //
+                // Check table for missing toolbar fields 
+                //
+
+                // List of required fields to check
+                List<string> dmuRequiredFields = new List<string>() { "relativeage", "hexcolor" };
+
+                // Get misssing required fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", dmuRequiredFields);
+                foreach (string field in missingFields)
+                {
+                    errors.Add($"Field not found: {field}");
+                }
             }
 
             if (errors.Count == 0)
