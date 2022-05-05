@@ -163,6 +163,10 @@ namespace Geomapmaker.Data
             OrientationPointSymbols = orientationSymbols;
         }
 
+        /// <summary>
+        /// Check for any missing line symbols in the symbology table
+        /// </summary>
+        /// <returns>List of missing symbology keys</returns>
         public static async Task<List<string>> GetMissingContactsAndFaultsSymbologyAsync()
         {
             List<string> missingSymbol = new List<string>();
@@ -181,6 +185,36 @@ namespace Geomapmaker.Data
             {
                 // Check if symbology exists
                 if (!ContactsAndFaultsSymbols.Any(a => a.Key == symbol))
+                {
+                    missingSymbol.Add(symbol);
+                }
+            }
+
+            return missingSymbol;
+        }
+
+        /// <summary>
+        /// Check for any missing point symbols in the symbology table
+        /// </summary>
+        /// <returns>List of missing symbology keys</returns>
+        public static async Task<List<string>> GetMissingOrientationPointsSymbologyAsync()
+        {
+            List<string> missingSymbol = new List<string>();
+
+            // Check if the OrientationPoints have been processed
+            if (OrientationPointSymbols == null)
+            {
+                await RefreshOPSymbolOptionsAsync();
+            }
+
+            // Get the symbol values from the OP
+            List<string> opSymbolValues = await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "symbol");
+
+            // Loop over the symbols
+            foreach (string symbol in opSymbolValues)
+            {
+                // Check if symbology exists
+                if (!OrientationPointSymbols.Any(a => a.Key == symbol))
                 {
                     missingSymbol.Add(symbol);
                 }

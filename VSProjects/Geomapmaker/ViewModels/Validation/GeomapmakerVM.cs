@@ -60,10 +60,19 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for any missing CF symbols
                 //
-                List<string> missingCFsymbols = await Data.Symbology.GetMissingContactsAndFaultsSymbologyAsync();
+                List<string> missingCFsymbols = await Symbology.GetMissingContactsAndFaultsSymbologyAsync();
                 foreach (string key in missingCFsymbols)
                 {
                     errors.Add($"Missing line symbology: {key}");
+                }
+
+                //
+                // Check for any missing OP symbols
+                //
+                List<string> missingOPsymbols = await Symbology.GetMissingOrientationPointsSymbologyAsync();
+                foreach (string key in missingOPsymbols)
+                {
+                    errors.Add($"Missing point symbology: {key}");
                 }
 
             }
