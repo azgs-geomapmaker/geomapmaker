@@ -136,17 +136,24 @@ namespace Geomapmaker.ViewModels.Hierarchy
                                         {
                                             string ID = Helpers.RowValueToString(row["ObjectID"]);
 
-                                            // In order to update the Map and/or the attribute table.
-                                            // Has to be called before any changes are made to the row.
-                                            context.Invalidate(row);
+                                            string updatedKey = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey;
 
-                                            row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey ?? "";
+                                            // Check if there is an HKEY value to update
+                                            if (!string.IsNullOrEmpty(updatedKey))
+                                            {
+                                                // In order to update the Map and/or the attribute table.
+                                                // Has to be called before any changes are made to the row.
+                                                context.Invalidate(row);
 
-                                            // After all the changes are done, persist it.
-                                            row.Store();
+                                                // Update the HierarchyKey value
+                                                row["HierarchyKey"] = updatedKey;
 
-                                            // Has to be called after the store too.
-                                            context.Invalidate(row);
+                                                // After all the changes are done, persist it.
+                                                row.Store();
+
+                                                // Has to be called after the store too.
+                                                context.Invalidate(row);
+                                            }
                                         }
                                     }
                                 }
