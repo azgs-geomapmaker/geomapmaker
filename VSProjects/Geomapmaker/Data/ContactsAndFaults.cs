@@ -55,21 +55,21 @@ namespace Geomapmaker.Data
 
                     ContactFaultTemplate tmpTemplate = new ContactFaultTemplate()
                     {
-                        Type = templateDef.DefaultValues["type"].ToString(),
-                        Label = templateDef.DefaultValues["label"].ToString(),
-                        Symbol = templateDef.DefaultValues["symbol"].ToString(),
-                        IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString(),
-                        ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString(),
-                        LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString(),
-                        IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y",
-                        DataSource = templateDef.DefaultValues["datasourceid"].ToString(),
+                        Type = templateDef.DefaultValues["type"]?.ToString(),
+                        Label = templateDef.DefaultValues["label"]?.ToString(),
+                        Symbol = templateDef.DefaultValues["symbol"]?.ToString(),
+                        IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString(),
+                        ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString(),
+                        LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString(),
+                        IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y",
+                        DataSource = templateDef.DefaultValues["datasourceid"]?.ToString(),
                         Template = template
                     };
 
                     // Notes is an optional field
                     if (templateDef.DefaultValues.ContainsKey("notes"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["notes"].ToString();
+                        tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
                     }
 
                     contactFaultTemplates.Add(tmpTemplate);
