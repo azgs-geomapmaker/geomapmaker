@@ -85,60 +85,45 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check table for any missing fields 
                 //
                 List<string> missingFields = await Data.DataSources.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for empty/null values in required fields
                 //
                 List<string> fieldsWithMissingValues = await Data.DataSources.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
                 //
                 // Check for any duplicate ids
                 //
                 List<string> duplicateIds = await Data.DataSources.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
+                foreach (string id in duplicateIds)
                 {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate datasources_id: {id}");
-                    }
+                    errors.Add($"Duplicate datasources_id: {id}");
                 }
 
                 //
                 // Check for unused data sources
                 //
                 List<string> unusedDataSources = await Data.DataSources.GetUnnecessaryDataSources();
-                if (unusedDataSources.Count != 0)
+                foreach (string ds in unusedDataSources)
                 {
-                    foreach (string ds in unusedDataSources)
-                    {
-                        errors.Add($"Unused data source: {ds}");
-                    }
+                    errors.Add($"Unused data source: {ds}");
                 }
 
                 //
                 // Check for missing data sources
                 //
                 List<string> missingDataSources = await Data.DataSources.GetMissingDataSources();
-                if (missingDataSources.Count != 0)
+                foreach (string ds in missingDataSources)
                 {
-                    foreach (string ds in missingDataSources)
-                    {
-                        errors.Add($"Missing data source: {ds}");
-                    }
+                    errors.Add($"Missing data source: {ds}");
                 }
 
             }
@@ -183,135 +168,104 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check table for any missing fields 
                 //
                 List<string> missingFields = await Data.DescriptionOfMapUnits.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for duplicate mapunit values
                 //
                 List<string> duplicateMapUnits = await Data.DescriptionOfMapUnits.GetDuplicateMapUnitsAsync();
-                if (duplicateMapUnits.Count != 0)
+                foreach (string duplicate in duplicateMapUnits)
                 {
-                    foreach (string duplicate in duplicateMapUnits)
-                    {
-                        errors.Add($"Duplicate MapUnit value: {duplicate}");
-                    }
+                    errors.Add($"Duplicate MapUnit value: {duplicate}");
                 }
 
                 //
                 // Check for duplicate DescriptionOfMapUnits_ID values
                 //
                 List<string> duplicateIds = await Data.DescriptionOfMapUnits.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
+                foreach (string id in duplicateIds)
                 {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
-                    }
+                    errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
                 }
 
                 //
                 // Check for duplicate name values
                 //
                 List<string> duplicateNames = await Data.DescriptionOfMapUnits.GetDuplicateNamesAsync();
-                if (duplicateNames.Count != 0)
+                foreach (string name in duplicateNames)
                 {
-                    foreach (string name in duplicateNames)
-                    {
-                        errors.Add($"Duplicate Name value: {name}");
-                    }
+                    errors.Add($"Duplicate Name value: {name}");
                 }
 
                 //
                 // Check for duplicate fullname values
                 //
                 List<string> duplicateFullNames = await Data.DescriptionOfMapUnits.GetDuplicateFullNamesAsync();
-                if (duplicateFullNames.Count != 0)
+                foreach (string fullName in duplicateFullNames)
                 {
-                    foreach (string fullName in duplicateFullNames)
-                    {
-                        errors.Add($"Duplicate FullName value: {fullName}");
-                    }
+                    errors.Add($"Duplicate FullName value: {fullName}");
                 }
 
                 //
                 // Check for duplicate rgb values
                 //
                 List<string> duplicateRGB = await Data.DescriptionOfMapUnits.GetDuplicateRGBAsync();
-                if (duplicateRGB.Count != 0)
+                foreach (string rgb in duplicateRGB)
                 {
-                    foreach (string rgb in duplicateRGB)
-                    {
-                        errors.Add($"Duplicate AreaFillRGB value: {rgb}");
-                    }
+                    errors.Add($"Duplicate AreaFillRGB value: {rgb}");
                 }
 
                 //
                 // Check for duplicate hierarchykey values
                 //
                 List<string> duplicateHierarchyKeys = await Data.DescriptionOfMapUnits.GetDuplicateHierarchyKeysAsync();
-                if (duplicateHierarchyKeys.Count != 0)
+                foreach (string hkey in duplicateHierarchyKeys)
                 {
-                    foreach (string hkey in duplicateHierarchyKeys)
-                    {
-                        errors.Add($"Duplicate HierarchyKey value: {hkey}");
-                    }
+                    errors.Add($"Duplicate HierarchyKey value: {hkey}");
                 }
 
                 //
                 // Check for empty/null values in required fields for ALL DMU ROWS
                 //
                 List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
                 //
                 // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
                 //
                 List<string> mapUnitfieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetMapUnitRequiredFieldsWithNullValues();
-                if (mapUnitfieldsWithMissingValues.Count != 0)
+                foreach (string field in mapUnitfieldsWithMissingValues)
                 {
-                    foreach (string field in mapUnitfieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in MapUnit field: {field}");
-                    }
+                    errors.Add($"Null value found in MapUnit field: {field}");
                 }
 
                 //
                 // Check for any MapUnits defined in DMU, but not used in MapUnitPolys
                 //
                 List<string> unusedDMU = await Data.DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
-                if (unusedDMU.Count != 0)
+                foreach (string mu in unusedDMU)
                 {
-                    foreach (string mu in unusedDMU)
-                    {
-                        errors.Add($"Unused MapUnit: {mu}");
-                    }
+                    errors.Add($"Unused MapUnit: {mu}");
                 }
-
 
                 //
                 // Check for HierarchyKey values that don't fit in the tree 
                 //
+
+                // Get the tree and unassigned list
                 Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> tuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
+
                 // Filter out the null/empty HierarchyKeys from the list of unsassigned rows
                 List<MapUnitTreeItem> unassignedNotNull = tuple.Item2.Where(a => !string.IsNullOrEmpty(a.HierarchyKey)).ToList();
-                if (unassignedNotNull.Count != 0)
+                foreach (MapUnitTreeItem row in unassignedNotNull)
                 {
-                    foreach (MapUnitTreeItem row in unassignedNotNull)
-                    {
-                        errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
-                    }
+                    errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
                 }
 
             }
@@ -351,48 +305,36 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check table for any missing fields 
                 //
                 List<string> missingFields = await Data.Glossary.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for empty/null values in required fields
                 //
                 List<string> fieldsWithMissingValues = await Data.Glossary.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
                 //
                 // Check for any duplicate ids
                 //
                 List<string> duplicateIds = await Data.Glossary.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
+                foreach (string id in duplicateIds)
                 {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate glossary_id: {id}");
-                    }
+                    errors.Add($"Duplicate glossary_id: {id}");
                 }
 
                 //
                 // Check for any duplicate terms
                 //
                 List<string> duplicateTerms = await Data.Glossary.GetDuplicateTermsAsync();
-                if (duplicateTerms.Count != 0)
+                foreach (string term in duplicateTerms)
                 {
-                    foreach (string term in duplicateTerms)
-                    {
-                        errors.Add($"Duplicate term: {term}");
-                    }
+                    errors.Add($"Duplicate term: {term}");
                 }
 
             }
@@ -430,24 +372,18 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check table for any missing fields 
                 //
                 List<string> missingFields = await Data.GeoMaterialDict.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for empty/null values in required fields
                 //
                 List<string> fieldsWithMissingValues = await Data.GeoMaterialDict.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
 
@@ -487,48 +423,36 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check layer for any missing fields 
                 //
                 List<string> missingFields = await Data.MapUnitPolys.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for any missing MapUnit definitions in the DMU
                 //
                 List<string> missingDMU = await Data.MapUnitPolys.GetMapUnitsNotDefinedInDMUTableAsync();
-                if (missingDMU.Count != 0)
+                foreach (string mu in missingDMU)
                 {
-                    foreach (string mu in missingDMU)
-                    {
-                        errors.Add($"MapUnit not defined in DMU: {mu}");
-                    }
+                    errors.Add($"MapUnit not defined in DMU: {mu}");
                 }
 
                 //
                 // Check for empty/null values in required fields
                 //
                 List<string> fieldsWithMissingValues = await Data.MapUnitPolys.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
                 //
                 // Check for duplicate MapUnitPolys_ID values
                 //
                 List<string> duplicateIds = await Data.MapUnitPolys.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
+                foreach (string id in duplicateIds)
                 {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate MapUnitPolys_ID value: {id}");
-                    }
+                    errors.Add($"Duplicate MapUnitPolys_ID value: {id}");
                 }
 
             }
@@ -568,48 +492,36 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check layer for any missing fields 
                 //
                 List<string> missingFields = await Data.ContactsAndFaults.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for empty/null values in required fields
                 //
                 List<string> fieldsWithMissingValues = await Data.ContactsAndFaults.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
                 //
                 // Check for duplicate Label values
                 //
                 List<string> duplicateLabels = await Data.ContactsAndFaults.GetDuplicateLabelsAsync();
-                if (duplicateLabels.Count != 0)
+                foreach (string label in duplicateLabels)
                 {
-                    foreach (string label in duplicateLabels)
-                    {
-                        errors.Add($"Duplicate Label value: {label}");
-                    }
+                    errors.Add($"Duplicate Label value: {label}");
                 }
 
                 //
                 // Check for duplicate ContactsAndFaults_ID values
                 //
                 List<string> duplicateIds = await Data.ContactsAndFaults.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
+                foreach (string id in duplicateIds)
                 {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
-                    }
+                    errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
                 }
             }
 
@@ -648,36 +560,27 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check table for any missing fields 
                 //
                 List<string> missingFields = await Data.Stations.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for empty/null values in required fields
                 //
                 List<string> fieldsWithMissingValues = await Data.Stations.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
                 //
                 // Check for duplicate Stations_ID values
                 //
                 List<string> duplicateIds = await Data.Stations.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
+                foreach (string id in duplicateIds)
                 {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate Stations_ID value: {id}");
-                    }
+                    errors.Add($"Duplicate Stations_ID value: {id}");
                 }
 
             }
@@ -717,36 +620,27 @@ namespace Geomapmaker.ViewModels.Validation
                 // Check table for any missing fields 
                 //
                 List<string> missingFields = await Data.OrientationPoints.GetMissingFieldsAsync();
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field not found: {field}");
-                    }
+                    errors.Add($"Field not found: {field}");
                 }
 
                 //
                 // Check for empty/null values in required fields
                 //
                 List<string> fieldsWithMissingValues = await Data.OrientationPoints.GetRequiredFieldsWithNullValues();
-                if (fieldsWithMissingValues.Count != 0)
+                foreach (string field in fieldsWithMissingValues)
                 {
-                    foreach (string field in fieldsWithMissingValues)
-                    {
-                        errors.Add($"Null value found in field: {field}");
-                    }
+                    errors.Add($"Null value found in field: {field}");
                 }
 
                 //
                 // Check for duplicate OrientationPoints_ID values
                 //
                 List<string> duplicateIds = await Data.OrientationPoints.GetDuplicateIdsAsync();
-                if (duplicateIds.Count != 0)
+                foreach (string id in duplicateIds)
                 {
-                    foreach (string id in duplicateIds)
-                    {
-                        errors.Add($"Duplicate OrientationPoints_ID value: {id}");
-                    }
+                    errors.Add($"Duplicate OrientationPoints_ID value: {id}");
                 }
 
             }

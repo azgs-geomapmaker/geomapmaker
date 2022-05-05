@@ -46,12 +46,9 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 List<string> missingFields = await Data.Symbology.GetMissingRequiredFieldsAsync();
                 // Add errors for any missing fields
-                if (missingFields.Count != 0)
+                foreach (string field in missingFields)
                 {
-                    foreach (string field in missingFields)
-                    {
-                        errors.Add($"Field '{field}' not found");
-                    }
+                    errors.Add($"Field '{field}' not found");
                 }
             }
 
