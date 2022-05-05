@@ -24,7 +24,7 @@ namespace Geomapmaker.Data
             List<string> foreignKeys = new List<string>();
 
             // Add DMU data sources
-            foreignKeys.AddRange(await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues());
+            foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
 
             // Add CF data sources
             foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
@@ -60,7 +60,7 @@ namespace Geomapmaker.Data
             List<string> foreignKeys = new List<string>();
 
             // Add DMU data sources
-            foreignKeys.AddRange(await DescriptionOfMapUnits.GetUniqueDescriptionSourceIDValues());
+            foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
 
             // Add CF data sources
             foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));

@@ -167,7 +167,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.DescriptionOfMapUnits.StandaloneTableExistsAsync() == false)
+            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits") == false)
             {
                 errors.Add("Table not found: DescriptionOfMapUnits");
             }
@@ -176,7 +176,13 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check table for any missing fields 
                 //
-                List<string> missingFields = await Data.DescriptionOfMapUnits.GetMissingFieldsAsync();
+
+                // List of required fields to check
+                List<string> dmuRequiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb",
+                                                               "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
+
+                // Get misssing required fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", dmuRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -185,7 +191,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate mapunit values
                 //
-                List<string> duplicateMapUnits = await Data.DescriptionOfMapUnits.GetDuplicateMapUnitsAsync();
+                List<string> duplicateMapUnits = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
                 foreach (string duplicate in duplicateMapUnits)
                 {
                     errors.Add($"Duplicate MapUnit value: {duplicate}");
@@ -194,7 +200,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate DescriptionOfMapUnits_ID values
                 //
-                List<string> duplicateIds = await Data.DescriptionOfMapUnits.GetDuplicateIdsAsync();
+                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
                 foreach (string id in duplicateIds)
                 {
                     errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
@@ -203,7 +209,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate name values
                 //
-                List<string> duplicateNames = await Data.DescriptionOfMapUnits.GetDuplicateNamesAsync();
+                List<string> duplicateNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
                 foreach (string name in duplicateNames)
                 {
                     errors.Add($"Duplicate Name value: {name}");
@@ -212,7 +218,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate fullname values
                 //
-                List<string> duplicateFullNames = await Data.DescriptionOfMapUnits.GetDuplicateFullNamesAsync();
+                List<string> duplicateFullNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
                 foreach (string fullName in duplicateFullNames)
                 {
                     errors.Add($"Duplicate FullName value: {fullName}");
@@ -221,7 +227,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate rgb values
                 //
-                List<string> duplicateRGB = await Data.DescriptionOfMapUnits.GetDuplicateRGBAsync();
+                List<string> duplicateRGB = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
                 foreach (string rgb in duplicateRGB)
                 {
                     errors.Add($"Duplicate AreaFillRGB value: {rgb}");
@@ -230,7 +236,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate hierarchykey values
                 //
-                List<string> duplicateHierarchyKeys = await Data.DescriptionOfMapUnits.GetDuplicateHierarchyKeysAsync();
+                List<string> duplicateHierarchyKeys = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
                 foreach (string hkey in duplicateHierarchyKeys)
                 {
                     errors.Add($"Duplicate HierarchyKey value: {hkey}");
@@ -239,7 +245,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields for ALL DMU ROWS
                 //
-                List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
+
+                // DMU fields that can't have nulls
+                List<string> dmuNotNull = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
+
+                // Get required fields with a null value
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", dmuNotNull);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
@@ -248,7 +259,13 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
                 //
-                List<string> mapUnitfieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetMapUnitRequiredFieldsWithNullValues();
+
+                // List of fields that can't be null
+                List<string> mapUnitNotNull = new List<string>() { "mapunit", "fullname", "age", "areafillrgb",
+                                                              "geomaterial", "geomaterialconfidence" };
+
+                // Get required fields with null values. Using the 'MapUnit is not null' where clause to only check MapUnit rows
+                List<string> mapUnitfieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", mapUnitNotNull, "MapUnit IS NOT NULL");
                 foreach (string field in mapUnitfieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in MapUnit field: {field}");
