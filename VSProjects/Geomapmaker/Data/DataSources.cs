@@ -5,6 +5,7 @@ using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,11 +124,11 @@ namespace Geomapmaker.Data
                             {
                                 DataSource dS = new DataSource
                                 {
-                                    ObjectId = long.Parse(row["objectid"].ToString()),
-                                    Source = row["source"]?.ToString(),
-                                    DataSource_ID = row["datasources_id"]?.ToString(),
-                                    Url = row["url"]?.ToString(),
-                                    Notes = row["notes"]?.ToString()
+                                    ObjectId = long.Parse(row["objectid"]?.ToString()),
+                                    Source = Helpers.RowValueToString(row["source"]),
+                                    DataSource_ID = Helpers.RowValueToString(row["datasources_id"]),
+                                    Url = Helpers.RowValueToString(row["url"]),
+                                    Notes = Helpers.RowValueToString(row["notes"])
                                 };
 
                                 //add it to our list
