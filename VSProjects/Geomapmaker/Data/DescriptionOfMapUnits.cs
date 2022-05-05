@@ -109,6 +109,16 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Get duplicate HierarchyKey values in the DMU table
+        /// </summary>
+        /// <returns>List of duplicate values</returns>
+        public static async Task<List<string>> GetDuplicateHierarchyKeysAsync()
+        {
+            // return duplicates 
+            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
+        }
+
+        /// <summary>
         /// Get duplicate DescriptionOfMapUnits_ID from DMU table
         /// </summary>
         /// <returns>List of any duplicate DescriptionOfMapUnits_ID in the DMU table</returns>

@@ -163,6 +163,7 @@ namespace Geomapmaker.ViewModels.Validation
                                        "No duplicate Name values.<br>" +
                                        "No duplicate FullName values.<br>" +
                                        "No duplicate AreaFillRGB values.<br>" +
+                                       "No duplicate HierarchyKey values.<br>" +
                                        "No duplicate DescriptionOfMapUnits_ID values.<br>" +
                                        "HierarchyKeys unique and well-formed";
 
@@ -251,6 +252,18 @@ namespace Geomapmaker.ViewModels.Validation
                 }
 
                 //
+                // Check for duplicate hierarchykey values
+                //
+                List<string> duplicateHierarchyKeys = await Data.DescriptionOfMapUnits.GetDuplicateHierarchyKeysAsync();
+                if (duplicateHierarchyKeys.Count != 0)
+                {
+                    foreach (string hkey in duplicateHierarchyKeys)
+                    {
+                        errors.Add($"Duplicate HierarchyKey value: {hkey}");
+                    }
+                }
+
+                //
                 // Check for empty/null values in required fields for ALL DMU ROWS
                 //
                 List<string> fieldsWithMissingValues = await Data.DescriptionOfMapUnits.GetRequiredFieldsWithNullValues();
@@ -297,7 +310,7 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     foreach (MapUnitTreeItem row in unassignedNotNull)
                     {
-                        errors.Add($"HierarchyKey Issue: {row.HierarchyKey}");
+                        errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
                     }
                 }
 
