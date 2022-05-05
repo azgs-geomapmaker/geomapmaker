@@ -1,5 +1,4 @@
 ﻿using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
@@ -16,49 +15,6 @@ namespace Geomapmaker.Data
     public class MapUnitPolys
     {
         /// <summary>
-        /// Check if the MapUnitPolys layer exists in Active Map
-        /// </summary>
-        /// <returns>Returns true if layer exists</returns>
-        public static async Task<bool> FeatureLayerExistsAsync()
-        {
-            return await General.FeatureLayerExistsAsync("MapUnitPolys");
-        }
-
-        /// <summary>
-        /// Get a list of unique, non-null values for the field DataSourceID in the MapUnitPolys layer
-        /// </summary>
-        /// <returns>List of DataSourceID values</returns>
-        public static async Task<List<string>> GetDistinctDataSourceIDValuesAsync()
-        {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid");
-        }
-
-        /// <summary>
-        /// Check the layer for any missing fieldss
-        /// </summary>
-        /// <returns>Returns a list of fieldnames missing from the layer</returns>
-        public static async Task<List<string>> GetMissingFieldsAsync()
-        {
-            // List of fields to check for
-            List<string> requiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
-                "mapunitpolys_id" };
-
-            return await General.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", requiredFields);
-        }
-
-        /// <summary>
-        /// Check the required fields for any missing values.
-        /// </summary>
-        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
-        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
-        {
-            // List of fields to check for null values
-            List<string> fieldsToCheck = new List<string>() { "mapunit", "identityconfidence", "datasourceid", "mapunitpolys_id" };
-
-            return await General.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", fieldsToCheck);
-        }
-
-        /// <summary>
         /// Compare the MapUnitPolys layer with the DescriptionOfMapUnits table. Return any MapUnitPolys not defined in DescriptionOfMapUnits. 
         /// </summary>
         /// <returns>List of MapUnits not defined</returns>
@@ -69,16 +25,6 @@ namespace Geomapmaker.Data
             List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
 
             return mapUnitPolys.Except(mapUnitDescriptions).ToList();
-        }
-
-        /// <summary>
-        /// Get duplicate MapUnitPolys_ID
-        /// </summary>
-        /// <returns>List of any duplicate MapUnitPolys_ID</returns>
-        public static async Task<List<string>> GetDuplicateIdsAsync()
-        {
-            // return duplicate ids
-            return await General.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
         }
 
         /// <summary>

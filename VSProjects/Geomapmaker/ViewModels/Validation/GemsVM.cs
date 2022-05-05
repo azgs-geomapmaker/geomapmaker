@@ -459,7 +459,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.MapUnitPolys.FeatureLayerExistsAsync() == false)
+            if (await General.FeatureLayerExistsAsync("MapUnitPolys") == false)
             {
                 errors.Add("Feature layer not found: MapUnitPolys");
             }
@@ -468,7 +468,13 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check layer for any missing fields 
                 //
-                List<string> missingFields = await Data.MapUnitPolys.GetMissingFieldsAsync();
+
+                // List of fields to check for
+                List<string> mupRequiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
+                "mapunitpolys_id" };
+
+                // Get the missing required fields
+                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", mupRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -486,7 +492,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await Data.MapUnitPolys.GetRequiredFieldsWithNullValues();
+
+                // List of fields to check for null values
+                List<string> mupNotNull = new List<string>() { "mapunit", "identityconfidence", "datasourceid", "mapunitpolys_id" };
+
+                // Get required fields with null values
+                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", mupNotNull);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
@@ -495,7 +506,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate MapUnitPolys_ID values
                 //
-                List<string> duplicateIds = await Data.MapUnitPolys.GetDuplicateIdsAsync();
+                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
                 foreach (string id in duplicateIds)
                 {
                     errors.Add($"Duplicate MapUnitPolys_ID value: {id}");
