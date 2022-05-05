@@ -162,5 +162,31 @@ namespace Geomapmaker.Data
 
             OrientationPointSymbols = orientationSymbols;
         }
+
+        public static async Task<List<string>> GetMissingContactsAndFaultsSymbologyAsync()
+        {
+            List<string> missingSymbol = new List<string>();
+
+            // Check if the ContactsAndFaultsSymbols have been processed
+            if (ContactsAndFaultsSymbols == null)
+            {
+                await RefreshCFSymbolOptionsAsync();
+            }
+            
+            // Get the symbol values from the CF layer
+            List<string> cfSymbolValues = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "symbol");
+
+            // Loop over the CF symbols
+            foreach (string symbol in cfSymbolValues)
+            {
+                // Check if symbology exists
+                if (!ContactsAndFaultsSymbols.Any(a => a.Key == symbol))
+                {
+                    missingSymbol.Add(symbol);
+                }
+            }
+
+            return missingSymbol;
+        }
     }
 }

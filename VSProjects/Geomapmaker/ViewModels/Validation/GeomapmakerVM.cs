@@ -38,7 +38,7 @@ namespace Geomapmaker.ViewModels.Validation
             // Check if the table exists
             if (await General.StandaloneTableExistsAsync("Symbology") == false)
             {
-                errors.Add("Symbology table not found");
+                errors.Add("Table not found: Symbology");
             }
             else // Table was found
             {
@@ -54,8 +54,18 @@ namespace Geomapmaker.ViewModels.Validation
                 // Add errors for any missing fields
                 foreach (string field in missingFields)
                 {
-                    errors.Add($"Field '{field}' not found");
+                    errors.Add($"Field not found: {field}");
                 }
+
+                //
+                // Check for any missing CF symbols
+                //
+                List<string> missingCFsymbols = await Data.Symbology.GetMissingContactsAndFaultsSymbologyAsync();
+                foreach (string key in missingCFsymbols)
+                {
+                    errors.Add($"Missing line symbology: {key}");
+                }
+
             }
 
             if (errors.Count == 0)
