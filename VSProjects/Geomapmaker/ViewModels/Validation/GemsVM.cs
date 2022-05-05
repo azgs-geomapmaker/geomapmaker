@@ -610,7 +610,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.Stations.FeatureLayerExistsAsync() == false)
+            if (await General.FeatureLayerExistsAsync("Stations") == false)
             {
                 // Optional layer. No error if not found
                 return "Skipped";
@@ -620,7 +620,13 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check table for any missing fields 
                 //
-                List<string> missingFields = await Data.Stations.GetMissingFieldsAsync();
+
+                // List of fields to check 
+                List<string> stationRequiredFields = new List<string>() { "fieldid", "locationconfidencemeters", "observedmapunit", "mapunit", "symbol", "label", "plotatscale",
+                "datasourceid", "notes", "locationmethod", "timedate", "observer", "significantdimensionmeters", "gpsx", "gpsy", "pdop", "mapx", "mapy", "stations_id" };
+
+                // Get list of missing fields
+                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("Stations", stationRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -629,7 +635,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await Data.Stations.GetRequiredFieldsWithNullValues();
+
+                // List of fields to check for null values
+                List<string> stationsNotNull = new List<string>() { "locationconfidencemeters", "mapunit", "plotatscale", "datasourceid", "stations_id" };
+
+                // Get requied fields with a null value
+                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("Stations", stationsNotNull);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
@@ -638,7 +649,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate Stations_ID values
                 //
-                List<string> duplicateIds = await Data.Stations.GetDuplicateIdsAsync();
+                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("Stations", "Stations_IDs");
                 foreach (string id in duplicateIds)
                 {
                     errors.Add($"Duplicate Stations_ID value: {id}");

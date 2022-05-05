@@ -33,7 +33,7 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
 
             // Add Stations data sources
-            foreignKeys.AddRange(await Stations.GetDistinctDataSourceIdValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
 
             // Add OP data sources (location)
             foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
@@ -69,7 +69,7 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
 
             // Add Stations data sources
-            foreignKeys.AddRange(await Stations.GetDistinctDataSourceIdValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
 
             // Add OP data sources (location)
             foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
