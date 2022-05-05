@@ -249,16 +249,22 @@ namespace Geomapmaker.Data
             // Get all the rows
             List<MapUnit> DMUs = await GetMapUnitsAsync();
 
-            // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents
+            // Order DMUs by HierarchyKey length then by HierarchyKey so we process children before their parents
             // Convert MapUnit to MapUnitTreeItem
             List<MapUnitTreeItem> hierarchyList = DMUs.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).Select(a => TinyMapper.Map<MapUnitTreeItem>(a)).ToList();
 
             // Loop over the DMUs
             foreach (MapUnitTreeItem mu in hierarchyList)
             {
+                // Check that the HKey is made up of digits and a dash.
+                if (!mu.HierarchyKey.All(c => char.IsDigit(c) || c == '-'))
+                {
+                    // Add to the unassigned list.
+                    tmpUnassigned.Add(mu);
+                }
                 // Check the HierarchyKey string for a dash
                 // Children will always have a dash (001-001 for example)
-                if (mu.HierarchyKey.IndexOf("-") != -1)
+                else if (mu.HierarchyKey.IndexOf("-") != -1)
                 {
                     // Remove the last dash and last index to find their parent's HierarchyKey (002-001 becomes 002)
                     string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
