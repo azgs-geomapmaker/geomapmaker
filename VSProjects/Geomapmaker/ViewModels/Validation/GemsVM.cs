@@ -670,7 +670,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the layer exists
-            if (await Data.OrientationPoints.FeatureLayerExistsAsync() == false)
+            if (await General.FeatureLayerExistsAsync("OrientationPoints") == false)
             {
                 // Optional layer. No error if not found
                 return "Skipped";
@@ -680,7 +680,14 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check table for any missing fields 
                 //
-                List<string> missingFields = await Data.OrientationPoints.GetMissingFieldsAsync();
+
+                // List of fields to check for
+                List<string> opRequiredFields = new List<string>() { "type", "azimuth", "inclination", "symbol", "label", "locationconfidencemeters",
+                "identityconfidence", "orientationconfidencedegrees", "plotatscale", "stationsid", "mapunit", "locationsourceid",
+                "orientationsourceid", "notes", "orientationpoints_id" };
+
+                // Get list of missing fields
+                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("OrientationPoints", opRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -689,7 +696,13 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await Data.OrientationPoints.GetRequiredFieldsWithNullValues();
+
+                // List of fields to check for null values
+                List<string> opNotNull = new List<string>() { "type", "azimuth", "inclination", "locationconfidencemeters", "identityconfidence", "orientationconfidencedegrees",
+                    "plotatscale", "mapunit", "locationsourceid", "orientationsourceid", "orientationpoints_id" };
+
+                // Get list of required fields with a null
+                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("OrientationPoints", opNotNull);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
@@ -698,7 +711,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate OrientationPoints_ID values
                 //
-                List<string> duplicateIds = await Data.OrientationPoints.GetDuplicateIdsAsync();
+                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("OrientationPoints", "orientationpoints_id");
                 foreach (string id in duplicateIds)
                 {
                     errors.Add($"Duplicate OrientationPoints_ID value: {id}");

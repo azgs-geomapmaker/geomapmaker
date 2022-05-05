@@ -7,75 +7,11 @@ using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
     public class OrientationPoints
     {
-        /// <summary>
-        /// Check if the OrientationPoints layer exists in Active Map
-        /// </summary>
-        /// <returns>Returns true if layer exists</returns>
-        public static async Task<bool> FeatureLayerExistsAsync()
-        {
-            return await General.FeatureLayerExistsAsync("OrientationPoints");
-        }
-
-        /// <summary>
-        /// Check the layer for any missing fieldss
-        /// </summary>
-        /// <returns>Returns a list of fieldnames missing from the layer</returns>
-        public static async Task<List<string>> GetMissingFieldsAsync()
-        {
-            // List of fields to check for
-            List<string> requiredFields = new List<string>() { "type", "azimuth", "inclination", "symbol", "label", "locationconfidencemeters",
-                "identityconfidence", "orientationconfidencedegrees", "plotatscale", "stationsid", "mapunit", "locationsourceid",
-                "orientationsourceid", "notes", "orientationpoints_id" };
-
-            return await General.FeatureLayerGetMissingFieldsAsync("OrientationPoints", requiredFields);
-        }
-
-        /// <summary>
-        /// Check the required fields for any missing values.
-        /// </summary>
-        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
-        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
-        {
-            // List of fields to check for null values
-            List<string> fieldsToCheck = new List<string>() { "type", "azimuth", "inclination", "locationconfidencemeters", "identityconfidence", "orientationconfidencedegrees", "plotatscale", "mapunit", "locationsourceid", "orientationsourceid", "orientationpoints_id" };
-
-            return await General.FeatureLayerGetRequiredFieldIsNullAsync("OrientationPoints", fieldsToCheck);
-        }
-
-        /// <summary>
-        /// Get duplicate ContactsAndFaults_ID
-        /// </summary>
-        /// <returns>List of any duplicate ContactsAndFaults_ID</returns>
-        public static async Task<List<string>> GetDuplicateIdsAsync()
-        {
-            // return duplicate ids
-            return await General.FeatureLayerGetDuplicateValuesInFieldAsync("OrientationPoints", "orientationpoints_id");
-        }
-
-        /// <summary>
-        /// Get a list of unique, non-null values for the field LocationSourceID in the OrientationPoints layer
-        /// </summary>
-        /// <returns>List of LocationSourceID values</returns>
-        public static async Task<List<string>> GetDistinctLocationSourceIDValuesAsync()
-        {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid");
-        }
-
-        /// <summary>
-        /// Get a list of unique, non-null values for the field OrientationSourceID in the OrientationPoints layer
-        /// </summary>
-        /// <returns>List of OrientationSourceID values</returns>
-        public static async Task<List<string>> GetDistinctOrientationSourceIDValuesAsync()
-        {
-            return await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid");
-        }
-
         /// <summary>
         /// Rebuild the symbols for the Orientation Points Layer
         /// </summary>

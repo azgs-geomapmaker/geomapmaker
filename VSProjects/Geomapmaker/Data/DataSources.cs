@@ -36,10 +36,10 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await Stations.GetDistinctDataSourceIdValuesAsync());
 
             // Add OP data sources (location)
-            foreignKeys.AddRange(await OrientationPoints.GetDistinctLocationSourceIDValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
 
             // Add OP data sources (orientation)
-            foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
 
             // Get all datasources from Data Source table
             List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
@@ -72,10 +72,10 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await Stations.GetDistinctDataSourceIdValuesAsync());
 
             // Add OP data sources (location)
-            foreignKeys.AddRange(await OrientationPoints.GetDistinctLocationSourceIDValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
 
             // Add OP data sources (orientation)
-            foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
 
             // Get all datasources from Data Source table
             List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
