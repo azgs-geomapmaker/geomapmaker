@@ -2,6 +2,7 @@
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -55,9 +56,9 @@ namespace Geomapmaker.Data
                                 {
                                     GemsSymbol cfS = new GemsSymbol
                                     {
-                                        Key = row["key"].ToString(),
-                                        Description = _helpers.Helpers.RowValueToString(row["description"]),
-                                        SymbolJson = row["symbol"].ToString()
+                                        Key = Helpers.RowValueToString(row["key"]),
+                                        Description = Helpers.RowValueToString(row["description"]),
+                                        SymbolJson = Helpers.RowValueToString(row["symbol"])
                                     };
 
                                     try
@@ -128,9 +129,9 @@ namespace Geomapmaker.Data
                                 {
                                     GemsSymbol symbol = new GemsSymbol
                                     {
-                                        Key = row["key"].ToString(),
-                                        Description = _helpers.Helpers.RowValueToString(row["description"]),
-                                        SymbolJson = row["symbol"].ToString()
+                                        Key = Helpers.RowValueToString(row["key"]),
+                                        Description = Helpers.RowValueToString(row["description"]),
+                                        SymbolJson = Helpers.RowValueToString(row["symbol"])
                                     };
 
                                     try
