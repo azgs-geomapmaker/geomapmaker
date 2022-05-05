@@ -296,9 +296,9 @@ namespace Geomapmaker.Data
                 {
                     IEnumerable<EditingTemplate> cfTemplates = cf.GetTemplates();
 
-                    foreach (var template in cfTemplates)
+                    foreach (EditingTemplate template in cfTemplates)
                     {
-                        var templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
                         if (templateDef.DefaultValues["datasourceid"]?.ToString() == originalDataSourceID)
                         {
