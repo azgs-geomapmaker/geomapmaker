@@ -321,7 +321,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.Glossary.StandaloneTableExistsAsync() == false)
+            if (await General.StandaloneTableExistsAsync("Glossary") == false)
             {
                 errors.Add("Table not found: Glossary");
             }
@@ -330,7 +330,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check table for any missing fields 
                 //
-                List<string> missingFields = await Data.Glossary.GetMissingFieldsAsync();
+
+                // List of fields to check for
+                List<string> glossaryRequiredFields = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
+
+                // Get list of missing fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Glossary", glossaryRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -339,7 +344,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await Data.Glossary.GetRequiredFieldsWithNullValues();
+
+                // List of fields that can't have nulls
+                List<string> glossaryNotNUll = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
+
+                // Get the required fields with a null
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("Glossary", glossaryNotNUll);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
@@ -348,7 +358,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for any duplicate ids
                 //
-                List<string> duplicateIds = await Data.Glossary.GetDuplicateIdsAsync();
+                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
                 foreach (string id in duplicateIds)
                 {
                     errors.Add($"Duplicate glossary_id: {id}");
@@ -357,7 +367,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for any duplicate terms
                 //
-                List<string> duplicateTerms = await Data.Glossary.GetDuplicateTermsAsync();
+                List<string> duplicateTerms = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "term");
                 foreach (string term in duplicateTerms)
                 {
                     errors.Add($"Duplicate term: {term}");
