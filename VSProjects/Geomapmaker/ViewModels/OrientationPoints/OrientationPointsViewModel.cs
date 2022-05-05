@@ -2,6 +2,7 @@
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             StationFieldIdOptions = await Data.Stations.GetStationFieldIdsAsync();
 
             // Data Source Options
-            DataSourceOptions = await Data.DataSources.GetDistinctDataSourceIdsAsync();
+            DataSourceOptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
         }
 
         #region INotifyPropertyChanged

@@ -15,38 +15,6 @@ namespace Geomapmaker.Data
     public class DataSources
     {
         /// <summary>
-        /// Check if the DataSources table exists
-        /// </summary>
-        /// <returns>Returns true if the table exists</returns>
-        public static async Task<bool> StandaloneTableExistsAsync()
-        {
-            return await General.StandaloneTableExistsAsync("DataSources");
-        }
-
-        /// <summary>
-        /// Check the table for any missing fieldss
-        /// </summary>
-        /// <returns>Returns a list of fieldnames missing from the table</returns>
-        public static async Task<List<string>> GetMissingFieldsAsync()
-        {
-            // List of fields to check for
-            List<string> requiredFields = new List<string>() { "source", "datasources_id", "url", "notes" };
-
-            return await General.StandaloneTableGetMissingFieldsAsync("DataSources", requiredFields);
-        }
-
-        /// <summary>
-        /// Check the required fields for any missing values.
-        /// </summary>
-        /// <returns>Returns a list of fieldnames that contain a null/empty value</returns>
-        public static async Task<List<string>> GetRequiredFieldsWithNullValues()
-        {
-            List<string> fieldsToCheck = new List<string>() { "source", "datasources_id" };
-
-            return await General.StandaloneTableGetRequiredFieldIsNullAsync("DataSources", fieldsToCheck);
-        }
-
-        /// <summary>
         /// Checks the data sources for any unused data sources
         /// </summary>
         /// <returns>List of unused data sources</returns>
@@ -74,7 +42,7 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
 
             // Get all datasources from Data Source table
-            List<string> dataSources = await GetDistinctDataSourceIdsAsync();
+            List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
 
             // Find unused data sources
             List<string> unusedDataSources = dataSources.Except(foreignKeys.Distinct()).ToList();
@@ -110,30 +78,12 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await OrientationPoints.GetDistinctOrientationSourceIDValuesAsync());
 
             // Get all datasources from Data Source table
-            List<string> dataSources = await GetDistinctDataSourceIdsAsync();
+            List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
 
             // Find missing data sources
             List<string> missingDataSources = foreignKeys.Except(dataSources).ToList();
 
             return missingDataSources;
-        }
-
-        /// <summary>
-        /// Get duplicate datasources_id
-        /// </summary>
-        /// <returns>List of duplicate datasources_id</returns>
-        public static async Task<List<string>> GetDuplicateIdsAsync()
-        {
-            return await General.StandaloneTableGetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
-        }
-
-        /// <summary>
-        /// Get distinct datasources_id from DataSources table
-        /// </summary>
-        /// <returns>List of distinct datasources_ids</returns>
-        public static async Task<List<string>> GetDistinctDataSourceIdsAsync()
-        {
-            return await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
         }
 
         /// <summary>

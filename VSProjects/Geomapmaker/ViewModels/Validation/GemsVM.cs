@@ -76,7 +76,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.DataSources.StandaloneTableExistsAsync() == false)
+            if (await General.StandaloneTableExistsAsync("DataSources") == false)
             {
                 errors.Add("Table not found: DataSources");
             }
@@ -85,7 +85,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check table for any missing fields 
                 //
-                List<string> missingFields = await Data.DataSources.GetMissingFieldsAsync();
+
+                // Required fields for DataSources
+                List<string> dsRequiredFields = new List<string>() { "source", "datasources_id", "url", "notes" };
+
+                // Get missing required fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DataSources", dsRequiredFields);
                 foreach (string field in missingFields)
                 {
                     errors.Add($"Field not found: {field}");
@@ -94,7 +99,10 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await Data.DataSources.GetRequiredFieldsWithNullValues();
+                // List of fields that can't have null values
+                List<string> dsNotNullFields = new List<string>() { "source", "datasources_id" };
+                // Get required fields with a null value
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DataSources", dsNotNullFields);
                 foreach (string field in fieldsWithMissingValues)
                 {
                     errors.Add($"Null value found in field: {field}");
@@ -103,7 +111,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for any duplicate ids
                 //
-                List<string> duplicateIds = await Data.DataSources.GetDuplicateIdsAsync();
+                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
                 foreach (string id in duplicateIds)
                 {
                     errors.Add($"Duplicate datasources_id: {id}");
