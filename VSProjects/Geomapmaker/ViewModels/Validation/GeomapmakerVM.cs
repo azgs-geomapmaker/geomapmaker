@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace Geomapmaker.ViewModels.Validation
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await Data.Symbology.StandaloneTableExistsAsync() == false)
+            if (await General.StandaloneTableExistsAsync("Symbology") == false)
             {
                 errors.Add("Symbology table not found");
             }
@@ -44,7 +45,12 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for any missing fields 
                 //
-                List<string> missingFields = await Data.Symbology.GetMissingRequiredFieldsAsync();
+
+                // List of required fields
+                List<string> symbologyRequiredFields = new List<string>() { "type", "key_", "description", "symbol" };
+
+                // Get missing fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Symbology", symbologyRequiredFields);
                 // Add errors for any missing fields
                 foreach (string field in missingFields)
                 {

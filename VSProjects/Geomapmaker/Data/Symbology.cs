@@ -19,26 +19,6 @@ namespace Geomapmaker.Data
         public static List<GemsSymbol> OrientationPointSymbols;
 
         /// <summary>
-        /// Check if the Symbology table exists
-        /// </summary>
-        /// <returns>True if the table exists</returns>
-        public static async Task<bool> StandaloneTableExistsAsync()
-        {
-            return await General.StandaloneTableExistsAsync("Symbology");
-        }
-
-        /// <summary>
-        /// Verify the required fields exist in table
-        /// </summary>
-        /// <returns>Returns list of missing fields</returns>
-        public static async Task<List<string>> GetMissingRequiredFieldsAsync()
-        {
-            List<string> requiredFields = new List<string>() { "type", "key_", "description", "symbol" };
-
-            return await General.StandaloneTableGetMissingFieldsAsync("Symbology", requiredFields);
-        }
-        
-        /// <summary>
         /// Rebuild the CF symbols from the symbology table
         /// </summary>
         /// <returns>Returns async task</returns>
