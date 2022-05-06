@@ -159,7 +159,8 @@ namespace Geomapmaker.ViewModels.Validation
                                        "No duplicate AreaFillRGB values.<br>" +
                                        "No duplicate HierarchyKey values.<br>" +
                                        "No duplicate DescriptionOfMapUnits_ID values.<br>" +
-                                       "HierarchyKeys unique and well-formed";
+                                       "HierarchyKeys unique and well-formed.<br>" +
+                                       "GeoMaterial are defined in GeoMaterialDict.";
 
         // 2. Validate DescriptionOfMapUnits table
         private async Task<string> Check2Async(string propertyKey)
@@ -274,7 +275,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for any MapUnits defined in DMU, but not used in MapUnitPolys
                 //
-                List<string> unusedDMU = await Data.DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
+                List<string> unusedDMU = await DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
                 foreach (string mu in unusedDMU)
                 {
                     errors.Add($"Unused MapUnit: {mu}");
@@ -292,6 +293,17 @@ namespace Geomapmaker.ViewModels.Validation
                 foreach (MapUnitTreeItem row in unassignedNotNull)
                 {
                     errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
+                }
+
+                //
+                // GeoMaterial are defined in GeoMaterialDict
+                //
+
+                // Get missing GeoMaterials
+                List<string> missingGeoMaterials = await DescriptionOfMapUnits.GetMissingGeoMaterialAsync();
+                foreach (string missing in missingGeoMaterials)
+                {
+                    errors.Add($"GeoMaterial not defined: {missing}");
                 }
 
             }
@@ -390,7 +402,8 @@ namespace Geomapmaker.ViewModels.Validation
         // 4. GeoMaterialDict Tooltip
         public string Check4Tooltip => "Table exists.<br>" +
                                        "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>";
+                                       "No empty/null values in required fields.<br>" +
+                                       "GeoMaterialDict table has not been modified.<br>";
 
         // 4. Validate GeoMaterialDict
         private async Task<string> Check4Async(string propertyKey)
@@ -435,7 +448,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check if the GeoMaterialDict table was modified
                 //
-                List<string> modifiedGeoMaterials = await Data.GeoMaterialDict.GetModifiedGeoMaterials();
+                List<string> modifiedGeoMaterials = await GeoMaterialDict.GetModifiedGeoMaterials();
                 foreach (string geomaterial in modifiedGeoMaterials)
                 {
                     errors.Add($"Geomaterial Modified: {geomaterial}");
@@ -458,7 +471,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Check5Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
-                                       "No duplicate MapUnitPolys_ID values";
+                                       "No duplicate MapUnitPolys_ID values.<br>";
 
         // 5. Validate MapUnitPolys layer
         private async Task<string> Check5Async(string propertyKey)
@@ -537,8 +550,8 @@ namespace Geomapmaker.ViewModels.Validation
         public string Check6Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
-                                       "No duplicate Label values" +
-                                       "No duplicate ContactsAndFaults_ID values";
+                                       "No duplicate Label values.<br>" +
+                                       "No duplicate ContactsAndFaults_ID values.<br>";
 
         // 6. Validate ContactsAndFaults layer
         private async Task<string> Check6Async(string propertyKey)
@@ -609,7 +622,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Check7Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
-                                       "No duplicate Stations_ID values";
+                                       "No duplicate Stations_ID values.<br>";
 
         // 7. Validate Stations layer
         private async Task<string> Check7Async(string propertyKey)
@@ -680,7 +693,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Check8Tooltip => "Layer exists.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
-                                       "No duplicate OrientationPoints_ID values";
+                                       "No duplicate OrientationPoints_ID values.<br>";
 
         // 8. Validate OrientationPoints layer
         private async Task<string> Check8Async(string propertyKey)

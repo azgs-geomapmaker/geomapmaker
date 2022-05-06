@@ -27,6 +27,29 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Check for missing GeoMaterials in the GeoMaterialDict
+        /// </summary>
+        /// <returns>Returns list of missing GeoMaterials</returns>
+        public static async Task<List<string>> GetMissingGeoMaterialAsync()
+        {
+            List<string> missingGeoMaterial = new List<string>();
+
+            // Get the GeoMaterial values from DMU
+            List<string> dmuGeoMaterials = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterial");
+
+            foreach (string geo in dmuGeoMaterials)
+            {
+                // Check GeoMaterialDict for value
+                if (!GeoMaterialDict.GeoMaterialOptions.Any(a => a.IndentedName == geo))
+                {
+                    missingGeoMaterial.Add(geo);
+                }
+            }
+
+            return missingGeoMaterial;
+        }
+
+        /// <summary>
         /// Get list of MapUnit (objects) from DMU
         /// </summary>
         /// <returns>List of MapUnits</returns>
