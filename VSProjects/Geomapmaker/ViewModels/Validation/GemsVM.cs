@@ -432,7 +432,14 @@ namespace Geomapmaker.ViewModels.Validation
                     errors.Add($"Null value found in field: {field}");
                 }
 
-
+                //
+                // Check if the GeoMaterialDict table was modified
+                //
+                List<string> modifiedGeoMaterials = await Data.GeoMaterialDict.GetModifiedGeoMaterials();
+                foreach (string geomaterial in modifiedGeoMaterials)
+                {
+                    errors.Add($"Geomaterial Modified: {geomaterial}");
+                }
             }
 
             if (errors.Count == 0)
