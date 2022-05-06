@@ -31,8 +31,8 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result1 { get; set; } = "Checking..";
         public string Result2 { get; set; } = "Checking..";
 
-        public string Check1Tooltip => "Check that the table exists.<br>" +
-                                       "Check table for any missing fields.";
+        public string Check1Tooltip => "Table exists.<br>" +
+                                       "No missing fields.<br>";
 
         // 1 Symbology table
         private async Task<string> Check1Async(string propertyKey)
@@ -93,7 +93,7 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        public string Check2Tooltip => "Check table for missing fields.";
+        public string Check2Tooltip => "Check for toolbar fields.";
 
         // 2 Symbology table
         private async Task<string> Check2Async(string propertyKey)
