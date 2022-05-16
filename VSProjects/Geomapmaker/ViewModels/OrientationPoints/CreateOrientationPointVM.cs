@@ -47,7 +47,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
         private async void SaveAsync()
         {
-            bool IsSucceeded = false;
+            string errorMessage = null;
 
             FeatureLayer opLayer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
 
@@ -59,19 +59,21 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             await QueuedTask.Run(async () =>
             {
-                EditOperation createFeatures = new EditOperation
+                try
                 {
-                    Name = "Create Orientation Point",
-                    SelectNewFeatures = true
-                };
+                    EditOperation createFeatures = new EditOperation
+                    {
+                        Name = "Create Orientation Point",
+                        SelectNewFeatures = true
+                    };
 
-                MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+                    MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
 
-                // Get geometry from point builder
-                Geometry point = pointBuilder.ToGeometry();
+                    // Get geometry from point builder
+                    Geometry point = pointBuilder.ToGeometry();
 
-                // Create features and set attributes
-                Dictionary<string, object> attributes = new Dictionary<string, object>
+                    // Create features and set attributes
+                    Dictionary<string, object> attributes = new Dictionary<string, object>
                 {
                     { "StationsID", StationFieldId },
                     { "Type", Type },
@@ -83,43 +85,40 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                     { "OrientationSourceID", OrientationSourceID },
                 };
 
-                RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
+                    RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
 
-                // Execute to execute the operation
-                createFeatures.Execute();
+                    // Execute to execute the operation
+                    createFeatures.Execute();
 
-                IsSucceeded = createFeatures.IsSucceeded;
-
-                if (IsSucceeded)
-                {
-                    MapView.Active?.ZoomTo(point);
+                    if (createFeatures.IsSucceeded)
+                    {
+                        // Zoom into point
+                        MapView.Active?.ZoomTo(point);
+                    }
                 }
-
-                //
-                // Validate X, Y Coordinates by checking if a feature was actually created at that geometry point. 
-                // I haven't found a way to check prior to executing the editOperation
-                //
-                if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(opLayer))
+                catch (Exception ex)
                 {
-                    IsSucceeded = false;
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
 
-                    // Undo the edit operation
-                    await createFeatures.UndoAsync();
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
+                    }
                 }
 
             });
 
-            if (IsSucceeded)
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "One or more errors occured.");
+            }
+            else
             {
                 Data.OrientationPoints.RebuildOrientationPointsSymbology();
                 ParentVM.CloseProwindow();
             }
-            else
-            {
-                // Raise error
-                _validationErrors["SpatialReferenceWkid"] = new List<string>() { "Coordinates not valid for Spatial Reference." };
-                RaiseErrorsChanged("SpatialReferenceWkid");
-            }
+
         }
 
         private string _stationFieldId;
@@ -408,16 +407,6 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             RaiseErrorsChanged(propertyKey);
         }
-
-
-
-
-
-
-
-
-
-
 
         // Validate symbol options
         public void ValidateSymbolOptions(List<GemsSymbol> symbolOptions, string propertyKey)
