@@ -38,6 +38,9 @@ namespace Geomapmaker.Data
                 {
                     if (opTable != null)
                     {
+                        // Remove all existing symbols
+                        opLayer.SetRenderer(opLayer.CreateRenderer(new SimpleRendererDefinition()));
+
                         QueryFilter queryFilter = new QueryFilter
                         {
                             PrefixClause = "DISTINCT",
