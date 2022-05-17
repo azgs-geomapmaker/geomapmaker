@@ -57,7 +57,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 return;
             }
 
-            await QueuedTask.Run(async () =>
+            await QueuedTask.Run(() =>
             {
                 try
                 {
@@ -106,7 +106,6 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                         errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
                     }
                 }
-
             });
 
             if (!string.IsNullOrEmpty(errorMessage))
@@ -118,7 +117,6 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 Data.OrientationPoints.RebuildOrientationPointsSymbology();
                 ParentVM.CloseProwindow();
             }
-
         }
 
         private string _stationFieldId;
