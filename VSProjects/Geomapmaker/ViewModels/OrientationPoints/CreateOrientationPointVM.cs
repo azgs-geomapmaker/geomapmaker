@@ -32,6 +32,8 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             SpatialReferenceWkid = currentWkid;
 
             // Trigger validation
+            Azimuth = "";
+            Inclination = "";
             Type = "";
             Symbol = null;
             XCoordinate = "";
@@ -74,16 +76,18 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
                     // Create features and set attributes
                     Dictionary<string, object> attributes = new Dictionary<string, object>
-                {
-                    { "StationsID", StationFieldId },
-                    { "Type", Type },
-                    { "Symbol", Symbol.Key },
-                    { "LocationConfidenceMeters", LocationConfidenceMeters },
-                    { "PlotAtScale", PlotAtScale },
-                    { "Notes", Notes },
-                    { "LocationSourceID", LocationSourceID },
-                    { "OrientationSourceID", OrientationSourceID },
-                };
+                    {
+                        { "StationsID", StationFieldId },
+                        { "Azimuth", Azimuth },
+                        { "Inclination", Inclination },
+                        { "Type", Type },
+                        { "Symbol", Symbol.Key },
+                        { "LocationConfidenceMeters", LocationConfidenceMeters },
+                        { "PlotAtScale", PlotAtScale },
+                        { "Notes", Notes },
+                        { "LocationSourceID", LocationSourceID },
+                        { "OrientationSourceID", OrientationSourceID },
+                    };
 
                     RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
 
@@ -128,6 +132,34 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 SetProperty(ref _stationFieldId, value, () => StationFieldId);
             }
         }
+
+        private string _azimuth;
+        public string Azimuth
+        {
+            get => _azimuth;
+            set
+            {
+                SetProperty(ref _azimuth, value, () => Azimuth);
+                ValidateAzimuth(Azimuth, "Azimuth");
+            }
+        }
+
+        // Holds the converted double value 
+        private double AzimuthDouble;
+
+        private string _inclination;
+        public string Inclination
+        {
+            get => _inclination;
+            set
+            {
+                SetProperty(ref _inclination, value, () => Inclination);
+                ValidateInclination(Inclination, "Inclination");
+            }
+        }
+
+        // Holds the converted double value 
+        private double InclinationDouble;
 
         private string _keyFilter;
         public string KeyFilter
@@ -328,6 +360,52 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             // Otherwise, return the errors for that parameter.
             return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
                 null : (IEnumerable)_validationErrors[propertyName];
+        }
+
+        private void ValidateAzimuth(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out AzimuthDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Azimuth value must be numerical." };
+            }
+            else if (AzimuthDouble < 0 || AzimuthDouble > 360)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Azimuth value must be between 0 and 360." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateInclination(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out InclinationDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Inclination value must be numerical." };
+            }
+            else if (InclinationDouble < -90 || InclinationDouble > 90)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Inclination value must be between -90 and 90s." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         private void ValidateWkid(string text, string propertyKey)
