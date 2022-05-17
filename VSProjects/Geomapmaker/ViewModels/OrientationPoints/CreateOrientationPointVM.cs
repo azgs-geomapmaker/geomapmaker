@@ -40,6 +40,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             YCoordinate = "";
             PlotAtScale = "0";
             LocationConfidenceMeters = "";
+            OrientationConfidenceDegrees = "";
         }
 
         private bool CanSave()
@@ -83,6 +84,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                         { "Type", Type },
                         { "Symbol", Symbol.Key },
                         { "LocationConfidenceMeters", LocationConfidenceMeters },
+                        { "OrientationConfidenceDegrees", OrientationConfidenceDegrees },
                         { "PlotAtScale", PlotAtScale },
                         { "Notes", Notes },
                         { "LocationSourceID", LocationSourceID },
@@ -317,6 +319,28 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
+        private string _orientationConfidenceDegrees;
+        public string OrientationConfidenceDegrees
+        {
+            get => _orientationConfidenceDegrees;
+            set
+            {
+                SetProperty(ref _orientationConfidenceDegrees, value, () => OrientationConfidenceDegrees);
+                ValidateRequiredNumber(OrientationConfidenceDegrees, "OrientationConfidenceDegrees");
+            }
+        }
+
+        private string _identityConfidence;
+        public string IdentityConfidence
+        {
+            get => _identityConfidence;
+            set
+            {
+                SetProperty(ref _identityConfidence, value, () => IdentityConfidence);
+                ValidateRequiredNumber(IdentityConfidence, "IdentityConfidence");
+            }
+        }
+
         private string _notes;
         public string Notes
         {
@@ -371,11 +395,11 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
             else if (!double.TryParse(text, out AzimuthDouble))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Azimuth value must be numerical." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
             }
             else if (AzimuthDouble < 0 || AzimuthDouble > 360)
             {
-                _validationErrors[propertyKey] = new List<string>() { "Azimuth value must be between 0 and 360." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be between 0 and 360." };
             }
             else
             {
@@ -394,11 +418,11 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
             else if (!double.TryParse(text, out InclinationDouble))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Inclination value must be numerical." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
             }
             else if (InclinationDouble < -90 || InclinationDouble > 90)
             {
-                _validationErrors[propertyKey] = new List<string>() { "Inclination value must be between -90 and 90s." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be between -90 and 90s." };
             }
             else
             {
@@ -530,6 +554,25 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             RaiseErrorsChanged(propertyKey);
         }
 
+        private void ValidateRequiredNumber(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!text.All(char.IsDigit))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
         private void ValidatePlotAtScale(string text, string propertyKey)
         {
             // Required field
@@ -539,11 +582,11 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
             else if (!int.TryParse(text, out PlotAtScaleInt))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be a postive integer." };
             }
             else if (PlotAtScaleInt < 0)
             {
-                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be a postive integer." };
             }
             else
             {

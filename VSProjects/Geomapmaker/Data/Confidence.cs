@@ -12,11 +12,18 @@ namespace Geomapmaker.Data
         };
 
         public static ObservableCollection<string> LocationConfidenceMeters => new ObservableCollection<string>() {
+            "-9",
             "10",
             "25",
             "50",
             "100",
             "250",
+        };
+
+        public static ObservableCollection<string> OrientationConfidenceDegrees => new ObservableCollection<string>() {
+            "-9",
+            "5",
+            "10",
         };
     }
 }
