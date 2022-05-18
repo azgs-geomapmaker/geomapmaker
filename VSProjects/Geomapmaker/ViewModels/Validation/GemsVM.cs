@@ -431,6 +431,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 4. GeoMaterialDict Tooltip
         public string Check4Tooltip => "Table exists.<br>" +
+                                       "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "GeoMaterialDict table has not been modified.<br>";
@@ -447,6 +448,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Table was found
             {
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCountAsync("GeoMaterialDict");
+                if (tableCount > 1)
+                {
+                    errors.Add($"Multiple GeoMaterialDict tables found");
+                }
+
                 //
                 // Check table for any missing fields 
                 //
