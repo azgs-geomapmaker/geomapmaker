@@ -45,6 +45,37 @@ namespace Geomapmaker.Data
             return underlyingTableExists;
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Get the number of tables with a specific name
+        /// </summary>
+        /// <param name="tableName">Name of table</param>
+        /// <returns>Returns the number of tables</returns>
+        public static int StandaloneTableCountAsync(string tableName)
+        {
+            // Check for active map
+            if (MapView.Active == null)
+            {
+                return 0;
+            }
+
+            IEnumerable<StandaloneTable> tables = MapView.Active?.Map.StandaloneTables.Where(a => a.Name == tableName);
+
+            return tables.Count();
+        }
+
         /// <summary>
         /// Check if standalone table exists
         /// </summary>

@@ -32,6 +32,7 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result2 { get; set; } = "Checking..";
 
         public string Check1Tooltip => "Table exists.<br>" +
+                                       "No duplicate tables.<br>" +
                                        "No missing fields.<br>";
 
         // 1 Symbology table
@@ -46,6 +47,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Table was found
             {
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCountAsync("Symbology");
+                if (tableCount > 1)
+                {
+                    errors.Add($"Multiple Symbology tables found");
+                }
+
                 //
                 // Check for any missing fields 
                 //
