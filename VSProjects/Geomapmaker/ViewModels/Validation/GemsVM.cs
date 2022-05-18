@@ -64,6 +64,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 1. DataSources Tooltip
         public string Check1Tooltip => "Table exists.<br>" +
+                                       "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate datasources_id values.<br>" +
@@ -82,6 +83,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Table was found
             {
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCountAsync("DataSources");
+                if (tableCount > 1)
+                {
+                    errors.Add($"Multiple DataSources tables found");
+                }
+
                 //
                 // Check table for any missing fields 
                 //
