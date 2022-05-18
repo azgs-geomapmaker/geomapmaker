@@ -161,6 +161,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 2. DescriptionOfMapUnits Tooltip
         public string Check2Tooltip => "Table exists.<br>" +
+                                       "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate MapUnit values.<br>" +
@@ -184,6 +185,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Table was found
             {
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCountAsync("DescriptionOfMapUnits");
+                if (tableCount > 1)
+                {
+                    errors.Add($"Multiple DescriptionOfMapUnits tables found");
+                }
+
                 //
                 // Check table for any missing fields 
                 //
