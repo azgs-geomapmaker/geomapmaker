@@ -50,7 +50,7 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCountAsync("Symbology");
+                int tableCount = General.StandaloneTableCount("Symbology");
                 if (tableCount > 1)
                 {
                     errors.Add($"Multiple Symbology tables found");

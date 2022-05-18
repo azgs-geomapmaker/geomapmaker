@@ -86,10 +86,10 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCountAsync("DataSources");
+                int tableCount = General.StandaloneTableCount("DataSources");
                 if (tableCount > 1)
                 {
-                    errors.Add($"Multiple DataSources tables found");
+                    errors.Add($"Multiple DataSources tables");
                 }
 
                 //
@@ -188,10 +188,10 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCountAsync("DescriptionOfMapUnits");
+                int tableCount = General.StandaloneTableCount("DescriptionOfMapUnits");
                 if (tableCount > 1)
                 {
-                    errors.Add($"Multiple DescriptionOfMapUnits tables found");
+                    errors.Add($"Multiple DescriptionOfMapUnits tables");
                 }
 
                 //
@@ -363,10 +363,10 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCountAsync("Glossary");
+                int tableCount = General.StandaloneTableCount("Glossary");
                 if (tableCount > 1)
                 {
-                    errors.Add($"Multiple Glossary tables found");
+                    errors.Add($"Multiple Glossary tables");
                 }
 
                 //
@@ -451,10 +451,10 @@ namespace Geomapmaker.ViewModels.Validation
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCountAsync("GeoMaterialDict");
+                int tableCount = General.StandaloneTableCount("GeoMaterialDict");
                 if (tableCount > 1)
                 {
-                    errors.Add($"Multiple GeoMaterialDict tables found");
+                    errors.Add($"Multiple GeoMaterialDict tables");
                 }
 
                 //
@@ -509,6 +509,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 5. MapUnitPolys Tooltip
         public string Check5Tooltip => "Layer exists.<br>" +
+                                       "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate MapUnitPolys_ID values.<br>";
@@ -525,6 +526,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Layer was found
             {
+                //
+                // Check for duplicate layers
+                //
+                int layerCount = General.FeatureLayerCount("MapUnitPolys");
+                if (layerCount > 1)
+                {
+                    errors.Add($"Multiple MapUnitPolys layers");
+                }
+
                 //
                 // Check layer for any missing fields 
                 //
@@ -588,6 +598,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 6. ContactsAndFaults Tooltip
         public string Check6Tooltip => "Layer exists.<br>" +
+                                       "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate Label values.<br>" +
@@ -605,6 +616,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Layer was found
             {
+                //
+                // Check for duplicate layers
+                //
+                int layerCount = General.FeatureLayerCount("ContactsAndFaults");
+                if (layerCount > 1)
+                {
+                    errors.Add($"Multiple ContactsAndFaults layers");
+                }
+
                 //
                 // Check layer for any missing fields 
                 //
@@ -660,6 +680,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 7. Stations Tooltip
         public string Check7Tooltip => "Layer exists.<br>" +
+                                       "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate Stations_ID values.<br>";
@@ -677,6 +698,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Layer was found
             {
+                //
+                // Check for duplicate layers
+                //
+                int layerCount = General.FeatureLayerCount("Stations");
+                if (layerCount > 1)
+                {
+                    errors.Add($"Multiple Stations layers");
+                }
+
                 //
                 // Check table for any missing fields 
                 //
@@ -731,6 +761,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 8. OrientationPoints Tooltip
         public string Check8Tooltip => "Layer exists.<br>" +
+                                       "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate OrientationPoints_ID values.<br>";
@@ -748,6 +779,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Layer was found
             {
+                //
+                // Check for duplicate layers
+                //
+                int layerCount = General.FeatureLayerCount("OrientationPointss");
+                if (layerCount > 1)
+                {
+                    errors.Add($"Multiple OrientationPoints layers");
+                }
+
                 //
                 // Check table for any missing fields 
                 //
@@ -800,36 +840,6 @@ namespace Geomapmaker.ViewModels.Validation
                 RaiseErrorsChanged(propertyKey);
                 return "Failed";
             }
-        }
-
-        // 3.9 No unnecessary map units in DescriptionOfMapUnits
-        private string Check9()
-        {
-            return "Skipped";
-        }
-
-        // 3.10 HierarchyKey values in DescriptionOfMapUnits are unique and well formed
-        private string Check10()
-        {
-            return "Skipped";
-        }
-
-        // 3.11 All values of GeoMaterial are defined in GeoMaterialDict. GeoMaterialDict is as specified in the GeMS standard
-        private string Check11()
-        {
-            return "Skipped";
-        }
-
-        // 3.12 No duplicate _ID values
-        private string Check12()
-        {
-            return "Skipped";
-        }
-
-        // 3.13 No zero-length or whitespace-only strings
-        private string Check13()
-        {
-            return "Skipped";
         }
 
         #region Validation

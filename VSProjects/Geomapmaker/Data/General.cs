@@ -45,25 +45,29 @@ namespace Geomapmaker.Data
             return underlyingTableExists;
         }
 
+        /// <summary>
+        /// Get the number of feature layers by name
+        /// </summary>
+        /// <param name="layerName">Name of layer</param>
+        /// <returns>Returns number of layers</returns>
+        public static int FeatureLayerCount(string layerName)
+        {
+            if (MapView.Active == null)
+            {
+                return 0;
+            }
 
+            var layers = MapView.Active?.Map.FindLayers(layerName);
 
-
-
-
-
-
-
-
-
-
-
+            return layers.Count();
+        }
 
         /// <summary>
-        /// Get the number of tables with a specific name
+        /// Get the number of tables by name
         /// </summary>
         /// <param name="tableName">Name of table</param>
         /// <returns>Returns the number of tables</returns>
-        public static int StandaloneTableCountAsync(string tableName)
+        public static int StandaloneTableCount(string tableName)
         {
             // Check for active map
             if (MapView.Active == null)
