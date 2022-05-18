@@ -41,7 +41,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="1" Grid.Row="1" Command="{Binding CommandAll}" Style="{DynamicResource Esri_Button}" Background="#2082D8" Foreground="#FFF" MinHeight="50" >Rebuild All</Button>
-        <Button Grid.Column="1" Grid.Row="2" Command="{Binding CommandCIMSymbols}" Style="{DynamicResource Esri_Button}" >CIMSymbols</Button>
+        <Button Grid.Column="1" Grid.Row="2" Command="{Binding CommandCIMSymbols}" Style="{DynamicResource Esri_Button}" >Line/Point Symbol Options</Button>
         <Button Grid.Column="1" Grid.Row="3" Command="{Binding CommandMups}" Style="{DynamicResource Esri_Button}" >MapUnitPolys Symbology and Templates</Button>
         <Button Grid.Column="1" Grid.Row="4" Command="{Binding CommandCf}" Style="{DynamicResource Esri_Button}" >Contacts Faults Symbology</Button>
         <Button Grid.Column="1" Grid.Row="5" Command="{Binding CommandOp}" Style="{DynamicResource Esri_Button}" >Orientation Points Symbology</Button>
