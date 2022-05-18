@@ -22,20 +22,48 @@ namespace Geomapmaker.ViewModels.Validation
             Result1 = await Check1Async("Result1");
             NotifyPropertyChanged("Result1");
 
-            Result2 = await Check2Async("Result2");
+            Result2 = Check2("Result2");
             NotifyPropertyChanged("Result2");
+
+            Result3 = await Check3Async("Result3");
+            NotifyPropertyChanged("Result3");
+
+            Result4 = "Skipped";
+            NotifyPropertyChanged("Result4");
+
+            Result5 = "Skipped";
+            NotifyPropertyChanged("Result5");
+
+            Result6 = "Skipped";
+            NotifyPropertyChanged("Result6");
+
+            Result7 = "Skipped";
+            NotifyPropertyChanged("Result7");
+
+            Result8 = "Skipped";
+            NotifyPropertyChanged("Result8");
+
+            Result9 = "Skipped";
+            NotifyPropertyChanged("Result9");
 
             ParentVM.UpdateGeomapmakerResults(_validationErrors.Count);
         }
 
         public string Result1 { get; set; } = "Checking..";
         public string Result2 { get; set; } = "Checking..";
+        public string Result3 { get; set; } = "Checking..";
+        public string Result4 { get; set; } = "Checking..";
+        public string Result5 { get; set; } = "Checking..";
+        public string Result6 { get; set; } = "Checking..";
+        public string Result7 { get; set; } = "Checking..";
+        public string Result8 { get; set; } = "Checking..";
+        public string Result9 { get; set; } = "Checking..";
 
         public string Check1Tooltip => "Table exists.<br>" +
                                        "No duplicate tables.<br>" +
                                        "No missing fields.<br>";
 
-        // 1 Symbology table
+        // Symbology table
         private async Task<string> Check1Async(string propertyKey)
         {
             List<string> errors = new List<string>();
@@ -103,10 +131,17 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        public string Check2Tooltip => "Check for toolbar fields.";
+        public string Check2Tooltip => "";
 
-        // 2 Symbology table
-        private async Task<string> Check2Async(string propertyKey)
+        private string Check2(string propertyKey)
+        {
+            return "Skipped";
+        }
+
+        public string Check3Tooltip => "Check for toolbar fields.";
+
+        // Symbology table
+        private async Task<string> Check3Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 

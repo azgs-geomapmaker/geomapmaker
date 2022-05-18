@@ -37,11 +37,11 @@
             <TabItem Header="GeMS">
                 <tabData:Gems />
             </TabItem>
-            <TabItem Header="Topo">
-                <tabData:Topo />
-            </TabItem>
             <TabItem Header="Geomapmaker">
                 <tabData:Geomapmaker />
+            </TabItem>
+            <TabItem Header="Topo">
+                <tabData:Topo />
             </TabItem>
         </TabControl>
     </Grid>

@@ -66,42 +66,42 @@
             <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result1}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="1" FontWeight="Bold" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="2" FontWeight="Bold" />
             <TextBlock Grid.Row="4" Grid.Column="2" Text="DataSources" ToolTip="{Binding Gems.Check2Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result2}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="2" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="3" FontWeight="Bold" />
             <TextBlock Grid.Row="6" Grid.Column="2" Text="DescriptionOfMapUnits" ToolTip="{Binding Gems.Check3Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result3}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="3" FontWeight="Bold" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="4" FontWeight="Bold" />
             <TextBlock Grid.Row="8" Grid.Column="2" Text="Glossary" ToolTip="{Binding Gems.Check4Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result4}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="10" Grid.Column="1" Text="4" FontWeight="Bold" />
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="5" FontWeight="Bold" />
             <TextBlock Grid.Row="10" Grid.Column="2" Text="GeoMaterialDict" ToolTip="{Binding Gems.Check5Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="10" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result5}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" />
             
-            <TextBlock Grid.Row="12" Grid.Column="1" Text="5" FontWeight="Bold" />
+            <TextBlock Grid.Row="12" Grid.Column="1" Text="6" FontWeight="Bold" />
             <TextBlock Grid.Row="12" Grid.Column="2" Text="MapUnitPolys" ToolTip="{Binding Gems.Check6Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="12" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result6}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="14" Grid.Column="1" Text="6" FontWeight="Bold" />
+            <TextBlock Grid.Row="14" Grid.Column="1" Text="7" FontWeight="Bold" />
             <TextBlock Grid.Row="14" Grid.Column="2" Text="ContactsAndFaults" ToolTip="{Binding Gems.Check7Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="14" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result7}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="16" Grid.Column="1" Text="7" FontWeight="Bold" />
+            <TextBlock Grid.Row="16" Grid.Column="1" Text="8" FontWeight="Bold" />
             <TextBlock Grid.Row="16" Grid.Column="2" Text="Stations" ToolTip="{Binding Gems.Check8Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="16" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result8}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />
 
-            <TextBlock Grid.Row="18" Grid.Column="1" Text="8" FontWeight="Bold" />
+            <TextBlock Grid.Row="18" Grid.Column="1" Text="9" FontWeight="Bold" />
             <TextBlock Grid.Row="18" Grid.Column="2" Text="OrientationPoints" ToolTip="{Binding Gems.Check9Tooltip}" TextWrapping="Wrap" />
             <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Gems.Result9}" Margin="10,0,0,0" FontWeight="Bold" />
             <!--<Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />-->

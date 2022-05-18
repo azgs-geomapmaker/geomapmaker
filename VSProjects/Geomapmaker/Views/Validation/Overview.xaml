@@ -52,12 +52,12 @@
             <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.GemsResults}" FontWeight="Bold" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="Topography:" FontWeight="Bold" />
-            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.TopoResults}" FontWeight="Bold" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Geomapmaker:" FontWeight="Bold" />
+            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.GeomapmakerResults}" FontWeight="Bold" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="Geomapmaker:" FontWeight="Bold" />
-            <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.GeomapmakerResults}" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Topography:" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Overview.TopoResults}" FontWeight="Bold" />
 
             <Button Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2" Padding="5" HorizontalAlignment="Center" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
 
