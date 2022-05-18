@@ -327,6 +327,9 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             get => _orientationConfidenceDegrees;
             set
             {
+                // Remove " (Unknown)" from the -9 option
+                value = value.Replace(" (Unknown)", "");
+
                 SetProperty(ref _orientationConfidenceDegrees, value, () => OrientationConfidenceDegrees);
                 ValidateRequiredNumber(OrientationConfidenceDegrees, "OrientationConfidenceDegrees");
             }

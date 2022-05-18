@@ -21,9 +21,10 @@ namespace Geomapmaker.Data
         };
 
         public static ObservableCollection<string> OrientationConfidenceDegrees => new ObservableCollection<string>() {
-            "-9",
+            "-9 (Unknown)",
             "5",
             "10",
         };
+
     }
 }
