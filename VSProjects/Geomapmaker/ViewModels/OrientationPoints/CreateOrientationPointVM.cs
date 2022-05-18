@@ -41,6 +41,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             PlotAtScale = "0";
             LocationConfidenceMeters = "";
             OrientationConfidenceDegrees = "";
+            IdentityConfidence = "";
         }
 
         private bool CanSave()
@@ -89,6 +90,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                         { "Notes", Notes },
                         { "LocationSourceID", LocationSourceID },
                         { "OrientationSourceID", OrientationSourceID },
+                        { "IdentityConfidence", IdentityConfidence },
                     };
 
                     RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
@@ -337,7 +339,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set
             {
                 SetProperty(ref _identityConfidence, value, () => IdentityConfidence);
-                ValidateRequiredNumber(IdentityConfidence, "IdentityConfidence");
+                ValidateRequiredString(IdentityConfidence, "IdentityConfidence");
             }
         }
 
@@ -561,7 +563,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (!text.All(char.IsDigit))
+            else if (!double.TryParse(text, out _))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
             }
