@@ -342,6 +342,7 @@ namespace Geomapmaker.ViewModels.Validation
 
         // 3. Glossary Tooltip
         public string Check3Tooltip => "Table exists.<br>" +
+                                       "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate Glossary_ID values.<br>" +
@@ -359,6 +360,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
             else // Table was found
             {
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCountAsync("Glossary");
+                if (tableCount > 1)
+                {
+                    errors.Add($"Multiple Glossary tables found");
+                }
+
                 //
                 // Check table for any missing fields 
                 //
