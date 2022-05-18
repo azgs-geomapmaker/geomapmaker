@@ -103,6 +103,10 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                         // Zoom into point
                         MapView.Active?.ZoomTo(point);
                     }
+                    else
+                    {
+                        MessageBox.Show(createFeatures.ErrorMessage, "One or more errors occured.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -317,7 +321,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set
             {
                 // Remove " (Unknown)" from the -9 option
-                value = value.Replace(" (Unknown)", "");
+                value = value?.Replace(" (Unknown)", "");
 
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
                 ValidateRequiredNumber(LocationConfidenceMeters, "LocationConfidenceMeters");
@@ -331,7 +335,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set
             {
                 // Remove " (Unknown)" from the -9 option
-                value = value.Replace(" (Unknown)", "");
+                value = value?.Replace(" (Unknown)", "");
 
                 SetProperty(ref _orientationConfidenceDegrees, value, () => OrientationConfidenceDegrees);
                 ValidateRequiredNumber(OrientationConfidenceDegrees, "OrientationConfidenceDegrees");

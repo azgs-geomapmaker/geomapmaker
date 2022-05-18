@@ -147,8 +147,11 @@ namespace Geomapmaker.ViewModels.Stations
             get => _locationConfidenceMeters;
             set
             {
+                // Remove " (Unknown)" from the -9 option
+                value = value?.Replace(" (Unknown)", "");
+
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
-                ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+                ValidateRequiredNumber(LocationConfidenceMeters, "LocationConfidenceMeters");
                 ValidateChangeWasMade();
             }
         }
@@ -207,21 +210,24 @@ namespace Geomapmaker.ViewModels.Stations
 
             await QueuedTask.Run(async () =>
             {
-                EditOperation modifyFeature = new EditOperation
+                try
                 {
-                    Name = "Station Edit",
-                };
+                    EditOperation modifyFeature = new EditOperation
+                    {
+                        Name = "Station Edit",
+                    };
 
-                MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+                    MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
 
-                // Get geometry from point builder
-                Geometry point = pointBuilder.ToGeometry();
+                    // Get geometry from point builder
+                    Geometry point = pointBuilder.ToGeometry();
 
-                var modifyInspector = new Inspector();
-                modifyInspector.Load(stationsLayer, Selected.ObjectID);
+                    Inspector modifyInspector = new Inspector();
 
-                // Create features and set attributes
-                Dictionary<string, object> attributes = new Dictionary<string, object>
+                    modifyInspector.Load(stationsLayer, Selected.ObjectID);
+
+                    // Create features and set attributes
+                    Dictionary<string, object> attributes = new Dictionary<string, object>
                 {
                     { "FieldID", FieldID },
                     { "TimeDate", TimeDate },
@@ -233,32 +239,30 @@ namespace Geomapmaker.ViewModels.Stations
                     { "DataSourceId", DataSourceId },
                 };
 
-                modifyFeature.Modify(stationsLayer, Selected.ObjectID, point, attributes);
+                    modifyFeature.Modify(stationsLayer, Selected.ObjectID, point, attributes);
 
-                // Execute to execute the operation
-                modifyFeature.Execute();
+                    // Execute to execute the operation
+                    modifyFeature.Execute();
 
-                if (modifyFeature.IsSucceeded)
-                {
-                    MapView.Active?.ZoomTo(point);
+                    if (modifyFeature.IsSucceeded)
+                    {
+                        MapView.Active?.ZoomTo(point);
+                    }
+                    else
+                    {
+                        MessageBox.Show(modifyFeature.ErrorMessage, "One or more errors occured.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    errorMessage = modifyFeature.ErrorMessage;
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
+
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
+                    }
                 }
-
-                //
-                // Validate X, Y Coordinates by checking if a feature was actually created at that geometry point. 
-                // I haven't found a way to check prior to executing the editOperation
-                //
-                if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(stationsLayer))
-                {
-                    errorMessage = "Coordinates not valid for Spatial Reference.";
-
-                    // Undo the edit operation
-                    await modifyFeature.UndoAsync();
-                }
-
             });
 
             if (string.IsNullOrEmpty(errorMessage))
@@ -412,12 +416,16 @@ namespace Geomapmaker.ViewModels.Stations
             RaiseErrorsChanged(propertyKey);
         }
 
-        private void ValidateRequiredString(string text, string propertyKey)
+        private void ValidateRequiredNumber(string text, string propertyKey)
         {
             // Required field
             if (string.IsNullOrEmpty(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out _))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
             }
             else
             {
@@ -493,11 +501,11 @@ namespace Geomapmaker.ViewModels.Stations
             }
             else if (!int.TryParse(text, out PlotAtScaleInt))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be a postive integer." };
             }
             else if (PlotAtScaleInt < 0)
             {
-                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be a postive integer." };
             }
             else
             {

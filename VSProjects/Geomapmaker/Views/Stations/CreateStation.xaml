@@ -107,9 +107,8 @@
             Grid.Row="11" 
             Grid.Column="1" 
             ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
-            SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
-            IsReadOnly="False" 
-            IsEditable="False" 
+            Text="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+            IsEditable="True" 
             >
             </ComboBox>
 
