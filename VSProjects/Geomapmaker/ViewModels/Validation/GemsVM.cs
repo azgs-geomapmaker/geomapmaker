@@ -28,14 +28,11 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result7 { get; set; } = "Checking..";
         public string Result8 { get; set; } = "Checking..";
         public string Result9 { get; set; } = "Checking..";
-        public string Result10 { get; set; } = "Checking..";
-        public string Result11 { get; set; } = "Checking..";
-        public string Result12 { get; set; } = "Checking..";
-        public string Result13 { get; set; } = "Checking..";
 
         public async Task Validate()
         {
-            Result1 = await Check1Async("Result1");
+            // GeMS doesn't check the symbology table
+            Result1 = "Skipped";
             NotifyPropertyChanged("Result1");
 
             Result2 = await Check2Async("Result2");
@@ -59,11 +56,14 @@ namespace Geomapmaker.ViewModels.Validation
             Result8 = await Check8Async("Result8");
             NotifyPropertyChanged("Result8");
 
+            Result9 = await Check9Async("Result9");
+            NotifyPropertyChanged("Result9");
+
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
-        // 1. DataSources Tooltip
-        public string Check1Tooltip => "Table exists.<br>" +
+        // DataSources Tooltip
+        public string Check2Tooltip => "Table exists.<br>" +
                                        "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
@@ -71,8 +71,8 @@ namespace Geomapmaker.ViewModels.Validation
                                        "No unused datasources_id values.<br>" +
                                        "No missing datasources_id values.";
 
-        // 1. Validate DataSources table
-        private async Task<string> Check1Async(string propertyKey)
+        // Validate DataSources table
+        private async Task<string> Check2Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -159,8 +159,8 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 2. DescriptionOfMapUnits Tooltip
-        public string Check2Tooltip => "Table exists.<br>" +
+        // DescriptionOfMapUnits Tooltip
+        public string Check3Tooltip => "Table exists.<br>" +
                                        "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
@@ -173,8 +173,8 @@ namespace Geomapmaker.ViewModels.Validation
                                        "HierarchyKeys unique and well-formed.<br>" +
                                        "GeoMaterial are defined in GeoMaterialDict.";
 
-        // 2. Validate DescriptionOfMapUnits table
-        private async Task<string> Check2Async(string propertyKey)
+        // Validate DescriptionOfMapUnits table
+        private async Task<string> Check3Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -340,16 +340,16 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 3. Glossary Tooltip
-        public string Check3Tooltip => "Table exists.<br>" +
+        // Glossary Tooltip
+        public string Check4Tooltip => "Table exists.<br>" +
                                        "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate Glossary_ID values.<br>" +
                                        "No duplicate Term values.<br>";
 
-        // 3. Validate Glossary
-        private async Task<string> Check3Async(string propertyKey)
+        // Validate Glossary
+        private async Task<string> Check4Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -429,15 +429,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 4. GeoMaterialDict Tooltip
-        public string Check4Tooltip => "Table exists.<br>" +
+        // GeoMaterialDict Tooltip
+        public string Check5Tooltip => "Table exists.<br>" +
                                        "No duplicate tables.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "GeoMaterialDict table has not been modified.<br>";
 
-        // 4. Validate GeoMaterialDict
-        private async Task<string> Check4Async(string propertyKey)
+        // Validate GeoMaterialDict
+        private async Task<string> Check5Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -507,15 +507,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 5. MapUnitPolys Tooltip
-        public string Check5Tooltip => "Layer exists.<br>" +
+        // MapUnitPolys Tooltip
+        public string Check6Tooltip => "Layer exists.<br>" +
                                        "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate MapUnitPolys_ID values.<br>";
 
-        // 5. Validate MapUnitPolys layer
-        private async Task<string> Check5Async(string propertyKey)
+        // Validate MapUnitPolys layer
+        private async Task<string> Check6Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -596,16 +596,16 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 6. ContactsAndFaults Tooltip
-        public string Check6Tooltip => "Layer exists.<br>" +
+        // ContactsAndFaults Tooltip
+        public string Check7Tooltip => "Layer exists.<br>" +
                                        "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate Label values.<br>" +
                                        "No duplicate ContactsAndFaults_ID values.<br>";
 
-        // 6. Validate ContactsAndFaults layer
-        private async Task<string> Check6Async(string propertyKey)
+        // Validate ContactsAndFaults layer
+        private async Task<string> Check7Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -678,15 +678,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 7. Stations Tooltip
-        public string Check7Tooltip => "Layer exists.<br>" +
+        // Stations Tooltip
+        public string Check8Tooltip => "Layer exists.<br>" +
                                        "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate Stations_ID values.<br>";
 
-        // 7. Validate Stations layer
-        private async Task<string> Check7Async(string propertyKey)
+        // Validate Stations layer
+        private async Task<string> Check8Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
@@ -759,15 +759,15 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
-        // 8. OrientationPoints Tooltip
-        public string Check8Tooltip => "Layer exists.<br>" +
+        // OrientationPoints Tooltip
+        public string Check9Tooltip => "Layer exists.<br>" +
                                        "No duplicate layers.<br>" +
                                        "No missing fields.<br>" +
                                        "No empty/null values in required fields.<br>" +
                                        "No duplicate OrientationPoints_ID values.<br>";
 
-        // 8. Validate OrientationPoints layer
-        private async Task<string> Check8Async(string propertyKey)
+        // Validate OrientationPoints layer
+        private async Task<string> Check9Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
