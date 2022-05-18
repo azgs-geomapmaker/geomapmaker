@@ -315,7 +315,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set
             {
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
-                ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+                ValidateRequiredNumber(LocationConfidenceMeters, "LocationConfidenceMeters");
             }
         }
 
