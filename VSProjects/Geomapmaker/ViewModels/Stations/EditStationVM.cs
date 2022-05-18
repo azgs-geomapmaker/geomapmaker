@@ -208,7 +208,7 @@ namespace Geomapmaker.ViewModels.Stations
                 return;
             }
 
-            await QueuedTask.Run(async () =>
+            await QueuedTask.Run(() =>
             {
                 try
                 {
@@ -267,8 +267,10 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (string.IsNullOrEmpty(errorMessage))
             {
+                // Check if FieldID changed
                 if (Selected.FieldID != FieldID)
                 {
+                    // Updated foreign key
                     await QueuedTask.Run(() =>
                     {
                         FeatureLayer op = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
