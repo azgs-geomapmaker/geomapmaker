@@ -12,7 +12,7 @@ namespace Geomapmaker.Data
         };
 
         public static ObservableCollection<string> LocationConfidenceMeters => new ObservableCollection<string>() {
-            "-9",
+            "-9 (Unknown)",
             "10",
             "25",
             "50",
