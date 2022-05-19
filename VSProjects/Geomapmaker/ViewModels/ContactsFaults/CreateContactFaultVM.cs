@@ -73,7 +73,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             if (layer == null)
             {
-                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                MessageBox.Show("ContactsAndFaults layer not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             if (layer == null)
             {
-                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                MessageBox.Show("ContactsAndFaults layer not found in active map.", "One or more errors occured.");
                 return;
             }
 

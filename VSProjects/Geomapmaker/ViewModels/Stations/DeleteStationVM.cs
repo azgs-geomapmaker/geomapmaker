@@ -109,7 +109,7 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (stationsLayer == null)
             {
-                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("Stations layer not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("Stations layer not found in active map.", "One or more errors occured.");
                 return;
             }
 

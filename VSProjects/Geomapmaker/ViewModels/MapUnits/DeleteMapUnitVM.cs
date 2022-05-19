@@ -110,7 +110,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             if (dmu == null)
             {
-                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 

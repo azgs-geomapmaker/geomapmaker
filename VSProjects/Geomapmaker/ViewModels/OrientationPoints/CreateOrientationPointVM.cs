@@ -57,7 +57,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             if (opLayer == null)
             {
-                MessageBox.Show("OrientationPoints layer not found in active map.");
+                MessageBox.Show("OrientationPoints layer not found in active map.", "One or more errors occured.");
                 return;
             }
 

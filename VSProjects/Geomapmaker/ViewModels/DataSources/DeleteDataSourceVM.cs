@@ -79,7 +79,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
             if (ds == null)
             {
-                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DataSources table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DataSources table not found in active map.", "One or more errors occured.");
                 return;
             }
 

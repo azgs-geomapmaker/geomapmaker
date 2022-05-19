@@ -76,7 +76,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
             if (ds == null)
             {
-                MessageBox.Show("DataSources table not found in active map.");
+                MessageBox.Show("DataSources table not found in active map.", "One or more errors occured.");
                 return;
             }
 

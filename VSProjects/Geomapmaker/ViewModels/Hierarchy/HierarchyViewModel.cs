@@ -110,7 +110,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
             if (dmu == null)
             {
-                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -164,7 +164,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
                             if (!result)
                             {
-                                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(editOperation.ErrorMessage);
+                                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(editOperation.ErrorMessage, "One or more errors occured.");
                             }
                         }
                     }

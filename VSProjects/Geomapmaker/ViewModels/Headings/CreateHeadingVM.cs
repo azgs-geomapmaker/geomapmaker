@@ -76,7 +76,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 

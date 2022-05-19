@@ -163,7 +163,7 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (stationsLayer == null)
             {
-                MessageBox.Show("Stations layer not found in active map.");
+                MessageBox.Show("Stations layer not found in active map.", "One or more errors occured.");
                 return;
             }
 
