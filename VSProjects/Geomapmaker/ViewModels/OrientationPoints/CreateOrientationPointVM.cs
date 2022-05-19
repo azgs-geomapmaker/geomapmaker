@@ -434,7 +434,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
             else if (InclinationDouble < -90 || InclinationDouble > 90)
             {
-                _validationErrors[propertyKey] = new List<string>() { "Value must be between -90 and 90s." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be between -90 and 90." };
             }
             else
             {
