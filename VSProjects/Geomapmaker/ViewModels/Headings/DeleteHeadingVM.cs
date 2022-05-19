@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
+using System.Windows;
 
 namespace Geomapmaker.ViewModels.Headings
 {
@@ -68,7 +69,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task DeleteAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
@@ -81,7 +82,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
                 return;
             }
 
@@ -133,7 +134,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {

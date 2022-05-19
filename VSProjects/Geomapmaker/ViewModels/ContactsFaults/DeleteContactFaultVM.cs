@@ -4,12 +4,11 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
-using Geomapmaker.RibbonElements;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -109,17 +108,17 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public string Label { get; set; }
 
         public GemsSymbol Symbol { get; set; }
-        
+
         public string IdentityConfidence { get; set; }
-        
+
         public string ExistenceConfidence { get; set; }
-        
+
         public string LocationConfidenceMeters { get; set; }
-        
+
         public string IsConcealedString { get; set; }
-        
+
         public string Notes { get; set; }
-        
+
         public string DataSource { get; set; }
 
         #region ### Validation ####

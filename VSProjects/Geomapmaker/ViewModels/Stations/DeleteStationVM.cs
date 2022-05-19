@@ -2,6 +2,7 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -95,7 +96,7 @@ namespace Geomapmaker.ViewModels.Stations
 
         private async void DeleteAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {FieldID}?", $"Delete {FieldID}?", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"Are you sure you want to delete {FieldID}?", $"Delete {FieldID}?", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
@@ -108,7 +109,7 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (stationsLayer == null)
             {
-                MessageBox.Show("Stations layer not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("Stations layer not found in active map.");
                 return;
             }
 
@@ -159,7 +160,7 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {

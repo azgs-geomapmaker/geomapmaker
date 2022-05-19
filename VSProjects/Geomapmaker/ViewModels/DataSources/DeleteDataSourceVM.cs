@@ -10,8 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
+using System.Windows;
 
 namespace Geomapmaker.ViewModels.DataSources
 {
@@ -65,7 +66,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
         private async void DeleteAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Id}?", $"Delete {Id}?", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"Are you sure you want to delete {Id}?", $"Delete {Id}?", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
@@ -78,7 +79,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
             if (ds == null)
             {
-                MessageBox.Show("DataSources table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DataSources table not found in active map.");
                 return;
             }
 
@@ -128,7 +129,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {

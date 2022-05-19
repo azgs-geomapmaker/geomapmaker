@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Stations
@@ -250,7 +250,7 @@ namespace Geomapmaker.ViewModels.Stations
                     }
                     else
                     {
-                        MessageBox.Show(modifyFeature.ErrorMessage, "One or more errors occured.");
+                        errorMessage = modifyFeature.ErrorMessage;
                     }
                 }
                 catch (Exception ex)

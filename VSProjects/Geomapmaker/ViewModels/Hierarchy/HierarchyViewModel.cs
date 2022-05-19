@@ -15,8 +15,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
+using System.Windows;
 
 namespace Geomapmaker.ViewModels.Hierarchy
 {
@@ -109,7 +110,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
                 return;
             }
 
@@ -163,7 +164,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
                             if (!result)
                             {
-                                MessageBox.Show(editOperation.ErrorMessage);
+                                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(editOperation.ErrorMessage);
                             }
                         }
                     }
@@ -184,7 +185,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {
