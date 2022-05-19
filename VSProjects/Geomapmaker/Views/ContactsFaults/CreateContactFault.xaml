@@ -205,7 +205,7 @@
             <ComboBox 
             Grid.Row="12" 
             Grid.Column="1" 
-            ItemsSource="{Binding Path=(data:Confidence.ContactsFaultsLocationConfidenceMeters)}" 
+            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
             SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
             IsEditable="False" 
