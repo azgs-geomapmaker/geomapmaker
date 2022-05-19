@@ -338,7 +338,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 value = value?.Replace(" (Unknown)", "");
 
                 SetProperty(ref _orientationConfidenceDegrees, value, () => OrientationConfidenceDegrees);
-                ValidateRequiredNumber(OrientationConfidenceDegrees, "OrientationConfidenceDegrees");
+                ValidateOrientationConfidenceDegrees(OrientationConfidenceDegrees, "OrientationConfidenceDegrees");
             }
         }
 
@@ -576,6 +576,29 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             else if (!double.TryParse(text, out _))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateOrientationConfidenceDegrees(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out double degreesDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
+            }
+            else if (degreesDouble > 90)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be less than 90." };
             }
             else
             {
