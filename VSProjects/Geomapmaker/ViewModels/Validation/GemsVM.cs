@@ -62,6 +62,9 @@ namespace Geomapmaker.ViewModels.Validation
             ParentVM.UpdateGemsResults(_validationErrors.Count);
         }
 
+        // Symbology Toolitp
+        public string Check1Tooltip => "Symbology table is not in GeMS specification.";
+
         // DataSources Tooltip
         public string Check2Tooltip => "Table exists.<br>" +
                                        "No duplicate tables.<br>" +

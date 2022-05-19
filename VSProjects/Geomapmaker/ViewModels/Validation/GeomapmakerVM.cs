@@ -22,28 +22,28 @@ namespace Geomapmaker.ViewModels.Validation
             Result1 = await Check1Async("Result1");
             NotifyPropertyChanged("Result1");
 
-            Result2 = Check2("Result2");
+            Result2 = await Check2Async("Result2");
             NotifyPropertyChanged("Result2");
 
             Result3 = await Check3Async("Result3");
             NotifyPropertyChanged("Result3");
 
-            Result4 = "Skipped";
+            Result4 = await Check4Async("Result4");
             NotifyPropertyChanged("Result4");
 
-            Result5 = "Skipped";
+            Result5 = await Check5Async("Result5");
             NotifyPropertyChanged("Result5");
 
-            Result6 = "Skipped";
+            Result6 = await Check6Async("Result6");
             NotifyPropertyChanged("Result6");
 
-            Result7 = "Skipped";
+            Result7 = await Check7Async("Result7");
             NotifyPropertyChanged("Result7");
 
-            Result8 = "Skipped";
+            Result8 = await Check8Async("Result8");
             NotifyPropertyChanged("Result8");
 
-            Result9 = "Skipped";
+            Result9 = await Check9Async("Result9");
             NotifyPropertyChanged("Result9");
 
             ParentVM.UpdateGeomapmakerResults(_validationErrors.Count);
@@ -59,11 +59,12 @@ namespace Geomapmaker.ViewModels.Validation
         public string Result8 { get; set; } = "Checking..";
         public string Result9 { get; set; } = "Checking..";
 
+        // Symbology
         public string Check1Tooltip => "Table exists.<br>" +
                                        "No duplicate tables.<br>" +
                                        "No missing fields.<br>";
 
-        // Symbology table
+        // Symbology
         private async Task<string> Check1Async(string propertyKey)
         {
             List<string> errors = new List<string>();
@@ -85,7 +86,7 @@ namespace Geomapmaker.ViewModels.Validation
                 }
 
                 //
-                // Check for any missing fields 
+                // Check for any missing fields
                 //
 
                 // List of required fields
@@ -116,7 +117,6 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     errors.Add($"Missing point symbology: {key}");
                 }
-
             }
 
             if (errors.Count == 0)
@@ -131,29 +131,45 @@ namespace Geomapmaker.ViewModels.Validation
             }
         }
 
+        // DataSources
         public string Check2Tooltip => "";
 
-        private string Check2(string propertyKey)
+        // DataSources
+        private async Task<string> Check2Async(string propertyKey)
         {
-            return "Skipped";
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits"))
+            {
+                // Validation
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
         }
 
+        // DescriptionOfMapUnits
         public string Check3Tooltip => "Check for toolbar fields.";
 
-        // Symbology table
+        // DescriptionOfMapUnits
         private async Task<string> Check3Async(string propertyKey)
         {
             List<string> errors = new List<string>();
 
             // Check if the table exists
-            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits") == false)
-            {
-                errors.Add("Table not found: DescriptionOfMapUnits");
-            }
-            else // Table was found
+            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits"))
             {
                 //
-                // Check table for missing toolbar fields 
+                // Check table for missing toolbar fields
                 //
 
                 // List of required fields to check
@@ -165,6 +181,162 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     errors.Add($"Field not found: {field}");
                 }
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        // Glossary
+        public string Check4Tooltip => "";
+
+        // Glossary
+        private async Task<string> Check4Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.StandaloneTableExistsAsync("Glossary"))
+            {
+                // Validation
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        // GeoMaterialDict
+        public string Check5Tooltip => "";
+
+        // GeoMaterialDict
+        private async Task<string> Check5Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.StandaloneTableExistsAsync("GeoMaterialDict"))
+            {
+                // Validation
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        // MapUnitPolys
+        public string Check6Tooltip => "";
+
+        // MapUnitPolys
+        private async Task<string> Check6Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.FeatureLayerExistsAsync("MapUnitPolys"))
+            {
+                // Validation
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        // ContactsAndFaults
+        public string Check7Tooltip => "";
+
+        // ContactsAndFaults
+        private async Task<string> Check7Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.FeatureLayerExistsAsync("ContactsAndFaults"))
+            {
+                // Validation
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        // Stations
+        public string Check8Tooltip => "";
+
+        // Stations
+        private async Task<string> Check8Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.FeatureLayerExistsAsync("Stations"))
+            {
+                // Validation
+            }
+
+            if (errors.Count == 0)
+            {
+                return "Passed";
+            }
+            else
+            {
+                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
+                RaiseErrorsChanged(propertyKey);
+                return "Failed";
+            }
+        }
+
+        // OrientationPoints
+        public string Check9Tooltip => "";
+
+        // OrientationPoints
+        private async Task<string> Check9Async(string propertyKey)
+        {
+            List<string> errors = new List<string>();
+
+            // Check if the table exists
+            if (await General.FeatureLayerExistsAsync("OrientationPoints"))
+            {
+                // Validation
             }
 
             if (errors.Count == 0)
@@ -200,7 +372,6 @@ namespace Geomapmaker.ViewModels.Validation
                 null : (IEnumerable)_validationErrors[propertyName];
         }
 
-        #endregion
-
+        #endregion Validation
     }
 }
