@@ -48,13 +48,9 @@
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="4" Grid.Column="1" Text="2" FontWeight="Bold" />
-            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left" Text="Contacts and faults in single feature class" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left" Text="Map-unit polygon boundaries are covered by contacts and faults lines" TextWrapping="Wrap" />
             <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Topo.Result2}" Margin="10,0,0,0" FontWeight="Bold" />
-            <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
-
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="3" FontWeight="Bold" />
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="Map-unit polygon boundaries are covered by contacts and faults lines" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Topo.Result3}" Margin="10,0,0,0" FontWeight="Bold" />
+            <!--<Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />-->
 
         </Grid>
     </AdornerDecorator>

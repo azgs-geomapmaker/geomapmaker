@@ -15,14 +15,12 @@ namespace Geomapmaker.ViewModels.Validation
             ParentVM = parentVM;
             Result1 = Check1();
             Result2 = Check2();
-            Result3 = Check3();
 
             ParentVM.UpdateTopoResults(_validationErrors.Count);
         }
 
         public string Result1 { get; set; } = "Checking..";
         public string Result2 { get; set; } = "Checking..";
-        public string Result3 { get; set; } = "Checking..";
 
         // 1.1 No overlaps or internal gaps in map-unit polygon layer
         private string Check1()
@@ -42,14 +40,8 @@ namespace Geomapmaker.ViewModels.Validation
             return "Skipped";
         }
 
-        // 1.2 Contacts and faults in single feature class
+        // Map-unit polygon boundaries are covered by contacts and faults lines
         private string Check2()
-        {
-            return "Skipped";
-        }
-
-        // 1.3 Map-unit polygon boundaries are covered by contacts and faults lines
-        private string Check3()
         {
             return "Skipped";
         }
