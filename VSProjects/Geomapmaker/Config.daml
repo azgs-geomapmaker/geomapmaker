@@ -62,11 +62,11 @@
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </comboBox>
-        <button id="Geomapmaker_DataSources" caption="Data Sources" className="Geomapmaker.ViewModels.DataSources.ShowDataSources" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGrey16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGrey32.png" keytip="todo">
+        <button id="Geomapmaker_DataSources" caption="Data Sources" className="Geomapmaker.ViewModels.DataSources.ShowDataSources" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" keytip="todo">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" keytip="todo" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGrey16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGrey32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
