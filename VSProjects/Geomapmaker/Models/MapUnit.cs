@@ -116,10 +116,6 @@ namespace Geomapmaker.Models
                 {
                     sb.Append($"<b>DescriptionSourceID: </b>{DescriptionSourceID}<br>");
                 }
-                if (!string.IsNullOrEmpty(ObjectID))
-                {
-                    sb.Append($"<b>ID: </b>{ObjectID}<br>");
-                }
 
                 return sb.ToString();
             }
