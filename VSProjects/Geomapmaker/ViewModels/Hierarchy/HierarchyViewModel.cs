@@ -53,7 +53,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
         });
 
         // Build the tree stucture
-        public async Task BuildTree()
+        public async void BuildTree()
         {
             // Get the hierarchy tree and unassigned list
             Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> hierarchyTuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
@@ -263,9 +263,9 @@ namespace Geomapmaker.ViewModels.Hierarchy
             // Tree takes a few seconds to load. Display progress dialog
             ProgressorSource ps = new ProgressorSource("Building hierarchy tree from DMU");
 
-            await QueuedTask.Run(async () =>
+            await QueuedTask.Run(() =>
             {
-                await _hierarchy.hierarchyVM.BuildTree();
+                _hierarchy.hierarchyVM.BuildTree();
             }, ps.Progressor);
 
             _hierarchy.Closed += (o, e) => { _hierarchy = null; };
