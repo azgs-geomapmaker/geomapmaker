@@ -7,7 +7,6 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
-using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,13 +14,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using ArcGIS.Desktop.Framework.Dialogs;
-using System.Windows.Input;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Hierarchy
 {
-    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
+    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged
     {
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
@@ -33,16 +31,40 @@ namespace Geomapmaker.ViewModels.Hierarchy
             {"Unassigned", "TODO Unassigned" },
         };
 
-        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
 
-        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
+        private bool hasChanged = false;
+
+        private ObservableCollection<MapUnitTreeItem> _tree = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
+        public ObservableCollection<MapUnitTreeItem> Tree
+        {
+            get => _tree;
+            set
+            {
+                _tree = value;
+
+                // Change made
+                hasChanged = true;
+            }
+        }
+
+        private ObservableCollection<MapUnitTreeItem> _unassigned = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
+        public ObservableCollection<MapUnitTreeItem> Unassigned
+        {
+            get => _unassigned;
+            set
+            {
+                _unassigned = value;
+
+                // Change made
+                hasChanged = true;
+            }
+        }
 
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
         private bool CanSave()
         {
-            // TODO Check if a change was made!
-            return true;
+            return hasChanged;
         }
 
         public event EventHandler WindowCloseEvent;
@@ -194,43 +216,6 @@ namespace Geomapmaker.ViewModels.Hierarchy
             }
         }
 
-        void IDropTarget.DragOver(IDropInfo dropInfo)
-        {
-            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
-            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
-
-            bool isItemDropValid = sourceItem != null && targetItem != null && targetItem.CanAcceptChildren;
-            bool isCollectionDropValid = sourceItem != null && dropInfo.TargetCollection is ICollection<MapUnitTreeItem> targetCollection;
-
-            if (sourceItem != null && targetItem != null)
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
-        }
-
-        void IDropTarget.Drop(IDropInfo dropInfo)
-        {
-            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
-
-            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
-
-            ICollection<MapUnitTreeItem> sourceCollection = dropInfo.DragInfo.SourceCollection as ICollection<MapUnitTreeItem>;
-
-            targetItem.Children.Add(sourceItem);
-            sourceCollection.Remove(sourceItem);
-        }
-
-        void IDropTarget.DragEnter(IDropInfo dropInfo)
-        {
-            // TODO
-        }
-
-        void IDropTarget.DragLeave(IDropInfo dropInfo)
-        {
-            // TODO
-        }
-
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -240,7 +225,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged
     }
 
     internal class ShowHierarchy : Button

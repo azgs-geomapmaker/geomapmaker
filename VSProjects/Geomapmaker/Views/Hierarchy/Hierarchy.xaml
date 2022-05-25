@@ -6,48 +6,47 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
-        xmlns:models="clr-namespace:Geomapmaker.Models"            
-        xmlns:dd="urn:gong-wpf-dragdrop" 
-        xmlns:viewmodels="clr-namespace:Geomapmaker.ViewModels" 
+        xmlns:models="clr-namespace:Geomapmaker.Models"
+        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:viewmodels="clr-namespace:Geomapmaker.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:HierarchyViewModel}"
         mc:Ignorable="d"
-        Title="Hierarchy" 
-        Height="500" 
-        MinHeight="500" 
+        Title="Hierarchy"
+        Height="500"
+        MinHeight="500"
         Width="500"
-        MinWidth="450"                      
-        WindowStartupLocation="CenterOwner"
-    >
-    
+        MinWidth="450"
+        WindowStartupLocation="CenterOwner">
+
     <controls:ProWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml" />
                 <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:ProWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
+            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="5" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="5" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}"/>
-        <TreeView Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25" >
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}" />
+        <TreeView Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
@@ -60,10 +59,10 @@
                         <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="FontWeight" Value="Normal"/>
+                                    <Setter Property="FontWeight" Value="Normal" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding MU}" Value="">
-                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="FontWeight" Value="Bold" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -75,11 +74,11 @@
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>
-                        <AdornedElementPlaceholder/>
+                        <AdornedElementPlaceholder />
                         <ItemsControl ItemsSource="{Binding}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -97,10 +96,10 @@
                         <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="FontWeight" Value="Normal"/>
+                                    <Setter Property="FontWeight" Value="Normal" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding MU}" Value="">
-                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="FontWeight" Value="Bold" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -115,6 +114,5 @@
             <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandCancel}">Cancel</Button>
             <Button Margin="5" Padding="5" Style="{DynamicResource Esri_Button}" Command="{Binding CommandSave}">Save</Button>
         </StackPanel>
-
     </Grid>
 </controls:ProWindow>
