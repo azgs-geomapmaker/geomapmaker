@@ -31,9 +31,10 @@ namespace Geomapmaker.ViewModels.Hierarchy
             {"Unassigned", "TODO Unassigned" },
         };
 
-
+        // Track if a change was made
         private bool hasChanged = false;
 
+        // Collection for hkey-assigned map units
         private ObservableCollection<MapUnitTreeItem> _tree = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
         public ObservableCollection<MapUnitTreeItem> Tree
         {
@@ -47,6 +48,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
             }
         }
 
+        // Collection for unassigned map units
         private ObservableCollection<MapUnitTreeItem> _unassigned = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
         public ObservableCollection<MapUnitTreeItem> Unassigned
         {
