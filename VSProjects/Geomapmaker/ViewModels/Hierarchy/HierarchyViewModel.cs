@@ -245,13 +245,10 @@ namespace Geomapmaker.ViewModels.Hierarchy
                 Owner = Application.Current.MainWindow
             };
 
-            // Tree takes a few seconds to load. Display progress dialog
-            ProgressorSource ps = new ProgressorSource("Building hierarchy tree from DMU");
-
             await QueuedTask.Run(() =>
             {
                 _hierarchy.hierarchyVM.BuildTree();
-            }, ps.Progressor);
+            });
 
             _hierarchy.Closed += (o, e) => { _hierarchy = null; };
 
