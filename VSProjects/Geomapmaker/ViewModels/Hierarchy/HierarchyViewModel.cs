@@ -73,6 +73,12 @@ namespace Geomapmaker.ViewModels.Hierarchy
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 }
+                else if (targetItem.ObjectID == sourceItem.ObjectID)
+                {
+                    // Can't set a node as a child of itself
+                    dropInfo.Effects = DragDropEffects.None;
+                    return;
+                }
                 // Target is a MapUnitTreeItem
                 else
                 {
@@ -99,10 +105,12 @@ namespace Geomapmaker.ViewModels.Hierarchy
             ICollection<MapUnitTreeItem> targetCollection = dropInfo.TargetCollection as ICollection<MapUnitTreeItem>;
             string targetName = ((FrameworkElement)((DropInfo)dropInfo)?.VisualTarget)?.Name;
 
+            sourceCollection.Remove(sourceItem);
+
             // Check if the target within the Unassigned listbox
             if (targetName == "Unassigned")
             {
-                // Flatten the nodes and add to unassigned collection
+                // Flatten descendents and add to unassigned
                 FlattenAndAddToUnassigned(sourceItem);
             }
             else if (targetItem != null)
@@ -116,24 +124,10 @@ namespace Geomapmaker.ViewModels.Hierarchy
                 targetCollection.Add(sourceItem);
             }
 
-            sourceCollection.Remove(sourceItem);
-
             hasChanged = true;
         }
 
-        //private bool IsNodeAChildOfParent(string MapUnit, MapUnitTreeItem mapUnit)
-        //{
-        //    if (mapUnit?.Children?.Count > 0)
-        //    {
-        //        foreach (MapUnitTreeItem child in mapUnit?.Children)
-        //        {
-        //            // Call on each child
-        //            IsNodeAChildOfParent(child);
-        //        }
-        //    }
-        //}
-
-        // Flatten the tree and add to unassigned
+        // Flatten the tree and add to flatList
         private void FlattenAndAddToUnassigned(MapUnitTreeItem mapUnit)
         {
             // Check for any children
@@ -149,7 +143,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
             // Clear out children
             mapUnit.Children = new ObservableCollection<MapUnitTreeItem>();
 
-            // Add to the unassigned list
+            // Add to the flatList
             Unassigned.Add(mapUnit);
         }
 
