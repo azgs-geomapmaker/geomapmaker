@@ -7,6 +7,7 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,7 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Hierarchy
 {
-    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged
+    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
     {
         // Tooltips dictionary
         public Dictionary<string, string> Tooltips => new Dictionary<string, string>
@@ -30,37 +31,6 @@ namespace Geomapmaker.ViewModels.Hierarchy
             {"HierarchyTree", "TODO HierarchyTree" },
             {"Unassigned", "TODO Unassigned" },
         };
-
-        // Track if a change was made
-        private bool hasChanged = false;
-
-        // Collection for hkey-assigned map units
-        private ObservableCollection<MapUnitTreeItem> _tree = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
-        public ObservableCollection<MapUnitTreeItem> Tree
-        {
-            get => _tree;
-            set
-            {
-                _tree = value;
-
-                // Change made
-                hasChanged = true;
-            }
-        }
-
-        // Collection for unassigned map units
-        private ObservableCollection<MapUnitTreeItem> _unassigned = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
-        public ObservableCollection<MapUnitTreeItem> Unassigned
-        {
-            get => _unassigned;
-            set
-            {
-                _unassigned = value;
-
-                // Change made
-                hasChanged = true;
-            }
-        }
 
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
@@ -75,6 +45,113 @@ namespace Geomapmaker.ViewModels.Hierarchy
         {
             WindowCloseEvent(this, new EventArgs());
         });
+
+        // Track if a change was made
+        private bool hasChanged = false;
+
+        // Collection for hkey-assigned map units
+        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
+
+        // Collection for unassigned map units
+        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
+
+        void IDropTarget.DragEnter(IDropInfo dropInfo)
+        {
+            //throw new NotImplementedException();
+        }
+
+        void IDropTarget.DragOver(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data != null)
+            {
+                MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
+
+                MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
+
+                // Target is a Collection
+                if (targetItem == null)
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                }
+                // Target is a MapUnitTreeItem
+                else
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                }
+
+                dropInfo.Effects = DragDropEffects.Move;
+            }
+        }
+
+        void IDropTarget.DragLeave(IDropInfo dropInfo)
+        {
+            //throw new NotImplementedException();
+        }
+
+        void IDropTarget.Drop(IDropInfo dropInfo)
+        {
+            // Source
+            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
+            ICollection<MapUnitTreeItem> sourceCollection = dropInfo.DragInfo.SourceCollection as ICollection<MapUnitTreeItem>;
+
+            // Target
+            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
+            ICollection<MapUnitTreeItem> targetCollection = dropInfo.TargetCollection as ICollection<MapUnitTreeItem>;
+            string targetName = ((FrameworkElement)((DropInfo)dropInfo)?.VisualTarget)?.Name;
+
+            // Check if the target within the Unassigned listbox
+            if (targetName == "Unassigned")
+            {
+                // Flatten the nodes and add to unassigned collection
+                FlattenAndAddToUnassigned(sourceItem);
+            }
+            else if (targetItem != null)
+            {
+                // Add to MapUnit child
+                targetItem.Children.Add(sourceItem);
+            }
+            else
+            {
+                // Add to collection
+                targetCollection.Add(sourceItem);
+            }
+
+            sourceCollection.Remove(sourceItem);
+
+            hasChanged = true;
+        }
+
+        //private bool IsNodeAChildOfParent(string MapUnit, MapUnitTreeItem mapUnit)
+        //{
+        //    if (mapUnit?.Children?.Count > 0)
+        //    {
+        //        foreach (MapUnitTreeItem child in mapUnit?.Children)
+        //        {
+        //            // Call on each child
+        //            IsNodeAChildOfParent(child);
+        //        }
+        //    }
+        //}
+
+        // Flatten the tree and add to unassigned
+        private void FlattenAndAddToUnassigned(MapUnitTreeItem mapUnit)
+        {
+            // Check for any children
+            if (mapUnit?.Children?.Count > 0)
+            {
+                foreach (MapUnitTreeItem child in mapUnit?.Children)
+                {
+                    // Call on each child
+                    FlattenAndAddToUnassigned(child);
+                }
+            }
+
+            // Clear out children
+            mapUnit.Children = new ObservableCollection<MapUnitTreeItem>();
+
+            // Add to the unassigned list
+            Unassigned.Add(mapUnit);
+        }
 
         // Build the tree stucture
         public async void BuildTree()
