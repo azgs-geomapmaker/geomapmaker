@@ -79,6 +79,12 @@ namespace Geomapmaker.ViewModels.Hierarchy
                     dropInfo.Effects = DragDropEffects.None;
                     return;
                 }
+                else if (IsTargetADescendantOfSource(sourceItem, targetItem))
+                {
+                    // Can't set a node as a child of a descendant
+                    dropInfo.Effects = DragDropEffects.None;
+                    return;
+                }
                 // Target is a MapUnitTreeItem
                 else
                 {
@@ -87,6 +93,29 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
                 dropInfo.Effects = DragDropEffects.Move;
             }
+        }
+
+        // Recursively check if the target is a descendant of the Source
+        private bool IsTargetADescendantOfSource(MapUnitTreeItem sourceItem, MapUnitTreeItem targetItem)
+        {
+            // Base case
+            if (sourceItem.Children == null || sourceItem.Children.Count == 0)
+            {
+                return false;
+            }
+            else if (sourceItem.Children.Contains(targetItem))
+            {
+                return true;
+            }
+            else
+            {
+                foreach (var child in sourceItem.Children)
+                {
+                    return (IsTargetADescendantOfSource(child, targetItem));
+                }
+            }
+
+            return false;
         }
 
         void IDropTarget.DragLeave(IDropInfo dropInfo)
@@ -127,7 +156,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
             hasChanged = true;
         }
 
-        // Flatten the tree and add to flatList
+        // Flatten the tree and add to unassigned
         private void FlattenAndAddToUnassigned(MapUnitTreeItem mapUnit)
         {
             // Check for any children
