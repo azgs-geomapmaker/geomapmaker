@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:data="clr-namespace:Geomapmaker.Data" 
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"            
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:stations="clr-namespace:Geomapmaker.ViewModels.Stations" d:DataContext="{d:DesignInstance Type=stations:DeleteStationVM}"
              mc:Ignorable="d" >
 
     <UserControl.Resources>
@@ -109,7 +109,7 @@
             </GroupBox>
 
             <TextBlock Grid.Row="7" Grid.Column="1" Text="Time Date" Visibility="{Binding Delete.Visibility}" />
-            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Delete.TimeDat}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
+            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Delete.TimeDate}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />
 
             <TextBlock Grid.Row="9" Grid.Column="1" Text="Observer" Visibility="{Binding Delete.Visibility}" />
             <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Delete.Observer}" IsEnabled="False" IsReadOnly="True" Visibility="{Binding Delete.Visibility}" />

@@ -90,7 +90,7 @@ namespace Geomapmaker.ViewModels.Headings
         public async void RefreshMapUnitsAsync()
         {
             MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
-            Headings = MapUnits.Where(a => a.ParagraphStyle == "Heading").OrderBy(a => a.Name).ToList();
+            Headings = MapUnits.Where(a => string.IsNullOrEmpty(a.MU)).OrderBy(a => a.Name).ToList();
         }
 
         #region INotifyPropertyChanged

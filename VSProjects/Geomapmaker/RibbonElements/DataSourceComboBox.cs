@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using Geomapmaker.Data;
 using System.Collections.Generic;
 
 namespace Geomapmaker.RibbonElements
@@ -17,7 +18,7 @@ namespace Geomapmaker.RibbonElements
 
             QueuedTask.Run(async () =>
             {
-                List<string> DataSourceIds = await Data.DataSources.GetDataSourceIdsAsync();
+                List<string> DataSourceIds = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
 
                 foreach (string id in DataSourceIds)
                 {

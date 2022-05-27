@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
@@ -66,7 +66,6 @@ namespace Geomapmaker.ViewModels.Headings
             set
             {
                 SetProperty(ref _description, value, () => Description);
-                ValidateDescription(Description, "Description");
                 ValidateChangeWasMade();
             }
         }
@@ -75,10 +74,7 @@ namespace Geomapmaker.ViewModels.Headings
         public string DescriptionSourceID
         {
             get => _descriptionSourceID;
-            set
-            {
-                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
-            }
+            set => SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
         }
 
         private bool CanUpdate()
@@ -97,7 +93,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -105,41 +101,45 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    // In order to update the Map and/or the attribute table.
-                                    // Has to be called before any changes are made to the row.
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                    row["Name"] = Name;
-                                    row["FullName"] = Name;
-                                    row["Description"] = Description;
-                                    row["ParagraphStyle"] = "Heading";
-                                    row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+                                            row["Name"] = Name;
+                                            row["FullName"] = Name;
+                                            row["Description"] = Description;
+                                            row["ParagraphStyle"] = "Heading";
+                                            row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
 
-                                    // After all the changes are done, persist it.
-                                    row.Store();
+                                            // After all the changes are done, persist it.
+                                            row.Store();
 
-                                    // Has to be called after the store too.
-                                    context.Invalidate(row);
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -218,21 +218,6 @@ namespace Geomapmaker.ViewModels.Headings
             else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.Name.ToLower() == name?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
-
-        // Validate the Heading's definition
-        private void ValidateDescription(string definition, string propertyKey)
-        {
-            if (Selected != null && string.IsNullOrWhiteSpace(definition))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
             }
             else
             {

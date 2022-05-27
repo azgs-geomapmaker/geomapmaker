@@ -60,13 +60,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public async void RefreshCFSymbolsAsync()
         {
             // Get symbology options if the list is null
-            if (Data.Symbology.CFSymbolOptionsList == null)
+            if (Data.Symbology.ContactsAndFaultsSymbols == null)
             {
-                await Data.Symbology.RefreshCFSymbolOptions();
+                await Data.Symbology.RefreshCFSymbolOptionsAsync();
             }
 
             // ParentVM keeps a copy of the master list
-            SymbolOptions = Data.Symbology.CFSymbolOptionsList;
+            SymbolOptions = Data.Symbology.ContactsAndFaultsSymbols;
 
             // Push options to create vm
             Create.SymbolOptions = SymbolOptions;
@@ -120,6 +120,9 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             _contactsfaults.Closed += (o, e) =>
             {
+                // Switch back to map explore tool
+                FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+
                 _contactsfaults = null;
             };
 

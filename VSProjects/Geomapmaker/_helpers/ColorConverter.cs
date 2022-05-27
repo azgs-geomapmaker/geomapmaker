@@ -26,8 +26,18 @@ namespace Geomapmaker._helpers
                 return null;
             }
 
-            // Split by comma 
-            string[] strArray = rgb.Split(',');
+            string[] strArray = { };
+
+            if (rgb.Contains(","))
+            {
+                // Split by comma 
+                strArray = rgb.Split(',');
+            }
+            else if (rgb.Contains(";"))
+            {
+                // Split by semicolon 
+                strArray = rgb.Split(';');
+            }
 
             // Color from RGB bytes
             return strArray.Length != 3 ? null : (Color?)Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2]));
@@ -36,18 +46,29 @@ namespace Geomapmaker._helpers
         // Convert RGB string to Hex
         public static string RGBtoHex(string rgb)
         {
-            // Null if the string is empty
+            // Black if the string is empty
             if (string.IsNullOrEmpty(rgb))
             {
-                return null;
+                return "#000000";
             }
 
-            // Split by comma 
-            string[] strArray = rgb.Split(',');
+            string[] strArray = { };
+
+            if (rgb.Contains(","))
+            {
+                // Split by comma 
+                strArray = rgb.Split(',');
+            }
+            else if (rgb.Contains(";"))
+            {
+                // Split by semicolon 
+                strArray = rgb.Split(';');
+            }
 
             if (strArray.Length != 3)
             {
-                return null;
+                // Black as default
+                return "#000000";
             }
 
             return Color.FromRgb(Convert.ToByte(strArray[0]), Convert.ToByte(strArray[1]), Convert.ToByte(strArray[2])).ToString();

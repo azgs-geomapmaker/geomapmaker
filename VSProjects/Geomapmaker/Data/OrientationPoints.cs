@@ -6,14 +6,15 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
     public class OrientationPoints
     {
+        /// <summary>
+        /// Rebuild the symbols for the Orientation Points Layer
+        /// </summary>
         public static async void RebuildOrientationPointsSymbology()
         {
             FeatureLayer opLayer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
@@ -26,52 +27,62 @@ namespace Geomapmaker.Data
             // Check if the symbol list has been populated 
             if (Symbology.OrientationPointSymbols == null)
             {
-                await Symbology.RefreshOPSymbolOptions();
+                await Symbology.RefreshOPSymbolOptionsAsync();
             }
 
             ProgressorSource ps = new ProgressorSource("Rebuilding Orientation Points Symbology...");
 
             await QueuedTask.Run(() =>
             {
-                Table opTable = opLayer.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table opTable = opLayer.GetTable())
                 {
-                    PrefixClause = "DISTINCT",
-                    PostfixClause = "ORDER BY symbol",
-                    SubFields = "symbol"
-                };
-
-                using (RowCursor rowCursor = opTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
+                    if (opTable != null)
                     {
-                        using (Row row = rowCursor.Current)
+                        // Remove all existing symbols
+                        opLayer.SetRenderer(opLayer.CreateRenderer(new SimpleRendererDefinition()));
+
+                        QueryFilter queryFilter = new QueryFilter
                         {
-                            string cfSymbolKey = row["symbol"]?.ToString();
+                            PrefixClause = "DISTINCT",
+                            PostfixClause = "ORDER BY symbol",
+                            SubFields = "symbol"
+                        };
 
-                            GemsSymbol Symbol = Symbology.OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
-
-                            if (Symbol != null)
+                        using (RowCursor rowCursor = opTable.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
                             {
-                                // Add symbology for existing CF polylines
-                                AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                using (Row row = rowCursor.Current)
+                                {
+                                    string cfSymbolKey = row["symbol"]?.ToString();
+
+                                    GemsSymbol Symbol = Symbology.OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
+
+                                    if (Symbol != null)
+                                    {
+                                        // Add symbology for existing CF polylines
+                                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                    }
+                                }
                             }
                         }
+
+                        OperationManager opManager = MapView.Active.Map.OperationManager;
+
+                        List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: OrientationPoints");
+                        foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                        {
+                            opManager.RemoveUndoOperation(undoOp);
+                        }
                     }
-                }
-
-                OperationManager opManager = MapView.Active.Map.OperationManager;
-
-                List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: OrientationPoints");
-                foreach (Operation undoOp in mapUnitPolyLayerUndos)
-                {
-                    opManager.RemoveUndoOperation(undoOp);
                 }
 
             }, ps.Progressor);
         }
 
+        /// <summary>
+        /// Add symbolJson to the renderer for OrientationPoints
+        /// </summary>
         public static async void AddSymbolToRenderer(string key, string symbolJson)
         {
             // Find the OrientationPoints layer

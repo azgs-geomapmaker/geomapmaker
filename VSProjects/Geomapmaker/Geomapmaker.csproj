@@ -199,10 +199,17 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\General.cs" />
+    <Compile Include="Data\Glossary.cs" />
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ViewModels\Validation\GeomapmakerVM.cs" />
+    <Compile Include="ViewModels\Validation\GemsVM.cs" />
+    <Compile Include="ViewModels\Validation\TopoVM.cs" />
+    <Compile Include="ViewModels\Validation\OverviewVM.cs" />
+    <Compile Include="ViewModels\Validation\ValidationViewModel.cs" />
     <Compile Include="Views\MapUnitPolys\GeneratePolygons.xaml.cs">
       <DependentUpon>GeneratePolygons.xaml</DependentUpon>
     </Compile>
@@ -316,7 +323,7 @@
     <Compile Include="Data\Confidence.cs" />
     <Compile Include="Data\DataSources.cs" />
     <Compile Include="Data\DescriptionOfMapUnits.cs" />
-    <Compile Include="Data\GeoMaterials.cs" />
+    <Compile Include="Data\GeoMaterialDict.cs" />
     <Compile Include="Data\Intervals.cs" />
     <Compile Include="Models\Geomaterial.cs" />
     <Compile Include="ViewModels\Hierarchy\HierarchyViewModel.cs" />
@@ -343,6 +350,21 @@
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Validation\Gems.xaml.cs">
+      <DependentUpon>Gems.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Validation\Geomapmaker.xaml.cs">
+      <DependentUpon>Geomapmaker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Validation\Topo.xaml.cs">
+      <DependentUpon>Topo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Validation\Overview.xaml.cs">
+      <DependentUpon>Overview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Validation\Validation.xaml.cs">
+      <DependentUpon>Validation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="_helpers\ColorConverter.cs" />
     <Compile Include="_helpers\Helpers.cs" />
     <Compile Include="_helpers\ValueConverters.cs" />
@@ -469,6 +491,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GlobalResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Validation\Gems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Validation\Geomapmaker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Validation\Topo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Validation\Overview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Validation\Validation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

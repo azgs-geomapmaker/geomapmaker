@@ -5,6 +5,7 @@ using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,46 +15,82 @@ namespace Geomapmaker.Data
 {
     public class DataSources
     {
-        public static async Task<List<string>> GetDataSourceIdsAsync()
+        /// <summary>
+        /// Checks the data sources for any unused data sources
+        /// </summary>
+        /// <returns>List of unused data sources</returns>
+        public static async Task<List<string>> GetUnnecessaryDataSources()
         {
-            List<string> DataSourcesIds = new List<string>();
+            // List of all foreign keys
+            List<string> foreignKeys = new List<string>();
 
-            StandaloneTable dataSourcesTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
+            // Add DMU data sources
+            foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
 
-            if (dataSourcesTable == null)
-            {
-                return DataSourcesIds;
-            }
+            // Add CF data sources
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
 
-            await QueuedTask.Run(() =>
-            {
-                Table enterpriseTable = dataSourcesTable.GetTable();
+            // Add MUP data sources
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
 
-                if (enterpriseTable == null)
-                {
-                    return;
-                }
+            // Add Stations data sources
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
 
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    PostfixClause = "ORDER BY datasources_id"
-                };
+            // Add OP data sources (location)
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
 
-                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
-                    {
-                        using (Row row = rowCursor.Current)
-                        {
-                            DataSourcesIds.Add(row["datasources_id"]?.ToString());
-                        }
-                    }
-                }
-            });
+            // Add OP data sources (orientation)
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
 
-            return DataSourcesIds;
+            // Get all datasources from Data Source table
+            List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
+
+            // Find unused data sources
+            List<string> unusedDataSources = dataSources.Except(foreignKeys.Distinct()).ToList();
+
+            return unusedDataSources;
         }
 
+        /// <summary>
+        /// Checks the data source table for any missing data sources
+        /// </summary>
+        /// <returns>List of missing data sources</returns>
+        public static async Task<List<string>> GetMissingDataSources()
+        {
+            // List of all foreign keys
+            List<string> foreignKeys = new List<string>();
+
+            // Add DMU data sources
+            foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
+
+            // Add CF data sources
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
+
+            // Add MUP data sources
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
+
+            // Add Stations data sources
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
+
+            // Add OP data sources (location)
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
+
+            // Add OP data sources (orientation)
+            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
+
+            // Get all datasources from Data Source table
+            List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
+
+            // Find missing data sources
+            List<string> missingDataSources = foreignKeys.Except(dataSources).ToList();
+
+            return missingDataSources;
+        }
+
+        /// <summary>
+        /// Get list of DataSources
+        /// </summary>
+        /// <returns>List of DataSources</returns>
         public static async Task<List<DataSource>> GetDataSourcesAsync()
         {
             List<DataSource> DataSourcesList = new List<DataSource>();
@@ -65,37 +102,38 @@ namespace Geomapmaker.Data
                 return DataSourcesList;
             }
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
-                Table enterpriseTable = dataSourcesTable.GetTable();
-
-                if (enterpriseTable == null)
+                using (Table table = dataSourcesTable.GetTable())
                 {
-                    return;
-                }
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    PostfixClause = "ORDER BY datasources_id"
-                };
-
-                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
+                    if (table == null)
                     {
-                        using (Row row = rowCursor.Current)
-                        {
-                            DataSource dS = new DataSource
-                            {
-                                ObjectId = long.Parse(row["objectid"].ToString()),
-                                Source = row["source"]?.ToString(),
-                                DataSource_ID = row["datasources_id"]?.ToString(),
-                                Url = row["url"]?.ToString(),
-                                Notes = row["notes"]?.ToString()
-                            };
+                        return;
+                    }
 
-                            //add it to our list
-                            DataSourcesList.Add(dS);
+                    QueryFilter queryFilter = new QueryFilter
+                    {
+                        PostfixClause = "ORDER BY datasources_id"
+                    };
+
+                    using (RowCursor rowCursor = table.Search(queryFilter))
+                    {
+                        while (rowCursor.MoveNext())
+                        {
+                            using (Row row = rowCursor.Current)
+                            {
+                                DataSource dS = new DataSource
+                                {
+                                    ObjectId = long.Parse(row["objectid"]?.ToString()),
+                                    Source = Helpers.RowValueToString(row["source"]),
+                                    DataSource_ID = Helpers.RowValueToString(row["datasources_id"]),
+                                    Url = Helpers.RowValueToString(row["url"]),
+                                    Notes = Helpers.RowValueToString(row["notes"])
+                                };
+
+                                //add it to our list
+                                DataSourcesList.Add(dS);
+                            }
                         }
                     }
                 }
@@ -104,6 +142,11 @@ namespace Geomapmaker.Data
             return DataSourcesList;
         }
 
+        /// <summary>
+        /// Updates related tables when datasourceID changes 
+        /// </summary>
+        /// <param name="originalDataSourceID">old id value</param>
+        /// <param name="newDataSourceID">new id value</param>
         public static void UpdateDataSourceForeignKeys(string originalDataSourceID, string newDataSourceID)
         {
             // Update DescriptionOfMapUnits
@@ -111,42 +154,45 @@ namespace Geomapmaker.Data
             {
                 StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
-                QueryFilter queryFilter = new QueryFilter
+                if (dmu != null)
                 {
-                    // Where DataSourceID is set to the original value
-                    WhereClause = $"DescriptionSourceID = '{originalDataSourceID}'"
-                };
-
-                // Create list of oids to update
-                List<long> oidSet = new List<long>();
-
-                using (RowCursor rc = dmu.Search(queryFilter))
-                {
-                    while (rc.MoveNext())
+                    QueryFilter queryFilter = new QueryFilter
                     {
-                        using (Row record = rc.Current)
+                        // Where DataSourceID is set to the original value
+                        WhereClause = $"DescriptionSourceID = '{originalDataSourceID}'"
+                    };
+
+                    // Create list of oids to update
+                    List<long> oidSet = new List<long>();
+
+                    using (RowCursor rc = dmu.Search(queryFilter))
+                    {
+                        while (rc.MoveNext())
                         {
-                            oidSet.Add(record.GetObjectID());
+                            using (Row record = rc.Current)
+                            {
+                                oidSet.Add(record.GetObjectID());
+                            }
                         }
                     }
+
+                    // Create the edit operation
+                    EditOperation modifyFeatures = new EditOperation
+                    {
+                        Name = "Update DescriptionSourceID for DescriptionOfMapUnits",
+                        ShowProgressor = true
+                    };
+
+                    Inspector multipleFeaturesInsp = new Inspector();
+
+                    multipleFeaturesInsp.Load(dmu, oidSet);
+
+                    multipleFeaturesInsp["DescriptionSourceID"] = newDataSourceID;
+
+                    modifyFeatures.Modify(multipleFeaturesInsp);
+
+                    modifyFeatures.Execute();
                 }
-
-                // Create the edit operation
-                EditOperation modifyFeatures = new EditOperation
-                {
-                    Name = "Update DescriptionSourceID for DescriptionOfMapUnits",
-                    ShowProgressor = true
-                };
-
-                Inspector multipleFeaturesInsp = new Inspector();
-
-                multipleFeaturesInsp.Load(dmu, oidSet);
-
-                multipleFeaturesInsp["DescriptionSourceID"] = newDataSourceID;
-
-                modifyFeatures.Modify(multipleFeaturesInsp);
-
-                modifyFeatures.Execute();
             });
 
             // Update MapUnitPolys
@@ -154,42 +200,45 @@ namespace Geomapmaker.Data
             {
                 FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
 
-                QueryFilter queryFilter = new QueryFilter
+                if (mup != null)
                 {
-                    // Where DataSourceID is set to the original value
-                    WhereClause = $"DataSourceID = '{originalDataSourceID}'"
-                };
-
-                // Create list of oids to update
-                List<long> oidSet = new List<long>();
-
-                using (RowCursor rc = mup.Search(queryFilter))
-                {
-                    while (rc.MoveNext())
+                    QueryFilter queryFilter = new QueryFilter
                     {
-                        using (Row record = rc.Current)
+                        // Where DataSourceID is set to the original value
+                        WhereClause = $"DataSourceID = '{originalDataSourceID}'"
+                    };
+
+                    // Create list of oids to update
+                    List<long> oidSet = new List<long>();
+
+                    using (RowCursor rc = mup.Search(queryFilter))
+                    {
+                        while (rc.MoveNext())
                         {
-                            oidSet.Add(record.GetObjectID());
+                            using (Row record = rc.Current)
+                            {
+                                oidSet.Add(record.GetObjectID());
+                            }
                         }
                     }
+
+                    // Create the edit operation
+                    EditOperation modifyFeatures = new EditOperation
+                    {
+                        Name = "Update DataSourceID for MapUnitPolys",
+                        ShowProgressor = true
+                    };
+
+                    Inspector multipleFeaturesInsp = new Inspector();
+
+                    multipleFeaturesInsp.Load(mup, oidSet);
+
+                    multipleFeaturesInsp["DataSourceID"] = newDataSourceID;
+
+                    modifyFeatures.Modify(multipleFeaturesInsp);
+
+                    modifyFeatures.Execute();
                 }
-
-                // Create the edit operation
-                EditOperation modifyFeatures = new EditOperation
-                {
-                    Name = "Update DataSourceID for MapUnitPolys",
-                    ShowProgressor = true
-                };
-
-                Inspector multipleFeaturesInsp = new Inspector();
-
-                multipleFeaturesInsp.Load(mup, oidSet);
-
-                multipleFeaturesInsp["DataSourceID"] = newDataSourceID;
-
-                modifyFeatures.Modify(multipleFeaturesInsp);
-
-                modifyFeatures.Execute();
             });
 
             // Update ContactsAndFaults
@@ -197,60 +246,67 @@ namespace Geomapmaker.Data
             {
                 FeatureLayer cf = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
 
-                QueryFilter queryFilter = new QueryFilter
+                if (cf != null)
                 {
-                    // Where DataSourceID is set to the original value
-                    WhereClause = $"DataSourceID = '{originalDataSourceID}'"
-                };
-
-                // Create list of oids to update
-                List<long> oidSet = new List<long>();
-
-                using (RowCursor rc = cf.Search(queryFilter))
-                {
-                    while (rc.MoveNext())
+                    QueryFilter queryFilter = new QueryFilter
                     {
-                        using (Row record = rc.Current)
+                        // Where DataSourceID is set to the original value
+                        WhereClause = $"DataSourceID = '{originalDataSourceID}'"
+                    };
+
+                    // Create list of oids to update
+                    List<long> oidSet = new List<long>();
+
+                    using (RowCursor rc = cf.Search(queryFilter))
+                    {
+                        while (rc.MoveNext())
                         {
-                            oidSet.Add(record.GetObjectID());
+                            using (Row record = rc.Current)
+                            {
+                                oidSet.Add(record.GetObjectID());
+                            }
                         }
                     }
+
+                    // Create the edit operation
+                    EditOperation modifyFeatures = new EditOperation
+                    {
+                        Name = "Update DataSourceID for ContactsAndFaults",
+                        ShowProgressor = true
+                    };
+
+                    Inspector multipleFeaturesInsp = new Inspector();
+
+                    multipleFeaturesInsp.Load(cf, oidSet);
+
+                    multipleFeaturesInsp["DataSourceID"] = newDataSourceID;
+
+                    modifyFeatures.Modify(multipleFeaturesInsp);
+
+                    modifyFeatures.Execute();
                 }
-
-                // Create the edit operation
-                EditOperation modifyFeatures = new EditOperation
-                {
-                    Name = "Update DataSourceID for ContactsAndFaults",
-                    ShowProgressor = true
-                };
-
-                Inspector multipleFeaturesInsp = new Inspector();
-
-                multipleFeaturesInsp.Load(cf, oidSet);
-
-                multipleFeaturesInsp["DataSourceID"] = newDataSourceID;
-
-                modifyFeatures.Modify(multipleFeaturesInsp);
-
-                modifyFeatures.Execute();
             });
 
+            // Update ContactsAndFaults Templates
             QueuedTask.Run(() =>
             {
                 FeatureLayer cf = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
 
-                IEnumerable<EditingTemplate> cfTemplates = cf.GetTemplates();
-
-                foreach (var template in cfTemplates)
+                if (cf != null)
                 {
-                    var templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                    IEnumerable<EditingTemplate> cfTemplates = cf.GetTemplates();
 
-                    if (templateDef.DefaultValues["datasourceid"]?.ToString() == originalDataSourceID)
+                    foreach (EditingTemplate template in cfTemplates)
                     {
-                        // Update datasourceid
-                        templateDef.DefaultValues["datasourceid"] = newDataSourceID;
+                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
-                        template.SetDefinition(templateDef);
+                        if (templateDef.DefaultValues["datasourceid"]?.ToString() == originalDataSourceID)
+                        {
+                            // Update datasourceid
+                            templateDef.DefaultValues["datasourceid"] = newDataSourceID;
+
+                            template.SetDefinition(templateDef);
+                        }
                     }
                 }
             });
@@ -260,42 +316,45 @@ namespace Geomapmaker.Data
             {
                 FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
 
-                QueryFilter queryFilter = new QueryFilter
+                if (stationsLayer != null)
                 {
-                    // Where DataSourceID is set to the original value
-                    WhereClause = $"DataSourceID = '{originalDataSourceID}'"
-                };
-
-                // Create list of oids to update
-                List<long> oidSet = new List<long>();
-
-                using (RowCursor rc = stationsLayer.Search(queryFilter))
-                {
-                    while (rc.MoveNext())
+                    QueryFilter queryFilter = new QueryFilter
                     {
-                        using (Row record = rc.Current)
+                        // Where DataSourceID is set to the original value
+                        WhereClause = $"DataSourceID = '{originalDataSourceID}'"
+                    };
+
+                    // Create list of oids to update
+                    List<long> oidSet = new List<long>();
+
+                    using (RowCursor rc = stationsLayer.Search(queryFilter))
+                    {
+                        while (rc.MoveNext())
                         {
-                            oidSet.Add(record.GetObjectID());
+                            using (Row record = rc.Current)
+                            {
+                                oidSet.Add(record.GetObjectID());
+                            }
                         }
                     }
+
+                    // Create the edit operation
+                    EditOperation modifyFeatures = new EditOperation
+                    {
+                        Name = "Update DataSourceID for Stations",
+                        ShowProgressor = true
+                    };
+
+                    Inspector multipleFeaturesInsp = new Inspector();
+
+                    multipleFeaturesInsp.Load(stationsLayer, oidSet);
+
+                    multipleFeaturesInsp["DataSourceID"] = newDataSourceID;
+
+                    modifyFeatures.Modify(multipleFeaturesInsp);
+
+                    modifyFeatures.Execute();
                 }
-
-                // Create the edit operation
-                EditOperation modifyFeatures = new EditOperation
-                {
-                    Name = "Update DataSourceID for Stations",
-                    ShowProgressor = true
-                };
-
-                Inspector multipleFeaturesInsp = new Inspector();
-
-                multipleFeaturesInsp.Load(stationsLayer, oidSet);
-
-                multipleFeaturesInsp["DataSourceID"] = newDataSourceID;
-
-                modifyFeatures.Modify(multipleFeaturesInsp);
-
-                modifyFeatures.Execute();
             });
 
             // Update OrientationPoints (LocationSourceID)
@@ -303,42 +362,45 @@ namespace Geomapmaker.Data
             {
                 FeatureLayer opLayer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
 
-                QueryFilter queryFilter = new QueryFilter
+                if (opLayer != null)
                 {
-                    // Where DataSourceID is set to the original value
-                    WhereClause = $"LocationSourceID = '{originalDataSourceID}'"
-                };
-
-                // Create list of oids to update
-                List<long> oidSet = new List<long>();
-
-                using (RowCursor rc = opLayer.Search(queryFilter))
-                {
-                    while (rc.MoveNext())
+                    QueryFilter queryFilter = new QueryFilter
                     {
-                        using (Row record = rc.Current)
+                        // Where DataSourceID is set to the original value
+                        WhereClause = $"LocationSourceID = '{originalDataSourceID}'"
+                    };
+
+                    // Create list of oids to update
+                    List<long> oidSet = new List<long>();
+
+                    using (RowCursor rc = opLayer.Search(queryFilter))
+                    {
+                        while (rc.MoveNext())
                         {
-                            oidSet.Add(record.GetObjectID());
+                            using (Row record = rc.Current)
+                            {
+                                oidSet.Add(record.GetObjectID());
+                            }
                         }
                     }
+
+                    // Create the edit operation
+                    EditOperation modifyFeatures = new EditOperation
+                    {
+                        Name = "Update LocationSourceID for Orientation Points",
+                        ShowProgressor = true
+                    };
+
+                    Inspector multipleFeaturesInsp = new Inspector();
+
+                    multipleFeaturesInsp.Load(opLayer, oidSet);
+
+                    multipleFeaturesInsp["LocationSourceID"] = newDataSourceID;
+
+                    modifyFeatures.Modify(multipleFeaturesInsp);
+
+                    modifyFeatures.Execute();
                 }
-
-                // Create the edit operation
-                EditOperation modifyFeatures = new EditOperation
-                {
-                    Name = "Update LocationSourceID for Orientation Points",
-                    ShowProgressor = true
-                };
-
-                Inspector multipleFeaturesInsp = new Inspector();
-
-                multipleFeaturesInsp.Load(opLayer, oidSet);
-
-                multipleFeaturesInsp["LocationSourceID"] = newDataSourceID;
-
-                modifyFeatures.Modify(multipleFeaturesInsp);
-
-                modifyFeatures.Execute();
             });
 
             // Update OrientationPoints (OrientationSourceID)
@@ -346,42 +408,45 @@ namespace Geomapmaker.Data
             {
                 FeatureLayer opLayer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
 
-                QueryFilter queryFilter = new QueryFilter
+                if (opLayer != null)
                 {
-                    // Where DataSourceID is set to the original value
-                    WhereClause = $"OrientationSourceID = '{originalDataSourceID}'"
-                };
-
-                // Create list of oids to update
-                List<long> oidSet = new List<long>();
-
-                using (RowCursor rc = opLayer.Search(queryFilter))
-                {
-                    while (rc.MoveNext())
+                    QueryFilter queryFilter = new QueryFilter
                     {
-                        using (Row record = rc.Current)
+                        // Where DataSourceID is set to the original value
+                        WhereClause = $"OrientationSourceID = '{originalDataSourceID}'"
+                    };
+
+                    // Create list of oids to update
+                    List<long> oidSet = new List<long>();
+
+                    using (RowCursor rc = opLayer.Search(queryFilter))
+                    {
+                        while (rc.MoveNext())
                         {
-                            oidSet.Add(record.GetObjectID());
+                            using (Row record = rc.Current)
+                            {
+                                oidSet.Add(record.GetObjectID());
+                            }
                         }
                     }
+
+                    // Create the edit operation
+                    EditOperation modifyFeatures = new EditOperation
+                    {
+                        Name = "Update LocationSourceID for Orientation Points",
+                        ShowProgressor = true
+                    };
+
+                    Inspector multipleFeaturesInsp = new Inspector();
+
+                    multipleFeaturesInsp.Load(opLayer, oidSet);
+
+                    multipleFeaturesInsp["OrientationSourceID"] = newDataSourceID;
+
+                    modifyFeatures.Modify(multipleFeaturesInsp);
+
+                    modifyFeatures.Execute();
                 }
-
-                // Create the edit operation
-                EditOperation modifyFeatures = new EditOperation
-                {
-                    Name = "Update LocationSourceID for Orientation Points",
-                    ShowProgressor = true
-                };
-
-                Inspector multipleFeaturesInsp = new Inspector();
-
-                multipleFeaturesInsp.Load(opLayer, oidSet);
-
-                multipleFeaturesInsp["OrientationSourceID"] = newDataSourceID;
-
-                modifyFeatures.Modify(multipleFeaturesInsp);
-
-                modifyFeatures.Execute();
             });
         }
     }

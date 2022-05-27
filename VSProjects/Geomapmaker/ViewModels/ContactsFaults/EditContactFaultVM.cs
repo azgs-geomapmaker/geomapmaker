@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -40,7 +40,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             if (layer == null)
             {
-                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                MessageBox.Show("ContactsAndFaults layer not found in active map.", "One or more errors occured.");
                 return;
             }
 

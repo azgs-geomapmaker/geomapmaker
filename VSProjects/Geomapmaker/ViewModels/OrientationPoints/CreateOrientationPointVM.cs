@@ -32,12 +32,16 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             SpatialReferenceWkid = currentWkid;
 
             // Trigger validation
+            Azimuth = "";
+            Inclination = "";
             Type = "";
             Symbol = null;
             XCoordinate = "";
             YCoordinate = "";
             PlotAtScale = "0";
             LocationConfidenceMeters = "";
+            OrientationConfidenceDegrees = "";
+            IdentityConfidence = "";
         }
 
         private bool CanSave()
@@ -47,78 +51,83 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
         private async void SaveAsync()
         {
-            bool IsSucceeded = false;
+            string errorMessage = null;
 
             FeatureLayer opLayer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
 
             if (opLayer == null)
             {
-                MessageBox.Show("OrientationPoints layer not found in active map.");
+                MessageBox.Show("OrientationPoints layer not found in active map.", "One or more errors occured.");
                 return;
             }
 
-            await QueuedTask.Run(async () =>
+            await QueuedTask.Run(() =>
             {
-                EditOperation createFeatures = new EditOperation
+                try
                 {
-                    Name = "Create Orientation Point",
-                    SelectNewFeatures = true
-                };
+                    EditOperation createFeatures = new EditOperation
+                    {
+                        Name = "Create Orientation Point",
+                        SelectNewFeatures = true
+                    };
 
-                MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+                    MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
 
-                // Get geometry from point builder
-                Geometry point = pointBuilder.ToGeometry();
+                    // Get geometry from point builder
+                    Geometry point = pointBuilder.ToGeometry();
 
-                // Create features and set attributes
-                Dictionary<string, object> attributes = new Dictionary<string, object>
-                {
-                    { "StationsID", StationFieldId },
-                    { "Type", Type },
-                    { "Symbol", Symbol.Key },
-                    { "LocationConfidenceMeters", LocationConfidenceMeters },
-                    { "PlotAtScale", PlotAtScale },
-                    { "Notes", Notes },
-                    { "LocationSourceID", LocationSourceID },
-                    { "OrientationSourceID", OrientationSourceID },
-                };
+                    // Create features and set attributes
+                    Dictionary<string, object> attributes = new Dictionary<string, object>
+                    {
+                        { "StationsID", StationFieldId },
+                        { "Azimuth", Azimuth },
+                        { "Inclination", Inclination },
+                        { "Type", Type },
+                        { "Symbol", Symbol.Key },
+                        { "LocationConfidenceMeters", LocationConfidenceMeters },
+                        { "OrientationConfidenceDegrees", OrientationConfidenceDegrees },
+                        { "PlotAtScale", PlotAtScale },
+                        { "Notes", Notes },
+                        { "LocationSourceID", LocationSourceID },
+                        { "OrientationSourceID", OrientationSourceID },
+                        { "IdentityConfidence", IdentityConfidence },
+                    };
 
-                RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
+                    RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
 
-                // Execute to execute the operation
-                createFeatures.Execute();
+                    // Execute to execute the operation
+                    createFeatures.Execute();
 
-                IsSucceeded = createFeatures.IsSucceeded;
-
-                if (IsSucceeded)
-                {
-                    MapView.Active?.ZoomTo(point);
+                    if (createFeatures.IsSucceeded)
+                    {
+                        // Zoom into point
+                        MapView.Active?.ZoomTo(point);
+                    }
+                    else
+                    {
+                        MessageBox.Show(createFeatures.ErrorMessage, "One or more errors occured.");
+                    }
                 }
-
-                //
-                // Validate X, Y Coordinates by checking if a feature was actually created at that geometry point. 
-                // I haven't found a way to check prior to executing the editOperation
-                //
-                if ((bool)!MapView.Active?.GetFeatures(point).ContainsKey(opLayer))
+                catch (Exception ex)
                 {
-                    IsSucceeded = false;
+                    errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.ToString();
 
-                    // Undo the edit operation
-                    await createFeatures.UndoAsync();
+                    // Trim the stack-trace from the error msg
+                    if (errorMessage.Contains("--->"))
+                    {
+                        errorMessage = errorMessage.Substring(0, errorMessage.IndexOf("--->"));
+                    }
                 }
-
             });
 
-            if (IsSucceeded)
+            if (!string.IsNullOrEmpty(errorMessage))
             {
-                Data.OrientationPoints.RebuildOrientationPointsSymbology();
-                ParentVM.CloseProwindow();
+                MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {
-                // Raise error
-                _validationErrors["SpatialReferenceWkid"] = new List<string>() { "Coordinates not valid for Spatial Reference." };
-                RaiseErrorsChanged("SpatialReferenceWkid");
+                Data.OrientationPoints.RebuildOrientationPointsSymbology();
+                ParentVM.CloseProwindow();
             }
         }
 
@@ -131,6 +140,34 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 SetProperty(ref _stationFieldId, value, () => StationFieldId);
             }
         }
+
+        private string _azimuth;
+        public string Azimuth
+        {
+            get => _azimuth;
+            set
+            {
+                SetProperty(ref _azimuth, value, () => Azimuth);
+                ValidateAzimuth(Azimuth, "Azimuth");
+            }
+        }
+
+        // Holds the converted double value 
+        private double AzimuthDouble;
+
+        private string _inclination;
+        public string Inclination
+        {
+            get => _inclination;
+            set
+            {
+                SetProperty(ref _inclination, value, () => Inclination);
+                ValidateInclination(Inclination, "Inclination");
+            }
+        }
+
+        // Holds the converted double value 
+        private double InclinationDouble;
 
         private string _keyFilter;
         public string KeyFilter
@@ -192,14 +229,14 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set => SetProperty(ref _symbolsFilteredMessage, value, () => SymbolsFilteredMessage);
         }
 
-        private List<GemsSymbol> _symbolOptions { get; set; }
+        private List<GemsSymbol> _symbolOptions;
         public List<GemsSymbol> SymbolOptions
         {
             get => _symbolOptions;
             set
             {
-                _symbolOptions = value;
-                NotifyPropertyChanged();
+                SetProperty(ref _symbolOptions, value, () => SymbolOptions);
+                ValidateSymbolOptions(SymbolOptions, "SymbolOptions");
             }
         }
 
@@ -283,8 +320,36 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             get => _locationConfidenceMeters;
             set
             {
+                // Remove " (Unknown)" from the -9 option
+                value = value?.Replace(" (Unknown)", "");
+
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
-                ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+                ValidateRequiredNumber(LocationConfidenceMeters, "LocationConfidenceMeters");
+            }
+        }
+
+        private string _orientationConfidenceDegrees;
+        public string OrientationConfidenceDegrees
+        {
+            get => _orientationConfidenceDegrees;
+            set
+            {
+                // Remove " (Unknown)" from the -9 option
+                value = value?.Replace(" (Unknown)", "");
+
+                SetProperty(ref _orientationConfidenceDegrees, value, () => OrientationConfidenceDegrees);
+                ValidateOrientationConfidenceDegrees(OrientationConfidenceDegrees, "OrientationConfidenceDegrees");
+            }
+        }
+
+        private string _identityConfidence;
+        public string IdentityConfidence
+        {
+            get => _identityConfidence;
+            set
+            {
+                SetProperty(ref _identityConfidence, value, () => IdentityConfidence);
+                ValidateRequiredString(IdentityConfidence, "IdentityConfidence");
             }
         }
 
@@ -331,6 +396,52 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             // Otherwise, return the errors for that parameter.
             return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
                 null : (IEnumerable)_validationErrors[propertyName];
+        }
+
+        private void ValidateAzimuth(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out AzimuthDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
+            }
+            else if (AzimuthDouble < 0 || AzimuthDouble > 360)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be between 0 and 360." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateInclination(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out InclinationDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
+            }
+            else if (InclinationDouble < -90 || InclinationDouble > 90)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be between -90 and 90." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
         }
 
         private void ValidateWkid(string text, string propertyKey)
@@ -409,6 +520,21 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             RaiseErrorsChanged(propertyKey);
         }
 
+        // Validate symbol options
+        public void ValidateSymbolOptions(List<GemsSymbol> symbolOptions, string propertyKey)
+        {
+            if (symbolOptions?.Count == 0)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Symbology table not found." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
         // Validate symbol
         private void ValidateSymbol(GemsSymbol symbol, string propertyKey)
         {
@@ -440,6 +566,48 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             RaiseErrorsChanged(propertyKey);
         }
 
+        private void ValidateRequiredNumber(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out _))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateOrientationConfidenceDegrees(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out double degreesDouble))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
+            }
+            else if (degreesDouble > 90)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be less than 90." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
         private void ValidatePlotAtScale(string text, string propertyKey)
         {
             // Required field
@@ -449,11 +617,11 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
             else if (!int.TryParse(text, out PlotAtScaleInt))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be a postive integer." };
             }
             else if (PlotAtScaleInt < 0)
             {
-                _validationErrors[propertyKey] = new List<string>() { "Scale must be a postive integer." };
+                _validationErrors[propertyKey] = new List<string>() { "Value must be a postive integer." };
             }
             else
             {

@@ -122,9 +122,8 @@
             Grid.Row="14" 
             Grid.Column="1" 
             ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
-            SelectedValue="{Binding Edit.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
-            IsReadOnly="False" 
-            IsEditable="False"
+            Text="{Binding Edit.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+            IsEditable="True"
             Visibility="{Binding Edit.Visibility}"
             >
             </ComboBox>

@@ -2,6 +2,7 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -95,7 +96,7 @@ namespace Geomapmaker.ViewModels.Stations
 
         private async void DeleteAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {FieldID}?", $"Delete {FieldID}?", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"Are you sure you want to delete {FieldID}?", $"Delete {FieldID}?", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
@@ -108,7 +109,7 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (stationsLayer == null)
             {
-                MessageBox.Show("Stations layer not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("Stations layer not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -116,30 +117,34 @@ namespace Geomapmaker.ViewModels.Stations
             {
                 try
                 {
-                    Table enterpriseTable = stationsLayer.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = stationsLayer.GetTable())
                     {
-
-                        QueryFilter filter = new QueryFilter { ObjectIDs = new List<long>{ Selected.ObjectID } };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+
+                                QueryFilter filter = new QueryFilter { ObjectIDs = new List<long> { Selected.ObjectID } };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            context.Invalidate(row);
 
-                                    row.Delete();
+                                            row.Delete();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -155,7 +160,7 @@ namespace Geomapmaker.ViewModels.Stations
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {
@@ -199,25 +204,28 @@ namespace Geomapmaker.ViewModels.Stations
 
             await QueuedTask.Run(() =>
             {
-                Table OrientationPointsTable = op.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table OrientationPointsTable = op.GetTable())
                 {
-                    WhereClause = $"StationsID = '{FieldID}'"
-                };
+                    if (OrientationPointsTable != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"StationsID = '{FieldID}'"
+                        };
 
-                int rowCount = OrientationPointsTable.GetCount(queryFilter);
+                        int rowCount = OrientationPointsTable.GetCount(queryFilter);
 
-                if (rowCount > 0)
-                {
-                    string pural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} OrientationPoint{pural} with this StationsID" };
+                        if (rowCount > 0)
+                        {
+                            string pural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} OrientationPoint{pural} with this StationsID" };
+                        }
+                        else
+                        {
+                            _validationErrors.Remove(propertyKey);
+                        }
+                    }
                 }
-                else
-                {
-                    _validationErrors.Remove(propertyKey);
-                }
-
             });
 
             RaiseErrorsChanged(propertyKey);

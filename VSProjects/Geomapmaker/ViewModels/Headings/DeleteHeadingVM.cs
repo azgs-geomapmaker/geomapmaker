@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
+using System.Windows;
 
 namespace Geomapmaker.ViewModels.Headings
 {
@@ -68,7 +69,7 @@ namespace Geomapmaker.ViewModels.Headings
         /// </summary>
         private async Task DeleteAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"Are you sure you want to delete {Name}?", $"Delete {Name}?", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
@@ -81,7 +82,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -89,31 +90,35 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectID };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
                                 {
-                                    // In order to update the Map and/or the attribute table.
-                                    // Has to be called before any changes are made to the row.
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                    row.Delete();
+                                            row.Delete();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, enterpriseTable);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -129,7 +134,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {

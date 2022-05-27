@@ -14,6 +14,22 @@ namespace Geomapmaker.Data
 {
     public class MapUnitPolys
     {
+        /// <summary>
+        /// Compare the MapUnitPolys layer with the DescriptionOfMapUnits table. Return any MapUnitPolys not defined in DescriptionOfMapUnits. 
+        /// </summary>
+        /// <returns>List of MapUnits not defined</returns>
+        public static async Task<List<string>> GetMapUnitsNotDefinedInDMUTableAsync()
+        {
+            List<string> mapUnitPolys = await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
+
+            List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
+
+            return mapUnitPolys.Except(mapUnitDescriptions).ToList();
+        }
+
+        /// <summary>
+        /// Rebuild the renderer for MapUnitPolys from the DMU table. Rebuild templates for the MUP layer from the DMU table
+        /// </summary>
         public static async void RebuildMUPSymbologyAndTemplates()
         {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
@@ -193,6 +209,10 @@ namespace Geomapmaker.Data
             }, ps.Progressor);
         }
 
+        /// <summary>
+        /// Get templates for the MapUnitPolys layer
+        /// </summary>
+        /// <returns>List of MapUnitPolys template</returns>
         public static async Task<List<MapUnitPolyTemplate>> GetMapUnitPolyTemplatesAsync()
         {
             // List of templates to return
@@ -200,7 +220,7 @@ namespace Geomapmaker.Data
 
             IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
 
-            // Find the ContactsFaults layer
+            // Find the MapUnitPolys layer
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             if (layer == null)
@@ -212,34 +232,38 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-                // Get templates from CF layer
+                // Get templates from layer
                 layerTemplates = layer.GetTemplates();
 
                 foreach (EditingTemplate template in layerTemplates)
                 {
-                    // Skip over the default template and Unassigned (for now)
-                    if (template.Name != "MapUnitPolys" && template.Name != "Unassigned")
+                    // Get CIMFeatureTemplate
+                    CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+
+                    // If the template has a mapunit value
+                    if (templateDef.DefaultValues.ContainsKey("mapunit") && templateDef.DefaultValues.ContainsKey("datasourceid"))
                     {
-                        // Get CIMFeatureTemplate
-                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                        string muKey = templateDef.DefaultValues["mapunit"]?.ToString();
 
-                        string muKey = templateDef.DefaultValues["mapunit"].ToString();
+                        // Find the matching DMU row
+                        MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
 
-                        MapUnit mapUnit = dmu.Where(a => a.MU == muKey).FirstOrDefault();
-
-                        MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
+                        // Check if the mapUnt was found
+                        if (mapUnit != null)
                         {
-                            MapUnit = muKey,
-                            HexColor = mapUnit.HexColor,
-                            Tooltip = mapUnit.Tooltip,
-                            DataSourceID = templateDef.DefaultValues["datasourceid"].ToString(),
-                            Template = template
-                        };
+                            MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
+                            {
+                                MapUnit = muKey,
+                                HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
+                                Tooltip = mapUnit.Tooltip,
+                                DataSourceID = templateDef.DefaultValues["datasourceid"]?.ToString(),
+                                Template = template
+                            };
 
-                        mupTemplates.Add(tmpTemplate);
+                            mupTemplates.Add(tmpTemplate);
+                        }
                     }
                 }
-
             });
 
             return mupTemplates;

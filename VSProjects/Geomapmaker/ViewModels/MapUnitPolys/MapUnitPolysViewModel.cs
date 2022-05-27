@@ -16,6 +16,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
+        public ICommand CommandRefreshDMU => new RelayCommand(() => RefreshDMU());
+
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
@@ -43,7 +45,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             }
         }
 
-        public async void RefreshMapUnitsAsync()
+        public async void RefreshDMU()
         {
             Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
@@ -78,8 +80,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
-
-            _mapunitpolys.mapUnitPolysVM.RefreshMapUnitsAsync();
 
             _mapunitpolys.Closed += (o, e) =>
             {

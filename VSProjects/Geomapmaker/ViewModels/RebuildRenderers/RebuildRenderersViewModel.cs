@@ -16,15 +16,26 @@ namespace Geomapmaker.ViewModels.RebuildRenderers
 
         public ICommand CommandMups => new RelayCommand(() => RebuildMUPSymbologyAndTemplates());
 
+        public ICommand CommandCIMSymbols => new RelayCommand(() => RebuildCIMSymbols());
+
         public ICommand CommandCf => new RelayCommand(() => RebuildContactsFaultsSymbology());
 
         public ICommand CommandOp => new RelayCommand(() => RebuildOrientationPointsSymbology());
 
-        public void RebuildAll()
+        public async void RebuildAll()
         {
+            await Symbology.RefreshCFSymbolOptionsAsync();
+            await Symbology.RefreshOPSymbolOptionsAsync();
             Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             ContactsAndFaults.RebuildContactsFaultsSymbology();
             Data.OrientationPoints.RebuildOrientationPointsSymbology();
+            CloseProwindow();
+        }
+
+        public async void RebuildCIMSymbols()
+        {
+            await Symbology.RefreshCFSymbolOptionsAsync();
+            await Symbology.RefreshOPSymbolOptionsAsync();
             CloseProwindow();
         }
 

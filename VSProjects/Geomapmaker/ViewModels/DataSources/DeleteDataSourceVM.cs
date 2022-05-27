@@ -10,8 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
+using System.Windows;
 
 namespace Geomapmaker.ViewModels.DataSources
 {
@@ -65,7 +66,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
         private async void DeleteAsync()
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to delete {Id}?", $"Delete {Id}?", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show($"Are you sure you want to delete {Id}?", $"Delete {Id}?", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
             {
@@ -78,7 +79,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
             if (ds == null)
             {
-                MessageBox.Show("DataSources table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DataSources table not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -86,29 +87,33 @@ namespace Geomapmaker.ViewModels.DataSources
             {
                 try
                 {
-                    Table enterpriseTable = ds.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table table = ds.GetTable())
                     {
-                        QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectId };
-
-                        using (RowCursor rowCursor = enterpriseTable.Search(filter, false))
+                        if (table != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                QueryFilter filter = new QueryFilter { WhereClause = "objectid = " + Selected.ObjectId };
+
+                                using (RowCursor rowCursor = table.Search(filter, false))
                                 {
-                                    context.Invalidate(row);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            context.Invalidate(row);
 
-                                    row.Delete();
+                                            row.Delete();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }, enterpriseTable);
+                            }, table);
 
-                    bool result = editOperation.Execute();
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -124,7 +129,7 @@ namespace Geomapmaker.ViewModels.DataSources
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {
@@ -171,145 +176,189 @@ namespace Geomapmaker.ViewModels.DataSources
 
             StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
 
-            await QueuedTask.Run(() =>
+            if (dmu != null)
             {
-                Table dmuTable = dmu.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                await QueuedTask.Run(() =>
                 {
-                    WhereClause = $"DescriptionSourceID = '{Id}'"
-                };
+                    using (Table table = dmu.GetTable())
+                    {
+                        if (table == null)
+                        {
+                            return;
+                        }
 
-                int rowCount = dmuTable.GetCount(queryFilter);
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"DescriptionSourceID = '{Id}'"
+                        };
 
-                if (rowCount > 0)
-                {
-                    isError = true;
-                    string plural = rowCount == 1 ? "" : "s"; 
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} DescriptionOfMapUnit{plural} with this DescriptionSourceID" };
-                    RaiseErrorsChanged(propertyKey);
+                        int rowCount = table.GetCount(queryFilter);
 
-                }
-            });
+                        if (rowCount > 0)
+                        {
+                            isError = true;
+                            string plural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} DescriptionOfMapUnit{plural} with this DescriptionSourceID" };
+                            RaiseErrorsChanged(propertyKey);
 
-            // Stop checking if we've found an error
-            if (isError) return;
-
-            FeatureLayer cf = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
-
-            await QueuedTask.Run(() =>
-            {
-                Table cfTable = cf.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    WhereClause = $"DataSourceID = '{Id}'"
-                };
-
-                int rowCount = cfTable.GetCount(queryFilter);
-
-                if (rowCount > 0)
-                {
-                    isError = true;
-                    string plural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} ContactsAndFault{plural} with this DataSourceID" };
-                    RaiseErrorsChanged(propertyKey);
-                }
-            });
-
-            // Stop checking if we've found an error
-            if (isError) return;
-
-            FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
-
-            await QueuedTask.Run(() =>
-            {
-                Table mupTable = mup.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    WhereClause = $"DataSourceID = '{Id}'"
-                };
-
-                int rowCount = mupTable.GetCount(queryFilter);
-
-                if (rowCount > 0)
-                {
-                    isError = true;
-                    string plural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{plural} with this DataSourceID" };
-                    RaiseErrorsChanged(propertyKey);
-                }
-            });
-
-            // Stop checking if we've found an error
-            if (isError) return;
-
-            FeatureLayer station = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
-
-            await QueuedTask.Run(() =>
-            {
-                Table stationTable = station.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    WhereClause = $"DataSourceID = '{Id}'"
-                };
-
-                int rowCount = stationTable.GetCount(queryFilter);
-
-                if (rowCount > 0)
-                {
-                    isError = true;
-                    string plural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Station{plural} with this DataSourceID" };
-                    RaiseErrorsChanged(propertyKey);
-                }
-            });
-
-            // Stop checking if we've found an error
-            if (isError) return;
-
-            FeatureLayer op = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
-
-            await QueuedTask.Run(() =>
-            {
-                Table opTable = op.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
-                {
-                    WhereClause = $"LocationSourceID = '{Id}'"
-                };
-
-                int rowCount = opTable.GetCount(queryFilter);
-
-                if (rowCount > 0)
-                {
-                    isError = true;
-                    string plural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this LocationSourceID" };
-                    RaiseErrorsChanged(propertyKey);
-                }
+                        }
+                    }
+                });
 
                 // Stop checking if we've found an error
                 if (isError) return;
+            }
 
-                queryFilter = new QueryFilter
+            FeatureLayer cf = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+
+            if (cf != null)
+            {
+                await QueuedTask.Run(() =>
                 {
-                    WhereClause = $"OrientationSourceID = '{Id}'"
-                };
+                    using (Table table = cf.GetTable())
+                    {
+                        if (table == null)
+                        {
+                            return;
+                        }
 
-                rowCount = opTable.GetCount(queryFilter);
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"DataSourceID = '{Id}'"
+                        };
 
-                if (rowCount > 0)
+                        int rowCount = table.GetCount(queryFilter);
+
+                        if (rowCount > 0)
+                        {
+                            isError = true;
+                            string plural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} ContactsAndFault{plural} with this DataSourceID" };
+                            RaiseErrorsChanged(propertyKey);
+                        }
+                    }
+                });
+
+                // Stop checking if we've found an error
+                if (isError) return;
+            }
+
+            FeatureLayer mup = MapView.Active?.Map.FindLayers("MapUnitPolys").FirstOrDefault() as FeatureLayer;
+
+            if (mup != null)
+            {
+                await QueuedTask.Run(() =>
                 {
-                    isError = true;
-                    string plural = rowCount == 1 ? "" : "s";
-                    _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this OrientationSourceID" };
-                    RaiseErrorsChanged(propertyKey);
-                }
-            });
+                    using (Table table = mup.GetTable())
+                    {
+                        if (table == null)
+                        {
+                            return;
+                        }
 
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"DataSourceID = '{Id}'"
+                        };
+
+                        int rowCount = table.GetCount(queryFilter);
+
+                        if (rowCount > 0)
+                        {
+                            isError = true;
+                            string plural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} MapUnitPoly{plural} with this DataSourceID" };
+                            RaiseErrorsChanged(propertyKey);
+                        }
+                    }
+                });
+
+                // Stop checking if we've found an error
+                if (isError) return;
+            }
+
+            FeatureLayer station = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
+
+            if (station != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = station.GetTable())
+                    {
+                        if (table == null)
+                        {
+                            return;
+                        }
+
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"DataSourceID = '{Id}'"
+                        };
+
+                        int rowCount = table.GetCount(queryFilter);
+
+                        if (rowCount > 0)
+                        {
+                            isError = true;
+                            string plural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Station{plural} with this DataSourceID" };
+                            RaiseErrorsChanged(propertyKey);
+                        }
+                    }
+                });
+
+                // Stop checking if we've found an error
+                if (isError) return;
+            }
+
+            FeatureLayer op = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
+
+            if (op != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = op.GetTable())
+                    {
+                        if (table == null)
+                        {
+                            return;
+                        }
+
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"LocationSourceID = '{Id}'"
+                        };
+
+                        int rowCount = table.GetCount(queryFilter);
+
+                        if (rowCount > 0)
+                        {
+                            isError = true;
+                            string plural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this LocationSourceID" };
+                            RaiseErrorsChanged(propertyKey);
+                        }
+
+                        // Stop checking if we've found an error
+                        if (isError) return;
+
+                        queryFilter = new QueryFilter
+                        {
+                            WhereClause = $"OrientationSourceID = '{Id}'"
+                        };
+
+                        rowCount = table.GetCount(queryFilter);
+
+                        if (rowCount > 0)
+                        {
+                            isError = true;
+                            string plural = rowCount == 1 ? "" : "s";
+                            _validationErrors[propertyKey] = new List<string>() { $"{rowCount} Orientation Point{plural} with this OrientationSourceID" };
+                            RaiseErrorsChanged(propertyKey);
+                        }
+                    }
+                });
+            }
         }
 
         #endregion

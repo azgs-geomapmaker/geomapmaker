@@ -1,16 +1,22 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
     public class Stations
     {
-        public static List<Station> GetStations()
+        /// <summary>
+        /// Get all stations
+        /// </summary>
+        /// <returns>Returns a list of stations</returns>
+        public static async Task<List<Station>> GetStationsAsync()
         {
             List<Station> StationsList = new List<Station>();
 
@@ -21,69 +27,47 @@ namespace Geomapmaker.Data
                 return StationsList;
             }
 
-            Table enterpriseTable = stationsLayer.GetTable();
-
-            using (RowCursor rowCursor = enterpriseTable.Search())
+            await QueuedTask.Run(() =>
             {
-                while (rowCursor.MoveNext())
+                using (Table table = stationsLayer.GetTable())
                 {
-                    using (Row row = rowCursor.Current)
+                    if (table != null)
                     {
-                        MapPoint Shape = (MapPoint)row["SHAPE"];
-
-                        Station newStation = new Station
+                        using (RowCursor rowCursor = table.Search())
                         {
-                            ObjectID = Helpers.RowValueToLong(row["ObjectID"]),
-                            FieldID = Helpers.RowValueToString(row["FieldID"]),
-                            TimeDate = row["TimeDate"]?.ToString(),
-                            Observer = Helpers.RowValueToString(row["Observer"]),
-                            LocationMethod = Helpers.RowValueToString(row["LocationMethod"]),
-                            LocationConfidenceMeters = Helpers.RowValueToString(row["LocationConfidenceMeters"]),
-                            PlotAtScale = Helpers.RowValueToString(row["PlotAtScale"]),
-                            Notes = Helpers.RowValueToString(row["Notes"]),
-                            DataSourceId = Helpers.RowValueToString(row["DataSourceId"]),
+                            while (rowCursor.MoveNext())
+                            {
+                                using (Row row = rowCursor.Current)
+                                {
+                                    MapPoint Shape = (MapPoint)row["SHAPE"];
 
-                            SpatialReferenceWkid = Shape?.SpatialReference?.Wkid.ToString(),
-                            XCoordinate = Shape?.X.ToString(),
-                            YCoordinate = Shape?.Y.ToString(),
-                        };
+                                    Station newStation = new Station
+                                    {
+                                        ObjectID = Helpers.RowValueToLong(row["ObjectID"]),
+                                        FieldID = Helpers.RowValueToString(row["FieldID"]),
+                                        TimeDate = row["TimeDate"]?.ToString(),
+                                        Observer = Helpers.RowValueToString(row["Observer"]),
+                                        LocationMethod = Helpers.RowValueToString(row["LocationMethod"]),
+                                        LocationConfidenceMeters = Helpers.RowValueToString(row["LocationConfidenceMeters"]),
+                                        PlotAtScale = Helpers.RowValueToString(row["PlotAtScale"]),
+                                        Notes = Helpers.RowValueToString(row["Notes"]),
+                                        DataSourceId = Helpers.RowValueToString(row["DataSourceId"]),
 
-                        StationsList.Add(newStation);
+                                        SpatialReferenceWkid = Shape?.SpatialReference?.Wkid.ToString(),
+                                        XCoordinate = Shape?.X.ToString(),
+                                        YCoordinate = Shape?.Y.ToString(),
+                                    };
+
+                                    StationsList.Add(newStation);
+                                }
+                            }
+                        }
                     }
                 }
-            }
+            });
 
             return StationsList;
         }
 
-        public static List<string> GetStationFieldIds()
-        {
-            List<string> FieldIds = new List<string>();
-
-            FeatureLayer stationsLayer = MapView.Active?.Map.FindLayers("Stations").FirstOrDefault() as FeatureLayer;
-
-            if (stationsLayer == null)
-            {
-                return FieldIds;
-            }
-
-            Table enterpriseTable = stationsLayer.GetTable();
-
-            using (RowCursor rowCursor = enterpriseTable.Search())
-            {
-                while (rowCursor.MoveNext())
-                {
-                    using (Row row = rowCursor.Current)
-                    {
-                        string rowFieldId = row["FieldID"]?.ToString();
-
-                        // Add it to temp list
-                        FieldIds.Add(rowFieldId);
-                    }
-                }
-            }
-
-            return FieldIds;
-        }
     }
 }

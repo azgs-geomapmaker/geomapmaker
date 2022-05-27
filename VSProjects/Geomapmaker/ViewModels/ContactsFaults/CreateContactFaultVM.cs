@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.ContactsFaults
@@ -73,7 +73,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             if (layer == null)
             {
-                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                MessageBox.Show("ContactsAndFaults layer not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             if (layer == null)
             {
-                MessageBox.Show("ContactsAndFaults layer not found in active map.");
+                MessageBox.Show("ContactsAndFaults layer not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -311,7 +311,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public List<GemsSymbol> SymbolOptions
         {
             get => _symbolOptions;
-            set => SetProperty(ref _symbolOptions, value, () => SymbolOptions);
+            set
+            {
+                SetProperty(ref _symbolOptions, value, () => SymbolOptions);
+                ValidateSymbolOptions(SymbolOptions, "SymbolOptions");
+            }
         }
 
         private GemsSymbol _symbol;
@@ -403,12 +407,27 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public bool HasErrors => _validationErrors.Count > 0;
 
+        // Validate symbol options
+        public void ValidateSymbolOptions(List<GemsSymbol> symbolOptions, string propertyKey)
+        {
+            if (symbolOptions?.Count == 0)
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Symbology table not found." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
         // Validate symbol
         private void ValidateSymbol(GemsSymbol symbol, string propertyKey)
         {
-            // Required field
             if (symbol == null)
             {
+                // Required field
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             else

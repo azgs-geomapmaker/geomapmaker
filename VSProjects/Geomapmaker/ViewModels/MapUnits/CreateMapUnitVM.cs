@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -155,7 +155,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
         public string HexColor => Color?.ToString();
 
-        public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterials.GeoMaterialOptions;
+        public ObservableCollection<Geomaterial> GeoMaterialOptions { get; set; } = Data.GeoMaterialDict.GeoMaterialOptions;
 
         // GeoMaterial
         private string _geoMaterial;
@@ -213,7 +213,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -221,7 +221,7 @@ namespace Geomapmaker.ViewModels.MapUnits
 
             if (mup == null)
             {
-                MessageBox.Show("MapUnitPolys not found in active map.");
+                MessageBox.Show("MapUnitPolys not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -237,38 +237,43 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-                        using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                        if (enterpriseTable != null)
                         {
-                            rowBuffer["MapUnit"] = MapUnit;
-                            rowBuffer["Name"] = Name;
-                            rowBuffer["FullName"] = FullName;
-                            rowBuffer["Age"] = Age;
-                            rowBuffer["RelativeAge"] = RelativeAge;
-                            rowBuffer["Description"] = Description;
-                            rowBuffer["Label"] = Label;
-                            rowBuffer["AreaFillRGB"] = AreaFillRGB;
-                            rowBuffer["HexColor"] = HexColor;
-                            rowBuffer["GeoMaterial"] = GeoMaterial;
-                            rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
-                            rowBuffer["ParagraphStyle"] = "Standard";
-                            rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
+                            EditOperation editOperation = new EditOperation();
 
-                            using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                            editOperation.Callback(context =>
                             {
-                                // To Indicate that the attribute table has to be updated.
-                                context.Invalidate(row);
-                            }
-                        }
-                    }, enterpriseTable);
+                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    rowBuffer["MapUnit"] = MapUnit;
+                                    rowBuffer["DescriptionOfMapUnits_ID"] = Guid.NewGuid().ToString();
+                                    rowBuffer["Name"] = Name;
+                                    rowBuffer["FullName"] = FullName;
+                                    rowBuffer["Age"] = Age;
+                                    rowBuffer["RelativeAge"] = RelativeAge;
+                                    rowBuffer["Description"] = Description;
+                                    rowBuffer["Label"] = Label;
+                                    rowBuffer["AreaFillRGB"] = AreaFillRGB;
+                                    rowBuffer["HexColor"] = HexColor;
+                                    rowBuffer["GeoMaterial"] = GeoMaterial;
+                                    rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
+                                    rowBuffer["ParagraphStyle"] = "Standard";
+                                    rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
 
-                    bool result = editOperation.Execute();
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                        // To Indicate that the attribute table has to be updated.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -325,11 +330,11 @@ namespace Geomapmaker.ViewModels.MapUnits
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
             // Alphabet chars only
-            else if (!mapUnit.All(Char.IsLetter))
+            else if (!mapUnit.All(char.IsLetterOrDigit))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Alphabetical letters only." };
+                _validationErrors[propertyKey] = new List<string>() { "Alphabet and number characters only." };
             }
-            // Name must be unique 
+            // MapUnit must be unique 
             else if (ParentVM.MapUnits.Any(a => a.MU?.ToLower() == MapUnit?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Map Unit is taken." };
@@ -351,10 +356,10 @@ namespace Geomapmaker.ViewModels.MapUnits
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            // Alphabet chars only
-            else if (!name.All(char.IsLetter))
+            // Alphabet chars or spaces only
+            else if (!name.All(c => char.IsLetter(c) || c == ' '))
             {
-                _validationErrors[propertyKey] = new List<string>() { "Alphabet characters only." };
+                        _validationErrors[propertyKey] = new List<string>() { "Alphabet characters or spaces only." };
             }
             else
             {

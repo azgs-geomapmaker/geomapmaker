@@ -2,6 +2,7 @@
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -68,7 +69,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             // Get symbology options if the list is null
             if (Data.Symbology.OrientationPointSymbols == null)
             {
-                await Data.Symbology.RefreshOPSymbolOptions();
+                await Data.Symbology.RefreshOPSymbolOptionsAsync();
             }
 
             // ParentVM keeps a copy of the master list
@@ -79,10 +80,10 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             Create.SymbolsFilteredMessage = $"{SymbolOptions.Count()} symbols";
 
             // Field ID Options
-            StationFieldIdOptions = Data.Stations.GetStationFieldIds();
+            StationFieldIdOptions = await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "fieldid");
 
             // Data Source Options
-            DataSourceOptions = await Data.DataSources.GetDataSourceIdsAsync();
+            DataSourceOptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
         }
 
         #region INotifyPropertyChanged

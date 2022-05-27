@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using ArcGIS.Desktop.Framework.Dialogs;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Headings
@@ -45,21 +45,14 @@ namespace Geomapmaker.ViewModels.Headings
         public string Description
         {
             get => _description;
-            set
-            {
-                SetProperty(ref _description, value, () => Description);
-                ValidateDescription(Description, "Description");
-            }
+            set => SetProperty(ref _description, value, () => Description);
         }
 
         private string _descriptionSourceID = GeomapmakerModule.DataSourceId;
         public string DescriptionSourceID
         {
             get => _descriptionSourceID;
-            set
-            {
-                SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
-            }
+            set => SetProperty(ref _descriptionSourceID, value, () => DescriptionSourceID);
         }
 
         /// <summary>
@@ -83,7 +76,7 @@ namespace Geomapmaker.ViewModels.Headings
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -91,31 +84,36 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-
-                        using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                        if (enterpriseTable != null)
                         {
-                            rowBuffer["Name"] = Name;
-                            rowBuffer["FullName"] = Name;
-                            rowBuffer["Description"] = Description;
-                            rowBuffer["ParagraphStyle"] = "Heading";
-                            rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
+                            EditOperation editOperation = new EditOperation();
 
-                            using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                            editOperation.Callback(context =>
                             {
-                                // To Indicate that the attribute table has to be updated.
-                                context.Invalidate(row);
-                            }
-                        }
-                    }, enterpriseTable);
+                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
 
-                    bool result = editOperation.Execute();
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    rowBuffer["Name"] = Name;
+                                    rowBuffer["DescriptionOfMapUnits_ID"] = Guid.NewGuid().ToString();
+                                    rowBuffer["FullName"] = Name;
+                                    rowBuffer["Description"] = Description;
+                                    rowBuffer["ParagraphStyle"] = "Heading";
+                                    rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
+
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                        // To Indicate that the attribute table has to be updated.
+                                        context.Invalidate(row);
+                                    }
+                                }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -172,22 +170,6 @@ namespace Geomapmaker.ViewModels.Headings
             else if (ParentVM.MapUnits.Any(a => a.Name.ToLower() == name.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
-
-        // Validate the Heading's definition
-        private void ValidateDescription(string definition, string propertyKey)
-        {
-            // Required field
-            if (string.IsNullOrWhiteSpace(definition))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
             }
             else
             {

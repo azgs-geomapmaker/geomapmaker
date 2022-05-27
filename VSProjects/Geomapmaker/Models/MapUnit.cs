@@ -47,7 +47,7 @@ namespace Geomapmaker.Models
                     return (Convert.ToDouble(AreaFillRGB.Split(';')[0]), Convert.ToDouble(AreaFillRGB.Split(';')[1]), Convert.ToDouble(AreaFillRGB.Split(';')[2]));
                 }
 
-                // black
+                // default to black
                 return (0, 0, 0);
             }
         }
@@ -60,21 +60,22 @@ namespace Geomapmaker.Models
 
         public string GeoMaterialConfidence { get; set; }
 
+        public string DisplayName => $"{MU} - {FullName}";
+
         public string Tooltip
         {
             get
             {
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append($"<b>ID: </b>{ObjectID}<br>");
-
                 if (!string.IsNullOrEmpty(MU))
                 {
                     sb.Append($"<b>MapUnit: </b>{MU}<br>");
                 }
-
-                sb.Append($"<b>Name: </b>{Name}<br>");
-
+                if (!string.IsNullOrEmpty(Name))
+                {
+                    sb.Append($"<b>Name: </b>{Name}<br>");
+                }
                 if (!string.IsNullOrEmpty(FullName))
                 {
                     sb.Append($"<b>FullName: </b>{FullName}<br>");
@@ -111,8 +112,10 @@ namespace Geomapmaker.Models
                 {
                     sb.Append($"<b>GeoMaterialConfidence: </b>{GeoMaterialConfidence}<br>");
                 }
-
-                sb.Append($"<b>DescriptionSourceID: </b>{DescriptionSourceID}<br>");
+                if (!string.IsNullOrEmpty(DescriptionSourceID))
+                {
+                    sb.Append($"<b>DescriptionSourceID: </b>{DescriptionSourceID}<br>");
+                }
 
                 return sb.ToString();
             }
@@ -127,9 +130,8 @@ namespace Geomapmaker.Models
 
         public ObservableCollection<MapUnitTreeItem> Children { get; set; } = new ObservableCollection<MapUnitTreeItem>();
 
-        public bool CanAcceptChildren => string.IsNullOrEmpty(ParagraphStyle) || ParagraphStyle == "Heading";
+        public bool CanAcceptChildren => string.IsNullOrEmpty(MU);
 
-        public string ColorVisibility => ParagraphStyle == "Heading" ? "Collapsed" : "Visible";
+        public string ColorVisibility => string.IsNullOrEmpty(MU) ? "Collapsed" : "Visible";
     }
-
 }

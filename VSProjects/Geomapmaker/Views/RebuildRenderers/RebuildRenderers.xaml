@@ -7,8 +7,8 @@
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
         Title="Rebuild Renderers" 
-        Height="300" 
-        MinHeight="250" 
+        Height="350" 
+        MinHeight="300" 
         Width="500"
         MinWidth="450"                     
         WindowStartupLocation="CenterOwner"
@@ -29,6 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
@@ -40,10 +41,11 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="1" Grid.Row="1" Command="{Binding CommandAll}" Style="{DynamicResource Esri_Button}" Background="#2082D8" Foreground="#FFF" MinHeight="50" >Rebuild All</Button>
-        <Button Grid.Column="1" Grid.Row="2" Command="{Binding CommandMups}" Style="{DynamicResource Esri_Button}" >MapUnitPolys Symbology and Templates</Button>
-        <Button Grid.Column="1" Grid.Row="3" Command="{Binding CommandCf}" Style="{DynamicResource Esri_Button}" >Contacts Faults Symbology</Button>
-        <Button Grid.Column="1" Grid.Row="4" Command="{Binding CommandOp}" Style="{DynamicResource Esri_Button}" >Orientation Points Symbology</Button>
+        <Button Grid.Column="1" Grid.Row="2" Command="{Binding CommandCIMSymbols}" Style="{DynamicResource Esri_Button}" >Line/Point Symbol Options</Button>
+        <Button Grid.Column="1" Grid.Row="3" Command="{Binding CommandMups}" Style="{DynamicResource Esri_Button}" >MapUnitPolys Symbology and Templates</Button>
+        <Button Grid.Column="1" Grid.Row="4" Command="{Binding CommandCf}" Style="{DynamicResource Esri_Button}" >Contacts Faults Symbology</Button>
+        <Button Grid.Column="1" Grid.Row="5" Command="{Binding CommandOp}" Style="{DynamicResource Esri_Button}" >Orientation Points Symbology</Button>
 
-        <Button Grid.Column="1" Grid.Row="6" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
+        <Button Grid.Column="1" Grid.Row="7" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
     </Grid>
 </controls:ProWindow>

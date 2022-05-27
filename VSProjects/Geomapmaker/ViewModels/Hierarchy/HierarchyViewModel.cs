@@ -3,11 +3,11 @@ using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using GongSolutions.Wpf.DragDrop;
-using Nelibur.ObjectMapper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,16 +32,11 @@ namespace Geomapmaker.ViewModels.Hierarchy
             {"Unassigned", "TODO Unassigned" },
         };
 
-        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
-
-        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
-
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
         private bool CanSave()
         {
-            // TODO Check if a change was made!
-            return true;
+            return hasChanged;
         }
 
         public event EventHandler WindowCloseEvent;
@@ -51,67 +46,146 @@ namespace Geomapmaker.ViewModels.Hierarchy
             WindowCloseEvent(this, new EventArgs());
         });
 
-        // Build the tree stucture by looping over the dmus
-        public async Task BuildTree()
+        // Track if a change was made
+        private bool hasChanged = false;
+
+        // Collection for hkey-assigned map units
+        public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
+
+        // Collection for unassigned map units
+        public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
+
+        void IDropTarget.DragEnter(IDropInfo dropInfo)
         {
-            // Temp list for unassigned DMUS
-            List<MapUnitTreeItem> tmpUnassigned = new List<MapUnitTreeItem>();
-            List<MapUnitTreeItem> tmpTree = new List<MapUnitTreeItem>();
+            //throw new NotImplementedException();
+        }
 
-            TinyMapper.Bind<MapUnit, MapUnitTreeItem>();
-
-            List<MapUnit> DMUs = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
-
-            // Order DMUs by HierarchyKey length then by HierarchyKey so we always process children before parents 
-            List<MapUnitTreeItem> hierarchyList = DMUs.OrderBy(a => a.HierarchyKey.Length).ThenBy(a => a.HierarchyKey).Select(a => TinyMapper.Map<MapUnitTreeItem>(a)).ToList();
-
-            // Loop over the DMUs
-            foreach (MapUnitTreeItem mu in hierarchyList)
+        void IDropTarget.DragOver(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data != null)
             {
-                // Check the HierarchyKey string for a dash
-                // Children will always have a dash (001-001 for example)
-                if (mu.HierarchyKey.IndexOf("-") != -1)
+                MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
+
+                MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
+
+                // Target is a Collection
+                if (targetItem == null)
                 {
-                    // Remove the last dash and last index to find their parent's HierarchyKey (001-001 becomes 001)
-                    string parentHierarchyKey = mu.HierarchyKey.Substring(0, mu.HierarchyKey.LastIndexOf("-"));
-
-                    // Look for a map unit that matches the parent HierarchyKey
-                    MapUnitTreeItem parent = hierarchyList.FirstOrDefault(a => a.HierarchyKey == parentHierarchyKey);
-
-                    if (parent == null)
-                    {
-                        // Parent not found. Add to the unassigned list.
-                        tmpUnassigned.Add(mu);
-                    }
-                    else
-                    {
-                        // Add child to parent
-                        parent.Children.Add(mu);
-                    }
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 }
+                else if (targetItem.ObjectID == sourceItem.ObjectID)
+                {
+                    // Can't set a node as a child of itself
+                    dropInfo.Effects = DragDropEffects.None;
+                    return;
+                }
+                else if (IsTargetADescendantOfSource(sourceItem, targetItem))
+                {
+                    // Can't set a node as a child of a descendant
+                    dropInfo.Effects = DragDropEffects.None;
+                    return;
+                }
+                // Target is a MapUnitTreeItem
                 else
                 {
-                    // Check if the HierarchyKey is empty
-                    if (string.IsNullOrWhiteSpace(mu.HierarchyKey))
-                    {
-                        // Add to the unassigned list.
-                        tmpUnassigned.Add(mu);
-                    }
-                    else
-                    {
-                        // Map Unit must be a root node
-                        tmpTree.Add(mu);
-                    }
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                }
+
+                dropInfo.Effects = DragDropEffects.Move;
+            }
+        }
+
+        // Recursively check if the target is a descendant of the Source
+        private bool IsTargetADescendantOfSource(MapUnitTreeItem sourceItem, MapUnitTreeItem targetItem)
+        {
+            // Base case
+            if (sourceItem.Children == null || sourceItem.Children.Count == 0)
+            {
+                return false;
+            }
+            else if (sourceItem.Children.Contains(targetItem))
+            {
+                return true;
+            }
+            else
+            {
+                foreach (var child in sourceItem.Children)
+                {
+                    return (IsTargetADescendantOfSource(child, targetItem));
                 }
             }
 
-            // Sort unassigned
-            tmpUnassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
+            return false;
+        }
 
-            Tree = new ObservableCollection<MapUnitTreeItem>(tmpTree);
-            Unassigned = new ObservableCollection<MapUnitTreeItem>(tmpUnassigned);
+        void IDropTarget.DragLeave(IDropInfo dropInfo)
+        {
+            //throw new NotImplementedException();
+        }
 
+        void IDropTarget.Drop(IDropInfo dropInfo)
+        {
+            // Source
+            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
+            ICollection<MapUnitTreeItem> sourceCollection = dropInfo.DragInfo.SourceCollection as ICollection<MapUnitTreeItem>;
+
+            // Target
+            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
+            ICollection<MapUnitTreeItem> targetCollection = dropInfo.TargetCollection as ICollection<MapUnitTreeItem>;
+            string targetName = ((FrameworkElement)((DropInfo)dropInfo)?.VisualTarget)?.Name;
+
+            sourceCollection.Remove(sourceItem);
+
+            // Check if the target within the Unassigned listbox
+            if (targetName == "Unassigned")
+            {
+                // Flatten descendents and add to unassigned
+                FlattenAndAddToUnassigned(sourceItem);
+            }
+            else if (targetItem != null)
+            {
+                // Add to MapUnit child
+                targetItem.Children.Add(sourceItem);
+            }
+            else
+            {
+                // Add to collection
+                targetCollection.Add(sourceItem);
+            }
+
+            hasChanged = true;
+        }
+
+        // Flatten the tree and add to unassigned
+        private void FlattenAndAddToUnassigned(MapUnitTreeItem mapUnit)
+        {
+            // Check for any children
+            if (mapUnit?.Children?.Count > 0)
+            {
+                foreach (MapUnitTreeItem child in mapUnit?.Children)
+                {
+                    // Call on each child
+                    FlattenAndAddToUnassigned(child);
+                }
+            }
+
+            // Clear out children
+            mapUnit.Children = new ObservableCollection<MapUnitTreeItem>();
+
+            // Add to the flatList
+            Unassigned.Add(mapUnit);
+        }
+
+        // Build the tree stucture
+        public async void BuildTree()
+        {
+            // Get the hierarchy tree and unassigned list
+            Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> hierarchyTuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
+
+            Tree = new ObservableCollection<MapUnitTreeItem>(hierarchyTuple.Item1);
             NotifyPropertyChanged("Tree");
+
+            Unassigned = new ObservableCollection<MapUnitTreeItem>(hierarchyTuple.Item2);
             NotifyPropertyChanged("Unassigned");
         }
 
@@ -160,54 +234,59 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
             if (dmu == null)
             {
-                MessageBox.Show("DescriptionOfMapUnits table not found in active map.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show("DescriptionOfMapUnits table not found in active map.", "One or more errors occured.");
                 return;
             }
 
             HierarchyList = new List<MapUnitTreeItem>();
             SetHierarchyKeys(Tree);
 
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            await QueuedTask.Run(() =>
             {
                 try
                 {
-                    Table enterpriseTable = dmu.GetTable();
-
-                    EditOperation editOperation = new EditOperation();
-
-                    editOperation.Callback(context =>
+                    using (Table enterpriseTable = dmu.GetTable())
                     {
-                        using (RowCursor rowCursor = enterpriseTable.Search(null, false))
+                        if (enterpriseTable != null)
                         {
-                            while (rowCursor.MoveNext())
+                            EditOperation editOperation = new EditOperation();
+
+                            editOperation.Callback(context =>
                             {
-                                using (Row row = rowCursor.Current)
+                                using (RowCursor rowCursor = enterpriseTable.Search(null, false))
                                 {
-                                    string ID = Helpers.RowValueToString(row["ObjectID"]);
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            string ID = Helpers.RowValueToString(row["ObjectID"]);
 
-                                    // In order to update the Map and/or the attribute table.
-                                    // Has to be called before any changes are made to the row.
-                                    context.Invalidate(row);
+                                            string updatedKey = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey;
 
-                                    row["HierarchyKey"] = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey ?? "";
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
-                                    // After all the changes are done, persist it.
-                                    row.Store();
+                                            // Update the HierarchyKey value
+                                            row["HierarchyKey"] = updatedKey;
 
-                                    // Has to be called after the store too.
-                                    context.Invalidate(row);
+                                            // After all the changes are done, persist it.
+                                            row.Store();
+
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
+                                        }
+                                    }
                                 }
+                            }, enterpriseTable);
+
+                            bool result = editOperation.Execute();
+
+                            if (!result)
+                            {
+                                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(editOperation.ErrorMessage, "One or more errors occured.");
                             }
                         }
-                    }, enterpriseTable);
-
-                    bool result = editOperation.Execute();
-
-                    if (!result)
-                    {
-                        MessageBox.Show(editOperation.ErrorMessage);
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -225,51 +304,13 @@ namespace Geomapmaker.ViewModels.Hierarchy
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                MessageBox.Show(errorMessage, "One or more errors occured.");
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(errorMessage, "One or more errors occured.");
             }
             else
             {
                 // Close window
                 WindowCloseEvent(this, new EventArgs());
             }
-        }
-
-        void IDropTarget.DragOver(IDropInfo dropInfo)
-        {
-            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
-            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
-
-            bool isItemDropValid = sourceItem != null && targetItem != null && targetItem.CanAcceptChildren;
-            bool isCollectionDropValid = sourceItem != null && dropInfo.TargetCollection is ICollection<MapUnitTreeItem> targetCollection;
-
-            if (sourceItem != null && targetItem != null)
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
-        }
-
-        void IDropTarget.Drop(IDropInfo dropInfo)
-        {
-            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
-
-            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
-
-            ICollection<MapUnitTreeItem> sourceCollection = dropInfo.DragInfo.SourceCollection as ICollection<MapUnitTreeItem>;
-
-            targetItem.Children.Add(sourceItem);
-            sourceCollection.Remove(sourceItem);
-        }
-
-        void IDropTarget.DragEnter(IDropInfo dropInfo)
-        {
-            // TODO
-        }
-
-        void IDropTarget.DragLeave(IDropInfo dropInfo)
-        {
-            // TODO
-
         }
 
         #region INotifyPropertyChanged
@@ -281,7 +322,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged
     }
 
     internal class ShowHierarchy : Button
@@ -301,7 +342,10 @@ namespace Geomapmaker.ViewModels.Hierarchy
                 Owner = Application.Current.MainWindow
             };
 
-            await _hierarchy.hierarchyVM.BuildTree();
+            await QueuedTask.Run(() =>
+            {
+                _hierarchy.hierarchyVM.BuildTree();
+            });
 
             _hierarchy.Closed += (o, e) => { _hierarchy = null; };
 

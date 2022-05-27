@@ -2,20 +2,28 @@
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker._helpers;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Geomapmaker.Data
 {
     public class Symbology
     {
-        public static List<GemsSymbol> CFSymbolOptionsList;
+        // List of CF symbols
+        public static List<GemsSymbol> ContactsAndFaultsSymbols;
 
-        public static async Task RefreshCFSymbolOptions()
+        // List of OP symbols
+        public static List<GemsSymbol> OrientationPointSymbols;
+
+        /// <summary>
+        /// Rebuild the CF symbols from the symbology table
+        /// </summary>
+        /// <returns>Returns async task</returns>
+        public static async Task RefreshCFSymbolOptionsAsync()
         {
             List<GemsSymbol> cfSymbols = new List<GemsSymbol>();
 
@@ -24,68 +32,70 @@ namespace Geomapmaker.Data
             // Return an empty list if the cfsymbology table isn null
             if (SymbologyTable == null)
             {
-                MessageBox.Show("Symbology table not found.");
-                CFSymbolOptionsList = cfSymbols;
+                ContactsAndFaultsSymbols = cfSymbols;
                 return;
             }
 
             // Process the cfsymbology table
             await QueuedTask.Run(() =>
             {
-                Table enterpriseTable = SymbologyTable.GetTable();
-
-                //var fields = enterpriseTable.GetDefinition().GetFields().ToList();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table enterpriseTable = SymbologyTable.GetTable())
                 {
-                    WhereClause = "TYPE = 'Line'",
-                    PostfixClause = "ORDER BY key_"
-                };
-                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
+                    if (enterpriseTable != null)
                     {
-                        using (Row row = rowCursor.Current)
+                        QueryFilter queryFilter = new QueryFilter
                         {
-                            GemsSymbol cfS = new GemsSymbol
+                            WhereClause = "TYPE = 'Line'",
+                            PostfixClause = "ORDER BY key_"
+                        };
+                        using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
                             {
-                                Key = row["key"].ToString(),
-                                Description = _helpers.Helpers.RowValueToString(row["description"]),
-                                SymbolJson = row["symbol"].ToString()
-                            };
-
-                            try
-                            {
-                                // Create the preview image used in the ComboBox
-                                SymbolStyleItem sSI = new SymbolStyleItem()
+                                using (Row row = rowCursor.Current)
                                 {
-                                    Symbol = CIMSymbolReference.FromJson(cfS.SymbolJson).Symbol,
-                                    PatchWidth = 250,
-                                    PatchHeight = 25,
-                                    SymbolPatchType = SymbolPatchType.HorizontalLine
-                                };
-                                cfS.Preview = sSI.PreviewImage;
+                                    GemsSymbol cfS = new GemsSymbol
+                                    {
+                                        Key = Helpers.RowValueToString(row["key"]),
+                                        Description = Helpers.RowValueToString(row["description"]),
+                                        SymbolJson = Helpers.RowValueToString(row["symbol"])
+                                    };
 
-                                // Add to list
-                                cfSymbols.Add(cfS);
-                            }
-                            catch
-                            {
-                                // Invalid CIM Symbol JSON
-                                Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                    try
+                                    {
+                                        // Create the preview image used in the ComboBox
+                                        SymbolStyleItem sSI = new SymbolStyleItem()
+                                        {
+                                            Symbol = CIMSymbolReference.FromJson(cfS.SymbolJson).Symbol,
+                                            PatchWidth = 250,
+                                            PatchHeight = 25,
+                                            SymbolPatchType = SymbolPatchType.HorizontalLine
+                                        };
+                                        cfS.Preview = sSI.PreviewImage;
+
+                                        // Add to list
+                                        cfSymbols.Add(cfS);
+                                    }
+                                    catch
+                                    {
+                                        // Invalid CIM Symbol JSON
+                                        Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                    }
+                                }
                             }
                         }
                     }
                 }
-
             });
 
-            CFSymbolOptionsList = cfSymbols;
+            ContactsAndFaultsSymbols = cfSymbols;
         }
 
-        public static List<GemsSymbol> OrientationPointSymbols;
-
-        public static async Task RefreshOPSymbolOptions()
+        /// <summary>
+        /// Rebuild the OP symbols from the symbology table
+        /// </summary>
+        /// <returns>Returns async task</returns>
+        public static async Task RefreshOPSymbolOptionsAsync()
         {
             List<GemsSymbol> orientationSymbols = new List<GemsSymbol>();
 
@@ -94,7 +104,6 @@ namespace Geomapmaker.Data
             // Check if the table exists
             if (orientationSymbologyTable == null)
             {
-                MessageBox.Show("Symbology table not found.");
                 OrientationPointSymbols = orientationSymbols;
                 return;
             }
@@ -102,46 +111,50 @@ namespace Geomapmaker.Data
             // Process the cfsymbology table
             await QueuedTask.Run(() =>
             {
-                Table enterpriseTable = orientationSymbologyTable.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table enterpriseTable = orientationSymbologyTable.GetTable())
                 {
-                    WhereClause = "TYPE = 'Point'",
-                    PostfixClause = "ORDER BY key_"
-                };
-
-                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
+                    if (enterpriseTable != null)
                     {
-                        using (Row row = rowCursor.Current)
+                        QueryFilter queryFilter = new QueryFilter
                         {
-                            GemsSymbol symbol = new GemsSymbol
-                            {
-                                Key = row["key"].ToString(),
-                                Description = _helpers.Helpers.RowValueToString(row["description"]),
-                                SymbolJson = row["symbol"].ToString()
-                            };
+                            WhereClause = "TYPE = 'Point'",
+                            PostfixClause = "ORDER BY key_"
+                        };
 
-                            try
+                        using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
                             {
-                                // Create the preview image used in the ComboBox
-                                SymbolStyleItem sSI = new SymbolStyleItem()
+                                using (Row row = rowCursor.Current)
                                 {
-                                    Symbol = CIMSymbolReference.FromJson(symbol.SymbolJson).Symbol,
-                                    PatchWidth = 25,
-                                    PatchHeight = 25,
-                                    SymbolPatchType = SymbolPatchType.Default
-                                };
-                                symbol.Preview = sSI.PreviewImage;
+                                    GemsSymbol symbol = new GemsSymbol
+                                    {
+                                        Key = Helpers.RowValueToString(row["key"]),
+                                        Description = Helpers.RowValueToString(row["description"]),
+                                        SymbolJson = Helpers.RowValueToString(row["symbol"])
+                                    };
 
-                                // Add to list
-                                orientationSymbols.Add(symbol);
-                            }
-                            catch
-                            {
-                                // Invalid CIM Symbol JSON
-                                Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                    try
+                                    {
+                                        // Create the preview image used in the ComboBox
+                                        SymbolStyleItem sSI = new SymbolStyleItem()
+                                        {
+                                            Symbol = CIMSymbolReference.FromJson(symbol.SymbolJson).Symbol,
+                                            PatchWidth = 25,
+                                            PatchHeight = 25,
+                                            SymbolPatchType = SymbolPatchType.Default
+                                        };
+                                        symbol.Preview = sSI.PreviewImage;
+
+                                        // Add to list
+                                        orientationSymbols.Add(symbol);
+                                    }
+                                    catch
+                                    {
+                                        // Invalid CIM Symbol JSON
+                                        Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                    }
+                                }
                             }
                         }
                     }
@@ -149,6 +162,66 @@ namespace Geomapmaker.Data
             });
 
             OrientationPointSymbols = orientationSymbols;
+        }
+
+        /// <summary>
+        /// Check for any missing line symbols in the symbology table
+        /// </summary>
+        /// <returns>List of missing symbology keys</returns>
+        public static async Task<List<string>> GetMissingContactsAndFaultsSymbologyAsync()
+        {
+            List<string> missingSymbol = new List<string>();
+
+            // Check if the ContactsAndFaultsSymbols have been processed
+            if (ContactsAndFaultsSymbols == null)
+            {
+                await RefreshCFSymbolOptionsAsync();
+            }
+            
+            // Get the symbol values from the CF layer
+            List<string> cfSymbolValues = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "symbol");
+
+            // Loop over the CF symbols
+            foreach (string symbol in cfSymbolValues)
+            {
+                // Check if symbology exists
+                if (!ContactsAndFaultsSymbols.Any(a => a.Key == symbol))
+                {
+                    missingSymbol.Add(symbol);
+                }
+            }
+
+            return missingSymbol;
+        }
+
+        /// <summary>
+        /// Check for any missing point symbols in the symbology table
+        /// </summary>
+        /// <returns>List of missing symbology keys</returns>
+        public static async Task<List<string>> GetMissingOrientationPointsSymbologyAsync()
+        {
+            List<string> missingSymbol = new List<string>();
+
+            // Check if the OrientationPoints have been processed
+            if (OrientationPointSymbols == null)
+            {
+                await RefreshOPSymbolOptionsAsync();
+            }
+
+            // Get the symbol values from the OP
+            List<string> opSymbolValues = await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "symbol");
+
+            // Loop over the symbols
+            foreach (string symbol in opSymbolValues)
+            {
+                // Check if symbology exists
+                if (!OrientationPointSymbols.Any(a => a.Key == symbol))
+                {
+                    missingSymbol.Add(symbol);
+                }
+            }
+
+            return missingSymbol;
         }
     }
 }

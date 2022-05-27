@@ -44,9 +44,9 @@ namespace Geomapmaker.ViewModels.Stations
             }
         }
 
-        public void RefreshStationOptions()
+        public async void RefreshStationOptions()
         {
-            StationOptions = Data.Stations.GetStations();
+            StationOptions = await Data.Stations.GetStationsAsync();
         }
 
         #region INotifyPropertyChanged

@@ -14,6 +14,11 @@ namespace Geomapmaker.Data
 {
     public class ContactsAndFaults
     {
+        /// <summary>
+        /// Get Templates for Contacts and Faults layer
+        /// </summary>
+        /// <param name="filterSketch"></param>
+        /// <returns>ContactFaultTemplate List</returns>
         public static async Task<List<ContactFaultTemplate>> GetContactFaultTemplatesAsync(bool filterSketch = false)
         {
             // List of templates to return
@@ -50,21 +55,21 @@ namespace Geomapmaker.Data
 
                     ContactFaultTemplate tmpTemplate = new ContactFaultTemplate()
                     {
-                        Type = templateDef.DefaultValues["type"].ToString(),
-                        Label = templateDef.DefaultValues["label"].ToString(),
-                        Symbol = templateDef.DefaultValues["symbol"].ToString(),
-                        IdentityConfidence = templateDef.DefaultValues["identityconfidence"].ToString(),
-                        ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"].ToString(),
-                        LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"].ToString(),
-                        IsConcealed = templateDef.DefaultValues["isconcealed"].ToString() == "Y",
-                        DataSource = templateDef.DefaultValues["datasourceid"].ToString(),
+                        Type = templateDef.DefaultValues["type"]?.ToString(),
+                        Label = templateDef.DefaultValues["label"]?.ToString(),
+                        Symbol = templateDef.DefaultValues["symbol"]?.ToString(),
+                        IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString(),
+                        ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString(),
+                        LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString(),
+                        IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y",
+                        DataSource = templateDef.DefaultValues["datasourceid"]?.ToString(),
                         Template = template
                     };
 
                     // Notes is an optional field
                     if (templateDef.DefaultValues.ContainsKey("notes"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["notes"].ToString();
+                        tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
                     }
 
                     contactFaultTemplates.Add(tmpTemplate);
@@ -75,6 +80,9 @@ namespace Geomapmaker.Data
             return contactFaultTemplates;
         }
 
+        /// <summary>
+        /// Rebuld the symbology renderer for ContactsAndFaults
+        /// </summary>
         public static async void RebuildContactsFaultsSymbology()
         {
             // CF Layer
@@ -86,13 +94,13 @@ namespace Geomapmaker.Data
             }
 
             // Check if the symbol list has been populated 
-            if (Symbology.CFSymbolOptionsList == null)
+            if (Symbology.ContactsAndFaultsSymbols == null)
             {
-                await Symbology.RefreshCFSymbolOptions();
+                await Symbology.RefreshCFSymbolOptionsAsync();
             }
 
             // Get the CF Symbology Options
-            List<GemsSymbol> SymbolOptions = Symbology.CFSymbolOptionsList;
+            List<GemsSymbol> SymbolOptions = Symbology.ContactsAndFaultsSymbols;
 
             if (SymbolOptions == null)
             {
@@ -120,29 +128,33 @@ namespace Geomapmaker.Data
                     }
                 }
 
-                Table cfTable = layer.GetTable();
-
-                QueryFilter queryFilter = new QueryFilter
+                using (Table table = layer.GetTable())
                 {
-                    PrefixClause = "DISTINCT",
-                    PostfixClause = "ORDER BY symbol",
-                    SubFields = "symbol"
-                };
-
-                using (RowCursor rowCursor = cfTable.Search(queryFilter))
-                {
-                    while (rowCursor.MoveNext())
+                    if (table != null)
                     {
-                        using (Row row = rowCursor.Current)
+                        QueryFilter queryFilter = new QueryFilter
                         {
-                            string cfSymbolKey = row["symbol"]?.ToString();
+                            PrefixClause = "DISTINCT",
+                            PostfixClause = "ORDER BY symbol",
+                            SubFields = "symbol"
+                        };
 
-                            GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
-
-                            if (Symbol != null)
+                        using (RowCursor rowCursor = table.Search(queryFilter))
+                        {
+                            while (rowCursor.MoveNext())
                             {
-                                // Add symbology for existing CF polylines
-                                AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                using (Row row = rowCursor.Current)
+                                {
+                                    string cfSymbolKey = row["symbol"]?.ToString();
+
+                                    GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == cfSymbolKey);
+
+                                    if (Symbol != null)
+                                    {
+                                        // Add symbology for existing CF polylines
+                                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                    }
+                                }
                             }
                         }
                     }
@@ -159,6 +171,11 @@ namespace Geomapmaker.Data
             }, ps.Progressor);
         }
 
+        /// <summary>
+        /// Add a symbol to the CF renderer 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="symbolJson"></param>
         public static async void AddSymbolToRenderer(string key, string symbolJson)
         {
             // Find the ContactsFaults layer
@@ -188,10 +205,10 @@ namespace Geomapmaker.Data
                 }
 
                 CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
-                        new CIMUniqueValue {
-                            FieldValues = new string[] { key }
-                        }
-                    };
+                    new CIMUniqueValue {
+                        FieldValues = new string[] { key }
+                    }
+                };
 
                 CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                 {
