@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels.MapUnitPolys
+namespace Geomapmaker.ViewModels.GeneratePolygons
 {
     public class GeneratePolygonsViewModel
     {
@@ -97,7 +97,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
     internal class ShowGeneratePolygons : Button
     {
-        private Views.MapUnitPolys.GeneratePolygons _generatepolygons = null;
+        private Views.GeneratePolygons.GeneratePolygons _generatepolygons = null;
 
         protected override void OnClick()
         {
@@ -108,7 +108,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 return;
             }
 
-            _generatepolygons = new Views.MapUnitPolys.GeneratePolygons
+            _generatepolygons = new Views.GeneratePolygons.GeneratePolygons
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };

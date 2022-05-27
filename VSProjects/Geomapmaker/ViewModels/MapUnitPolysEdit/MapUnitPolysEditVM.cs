@@ -247,7 +247,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
             get => _dataSource;
             set
             {
-                _notes = value;
+                _dataSource = value;
                 NotifyPropertyChanged();
             }
         }

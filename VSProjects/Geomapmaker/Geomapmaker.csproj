@@ -205,6 +205,7 @@
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ViewModels\GeneratePolygons\GeneratePolygonsViewModel.cs" />
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
     <Compile Include="ViewModels\Validation\GeomapmakerVM.cs" />
@@ -218,12 +219,11 @@
     <Compile Include="Views\MapUnitPolysEdit\MapUnitPolysEdit.xaml.cs">
       <DependentUpon>MapUnitPolysEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MapUnitPolys\GeneratePolygons.xaml.cs">
+    <Compile Include="Views\GeneratePolygons\GeneratePolygons.xaml.cs">
       <DependentUpon>GeneratePolygons.xaml</DependentUpon>
     </Compile>
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
-    <Compile Include="ViewModels\MapUnitPolys\GeneratePolygonsViewModel.cs" />
     <Compile Include="Views\RebuildRenderers\RebuildRenderers.xaml.cs">
       <DependentUpon>RebuildRenderers.xaml</DependentUpon>
     </Compile>
@@ -390,7 +390,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MapUnitPolys\GeneratePolygons.xaml">
+    <Page Include="Views\GeneratePolygons\GeneratePolygons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
