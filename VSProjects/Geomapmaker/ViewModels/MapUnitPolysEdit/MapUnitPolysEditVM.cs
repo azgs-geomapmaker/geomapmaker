@@ -404,11 +404,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
-            await QueuedTask.Run(async () =>
-            {
-                _mapunitpolysedit.mapUnitPolysEditVM.MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
-            });
-
             _mapunitpolysedit.Closed += (o, e) =>
             {
                 // Reset the map tool to explore
@@ -420,7 +415,11 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
             _mapunitpolysedit.mapUnitPolysEditVM.WindowCloseEvent += (s, e) => _mapunitpolysedit.Close();
 
             _mapunitpolysedit.Show();
-        }
 
+            await QueuedTask.Run(async () =>
+            {
+                _mapunitpolysedit.mapUnitPolysEditVM.MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
+            });
+        }
     }
 }
