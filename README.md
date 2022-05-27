@@ -4,8 +4,8 @@ This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geo
 ## Critical Broad-Strokes Requirements
 - [x] Toolbar should be compatible with PostgreSQL ArcSDE for versioning support.
 - [ ] Must generate a GeMS validation REPORT that checks topology and other rules
-- [ ] Maps must be exportable as a GeMs compliant ESRI File Geodatabase
-- [x] That when users fill out a feature through the toolbar form that form is enforcing appropriate constraints and vocabularies.
+- [x] Maps must be exportable as a GeMs compliant ESRI File Geodatabase
+- [x] Forms for adding features enforce appropriate constraints and vocabularies.
 - [x] Ability to transfer, select, and view from a pre-made list of symbologies.
 
 ## Table of Contents
@@ -18,12 +18,16 @@ This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geo
     5. [HIERARCHY (BUTTON)](#hierarchy-button)
     6. [CONTACTS AND FAULTS (WORKFLOW)](#contacts-and-faults-workflow)
     7. [CREATE SINGLE POLYGON (WORKFLOW)](#create-single-polygon-workflow)
+    8. [ASSIGN MULTIPLE MAP UNITS](#assign-multiple-map-units-workflow)
+    9. [STATIONS (BUTTON)](#stations-button)
 3. GEMS TABLE DEFINITIONS
     1. [MAP UNIT POLYS](#map-unit-polys)
     2. [CONTACTS AND FAULTS](#contacts-and-faults)
     3. [DESCRIPTION OF MAP UNITS](#description-of-map-units)
     4. [DATA SOURCES](#datasources)
     5. [GLOSSARY](#glossary)
+    6. [STATIONS](#stations)
+    7. [ORIENTATION POINTS](#orientation-points)
 4. APPENDIX
     1. [AGES](#ages)
     3. [SYMBOLOGY AND STYLES](#symbology-and-styles)
@@ -36,6 +40,11 @@ This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geo
     10. [UNIT IMPORT](#unit-import)
 
 ## Installation
+A simple demonstration installation is availabe in [/demo_installation](/demo_installation). This demo currently includes only the geomapmaker addin installation file (in [/geomapmaker_addin](/geomapmaker_addin). The addin can be installed by going to the addin-manager in the ArcPro Settings
+
+![Screenshot 2022-05-27 at 12 39 44 PM](https://user-images.githubusercontent.com/10422595/170779059-11e84426-28e1-40a3-a458-556def262871.png)
+
+The addin manager will automatically work with any tables loaded into the currently active map that follow the GeMS namespace.
 
 ### Data Source (Dropdown)
 Users must select a data source from the dropdown menu before being able to proceed with other actions (other than creating a new data source user). The list of selectable datasources is drawn from the [DATA SOURCES](#datasources) table.
@@ -90,12 +99,18 @@ Users then select the relevant polygon borders and map unit using the create sin
 ### Create ALL Polygons (Button)
 This button creates all valid polygons based on the intersection of existing linework in the [CONTACTS AND FAULTS](#contacts-and-faults) table. It does not create duplicate polygons. These polygons are automatically assigned to a generic unit type named UNASSIGNED.
 
-### Stations (Workflow)
+### Stations (Button)
+The Stations button in the toolbar will open a form for creating a new station.
+
+![Screenshot 2022-05-27 at 12 19 34 PM](https://user-images.githubusercontent.com/10422595/170776573-7f2ebd0d-ea53-4b67-961f-8ac3c488927d.png)
 
 ### Orientation Points (Workflow)
 
 ### Validation (Workflow)
 *This workflow is currenlty being revised.)
+
+### Update Fields (Button)
+*This button is not yet implemented.*
 
 #### Map Unit Polys
 > Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
@@ -193,9 +208,6 @@ It may be desirable to add severall "lookup" buttons to the ribbon.
 1. Lookup formation names
 2. Lookup geologic intervals
 3. Lookup FGDC symbology by name rather than number
-
-### Unit Import
-The former AZGS toolbar has (not sure if it is still working) a button that let users import Map Units from older maps into a new map project. It has not yet been decided if this feature should be included or not, and if it is included, if it should be expanded to include glossaries and other tables besides the DescriptionOfMapUnits. Feedback from the mappers is needed. 
 
 ### Existing GeMS tools
 https://github.com/usgs/gems-tools-pro
