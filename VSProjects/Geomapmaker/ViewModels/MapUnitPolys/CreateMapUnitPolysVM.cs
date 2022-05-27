@@ -42,7 +42,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             // Trigger validation
             Selected = Selected;
-
         }
 
         private bool _toggleCFTool;
