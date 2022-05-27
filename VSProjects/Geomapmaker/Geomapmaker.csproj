@@ -205,11 +205,15 @@
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
     <Compile Include="ViewModels\Validation\GeomapmakerVM.cs" />
     <Compile Include="ViewModels\Validation\GemsVM.cs" />
     <Compile Include="ViewModels\Validation\TopoVM.cs" />
     <Compile Include="ViewModels\Validation\OverviewVM.cs" />
     <Compile Include="ViewModels\Validation\ValidationViewModel.cs" />
+    <Compile Include="Views\MapUnitPolysEdit\MapUnitPolysEdit.xaml.cs">
+      <DependentUpon>MapUnitPolysEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MapUnitPolys\GeneratePolygons.xaml.cs">
       <DependentUpon>GeneratePolygons.xaml</DependentUpon>
     </Compile>
@@ -374,6 +378,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\MapUnitPolysEdit\MapUnitPolysEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MapUnitPolys\GeneratePolygons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -523,10 +531,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\MapUnitPolysEdit\" />
-    <Folder Include="Views\MapUnitPolysEdit\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   PackageAction can be:
