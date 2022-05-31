@@ -25,6 +25,7 @@
           <group refID="Geomapmaker_Points" />
           <group refID="Geomapmaker_Renderers" />
           <group refID="Geomapmaker_Validation" />
+          <group refID="Geomapmaker_Export" />
         </tab>
       </tabs>
       <!-- Groups -->
@@ -55,6 +56,9 @@
         </group>
         <group id="Geomapmaker_Validation" caption="Validation" keytip="todo">
           <button refID="Geomapmaker_Validation_Btn" />
+        </group>
+        <group id="Geomapmaker_Export" caption="Export" keytip="todo">
+          <button refID="Geomapmaker_Export_Btn" />
         </group>
       </groups>
       <!-- Controls -->
@@ -134,12 +138,17 @@
             Tooltip text<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_MapUnitPolysCreate_Btn" caption="Create Map Unit Polys" className="Geomapmaker.ViewModels.MapUnitPolysCreate.ShowMapUnitPolysCreate" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_MapUnitPolysCreate_Btn" caption="Create Map Unit Polys" className="Geomapmaker.ViewModels.MapUnitPolysCreate.ShowMapUnitPolysCreate" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_MapUnitPolysEdit_Btn" caption="Edit Map Unit Polys" className="Geomapmaker.ViewModels.MapUnitPolysEdit.ShowMapUnitPolysEdit" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_MapUnitPolysEdit_Btn" caption="Edit Map Unit Polys" className="Geomapmaker.ViewModels.MapUnitPolysEdit.ShowMapUnitPolysEdit" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" keytip="todo" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">
+            Tooltip text<disabledText />
+          </tooltip>
+        </button>
+        <button id="Geomapmaker_Export_Btn" caption="Export" className="Geomapmaker.ViewModels.Export.ShowExport" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat32.png">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText />
           </tooltip>

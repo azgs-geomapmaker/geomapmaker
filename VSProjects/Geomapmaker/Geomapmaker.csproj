@@ -205,6 +205,7 @@
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ViewModels\Export\ExportVM.cs" />
     <Compile Include="ViewModels\GeneratePolygons\GeneratePolygonsViewModel.cs" />
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
@@ -213,6 +214,9 @@
     <Compile Include="ViewModels\Validation\TopoVM.cs" />
     <Compile Include="ViewModels\Validation\OverviewVM.cs" />
     <Compile Include="ViewModels\Validation\ValidationViewModel.cs" />
+    <Compile Include="Views\Export\Export.xaml.cs">
+      <DependentUpon>Export.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MapUnitPolysCreate\MapUnitPolysCreate.xaml.cs">
       <DependentUpon>MapUnitPolysCreate.xaml</DependentUpon>
     </Compile>
@@ -366,6 +370,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Export\Export.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MapUnitPolysCreate\MapUnitPolysCreate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -507,10 +515,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\Export\" />
-    <Folder Include="Views\Export\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   PackageAction can be:
