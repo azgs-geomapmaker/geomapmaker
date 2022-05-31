@@ -5,6 +5,7 @@ using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -12,18 +13,32 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels.MapUnitPolys
+namespace Geomapmaker.ViewModels.MapUnitPolysCreate
 {
-    public class CreateMapUnitPolysVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class MapUnitPolysCreateVM : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
     {
-        public MapUnitPolysViewModel ParentVM { get; set; }
+        public event EventHandler WindowCloseEvent;
 
-        public CreateMapUnitPolysVM(MapUnitPolysViewModel parentVM)
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public ICommand CommandRefreshDMU => new RelayCommand(() => RefreshDMU());
+
+        // Create a Map Unit Polygon
+        public ICommand CommandCreate => new RelayCommand(() => CreateAsync(), () => CanCreate());
+
+        // Reset Object ids
+        public ICommand CommandClearOids => new RelayCommand(() => ClearOids(), () => ContactFaultOids != null && ContactFaultOids.Count > 0);
+
+        public void CloseProwindow()
         {
-            ParentVM = parentVM;
+            WindowCloseEvent(this, new EventArgs());
+        }
 
+        public MapUnitPolysCreateVM()
+        {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
@@ -42,7 +57,23 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             // Trigger validation
             Selected = Selected;
+        }
 
+        private List<MapUnitPolyTemplate> _mapUnits;
+        public List<MapUnitPolyTemplate> MapUnits
+        {
+            get => _mapUnits;
+            set
+            {
+                _mapUnits = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public async void RefreshDMU()
+        {
+            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+            MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
         }
 
         private bool _toggleCFTool;
@@ -51,7 +82,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             get => _toggleCFTool;
             set
             {
-                SetProperty(ref _toggleCFTool, value, () => ToggleCFTool);
+                _toggleCFTool = value;
 
                 // if the toggle-btn is active
                 if (value)
@@ -66,12 +97,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 }
             }
         }
-
-        // Create a Map Unit Polygon
-        public ICommand CommandCreate => new RelayCommand(() => CreateAsync(), () => CanCreate());
-
-        // Reset Object ids
-        public ICommand CommandClearOids => new RelayCommand(() => ClearOids(), () => ContactFaultOids != null && ContactFaultOids.Count > 0);
 
         private void ClearOids()
         {
@@ -146,7 +171,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             if (ConstructPolygonsSucceeded)
             {
-                ParentVM.CloseProwindow();
+                CloseProwindow();
             }
             else
             {
@@ -154,30 +179,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
                 _validationErrors["SelectedOid"] = new List<string>() { "A new polygon cannot be constructed from these CF lines." };
                 RaiseErrorsChanged("SelectedOid");
             }
-        }
-
-        public CreateMapUnitPolysVM()
-        {
-            FrameworkApplication.SetCurrentToolAsync("Geomapmaker_SelectContactsFaultsTool");
-
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
-
-            if (layer == null)
-            {
-                return;
-            }
-
-            QueuedTask.Run(() =>
-            {
-                Selection cfSelection = layer.GetSelection();
-
-                IReadOnlyList<long> cfOids = cfSelection.GetObjectIDs();
-
-                Set_CF_Oids(cfOids.ToList());
-            });
-
-            // Trigger validation
-            Selected = Selected;
         }
 
         // Collection of ID/Labels for selected CF lines
@@ -247,7 +248,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             get => _dataSource;
             set
             {
-                _notes = value;
+                _dataSource = value;
                 NotifyPropertyChanged();
             }
         }
@@ -373,5 +374,53 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         }
 
         #endregion
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+    }
+
+    internal class ShowMapUnitPolysCreate : Button
+    {
+        private Views.MapUnitPolysCreate.MapUnitPolysCreate _mapunitpolyscreate = null;
+
+        protected override async void OnClick()
+        {
+            //already open?
+            if (_mapunitpolyscreate != null)
+            {
+                _mapunitpolyscreate.Close();
+                return;
+            }
+
+            _mapunitpolyscreate = new Views.MapUnitPolysCreate.MapUnitPolysCreate
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
+            _mapunitpolyscreate.Closed += (o, e) =>
+            {
+                // Reset the map tool to explore
+                FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+
+                _mapunitpolyscreate = null;
+            };
+
+            _mapunitpolyscreate.mapUnitPolysCreateVM.WindowCloseEvent += (s, e) => _mapunitpolyscreate.Close();
+
+            _mapunitpolyscreate.Show();
+
+            await QueuedTask.Run(async () =>
+            {
+                _mapunitpolyscreate.mapUnitPolysCreateVM.MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
+            });
+        }
     }
 }

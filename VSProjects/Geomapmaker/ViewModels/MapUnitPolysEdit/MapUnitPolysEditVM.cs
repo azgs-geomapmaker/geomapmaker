@@ -1,28 +1,54 @@
-﻿using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Editing.Attributes;
-using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Mapping;
+using ArcGIS.Desktop.Framework.Controls;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
+using System.Collections.ObjectModel;
+using System.Linq;
 
-namespace Geomapmaker.ViewModels.MapUnitPolys
+namespace Geomapmaker.ViewModels.MapUnitPolysEdit
 {
-    public class EditMapUnitPolysVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class MapUnitPolysEditVM : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
     {
-        public MapUnitPolysViewModel ParentVM { get; set; }
+        public event EventHandler WindowCloseEvent;
 
-        public EditMapUnitPolysVM(MapUnitPolysViewModel parentVM)
+        public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+
+        public ICommand CommandRefreshDMU => new RelayCommand(() => RefreshDMU());
+
+        public void CloseProwindow()
         {
-            ParentVM = parentVM;
+            WindowCloseEvent(this, new EventArgs());
+        }
 
+        private List<MapUnitPolyTemplate> _mapUnits { get; set; }
+        public List<MapUnitPolyTemplate> MapUnits
+        {
+            get => _mapUnits;
+            set
+            {
+                _mapUnits = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public async void RefreshDMU()
+        {
+            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
+            MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
+        }
+
+        public MapUnitPolysEditVM()
+        {
             FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             if (layer == null)
@@ -116,7 +142,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
 
             if (editOperationSucceeded)
             {
-                ParentVM.CloseProwindow();
+                CloseProwindow();
             }
         }
 
@@ -126,7 +152,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             get => _toggleMupTool;
             set
             {
-                SetProperty(ref _toggleMupTool, value, () => ToggleMupTool);
+                _toggleMupTool = value;
 
                 // if the toggle-btn is active
                 if (value)
@@ -192,7 +218,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             }
         }
 
-        private string _identityConfidence;
+        private string _identityConfidence = "High";
         public string IdentityConfidence
         {
             get => _identityConfidence;
@@ -221,7 +247,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
             get => _dataSource;
             set
             {
-                _notes = value;
+                _dataSource = value;
                 NotifyPropertyChanged();
             }
         }
@@ -347,5 +373,53 @@ namespace Geomapmaker.ViewModels.MapUnitPolys
         }
 
         #endregion
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+    }
+
+    internal class ShowMapUnitPolysEdit : Button
+    {
+        private Views.MapUnitPolysEdit.MapUnitPolysEdit _mapunitpolysedit = null;
+
+        protected override async void OnClick()
+        {
+            //already open?
+            if (_mapunitpolysedit != null)
+            {
+                _mapunitpolysedit.Close();
+                return;
+            }
+
+            _mapunitpolysedit = new Views.MapUnitPolysEdit.MapUnitPolysEdit
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
+            _mapunitpolysedit.Closed += (o, e) =>
+            {
+                // Reset the map tool to explore
+                FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+
+                _mapunitpolysedit = null;
+            };
+
+            _mapunitpolysedit.mapUnitPolysEditVM.WindowCloseEvent += (s, e) => _mapunitpolysedit.Close();
+
+            _mapunitpolysedit.Show();
+
+            await QueuedTask.Run(async () =>
+            {
+                _mapunitpolysedit.mapUnitPolysEditVM.MapUnits = await Data.MapUnitPolys.GetMapUnitPolyTemplatesAsync();
+            });
+        }
     }
 }

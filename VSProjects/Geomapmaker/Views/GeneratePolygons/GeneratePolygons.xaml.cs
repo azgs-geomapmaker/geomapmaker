@@ -1,6 +1,6 @@
-﻿using Geomapmaker.ViewModels.MapUnitPolys;
+﻿using Geomapmaker.ViewModels.GeneratePolygons;
 
-namespace Geomapmaker.Views.MapUnitPolys
+namespace Geomapmaker.Views.GeneratePolygons
 {
     /// <summary>
     /// Interaction logic for GeneratePolygons.xaml
