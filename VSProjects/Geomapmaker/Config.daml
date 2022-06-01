@@ -23,9 +23,7 @@
           <group refID="Geomapmaker_ContactsAndFaults" />
           <group refID="Geomapmaker_MUPs" />
           <group refID="Geomapmaker_Points" />
-          <group refID="Geomapmaker_Renderers" />
-          <group refID="Geomapmaker_Validation" />
-          <group refID="Geomapmaker_Export" />
+          <group refID="Geomapmaker_Tools" />
         </tab>
       </tabs>
       <!-- Groups -->
@@ -51,13 +49,9 @@
           <button refID="Geomapmaker_Stations_Btn" />
           <button refID="Geomapmaker_OrientationPoints_Btn" />
         </group>
-        <group id="Geomapmaker_Renderers" caption="Symbology and Templates" keytip="todo">
-          <button refID="Geomapmaker_RebuildRenderers" size="large" />
-        </group>
-        <group id="Geomapmaker_Validation" caption="Validation" keytip="todo">
+        <group id="Geomapmaker_Tools" caption="Tools" keytip="todo">
+          <button refID="Geomapmaker_RebuildRenderers" />
           <button refID="Geomapmaker_Validation_Btn" />
-        </group>
-        <group id="Geomapmaker_Export" caption="Export" keytip="todo">
           <button refID="Geomapmaker_Export_Btn" />
         </group>
       </groups>
