@@ -234,15 +234,13 @@
 
             <TextBlock Grid.Row="13" Grid.Column="1" Text="Location Confidence " Visibility="{Binding Edit.Visibility}" />
             <ComboBox 
-            Grid.Row="14" 
-            Grid.Column="1" 
-            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
-            SelectedValue="{Binding Edit.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
-            IsReadOnly="False" 
-            IsEditable="False" 
-            Visibility="{Binding Edit.Visibility}"
-            >
-            </ComboBox>
+                Grid.Row="14" 
+                Grid.Column="1" 
+                ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
+                Text="{Binding Edit.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding Edit.Visibility}"
+                IsEditable="True"  
+                />
 
             <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" Visibility="{Binding Edit.Visibility}" >
                 <TextBlock Text="Concealed " />

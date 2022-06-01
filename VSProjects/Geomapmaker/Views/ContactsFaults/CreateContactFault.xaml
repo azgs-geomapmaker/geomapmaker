@@ -240,14 +240,12 @@
 
             <TextBlock Grid.Row="11" Grid.Column="1" Text="Location Confidence " />
             <ComboBox 
-            Grid.Row="12" 
-            Grid.Column="1" 
-            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
-            SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
-            IsReadOnly="False" 
-            IsEditable="False" 
-            >
-            </ComboBox>
+                Grid.Row="12" 
+                Grid.Column="1" 
+                ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
+                Text="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+                IsEditable="True"  
+                />
 
             <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Horizontal" >
                 <TextBlock Text="Concealed " />
