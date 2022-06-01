@@ -8,6 +8,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,11 +26,6 @@ namespace Geomapmaker.ViewModels.Export
 
         public ICommand CommandExport => new RelayCommand(() => Export());
 
-        public ExportVM()
-        {
-
-        }
-
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
@@ -43,11 +39,10 @@ namespace Geomapmaker.ViewModels.Export
             // Remove extension
             projectName = projectName.Replace(".aprx", "");
 
-            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog
+            SaveFileDialog dialog = new SaveFileDialog
             {
                 FileName = projectName,
                 DefaultExt = ".gdb",
-                //Filter = "File geodatabase (.gdb)|*.gdb"
             };
 
             // Show save file dialog box
@@ -63,11 +58,14 @@ namespace Geomapmaker.ViewModels.Export
                 // Get the maps spatial reference or default to WGS84
                 SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
 
-                // Save document
-                string filename = dialog.FileName;
+                // Path for the new GDB file
+                string gdbPath = dialog.FileName;
+
+                // Path for the FeatureDataset
+                string featureDatasetPath = gdbPath + "\\GeologicMap";
 
                 // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
-                FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(filename));
+                FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(gdbPath));
 
                 // Create and use the file geodatabase
                 using (Geodatabase geodatabase = SchemaBuilder.CreateGeodatabase(fileGeodatabaseConnectionPath))
@@ -89,11 +87,47 @@ namespace Geomapmaker.ViewModels.Export
                         IReadOnlyList<string> errors = schemaBuilder.ErrorMessages;
                     }
 
+                    FeatureLayer cf = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+                    if (cf != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(cf, featureDatasetPath);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
+                    }
+
+                    FeatureLayer mup = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+                    if (mup != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(mup, featureDatasetPath);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
+                    }
+
+                    FeatureLayer stations = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "Stations");
+
+                    if (stations != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(stations, featureDatasetPath);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
+                    }
+
+                    FeatureLayer op = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "OrientationPoints");
+
+                    if (op != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(op, featureDatasetPath);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
+                    }
+
                     StandaloneTable ds = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
 
                     if (ds != null)
                     {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(ds, filename);
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(ds, gdbPath);
 
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
@@ -102,7 +136,7 @@ namespace Geomapmaker.ViewModels.Export
 
                     if (dmu != null)
                     {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(dmu, filename);
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(dmu, gdbPath);
 
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
@@ -111,7 +145,7 @@ namespace Geomapmaker.ViewModels.Export
 
                     if (geoDict != null)
                     {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(geoDict, filename);
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(geoDict, gdbPath);
 
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
@@ -120,7 +154,7 @@ namespace Geomapmaker.ViewModels.Export
 
                     if (glossary != null)
                     {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(glossary, filename);
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(glossary, gdbPath);
 
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
@@ -129,7 +163,7 @@ namespace Geomapmaker.ViewModels.Export
 
                     if (symbology != null)
                     {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(symbology, filename);
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(symbology, gdbPath);
 
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
