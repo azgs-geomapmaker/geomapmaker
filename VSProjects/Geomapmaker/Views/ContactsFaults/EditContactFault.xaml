@@ -185,15 +185,52 @@
                 </RadioButton>
             </Grid>
 
-            <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal" Visibility="{Binding Edit.Visibility}">
-                <TextBlock Text="Existence Confidence " />
-                <TextBlock FontWeight="Bold" Text="{Binding Edit.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
-                <Validation.ErrorTemplate>
-                        <ControlTemplate />
-                    </Validation.ErrorTemplate>
-                </TextBlock>
-            </StackPanel>
-            <Slider Grid.Row="12" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Edit.ExistenceConfidence, Converter={StaticResource SliderConverter}}" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="11" Grid.Column="1"  Text="Identity Confidence "  Visibility="{Binding Edit.Visibility}"/>
+            <Grid Grid.Row="12" Grid.Column="1"  Visibility="{Binding Edit.Visibility}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <RadioButton 
+                    Grid.Row="0" 
+                    Grid.Column="1" 
+                    GroupName="ExistenceConfidence" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center" 
+                    Content="Low"
+                    IsChecked="{Binding Edit.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
+                    >
+                </RadioButton>
+
+                <RadioButton 
+                    Grid.Row="0" 
+                    Grid.Column="2" 
+                    GroupName="ExistenceConfidence" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Content="Medium"
+                    IsChecked="{Binding Edit.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
+                    >
+                </RadioButton>
+
+                <RadioButton 
+                    Grid.Row="0" 
+                    Grid.Column="3"
+                    GroupName="ExistenceConfidence" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Content="High"
+                    IsChecked="{Binding Edit.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
+                    >
+                </RadioButton>
+            </Grid>
 
             <TextBlock Grid.Row="13" Grid.Column="1" Text="Location Confidence " Visibility="{Binding Edit.Visibility}" />
             <ComboBox 
