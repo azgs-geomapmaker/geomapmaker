@@ -41,7 +41,7 @@
 
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" >
             <TextBlock Text="Include Report" />
-            <CheckBox Style="{DynamicResource Esri_CheckboxToggleSwitch}" />
+            <CheckBox Style="{DynamicResource Esri_CheckboxToggleSwitch}" IsEnabled="False" />
         </StackPanel>
 
         <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
