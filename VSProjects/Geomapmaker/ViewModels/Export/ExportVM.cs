@@ -2,9 +2,11 @@
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Core;
+using ArcGIS.Desktop.Core.Geoprocessing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using System;
 using System.Collections.Generic;
@@ -33,7 +35,7 @@ namespace Geomapmaker.ViewModels.Export
             WindowCloseEvent(this, new EventArgs());
         }
 
-        public void Export()
+        public async void Export()
         {
             // Get the project name
             string projectName = Project.Current.Name;
@@ -55,7 +57,7 @@ namespace Geomapmaker.ViewModels.Export
             if (result == true)
             {
                 // Get the maps spatial reference or default to WGS84
-                var spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
+                SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
 
                 // Save document
                 string filename = dialog.FileName;
@@ -66,14 +68,13 @@ namespace Geomapmaker.ViewModels.Export
                 // Create and use the file geodatabase
                 using (Geodatabase geodatabase = SchemaBuilder.CreateGeodatabase(fileGeodatabaseConnectionPath))
                 {
-
                     SchemaBuilder schemaBuilder = new SchemaBuilder(geodatabase);
 
-                    // Create a FeatureDataset named as 'GeologicMap'
-                    FeatureDatasetDescription featureDatasetDescription = new FeatureDatasetDescription("GeologicMap", spatialReferences);
+                    // Initialize a new FeatureDataset named as 'GeologicMap'
+                    FeatureDatasetDescription geologicMapFeatureDataset = new FeatureDatasetDescription("GeologicMap", spatialReferences);
 
-                    // 
-                    schemaBuilder.Create(featureDatasetDescription);
+                    // Create the FeatureDataset
+                    schemaBuilder.Create(geologicMapFeatureDataset);
 
                     // Build status
                     bool buildStatus = schemaBuilder.Build();
@@ -84,7 +85,52 @@ namespace Geomapmaker.ViewModels.Export
                         IReadOnlyList<string> errors = schemaBuilder.ErrorMessages;
                     }
 
+                    StandaloneTable ds = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
 
+                    if (ds != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(ds, filename);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
+                    }
+
+                    StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+                    if (dmu != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(dmu, filename);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
+                    }
+
+
+                    StandaloneTable geoDict = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "GeoMaterialDict");
+
+                    if (geoDict != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(geoDict, filename);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
+                    }
+
+
+                    StandaloneTable glossary = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
+
+                    if (glossary != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(glossary, filename);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
+                    }
+
+                    StandaloneTable symbology = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Symbology");
+
+                    if (symbology != null)
+                    {
+                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(symbology, filename);
+
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
+                    }
                 }
 
                 CloseProwindow();
