@@ -7,8 +7,8 @@
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
         Title="Export"
-        Height="600" 
-        MinHeight="550" 
+        Height="300" 
+        MinHeight="250" 
         Width="500"
         MinWidth="450"
         WindowStartupLocation="CenterOwner"
@@ -25,6 +25,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
@@ -35,8 +37,12 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <!--<TextBlock Grid.Row="1" Grid.Column="1" Text="Export Path" />
+        <TextBox Grid.Row="2" Grid.Column="1" />-->
+
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+            <Button Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
         </StackPanel>
         
     </Grid>

@@ -1,4 +1,5 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Core;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using System;
@@ -15,6 +16,8 @@ namespace Geomapmaker.ViewModels.Export
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
+        public ICommand CommandExport => new RelayCommand(() => Export());
+
         public ExportVM()
         {
 
@@ -23,6 +26,32 @@ namespace Geomapmaker.ViewModels.Export
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
+        }
+
+        public void Export()
+        {
+            // Get the project name
+            string projectName = Project.Current.Name;
+
+            // Remove extension
+            projectName = projectName.Replace(".aprx", "");
+
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = projectName,
+                DefaultExt = ".gdb",
+                Filter = "File geodatabase (.gdb)|*.gdb"
+            };
+
+            // Show save file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dialog.FileName;
+            }
         }
 
         #region Validation
