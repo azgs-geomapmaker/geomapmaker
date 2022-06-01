@@ -7,10 +7,10 @@
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
         Title="Export"
-        Height="300" 
-        MinHeight="250" 
-        Width="500"
-        MinWidth="450"
+        Height="200" 
+        MinHeight="150" 
+        Width="300"
+        MinWidth="250"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -37,8 +37,12 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <!--<TextBlock Grid.Row="1" Grid.Column="1" Text="Export Path" />
-        <TextBox Grid.Row="2" Grid.Column="1" />-->
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Export to File Geodatabase" HorizontalAlignment="Center" FontWeight="Bold" />
+
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" >
+            <TextBlock Text="Include Report" />
+            <CheckBox Style="{DynamicResource Esri_CheckboxToggleSwitch}" />
+        </StackPanel>
 
         <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
