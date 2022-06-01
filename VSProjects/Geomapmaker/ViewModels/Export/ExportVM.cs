@@ -56,6 +56,10 @@ namespace Geomapmaker.ViewModels.Export
             // Process save file dialog box results
             if (result == true)
             {
+                ProgressDialog progDialog = new ProgressDialog("Exporting Geodatabase");
+
+                progDialog.Show();
+
                 // Get the maps spatial reference or default to WGS84
                 SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
 
@@ -103,7 +107,6 @@ namespace Geomapmaker.ViewModels.Export
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
 
-
                     StandaloneTable geoDict = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "GeoMaterialDict");
 
                     if (geoDict != null)
@@ -112,7 +115,6 @@ namespace Geomapmaker.ViewModels.Export
 
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
-
 
                     StandaloneTable glossary = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
 
@@ -132,6 +134,8 @@ namespace Geomapmaker.ViewModels.Export
                         await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
                     }
                 }
+
+                progDialog.Hide();
 
                 CloseProwindow();
             }
