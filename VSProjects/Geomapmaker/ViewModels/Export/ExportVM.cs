@@ -1,10 +1,15 @@
-﻿using ArcGIS.Desktop.Core;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Data.DDL;
+using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Mapping;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -40,7 +45,7 @@ namespace Geomapmaker.ViewModels.Export
             {
                 FileName = projectName,
                 DefaultExt = ".gdb",
-                Filter = "File geodatabase (.gdb)|*.gdb"
+                //Filter = "File geodatabase (.gdb)|*.gdb"
             };
 
             // Show save file dialog box
@@ -49,8 +54,40 @@ namespace Geomapmaker.ViewModels.Export
             // Process save file dialog box results
             if (result == true)
             {
+                // Get the maps spatial reference or default to WGS84
+                var spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
+
                 // Save document
                 string filename = dialog.FileName;
+
+                // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
+                FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(filename));
+
+                // Create and use the file geodatabase
+                using (Geodatabase geodatabase = SchemaBuilder.CreateGeodatabase(fileGeodatabaseConnectionPath))
+                {
+
+                    SchemaBuilder schemaBuilder = new SchemaBuilder(geodatabase);
+
+                    // Create a FeatureDataset named as 'GeologicMap'
+                    FeatureDatasetDescription featureDatasetDescription = new FeatureDatasetDescription("GeologicMap", spatialReferences);
+
+                    // 
+                    schemaBuilder.Create(featureDatasetDescription);
+
+                    // Build status
+                    bool buildStatus = schemaBuilder.Build();
+
+                    // Build errors
+                    if (!buildStatus)
+                    {
+                        IReadOnlyList<string> errors = schemaBuilder.ErrorMessages;
+                    }
+
+
+                }
+
+                CloseProwindow();
             }
         }
 
