@@ -62,48 +62,48 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="Geomapmaker: Validation specific to the toolbar" FontWeight="Bold" Margin="0,0,0,10" />
             
             <TextBlock Grid.Row="2" Grid.Column="1" Text="1" FontWeight="Bold" />
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="Symbology" ToolTip="{Binding Geomapmaker.Check1Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result1}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Symbology" ToolTip="{Binding Geomapmaker.SymbologyTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Symbology}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="4" Grid.Column="1" Text="2" FontWeight="Bold" />
-            <TextBlock Grid.Row="4" Grid.Column="2" Text="DataSources" ToolTip="{Binding Geomapmaker.Check2Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result2}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="4" Grid.Column="2" Text="DataSources" ToolTip="{Binding Geomapmaker.DataSourcesTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.DataSources}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="6" Grid.Column="1" Text="3" FontWeight="Bold" />
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="DescriptionOfMapUnits" ToolTip="{Binding Geomapmaker.Check3Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result3}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="DescriptionOfMapUnits" ToolTip="{Binding Geomapmaker.DescriptionOfMapUnitsTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.DescriptionOfMapUnits}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="8" Grid.Column="1" Text="4" FontWeight="Bold" />
-            <TextBlock Grid.Row="8" Grid.Column="2" Text="Glossary" ToolTip="{Binding Geomapmaker.Check4Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result4}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="Glossary" ToolTip="{Binding Geomapmaker.GlossaryTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Glossary}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="10" Grid.Column="1" Text="5" FontWeight="Bold" />
-            <TextBlock Grid.Row="10" Grid.Column="2" Text="GeoMaterialDict" ToolTip="{Binding Geomapmaker.Check5Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="10" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result5}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="10" Grid.Column="2" Text="GeoMaterialDict" ToolTip="{Binding Geomapmaker.GeoMaterialDictooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="10" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.GeoMaterialDict}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="12" Grid.Column="1" Text="6" FontWeight="Bold" />
-            <TextBlock Grid.Row="12" Grid.Column="2" Text="MapUnitPolys" ToolTip="{Binding Geomapmaker.Check6Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="12" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result6}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="12" Grid.Column="2" Text="MapUnitPolys" ToolTip="{Binding Geomapmaker.MapUnitPolysTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="12" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.MapUnitPolys}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="14" Grid.Column="1" Text="7" FontWeight="Bold" />
-            <TextBlock Grid.Row="14" Grid.Column="2" Text="ContactsAndFaults" ToolTip="{Binding Geomapmaker.Check7Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="14" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result7}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="14" Grid.Column="2" Text="ContactsAndFaults" ToolTip="{Binding Geomapmaker.ContactsAndFaultsTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="14" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.ContactsAndFaults}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="16" Grid.Column="1" Text="8" FontWeight="Bold" />
-            <TextBlock Grid.Row="16" Grid.Column="2" Text="Stations" ToolTip="{Binding Geomapmaker.Check8Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="16" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result8}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="16" Grid.Column="2" Text="Stations" ToolTip="{Binding Geomapmaker.StationsTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="16" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Stations}" Margin="10,0,0,0" FontWeight="Bold" />
             <Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />
 
             <TextBlock Grid.Row="18" Grid.Column="1" Text="9" FontWeight="Bold" />
-            <TextBlock Grid.Row="18" Grid.Column="2" Text="OrientationPoints" ToolTip="{Binding Geomapmaker.Check9Tooltip}" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.Result9}" Margin="10,0,0,0" FontWeight="Bold" />
+            <TextBlock Grid.Row="18" Grid.Column="2" Text="OrientationPoints" ToolTip="{Binding Geomapmaker.OrientationPointsTooltip}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="18" Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Geomapmaker.OrientationPoints}" Margin="10,0,0,0" FontWeight="Bold" />
             <!--<Separator Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="3" />-->
 
         </Grid>
