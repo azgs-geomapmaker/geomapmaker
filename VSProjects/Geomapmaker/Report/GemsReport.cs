@@ -19,8 +19,20 @@ h1 {font-size: 1.5em; font-weight: bold;}
 h1, h2 {background-color: lightgray; padding: 5px; border-radius: 4px; font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; , sans-serif; text-align: center;}
 
 table {
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+table td:first-child {
+    text-align: center;
+    width: 200px;
+}
+
+table th {
+    height: 50px;
+    background-color: #1E5288;
+    color: white;
 }
 
 table,
@@ -36,10 +48,6 @@ table td {
 }
 
 .info {font-family: Courier New, Courier, monospace; margin-left: 20px; margin-right: 20px;}
-
-.errorCol {min-width: 500px;}
-
-.error {color: red;}
 
 ";
 
@@ -100,7 +108,7 @@ table td {
                     new XElement("table",
                         new XElement("tr",
                             new XElement("th", "Dataset"),
-                            new XElement("th", "Errors")
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Errors")
                         ),
                         new XElement("tr",
                             new XElement("td", "Symbology"),
@@ -153,7 +161,7 @@ table td {
                     new XElement("table",
                         new XElement("tr",
                             new XElement("th", "Dataset"),
-                            new XElement("th", "Errors")
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Errors")
                         ),
                         new XElement("tr",
                             new XElement("td", "Symbology"),
@@ -201,15 +209,13 @@ table td {
 
             if (errorList.Count == 0)
             {
-                list.Add(new XElement("div",
-                    new XAttribute("class", "errorCol"), "Passed"));
+                list.Add(new XElement("div", new XAttribute("style", "font-weight: bold; text-align: right;"), "Passed"));
             }
             else
             {
                 foreach (string error in errorList)
                 {
-                    list.Add(new XElement("div",
-                                new XAttribute("class", "error errorCol"), error));
+                    list.Add(new XElement("div", new XAttribute("style", "color: red; text-align: right;"), error));
                 }
             }
 
