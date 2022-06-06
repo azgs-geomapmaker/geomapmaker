@@ -27,7 +27,7 @@ namespace Geomapmaker.ViewModels.Export
 
         public ICommand CommandExport => new RelayCommand(() => Export());
 
-        public bool CreateReport { get; set; } = false;
+        public bool CreateReport { get; set; } = true;
 
         public void CloseProwindow()
         {
