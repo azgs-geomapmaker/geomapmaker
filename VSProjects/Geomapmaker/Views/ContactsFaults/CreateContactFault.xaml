@@ -145,98 +145,20 @@
             </GroupBox>
 
             <TextBlock Grid.Row="7" Grid.Column="1"  Text="Identity Confidence "/>
-            <Grid Grid.Row="8" Grid.Column="1" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                </Grid.ColumnDefinitions>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="1" 
-                    GroupName="IdentityConfidence" 
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Center" 
-                    Content="Low"
-                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
-                    >
-                </RadioButton>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="2" 
-                    GroupName="IdentityConfidence" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    Content="Medium"
-                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
-                    >
-                </RadioButton>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="3"
-                    GroupName="IdentityConfidence" 
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Center" 
-                    Content="High"
-                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
-                    >
-                </RadioButton>
-            </Grid>
+            <ComboBox 
+                Grid.Row="8" 
+                Grid.Column="1" 
+                ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}"
+                Text="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged}"
+                />
 
             <TextBlock Grid.Row="9" Grid.Column="1"  Text="Existence Confidence "/>
-            <Grid Grid.Row="10" Grid.Column="1" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                </Grid.ColumnDefinitions>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="1" 
-                    GroupName="ExistenceConfidence" 
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Center" 
-                    Content="Low"
-                    IsChecked="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
-                    >
-                </RadioButton>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="2" 
-                    GroupName="ExistenceConfidence" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    Content="Medium"
-                    IsChecked="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
-                    >
-                </RadioButton>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="3"
-                    GroupName="ExistenceConfidence" 
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Center" 
-                    Content="High"
-                    IsChecked="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
-                    >
-                </RadioButton>
-            </Grid>
+            <ComboBox 
+                Grid.Row="10" 
+                Grid.Column="1" 
+                ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}"
+                Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}"
+                />
 
             <TextBlock Grid.Row="11" Grid.Column="1" Text="Location Confidence " />
             <ComboBox 
