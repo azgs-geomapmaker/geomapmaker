@@ -145,72 +145,29 @@
             </GroupBox>
 
             <TextBlock Grid.Row="7" Grid.Column="1"  Text="Identity Confidence "/>
-            <Grid Grid.Row="8" Grid.Column="1" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                </Grid.ColumnDefinitions>
+            <ComboBox 
+                Grid.Row="8" 
+                Grid.Column="1" 
+                ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}"
+                Text="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged}"
+                />
 
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="1" 
-                    GroupName="IdentityConfidence" 
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Center" 
-                    Content="Low"
-                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Low'}"
-                    >
-                </RadioButton>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="2" 
-                    GroupName="IdentityConfidence" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    Content="Medium"
-                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='Medium'}"
-                    >
-                </RadioButton>
-
-                <RadioButton 
-                    Grid.Row="0" 
-                    Grid.Column="3"
-                    GroupName="IdentityConfidence" 
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Center" 
-                    Content="High"
-                    IsChecked="{Binding Create.IdentityConfidence, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RadioConfidenceConverter}, ConverterParameter='High'}"
-                    >
-                </RadioButton>
-            </Grid>
-
-            <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="Existence Confidence " />
-                <TextBlock FontWeight="Bold" Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}" ToolTip="Existence Confidence" Style="{DynamicResource Esri_TextBlockRegular}">
-                <Validation.ErrorTemplate>
-                        <ControlTemplate />
-                    </Validation.ErrorTemplate>
-                </TextBlock>
-            </StackPanel>
-            <Slider Grid.Row="10" Grid.Column="1" Minimum="0" Maximum="2" IsSnapToTickEnabled="True" Value="{Binding Create.ExistenceConfidence, Converter={StaticResource SliderConverter}}"/>
+            <TextBlock Grid.Row="9" Grid.Column="1"  Text="Existence Confidence "/>
+            <ComboBox 
+                Grid.Row="10" 
+                Grid.Column="1" 
+                ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}"
+                Text="{Binding Create.ExistenceConfidence, UpdateSourceTrigger=PropertyChanged}"
+                />
 
             <TextBlock Grid.Row="11" Grid.Column="1" Text="Location Confidence " />
             <ComboBox 
-            Grid.Row="12" 
-            Grid.Column="1" 
-            ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}" 
-            SelectedValue="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
-            IsReadOnly="False" 
-            IsEditable="False" 
-            >
-            </ComboBox>
+                Grid.Row="12" 
+                Grid.Column="1" 
+                ItemsSource="{Binding Path=(data:Confidence.LocationConfidenceMeters)}"
+                Text="{Binding Create.LocationConfidenceMeters, UpdateSourceTrigger=PropertyChanged}"
+                IsEditable="True"  
+                />
 
             <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Horizontal" >
                 <TextBlock Text="Concealed " />

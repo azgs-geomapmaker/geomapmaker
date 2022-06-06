@@ -358,7 +358,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             set
             {
                 SetProperty(ref _locationConfidenceMeters, value, () => LocationConfidenceMeters);
-                ValidateRequiredString(LocationConfidenceMeters, "LocationConfidenceMeters");
+                ValidateRequiredNumber(LocationConfidenceMeters, "LocationConfidenceMeters");
             }
         }
 
@@ -467,6 +467,25 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             if (string.IsNullOrEmpty(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
+
+        private void ValidateRequiredNumber(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrEmpty(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (!double.TryParse(text, out _))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Value must be numerical." };
             }
             else
             {
