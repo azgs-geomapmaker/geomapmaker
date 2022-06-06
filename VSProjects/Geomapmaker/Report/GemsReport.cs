@@ -60,11 +60,11 @@ table td {
             };
         }
 
-        public async void ExportReport(string filePath)
+        public async Task<bool> ExportReportAsync(string filePath)
         {
             if (report == null)
             {
-                return;
+                return false;
             }
 
             XDocument reportXml = new XDocument(
@@ -80,6 +80,8 @@ table td {
             );
 
             File.WriteAllText(filePath, reportXml.ToString());
+
+            return true;
         }
 
         private XElement GetHeader()

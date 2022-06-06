@@ -180,7 +180,7 @@ namespace Geomapmaker.ViewModels.Export
 
                     report.BuildReport();
 
-                    report.ExportReport(reportPath);
+                    await report.ExportReportAsync(reportPath);
                 }
 
                 progDialog.Hide();
