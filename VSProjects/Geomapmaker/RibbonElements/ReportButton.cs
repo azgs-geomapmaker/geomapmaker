@@ -1,10 +1,9 @@
-﻿using ArcGIS.Desktop.Core;
-using ArcGIS.Desktop.Framework.Contracts;
+﻿using ArcGIS.Desktop.Framework.Contracts;
 using Geomapmaker.Report;
 using System.Diagnostics;
 using System.IO;
 
-namespace Geomapmaker
+namespace Geomapmaker.RibbonElements
 {
     internal class ReportButton : Button
     {
