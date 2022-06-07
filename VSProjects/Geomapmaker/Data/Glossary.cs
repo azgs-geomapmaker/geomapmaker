@@ -16,7 +16,11 @@ namespace Geomapmaker.Data
 
             List<string> glossaryTerms = await GetGlossaryTermsAsync();
 
+            // DescriptionOfMapUnits
             undefinedTerms.AddRange(await DescriptionOfMapUnits.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+
+            // ContactsAndFaults
+            undefinedTerms.AddRange(await ContactsAndFaults.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
 
             return undefinedTerms;
         }
