@@ -66,6 +66,9 @@
     <Reference Include="GongSolutions.WPF.DragDrop, Version=3.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
       <HintPath>packages\gong-wpf-dragdrop.3.1.1\lib\net48\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.43.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlAgilityPack.1.11.43\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
     </Reference>
@@ -199,21 +202,22 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\GemsValidation.cs" />
+    <Compile Include="Data\GeomapmakerValidation.cs" />
     <Compile Include="Data\General.cs" />
     <Compile Include="Data\Glossary.cs" />
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Data\ArcGisProject.cs" />
+    <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="RibbonElements\ReportButton.cs" />
+    <Compile Include="Report\GemsReport.cs" />
     <Compile Include="ViewModels\Export\ExportVM.cs" />
     <Compile Include="ViewModels\GeneratePolygons\GeneratePolygonsViewModel.cs" />
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
-    <Compile Include="ViewModels\Validation\GeomapmakerVM.cs" />
-    <Compile Include="ViewModels\Validation\GemsVM.cs" />
-    <Compile Include="ViewModels\Validation\TopoVM.cs" />
-    <Compile Include="ViewModels\Validation\OverviewVM.cs" />
-    <Compile Include="ViewModels\Validation\ValidationViewModel.cs" />
     <Compile Include="Views\Export\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>
     </Compile>
@@ -346,21 +350,6 @@
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Validation\Gems.xaml.cs">
-      <DependentUpon>Gems.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Validation\Geomapmaker.xaml.cs">
-      <DependentUpon>Geomapmaker.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Validation\Topo.xaml.cs">
-      <DependentUpon>Topo.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Validation\Overview.xaml.cs">
-      <DependentUpon>Overview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Validation\Validation.xaml.cs">
-      <DependentUpon>Validation.xaml</DependentUpon>
-    </Compile>
     <Compile Include="_helpers\ColorConverter.cs" />
     <Compile Include="_helpers\Helpers.cs" />
     <Compile Include="_helpers\ValueConverters.cs" />
@@ -483,26 +472,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GlobalResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Validation\Gems.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Validation\Geomapmaker.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Validation\Topo.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Validation\Overview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Validation\Validation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

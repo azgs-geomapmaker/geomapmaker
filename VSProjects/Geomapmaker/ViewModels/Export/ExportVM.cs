@@ -8,6 +8,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Report;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace Geomapmaker.ViewModels.Export
 
         public ICommand CommandExport => new RelayCommand(() => Export());
 
+        public bool CreateReport { get; set; } = true;
+
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
@@ -34,10 +37,7 @@ namespace Geomapmaker.ViewModels.Export
         public async void Export()
         {
             // Get the project name
-            string projectName = Project.Current.Name;
-
-            // Remove extension
-            projectName = projectName.Replace(".aprx", "");
+            string projectName = Data.ArcGisProject.GetName();
 
             SaveFileDialog dialog = new SaveFileDialog
             {
@@ -51,6 +51,8 @@ namespace Geomapmaker.ViewModels.Export
             // Process save file dialog box results
             if (result == true)
             {
+                CloseProwindow();
+
                 ProgressDialog progDialog = new ProgressDialog("Exporting Geodatabase");
 
                 progDialog.Show();
@@ -63,6 +65,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 // Path for the FeatureDataset
                 string featureDatasetPath = gdbPath + "\\GeologicMap";
+
+                // Path for the report
+                string reportPath = gdbPath + "\\Report.html";
 
                 // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
                 FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(gdbPath));
@@ -169,9 +174,17 @@ namespace Geomapmaker.ViewModels.Export
                     }
                 }
 
+                if (CreateReport)
+                {
+                    GemsReport report = new GemsReport();
+
+                    report.BuildReport();
+
+                    await report.ExportReportAsync(reportPath);
+                }
+
                 progDialog.Hide();
 
-                CloseProwindow();
             }
         }
 

@@ -1,81 +1,32 @@
-﻿using ArcGIS.Desktop.Framework.Contracts;
-using Geomapmaker.Data;
-using Geomapmaker.Models;
+﻿using Geomapmaker.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Geomapmaker.ViewModels.Validation
+namespace Geomapmaker.Data
 {
-    public class GemsVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class GemsValidation
     {
-        public ValidationViewModel ParentVM { get; set; }
-
-        public GemsVM(ValidationViewModel parentVM)
+        public static async Task<Dictionary<string, List<string>>> GetErrorsAsync()
         {
-            ParentVM = parentVM;
+            Dictionary<string, List<string>> _validationErrors = new Dictionary<string, List<string>>
+            {
+                { "Symbology", new List<string>() },
+                { "DataSources", await GetDataSourcesErrorsAsync() },
+                { "DescriptionOfMapUnits", await GetDescriptionOfMapUnitsErrorsAsync() },
+                { "Glossary", await GetGlossaryErrorsAsync() },
+                { "GeoMaterialDict", await GetGeoMaterialDictErrorsAsync() },
+                { "MapUnitPolys", await GetMapUnitPolysErrorsAsync() },
+                { "ContactsAndFaults", await GetContactsAndFaultsErrorsAsync() },
+                { "Stations", await GetStationsErrorsAsync() },
+                { "OrientationPoints", await GetOrientationPointsErrorsAsync() }
+            };
+
+            return _validationErrors;
         }
 
-        public string Result1 { get; set; } = "Checking..";
-        public string Result2 { get; set; } = "Checking..";
-        public string Result3 { get; set; } = "Checking..";
-        public string Result4 { get; set; } = "Checking..";
-        public string Result5 { get; set; } = "Checking..";
-        public string Result6 { get; set; } = "Checking..";
-        public string Result7 { get; set; } = "Checking..";
-        public string Result8 { get; set; } = "Checking..";
-        public string Result9 { get; set; } = "Checking..";
-
-        public async Task Validate()
-        {
-            // GeMS doesn't check the symbology table
-            Result1 = "Skipped";
-            NotifyPropertyChanged("Result1");
-
-            Result2 = await Check2Async("Result2");
-            NotifyPropertyChanged("Result2");
-
-            Result3 = await Check3Async("Result3");
-            NotifyPropertyChanged("Result3");
-
-            Result4 = await Check4Async("Result4");
-            NotifyPropertyChanged("Result4");
-
-            Result5 = await Check5Async("Result5");
-            NotifyPropertyChanged("Result5");
-
-            Result6 = await Check6Async("Result6");
-            NotifyPropertyChanged("Result6");
-
-            Result7 = await Check7Async("Result7");
-            NotifyPropertyChanged("Result7");
-
-            Result8 = await Check8Async("Result8");
-            NotifyPropertyChanged("Result8");
-
-            Result9 = await Check9Async("Result9");
-            NotifyPropertyChanged("Result9");
-
-            ParentVM.UpdateGemsResults(_validationErrors.Count);
-        }
-
-        // Symbology Toolitp
-        public string Check1Tooltip => "Symbology table is not in GeMS specification.";
-
-        // DataSources Tooltip
-        public string Check2Tooltip => "Table exists.<br>" +
-                                       "No duplicate tables.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "No duplicate datasources_id values.<br>" +
-                                       "No unused datasources_id values.<br>" +
-                                       "No missing datasources_id values.";
-
-        // Validate DataSources table
-        private async Task<string> Check2Async(string propertyKey)
+        private static async Task<List<string>> GetDataSourcesErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -147,37 +98,12 @@ namespace Geomapmaker.ViewModels.Validation
                 {
                     errors.Add($"Missing data source: {ds}");
                 }
-
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        // DescriptionOfMapUnits Tooltip
-        public string Check3Tooltip => "Table exists.<br>" +
-                                       "No duplicate tables.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "No duplicate MapUnit values.<br>" +
-                                       "No duplicate Name values.<br>" +
-                                       "No duplicate FullName values.<br>" +
-                                       "No duplicate AreaFillRGB values.<br>" +
-                                       "No duplicate HierarchyKey values.<br>" +
-                                       "No duplicate DescriptionOfMapUnits_ID values.<br>" +
-                                       "HierarchyKeys unique and well-formed.<br>" +
-                                       "GeoMaterial are defined in GeoMaterialDict.";
-
-        // Validate DescriptionOfMapUnits table
-        private async Task<string> Check3Async(string propertyKey)
+        private static async Task<List<string>> GetDescriptionOfMapUnitsErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -331,28 +257,10 @@ namespace Geomapmaker.ViewModels.Validation
 
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        // Glossary Tooltip
-        public string Check4Tooltip => "Table exists.<br>" +
-                                       "No duplicate tables.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "No duplicate Glossary_ID values.<br>" +
-                                       "No duplicate Term values.<br>";
-
-        // Validate Glossary
-        private async Task<string> Check4Async(string propertyKey)
+        private static async Task<List<string>> GetGlossaryErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -420,27 +328,10 @@ namespace Geomapmaker.ViewModels.Validation
 
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        // GeoMaterialDict Tooltip
-        public string Check5Tooltip => "Table exists.<br>" +
-                                       "No duplicate tables.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "GeoMaterialDict table has not been modified.<br>";
-
-        // Validate GeoMaterialDict
-        private async Task<string> Check5Async(string propertyKey)
+        private static async Task<List<string>> GetGeoMaterialDictErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -498,27 +389,10 @@ namespace Geomapmaker.ViewModels.Validation
                 }
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        // MapUnitPolys Tooltip
-        public string Check6Tooltip => "Layer exists.<br>" +
-                                       "No duplicate layers.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "No duplicate MapUnitPolys_ID values.<br>";
-
-        // Validate MapUnitPolys layer
-        private async Task<string> Check6Async(string propertyKey)
+        private static async Task<List<string>> GetMapUnitPolysErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -587,28 +461,10 @@ namespace Geomapmaker.ViewModels.Validation
 
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        // ContactsAndFaults Tooltip
-        public string Check7Tooltip => "Layer exists.<br>" +
-                                       "No duplicate layers.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "No duplicate Label values.<br>" +
-                                       "No duplicate ContactsAndFaults_ID values.<br>";
-
-        // Validate ContactsAndFaults layer
-        private async Task<string> Check7Async(string propertyKey)
+        private static async Task<List<string>> GetContactsAndFaultsErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -669,27 +525,10 @@ namespace Geomapmaker.ViewModels.Validation
                 }
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        // Stations Tooltip
-        public string Check8Tooltip => "Layer exists.<br>" +
-                                       "No duplicate layers.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "No duplicate Stations_ID values.<br>";
-
-        // Validate Stations layer
-        private async Task<string> Check8Async(string propertyKey)
+        private static async Task<List<string>> GetStationsErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -697,7 +536,7 @@ namespace Geomapmaker.ViewModels.Validation
             if (await General.FeatureLayerExistsAsync("Stations") == false)
             {
                 // Optional layer. No error if not found
-                return "Skipped";
+                return errors;
             }
             else // Layer was found
             {
@@ -750,27 +589,10 @@ namespace Geomapmaker.ViewModels.Validation
 
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        // OrientationPoints Tooltip
-        public string Check9Tooltip => "Layer exists.<br>" +
-                                       "No duplicate layers.<br>" +
-                                       "No missing fields.<br>" +
-                                       "No empty/null values in required fields.<br>" +
-                                       "No duplicate OrientationPoints_ID values.<br>";
-
-        // Validate OrientationPoints layer
-        private async Task<string> Check9Async(string propertyKey)
+        private static async Task<List<string>> GetOrientationPointsErrorsAsync()
         {
             List<string> errors = new List<string>();
 
@@ -778,7 +600,7 @@ namespace Geomapmaker.ViewModels.Validation
             if (await General.FeatureLayerExistsAsync("OrientationPoints") == false)
             {
                 // Optional layer. No error if not found
-                return "Skipped";
+                return errors;
             }
             else // Layer was found
             {
@@ -833,39 +655,8 @@ namespace Geomapmaker.ViewModels.Validation
 
             }
 
-            if (errors.Count == 0)
-            {
-                return "Passed";
-            }
-            else
-            {
-                _validationErrors[propertyKey] = _helpers.Helpers.ErrorListToTooltip(errors);
-                RaiseErrorsChanged(propertyKey);
-                return "Failed";
-            }
+            return errors;
         }
 
-        #region Validation
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-
-        public bool HasErrors => _validationErrors.Count > 0;
-
-        private void RaiseErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        public IEnumerable GetErrors(string propertyName)
-        {
-            // Return null if parameters is null/empty OR there are no errors for that parameter
-            // Otherwise, return the errors for that parameter.
-            return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
-                null : (IEnumerable)_validationErrors[propertyName];
-        }
-
-        #endregion
     }
 }
