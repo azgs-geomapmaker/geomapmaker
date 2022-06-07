@@ -22,6 +22,9 @@ namespace Geomapmaker.Data
             // ContactsAndFaults
             undefinedTerms.AddRange(await ContactsAndFaults.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
 
+            // MapUnitPolys
+            undefinedTerms.AddRange(await MapUnitPolys.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+
             return undefinedTerms;
         }
 

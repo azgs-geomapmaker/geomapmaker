@@ -15,6 +15,32 @@ namespace Geomapmaker.Data
     public class MapUnitPolys
     {
         /// <summary>
+        ///  Get undefined terms that must be defined in the Glossary
+        /// </summary>
+        /// <param name="definedTerms">List of defined terms in the glossary</param>
+        /// <returns>List of missing glossary terms</returns>
+        public static async Task<List<UndefinedTerms>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        {
+            List<UndefinedTerms> undefinedTerms = new List<UndefinedTerms>();
+
+            List<string> IdentityConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "IdentityConfidence");
+
+            IEnumerable<string> undefinedType = IdentityConfidenceTerms.Except(definedTerms);
+
+            foreach (string term in undefinedType)
+            {
+                undefinedTerms.Add(new UndefinedTerms()
+                {
+                    DatasetName = "MapUnitPolys",
+                    FieldName = "IdentityConfidence",
+                    Term = term
+                });
+            }
+
+            return undefinedTerms;
+        }
+
+        /// <summary>
         /// Compare the MapUnitPolys layer with the DescriptionOfMapUnits table. Return any MapUnitPolys not defined in DescriptionOfMapUnits. 
         /// </summary>
         /// <returns>List of MapUnits not defined</returns>
