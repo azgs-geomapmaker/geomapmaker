@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using Geomapmaker.Report;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +10,10 @@ namespace Geomapmaker.RibbonElements
     {
         protected override async void OnClick()
         {
+            ProgressDialog progDialog = new ProgressDialog("Building Report");
+
+            progDialog.Show();
+
             GemsReport report = new GemsReport();
 
             report.BuildReport();
@@ -17,7 +22,9 @@ namespace Geomapmaker.RibbonElements
 
             await report.ExportReportAsync(tempFilePath);
 
-            var process = Process.Start(tempFilePath);
+            progDialog.Hide();
+
+            Process process = Process.Start(tempFilePath);
 
             process.Exited += (s, e) => File.Delete(tempFilePath);
         }
