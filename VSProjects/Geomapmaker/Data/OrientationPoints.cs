@@ -7,11 +7,52 @@ using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
     public class OrientationPoints
     {
+        /// <summary>
+        ///  Get undefined terms that must be defined in the Glossary
+        /// </summary>
+        /// <param name="definedTerms">List of defined terms in the glossary</param>
+        /// <returns>List of missing glossary terms</returns>
+        public static async Task<List<UndefinedTerms>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        {
+            List<UndefinedTerms> undefinedTerms = new List<UndefinedTerms>();
+
+            List<string> TypeTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "Type");
+
+            IEnumerable<string> undefinedType = TypeTerms.Except(definedTerms);
+
+            foreach (string term in undefinedType)
+            {
+                undefinedTerms.Add(new UndefinedTerms()
+                {
+                    DatasetName = "OrientationPoints",
+                    FieldName = "Type",
+                    Term = term
+                });
+            }
+
+            List<string> IdentityConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "IdentityConfidence");
+
+            IEnumerable<string> undefinedIdentityConfidence = IdentityConfidenceTerms.Except(definedTerms);
+
+            foreach (string term in undefinedIdentityConfidence)
+            {
+                undefinedTerms.Add(new UndefinedTerms()
+                {
+                    DatasetName = "OrientationPoints",
+                    FieldName = "IdentityConfidence",
+                    Term = term
+                });
+            }
+
+            return undefinedTerms;
+        }
+
         /// <summary>
         /// Rebuild the symbols for the Orientation Points Layer
         /// </summary>

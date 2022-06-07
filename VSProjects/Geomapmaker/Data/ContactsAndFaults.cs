@@ -14,7 +14,6 @@ namespace Geomapmaker.Data
 {
     public class ContactsAndFaults
     {
-
         /// <summary>
         ///  Get undefined terms that must be defined in the Glossary
         /// </summary>

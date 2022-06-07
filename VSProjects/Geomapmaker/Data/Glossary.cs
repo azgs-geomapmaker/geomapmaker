@@ -25,6 +25,9 @@ namespace Geomapmaker.Data
             // MapUnitPolys
             undefinedTerms.AddRange(await MapUnitPolys.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
 
+            // OrientationPoints
+            undefinedTerms.AddRange(await OrientationPoints.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+
             return undefinedTerms;
         }
 
