@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,14 +10,13 @@ namespace Geomapmaker.Data
 {
     public class Glossary
     {
-        public static async Task<Dictionary<string, List<string>>> GetUndefinedGlossaryTerms()
+        public static async Task<List<UndefinedTerms>> GetUndefinedGlossaryTerms()
         {
-            Dictionary<string, List<string>> undefinedTerms = new Dictionary<string, List<string>>();
+            List<UndefinedTerms> undefinedTerms = new List<UndefinedTerms>();
 
             List<string> glossaryTerms = await GetGlossaryTermsAsync();
 
-
-
+            undefinedTerms.AddRange(await DescriptionOfMapUnits.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
 
             return undefinedTerms;
         }

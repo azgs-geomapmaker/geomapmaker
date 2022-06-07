@@ -6,8 +6,7 @@ namespace Geomapmaker
     {
         protected override async void OnClick()
         {
-            var fooooo = await Data.Glossary.GetGlossaryTermsAsync();
-
+            var undefinedTerms = await Data.Glossary.GetUndefinedGlossaryTerms();
         }
     }
 }

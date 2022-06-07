@@ -14,6 +14,46 @@ namespace Geomapmaker.Data
     public class DescriptionOfMapUnits
     {
         /// <summary>
+        /// Get undefined terms that must be defined in the Glossary
+        /// </summary>
+        /// <param name="definedTerms">List of defined terms in the glossary</param>
+        /// <returns>List of missing glossary terms</returns>
+        public static async Task<List<UndefinedTerms>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        {
+            List<UndefinedTerms> undefinedTerms = new List<UndefinedTerms>();
+
+            List<string> ParagraphStyleTerms = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "ParagraphStyle");
+
+            IEnumerable<string> undefinedParagraphStyle = ParagraphStyleTerms.Except(definedTerms);
+
+            foreach (string term in undefinedParagraphStyle)
+            {
+                undefinedTerms.Add(new UndefinedTerms()
+                {
+                    DatasetName = "DescriptionOfMapUnits",
+                    FieldName = "ParagraphStyle",
+                    Term = term
+                });
+            }
+
+            List<string> GeoMaterialConfidenceTerms = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterialConfidence");
+
+            IEnumerable<string> undefinedGeoMaterialConfidenceTerms = GeoMaterialConfidenceTerms.Except(definedTerms);
+
+            foreach (string term in undefinedGeoMaterialConfidenceTerms)
+            {
+                undefinedTerms.Add(new UndefinedTerms()
+                {
+                    DatasetName = "DescriptionOfMapUnits",
+                    FieldName = "GeoMaterialConfidence",
+                    Term = term
+                });
+            }
+
+            return undefinedTerms;
+        }
+
+        /// <summary>
         /// Compare the MapUnitPolys layer with the DescriptionOfMapUnits table. Return any unused MapUnits from DescriptionOfMapUnits. 
         /// </summary>
         /// <returns>List of MapUnits not used</returns>

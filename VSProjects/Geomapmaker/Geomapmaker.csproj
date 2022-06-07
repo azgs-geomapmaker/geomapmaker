@@ -212,6 +212,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Data\ArcGisProject.cs" />
     <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="Models\UndefinedTerms.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />
     <Compile Include="Report\GemsReport.cs" />
     <Compile Include="TestButton.cs" />
