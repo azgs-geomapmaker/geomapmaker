@@ -24,7 +24,6 @@
           <group refID="Geomapmaker_MUPs" />
           <group refID="Geomapmaker_Points" />
           <group refID="Geomapmaker_Tools" />
-          <group refID="Geomapmaker_Testing" />
         </tab>
       </tabs>
       <!-- Groups -->
@@ -52,11 +51,8 @@
         </group>
         <group id="Geomapmaker_Tools" caption="Tools" keytip="todo">
           <button refID="Geomapmaker_RebuildRenderers" />
-          <button refID="Geomapmaker_Validation_Btn" />
-          <button refID="Geomapmaker_Export_Btn" />
-        </group>
-        <group id="Geomapmaker_Testing" caption="Testing" keytip="todo">
           <button refID="Geomapmaker_Report" />
+          <button refID="Geomapmaker_Export_Btn" />
         </group>
       </groups>
       <!-- Controls -->
@@ -114,10 +110,6 @@
             Tooltip text<disabledText /></tooltip>
         </button>
         <button id="Geomapmaker_GeneratePolygons_Btn" caption="Generate Polygons" className="Geomapmaker.ViewModels.GeneratePolygons.ShowGeneratePolygons" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
-          <tooltip heading="Tooltip Heading">
-            Tooltip text<disabledText /></tooltip>
-        </button>
-        <button id="Geomapmaker_Validation_Btn" caption="Validation" className="Geomapmaker.ViewModels.Validation.ShowValidation" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
