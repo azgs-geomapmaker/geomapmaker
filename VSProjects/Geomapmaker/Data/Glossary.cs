@@ -10,6 +10,129 @@ namespace Geomapmaker.Data
 {
     public class Glossary
     {
+        /// <summary>
+        /// Get validation report for table
+        /// </summary>
+        /// <returns>List of Validation results</returns>
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Table exists."},
+                new ValidationRule{ Description="No duplicate tables."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No empty/null values in required fields."},
+                new ValidationRule{ Description="No duplicate ids."},
+                new ValidationRule{ Description="No duplicate terms."},
+
+            };
+
+            if (await General.StandaloneTableExistsAsync("DataSources") == false)
+            {
+                results[0].Status = ValidationStatus.Failed;
+                results[0].Errors.Add("Table not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCount("Glossary");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} tables found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check table for any missing fields 
+                //
+
+                // List of fields to check for
+                List<string> glossaryRequiredFields = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
+
+                // Get list of missing fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Glossary", glossaryRequiredFields);
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+
+                // List of fields that can't have nulls
+                List<string> glossaryNotNUll = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
+
+                // Get the required fields with a null
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("Glossary", glossaryNotNUll);
+                if (fieldsWithMissingValues.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        results[3].Errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for any duplicate ids
+                //
+                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
+                if (duplicateIds.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string id in duplicateIds)
+                    {
+                        results[4].Errors.Add($"Duplicate glossary_id: {id}");
+                    }
+                }
+
+                //
+                // Check for any duplicate terms
+                //
+                List<string> duplicateTerms = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "term");
+                if (duplicateTerms.Count == 0)
+                {
+                    results[5].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[5].Status = ValidationStatus.Failed;
+                    foreach (string term in duplicateTerms)
+                    {
+                        results[5].Errors.Add($"Duplicate term: {term}");
+                    }
+                }
+            }
+
+            return results;
+        }
+
         public static async Task<List<UndefinedTerm>> GetUndefinedGlossaryTerms()
         {
             List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();

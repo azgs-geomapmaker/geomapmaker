@@ -13,8 +13,8 @@ namespace Geomapmaker.Data
             Dictionary<string, List<string>> _validationErrors = new Dictionary<string, List<string>>
             {
                 { "Symbology", new List<string>() },
-                { "DataSources", await GetDataSourcesErrorsAsync() },
-                { "DescriptionOfMapUnits", await GetDescriptionOfMapUnitsErrorsAsync() },
+                //{ "DataSources", await GetDataSourcesErrorsAsync() },
+                //{ "DescriptionOfMapUnits", await GetDescriptionOfMapUnitsErrorsAsync() },
                 { "Glossary", await GetGlossaryErrorsAsync() },
                 { "GeoMaterialDict", await GetGeoMaterialDictErrorsAsync() },
                 { "MapUnitPolys", await GetMapUnitPolysErrorsAsync() },
@@ -26,239 +26,239 @@ namespace Geomapmaker.Data
             return _validationErrors;
         }
 
-        private static async Task<List<string>> GetDataSourcesErrorsAsync()
-        {
-            List<string> errors = new List<string>();
+        //private static async Task<List<string>> GetDataSourcesErrorsAsync()
+        //{
+        //    List<string> errors = new List<string>();
 
-            // Check if the table exists
-            if (await General.StandaloneTableExistsAsync("DataSources") == false)
-            {
-                errors.Add("Table not found: DataSources");
-            }
-            else // Table was found
-            {
-                //
-                // Check for duplicate tables
-                //
-                int tableCount = General.StandaloneTableCount("DataSources");
-                if (tableCount > 1)
-                {
-                    errors.Add($"Multiple DataSources tables");
-                }
+        //    // Check if the table exists
+        //    if (await General.StandaloneTableExistsAsync("DataSources") == false)
+        //    {
+        //        errors.Add("Table not found: DataSources");
+        //    }
+        //    else // Table was found
+        //    {
+        //        //
+        //        // Check for duplicate tables
+        //        //
+        //        int tableCount = General.StandaloneTableCount("DataSources");
+        //        if (tableCount > 1)
+        //        {
+        //            errors.Add($"Multiple DataSources tables");
+        //        }
 
-                //
-                // Check table for any missing fields 
-                //
+        //        //
+        //        // Check table for any missing fields 
+        //        //
 
-                // Required fields for DataSources
-                List<string> dsRequiredFields = new List<string>() { "source", "datasources_id", "url", "notes" };
+        //        // Required fields for DataSources
+        //        List<string> dsRequiredFields = new List<string>() { "source", "datasources_id", "url", "notes" };
 
-                // Get missing required fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DataSources", dsRequiredFields);
-                foreach (string field in missingFields)
-                {
-                    errors.Add($"Field not found: {field}");
-                }
+        //        // Get missing required fields
+        //        List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DataSources", dsRequiredFields);
+        //        foreach (string field in missingFields)
+        //        {
+        //            errors.Add($"Field not found: {field}");
+        //        }
 
-                //
-                // Check for empty/null values in required fields
-                //
-                // List of fields that can't have null values
-                List<string> dsNotNullFields = new List<string>() { "source", "datasources_id" };
-                // Get required fields with a null value
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DataSources", dsNotNullFields);
-                foreach (string field in fieldsWithMissingValues)
-                {
-                    errors.Add($"Null value found in field: {field}");
-                }
+        //        //
+        //        // Check for empty/null values in required fields
+        //        //
+        //        // List of fields that can't have null values
+        //        List<string> dsNotNullFields = new List<string>() { "source", "datasources_id" };
+        //        // Get required fields with a null value
+        //        List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DataSources", dsNotNullFields);
+        //        foreach (string field in fieldsWithMissingValues)
+        //        {
+        //            errors.Add($"Null value found in field: {field}");
+        //        }
 
-                //
-                // Check for any duplicate ids
-                //
-                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
-                foreach (string id in duplicateIds)
-                {
-                    errors.Add($"Duplicate datasources_id: {id}");
-                }
+        //        //
+        //        // Check for any duplicate ids
+        //        //
+        //        List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
+        //        foreach (string id in duplicateIds)
+        //        {
+        //            errors.Add($"Duplicate datasources_id: {id}");
+        //        }
 
-                //
-                // Check for unused data sources
-                //
-                List<string> unusedDataSources = await Data.DataSources.GetUnnecessaryDataSources();
-                foreach (string ds in unusedDataSources)
-                {
-                    errors.Add($"Unused data source: {ds}");
-                }
+        //        //
+        //        // Check for unused data sources
+        //        //
+        //        List<string> unusedDataSources = await Data.DataSources.GetUnnecessaryDataSources();
+        //        foreach (string ds in unusedDataSources)
+        //        {
+        //            errors.Add($"Unused data source: {ds}");
+        //        }
 
-                //
-                // Check for missing data sources
-                //
-                List<string> missingDataSources = await Data.DataSources.GetMissingDataSources();
-                foreach (string ds in missingDataSources)
-                {
-                    errors.Add($"Missing data source: {ds}");
-                }
-            }
+        //        //
+        //        // Check for missing data sources
+        //        //
+        //        List<string> missingDataSources = await Data.DataSources.GetMissingDataSources();
+        //        foreach (string ds in missingDataSources)
+        //        {
+        //            errors.Add($"Missing data source: {ds}");
+        //        }
+        //    }
 
-            return errors;
-        }
+        //    return errors;
+        //}
 
-        private static async Task<List<string>> GetDescriptionOfMapUnitsErrorsAsync()
-        {
-            List<string> errors = new List<string>();
+        //private static async Task<List<string>> GetDescriptionOfMapUnitsErrorsAsync()
+        //{
+        //    List<string> errors = new List<string>();
 
-            // Check if the table exists
-            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits") == false)
-            {
-                errors.Add("Table not found: DescriptionOfMapUnits");
-            }
-            else // Table was found
-            {
-                //
-                // Check for duplicate tables
-                //
-                int tableCount = General.StandaloneTableCount("DescriptionOfMapUnits");
-                if (tableCount > 1)
-                {
-                    errors.Add($"Multiple DescriptionOfMapUnits tables");
-                }
+        //    // Check if the table exists
+        //    if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits") == false)
+        //    {
+        //        errors.Add("Table not found: DescriptionOfMapUnits");
+        //    }
+        //    else // Table was found
+        //    {
+        //        //
+        //        // Check for duplicate tables
+        //        //
+        //        int tableCount = General.StandaloneTableCount("DescriptionOfMapUnits");
+        //        if (tableCount > 1)
+        //        {
+        //            errors.Add($"Multiple DescriptionOfMapUnits tables");
+        //        }
 
-                //
-                // Check table for any missing fields 
-                //
+        //        //
+        //        // Check table for any missing fields 
+        //        //
 
-                // List of required fields to check
-                List<string> dmuRequiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb",
-                                                               "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
+        //        // List of required fields to check
+        //        List<string> dmuRequiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb",
+        //                                                       "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
 
-                // Get misssing required fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", dmuRequiredFields);
-                foreach (string field in missingFields)
-                {
-                    errors.Add($"Field not found: {field}");
-                }
+        //        // Get misssing required fields
+        //        List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", dmuRequiredFields);
+        //        foreach (string field in missingFields)
+        //        {
+        //            errors.Add($"Field not found: {field}");
+        //        }
 
-                //
-                // Check for duplicate mapunit values
-                //
-                List<string> duplicateMapUnits = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
-                foreach (string duplicate in duplicateMapUnits)
-                {
-                    errors.Add($"Duplicate MapUnit value: {duplicate}");
-                }
+        //        //
+        //        // Check for duplicate mapunit values
+        //        //
+        //        List<string> duplicateMapUnits = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
+        //        foreach (string duplicate in duplicateMapUnits)
+        //        {
+        //            errors.Add($"Duplicate MapUnit value: {duplicate}");
+        //        }
 
-                //
-                // Check for duplicate DescriptionOfMapUnits_ID values
-                //
-                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
-                foreach (string id in duplicateIds)
-                {
-                    errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
-                }
+        //        //
+        //        // Check for duplicate DescriptionOfMapUnits_ID values
+        //        //
+        //        List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
+        //        foreach (string id in duplicateIds)
+        //        {
+        //            errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
+        //        }
 
-                //
-                // Check for duplicate name values
-                //
-                List<string> duplicateNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
-                foreach (string name in duplicateNames)
-                {
-                    errors.Add($"Duplicate Name value: {name}");
-                }
+        //        //
+        //        // Check for duplicate name values
+        //        //
+        //        List<string> duplicateNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
+        //        foreach (string name in duplicateNames)
+        //        {
+        //            errors.Add($"Duplicate Name value: {name}");
+        //        }
 
-                //
-                // Check for duplicate fullname values
-                //
-                List<string> duplicateFullNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
-                foreach (string fullName in duplicateFullNames)
-                {
-                    errors.Add($"Duplicate FullName value: {fullName}");
-                }
+        //        //
+        //        // Check for duplicate fullname values
+        //        //
+        //        List<string> duplicateFullNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
+        //        foreach (string fullName in duplicateFullNames)
+        //        {
+        //            errors.Add($"Duplicate FullName value: {fullName}");
+        //        }
 
-                //
-                // Check for duplicate rgb values
-                //
-                List<string> duplicateRGB = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
-                foreach (string rgb in duplicateRGB)
-                {
-                    errors.Add($"Duplicate AreaFillRGB value: {rgb}");
-                }
+        //        //
+        //        // Check for duplicate rgb values
+        //        //
+        //        List<string> duplicateRGB = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
+        //        foreach (string rgb in duplicateRGB)
+        //        {
+        //            errors.Add($"Duplicate AreaFillRGB value: {rgb}");
+        //        }
 
-                //
-                // Check for duplicate hierarchykey values
-                //
-                List<string> duplicateHierarchyKeys = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
-                foreach (string hkey in duplicateHierarchyKeys)
-                {
-                    errors.Add($"Duplicate HierarchyKey value: {hkey}");
-                }
+        //        //
+        //        // Check for duplicate hierarchykey values
+        //        //
+        //        List<string> duplicateHierarchyKeys = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
+        //        foreach (string hkey in duplicateHierarchyKeys)
+        //        {
+        //            errors.Add($"Duplicate HierarchyKey value: {hkey}");
+        //        }
 
-                //
-                // Check for empty/null values in required fields for ALL DMU ROWS
-                //
+        //        //
+        //        // Check for empty/null values in required fields for ALL DMU ROWS
+        //        //
 
-                // DMU fields that can't have nulls
-                List<string> dmuNotNull = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
+        //        // DMU fields that can't have nulls
+        //        List<string> dmuNotNull = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
 
-                // Get required fields with a null value
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", dmuNotNull);
-                foreach (string field in fieldsWithMissingValues)
-                {
-                    errors.Add($"Null value found in field: {field}");
-                }
+        //        // Get required fields with a null value
+        //        List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", dmuNotNull);
+        //        foreach (string field in fieldsWithMissingValues)
+        //        {
+        //            errors.Add($"Null value found in field: {field}");
+        //        }
 
-                //
-                // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
-                //
+        //        //
+        //        // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
+        //        //
 
-                // List of fields that can't be null
-                List<string> mapUnitNotNull = new List<string>() { "mapunit", "fullname", "age", "areafillrgb",
-                                                              "geomaterial", "geomaterialconfidence" };
+        //        // List of fields that can't be null
+        //        List<string> mapUnitNotNull = new List<string>() { "mapunit", "fullname", "age", "areafillrgb",
+        //                                                      "geomaterial", "geomaterialconfidence" };
 
-                // Get required fields with null values. Using the 'MapUnit is not null' where clause to only check MapUnit rows
-                List<string> mapUnitfieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", mapUnitNotNull, "MapUnit IS NOT NULL");
-                foreach (string field in mapUnitfieldsWithMissingValues)
-                {
-                    errors.Add($"Null value found in MapUnit field: {field}");
-                }
+        //        // Get required fields with null values. Using the 'MapUnit is not null' where clause to only check MapUnit rows
+        //        List<string> mapUnitfieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", mapUnitNotNull, "MapUnit IS NOT NULL");
+        //        foreach (string field in mapUnitfieldsWithMissingValues)
+        //        {
+        //            errors.Add($"Null value found in MapUnit field: {field}");
+        //        }
 
-                //
-                // Check for any MapUnits defined in DMU, but not used in MapUnitPolys
-                //
-                List<string> unusedDMU = await DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
-                foreach (string mu in unusedDMU)
-                {
-                    errors.Add($"Unused MapUnit: {mu}");
-                }
+        //        //
+        //        // Check for any MapUnits defined in DMU, but not used in MapUnitPolys
+        //        //
+        //        List<string> unusedDMU = await DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
+        //        foreach (string mu in unusedDMU)
+        //        {
+        //            errors.Add($"Unused MapUnit: {mu}");
+        //        }
 
-                //
-                // Check for HierarchyKey values that don't fit in the tree 
-                //
+        //        //
+        //        // Check for HierarchyKey values that don't fit in the tree 
+        //        //
 
-                // Get the tree and unassigned list
-                Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> tuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
+        //        // Get the tree and unassigned list
+        //        Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> tuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
 
-                // Filter out the null/empty HierarchyKeys from the list of unsassigned rows
-                List<MapUnitTreeItem> unassignedNotNull = tuple.Item2.Where(a => !string.IsNullOrEmpty(a.HierarchyKey)).ToList();
-                foreach (MapUnitTreeItem row in unassignedNotNull)
-                {
-                    errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
-                }
+        //        // Filter out the null/empty HierarchyKeys from the list of unsassigned rows
+        //        List<MapUnitTreeItem> unassignedNotNull = tuple.Item2.Where(a => !string.IsNullOrEmpty(a.HierarchyKey)).ToList();
+        //        foreach (MapUnitTreeItem row in unassignedNotNull)
+        //        {
+        //            errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
+        //        }
 
-                //
-                // GeoMaterial are defined in GeoMaterialDict
-                //
+        //        //
+        //        // GeoMaterial are defined in GeoMaterialDict
+        //        //
 
-                // Get missing GeoMaterials
-                List<string> missingGeoMaterials = await DescriptionOfMapUnits.GetMissingGeoMaterialAsync();
-                foreach (string missing in missingGeoMaterials)
-                {
-                    errors.Add($"GeoMaterial not defined: {missing}");
-                }
+        //        // Get missing GeoMaterials
+        //        List<string> missingGeoMaterials = await DescriptionOfMapUnits.GetMissingGeoMaterialAsync();
+        //        foreach (string missing in missingGeoMaterials)
+        //        {
+        //            errors.Add($"GeoMaterial not defined: {missing}");
+        //        }
 
-            }
+        //    }
 
-            return errors;
-        }
+        //    return errors;
+        //}
 
         private static async Task<List<string>> GetGlossaryErrorsAsync()
         {

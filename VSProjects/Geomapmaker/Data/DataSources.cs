@@ -15,6 +15,10 @@ namespace Geomapmaker.Data
 {
     public class DataSources
     {
+        /// <summary>
+        /// Get validation report for table
+        /// </summary>
+        /// <returns>List of Validation results</returns>
         public static async Task<List<ValidationRule>> GetValidationResultsAsync()
         {
             List<ValidationRule> results = new List<ValidationRule>

@@ -63,6 +63,14 @@ td:last-child {
     margin-right: 20px;
 }
 
+.passed {
+    background-color: #70B865;
+}
+
+.failed {
+    background-color: #fc3c56;
+}
+
 ";
 
         public void BuildReport()
@@ -117,7 +125,8 @@ td:last-child {
             return new XElement("div",
                 new XElement("h2", "Validation"),
                 await GetDataSourceErrorsAsync(),
-                await GetDescriptionOfMapUnitsErrorsAsync()
+                await GetDescriptionOfMapUnitsErrorsAsync(),
+                await GetGlossaryErrorsAsync()
             );
         }
 
@@ -130,7 +139,8 @@ td:last-child {
             return new XElement("div",
                     new XElement("table",
                        new XElement("tr",
-                            new XElement("th", new XAttribute("colspan", "2"), $"DataSources: {(isFailed ? "Failed": "Passed")}")
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"DataSources: {(isFailed ? "Failed": "Passed")}")
                         ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),
@@ -151,8 +161,31 @@ td:last-child {
             return new XElement("div",
                     new XElement("table",
                        new XElement("tr",
-                            new XElement("th", new XAttribute("colspan", "2"), $"DescriptionOfMapUnits: {(isFailed ? "Failed" : "Passed")}")
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"DescriptionOfMapUnits: {(isFailed ? "Failed" : "Passed")}")
+                            ),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
                         ),
+                        ValidationRuleListToHtml(results)
+                    )
+            );
+        }
+
+        private async Task<XElement> GetGlossaryErrorsAsync()
+        {
+            List<ValidationRule> results = await Glossary.GetValidationResultsAsync();
+
+            bool isFailed = results.Any(a => a.Errors.Count != 0);
+
+            return new XElement("div",
+                    new XElement("table",
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"Glossary: {(isFailed ? "Failed" : "Passed")}")
+                            ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),
                             new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
