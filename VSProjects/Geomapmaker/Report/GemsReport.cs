@@ -15,6 +15,7 @@ namespace Geomapmaker.Report
 
         private readonly string css =
 @"
+
 h1, h2 {
     font-family: ""Times New Roman"", Times, serif;
     background-color: lightgray;
@@ -128,7 +129,8 @@ td:last-child {
                 await GetDescriptionOfMapUnitsErrorsAsync(),
                 await GetGlossaryErrorsAsync(),
                 await GetGeoMaterialDictErrorsAsync(),
-                await GetMapUnitPolysErrorsAsync()
+                await GetMapUnitPolysErrorsAsync(),
+                await GetContactsAndFaultsErrorsAsync()
             );
         }
 
@@ -231,6 +233,28 @@ td:last-child {
                        new XElement("tr",
                             new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
                             $"MapUnitPolys: {(isFailed ? "Failed" : "Passed")}")
+                            ),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
+                        ),
+                        ValidationRuleListToHtml(results)
+                    )
+            );
+        }
+
+        private async Task<XElement> GetContactsAndFaultsErrorsAsync()
+        {
+            List<ValidationRule> results = await ContactsAndFaults.GetValidationResultsAsync();
+
+            bool isFailed = results.Any(a => a.Errors.Count != 0);
+
+            return new XElement("div",
+                    new XElement("table",
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"ContactsAndFaults: {(isFailed ? "Failed" : "Passed")}")
                             ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),

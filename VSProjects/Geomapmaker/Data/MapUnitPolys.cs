@@ -15,7 +15,7 @@ namespace Geomapmaker.Data
     public class MapUnitPolys
     {
         /// <summary>
-        /// Get validation report for table
+        /// Get validation report for layer
         /// </summary>
         /// <returns>List of Validation results</returns>
         public static async Task<List<ValidationRule>> GetValidationResultsAsync()

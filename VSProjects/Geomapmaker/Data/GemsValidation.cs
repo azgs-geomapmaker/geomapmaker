@@ -17,7 +17,7 @@ namespace Geomapmaker.Data
                 //{ "DescriptionOfMapUnits", await GetDescriptionOfMapUnitsErrorsAsync() },
                 //{ "Glossary", await GetGlossaryErrorsAsync() },
                 //{ "GeoMaterialDict", await GetGeoMaterialDictErrorsAsync() },
-                { "MapUnitPolys", await GetMapUnitPolysErrorsAsync() },
+                //{ "MapUnitPolys", await GetMapUnitPolysErrorsAsync() },
                 { "ContactsAndFaults", await GetContactsAndFaultsErrorsAsync() },
                 { "Stations", await GetStationsErrorsAsync() },
                 { "OrientationPoints", await GetOrientationPointsErrorsAsync() }
@@ -392,77 +392,77 @@ namespace Geomapmaker.Data
         //    return errors;
         //}
 
-        private static async Task<List<string>> GetMapUnitPolysErrorsAsync()
-        {
-            List<string> errors = new List<string>();
+        //private static async Task<List<string>> GetMapUnitPolysErrorsAsync()
+        //{
+        //    List<string> errors = new List<string>();
 
-            // Check if the layer exists
-            if (await General.FeatureLayerExistsAsync("MapUnitPolys") == false)
-            {
-                errors.Add("Feature layer not found: MapUnitPolys");
-            }
-            else // Layer was found
-            {
-                //
-                // Check for duplicate layers
-                //
-                int layerCount = General.FeatureLayerCount("MapUnitPolys");
-                if (layerCount > 1)
-                {
-                    errors.Add($"Multiple MapUnitPolys layers");
-                }
+        //    // Check if the layer exists
+        //    if (await General.FeatureLayerExistsAsync("MapUnitPolys") == false)
+        //    {
+        //        errors.Add("Feature layer not found: MapUnitPolys");
+        //    }
+        //    else // Layer was found
+        //    {
+        //        //
+        //        // Check for duplicate layers
+        //        //
+        //        int layerCount = General.FeatureLayerCount("MapUnitPolys");
+        //        if (layerCount > 1)
+        //        {
+        //            errors.Add($"Multiple MapUnitPolys layers");
+        //        }
 
-                //
-                // Check layer for any missing fields 
-                //
+        //        //
+        //        // Check layer for any missing fields 
+        //        //
 
-                // List of fields to check for
-                List<string> mupRequiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
-                "mapunitpolys_id" };
+        //        // List of fields to check for
+        //        List<string> mupRequiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
+        //        "mapunitpolys_id" };
 
-                // Get the missing required fields
-                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", mupRequiredFields);
-                foreach (string field in missingFields)
-                {
-                    errors.Add($"Field not found: {field}");
-                }
+        //        // Get the missing required fields
+        //        List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", mupRequiredFields);
+        //        foreach (string field in missingFields)
+        //        {
+        //            errors.Add($"Field not found: {field}");
+        //        }
 
-                //
-                // Check for any missing MapUnit definitions in the DMU
-                //
-                List<string> missingDMU = await Data.MapUnitPolys.GetMapUnitsNotDefinedInDMUTableAsync();
-                foreach (string mu in missingDMU)
-                {
-                    errors.Add($"MapUnit not defined in DMU: {mu}");
-                }
+        //        //
+        //        // Check for any missing MapUnit definitions in the DMU
+        //        //
+        //        List<string> missingDMU = await Data.MapUnitPolys.GetMapUnitsNotDefinedInDMUTableAsync();
+        //        foreach (string mu in missingDMU)
+        //        {
+        //            errors.Add($"MapUnit not defined in DMU: {mu}");
+        //        }
 
-                //
-                // Check for empty/null values in required fields
-                //
+        //        //
+        //        // Check for empty/null values in required fields
+        //        //
 
-                // List of fields to check for null values
-                List<string> mupNotNull = new List<string>() { "mapunit", "identityconfidence", "datasourceid", "mapunitpolys_id" };
+        //        // List of fields to check for null values
+        //        List<string> mupNotNull = new List<string>() { "mapunit", "identityconfidence", "datasourceid", "mapunitpolys_id" };
 
-                // Get required fields with null values
-                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", mupNotNull);
-                foreach (string field in fieldsWithMissingValues)
-                {
-                    errors.Add($"Null value found in field: {field}");
-                }
+        //        // Get required fields with null values
+        //        List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", mupNotNull);
+        //        foreach (string field in fieldsWithMissingValues)
+        //        {
+        //            errors.Add($"Null value found in field: {field}");
+        //        }
 
-                //
-                // Check for duplicate MapUnitPolys_ID values
-                //
-                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
-                foreach (string id in duplicateIds)
-                {
-                    errors.Add($"Duplicate MapUnitPolys_ID value: {id}");
-                }
+        //        //
+        //        // Check for duplicate MapUnitPolys_ID values
+        //        //
+        //        List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
+        //        foreach (string id in duplicateIds)
+        //        {
+        //            errors.Add($"Duplicate MapUnitPolys_ID value: {id}");
+        //        }
 
-            }
+        //    }
 
-            return errors;
-        }
+        //    return errors;
+        //}
 
         private static async Task<List<string>> GetContactsAndFaultsErrorsAsync()
         {

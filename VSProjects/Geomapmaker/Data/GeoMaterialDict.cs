@@ -24,7 +24,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No duplicate tables."},
                 new ValidationRule{ Description="No missing fields."},
                 new ValidationRule{ Description="No empty/null values in required fields."},
-                new ValidationRule{ Description="GeoMaterialDict was modified."},
+                new ValidationRule{ Description="GeoMaterialDict table has not been modified."},
             };
 
             if (await General.StandaloneTableExistsAsync("GeoMaterialDict") == false)
