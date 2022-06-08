@@ -15,7 +15,7 @@ namespace Geomapmaker.Data
                 { "Symbology", new List<string>() },
                 //{ "DataSources", await GetDataSourcesErrorsAsync() },
                 //{ "DescriptionOfMapUnits", await GetDescriptionOfMapUnitsErrorsAsync() },
-                { "Glossary", await GetGlossaryErrorsAsync() },
+                //{ "Glossary", await GetGlossaryErrorsAsync() },
                 { "GeoMaterialDict", await GetGeoMaterialDictErrorsAsync() },
                 { "MapUnitPolys", await GetMapUnitPolysErrorsAsync() },
                 { "ContactsAndFaults", await GetContactsAndFaultsErrorsAsync() },
@@ -260,76 +260,76 @@ namespace Geomapmaker.Data
         //    return errors;
         //}
 
-        private static async Task<List<string>> GetGlossaryErrorsAsync()
-        {
-            List<string> errors = new List<string>();
+        //private static async Task<List<string>> GetGlossaryErrorsAsync()
+        //{
+        //    List<string> errors = new List<string>();
 
-            // Check if the table exists
-            if (await General.StandaloneTableExistsAsync("Glossary") == false)
-            {
-                errors.Add("Table not found: Glossary");
-            }
-            else // Table was found
-            {
-                //
-                // Check for duplicate tables
-                //
-                int tableCount = General.StandaloneTableCount("Glossary");
-                if (tableCount > 1)
-                {
-                    errors.Add($"Multiple Glossary tables");
-                }
+        //    // Check if the table exists
+        //    if (await General.StandaloneTableExistsAsync("Glossary") == false)
+        //    {
+        //        errors.Add("Table not found: Glossary");
+        //    }
+        //    else // Table was found
+        //    {
+        //        //
+        //        // Check for duplicate tables
+        //        //
+        //        int tableCount = General.StandaloneTableCount("Glossary");
+        //        if (tableCount > 1)
+        //        {
+        //            errors.Add($"Multiple Glossary tables");
+        //        }
 
-                //
-                // Check table for any missing fields 
-                //
+        //        //
+        //        // Check table for any missing fields 
+        //        //
 
-                // List of fields to check for
-                List<string> glossaryRequiredFields = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
+        //        // List of fields to check for
+        //        List<string> glossaryRequiredFields = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
 
-                // Get list of missing fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Glossary", glossaryRequiredFields);
-                foreach (string field in missingFields)
-                {
-                    errors.Add($"Field not found: {field}");
-                }
+        //        // Get list of missing fields
+        //        List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Glossary", glossaryRequiredFields);
+        //        foreach (string field in missingFields)
+        //        {
+        //            errors.Add($"Field not found: {field}");
+        //        }
 
-                //
-                // Check for empty/null values in required fields
-                //
+        //        //
+        //        // Check for empty/null values in required fields
+        //        //
 
-                // List of fields that can't have nulls
-                List<string> glossaryNotNUll = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
+        //        // List of fields that can't have nulls
+        //        List<string> glossaryNotNUll = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
 
-                // Get the required fields with a null
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("Glossary", glossaryNotNUll);
-                foreach (string field in fieldsWithMissingValues)
-                {
-                    errors.Add($"Null value found in field: {field}");
-                }
+        //        // Get the required fields with a null
+        //        List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("Glossary", glossaryNotNUll);
+        //        foreach (string field in fieldsWithMissingValues)
+        //        {
+        //            errors.Add($"Null value found in field: {field}");
+        //        }
 
-                //
-                // Check for any duplicate ids
-                //
-                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
-                foreach (string id in duplicateIds)
-                {
-                    errors.Add($"Duplicate glossary_id: {id}");
-                }
+        //        //
+        //        // Check for any duplicate ids
+        //        //
+        //        List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
+        //        foreach (string id in duplicateIds)
+        //        {
+        //            errors.Add($"Duplicate glossary_id: {id}");
+        //        }
 
-                //
-                // Check for any duplicate terms
-                //
-                List<string> duplicateTerms = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "term");
-                foreach (string term in duplicateTerms)
-                {
-                    errors.Add($"Duplicate term: {term}");
-                }
+        //        //
+        //        // Check for any duplicate terms
+        //        //
+        //        List<string> duplicateTerms = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "term");
+        //        foreach (string term in duplicateTerms)
+        //        {
+        //            errors.Add($"Duplicate term: {term}");
+        //        }
 
-            }
+        //    }
 
-            return errors;
-        }
+        //    return errors;
+        //}
 
         private static async Task<List<string>> GetGeoMaterialDictErrorsAsync()
         {

@@ -27,7 +27,7 @@ namespace Geomapmaker.Data
 
             };
 
-            if (await General.StandaloneTableExistsAsync("DataSources") == false)
+            if (await General.StandaloneTableExistsAsync("Glossary") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Table not found");
