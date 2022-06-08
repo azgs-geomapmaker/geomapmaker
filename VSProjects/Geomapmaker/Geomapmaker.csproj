@@ -210,7 +210,6 @@
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Data\ArcGisProject.cs" />
     <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\UndefinedTerms.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />

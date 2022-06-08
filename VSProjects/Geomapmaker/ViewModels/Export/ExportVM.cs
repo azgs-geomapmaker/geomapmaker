@@ -37,7 +37,7 @@ namespace Geomapmaker.ViewModels.Export
         public async void Export()
         {
             // Get the project name
-            string projectName = Data.ArcGisProject.GetName();
+            string projectName = _helpers.Helpers.GetProjectName();
 
             SaveFileDialog dialog = new SaveFileDialog
             {

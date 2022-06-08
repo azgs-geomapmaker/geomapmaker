@@ -55,7 +55,7 @@ table td {
         {
             report = new ReportModel()
             {
-                ProjectName = ArcGisProject.GetName(),
+                ProjectName = _helpers.Helpers.GetProjectName(),
                 ReportDate = DateTime.Today.ToString("D"),
             };
         }
