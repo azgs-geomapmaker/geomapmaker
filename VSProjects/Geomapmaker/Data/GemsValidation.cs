@@ -16,7 +16,7 @@ namespace Geomapmaker.Data
                 //{ "DataSources", await GetDataSourcesErrorsAsync() },
                 //{ "DescriptionOfMapUnits", await GetDescriptionOfMapUnitsErrorsAsync() },
                 //{ "Glossary", await GetGlossaryErrorsAsync() },
-                { "GeoMaterialDict", await GetGeoMaterialDictErrorsAsync() },
+                //{ "GeoMaterialDict", await GetGeoMaterialDictErrorsAsync() },
                 { "MapUnitPolys", await GetMapUnitPolysErrorsAsync() },
                 { "ContactsAndFaults", await GetContactsAndFaultsErrorsAsync() },
                 { "Stations", await GetStationsErrorsAsync() },
@@ -331,66 +331,66 @@ namespace Geomapmaker.Data
         //    return errors;
         //}
 
-        private static async Task<List<string>> GetGeoMaterialDictErrorsAsync()
-        {
-            List<string> errors = new List<string>();
+        //private static async Task<List<string>> GetGeoMaterialDictErrorsAsync()
+        //{
+        //    List<string> errors = new List<string>();
 
-            // Check if the table exists
-            if (await General.StandaloneTableExistsAsync("GeoMaterialDict") == false)
-            {
-                errors.Add("Table not found: GeoMaterialDict");
-            }
-            else // Table was found
-            {
-                //
-                // Check for duplicate tables
-                //
-                int tableCount = General.StandaloneTableCount("GeoMaterialDict");
-                if (tableCount > 1)
-                {
-                    errors.Add($"Multiple GeoMaterialDict tables");
-                }
+        //    // Check if the table exists
+        //    if (await General.StandaloneTableExistsAsync("GeoMaterialDict") == false)
+        //    {
+        //        errors.Add("Table not found: GeoMaterialDict");
+        //    }
+        //    else // Table was found
+        //    {
+        //        //
+        //        // Check for duplicate tables
+        //        //
+        //        int tableCount = General.StandaloneTableCount("GeoMaterialDict");
+        //        if (tableCount > 1)
+        //        {
+        //            errors.Add($"Multiple GeoMaterialDict tables");
+        //        }
 
-                //
-                // Check table for any missing fields 
-                //
+        //        //
+        //        // Check table for any missing fields 
+        //        //
 
-                // List of required fields
-                List<string> geoMaterialRequiredFields = new List<string>() { "hierarchykey", "geomaterial", "indentedname", "definition" };
+        //        // List of required fields
+        //        List<string> geoMaterialRequiredFields = new List<string>() { "hierarchykey", "geomaterial", "indentedname", "definition" };
 
-                // Get list of missing required fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("GeoMaterialDict", geoMaterialRequiredFields);
-                foreach (string field in missingFields)
-                {
-                    errors.Add($"Field not found: {field}");
-                }
+        //        // Get list of missing required fields
+        //        List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("GeoMaterialDict", geoMaterialRequiredFields);
+        //        foreach (string field in missingFields)
+        //        {
+        //            errors.Add($"Field not found: {field}");
+        //        }
 
-                //
-                // Check for empty/null values in required fields
-                //
+        //        //
+        //        // Check for empty/null values in required fields
+        //        //
 
-                // List of fields to check for null values
-                List<string> geoMaterialNotNull = new List<string>() { "hierarchykey", "geomaterial", "indentedname" };
+        //        // List of fields to check for null values
+        //        List<string> geoMaterialNotNull = new List<string>() { "hierarchykey", "geomaterial", "indentedname" };
 
-                // Check the required fields for any missing values.
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("GeoMaterialDict", geoMaterialNotNull);
-                foreach (string field in fieldsWithMissingValues)
-                {
-                    errors.Add($"Null value found in field: {field}");
-                }
+        //        // Check the required fields for any missing values.
+        //        List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("GeoMaterialDict", geoMaterialNotNull);
+        //        foreach (string field in fieldsWithMissingValues)
+        //        {
+        //            errors.Add($"Null value found in field: {field}");
+        //        }
 
-                //
-                // Check if the GeoMaterialDict table was modified
-                //
-                List<string> modifiedGeoMaterials = await GeoMaterialDict.GetModifiedGeoMaterials();
-                foreach (string geomaterial in modifiedGeoMaterials)
-                {
-                    errors.Add($"Geomaterial Modified: {geomaterial}");
-                }
-            }
+        //        //
+        //        // Check if the GeoMaterialDict table was modified
+        //        //
+        //        List<string> modifiedGeoMaterials = await GeoMaterialDict.GetModifiedGeoMaterials();
+        //        foreach (string geomaterial in modifiedGeoMaterials)
+        //        {
+        //            errors.Add($"Geomaterial Modified: {geomaterial}");
+        //        }
+        //    }
 
-            return errors;
-        }
+        //    return errors;
+        //}
 
         private static async Task<List<string>> GetMapUnitPolysErrorsAsync()
         {

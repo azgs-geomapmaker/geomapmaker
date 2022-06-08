@@ -15,6 +15,129 @@ namespace Geomapmaker.Data
     public class MapUnitPolys
     {
         /// <summary>
+        /// Get validation report for table
+        /// </summary>
+        /// <returns>List of Validation results</returns>
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Layer exists."},
+                new ValidationRule{ Description="No duplicate layers."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No missing DescriptionOfMapUnits definitions."},
+                new ValidationRule{ Description="No empty/null values in required fields."},
+                new ValidationRule{ Description="No duplicate MapUnitPolys_ID values."}
+            };
+
+            if (await General.FeatureLayerExistsAsync("MapUnitPolys") == false)
+            {
+                results[0].Status = ValidationStatus.Failed;
+                results[0].Errors.Add("Layer not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate layers
+                //
+                int tableCount = General.FeatureLayerCount("MapUnitPolys");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} layers found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check layer for any missing fields 
+                //
+
+                // List of fields to check for
+                List<string> mupRequiredFields = new List<string>() { "mapunit", "identityconfidence", "label", "symbol", "datasourceid", "notes",
+                "mapunitpolys_id" };
+
+                // Get the missing required fields
+                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", mupRequiredFields);
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for any missing MapUnit definitions in the DMU
+                //
+                List<string> missingDMU = await Data.MapUnitPolys.GetMapUnitsNotDefinedInDMUTableAsync();
+                if (missingDMU.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string mu in missingDMU)
+                    {
+                        results[3].Errors.Add($"MapUnit not defined in DMU: {mu}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+
+                // List of fields to check for null values
+                List<string> mupNotNull = new List<string>() { "mapunit", "identityconfidence", "datasourceid", "mapunitpolys_id" };
+
+                // Get required fields with null values
+                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", mupNotNull);
+                if (fieldsWithMissingValues.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        results[4].Errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for duplicate MapUnitPolys_ID values
+                //
+                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
+                if (duplicateIds.Count == 0)
+                {
+                    results[5].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[5].Status = ValidationStatus.Failed;
+                    foreach (string id in duplicateIds)
+                    {
+                        results[5].Errors.Add($"Duplicate MapUnitPolys_ID value: {id}");
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
         ///  Get undefined terms that must be defined in the Glossary
         /// </summary>
         /// <param name="definedTerms">List of defined terms in the glossary</param>

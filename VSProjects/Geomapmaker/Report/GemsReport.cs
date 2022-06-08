@@ -127,7 +127,8 @@ td:last-child {
                 await GetDataSourceErrorsAsync(),
                 await GetDescriptionOfMapUnitsErrorsAsync(),
                 await GetGlossaryErrorsAsync(),
-                await GetGeoMaterialDictErrorsAsync()
+                await GetGeoMaterialDictErrorsAsync(),
+                await GetMapUnitPolysErrorsAsync()
             );
         }
 
@@ -207,7 +208,29 @@ td:last-child {
                     new XElement("table",
                        new XElement("tr",
                             new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
-                            $"Glossary: {(isFailed ? "Failed" : "Passed")}")
+                            $"GeoMaterialDict: {(isFailed ? "Failed" : "Passed")}")
+                            ),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
+                        ),
+                        ValidationRuleListToHtml(results)
+                    )
+            );
+        }
+
+        private async Task<XElement> GetMapUnitPolysErrorsAsync()
+        {
+            List<ValidationRule> results = await MapUnitPolys.GetValidationResultsAsync();
+
+            bool isFailed = results.Any(a => a.Errors.Count != 0);
+
+            return new XElement("div",
+                    new XElement("table",
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"MapUnitPolys: {(isFailed ? "Failed" : "Passed")}")
                             ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),
