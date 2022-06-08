@@ -1,6 +1,6 @@
 ﻿namespace Geomapmaker.Models
 {
-    public class UndefinedTerms
+    public class UndefinedTerm
     {
         public string DatasetName { get; set; }
 

@@ -10,9 +10,9 @@ namespace Geomapmaker.Data
 {
     public class Glossary
     {
-        public static async Task<List<UndefinedTerms>> GetUndefinedGlossaryTerms()
+        public static async Task<List<UndefinedTerm>> GetUndefinedGlossaryTerms()
         {
-            List<UndefinedTerms> undefinedTerms = new List<UndefinedTerms>();
+            List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
 
             List<string> glossaryTerms = await GetGlossaryTermsAsync();
 

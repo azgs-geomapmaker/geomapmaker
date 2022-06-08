@@ -211,7 +211,7 @@
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\ReportModel.cs" />
-    <Compile Include="Models\UndefinedTerms.cs" />
+    <Compile Include="Models\UndefinedTerm.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />
     <Compile Include="Report\GemsReport.cs" />
     <Compile Include="TestButton.cs" />

@@ -18,9 +18,9 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <param name="definedTerms">List of defined terms in the glossary</param>
         /// <returns>List of missing glossary terms</returns>
-        public static async Task<List<UndefinedTerms>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        public static async Task<List<UndefinedTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
         {
-            List<UndefinedTerms> undefinedTerms = new List<UndefinedTerms>();
+            List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
 
             List<string> TypeTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "Type");
 
@@ -28,7 +28,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedType)
             {
-                undefinedTerms.Add(new UndefinedTerms()
+                undefinedTerms.Add(new UndefinedTerm()
                 {
                     DatasetName = "OrientationPoints",
                     FieldName = "Type",
@@ -42,7 +42,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedIdentityConfidence)
             {
-                undefinedTerms.Add(new UndefinedTerms()
+                undefinedTerms.Add(new UndefinedTerm()
                 {
                     DatasetName = "OrientationPoints",
                     FieldName = "IdentityConfidence",
