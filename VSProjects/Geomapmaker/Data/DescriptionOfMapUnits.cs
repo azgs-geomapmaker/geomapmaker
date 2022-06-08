@@ -13,6 +13,279 @@ namespace Geomapmaker.Data
 {
     public class DescriptionOfMapUnits
     {
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Table exists."},
+                new ValidationRule{ Description="No duplicate tables."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No duplicate MapUnit values."},
+                new ValidationRule{ Description="No duplicate DescriptionOfMapUnits_ID values."},
+                new ValidationRule{ Description="No duplicate Name values."},
+                new ValidationRule{ Description="No duplicate FullName values."},
+                new ValidationRule{ Description="No duplicate AreaFillRGB values."},
+                new ValidationRule{ Description="No duplicate HierarchyKey values."},
+                new ValidationRule{ Description="No bad HierarchyKey values."},
+                new ValidationRule{ Description="No empty/null values in required fields (All Rows)."},
+                new ValidationRule{ Description="No empty/null values in required fields (MapUnits)."},
+                new ValidationRule{ Description="No unused MapUnits."},
+                new ValidationRule{ Description="GeoMaterial are defined in GeoMaterialDict"},
+            };
+
+            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits") == false)
+            {
+                results[0].Status = ValidationStatus.Failed;
+                results[0].Errors.Add("Table not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCount("DescriptionOfMapUnits");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} tables found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check table for any missing fields 
+                //
+
+                // List of required fields to check
+                List<string> dmuRequiredFields = new List<string>() { "mapunit", "name", "fullname", "age", "description", "hierarchykey", "paragraphstyle", "label", "symbol", "areafillrgb",
+                                                               "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
+
+                // Get misssing required fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", dmuRequiredFields);
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for duplicate mapunit values
+                //
+                List<string> duplicateMapUnits = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
+                if (duplicateMapUnits.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string duplicate in duplicateMapUnits)
+                    {
+                        results[3].Errors.Add($"Duplicate MapUnit value: {duplicate}");
+                    }
+                }
+
+                //
+                // Check for duplicate DescriptionOfMapUnits_ID values
+                //
+                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
+                if (duplicateIds.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string id in duplicateIds)
+                    {
+                        results[4].Errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
+                    }
+                }
+
+                //
+                // Check for duplicate name values
+                //
+                List<string> duplicateNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
+                if (duplicateNames.Count == 0)
+                {
+                    results[5].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[5].Status = ValidationStatus.Failed;
+                    foreach (string name in duplicateNames)
+                    {
+                        results[5].Errors.Add($"Duplicate Name value: {name}");
+                    }
+                }
+
+                //
+                // Check for duplicate fullname values
+                //
+                List<string> duplicateFullNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
+                if (duplicateFullNames.Count == 0)
+                {
+                    results[6].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[6].Status = ValidationStatus.Failed;
+                    foreach (string fullName in duplicateFullNames)
+                    {
+                        results[6].Errors.Add($"Duplicate FullName value: {fullName}");
+                    }
+                }
+
+                //
+                // Check for duplicate rgb values
+                //
+                List<string> duplicateRGB = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
+                if (duplicateRGB.Count == 0)
+                {
+                    results[7].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[7].Status = ValidationStatus.Failed;
+                    foreach (string rgb in duplicateRGB)
+                    {
+                        results[7].Errors.Add($"Duplicate AreaFillRGB value: {rgb}");
+                    }
+                }
+
+                //
+                // Check for duplicate hierarchykey values
+                //
+                List<string> duplicateHierarchyKeys = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
+                if (duplicateHierarchyKeys.Count == 0)
+                {
+                    results[8].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[8].Status = ValidationStatus.Failed;
+                    foreach (string hkey in duplicateHierarchyKeys)
+                    {
+                        results[8].Errors.Add($"Duplicate HierarchyKey value: {hkey}");
+                    }
+                }
+
+                //
+                // Check for HierarchyKey values that don't fit in the tree 
+                //
+                // Get the tree and unassigned list
+                Tuple<List<MapUnitTreeItem>, List<MapUnitTreeItem>> tuple = await Data.DescriptionOfMapUnits.GetHierarchyTreeAsync();
+
+                // Filter out the null/empty HierarchyKeys from the list of unsassigned rows
+                List<MapUnitTreeItem> unassignedNotNull = tuple.Item2.Where(a => !string.IsNullOrEmpty(a.HierarchyKey)).ToList();
+                if (unassignedNotNull.Count == 0)
+                {
+                    results[9].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[9].Status = ValidationStatus.Failed;
+                    foreach (MapUnitTreeItem row in unassignedNotNull)
+                    {
+                        results[9].Errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields for ALL DMU ROWS
+                //
+                // DMU fields that can't have nulls
+                List<string> dmuNotNull = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
+
+                // Get required fields with a null value
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", dmuNotNull);
+                if (fieldsWithMissingValues.Count == 0)
+                {
+                    results[10].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[10].Status = ValidationStatus.Failed;
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        results[10].Errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields for MAPUNIT dmu rows (not headings)
+                //
+                // List of fields that can't be null
+                List<string> mapUnitNotNull = new List<string>() { "mapunit", "fullname", "age", "areafillrgb",
+                                                              "geomaterial", "geomaterialconfidence" };
+
+                // Get required fields with null values. Using the 'MapUnit is not null' where clause to only check MapUnit rows
+                List<string> mapUnitfieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", mapUnitNotNull, "MapUnit IS NOT NULL");
+                if (mapUnitfieldsWithMissingValues.Count == 0)
+                {
+                    results[11].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[11].Status = ValidationStatus.Failed;
+                    foreach (string field in mapUnitfieldsWithMissingValues)
+                    {
+                        results[11].Errors.Add($"Null value found in MapUnit field: {field}");
+                    }
+                }
+
+                //
+                // Check for any MapUnits defined in DMU, but not used in MapUnitPolys
+                //
+                List<string> unusedDMU = await DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
+                if (unusedDMU.Count == 0)
+                {
+                    results[12].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[12].Status = ValidationStatus.Failed;
+                    foreach (string mu in unusedDMU)
+                    {
+                        results[12].Errors.Add($"Unused MapUnit: {mu}");
+                    }
+                }
+
+                //
+                // GeoMaterial are defined in GeoMaterialDict
+                //
+
+                // Get missing GeoMaterials
+                List<string> missingGeoMaterials = await DescriptionOfMapUnits.GetMissingGeoMaterialAsync();
+                if (missingGeoMaterials.Count == 0)
+                {
+                    results[13].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[13].Status = ValidationStatus.Failed;
+                    foreach (string missing in missingGeoMaterials)
+                    {
+                        results[13].Errors.Add($"GeoMaterial not defined: {missing}");
+                    }
+                }
+            }
+
+            return results;
+        }
+
         /// <summary>
         /// Get undefined terms that must be defined in the Glossary
         /// </summary>

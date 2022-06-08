@@ -37,6 +37,7 @@ table {
 table,
 th,
 td {
+    margin-top: 20px;
     border: 1px solid gray;
     border-collapse: collapse;
     padding: 3px;
@@ -115,7 +116,8 @@ td:last-child {
         {
             return new XElement("div",
                 new XElement("h2", "Validation"),
-                await GetDataSourceErrorsAsync()
+                await GetDataSourceErrorsAsync(),
+                await GetDescriptionOfMapUnitsErrorsAsync()
             );
         }
 
@@ -129,6 +131,27 @@ td:last-child {
                     new XElement("table",
                        new XElement("tr",
                             new XElement("th", new XAttribute("colspan", "2"), $"DataSources: {(isFailed ? "Failed": "Passed")}")
+                        ),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
+                        ),
+                        ValidationRuleListToHtml(results)
+                    )
+            );
+        }
+
+        private async Task<XElement> GetDescriptionOfMapUnitsErrorsAsync()
+        {
+            List<ValidationRule> results = await DescriptionOfMapUnits.GetValidationResultsAsync();
+
+            bool isFailed = results.Any(a => a.Errors.Count != 0);
+
+            return new XElement("div",
+                    new XElement("table",
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), $"DescriptionOfMapUnits: {(isFailed ? "Failed" : "Passed")}")
                         ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),
