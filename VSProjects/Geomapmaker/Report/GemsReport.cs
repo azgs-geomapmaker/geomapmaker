@@ -3,6 +3,7 @@ using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -14,25 +15,23 @@ namespace Geomapmaker.Report
 
         private readonly string css =
 @"
-h1 {font-size: 1.5em; font-weight: bold;}
+h1, h2 {
+    font-family: ""Times New Roman"", Times, serif;
+    background-color: lightgray;
+    padding: 5px;
+    border-radius: 4px;
+    text-align: center;
+}
 
-h1, h2 {background-color: lightgray; padding: 5px; border-radius: 4px; font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; , sans-serif; text-align: center;}
+h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
 
 table {
     margin-left: auto;
     margin-right: auto;
     width: 80%;
-}
-
-table td:first-child {
-    text-align: center;
-    width: 200px;
-}
-
-table th {
-    height: 50px;
-    background-color: #1E5288;
-    color: white;
 }
 
 table,
@@ -47,7 +46,21 @@ table td {
     vertical-align: top;
 }
 
-.info {font-family: Courier New, Courier, monospace; margin-left: 20px; margin-right: 20px;}
+td:last-child {
+    font-weight: bold;
+    text-align: right;
+}
+
+.tableHeader {
+    background-color: #1E5288;
+    color: white;
+}
+
+.info {
+    font-family: ""Courier New"", Courier, monospace;
+    margin-left: 20px;
+    margin-right: 20px;
+}
 
 ";
 
@@ -74,8 +87,7 @@ table td {
                    ),
                    GetHeader(),
                    GetInformation(),
-                   await GetGemsErrorsAsync(),
-                   await GetGeomapmakerErrorsAsync()
+                   await GetValidationAsync()
                )
             );
 
@@ -87,7 +99,7 @@ table td {
         private XElement GetHeader()
         {
             return new XElement("h1",
-                "GeMS validation of " + report.ProjectName
+                "GeMS report of " + report.ProjectName
             );
         }
 
@@ -99,131 +111,78 @@ table td {
             );
         }
 
-        private async Task<XElement> GetGemsErrorsAsync()
+        private async Task<XElement> GetValidationAsync()
         {
-            Dictionary<string, List<string>> errors = await GemsValidation.GetErrorsAsync();
+            return new XElement("div",
+                new XElement("h2", "Validation"),
+                await GetDataSourceErrorsAsync()
+            );
+        }
+
+        private async Task<XElement> GetDataSourceErrorsAsync()
+        {
+            List<ValidationRule> results = await DataSources.GetValidationResultsAsync();
+
+            bool isFailed = results.Any(a => a.Errors.Count != 0);
 
             return new XElement("div",
-                    new XElement("h2",
-                        "GeMs Validation"
-                    ),
                     new XElement("table",
-                        new XElement("tr",
-                            new XElement("th", "Dataset"),
-                            new XElement("th", new XAttribute("style", "text-align: right;"), "Errors")
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), $"DataSources: {(isFailed ? "Failed": "Passed")}")
                         ),
                         new XElement("tr",
-                            new XElement("td", "Symbology"),
-                            new XElement("td", ErrorListToHtml(errors["Symbology"]))
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
                         ),
-                        new XElement("tr",
-                            new XElement("td", "DataSources"),
-                            new XElement("td", ErrorListToHtml(errors["DataSources"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "DescriptionOfMapUnits"),
-                            new XElement("td", ErrorListToHtml(errors["DescriptionOfMapUnits"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "Glossary"),
-                            new XElement("td", ErrorListToHtml(errors["Glossary"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "GeoMaterialDict"),
-                            new XElement("td", ErrorListToHtml(errors["GeoMaterialDict"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "MapUnitPolys"),
-                            new XElement("td", ErrorListToHtml(errors["MapUnitPolys"]))
-                        ),
-                         new XElement("tr",
-                            new XElement("td", "ContactsAndFaults"),
-                            new XElement("td", ErrorListToHtml(errors["ContactsAndFaults"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "Stations"),
-                            new XElement("td", ErrorListToHtml(errors["Stations"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "OrientationPoints"),
-                            new XElement("td", ErrorListToHtml(errors["OrientationPoints"]))
-                        )
+                        ValidationRuleListToHtml(results)
                     )
             );
         }
 
-        private async Task<XElement> GetGeomapmakerErrorsAsync()
-        {
-            Dictionary<string, List<string>> errors = await GeomapmakerValidation.GetErrorsAsync();
-
-            return new XElement("div",
-                    new XElement("h2",
-                        "Geomapmaker Validation"
-                    ),
-                    new XElement("table",
-                        new XElement("tr",
-                            new XElement("th", "Dataset"),
-                            new XElement("th", new XAttribute("style", "text-align: right;"), "Errors")
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "Symbology"),
-                            new XElement("td", ErrorListToHtml(errors["Symbology"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "DataSources"),
-                            new XElement("td", ErrorListToHtml(errors["DataSources"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "DescriptionOfMapUnits"),
-                            new XElement("td", ErrorListToHtml(errors["DescriptionOfMapUnits"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "Glossary"),
-                            new XElement("td", ErrorListToHtml(errors["Glossary"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "GeoMaterialDict"),
-                            new XElement("td", ErrorListToHtml(errors["GeoMaterialDict"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "MapUnitPolys"),
-                            new XElement("td", ErrorListToHtml(errors["MapUnitPolys"]))
-                        ),
-                         new XElement("tr",
-                            new XElement("td", "ContactsAndFaults"),
-                            new XElement("td", ErrorListToHtml(errors["ContactsAndFaults"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "Stations"),
-                            new XElement("td", ErrorListToHtml(errors["Stations"]))
-                        ),
-                        new XElement("tr",
-                            new XElement("td", "OrientationPoints"),
-                            new XElement("td", ErrorListToHtml(errors["OrientationPoints"]))
-                        )
-                    )
-            );
-        }
-
-        private List<XElement> ErrorListToHtml(List<string> errorList)
+        private List<XElement> ValidationRuleListToHtml(List<ValidationRule> results)
         {
             List<XElement> list = new List<XElement>();
 
-            if (errorList.Count == 0)
+            foreach (ValidationRule result in results)
             {
-                list.Add(new XElement("div", new XAttribute("style", "font-weight: bold; text-align: right;"), "Passed"));
-            }
-            else
-            {
-                foreach (string error in errorList)
+                if (result.Status == ValidationStatus.Skipped)
                 {
-                    list.Add(new XElement("div", new XAttribute("style", "color: red; text-align: right;"), error));
+                    list.Add(new XElement("tr",
+                        new XElement("td", result.Description),
+                        new XElement("td", "Skipped")
+                    ));
+                }
+                else if (result.Status == ValidationStatus.Passed)
+                {
+                    list.Add(new XElement("tr",
+                        new XElement("td", result.Description),
+                        new XElement("td", "Passed")
+                    ));
+                }
+                else
+                {
+                    list.Add(new XElement("tr",
+                        new XElement("td", result.Description),
+                            new XElement("td", ErrorListToHtml(result.Errors))
+                        )
+                    );
                 }
             }
 
             return list;
         }
 
-    }
+        private List<XElement> ErrorListToHtml(List<string> errorList)
+        {
+            List<XElement> list = new List<XElement>();
 
+            foreach (string error in errorList)
+            {
+                list.Add(new XElement("div", new XAttribute("style", "color: red;"), error));
+            }
+
+            return list;
+        }
+    }
 }
