@@ -53,22 +53,26 @@ td:last-child {
     text-align: right;
 }
 
-.tableHeader {
-    background-color: #1E5288;
-    color: white;
-}
-
 .info {
     font-family: ""Courier New"", Courier, monospace;
     margin-left: 20px;
     margin-right: 20px;
 }
 
+.tableHeader {
+    background-color: #1E5288;
+    color: white;
+}
+
 .passed {
+    height: 40px;
+    font-size: 1.25em;
     background-color: #70B865;
 }
 
 .failed {
+    height: 40px;
+    font-size: 1.25em;
     background-color: #fc3c56;
 }
 
@@ -130,7 +134,8 @@ td:last-child {
                 await GetGlossaryErrorsAsync(),
                 await GetGeoMaterialDictErrorsAsync(),
                 await GetMapUnitPolysErrorsAsync(),
-                await GetContactsAndFaultsErrorsAsync()
+                await GetContactsAndFaultsErrorsAsync(),
+                await GetStationsErrorsAsync()
             );
         }
 
@@ -138,13 +143,13 @@ td:last-child {
         {
             List<ValidationRule> results = await DataSources.GetValidationResultsAsync();
 
-            bool isFailed = results.Any(a => a.Errors.Count != 0);
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
 
             return new XElement("div",
                     new XElement("table",
                        new XElement("tr",
                             new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
-                            $"DataSources: {(isFailed ? "Failed": "Passed")}")
+                            $"DataSources: {(isFailed ? "Failed" : "Passed")}")
                         ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),
@@ -160,7 +165,7 @@ td:last-child {
         {
             List<ValidationRule> results = await DescriptionOfMapUnits.GetValidationResultsAsync();
 
-            bool isFailed = results.Any(a => a.Errors.Count != 0);
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
 
             return new XElement("div",
                     new XElement("table",
@@ -182,7 +187,7 @@ td:last-child {
         {
             List<ValidationRule> results = await Glossary.GetValidationResultsAsync();
 
-            bool isFailed = results.Any(a => a.Errors.Count != 0);
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
 
             return new XElement("div",
                     new XElement("table",
@@ -204,7 +209,7 @@ td:last-child {
         {
             List<ValidationRule> results = await GeoMaterialDict.GetValidationResultsAsync();
 
-            bool isFailed = results.Any(a => a.Errors.Count != 0);
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
 
             return new XElement("div",
                     new XElement("table",
@@ -226,7 +231,7 @@ td:last-child {
         {
             List<ValidationRule> results = await MapUnitPolys.GetValidationResultsAsync();
 
-            bool isFailed = results.Any(a => a.Errors.Count != 0);
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
 
             return new XElement("div",
                     new XElement("table",
@@ -248,13 +253,48 @@ td:last-child {
         {
             List<ValidationRule> results = await ContactsAndFaults.GetValidationResultsAsync();
 
-            bool isFailed = results.Any(a => a.Errors.Count != 0);
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
 
             return new XElement("div",
                     new XElement("table",
                        new XElement("tr",
                             new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
                             $"ContactsAndFaults: {(isFailed ? "Failed" : "Passed")}")
+                            ),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
+                        ),
+                        ValidationRuleListToHtml(results)
+                    )
+            );
+        }
+
+        private async Task<XElement> GetStationsErrorsAsync()
+        {
+            List<ValidationRule> results = await Stations.GetValidationResultsAsync();
+
+            bool isSkipped = results.All(a => a.Status == ValidationStatus.Skipped);
+
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
+
+            string result = "Passed";
+
+            if (isSkipped)
+            {
+                result = "Skipped";
+            }
+            else if (isFailed)
+            {
+                result = "Failed";
+            }
+
+            return new XElement("div",
+                    new XElement("table",
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"Stations: {result}")
                             ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),

@@ -18,7 +18,7 @@ namespace Geomapmaker.Data
                 //{ "Glossary", await GetGlossaryErrorsAsync() },
                 //{ "GeoMaterialDict", await GetGeoMaterialDictErrorsAsync() },
                 //{ "MapUnitPolys", await GetMapUnitPolysErrorsAsync() },
-                { "ContactsAndFaults", await GetContactsAndFaultsErrorsAsync() },
+                //{ "ContactsAndFaults", await GetContactsAndFaultsErrorsAsync() },
                 { "Stations", await GetStationsErrorsAsync() },
                 { "OrientationPoints", await GetOrientationPointsErrorsAsync() }
             };
@@ -464,69 +464,69 @@ namespace Geomapmaker.Data
         //    return errors;
         //}
 
-        private static async Task<List<string>> GetContactsAndFaultsErrorsAsync()
-        {
-            List<string> errors = new List<string>();
+        //private static async Task<List<string>> GetContactsAndFaultsErrorsAsync()
+        //{
+        //    List<string> errors = new List<string>();
 
-            // Check if the layer exists
-            if (await General.FeatureLayerExistsAsync("ContactsAndFaults") == false)
-            {
-                errors.Add("Feature layer not found: ContactsAndFaults");
-            }
-            else // Layer was found
-            {
-                //
-                // Check for duplicate layers
-                //
-                int layerCount = General.FeatureLayerCount("ContactsAndFaults");
-                if (layerCount > 1)
-                {
-                    errors.Add($"Multiple ContactsAndFaults layers");
-                }
+        //    // Check if the layer exists
+        //    if (await General.FeatureLayerExistsAsync("ContactsAndFaults") == false)
+        //    {
+        //        errors.Add("Feature layer not found: ContactsAndFaults");
+        //    }
+        //    else // Layer was found
+        //    {
+        //        //
+        //        // Check for duplicate layers
+        //        //
+        //        int layerCount = General.FeatureLayerCount("ContactsAndFaults");
+        //        if (layerCount > 1)
+        //        {
+        //            errors.Add($"Multiple ContactsAndFaults layers");
+        //        }
 
-                //
-                // Check layer for any missing fields 
-                //
-                List<string> cfRequiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
-                "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id" };
+        //        //
+        //        // Check layer for any missing fields 
+        //        //
+        //        List<string> cfRequiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
+        //        "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id" };
 
-                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("ContactsAndFaults", cfRequiredFields);
-                foreach (string field in missingFields)
-                {
-                    errors.Add($"Field not found: {field}");
-                }
+        //        List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("ContactsAndFaults", cfRequiredFields);
+        //        foreach (string field in missingFields)
+        //        {
+        //            errors.Add($"Field not found: {field}");
+        //        }
 
-                //
-                // Check for empty/null values in required fields
-                //
-                List<string> cfNotNullFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence", "identityconfidence", "datasourceid", "contactsandfaults_id" };
-                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("ContactsAndFaults", cfNotNullFields);
-                foreach (string field in fieldsWithMissingValues)
-                {
-                    errors.Add($"Null value found in field: {field}");
-                }
+        //        //
+        //        // Check for empty/null values in required fields
+        //        //
+        //        List<string> cfNotNullFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence", "identityconfidence", "datasourceid", "contactsandfaults_id" };
+        //        List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("ContactsAndFaults", cfNotNullFields);
+        //        foreach (string field in fieldsWithMissingValues)
+        //        {
+        //            errors.Add($"Null value found in field: {field}");
+        //        }
 
-                //
-                // Check for duplicate Label values
-                //
-                List<string> duplicateLabels = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
-                foreach (string label in duplicateLabels)
-                {
-                    errors.Add($"Duplicate Label value: {label}");
-                }
+        //        //
+        //        // Check for duplicate Label values
+        //        //
+        //        List<string> duplicateLabels = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
+        //        foreach (string label in duplicateLabels)
+        //        {
+        //            errors.Add($"Duplicate Label value: {label}");
+        //        }
 
-                //
-                // Check for duplicate ContactsAndFaults_ID values
-                //
-                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
-                foreach (string id in duplicateIds)
-                {
-                    errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
-                }
-            }
+        //        //
+        //        // Check for duplicate ContactsAndFaults_ID values
+        //        //
+        //        List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
+        //        foreach (string id in duplicateIds)
+        //        {
+        //            errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
+        //        }
+        //    }
 
-            return errors;
-        }
+        //    return errors;
+        //}
 
         private static async Task<List<string>> GetStationsErrorsAsync()
         {
