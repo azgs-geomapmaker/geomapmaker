@@ -24,13 +24,13 @@
           <group refID="Geomapmaker_MUPs" />
           <group refID="Geomapmaker_Points" />
           <group refID="Geomapmaker_Tools" />
+          <group refID="Geomapmaker_Test" />
         </tab>
       </tabs>
       <!-- Groups -->
       <groups>
         <group id="Geomapmaker_Admin" caption="Admin" keytip="A">
           <comboBox refID="Geomapmaker_DataSourceComboBox" />
-          <button refID="Geomapmaker_TestButton" size="large" />
         </group>
         <group id="Geomapmaker_Tables" caption="Standalone Tables" keytip="DS">
           <button refID="Geomapmaker_DataSources" />
@@ -54,6 +54,9 @@
           <button refID="Geomapmaker_RebuildRenderers" />
           <button refID="Geomapmaker_Report" />
           <button refID="Geomapmaker_Export_Btn" />
+        </group>
+        <group id="Geomapmaker_Test" caption="Test" keytip="todo">
+          <button refID="Geomapmaker_TestButton" />
         </group>
       </groups>
       <!-- Controls -->
@@ -129,7 +132,7 @@
         <button id="Geomapmaker_Report" caption="Report" className="Geomapmaker.RibbonElements.ReportButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_TestButton" caption="TestButton" className="TestButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png">
+        <button id="Geomapmaker_TestButton" caption="Test Button" className="TestButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
