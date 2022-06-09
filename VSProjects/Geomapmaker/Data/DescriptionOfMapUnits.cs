@@ -20,6 +20,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="Table exists."},
                 new ValidationRule{ Description="No duplicate tables."},
                 new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No missing toolbar fields."},
                 new ValidationRule{ Description="No duplicate MapUnit values."},
                 new ValidationRule{ Description="No duplicate DescriptionOfMapUnits_ID values."},
                 new ValidationRule{ Description="No duplicate Name values."},
@@ -81,19 +82,40 @@ namespace Geomapmaker.Data
                 }
 
                 //
-                // Check for duplicate mapunit values
+                // Check table for missing toolbar fields
                 //
-                List<string> duplicateMapUnits = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
-                if (duplicateMapUnits.Count == 0)
+                // List of required fields to check
+                List<string> toolbarRequiredFields = new List<string>() { "relativeage", "hexcolor" };
+
+                // Get misssing required fields
+                List<string> toolbarMissingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", toolbarRequiredFields);
+                if (toolbarMissingFields.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
                 }
                 else
                 {
                     results[3].Status = ValidationStatus.Failed;
+                    foreach (string field in toolbarMissingFields)
+                    {
+                        results[3].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for duplicate mapunit values
+                //
+                List<string> duplicateMapUnits = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
+                if (duplicateMapUnits.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
                     foreach (string duplicate in duplicateMapUnits)
                     {
-                        results[3].Errors.Add($"Duplicate MapUnit value: {duplicate}");
+                        results[4].Errors.Add($"Duplicate MapUnit value: {duplicate}");
                     }
                 }
 
@@ -103,14 +125,14 @@ namespace Geomapmaker.Data
                 List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
                 if (duplicateIds.Count == 0)
                 {
-                    results[4].Status = ValidationStatus.Passed;
+                    results[5].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[4].Status = ValidationStatus.Failed;
+                    results[5].Status = ValidationStatus.Failed;
                     foreach (string id in duplicateIds)
                     {
-                        results[4].Errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
+                        results[5].Errors.Add($"Duplicate DescriptionOfMapUnits_ID value: {id}");
                     }
                 }
 
@@ -120,14 +142,14 @@ namespace Geomapmaker.Data
                 List<string> duplicateNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
                 if (duplicateNames.Count == 0)
                 {
-                    results[5].Status = ValidationStatus.Passed;
+                    results[6].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[5].Status = ValidationStatus.Failed;
+                    results[6].Status = ValidationStatus.Failed;
                     foreach (string name in duplicateNames)
                     {
-                        results[5].Errors.Add($"Duplicate Name value: {name}");
+                        results[6].Errors.Add($"Duplicate Name value: {name}");
                     }
                 }
 
@@ -137,14 +159,14 @@ namespace Geomapmaker.Data
                 List<string> duplicateFullNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
                 if (duplicateFullNames.Count == 0)
                 {
-                    results[6].Status = ValidationStatus.Passed;
+                    results[7].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[6].Status = ValidationStatus.Failed;
+                    results[7].Status = ValidationStatus.Failed;
                     foreach (string fullName in duplicateFullNames)
                     {
-                        results[6].Errors.Add($"Duplicate FullName value: {fullName}");
+                        results[7].Errors.Add($"Duplicate FullName value: {fullName}");
                     }
                 }
 
@@ -154,14 +176,14 @@ namespace Geomapmaker.Data
                 List<string> duplicateRGB = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
                 if (duplicateRGB.Count == 0)
                 {
-                    results[7].Status = ValidationStatus.Passed;
+                    results[8].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[7].Status = ValidationStatus.Failed;
+                    results[8].Status = ValidationStatus.Failed;
                     foreach (string rgb in duplicateRGB)
                     {
-                        results[7].Errors.Add($"Duplicate AreaFillRGB value: {rgb}");
+                        results[8].Errors.Add($"Duplicate AreaFillRGB value: {rgb}");
                     }
                 }
 
@@ -171,14 +193,14 @@ namespace Geomapmaker.Data
                 List<string> duplicateHierarchyKeys = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
                 if (duplicateHierarchyKeys.Count == 0)
                 {
-                    results[8].Status = ValidationStatus.Passed;
+                    results[9].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[8].Status = ValidationStatus.Failed;
+                    results[9].Status = ValidationStatus.Failed;
                     foreach (string hkey in duplicateHierarchyKeys)
                     {
-                        results[8].Errors.Add($"Duplicate HierarchyKey value: {hkey}");
+                        results[9].Errors.Add($"Duplicate HierarchyKey value: {hkey}");
                     }
                 }
 
@@ -192,14 +214,14 @@ namespace Geomapmaker.Data
                 List<MapUnitTreeItem> unassignedNotNull = tuple.Item2.Where(a => !string.IsNullOrEmpty(a.HierarchyKey)).ToList();
                 if (unassignedNotNull.Count == 0)
                 {
-                    results[9].Status = ValidationStatus.Passed;
+                    results[10].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[9].Status = ValidationStatus.Failed;
+                    results[10].Status = ValidationStatus.Failed;
                     foreach (MapUnitTreeItem row in unassignedNotNull)
                     {
-                        results[9].Errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
+                        results[10].Errors.Add($"Bad HierarchyKey: {row.HierarchyKey}");
                     }
                 }
 
@@ -213,14 +235,14 @@ namespace Geomapmaker.Data
                 List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", dmuNotNull);
                 if (fieldsWithMissingValues.Count == 0)
                 {
-                    results[10].Status = ValidationStatus.Passed;
+                    results[11].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[10].Status = ValidationStatus.Failed;
+                    results[11].Status = ValidationStatus.Failed;
                     foreach (string field in fieldsWithMissingValues)
                     {
-                        results[10].Errors.Add($"Null value found in field: {field}");
+                        results[11].Errors.Add($"Null value found in field: {field}");
                     }
                 }
 
@@ -235,14 +257,14 @@ namespace Geomapmaker.Data
                 List<string> mapUnitfieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", mapUnitNotNull, "MapUnit IS NOT NULL");
                 if (mapUnitfieldsWithMissingValues.Count == 0)
                 {
-                    results[11].Status = ValidationStatus.Passed;
+                    results[12].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[11].Status = ValidationStatus.Failed;
+                    results[12].Status = ValidationStatus.Failed;
                     foreach (string field in mapUnitfieldsWithMissingValues)
                     {
-                        results[11].Errors.Add($"Null value found in MapUnit field: {field}");
+                        results[12].Errors.Add($"Null value found in MapUnit field: {field}");
                     }
                 }
 
@@ -252,14 +274,14 @@ namespace Geomapmaker.Data
                 List<string> unusedDMU = await DescriptionOfMapUnits.GetUnusedMapUnitsAsync();
                 if (unusedDMU.Count == 0)
                 {
-                    results[12].Status = ValidationStatus.Passed;
+                    results[13].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[12].Status = ValidationStatus.Failed;
+                    results[13].Status = ValidationStatus.Failed;
                     foreach (string mu in unusedDMU)
                     {
-                        results[12].Errors.Add($"Unused MapUnit: {mu}");
+                        results[13].Errors.Add($"Unused MapUnit: {mu}");
                     }
                 }
 
@@ -271,14 +293,14 @@ namespace Geomapmaker.Data
                 List<string> missingGeoMaterials = await DescriptionOfMapUnits.GetMissingGeoMaterialAsync();
                 if (missingGeoMaterials.Count == 0)
                 {
-                    results[13].Status = ValidationStatus.Passed;
+                    results[14].Status = ValidationStatus.Passed;
                 }
                 else
                 {
-                    results[13].Status = ValidationStatus.Failed;
+                    results[14].Status = ValidationStatus.Failed;
                     foreach (string missing in missingGeoMaterials)
                     {
-                        results[13].Errors.Add($"GeoMaterial not defined: {missing}");
+                        results[14].Errors.Add($"GeoMaterial not defined: {missing}");
                     }
                 }
             }
