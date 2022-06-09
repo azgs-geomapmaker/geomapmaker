@@ -14,6 +14,113 @@ namespace Geomapmaker.Data
     public class OrientationPoints
     {
         /// <summary>
+        /// Get validation report for layer
+        /// </summary>
+        /// <returns>List of Validation results</returns>
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Layer exists."},
+                new ValidationRule{ Description="No duplicate layers."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No empty/null values in required fields."},
+                new ValidationRule{ Description="No duplicate OrientationPoints_ID values."},
+            };
+
+            if (await General.FeatureLayerExistsAsync("OrientationPoints") == false)
+            {
+                results[0].Status = ValidationStatus.Skipped;
+                results[0].Errors.Add("Layer not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate layers
+                //
+                int tableCount = General.FeatureLayerCount("OrientationPoints");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} layers found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check table for any missing fields 
+                //
+
+                // List of fields to check for
+                List<string> opRequiredFields = new List<string>() { "type", "azimuth", "inclination", "symbol", "label", "locationconfidencemeters",
+                "identityconfidence", "orientationconfidencedegrees", "plotatscale", "stationsid", "mapunit", "locationsourceid",
+                "orientationsourceid", "notes", "orientationpoints_id" };
+
+                // Get list of missing fields
+                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("OrientationPoints", opRequiredFields);
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+
+                // List of fields to check for null values
+                List<string> opNotNull = new List<string>() { "type", "azimuth", "inclination", "locationconfidencemeters", "identityconfidence", "orientationconfidencedegrees",
+                    "plotatscale", "mapunit", "locationsourceid", "orientationsourceid", "orientationpoints_id" };
+
+                // Get list of required fields with a null
+                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("OrientationPoints", opNotNull);
+                if (fieldsWithMissingValues.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        results[3].Errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for duplicate OrientationPoints_ID values
+                //
+                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("OrientationPoints", "orientationpoints_id");
+                if (duplicateIds.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string id in duplicateIds)
+                    {
+                        results[4].Errors.Add($"Duplicate OrientationPoints_ID value: {id}");
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
         ///  Get undefined terms that must be defined in the Glossary
         /// </summary>
         /// <param name="definedTerms">List of defined terms in the glossary</param>

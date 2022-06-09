@@ -71,9 +71,10 @@ td:last-child {
 }
 
 .failed {
+    color: #fff;
     height: 40px;
     font-size: 1.25em;
-    background-color: #fc3c56;
+    background-color: #b2162c;
 }
 
 ";
@@ -135,7 +136,8 @@ td:last-child {
                 await GetGeoMaterialDictErrorsAsync(),
                 await GetMapUnitPolysErrorsAsync(),
                 await GetContactsAndFaultsErrorsAsync(),
-                await GetStationsErrorsAsync()
+                await GetStationsErrorsAsync(),
+                await GetOrientationPointsErrorsAsync()
             );
         }
 
@@ -295,6 +297,41 @@ td:last-child {
                        new XElement("tr",
                             new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
                             $"Stations: {result}")
+                            ),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
+                        ),
+                        ValidationRuleListToHtml(results)
+                    )
+            );
+        }
+
+        private async Task<XElement> GetOrientationPointsErrorsAsync()
+        {
+            List<ValidationRule> results = await OrientationPoints.GetValidationResultsAsync();
+
+            bool isSkipped = results.All(a => a.Status == ValidationStatus.Skipped);
+
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
+
+            string result = "Passed";
+
+            if (isSkipped)
+            {
+                result = "Skipped";
+            }
+            else if (isFailed)
+            {
+                result = "Failed";
+            }
+
+            return new XElement("div",
+                    new XElement("table",
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"OrientationPoints: {result}")
                             ),
                         new XElement("tr",
                          new XAttribute("class", "tableHeader"),
