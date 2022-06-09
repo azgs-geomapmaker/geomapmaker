@@ -24,7 +24,10 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No empty/null values in required fields."},
                 new ValidationRule{ Description="No duplicate ids."},
                 new ValidationRule{ Description="No duplicate terms."},
-
+                new ValidationRule{ Description="No missing glossary terms in DescriptionOfMapUnits."},
+                new ValidationRule{ Description="No missing glossary terms in ContactsAndFaults."},
+                new ValidationRule{ Description="No missing glossary terms in MapUnitPolys."},
+                new ValidationRule{ Description="No missing glossary terms in OrientationPoints."}
             };
 
             if (await General.StandaloneTableExistsAsync("Glossary") == false)
@@ -126,6 +129,76 @@ namespace Geomapmaker.Data
                     foreach (string term in duplicateTerms)
                     {
                         results[5].Errors.Add($"Duplicate term: {term}");
+                    }
+                }
+
+                List<UndefinedTerm> undefinedTerms = await GetUndefinedGlossaryTerms();
+
+                //
+                // Check DescriptionOfMapUnits for missing undefined glossary terms
+                //
+                List<UndefinedTerm> dmuTerms = undefinedTerms.Where(a => a.DatasetName == "DescriptionOfMapUnits").ToList();
+                if (dmuTerms.Count == 0)
+                {
+                    results[6].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[6].Status = ValidationStatus.Failed;
+                    foreach (UndefinedTerm undefinedTerm in dmuTerms)
+                    {
+                        results[6].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
+                    }
+                }
+
+                //
+                // Check ContactsAndFaults for missing undefined glossary terms
+                //
+                List<UndefinedTerm> cfTerms = undefinedTerms.Where(a => a.DatasetName == "ContactsAndFaults").ToList();
+                if (cfTerms.Count == 0)
+                {
+                    results[7].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[7].Status = ValidationStatus.Failed;
+                    foreach (UndefinedTerm undefinedTerm in cfTerms)
+                    {
+                        results[7].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
+                    }
+                }
+
+                //
+                // Check MapUnitPolys for missing undefined glossary terms
+                //
+                List<UndefinedTerm> mupTerms = undefinedTerms.Where(a => a.DatasetName == "MapUnitPolys").ToList();
+                if (mupTerms.Count == 0)
+                {
+                    results[8].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[8].Status = ValidationStatus.Failed;
+                    foreach (UndefinedTerm undefinedTerm in mupTerms)
+                    {
+                        results[8].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
+                    }
+                }
+
+                //
+                // Check OrientationPoints for missing undefined glossary terms
+                //
+                List<UndefinedTerm> opTerms = undefinedTerms.Where(a => a.DatasetName == "OrientationPoints").ToList();
+                if (opTerms.Count == 0)
+                {
+                    results[9].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[9].Status = ValidationStatus.Failed;
+                    foreach (UndefinedTerm undefinedTerm in opTerms)
+                    {
+                        results[9].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
                     }
                 }
             }

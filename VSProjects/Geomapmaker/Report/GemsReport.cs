@@ -405,7 +405,7 @@ td:last-child {
 
             foreach (string error in errorList)
             {
-                list.Add(new XElement("div", new XAttribute("style", "color: red;"), error));
+                list.Add(new XElement("div", new XAttribute("style", "color: red; margin-bottom: 6px;"), error));
             }
 
             return list;
