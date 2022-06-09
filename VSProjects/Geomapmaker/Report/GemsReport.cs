@@ -130,6 +130,7 @@ td:last-child {
         {
             return new XElement("div",
                 new XElement("h2", "Validation"),
+                await GetSymbologyErrorsAsync(),
                 await GetDataSourceErrorsAsync(),
                 await GetDescriptionOfMapUnitsErrorsAsync(),
                 await GetGlossaryErrorsAsync(),
@@ -138,6 +139,28 @@ td:last-child {
                 await GetContactsAndFaultsErrorsAsync(),
                 await GetStationsErrorsAsync(),
                 await GetOrientationPointsErrorsAsync()
+            );
+        }
+
+        private async Task<XElement> GetSymbologyErrorsAsync()
+        {
+            List<ValidationRule> results = await Symbology.GetValidationResultsAsync();
+
+            bool isFailed = results.Any(a => a.Status == ValidationStatus.Failed);
+
+            return new XElement("div",
+                    new XElement("table",
+                       new XElement("tr",
+                            new XElement("th", new XAttribute("colspan", "2"), new XAttribute("class", $"{(isFailed ? "failed" : "passed")}"),
+                            $"Symbology: {(isFailed ? "Failed" : "Passed")}")
+                        ),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Rule"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
+                        ),
+                        ValidationRuleListToHtml(results)
+                    )
             );
         }
 

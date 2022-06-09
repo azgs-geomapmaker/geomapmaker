@@ -202,7 +202,6 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\GemsValidation.cs" />
     <Compile Include="Data\GeomapmakerValidation.cs" />
     <Compile Include="Data\General.cs" />
     <Compile Include="Data\Glossary.cs" />
