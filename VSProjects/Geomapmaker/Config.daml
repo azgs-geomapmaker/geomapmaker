@@ -51,9 +51,9 @@
           <button refID="Geomapmaker_OrientationPoints_Btn" />
         </group>
         <group id="Geomapmaker_Tools" caption="Tools" keytip="todo">
-          <button refID="Geomapmaker_RebuildRenderers" />
           <button refID="Geomapmaker_Report" />
           <button refID="Geomapmaker_Export_Btn" />
+          <menu refID="Geomapmaker_RibbonElements_Tools" size="large" />
         </group>
         <group id="Geomapmaker_Test" caption="Test" keytip="todo">
           <button refID="Geomapmaker_TestButton" />
@@ -138,6 +138,11 @@
       </controls>
       <!-- Dock Panes -->
       <dockPanes></dockPanes>
+      <menus>
+        <menu id="Geomapmaker_RibbonElements_Tools" caption="Tools" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" >
+          <button refID="Geomapmaker_RebuildRenderers" />
+        </menu>
+      </menus>
     </insertModule>
   </modules>
   <!-- Conditions -->
