@@ -13,6 +13,111 @@ namespace Geomapmaker.Data
     public class GeoMaterialDict
     {
         /// <summary>
+        /// Get validation report for table
+        /// </summary>
+        /// <returns>List of Validation results</returns>
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Table exists."},
+                new ValidationRule{ Description="No duplicate tables."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No empty/null values in required fields."},
+                new ValidationRule{ Description="GeoMaterialDict table has not been modified."},
+            };
+
+            if (await General.StandaloneTableExistsAsync("GeoMaterialDict") == false)
+            {
+                results[0].Status = ValidationStatus.Failed;
+                results[0].Errors.Add("Table not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCount("GeoMaterialDict");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} tables found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check table for any missing fields 
+                //
+
+                // List of required fields
+                List<string> geoMaterialRequiredFields = new List<string>() { "hierarchykey", "geomaterial", "indentedname", "definition" };
+
+                // Get list of missing required fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("GeoMaterialDict", geoMaterialRequiredFields);
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+
+                // List of fields to check for null values
+                List<string> geoMaterialNotNull = new List<string>() { "hierarchykey", "geomaterial", "indentedname" };
+
+                // Check the required fields for any missing values.
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("GeoMaterialDict", geoMaterialNotNull);
+                if (fieldsWithMissingValues.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        results[3].Errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check if the GeoMaterialDict table was modified
+                //
+                List<string> modifiedGeoMaterials = await GeoMaterialDict.GetModifiedGeoMaterials();
+                if (modifiedGeoMaterials.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string geomaterial in modifiedGeoMaterials)
+                    {
+                        results[4].Errors.Add($"Geomaterial Modified: {geomaterial}");
+                    }
+                }
+
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Compares the hard-coded Geomaterials values to the GeoMaterialDict table values.
         /// </summary>
         /// <returns>Returns true if the table is modified.</returns>

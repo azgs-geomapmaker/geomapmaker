@@ -13,6 +13,105 @@ namespace Geomapmaker.Data
 {
     public class Symbology
     {
+        /// <summary>
+        /// Get validation report for table
+        /// </summary>
+        /// <returns>List of Validation results</returns>
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Table exists."},
+                new ValidationRule{ Description="No duplicate tables."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No missing ContactsAndFaults symbols"},
+                new ValidationRule{ Description="No missing OrientationPoints symbols"},
+            };
+
+            if (await General.StandaloneTableExistsAsync("Symbology") == false)
+            {
+                results[0].Status = ValidationStatus.Failed;
+                results[0].Errors.Add("Table not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCount("Symbology");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} tables found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check for any missing fields
+                //
+
+                // List of required fields
+                List<string> symbologyRequiredFields = new List<string>() { "type", "key_", "description", "symbol" };
+
+                // Get missing fields
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Symbology", symbologyRequiredFields);
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for any missing CF symbols
+                //
+                List<string> missingCFsymbols = await Symbology.GetMissingContactsAndFaultsSymbologyAsync();
+                if (missingCFsymbols.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string key in missingCFsymbols)
+                    {
+                        results[3].Errors.Add($"Missing line symbology: {key}");
+                    }
+                }
+
+                //
+                // Check for any missing OP symbols
+                //
+                List<string> missingOPsymbols = await Symbology.GetMissingOrientationPointsSymbologyAsync();
+                if (missingOPsymbols.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string key in missingOPsymbols)
+                    {
+                        results[4].Errors.Add($"Missing point symbology: {key}");
+                    }
+                }
+            }
+
+            return results;
+        }
+
         // List of CF symbols
         public static List<GemsSymbol> ContactsAndFaultsSymbols;
 

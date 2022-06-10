@@ -1,10 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace Geomapmaker._helpers
 {
     public class Helpers
     {
+        public static string GetProjectName()
+        {
+            // Get the project name
+            string projectName = ArcGIS.Desktop.Core.Project.Current?.Name ?? "Geomapmaker";
+
+            // Remove extension
+            return projectName.Replace(".aprx", "");
+        }
+
         // Convert row object to a string
         public static string RowValueToString(object value)
         {

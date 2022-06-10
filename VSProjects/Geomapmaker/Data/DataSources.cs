@@ -16,6 +16,137 @@ namespace Geomapmaker.Data
     public class DataSources
     {
         /// <summary>
+        /// Get validation report for table
+        /// </summary>
+        /// <returns>List of Validation results</returns>
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Table exists."},
+                new ValidationRule{ Description="No duplicate tables."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No empty/null values in required fields."},
+                new ValidationRule{ Description="No duplicate ids."},
+                new ValidationRule{ Description="No unused data sources."},
+                new ValidationRule{ Description="No missing data sources."}
+            };
+
+            if (await General.StandaloneTableExistsAsync("DataSources") == false)
+            {
+                results[0].Status = ValidationStatus.Failed;
+                results[0].Errors.Add("Table not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate tables
+                //
+                int tableCount = General.StandaloneTableCount("DataSources");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} tables found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check table for any missing fields 
+                //
+
+                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DataSources", new List<string> { "source", "datasources_id", "url", "notes" });
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DataSources", new List<string> { "source", "datasources_id" });
+                if (fieldsWithMissingValues.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        results[3].Errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for any duplicate ids
+                //
+                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
+                if (duplicateIds.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string id in duplicateIds)
+                    {
+                        results[4].Errors.Add($"Duplicate datasources_id: {id}");
+                    }
+                }
+
+                //
+                // Check for unused data sources
+                //
+                List<string> unusedDataSources = await GetUnnecessaryDataSources();
+                if (unusedDataSources.Count == 0)
+                {
+                    results[5].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[5].Status = ValidationStatus.Failed;
+                    foreach (string ds in unusedDataSources)
+                    {
+                        results[5].Errors.Add($"Unused data source: {ds}");
+                    }
+                }
+
+                //
+                // Check for missing data sources
+                //
+                List<string> missingDataSources = await GetMissingDataSources();
+                if (missingDataSources.Count == 0)
+                {
+                    results[6].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[6].Status = ValidationStatus.Failed;
+                    foreach (string ds in missingDataSources)
+                    {
+                        results[6].Errors.Add($"Missing data source: {ds}");
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Checks the data sources for any unused data sources
         /// </summary>
         /// <returns>List of unused data sources</returns>

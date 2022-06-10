@@ -15,6 +15,177 @@ namespace Geomapmaker.Data
     public class ContactsAndFaults
     {
         /// <summary>
+        /// Get validation report for layer
+        /// </summary>
+        /// <returns>List of Validation results</returns>
+        public static async Task<List<ValidationRule>> GetValidationResultsAsync()
+        {
+            List<ValidationRule> results = new List<ValidationRule>
+            {
+                new ValidationRule{ Description="Layer exists."},
+                new ValidationRule{ Description="No duplicate layers."},
+                new ValidationRule{ Description="No missing fields."},
+                new ValidationRule{ Description="No empty/null values in required fields."},
+                new ValidationRule{ Description="No duplicate Label values."},
+                new ValidationRule{ Description="No duplicate ContactsAndFaults_ID values."}
+            };
+
+            if (await General.FeatureLayerExistsAsync("MapUnitPolys") == false)
+            {
+                results[0].Status = ValidationStatus.Failed;
+                results[0].Errors.Add("Layer not found");
+                return results;
+            }
+            else // Table was found
+            {
+                results[0].Status = ValidationStatus.Passed;
+
+                //
+                // Check for duplicate layers
+                //
+                int tableCount = General.FeatureLayerCount("MapUnitPolys");
+                if (tableCount > 1)
+                {
+                    results[1].Status = ValidationStatus.Failed;
+                    results[1].Errors.Add($"{tableCount} layers found");
+                }
+                else
+                {
+                    results[1].Status = ValidationStatus.Passed;
+                }
+
+                //
+                // Check layer for any missing fields 
+                //
+                List<string> cfRequiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
+                "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id" };
+
+                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("ContactsAndFaults", cfRequiredFields);
+                if (missingFields.Count == 0)
+                {
+                    results[2].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[2].Status = ValidationStatus.Failed;
+                    foreach (string field in missingFields)
+                    {
+                        results[2].Errors.Add($"Field not found: {field}");
+                    }
+                }
+
+                //
+                // Check for empty/null values in required fields
+                //
+                List<string> cfNotNullFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence", "identityconfidence", "datasourceid", "contactsandfaults_id" };
+                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("ContactsAndFaults", cfNotNullFields);
+                if (fieldsWithMissingValues.Count == 0)
+                {
+                    results[3].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[3].Status = ValidationStatus.Failed;
+                    foreach (string field in fieldsWithMissingValues)
+                    {
+                        results[3].Errors.Add($"Null value found in field: {field}");
+                    }
+                }
+
+                //
+                // Check for duplicate Label values
+                //
+                List<string> duplicateLabels = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
+                if (duplicateLabels.Count == 0)
+                {
+                    results[4].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[4].Status = ValidationStatus.Failed;
+                    foreach (string label in duplicateLabels)
+                    {
+                        results[4].Errors.Add($"Duplicate Label value: {label}");
+                    }
+                }
+
+                //
+                // Check for duplicate ContactsAndFaults_ID values
+                //
+                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
+                if (duplicateIds.Count == 0)
+                {
+                    results[5].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[5].Status = ValidationStatus.Failed;
+                    foreach (string id in duplicateIds)
+                    {
+                        results[5].Errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
+                    }
+                }
+
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        ///  Get undefined terms that must be defined in the Glossary
+        /// </summary>
+        /// <param name="definedTerms">List of defined terms in the glossary</param>
+        /// <returns>List of missing glossary terms</returns>
+        public static async Task<List<UndefinedTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        {
+            List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
+
+            List<string> TypeTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "Type");
+
+            IEnumerable<string> undefinedType = TypeTerms.Except(definedTerms);
+
+            foreach (string term in undefinedType)
+            {
+                undefinedTerms.Add(new UndefinedTerm()
+                {
+                    DatasetName = "ContactsAndFaults",
+                    FieldName = "Type",
+                    Term = term
+                });
+            }
+
+            List<string> ExistenceConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "ExistenceConfidence");
+
+            IEnumerable<string> undefinedExistenceConfidence = ExistenceConfidenceTerms.Except(definedTerms);
+
+            foreach (string term in undefinedExistenceConfidence)
+            {
+                undefinedTerms.Add(new UndefinedTerm()
+                {
+                    DatasetName = "ContactsAndFaults",
+                    FieldName = "ExistenceConfidence",
+                    Term = term
+                });
+            }
+
+            List<string> IdentityConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "IdentityConfidence");
+
+            IEnumerable<string> undefinedIdentityConfidence = IdentityConfidenceTerms.Except(definedTerms);
+
+            foreach (string term in undefinedIdentityConfidence)
+            {
+                undefinedTerms.Add(new UndefinedTerm()
+                {
+                    DatasetName = "ContactsAndFaults",
+                    FieldName = "IdentityConfidence",
+                    Term = term
+                });
+            }
+
+            return undefinedTerms;
+        }
+
+        /// <summary>
         /// Get Templates for Contacts and Faults layer
         /// </summary>
         /// <param name="filterSketch"></param>

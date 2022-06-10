@@ -202,24 +202,29 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\GemsValidation.cs" />
-    <Compile Include="Data\GeomapmakerValidation.cs" />
     <Compile Include="Data\General.cs" />
     <Compile Include="Data\Glossary.cs" />
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Data\ArcGisProject.cs" />
     <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="Models\UndefinedTerm.cs" />
+    <Compile Include="Models\ValidationRule.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />
     <Compile Include="Report\GemsReport.cs" />
+    <Compile Include="RibbonElements\Tools.cs" />
+    <Compile Include="TestButton.cs" />
     <Compile Include="ViewModels\Export\ExportVM.cs" />
     <Compile Include="ViewModels\GeneratePolygons\GeneratePolygonsViewModel.cs" />
+    <Compile Include="ViewModels\Glossary\GlossaryVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
     <Compile Include="Views\Export\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Glossary\Glossary.xaml.cs">
+      <DependentUpon>Glossary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MapUnitPolysCreate\MapUnitPolysCreate.xaml.cs">
       <DependentUpon>MapUnitPolysCreate.xaml</DependentUpon>
@@ -360,6 +365,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\Export\Export.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Glossary\Glossary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
