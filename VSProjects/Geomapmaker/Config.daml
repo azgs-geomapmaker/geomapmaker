@@ -55,9 +55,11 @@
           <button refID="Geomapmaker_Export_Btn" />
           <menu refID="Geomapmaker_RibbonElements_Tools" size="large" />
         </group>
+        
         <group id="Geomapmaker_Test" caption="Test" keytip="todo">
           <button refID="Geomapmaker_TestButton" />
         </group>
+        
       </groups>
       <!-- Controls -->
       <controls>
@@ -132,10 +134,13 @@
         <button id="Geomapmaker_Report" caption="Report" className="Geomapmaker.RibbonElements.ReportButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_TestButton" caption="Test Button" className="TestButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png">
+        <button id="Geomapmaker_TestButton" caption="Test Button" className="TestButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
         <button id="Geomapmaker_Glossary" caption="Update Glossary" className="Geomapmaker.ViewModels.Glossary.ShowGlossary" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </button>
+        <button id="Geomapmaker_PrimaryKeys" caption="Set Primary Keys" className="Geomapmaker.RibbonElements.SetAllPrimaryKeys" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
@@ -145,6 +150,7 @@
         <menu id="Geomapmaker_RibbonElements_Tools" caption="Tools" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png">
           <button refID="Geomapmaker_RebuildRenderers" />
           <button refID="Geomapmaker_Glossary" />
+          <button refID="Geomapmaker_PrimaryKeys" />
         </menu>
       </menus>
     </insertModule>
