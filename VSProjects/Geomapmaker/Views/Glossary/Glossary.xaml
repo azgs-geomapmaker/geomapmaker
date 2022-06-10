@@ -33,6 +33,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -61,7 +62,12 @@
         <TextBlock Grid.Row="5" Grid.Column="1" Text="Definition" />
         <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Definition, UpdateSourceTrigger=PropertyChanged}" MinLines="3" />
 
-        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="7" Grid.Column="1" >
+            <TextBlock Text="DefinitionSourceID" />
+            <TextBox Text="{Binding DefinitionSourceID}" IsReadOnly="True" IsEnabled="False" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
             <Button Padding="5" Command="{Binding CommandSkip}" Style="{DynamicResource Esri_Button}" >Skip</Button>
             <Button Padding="5" Command="{Binding CommandSave}" Style="{DynamicResource Esri_Button}" >Save</Button>
