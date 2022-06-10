@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Dialogs;
 
 namespace Geomapmaker.RibbonElements
 {
@@ -6,7 +7,11 @@ namespace Geomapmaker.RibbonElements
     {
         protected override void OnClick()
         {
+            int idCount = 0;
 
+            // Add primary keys 
+
+            MessageBox.Show($"Created {idCount} Primary Keys", "Set All Primary Keys");
         }
     }
 }
