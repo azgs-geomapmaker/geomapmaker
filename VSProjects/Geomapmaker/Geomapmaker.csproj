@@ -211,7 +211,6 @@
     <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\UndefinedTerm.cs" />
     <Compile Include="Models\ValidationRule.cs" />
-    <Compile Include="RibbonElements\Button1.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />
     <Compile Include="Report\GemsReport.cs" />
     <Compile Include="RibbonElements\Tools.cs" />
