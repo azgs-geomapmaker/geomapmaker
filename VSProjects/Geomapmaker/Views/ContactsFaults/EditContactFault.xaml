@@ -23,8 +23,6 @@
     <AdornerDecorator>
         <Grid>
             <Grid.Resources>
-                <conv:RadioConfidenceConverter x:Key="RadioConfidenceConverter" />
-                <conv:SliderConverter x:Key="SliderConverter" />
                 <conv:ConcealedConverter x:Key="ConcealedConverter" />
             </Grid.Resources>
 
