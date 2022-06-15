@@ -202,9 +202,6 @@ namespace Geomapmaker.Data
             return fieldsWithNull;
         }
 
-
-
-
         /// <summary>
         /// Find duplicate values in a standalone table
         /// </summary>

@@ -1,6 +1,8 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -321,6 +323,79 @@ namespace Geomapmaker.Data
             }
 
             return uniqueValues;
+        }
+
+
+
+
+
+        public static async Task<int> SetPrimaryKeys(string layerName, string fieldName)
+        {
+            int count = 0;
+
+            List<string> uniqueValues = new List<string>();
+
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
+
+            if (layer != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = layer.GetTable())
+                    {
+                        if (table != null)
+                        {
+                            // Get fields for the table
+                            List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
+
+                            // Check if the table has the field
+                            if (tableFields.Any(a => a.Name.ToLower() == fieldName.ToLower()))
+                            {
+                                QueryFilter queryFilter = new QueryFilter
+                                {
+                                    // Where field is null or empty
+                                    WhereClause = $"{fieldName} = '' or {fieldName} is null",
+                                    SubFields = fieldName
+                                };
+
+                                EditOperation editOperation = new EditOperation();
+
+                                editOperation.Callback(context =>
+                                {
+                                    using (RowCursor rowCursor = table.Search(queryFilter, false))
+                                    {
+                                        while (rowCursor.MoveNext())
+                                        {
+                                            using (Row row = rowCursor.Current)
+                                            {
+                                                // Increment
+                                                count++;
+
+                                                // In order to update the Map and/or the attribute table.
+                                                // Has to be called before any changes are made to the row.
+                                                context.Invalidate(row);
+
+                                                // Assign a new guid
+                                                row[fieldName] = Guid.NewGuid().ToString();
+
+                                                // After all the changes are done, persist it.
+                                                row.Store();
+
+                                                // Has to be called after the store too.
+                                                context.Invalidate(row);
+                                            }
+                                        }
+                                    }
+                                }, table);
+
+                                bool result = editOperation.Execute();
+                            }
+                        }
+                    }
+                });
+            }
+
+            return count;
         }
     }
 }
