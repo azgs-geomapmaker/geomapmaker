@@ -28,7 +28,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No missing OrientationPoints symbols"},
             };
 
-            if (await General.StandaloneTableExistsAsync("Symbology") == false)
+            if (await AnyStandaloneTable.DoesTableExistsAsync("Symbology") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Table not found");
@@ -41,7 +41,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCount("Symbology");
+                int tableCount = AnyStandaloneTable.GetTableCount("Symbology");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -60,7 +60,7 @@ namespace Geomapmaker.Data
                 List<string> symbologyRequiredFields = new List<string>() { "type", "key_", "description", "symbol" };
 
                 // Get missing fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Symbology", symbologyRequiredFields);
+                List<string> missingFields = await AnyStandaloneTable.GetMissingFieldsAsync("Symbology", symbologyRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;

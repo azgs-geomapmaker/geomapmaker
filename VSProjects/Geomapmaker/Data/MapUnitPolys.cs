@@ -171,7 +171,7 @@ namespace Geomapmaker.Data
         {
             List<string> mapUnitPolys = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
 
-            List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
+            List<string> mapUnitDescriptions = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
 
             return mapUnitPolys.Except(mapUnitDescriptions).ToList();
         }

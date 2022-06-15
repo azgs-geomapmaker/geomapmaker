@@ -83,7 +83,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             StationFieldIdOptions = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("Stations", "fieldid");
 
             // Data Source Options
-            DataSourceOptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
+            DataSourceOptions = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DataSources", "datasources_id");
         }
 
         #region INotifyPropertyChanged

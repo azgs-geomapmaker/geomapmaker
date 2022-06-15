@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public class General
+    public class AnyStandaloneTable
     {
-
-
-
-
         /// <summary>
         /// Get the number of tables by name
         /// </summary>
         /// <param name="tableName">Name of table</param>
         /// <returns>Returns the number of tables</returns>
-        public static int StandaloneTableCount(string tableName)
+        public static int GetTableCount(string tableName)
         {
             // Check for active map
             if (MapView.Active == null)
@@ -36,7 +32,7 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <param name="tableName">Name of table</param>
         /// <returns>Returns true if table exists</returns>
-        public static async Task<bool> StandaloneTableExistsAsync(string tableName)
+        public static async Task<bool> DoesTableExistsAsync(string tableName)
         {
             // Check for active map
             if (MapView.Active == null)
@@ -69,15 +65,13 @@ namespace Geomapmaker.Data
             return underlyingTableExists;
         }
 
-
-
         /// <summary>
         /// Check if a standalone table has the required fields.
         /// </summary>
         /// <param name="tableName">Name of the table</param>
         /// <param name="requiredFields">List of fields to check</param>
         /// <returns>Returns list of missing fields</returns>
-        public static async Task<List<string>> StandaloneTableGetMissingFieldsAsync(string tableName, List<string> requiredFields)
+        public static async Task<List<string>> GetMissingFieldsAsync(string tableName, List<string> requiredFields)
         {
             List<string> missingFields = new List<string>();
 
@@ -135,7 +129,7 @@ namespace Geomapmaker.Data
         /// <param name="tableName">Name of table</param>
         /// <param name="fieldsToCheck">List of fields to check</param>
         /// <returns>List of required fields with a null value</returns>
-        public static async Task<List<string>> StandaloneTableGetRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck, string whereClause = "")
+        public static async Task<List<string>> GetRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck, string whereClause = "")
         {
             List<string> fieldsWithNull = new List<string>();
 
@@ -147,7 +141,7 @@ namespace Geomapmaker.Data
             }
 
             // Avoid any errors from trying to check fields that don't exist 
-            List<string> missingFields = await StandaloneTableGetMissingFieldsAsync(tableName, fieldsToCheck);
+            List<string> missingFields = await GetMissingFieldsAsync(tableName, fieldsToCheck);
             if (missingFields.Count > 0)
             {
                 return fieldsWithNull;
@@ -218,7 +212,7 @@ namespace Geomapmaker.Data
         /// <param name="fieldName">Name of field</param>
         /// <param name="whereClause">Where-clause</param>
         /// <returns>Returns list of duplicate values</returns>
-        public static async Task<List<string>> StandaloneTableGetDuplicateValuesInFieldAsync(string tableName, string fieldName, string whereClause = "")
+        public static async Task<List<string>> GetDuplicateValuesInFieldAsync(string tableName, string fieldName, string whereClause = "")
         {
             List<string> allValues = new List<string>();
 
@@ -286,7 +280,7 @@ namespace Geomapmaker.Data
         /// <param name="tableName">Name of the table</param>
         /// <param name="fieldName">Name of the field</param>
         /// <returns>List of distinct values</returns>
-        public static async Task<List<string>> StandaloneTableGetDistinctValuesForFieldAsync(string tableName, string fieldName)
+        public static async Task<List<string>> GetDistinctValuesForFieldAsync(string tableName, string fieldName)
         {
             List<string> uniqueValues = new List<string>();
 

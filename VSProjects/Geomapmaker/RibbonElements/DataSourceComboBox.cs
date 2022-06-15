@@ -18,7 +18,7 @@ namespace Geomapmaker.RibbonElements
 
             QueuedTask.Run(async () =>
             {
-                List<string> DataSourceIds = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
+                List<string> DataSourceIds = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DataSources", "datasources_id");
 
                 foreach (string id in DataSourceIds)
                 {
