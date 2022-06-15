@@ -159,19 +159,19 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
 
             // Add CF data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
 
             // Add MUP data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
 
             // Add Stations data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
 
             // Add OP data sources (location)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
 
             // Add OP data sources (orientation)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
 
             // Get all datasources from Data Source table
             List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
@@ -195,19 +195,19 @@ namespace Geomapmaker.Data
             foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
 
             // Add CF data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
 
             // Add MUP data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
 
             // Add Stations data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
 
             // Add OP data sources (location)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
 
             // Add OP data sources (orientation)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
+            foreignKeys.AddRange(await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
 
             // Get all datasources from Data Source table
             List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");

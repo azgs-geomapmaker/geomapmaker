@@ -7,47 +7,23 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public class General
+    public class FeatureLayers
     {
-
-
-
-
         /// <summary>
-        /// Get the number of tables by name
+        /// Check if a feature layer exists
         /// </summary>
-        /// <param name="tableName">Name of table</param>
-        /// <returns>Returns the number of tables</returns>
-        public static int StandaloneTableCount(string tableName)
+        /// <param name="layerName">Name of layer</param>
+        /// <returns>Returns true if layer exists</returns>
+        public static async Task<bool> FeatureLayerExistsAsync(string layerName)
         {
-            // Check for active map
-            if (MapView.Active == null)
-            {
-                return 0;
-            }
-
-            IEnumerable<StandaloneTable> tables = MapView.Active?.Map.StandaloneTables.Where(a => a.Name == tableName);
-
-            return tables.Count();
-        }
-
-        /// <summary>
-        /// Check if standalone table exists
-        /// </summary>
-        /// <param name="tableName">Name of table</param>
-        /// <returns>Returns true if table exists</returns>
-        public static async Task<bool> StandaloneTableExistsAsync(string tableName)
-        {
-            // Check for active map
             if (MapView.Active == null)
             {
                 return false;
             }
 
-            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
 
-            // Check if table was null
-            if (standaloneTable == null)
+            if (layer == null)
             {
                 return false;
             }
@@ -57,7 +33,7 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-                using (Table table = standaloneTable.GetTable())
+                using (Table table = layer.GetTable())
                 {
                     if (table != null)
                     {
@@ -69,15 +45,30 @@ namespace Geomapmaker.Data
             return underlyingTableExists;
         }
 
+        /// <summary>
+        /// Get the number of feature layers by name
+        /// </summary>
+        /// <param name="layerName">Name of layer</param>
+        /// <returns>Returns number of layers</returns>
+        public static int FeatureLayerCount(string layerName)
+        {
+            if (MapView.Active == null)
+            {
+                return 0;
+            }
 
+            var layers = MapView.Active?.Map.FindLayers(layerName);
+
+            return layers.Count();
+        }
 
         /// <summary>
-        /// Check if a standalone table has the required fields.
+        /// Check if a feature layer has the required fields.
         /// </summary>
-        /// <param name="tableName">Name of the table</param>
+        /// <param name="layerName">Name of the layer</param>
         /// <param name="requiredFields">List of fields to check</param>
         /// <returns>Returns list of missing fields</returns>
-        public static async Task<List<string>> StandaloneTableGetMissingFieldsAsync(string tableName, List<string> requiredFields)
+        public static async Task<List<string>> FeatureLayerGetMissingFieldsAsync(string layerName, List<string> requiredFields)
         {
             List<string> missingFields = new List<string>();
 
@@ -88,11 +79,11 @@ namespace Geomapmaker.Data
                 return requiredFields;
             }
 
-            // Get standalone table by name
-            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+            // Get feature layer by name
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
 
-            // Check if table was null
-            if (standaloneTable == null)
+            // Check if layer was null
+            if (layer == null)
             {
                 // Missing all required fields
                 return requiredFields;
@@ -100,7 +91,7 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-                using (Table table = standaloneTable.GetTable())
+                using (Table table = layer.GetTable())
                 {
                     // Underlying table not found
                     if (table == null)
@@ -132,10 +123,10 @@ namespace Geomapmaker.Data
         /// <summary>
         /// Verify the required fields are not null
         /// </summary>
-        /// <param name="tableName">Name of table</param>
+        /// <param name="layerName">Name of layer</param>
         /// <param name="fieldsToCheck">List of fields to check</param>
         /// <returns>List of required fields with a null value</returns>
-        public static async Task<List<string>> StandaloneTableGetRequiredFieldIsNullAsync(string tableName, List<string> fieldsToCheck, string whereClause = "")
+        public static async Task<List<string>> FeatureLayerGetRequiredFieldIsNullAsync(string layerName, List<string> fieldsToCheck, string whereClause = "")
         {
             List<string> fieldsWithNull = new List<string>();
 
@@ -147,17 +138,17 @@ namespace Geomapmaker.Data
             }
 
             // Avoid any errors from trying to check fields that don't exist 
-            List<string> missingFields = await StandaloneTableGetMissingFieldsAsync(tableName, fieldsToCheck);
+            List<string> missingFields = await FeatureLayerGetMissingFieldsAsync(layerName, fieldsToCheck);
             if (missingFields.Count > 0)
             {
                 return fieldsWithNull;
             }
 
-            // Get standalone table by name
-            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+            // Get layer by name
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
 
             // Check if the table was null
-            if (standaloneTable == null)
+            if (layer == null)
             {
                 // Missing all required fields
                 return fieldsWithNull;
@@ -165,7 +156,7 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-                using (Table table = standaloneTable.GetTable())
+                using (Table table = layer.GetTable())
                 {
                     // Underlying table found
                     if (table != null)
@@ -208,17 +199,14 @@ namespace Geomapmaker.Data
             return fieldsWithNull;
         }
 
-
-
-
         /// <summary>
-        /// Find duplicate values in a standalone table
+        /// Find duplicate values in a feature layer
         /// </summary>
-        /// <param name="tableName">Name of table</param>
+        /// <param name="layerName">Name of layer</param>
         /// <param name="fieldName">Name of field</param>
         /// <param name="whereClause">Where-clause</param>
         /// <returns>Returns list of duplicate values</returns>
-        public static async Task<List<string>> StandaloneTableGetDuplicateValuesInFieldAsync(string tableName, string fieldName, string whereClause = "")
+        public static async Task<List<string>> FeatureLayerGetDuplicateValuesInFieldAsync(string layerName, string fieldName, string whereClause = "")
         {
             List<string> allValues = new List<string>();
 
@@ -228,18 +216,18 @@ namespace Geomapmaker.Data
                 return allValues;
             }
 
-            // Get standalone table by name
-            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+            // Get layer by name
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
 
-            // Check if the table was null
-            if (standaloneTable == null)
+            // Check if the layer was null
+            if (layer == null)
             {
                 return allValues;
             }
 
             await QueuedTask.Run(() =>
             {
-                using (Table table = standaloneTable.GetTable())
+                using (Table table = layer.GetTable())
                 {
                     // Underlying table found
                     if (table != null)
@@ -279,24 +267,24 @@ namespace Geomapmaker.Data
             // Return duplicates
             return allValues.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
         }
-        
+
         /// <summary>
-        /// Get dictinct values for a specific field from a standalone table
+        /// Get distinct values for a field from a feature layer
         /// </summary>
-        /// <param name="tableName">Name of the table</param>
-        /// <param name="fieldName">Name of the field</param>
+        /// <param name="layerName">Name of layer</param>
+        /// <param name="fieldName">Name of field</param>
         /// <returns>List of distinct values</returns>
-        public static async Task<List<string>> StandaloneTableGetDistinctValuesForFieldAsync(string tableName, string fieldName)
+        public static async Task<List<string>> FeatureLayerGetDistinctValuesForFieldAsync(string layerName, string fieldName)
         {
             List<string> uniqueValues = new List<string>();
 
-            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+            FeatureLayer layer = MapView.Active?.Map.FindLayers(layerName).FirstOrDefault() as FeatureLayer;
 
-            if (standaloneTable != null)
+            if (layer != null)
             {
                 await QueuedTask.Run(() =>
                 {
-                    using (Table table = standaloneTable.GetTable())
+                    using (Table table = layer.GetTable())
                     {
                         if (table != null)
                         {

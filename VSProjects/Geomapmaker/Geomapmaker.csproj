@@ -202,10 +202,12 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\FeatureLayers.cs" />
     <Compile Include="Data\General.cs" />
     <Compile Include="Data\Glossary.cs" />
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationPoints.cs" />
+    <Compile Include="Data\StandaloneTables.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\ReportModel.cs" />

@@ -30,7 +30,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No duplicate MapUnitPolys_ID values."}
             };
 
-            if (await General.FeatureLayerExistsAsync("MapUnitPolys") == false)
+            if (await FeatureLayers.FeatureLayerExistsAsync("MapUnitPolys") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Layer not found");
@@ -43,7 +43,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate layers
                 //
-                int tableCount = General.FeatureLayerCount("MapUnitPolys");
+                int tableCount = FeatureLayers.FeatureLayerCount("MapUnitPolys");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -63,7 +63,7 @@ namespace Geomapmaker.Data
                 "mapunitpolys_id" };
 
                 // Get the missing required fields
-                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", mupRequiredFields);
+                List<string> missingFields = await FeatureLayers.FeatureLayerGetMissingFieldsAsync("MapUnitPolys", mupRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -102,7 +102,7 @@ namespace Geomapmaker.Data
                 List<string> mupNotNull = new List<string>() { "mapunit", "identityconfidence", "datasourceid", "mapunitpolys_id" };
 
                 // Get required fields with null values
-                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", mupNotNull);
+                List<string> fieldsWithMissingValues = await FeatureLayers.FeatureLayerGetRequiredFieldIsNullAsync("MapUnitPolys", mupNotNull);
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
@@ -119,7 +119,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate MapUnitPolys_ID values
                 //
-                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
+                List<string> duplicateIds = await FeatureLayers.FeatureLayerGetDuplicateValuesInFieldAsync("MapUnitPolys", "MapUnitPolys_ID");
                 if (duplicateIds.Count == 0)
                 {
                     results[5].Status = ValidationStatus.Passed;
@@ -146,7 +146,7 @@ namespace Geomapmaker.Data
         {
             List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
 
-            List<string> IdentityConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "IdentityConfidence");
+            List<string> IdentityConfidenceTerms = await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "IdentityConfidence");
 
             IEnumerable<string> undefinedType = IdentityConfidenceTerms.Except(definedTerms);
 
@@ -169,7 +169,7 @@ namespace Geomapmaker.Data
         /// <returns>List of MapUnits not defined</returns>
         public static async Task<List<string>> GetMapUnitsNotDefinedInDMUTableAsync()
         {
-            List<string> mapUnitPolys = await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
+            List<string> mapUnitPolys = await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
 
             List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
 
