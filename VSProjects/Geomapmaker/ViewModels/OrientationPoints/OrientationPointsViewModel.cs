@@ -80,7 +80,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             Create.SymbolsFilteredMessage = $"{SymbolOptions.Count()} symbols";
 
             // Field ID Options
-            StationFieldIdOptions = await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "fieldid");
+            StationFieldIdOptions = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("Stations", "fieldid");
 
             // Data Source Options
             DataSourceOptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");

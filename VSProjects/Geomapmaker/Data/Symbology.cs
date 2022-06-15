@@ -278,7 +278,7 @@ namespace Geomapmaker.Data
             }
             
             // Get the symbol values from the CF layer
-            List<string> cfSymbolValues = await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "symbol");
+            List<string> cfSymbolValues = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "symbol");
 
             // Loop over the CF symbols
             foreach (string symbol in cfSymbolValues)
@@ -308,7 +308,7 @@ namespace Geomapmaker.Data
             }
 
             // Get the symbol values from the OP
-            List<string> opSymbolValues = await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "symbol");
+            List<string> opSymbolValues = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "symbol");
 
             // Loop over the symbols
             foreach (string symbol in opSymbolValues)

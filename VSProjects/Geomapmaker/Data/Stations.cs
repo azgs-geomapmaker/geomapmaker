@@ -27,7 +27,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No duplicate Stations_ID values."},
             };
 
-            if (await FeatureLayers.FeatureLayerExistsAsync("Stations") == false)
+            if (await AnyFeatureLayer.DoesLayerExistsAsync("Stations") == false)
             {
                 results[0].Status = ValidationStatus.Skipped;
                 results[0].Errors.Add("Layer not found");
@@ -40,7 +40,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate layers
                 //
-                int tableCount = FeatureLayers.FeatureLayerCount("Stations");
+                int tableCount = AnyFeatureLayer.GetLayerCount("Stations");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -60,7 +60,7 @@ namespace Geomapmaker.Data
                 "datasourceid", "notes", "locationmethod", "timedate", "observer", "significantdimensionmeters", "gpsx", "gpsy", "pdop", "mapx", "mapy", "stations_id" };
 
                 // Get list of missing fields
-                List<string> missingFields = await FeatureLayers.FeatureLayerGetMissingFieldsAsync("Stations", stationRequiredFields);
+                List<string> missingFields = await AnyFeatureLayer.GetMissingFieldsAsync("Stations", stationRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -82,7 +82,7 @@ namespace Geomapmaker.Data
                 List<string> stationsNotNull = new List<string>() { "locationconfidencemeters", "mapunit", "plotatscale", "datasourceid", "stations_id" };
 
                 // Get requied fields with a null value
-                List<string> fieldsWithMissingValues = await FeatureLayers.FeatureLayerGetRequiredFieldIsNullAsync("Stations", stationsNotNull);
+                List<string> fieldsWithMissingValues = await AnyFeatureLayer.GetRequiredFieldIsNullAsync("Stations", stationsNotNull);
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
@@ -99,7 +99,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate Stations_ID values
                 //
-                List<string> duplicateIds = await FeatureLayers.FeatureLayerGetDuplicateValuesInFieldAsync("Stations", "Stations_IDs");
+                List<string> duplicateIds = await AnyFeatureLayer.GetDuplicateValuesInFieldAsync("Stations", "Stations_IDs");
                 if (duplicateIds.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;

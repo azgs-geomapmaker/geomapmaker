@@ -354,7 +354,7 @@ namespace Geomapmaker.Data
         /// <returns>List of MapUnits not used</returns>
         public static async Task<List<string>> GetUnusedMapUnitsAsync()
         {
-            List<string> mapUnitPolys = await FeatureLayers.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
+            List<string> mapUnitPolys = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
 
             List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
 

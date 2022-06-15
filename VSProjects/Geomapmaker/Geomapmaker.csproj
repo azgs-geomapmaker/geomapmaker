@@ -202,7 +202,7 @@
     <AddInContent Include="DarkImages\AddInDesktop32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\FeatureLayers.cs" />
+    <Compile Include="Data\AnyFeatureLayer.cs" />
     <Compile Include="Data\General.cs" />
     <Compile Include="Data\Glossary.cs" />
     <Compile Include="Data\MapUnitPolys.cs" />

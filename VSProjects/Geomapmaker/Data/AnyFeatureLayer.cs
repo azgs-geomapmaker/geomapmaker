@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
-    public class FeatureLayers
+    public class AnyFeatureLayer
     {
         /// <summary>
         /// Check if a feature layer exists
         /// </summary>
         /// <param name="layerName">Name of layer</param>
         /// <returns>Returns true if layer exists</returns>
-        public static async Task<bool> FeatureLayerExistsAsync(string layerName)
+        public static async Task<bool> DoesLayerExistsAsync(string layerName)
         {
             if (MapView.Active == null)
             {
@@ -50,7 +50,7 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <param name="layerName">Name of layer</param>
         /// <returns>Returns number of layers</returns>
-        public static int FeatureLayerCount(string layerName)
+        public static int GetLayerCount(string layerName)
         {
             if (MapView.Active == null)
             {
@@ -68,7 +68,7 @@ namespace Geomapmaker.Data
         /// <param name="layerName">Name of the layer</param>
         /// <param name="requiredFields">List of fields to check</param>
         /// <returns>Returns list of missing fields</returns>
-        public static async Task<List<string>> FeatureLayerGetMissingFieldsAsync(string layerName, List<string> requiredFields)
+        public static async Task<List<string>> GetMissingFieldsAsync(string layerName, List<string> requiredFields)
         {
             List<string> missingFields = new List<string>();
 
@@ -126,7 +126,7 @@ namespace Geomapmaker.Data
         /// <param name="layerName">Name of layer</param>
         /// <param name="fieldsToCheck">List of fields to check</param>
         /// <returns>List of required fields with a null value</returns>
-        public static async Task<List<string>> FeatureLayerGetRequiredFieldIsNullAsync(string layerName, List<string> fieldsToCheck, string whereClause = "")
+        public static async Task<List<string>> GetRequiredFieldIsNullAsync(string layerName, List<string> fieldsToCheck, string whereClause = "")
         {
             List<string> fieldsWithNull = new List<string>();
 
@@ -138,7 +138,7 @@ namespace Geomapmaker.Data
             }
 
             // Avoid any errors from trying to check fields that don't exist 
-            List<string> missingFields = await FeatureLayerGetMissingFieldsAsync(layerName, fieldsToCheck);
+            List<string> missingFields = await GetMissingFieldsAsync(layerName, fieldsToCheck);
             if (missingFields.Count > 0)
             {
                 return fieldsWithNull;
@@ -206,7 +206,7 @@ namespace Geomapmaker.Data
         /// <param name="fieldName">Name of field</param>
         /// <param name="whereClause">Where-clause</param>
         /// <returns>Returns list of duplicate values</returns>
-        public static async Task<List<string>> FeatureLayerGetDuplicateValuesInFieldAsync(string layerName, string fieldName, string whereClause = "")
+        public static async Task<List<string>> GetDuplicateValuesInFieldAsync(string layerName, string fieldName, string whereClause = "")
         {
             List<string> allValues = new List<string>();
 
@@ -274,7 +274,7 @@ namespace Geomapmaker.Data
         /// <param name="layerName">Name of layer</param>
         /// <param name="fieldName">Name of field</param>
         /// <returns>List of distinct values</returns>
-        public static async Task<List<string>> FeatureLayerGetDistinctValuesForFieldAsync(string layerName, string fieldName)
+        public static async Task<List<string>> GetDistinctValuesForFieldAsync(string layerName, string fieldName)
         {
             List<string> uniqueValues = new List<string>();
 
