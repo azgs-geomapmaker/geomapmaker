@@ -30,7 +30,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No duplicate ContactsAndFaults_ID values."}
             };
 
-            if (await General.FeatureLayerExistsAsync("MapUnitPolys") == false)
+            if (await AnyFeatureLayer.DoesLayerExistsAsync("MapUnitPolys") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Layer not found");
@@ -43,7 +43,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate layers
                 //
-                int tableCount = General.FeatureLayerCount("MapUnitPolys");
+                int tableCount = AnyFeatureLayer.GetLayerCount("MapUnitPolys");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -60,7 +60,7 @@ namespace Geomapmaker.Data
                 List<string> cfRequiredFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence",
                 "identityconfidence", "label", "symbol", "datasourceid", "notes", "contactsandfaults_id" };
 
-                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("ContactsAndFaults", cfRequiredFields);
+                List<string> missingFields = await AnyFeatureLayer.GetMissingFieldsAsync("ContactsAndFaults", cfRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -78,7 +78,7 @@ namespace Geomapmaker.Data
                 // Check for empty/null values in required fields
                 //
                 List<string> cfNotNullFields = new List<string>() { "type", "isconcealed", "locationconfidencemeters", "existenceconfidence", "identityconfidence", "datasourceid", "contactsandfaults_id" };
-                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("ContactsAndFaults", cfNotNullFields);
+                List<string> fieldsWithMissingValues = await AnyFeatureLayer.GetRequiredFieldIsNullAsync("ContactsAndFaults", cfNotNullFields);
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
@@ -95,7 +95,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate Label values
                 //
-                List<string> duplicateLabels = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
+                List<string> duplicateLabels = await AnyFeatureLayer.GetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
                 if (duplicateLabels.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
@@ -112,7 +112,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate ContactsAndFaults_ID values
                 //
-                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
+                List<string> duplicateIds = await AnyFeatureLayer.GetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
                 if (duplicateIds.Count == 0)
                 {
                     results[5].Status = ValidationStatus.Passed;
@@ -140,7 +140,7 @@ namespace Geomapmaker.Data
         {
             List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
 
-            List<string> TypeTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "Type");
+            List<string> TypeTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "Type");
 
             IEnumerable<string> undefinedType = TypeTerms.Except(definedTerms);
 
@@ -154,7 +154,7 @@ namespace Geomapmaker.Data
                 });
             }
 
-            List<string> ExistenceConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "ExistenceConfidence");
+            List<string> ExistenceConfidenceTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "ExistenceConfidence");
 
             IEnumerable<string> undefinedExistenceConfidence = ExistenceConfidenceTerms.Except(definedTerms);
 
@@ -168,7 +168,7 @@ namespace Geomapmaker.Data
                 });
             }
 
-            List<string> IdentityConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "IdentityConfidence");
+            List<string> IdentityConfidenceTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "IdentityConfidence");
 
             IEnumerable<string> undefinedIdentityConfidence = IdentityConfidenceTerms.Except(definedTerms);
 

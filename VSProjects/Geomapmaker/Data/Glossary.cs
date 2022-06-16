@@ -30,7 +30,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No missing glossary terms in OrientationPoints."}
             };
 
-            if (await General.StandaloneTableExistsAsync("Glossary") == false)
+            if (await AnyStandaloneTable.DoesTableExistsAsync("Glossary") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Table not found");
@@ -43,7 +43,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCount("Glossary");
+                int tableCount = AnyStandaloneTable.GetTableCount("Glossary");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -62,7 +62,7 @@ namespace Geomapmaker.Data
                 List<string> glossaryRequiredFields = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
 
                 // Get list of missing fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("Glossary", glossaryRequiredFields);
+                List<string> missingFields = await AnyStandaloneTable.GetMissingFieldsAsync("Glossary", glossaryRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -84,7 +84,7 @@ namespace Geomapmaker.Data
                 List<string> glossaryNotNUll = new List<string>() { "term", "definition", "definitionsourceid", "glossary_id" };
 
                 // Get the required fields with a null
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("Glossary", glossaryNotNUll);
+                List<string> fieldsWithMissingValues = await AnyStandaloneTable.GetRequiredFieldIsNullAsync("Glossary", glossaryNotNUll);
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
@@ -101,7 +101,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for any duplicate ids
                 //
-                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
+                List<string> duplicateIds = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("Glossary", "Glossary_ID");
                 if (duplicateIds.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
@@ -118,7 +118,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for any duplicate terms
                 //
-                List<string> duplicateTerms = await General.StandaloneTableGetDuplicateValuesInFieldAsync("Glossary", "term");
+                List<string> duplicateTerms = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("Glossary", "term");
                 if (duplicateTerms.Count == 0)
                 {
                     results[5].Status = ValidationStatus.Passed;

@@ -34,7 +34,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="GeoMaterial are defined in GeoMaterialDict"},
             };
 
-            if (await General.StandaloneTableExistsAsync("DescriptionOfMapUnits") == false)
+            if (await AnyStandaloneTable.DoesTableExistsAsync("DescriptionOfMapUnits") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Table not found");
@@ -47,7 +47,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCount("DescriptionOfMapUnits");
+                int tableCount = AnyStandaloneTable.GetTableCount("DescriptionOfMapUnits");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -67,7 +67,7 @@ namespace Geomapmaker.Data
                                                                "areafillpatterndescription", "descriptionsourceid", "geomaterial", "geomaterialconfidence", "descriptionofmapunits_id" };
 
                 // Get misssing required fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", dmuRequiredFields);
+                List<string> missingFields = await AnyStandaloneTable.GetMissingFieldsAsync("DescriptionOfMapUnits", dmuRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -88,7 +88,7 @@ namespace Geomapmaker.Data
                 List<string> toolbarRequiredFields = new List<string>() { "relativeage", "hexcolor" };
 
                 // Get misssing required fields
-                List<string> toolbarMissingFields = await General.StandaloneTableGetMissingFieldsAsync("DescriptionOfMapUnits", toolbarRequiredFields);
+                List<string> toolbarMissingFields = await AnyStandaloneTable.GetMissingFieldsAsync("DescriptionOfMapUnits", toolbarRequiredFields);
                 if (toolbarMissingFields.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
@@ -105,7 +105,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate mapunit values
                 //
-                List<string> duplicateMapUnits = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
+                List<string> duplicateMapUnits = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "MapUnit", "MapUnit IS NOT NULL");
                 if (duplicateMapUnits.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
@@ -122,7 +122,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate DescriptionOfMapUnits_ID values
                 //
-                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
+                List<string> duplicateIds = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "DescriptionOfMapUnits_ID");
                 if (duplicateIds.Count == 0)
                 {
                     results[5].Status = ValidationStatus.Passed;
@@ -139,7 +139,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate name values
                 //
-                List<string> duplicateNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
+                List<string> duplicateNames = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "name");
                 if (duplicateNames.Count == 0)
                 {
                     results[6].Status = ValidationStatus.Passed;
@@ -156,7 +156,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate fullname values
                 //
-                List<string> duplicateFullNames = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
+                List<string> duplicateFullNames = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "fullname");
                 if (duplicateFullNames.Count == 0)
                 {
                     results[7].Status = ValidationStatus.Passed;
@@ -173,7 +173,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate rgb values
                 //
-                List<string> duplicateRGB = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
+                List<string> duplicateRGB = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "areafillrgb");
                 if (duplicateRGB.Count == 0)
                 {
                     results[8].Status = ValidationStatus.Passed;
@@ -190,7 +190,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate hierarchykey values
                 //
-                List<string> duplicateHierarchyKeys = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
+                List<string> duplicateHierarchyKeys = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("DescriptionOfMapUnits", "hierarchykey");
                 if (duplicateHierarchyKeys.Count == 0)
                 {
                     results[9].Status = ValidationStatus.Passed;
@@ -232,7 +232,7 @@ namespace Geomapmaker.Data
                 List<string> dmuNotNull = new List<string>() { "name", "hierarchykey", "paragraphstyle", "descriptionsourceid", "descriptionofmapunits_id" };
 
                 // Get required fields with a null value
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", dmuNotNull);
+                List<string> fieldsWithMissingValues = await AnyStandaloneTable.GetRequiredFieldIsNullAsync("DescriptionOfMapUnits", dmuNotNull);
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[11].Status = ValidationStatus.Passed;
@@ -254,7 +254,7 @@ namespace Geomapmaker.Data
                                                               "geomaterial", "geomaterialconfidence" };
 
                 // Get required fields with null values. Using the 'MapUnit is not null' where clause to only check MapUnit rows
-                List<string> mapUnitfieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DescriptionOfMapUnits", mapUnitNotNull, "MapUnit IS NOT NULL");
+                List<string> mapUnitfieldsWithMissingValues = await AnyStandaloneTable.GetRequiredFieldIsNullAsync("DescriptionOfMapUnits", mapUnitNotNull, "MapUnit IS NOT NULL");
                 if (mapUnitfieldsWithMissingValues.Count == 0)
                 {
                     results[12].Status = ValidationStatus.Passed;
@@ -317,7 +317,7 @@ namespace Geomapmaker.Data
         {
             List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
 
-            List<string> ParagraphStyleTerms = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "ParagraphStyle");
+            List<string> ParagraphStyleTerms = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "ParagraphStyle");
 
             IEnumerable<string> undefinedParagraphStyle = ParagraphStyleTerms.Except(definedTerms);
 
@@ -331,7 +331,7 @@ namespace Geomapmaker.Data
                 });
             }
 
-            List<string> GeoMaterialConfidenceTerms = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterialConfidence");
+            List<string> GeoMaterialConfidenceTerms = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterialConfidence");
 
             IEnumerable<string> undefinedGeoMaterialConfidenceTerms = GeoMaterialConfidenceTerms.Except(definedTerms);
 
@@ -354,9 +354,9 @@ namespace Geomapmaker.Data
         /// <returns>List of MapUnits not used</returns>
         public static async Task<List<string>> GetUnusedMapUnitsAsync()
         {
-            List<string> mapUnitPolys = await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
+            List<string> mapUnitPolys = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("MapUnitPolys", "MapUnit");
 
-            List<string> mapUnitDescriptions = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
+            List<string> mapUnitDescriptions = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "MapUnit");
 
             return mapUnitDescriptions.Except(mapUnitPolys).ToList();
         }
@@ -370,7 +370,7 @@ namespace Geomapmaker.Data
             List<string> missingGeoMaterial = new List<string>();
 
             // Get the GeoMaterial values from DMU
-            List<string> dmuGeoMaterials = await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterial");
+            List<string> dmuGeoMaterials = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterial");
 
             foreach (string geo in dmuGeoMaterials)
             {

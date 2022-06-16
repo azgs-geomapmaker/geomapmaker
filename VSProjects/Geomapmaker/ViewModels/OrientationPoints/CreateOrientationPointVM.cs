@@ -40,7 +40,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             YCoordinate = "";
             PlotAtScale = "0";
             LocationConfidenceMeters = "";
-            OrientationConfidenceDegrees = "";
+            OrientationConfidenceDegrees = "-9";
             IdentityConfidence = "";
         }
 

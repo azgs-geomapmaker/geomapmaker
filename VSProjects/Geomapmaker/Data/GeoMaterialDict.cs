@@ -27,7 +27,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="GeoMaterialDict table has not been modified."},
             };
 
-            if (await General.StandaloneTableExistsAsync("GeoMaterialDict") == false)
+            if (await AnyStandaloneTable.DoesTableExistsAsync("GeoMaterialDict") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Table not found");
@@ -40,7 +40,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCount("GeoMaterialDict");
+                int tableCount = AnyStandaloneTable.GetTableCount("GeoMaterialDict");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -59,7 +59,7 @@ namespace Geomapmaker.Data
                 List<string> geoMaterialRequiredFields = new List<string>() { "hierarchykey", "geomaterial", "indentedname", "definition" };
 
                 // Get list of missing required fields
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("GeoMaterialDict", geoMaterialRequiredFields);
+                List<string> missingFields = await AnyStandaloneTable.GetMissingFieldsAsync("GeoMaterialDict", geoMaterialRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -81,7 +81,7 @@ namespace Geomapmaker.Data
                 List<string> geoMaterialNotNull = new List<string>() { "hierarchykey", "geomaterial", "indentedname" };
 
                 // Check the required fields for any missing values.
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("GeoMaterialDict", geoMaterialNotNull);
+                List<string> fieldsWithMissingValues = await AnyStandaloneTable.GetRequiredFieldIsNullAsync("GeoMaterialDict", geoMaterialNotNull);
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;

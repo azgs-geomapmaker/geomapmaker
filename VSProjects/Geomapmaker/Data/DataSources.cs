@@ -32,7 +32,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No missing data sources."}
             };
 
-            if (await General.StandaloneTableExistsAsync("DataSources") == false)
+            if (await AnyStandaloneTable.DoesTableExistsAsync("DataSources") == false)
             {
                 results[0].Status = ValidationStatus.Failed;
                 results[0].Errors.Add("Table not found");
@@ -45,7 +45,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate tables
                 //
-                int tableCount = General.StandaloneTableCount("DataSources");
+                int tableCount = AnyStandaloneTable.GetTableCount("DataSources");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -60,7 +60,7 @@ namespace Geomapmaker.Data
                 // Check table for any missing fields 
                 //
 
-                List<string> missingFields = await General.StandaloneTableGetMissingFieldsAsync("DataSources", new List<string> { "source", "datasources_id", "url", "notes" });
+                List<string> missingFields = await AnyStandaloneTable.GetMissingFieldsAsync("DataSources", new List<string> { "source", "datasources_id", "url", "notes" });
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -77,7 +77,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for empty/null values in required fields
                 //
-                List<string> fieldsWithMissingValues = await General.StandaloneTableGetRequiredFieldIsNullAsync("DataSources", new List<string> { "source", "datasources_id" });
+                List<string> fieldsWithMissingValues = await AnyStandaloneTable.GetRequiredFieldIsNullAsync("DataSources", new List<string> { "source", "datasources_id" });
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
@@ -94,7 +94,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for any duplicate ids
                 //
-                List<string> duplicateIds = await General.StandaloneTableGetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
+                List<string> duplicateIds = await AnyStandaloneTable.GetDuplicateValuesInFieldAsync("DataSources", "datasources_id");
                 if (duplicateIds.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
@@ -156,25 +156,25 @@ namespace Geomapmaker.Data
             List<string> foreignKeys = new List<string>();
 
             // Add DMU data sources
-            foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
+            foreignKeys.AddRange(await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
 
             // Add CF data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
 
             // Add MUP data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
 
             // Add Stations data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("Stations", "datasourceid"));
 
             // Add OP data sources (location)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
 
             // Add OP data sources (orientation)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
 
             // Get all datasources from Data Source table
-            List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
+            List<string> dataSources = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DataSources", "datasources_id");
 
             // Find unused data sources
             List<string> unusedDataSources = dataSources.Except(foreignKeys.Distinct()).ToList();
@@ -192,25 +192,25 @@ namespace Geomapmaker.Data
             List<string> foreignKeys = new List<string>();
 
             // Add DMU data sources
-            foreignKeys.AddRange(await General.StandaloneTableGetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
+            foreignKeys.AddRange(await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "DescriptionSourceID"));
 
             // Add CF data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "DataSourceID"));
 
             // Add MUP data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("MapUnitPolys", "datasourceid"));
 
             // Add Stations data sources
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("Stations", "datasourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("Stations", "datasourceid"));
 
             // Add OP data sources (location)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "locationsourceid"));
 
             // Add OP data sources (orientation)
-            foreignKeys.AddRange(await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
+            foreignKeys.AddRange(await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "orientationsourceid"));
 
             // Get all datasources from Data Source table
-            List<string> dataSources = await General.StandaloneTableGetDistinctValuesForFieldAsync("DataSources", "datasources_id");
+            List<string> dataSources = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DataSources", "datasources_id");
 
             // Find missing data sources
             List<string> missingDataSources = foreignKeys.Except(dataSources).ToList();

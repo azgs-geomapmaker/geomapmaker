@@ -28,7 +28,7 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No duplicate OrientationPoints_ID values."},
             };
 
-            if (await General.FeatureLayerExistsAsync("OrientationPoints") == false)
+            if (await AnyFeatureLayer.DoesLayerExistsAsync("OrientationPoints") == false)
             {
                 results[0].Status = ValidationStatus.Skipped;
                 results[0].Errors.Add("Layer not found");
@@ -41,7 +41,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate layers
                 //
-                int tableCount = General.FeatureLayerCount("OrientationPoints");
+                int tableCount = AnyFeatureLayer.GetLayerCount("OrientationPoints");
                 if (tableCount > 1)
                 {
                     results[1].Status = ValidationStatus.Failed;
@@ -62,7 +62,7 @@ namespace Geomapmaker.Data
                 "orientationsourceid", "notes", "orientationpoints_id" };
 
                 // Get list of missing fields
-                List<string> missingFields = await General.FeatureLayerGetMissingFieldsAsync("OrientationPoints", opRequiredFields);
+                List<string> missingFields = await AnyFeatureLayer.GetMissingFieldsAsync("OrientationPoints", opRequiredFields);
                 if (missingFields.Count == 0)
                 {
                     results[2].Status = ValidationStatus.Passed;
@@ -85,7 +85,7 @@ namespace Geomapmaker.Data
                     "plotatscale", "mapunit", "locationsourceid", "orientationsourceid", "orientationpoints_id" };
 
                 // Get list of required fields with a null
-                List<string> fieldsWithMissingValues = await General.FeatureLayerGetRequiredFieldIsNullAsync("OrientationPoints", opNotNull);
+                List<string> fieldsWithMissingValues = await AnyFeatureLayer.GetRequiredFieldIsNullAsync("OrientationPoints", opNotNull);
                 if (fieldsWithMissingValues.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
@@ -102,7 +102,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for duplicate OrientationPoints_ID values
                 //
-                List<string> duplicateIds = await General.FeatureLayerGetDuplicateValuesInFieldAsync("OrientationPoints", "orientationpoints_id");
+                List<string> duplicateIds = await AnyFeatureLayer.GetDuplicateValuesInFieldAsync("OrientationPoints", "orientationpoints_id");
                 if (duplicateIds.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
@@ -129,7 +129,7 @@ namespace Geomapmaker.Data
         {
             List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
 
-            List<string> TypeTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "Type");
+            List<string> TypeTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "Type");
 
             IEnumerable<string> undefinedType = TypeTerms.Except(definedTerms);
 
@@ -143,7 +143,7 @@ namespace Geomapmaker.Data
                 });
             }
 
-            List<string> IdentityConfidenceTerms = await General.FeatureLayerGetDistinctValuesForFieldAsync("OrientationPoints", "IdentityConfidence");
+            List<string> IdentityConfidenceTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "IdentityConfidence");
 
             IEnumerable<string> undefinedIdentityConfidence = IdentityConfidenceTerms.Except(definedTerms);
 
