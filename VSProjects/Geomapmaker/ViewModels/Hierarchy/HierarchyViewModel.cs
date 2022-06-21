@@ -261,7 +261,7 @@ namespace Geomapmaker.ViewModels.Hierarchy
                                         {
                                             string ID = Helpers.RowValueToString(row["ObjectID"]);
 
-                                            string updatedKey = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey;
+                                            string updatedKey = HierarchyList.FirstOrDefault(a => a.ObjectID == ID)?.HierarchyKey ?? "";
 
                                             // Has to be called before any changes are made to the row.
                                             context.Invalidate(row);
