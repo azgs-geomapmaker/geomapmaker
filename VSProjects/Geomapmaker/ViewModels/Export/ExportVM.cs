@@ -27,6 +27,8 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateGeodatabase { get; set; } = true;
 
+        public bool CreateShapefiles { get; set; } = true;
+
         public bool CreateReport { get; set; } = true;
 
         public void CloseProwindow()
@@ -64,6 +66,11 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateGeodatabase)
                 {
                     ExportGeodatabase(geodatabasePath, featureDatasetPath);
+                }
+
+                if (CreateShapefiles)
+                {
+
                 }
 
                 if (CreateReport)
