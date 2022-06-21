@@ -1,20 +1,18 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Core.Geoprocessing;
 using ArcGIS.Desktop.Framework;
-using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Report;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Export
@@ -36,21 +34,25 @@ namespace Geomapmaker.ViewModels.Export
 
         public async void Export()
         {
-            // Get the project name
-            string projectName = _helpers.Helpers.GetProjectName();
+            FolderBrowserDialog folderPrompt = new FolderBrowserDialog();
 
-            SaveFileDialog dialog = new SaveFileDialog
+            if (folderPrompt.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
             {
-                FileName = projectName,
-                DefaultExt = ".gdb",
-            };
+                // Export folder path from user
+                string exportPath = folderPrompt.SelectedPath;
 
-            // Show save file dialog box
-            bool? result = dialog.ShowDialog();
+                // Get the project name
+                string projectName = _helpers.Helpers.GetProjectName();
 
-            // Process save file dialog box results
-            if (result == true)
-            {
+                // Path for the new GDB file
+                string gdbPath = exportPath + $"\\{projectName}.gdb";
+
+                // Path for the FeatureDataset
+                string featureDatasetPath = gdbPath + "\\GeologicMap";
+
+                // Path for the report
+                string reportPath = exportPath + "\\Report.html";
+
                 CloseProwindow();
 
                 ProgressDialog progDialog = new ProgressDialog("Exporting Geodatabase");
@@ -59,15 +61,6 @@ namespace Geomapmaker.ViewModels.Export
 
                 // Get the maps spatial reference or default to WGS84
                 SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
-
-                // Path for the new GDB file
-                string gdbPath = dialog.FileName;
-
-                // Path for the FeatureDataset
-                string featureDatasetPath = gdbPath + "\\GeologicMap";
-
-                // Path for the report
-                string reportPath = gdbPath + "\\Report.html";
 
                 // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
                 FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(gdbPath));
@@ -238,7 +231,7 @@ namespace Geomapmaker.ViewModels.Export
         #endregion
     }
 
-    internal class ShowExport : Button
+    internal class ShowExport : ArcGIS.Desktop.Framework.Contracts.Button
     {
         private Views.Export.Export _export = null;
 
