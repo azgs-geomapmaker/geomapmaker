@@ -29,6 +29,8 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateShapefiles { get; set; } = true;
 
+        public bool CreateTextTables { get; set; } = true;
+
         public bool CreateReport { get; set; } = true;
 
         public void CloseProwindow()
@@ -51,10 +53,14 @@ namespace Geomapmaker.ViewModels.Export
                 // Path for the new GDB file
                 string geodatabasePath = exportPath + $"\\{projectName}.gdb";
 
-                // Path for the FeatureDataset
+                // Path for the FeatureDataset (inside the GDB)
                 string featureDatasetPath = geodatabasePath + "\\GeologicMap";
 
+                // Path for shapefiles
                 string shapefilePath = exportPath + "\\Shapefiles";
+
+                // Path for text-tables
+                string tablesPath = exportPath + "\\Tables";
 
                 // Path for the report
                 string reportPath = exportPath + "\\Report.html";
@@ -87,6 +93,19 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "GeoMaterialDict", shapefilePath });
                     await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Glossary", shapefilePath });
                     await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Symbology", shapefilePath });
+                }
+
+                if (CreateTextTables)
+                {
+                    // Create tables folder
+                    System.IO.Directory.CreateDirectory(tablesPath);
+
+                    // Tables
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", tablesPath, "DataSources.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", tablesPath, "DescriptionOfMapUnits.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", tablesPath, "GeoMaterialDict.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", tablesPath, "Glossary.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", tablesPath, "Symbology.psv" });
                 }
 
                 if (CreateReport)

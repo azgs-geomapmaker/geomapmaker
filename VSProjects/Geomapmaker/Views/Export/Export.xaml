@@ -28,6 +28,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
@@ -49,11 +50,16 @@
         </StackPanel>
 
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <TextBlock Text="Text Tables" />
+            <CheckBox Style="{DynamicResource Esri_CheckboxToggleSwitch}" IsChecked="{Binding CreateTextTables, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <TextBlock Text="Report" />
             <CheckBox Style="{DynamicResource Esri_CheckboxToggleSwitch}" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
             <Button Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
         </StackPanel>
