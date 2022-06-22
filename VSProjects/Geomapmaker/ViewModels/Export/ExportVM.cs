@@ -40,7 +40,7 @@ namespace Geomapmaker.ViewModels.Export
         {
             FolderBrowserDialog folderPrompt = new FolderBrowserDialog();
 
-            if (folderPrompt.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
+            if (folderPrompt.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 // Export folder path from user
                 string exportPath = folderPrompt.SelectedPath;
@@ -53,6 +53,8 @@ namespace Geomapmaker.ViewModels.Export
 
                 // Path for the FeatureDataset
                 string featureDatasetPath = geodatabasePath + "\\GeologicMap";
+
+                string shapefilePath = exportPath + "\\Shapefiles";
 
                 // Path for the report
                 string reportPath = exportPath + "\\Report.html";
@@ -70,7 +72,21 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateShapefiles)
                 {
+                    // Create shapefiles folder
+                    System.IO.Directory.CreateDirectory(shapefilePath);
 
+                    // FeatureClasses
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", shapefilePath });
+
+                    // Tables
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DataSources", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DescriptionOfMapUnits", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "GeoMaterialDict", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Glossary", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Symbology", shapefilePath });
                 }
 
                 if (CreateReport)
@@ -107,94 +123,20 @@ namespace Geomapmaker.ViewModels.Export
                 schemaBuilder.Create(geologicMapFeatureDataset);
 
                 // Build status
-                bool buildStatus = schemaBuilder.Build();
+                schemaBuilder.Build();
 
-                // Build errors
-                if (!buildStatus)
-                {
-                    IReadOnlyList<string> errors = schemaBuilder.ErrorMessages;
-                }
+                // FeatureClasses
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "ContactsAndFaults", featureDatasetPath });
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "MapUnitPolys", featureDatasetPath });
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "Stations", featureDatasetPath });
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "OrientationPoints", featureDatasetPath });
 
-                FeatureLayer cf = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
-
-                if (cf != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(cf, featureDatasetPath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                }
-
-                FeatureLayer mup = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
-
-                if (mup != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(mup, featureDatasetPath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                }
-
-                FeatureLayer stations = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "Stations");
-
-                if (stations != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(stations, featureDatasetPath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                }
-
-                FeatureLayer op = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "OrientationPoints");
-
-                if (op != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(op, featureDatasetPath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                }
-
-                StandaloneTable ds = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
-
-                if (ds != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(ds, geodatabasePath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                }
-
-                StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-                if (dmu != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(dmu, geodatabasePath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                }
-
-                StandaloneTable geoDict = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "GeoMaterialDict");
-
-                if (geoDict != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(geoDict, geodatabasePath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                }
-
-                StandaloneTable glossary = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
-
-                if (glossary != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(glossary, geodatabasePath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                }
-
-                StandaloneTable symbology = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Symbology");
-
-                if (symbology != null)
-                {
-                    IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(symbology, geodatabasePath);
-
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                }
+                // Tables
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DataSources", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DescriptionOfMapUnits", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "GeoMaterialDict", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Glossary", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Symbology", geodatabasePath });
             }
         }
 
