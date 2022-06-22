@@ -1,20 +1,18 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Core.Geoprocessing;
 using ArcGIS.Desktop.Framework;
-using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Report;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Export
@@ -27,6 +25,12 @@ namespace Geomapmaker.ViewModels.Export
 
         public ICommand CommandExport => new RelayCommand(() => Export());
 
+        public bool CreateGeodatabase { get; set; } = true;
+
+        public bool CreateShapefiles { get; set; } = true;
+
+        public bool CreateTextTables { get; set; } = true;
+
         public bool CreateReport { get; set; } = true;
 
         public void CloseProwindow()
@@ -36,142 +40,72 @@ namespace Geomapmaker.ViewModels.Export
 
         public async void Export()
         {
-            // Get the project name
-            string projectName = _helpers.Helpers.GetProjectName();
+            FolderBrowserDialog folderPrompt = new FolderBrowserDialog();
 
-            SaveFileDialog dialog = new SaveFileDialog
+            if (folderPrompt.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                FileName = projectName,
-                DefaultExt = ".gdb",
-            };
+                // Export folder path from user
+                string exportPath = folderPrompt.SelectedPath;
 
-            // Show save file dialog box
-            bool? result = dialog.ShowDialog();
+                // Get the project name
+                string projectName = _helpers.Helpers.GetProjectName();
 
-            // Process save file dialog box results
-            if (result == true)
-            {
+                // Path for the new GDB file
+                string geodatabasePath = exportPath + $"\\{projectName}.gdb";
+
+                // Path for the FeatureDataset (inside the GDB)
+                string featureDatasetPath = geodatabasePath + "\\GeologicMap";
+
+                // Path for shapefiles
+                string shapefilePath = exportPath + "\\Shapefiles";
+
+                // Path for text-tables
+                string tablesPath = exportPath + "\\Tables";
+
+                // Path for the report
+                string reportPath = exportPath + "\\Report.html";
+
                 CloseProwindow();
 
                 ProgressDialog progDialog = new ProgressDialog("Exporting Geodatabase");
 
                 progDialog.Show();
 
-                // Get the maps spatial reference or default to WGS84
-                SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
-
-                // Path for the new GDB file
-                string gdbPath = dialog.FileName;
-
-                // Path for the FeatureDataset
-                string featureDatasetPath = gdbPath + "\\GeologicMap";
-
-                // Path for the report
-                string reportPath = gdbPath + "\\Report.html";
-
-                // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
-                FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(gdbPath));
-
-                // Create and use the file geodatabase
-                using (Geodatabase geodatabase = SchemaBuilder.CreateGeodatabase(fileGeodatabaseConnectionPath))
+                if (CreateGeodatabase)
                 {
-                    SchemaBuilder schemaBuilder = new SchemaBuilder(geodatabase);
+                    ExportGeodatabase(geodatabasePath, featureDatasetPath);
+                }
 
-                    // Initialize a new FeatureDataset named as 'GeologicMap'
-                    FeatureDatasetDescription geologicMapFeatureDataset = new FeatureDatasetDescription("GeologicMap", spatialReferences);
+                if (CreateShapefiles)
+                {
+                    // Create shapefiles folder
+                    System.IO.Directory.CreateDirectory(shapefilePath);
 
-                    // Create the FeatureDataset
-                    schemaBuilder.Create(geologicMapFeatureDataset);
+                    // FeatureClasses
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", shapefilePath });
 
-                    // Build status
-                    bool buildStatus = schemaBuilder.Build();
+                    // Tables
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DataSources", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DescriptionOfMapUnits", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "GeoMaterialDict", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Glossary", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Symbology", shapefilePath });
+                }
 
-                    // Build errors
-                    if (!buildStatus)
-                    {
-                        IReadOnlyList<string> errors = schemaBuilder.ErrorMessages;
-                    }
+                if (CreateTextTables)
+                {
+                    // Create tables folder
+                    System.IO.Directory.CreateDirectory(tablesPath);
 
-                    FeatureLayer cf = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
-
-                    if (cf != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(cf, featureDatasetPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                    }
-
-                    FeatureLayer mup = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
-
-                    if (mup != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(mup, featureDatasetPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                    }
-
-                    FeatureLayer stations = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "Stations");
-
-                    if (stations != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(stations, featureDatasetPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                    }
-
-                    FeatureLayer op = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "OrientationPoints");
-
-                    if (op != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(op, featureDatasetPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", valueArray);
-                    }
-
-                    StandaloneTable ds = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
-
-                    if (ds != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(ds, gdbPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                    }
-
-                    StandaloneTable dmu = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
-
-                    if (dmu != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(dmu, gdbPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                    }
-
-                    StandaloneTable geoDict = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "GeoMaterialDict");
-
-                    if (geoDict != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(geoDict, gdbPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                    }
-
-                    StandaloneTable glossary = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
-
-                    if (glossary != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(glossary, gdbPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                    }
-
-                    StandaloneTable symbology = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Symbology");
-
-                    if (symbology != null)
-                    {
-                        IReadOnlyList<string> valueArray = Geoprocessing.MakeValueArray(symbology, gdbPath);
-
-                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", valueArray);
-                    }
+                    // Tables
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", tablesPath, "DataSources.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", tablesPath, "DescriptionOfMapUnits.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", tablesPath, "GeoMaterialDict.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", tablesPath, "Glossary.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", tablesPath, "Symbology.psv" });
                 }
 
                 if (CreateReport)
@@ -185,6 +119,43 @@ namespace Geomapmaker.ViewModels.Export
 
                 progDialog.Hide();
 
+            }
+        }
+
+        private async void ExportGeodatabase(string geodatabasePath, string featureDatasetPath)
+        {
+            // Get the maps spatial reference or default to WGS84
+            SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
+
+            // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
+            FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(geodatabasePath));
+
+            // Create and use the file geodatabase
+            using (Geodatabase geodatabase = SchemaBuilder.CreateGeodatabase(fileGeodatabaseConnectionPath))
+            {
+                SchemaBuilder schemaBuilder = new SchemaBuilder(geodatabase);
+
+                // Initialize a new FeatureDataset named as 'GeologicMap'
+                FeatureDatasetDescription geologicMapFeatureDataset = new FeatureDatasetDescription("GeologicMap", spatialReferences);
+
+                // Create the FeatureDataset
+                schemaBuilder.Create(geologicMapFeatureDataset);
+
+                // Build status
+                schemaBuilder.Build();
+
+                // FeatureClasses
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "ContactsAndFaults", featureDatasetPath });
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "MapUnitPolys", featureDatasetPath });
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "Stations", featureDatasetPath });
+                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "OrientationPoints", featureDatasetPath });
+
+                // Tables
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DataSources", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DescriptionOfMapUnits", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "GeoMaterialDict", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Glossary", geodatabasePath });
+                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Symbology", geodatabasePath });
             }
         }
 
@@ -238,7 +209,7 @@ namespace Geomapmaker.ViewModels.Export
         #endregion
     }
 
-    internal class ShowExport : Button
+    internal class ShowExport : ArcGIS.Desktop.Framework.Contracts.Button
     {
         private Views.Export.Export _export = null;
 

@@ -390,7 +390,7 @@ namespace Geomapmaker.Data
                     CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
                     // If the template has a mapunit value
-                    if (templateDef.DefaultValues.ContainsKey("mapunit") && templateDef.DefaultValues.ContainsKey("datasourceid"))
+                    if (templateDef.DefaultValues != null && templateDef.DefaultValues.ContainsKey("mapunit") && templateDef.DefaultValues.ContainsKey("datasourceid"))
                     {
                         string muKey = templateDef.DefaultValues["mapunit"]?.ToString();
 
