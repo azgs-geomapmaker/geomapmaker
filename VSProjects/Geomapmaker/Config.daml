@@ -53,9 +53,9 @@
           <button refID="Geomapmaker_OrientationPoints_Btn" />
         </group>
         <group id="Geomapmaker_Tools" caption="Tools" keytip="todo">
+          <menu refID="Geomapmaker_RibbonElements_Tools" size="large" />
           <button refID="Geomapmaker_Report" />
           <button refID="Geomapmaker_Export_Btn" />
-          <menu refID="Geomapmaker_RibbonElements_Tools" size="large" />
         </group>
         <group id="Geomapmaker_Test" caption="Test" keytip="todo">
           <button refID="Geomapmaker_TestButton" />
