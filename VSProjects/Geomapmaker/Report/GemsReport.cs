@@ -141,6 +141,51 @@ td:last-child {
             return new XElement("div",
                 new XElement("h2", "Validation"),
 
+                new XElement("table",
+                    new XAttribute("style", "width: 25%;"),
+                        new XElement("tr",
+                         new XAttribute("class", "tableHeader"),
+                            new XElement("th", new XAttribute("style", "text-align: left;"), "Dataset"),
+                            new XElement("th", new XAttribute("style", "text-align: right;"), "Result")
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "Symbology"), GetValidationResult(SymbologyResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "DataSources"), GetValidationResult(DataSourcesResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "DescriptionOfMapUnits"), GetValidationResult(DescriptionOfMapUnitsResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "Glossary"), GetValidationResult(GlossaryResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "GeoMaterialDict"), GetValidationResult(GeoMaterialDictResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "MapUnitPolys"), GetValidationResult(MapUnitPolysResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "ContactsAndFaultsResults"), GetValidationResult(ContactsAndFaultsResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "Stations"), GetValidationResult(StationsResults)
+                        ),
+
+                        new XElement("tr",
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "Symbology"), GetValidationResult(OrientationPointsResults)
+                        )
+                ),
+
                 // Required datsets
                 GetErrorTable("Symbology", SymbologyResults, true),
                 GetErrorTable("DataSources", DataSourcesResults, true),
@@ -156,11 +201,29 @@ td:last-child {
             );
         }
 
+        private XElement GetValidationResult(List<ValidationRule> results)
+        {
+            if (results.Any(a => a.Status == ValidationStatus.Failed))
+            {
+                return new XElement("td", new XAttribute("style", "text-align: right; color: red;"), "Failed");
+            }
+            else if (results.All(a => a.Status == ValidationStatus.Skipped))
+            {
+                return new XElement("td", new XAttribute("style", "text-align: right;"), "Skipped");
+            }
+
+            return new XElement("td", new XAttribute("style", "text-align: right;"), "Passed");
+        }
+
         private XElement GetErrorTable(string DatsetName, List<ValidationRule> results, bool isRequiredDataset)
         {
-            string result = results.Any(a => a.Status == ValidationStatus.Failed) ? "Failed" : "Passed";
+            string result = "Passed";
 
-            if (isRequiredDataset == false && results.All(a => a.Status == ValidationStatus.Skipped))
+            if (results.Any(a => a.Status == ValidationStatus.Failed))
+            {
+                result = "Failed";
+            }
+            else if (results.All(a => a.Status == ValidationStatus.Skipped))
             {
                 result = "Skipped";
             }
