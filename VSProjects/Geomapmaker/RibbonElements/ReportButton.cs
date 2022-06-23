@@ -24,9 +24,7 @@ namespace Geomapmaker.RibbonElements
 
             progDialog.Hide();
 
-            Process process = Process.Start(tempFilePath);
-
-            process.Exited += (s, e) => File.Delete(tempFilePath);
+            Process.Start(tempFilePath);
         }
     }
 }
