@@ -213,18 +213,15 @@ td:last-child {
                         )
                 ),
 
-                // Required datsets
-                GetErrorTable("Symbology", SymbologyResults, true),
-                GetErrorTable("DataSources", DataSourcesResults, true),
-                GetErrorTable("DescriptionOfMapUnits", DescriptionOfMapUnitsResults, true),
-                GetErrorTable("Glossary", GlossaryResults, true),
-                GetErrorTable("GeoMaterialDict", GeoMaterialDictResults, true),
-                GetErrorTable("MapUnitPolys", MapUnitPolysResults, true),
-                GetErrorTable("ContactsAndFaults", ContactsAndFaultsResults, true),
-
-                // Optional datasets
-                GetErrorTable("Stations", StationsResults, false),
-                GetErrorTable("OrientationPoints", OrientationPointsResults, false)
+                GetErrorTable("Symbology", SymbologyResults),
+                GetErrorTable("DataSources", DataSourcesResults),
+                GetErrorTable("DescriptionOfMapUnits", DescriptionOfMapUnitsResults),
+                GetErrorTable("Glossary", GlossaryResults),
+                GetErrorTable("GeoMaterialDict", GeoMaterialDictResults),
+                GetErrorTable("MapUnitPolys", MapUnitPolysResults),
+                GetErrorTable("ContactsAndFaults", ContactsAndFaultsResults),
+                GetErrorTable("Stations", StationsResults),
+                GetErrorTable("OrientationPoints", OrientationPointsResults)
             );
         }
 
@@ -242,7 +239,7 @@ td:last-child {
             return new XElement("td", new XAttribute("style", "text-align: right;"), "Passed");
         }
 
-        private XElement GetErrorTable(string DatsetName, List<ValidationRule> results, bool isRequiredDataset)
+        private XElement GetErrorTable(string DatsetName, List<ValidationRule> results)
         {
             string result = "Passed";
 
