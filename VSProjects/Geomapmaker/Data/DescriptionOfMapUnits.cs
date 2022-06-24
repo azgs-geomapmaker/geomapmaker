@@ -323,13 +323,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedParagraphStyle)
             {
-                undefinedTerms.Add(new GlossaryTerm()
-                {
-                    DatasetName = "DescriptionOfMapUnits",
-                    FieldName = "ParagraphStyle",
-                    Definition = "test123",
-                    Term = term
-                });
+                undefinedTerms.Add(PredefinedTerms.GetPrepopulatedDefinition("DescriptionOfMapUnits", "ParagraphStyle", term));
             }
 
             List<string> GeoMaterialConfidenceTerms = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterialConfidence");
@@ -338,12 +332,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedGeoMaterialConfidenceTerms)
             {
-                undefinedTerms.Add(new GlossaryTerm()
-                {
-                    DatasetName = "DescriptionOfMapUnits",
-                    FieldName = "GeoMaterialConfidence",
-                    Term = term
-                });
+                undefinedTerms.Add(PredefinedTerms.GetPrepopulatedDefinition("DescriptionOfMapUnits", "GeoMaterialConfidence", term));
             }
 
             return undefinedTerms;
