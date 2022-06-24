@@ -207,11 +207,12 @@
     <Compile Include="Data\Glossary.cs" />
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationPoints.cs" />
+    <Compile Include="Data\PredefinedTerms.cs" />
     <Compile Include="Data\StandaloneTables.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\ReportModel.cs" />
-    <Compile Include="Models\UndefinedTerm.cs" />
+    <Compile Include="Models\GlossaryTerm.cs" />
     <Compile Include="Models\ValidationRule.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />
     <Compile Include="Report\GemsReport.cs" />

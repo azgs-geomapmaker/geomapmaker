@@ -152,8 +152,8 @@ namespace Geomapmaker.ViewModels.Glossary
             Definition = UndefinedTerms[currentIndex].Definition;
         }
 
-        private List<UndefinedTerm> _undefinedTerms { get; set; } = new List<UndefinedTerm>();
-        public List<UndefinedTerm> UndefinedTerms
+        private List<GlossaryTerm> _undefinedTerms { get; set; } = new List<GlossaryTerm>();
+        public List<GlossaryTerm> UndefinedTerms
         {
             get => _undefinedTerms;
             set

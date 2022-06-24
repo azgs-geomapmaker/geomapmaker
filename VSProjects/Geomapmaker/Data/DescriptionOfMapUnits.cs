@@ -313,9 +313,9 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <param name="definedTerms">List of defined terms in the glossary</param>
         /// <returns>List of missing glossary terms</returns>
-        public static async Task<List<UndefinedTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        public static async Task<List<GlossaryTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
         {
-            List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
+            List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
             List<string> ParagraphStyleTerms = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "ParagraphStyle");
 
@@ -323,10 +323,11 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedParagraphStyle)
             {
-                undefinedTerms.Add(new UndefinedTerm()
+                undefinedTerms.Add(new GlossaryTerm()
                 {
                     DatasetName = "DescriptionOfMapUnits",
                     FieldName = "ParagraphStyle",
+                    Definition = "test123",
                     Term = term
                 });
             }
@@ -337,7 +338,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedGeoMaterialConfidenceTerms)
             {
-                undefinedTerms.Add(new UndefinedTerm()
+                undefinedTerms.Add(new GlossaryTerm()
                 {
                     DatasetName = "DescriptionOfMapUnits",
                     FieldName = "GeoMaterialConfidence",
