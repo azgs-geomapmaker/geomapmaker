@@ -149,7 +149,7 @@ namespace Geomapmaker.ViewModels.Glossary
             Dataset = UndefinedTerms[currentIndex].DatasetName;
             Field = UndefinedTerms[currentIndex].FieldName;
             Term = UndefinedTerms[currentIndex].Term;
-            Definition = "";
+            Definition = UndefinedTerms[currentIndex].Definition;
         }
 
         private List<UndefinedTerm> _undefinedTerms { get; set; } = new List<UndefinedTerm>();
