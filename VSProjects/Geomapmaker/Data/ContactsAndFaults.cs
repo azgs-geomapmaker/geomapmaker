@@ -140,46 +140,50 @@ namespace Geomapmaker.Data
         {
             List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
-            List<string> TypeTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "Type");
-
-            IEnumerable<string> undefinedType = TypeTerms.Except(definedTerms);
-
-            foreach (string term in undefinedType)
+            // Get symbology options if the list is null
+            if (Symbology.ContactsAndFaultsSymbols == null)
             {
+                await Symbology.RefreshCFSymbolOptionsAsync();
+            }
+
+            // Get Type and Symbol value
+            Dictionary<string, string> TypeSymbolDict = await GetTypeAndSymbolsAsync();
+
+            // Filter out types that have already been defined in the glossary
+            TypeSymbolDict = TypeSymbolDict.Where(a => !definedTerms.Contains(a.Key)).ToDictionary(p => p.Key, p => p.Value);
+
+            foreach (string key in TypeSymbolDict.Keys)
+            {
+                // Get the symbol description 
+                string symbolDef = Symbology.ContactsAndFaultsSymbols.FirstOrDefault(a => a.Key == TypeSymbolDict[key])?.Description;
+
                 undefinedTerms.Add(new GlossaryTerm()
                 {
                     DatasetName = "ContactsAndFaults",
                     FieldName = "Type",
-                    Term = term
+                    Term = key,
+                    Definition = symbolDef
                 });
             }
 
+            // ExistenceConfidence
             List<string> ExistenceConfidenceTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "ExistenceConfidence");
 
             IEnumerable<string> undefinedExistenceConfidence = ExistenceConfidenceTerms.Except(definedTerms);
 
             foreach (string term in undefinedExistenceConfidence)
             {
-                undefinedTerms.Add(new GlossaryTerm()
-                {
-                    DatasetName = "ContactsAndFaults",
-                    FieldName = "ExistenceConfidence",
-                    Term = term
-                });
+                undefinedTerms.Add(PredefinedTerms.GetPrepopulatedDefinition("ContactsAndFaults", "ExistenceConfidence", term));
             }
 
+            // IdentityConfidence
             List<string> IdentityConfidenceTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "IdentityConfidence");
 
             IEnumerable<string> undefinedIdentityConfidence = IdentityConfidenceTerms.Except(definedTerms);
 
             foreach (string term in undefinedIdentityConfidence)
             {
-                undefinedTerms.Add(new GlossaryTerm()
-                {
-                    DatasetName = "ContactsAndFaults",
-                    FieldName = "IdentityConfidence",
-                    Term = term
-                });
+                undefinedTerms.Add(PredefinedTerms.GetPrepopulatedDefinition("ContactsAndFaults", "IdentityConfidence", term));
             }
 
             return undefinedTerms;
@@ -408,6 +412,52 @@ namespace Geomapmaker.Data
 
                 layer.SetRenderer(updatedRenderer);
             });
+        }
+
+        /// <summary>
+        /// Get a dictionary with all of the ContactsAndFaults Type and Symbol pairs.
+        /// </summary>
+        /// <returns>Returns a Dictionary<string, string> of Type and Symbol</returns>
+        public static async Task<Dictionary<string, string>> GetTypeAndSymbolsAsync()
+        {
+            Dictionary<string, string> typeDictionary = new Dictionary<string, string>();
+
+            FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+
+            if (layer != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = layer.GetTable())
+                    {
+                        if (table != null)
+                        {
+                            QueryFilter queryFilter = new QueryFilter
+                            {
+                                WhereClause = "type <> '' AND symbol <> ''",
+                                SubFields = "type, symbol"
+                            };
+
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        string type = row["type"]?.ToString();
+
+                                        string symbol = row["symbol"]?.ToString();
+
+                                        typeDictionary[type] = symbol;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            return typeDictionary;
         }
     }
 }
