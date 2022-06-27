@@ -325,5 +325,51 @@ namespace Geomapmaker.Data
 
             return uniqueValues;
         }
+
+        public static async Task<string> GetValueFromWhereClauseAsync(string tableName, string whereClause, string returnField)
+        {
+            string returnValue = "";
+
+            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == tableName);
+
+            if (standaloneTable != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = standaloneTable.GetTable())
+                    {
+                        if (table != null)
+                        {
+                            // Get fields for the table
+                            List<Field> tableFields = table.GetDefinition()?.GetFields()?.ToList();
+
+                            // Check if the table has the return field
+                            if (tableFields.Any(a => a.Name.ToLower() == returnField.ToLower()))
+                            {
+                                QueryFilter queryFilter = new QueryFilter
+                                {
+                                    WhereClause = whereClause,
+                                    //SubFields = $"{returnField}"
+                                };
+
+                                using (RowCursor rowCursor = table.Search(queryFilter))
+                                {
+                                    while (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            returnValue = row[returnField]?.ToString();
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            return returnValue;
+        }
     }
 }

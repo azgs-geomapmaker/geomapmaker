@@ -140,12 +140,6 @@ namespace Geomapmaker.Data
         {
             List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
-            // Get symbology options if the list is null
-            if (Symbology.ContactsAndFaultsSymbols == null)
-            {
-                await Symbology.RefreshCFSymbolOptionsAsync();
-            }
-
             // Get Type and Symbol value
             Dictionary<string, string> TypeSymbolDict = await GetTypeAndSymbolsAsync();
 
@@ -155,7 +149,7 @@ namespace Geomapmaker.Data
             foreach (string key in TypeSymbolDict.Keys)
             {
                 // Get the symbol description 
-                string symbolDef = Symbology.ContactsAndFaultsSymbols.FirstOrDefault(a => a.Key == TypeSymbolDict[key])?.Description;
+                string symbolDef = await AnyStandaloneTable.GetValueFromWhereClauseAsync("Symbology", $"Type = 'Line' AND Key_ = '{TypeSymbolDict[key]}'", "Description");
 
                 undefinedTerms.Add(new GlossaryTerm()
                 {
