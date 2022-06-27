@@ -167,7 +167,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedExistenceConfidence)
             {
-                undefinedTerms.Add(PredefinedTerms.GetPrepopulatedDefinition("ContactsAndFaults", "ExistenceConfidence", term));
+                undefinedTerms.Add(await PredefinedTerms.GetPrepopulatedDefinitionAsync("ContactsAndFaults", "ExistenceConfidence", term));
             }
 
             // IdentityConfidence
@@ -177,7 +177,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedIdentityConfidence)
             {
-                undefinedTerms.Add(PredefinedTerms.GetPrepopulatedDefinition("ContactsAndFaults", "IdentityConfidence", term));
+                undefinedTerms.Add(await PredefinedTerms .GetPrepopulatedDefinitionAsync("ContactsAndFaults", "IdentityConfidence", term));
             }
 
             return undefinedTerms;

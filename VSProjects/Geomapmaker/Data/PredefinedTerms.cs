@@ -1,27 +1,15 @@
 ﻿using Geomapmaker.Models;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
 {
     public class PredefinedTerms
     {
-        public static GlossaryTerm GetPrepopulatedDefinition(string datasetName, string fieldName, string term)
+        public static async Task<GlossaryTerm> GetPrepopulatedDefinitionAsync(string datasetName, string fieldName, string term)
         {
-            GlossaryTerm prepop = PrepopulateTermDefinitions.FirstOrDefault(a => a.DatasetName == datasetName && a.FieldName == fieldName && a.Term == term);
+            string definition = await AnyStandaloneTable.GetValueFromWhereClauseAsync("PredefinedTerms", $"DatasetName = '{datasetName}' AND FieldName = '{fieldName}' AND Term = '{term}'", "Definition");
 
-            if (prepop == null)
-            {
-                return new GlossaryTerm { DatasetName = datasetName, FieldName = fieldName, Term = term };
-            }
-
-            return prepop;
+            return new GlossaryTerm { DatasetName = datasetName, FieldName = fieldName, Term = term, Definition = definition };
         }
-
-        public static List<GlossaryTerm> PrepopulateTermDefinitions => new List<GlossaryTerm>()
-        {
-            new GlossaryTerm { DatasetName = "DescriptionOfMapUnits", FieldName = "ParagraphStyle", Term = "Heading2", Definition = "Prepop ParagraphStyle test" },
-            new GlossaryTerm { DatasetName = "DescriptionOfMapUnits", FieldName = "GeoMaterialConfidence", Term = "Low", Definition = "Prepop GeoMaterialConfidence test" },
-        };
     }
 }
