@@ -155,12 +155,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedIdentityConfidence)
             {
-                undefinedTerms.Add(new GlossaryTerm()
-                {
-                    DatasetName = "OrientationPoints",
-                    FieldName = "IdentityConfidence",
-                    Term = term
-                });
+                undefinedTerms.Add(await PredefinedTerms.GetPrepopulatedDefinitionAsync("OrientationPoints", "IdentityConfidence", term));
             }
 
             return undefinedTerms;
