@@ -2,6 +2,7 @@
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -132,7 +133,11 @@ namespace Geomapmaker.Data
                     }
                 }
 
-                List<GlossaryTerm> undefinedTerms = await GetUndefinedGlossaryTerms();
+                // Find Undefined terms
+                Tuple<List<string>, List<GlossaryTerm>> tuple = await GetUndefinedGlossaryTerms();
+
+                // Get the list of undefined terms from the tuple
+                List<GlossaryTerm> undefinedTerms = tuple.Item2;
 
                 //
                 // Check DescriptionOfMapUnits for missing undefined glossary terms
@@ -206,7 +211,7 @@ namespace Geomapmaker.Data
             return results;
         }
 
-        public static async Task<List<GlossaryTerm>> GetUndefinedGlossaryTerms()
+        public static async Task<Tuple<List<string>, List<GlossaryTerm>>> GetUndefinedGlossaryTerms()
         {
             List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
@@ -224,7 +229,7 @@ namespace Geomapmaker.Data
             // OrientationPoints
             undefinedTerms.AddRange(await OrientationPoints.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
 
-            return undefinedTerms;
+            return Tuple.Create(glossaryTerms, undefinedTerms);
         }
 
         public static async Task<List<string>> GetGlossaryTermsAsync()

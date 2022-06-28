@@ -5,7 +5,6 @@ using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,19 +14,19 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Glossary
 {
-    public class UndefinedGlossaryVM : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
+    public class CreateGlossaryVM
+        : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
     {
-        public ICommand CommandSkip => new RelayCommand(() => Skip(), () => CanSkip());
-
         public ICommand CommandSave => new RelayCommand(() => Save(), () => CanSave());
 
         public GlossaryVM ParentVM { get; set; }
 
-        public UndefinedGlossaryVM(GlossaryVM parentVM)
+        public CreateGlossaryVM(GlossaryVM parentVM)
         {
             ParentVM = parentVM;
 
             // Trigger validation
+            Term = "";
             Definition = "";
         }
 
@@ -99,95 +98,7 @@ namespace Geomapmaker.ViewModels.Glossary
             }
             else
             {
-                ParentVM.GetGlossaryTermsAndUndefined(false);
-                Skip();
-            }
-        }
-
-        private bool CanSkip()
-        {
-            return currentIndex < UndefinedTerms?.Count - 1;
-        }
-
-        public void Skip()
-        {
-            if (currentIndex < UndefinedTerms?.Count - 1)
-            {
-                currentIndex++;
-                SetValues();
-            }
-            else
-            {
                 ParentVM.CloseProwindow();
-            }
-        }
-
-        private int currentIndex = 0;
-
-        public void SetUndefinedTerms(List<GlossaryTerm> undefined)
-        {
-            UndefinedTerms = undefined;
-
-            if (UndefinedTerms.Count == 0)
-            {
-                Heading = "No Undefined Glossary Terms";
-            }
-            else
-            {
-                SetValues();
-            }
-        }
-
-        private void SetValues()
-        {
-            Heading = $"{currentIndex + 1} of {UndefinedTerms.Count} Undefined Glossary Terms";
-            Dataset = UndefinedTerms[currentIndex].DatasetName;
-            Field = UndefinedTerms[currentIndex].FieldName;
-            Term = UndefinedTerms[currentIndex].Term;
-            Definition = UndefinedTerms[currentIndex].Definition;
-        }
-
-        private List<GlossaryTerm> _undefinedTerms { get; set; } = new List<GlossaryTerm>();
-        public List<GlossaryTerm> UndefinedTerms
-        {
-            get => _undefinedTerms;
-            set
-            {
-                _undefinedTerms = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private string _heading { get; set; }
-        public string Heading
-        {
-            get => _heading;
-            set
-            {
-                _heading = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private string _dataset { get; set; }
-        public string Dataset
-        {
-            get => _dataset;
-            set
-            {
-                _dataset = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private string _field { get; set; }
-        public string Field
-        {
-            get => _field;
-            set
-            {
-                _field = value;
-                NotifyPropertyChanged();
             }
         }
 
@@ -198,6 +109,7 @@ namespace Geomapmaker.ViewModels.Glossary
             set
             {
                 _term = value;
+                ValidateUniqueTerm(Term, "Term");
                 NotifyPropertyChanged();
             }
         }
@@ -246,6 +158,25 @@ namespace Geomapmaker.ViewModels.Glossary
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
+
+        private void ValidateUniqueTerm(string text, string propertyKey)
+        {
+            // Required field
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "" };
+            }
+            else if (ParentVM.Terms.Any(a => a.ToLower() == text?.ToLower()))
+            {
+                _validationErrors[propertyKey] = new List<string>() { "Term is taken." };
+            }
+            else
+            {
+                _validationErrors.Remove(propertyKey);
+            }
+
+            RaiseErrorsChanged(propertyKey);
+        }
 
         private void ValidateRequiredString(string text, string propertyKey)
         {

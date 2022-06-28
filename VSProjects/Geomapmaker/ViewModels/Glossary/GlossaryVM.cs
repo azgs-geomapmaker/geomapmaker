@@ -2,7 +2,9 @@
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using Geomapmaker.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -16,15 +18,40 @@ namespace Geomapmaker.ViewModels.Glossary
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
         public UndefinedGlossaryVM Undefined { get; set; }
+        public CreateGlossaryVM Create { get; set; }
 
         public GlossaryVM()
         {
             Undefined = new UndefinedGlossaryVM(this);
+            Create = new CreateGlossaryVM(this);
         }
 
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
+        }
+
+        private List<string> _terms { get; set; }
+        public List<string> Terms
+        {
+            get => _terms;
+            set
+            {
+                _terms = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public async void GetGlossaryTermsAndUndefined(bool SetUndefined = true)
+        {
+            Tuple<List<string>, List<GlossaryTerm>> tuple = await Data.Glossary.GetUndefinedGlossaryTerms();
+
+            Terms = tuple.Item1;
+
+            if (SetUndefined)
+            {
+                Undefined.SetUndefinedTerms(tuple.Item2);
+            }
         }
 
         #region INotifyPropertyChanged
@@ -70,7 +97,7 @@ namespace Geomapmaker.ViewModels.Glossary
 
             await QueuedTask.Run(() =>
             {
-                _glossary.glossaryVM.Undefined.GetUndefinedTerms();
+                _glossary.glossaryVM.GetGlossaryTermsAndUndefined();
             }, ps.Progressor);
         }
     }

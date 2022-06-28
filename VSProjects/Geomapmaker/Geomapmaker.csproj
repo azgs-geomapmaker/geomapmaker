@@ -220,6 +220,7 @@
     <Compile Include="TestButton.cs" />
     <Compile Include="ViewModels\Export\ExportVM.cs" />
     <Compile Include="ViewModels\GeneratePolygons\GeneratePolygonsViewModel.cs" />
+    <Compile Include="ViewModels\Glossary\CreateGlossaryVM.cs" />
     <Compile Include="ViewModels\Glossary\UndefinedGlossaryVM.cs" />
     <Compile Include="ViewModels\Glossary\GlossaryVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
@@ -229,6 +230,9 @@
     </Compile>
     <Compile Include="Views\Glossary\Glossary.xaml.cs">
       <DependentUpon>Glossary.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Glossary\CreateGlossary.xaml.cs">
+      <DependentUpon>CreateGlossary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Glossary\UndefinedGlossary.xaml.cs">
       <DependentUpon>UndefinedGlossary.xaml</DependentUpon>
@@ -376,6 +380,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Glossary\Glossary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Glossary\CreateGlossary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -35,12 +35,9 @@
             <TabItem Header="Undefined" >
                 <tabData:UndefinedGlossary />
             </TabItem>
-            <!--<TabItem Header="Edit">
-                <tabData:EditDataSource />
+            <TabItem Header="Create">
+                <tabData:CreateGlossary/>
             </TabItem>
-            <TabItem Header="Delete">
-                <tabData:DeleteDataSource />
-            </TabItem>-->
         </TabControl>
     </Grid>
 
