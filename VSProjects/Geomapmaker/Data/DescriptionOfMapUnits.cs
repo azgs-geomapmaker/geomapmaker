@@ -546,7 +546,7 @@ namespace Geomapmaker.Data
             }
 
             // Sort unassigned
-            tmpUnassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
+            tmpUnassigned = tmpUnassigned.OrderBy(a => !string.IsNullOrEmpty(a.MU)).ThenBy(b => b.Name).ToList();
 
             // Combine the lists into a single tuple
             return Tuple.Create(tmpTree, tmpUnassigned);
