@@ -8,10 +8,10 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.Glossary"
         mc:Ignorable="d"
         Title="Glossary"
-        Height="400" 
-        MinHeight="350" 
-        Width="400"
-        MinWidth="350"        
+        Height="500" 
+        MinHeight="450" 
+        Width="500"
+        MinWidth="450"        
         WindowStartupLocation="CenterOwner"
     >
 
@@ -37,6 +37,9 @@
             </TabItem>
             <TabItem Header="Create">
                 <tabData:CreateGlossary/>
+            </TabItem>
+            <TabItem Header="Edit">
+                <tabData:EditGlossary/>
             </TabItem>
         </TabControl>
     </Grid>

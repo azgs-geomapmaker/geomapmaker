@@ -133,8 +133,8 @@ namespace Geomapmaker.Data
                     }
                 }
 
-                // Find Undefined terms
-                Tuple<List<string>, List<GlossaryTerm>> tuple = await GetUndefinedGlossaryTerms();
+                // Find terms
+                Tuple<List<GlossaryTerm>, List<GlossaryTerm>> tuple = await GetUndefinedGlossaryTerms();
 
                 // Get the list of undefined terms from the tuple
                 List<GlossaryTerm> undefinedTerms = tuple.Item2;
@@ -211,30 +211,32 @@ namespace Geomapmaker.Data
             return results;
         }
 
-        public static async Task<Tuple<List<string>, List<GlossaryTerm>>> GetUndefinedGlossaryTerms()
+        public static async Task<Tuple<List<GlossaryTerm>, List<GlossaryTerm>>> GetUndefinedGlossaryTerms()
         {
             List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
-            List<string> glossaryTerms = await GetGlossaryTermsAsync();
+            List<GlossaryTerm> glossaryTerms = await GetGlossaryDictionaryAsync();
+
+            List<string> terms = glossaryTerms.Select(a => a.Term).ToList();
 
             // DescriptionOfMapUnits
-            undefinedTerms.AddRange(await DescriptionOfMapUnits.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await DescriptionOfMapUnits.GetTermsUndefinedInGlossaryAsync(terms));
 
             // ContactsAndFaults
-            undefinedTerms.AddRange(await ContactsAndFaults.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await ContactsAndFaults.GetTermsUndefinedInGlossaryAsync(terms));
 
             // MapUnitPolys
-            undefinedTerms.AddRange(await MapUnitPolys.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await MapUnitPolys.GetTermsUndefinedInGlossaryAsync(terms));
 
             // OrientationPoints
-            undefinedTerms.AddRange(await OrientationPoints.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await OrientationPoints.GetTermsUndefinedInGlossaryAsync(terms));
 
             return Tuple.Create(glossaryTerms, undefinedTerms);
         }
 
-        public static async Task<List<string>> GetGlossaryTermsAsync()
+        public static async Task<List<GlossaryTerm>> GetGlossaryDictionaryAsync()
         {
-            List<string> terms = new List<string>();
+            List<GlossaryTerm> terms = new List<GlossaryTerm>();
 
             StandaloneTable standalone = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
 
@@ -252,18 +254,21 @@ namespace Geomapmaker.Data
                         return;
                     }
 
-                    QueryFilter queryFilter = new QueryFilter
-                    {
-                        SubFields = "Term"
-                    };
-
-                    using (RowCursor rowCursor = table.Search(queryFilter))
+                    using (RowCursor rowCursor = table.Search())
                     {
                         while (rowCursor.MoveNext())
                         {
                             using (Row row = rowCursor.Current)
                             {
-                                terms.Add(row["Term"]?.ToString());
+                                GlossaryTerm term = new GlossaryTerm
+                                {
+                                    ObjectId = long.Parse(row["ObjectId"]?.ToString()),
+                                    Term = row["Term"]?.ToString(),
+                                    Definition = row["Definition"]?.ToString(),
+                                    DefinitionSourceID = row["DefinitionSourceID"]?.ToString(),
+                                };
+
+                                terms.Add(term);
                             }
                         }
                     }

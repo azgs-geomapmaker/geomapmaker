@@ -1,7 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
-using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
@@ -14,8 +14,7 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Glossary
 {
-    public class CreateGlossaryVM
-        : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
+    public class CreateGlossaryVM : PropertyChangedBase, INotifyDataErrorInfo
     {
         public ICommand CommandSave => new RelayCommand(() => Save(), () => CanSave());
 
@@ -102,27 +101,25 @@ namespace Geomapmaker.ViewModels.Glossary
             }
         }
 
-        private string _term { get; set; }
+        private string _term;
         public string Term
         {
             get => _term;
             set
             {
-                _term = value;
+                SetProperty(ref _term, value, () => Term);
                 ValidateUniqueTerm(Term, "Term");
-                NotifyPropertyChanged();
             }
         }
 
-        private string _definition { get; set; }
+        private string _definition;
         public string Definition
         {
             get => _definition;
             set
             {
-                _definition = value;
+                SetProperty(ref _definition, value, () => Definition);
                 ValidateRequiredString(Definition, "Definition");
-                NotifyPropertyChanged();
             }
         }
 
@@ -132,9 +129,8 @@ namespace Geomapmaker.ViewModels.Glossary
             get => _definitionSourceID;
             set
             {
-                _definitionSourceID = value;
+                SetProperty(ref _definitionSourceID, value, () => DefinitionSourceID);
                 ValidateRequiredString(DefinitionSourceID, "DefinitionSourceID");
-                NotifyPropertyChanged();
             }
         }
 
@@ -166,7 +162,7 @@ namespace Geomapmaker.ViewModels.Glossary
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.Terms.Any(a => a.ToLower() == text?.ToLower()))
+            else if (ParentVM.Terms.Any(a => a.Term.ToLower() == text?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Term is taken." };
             }
@@ -191,17 +187,6 @@ namespace Geomapmaker.ViewModels.Glossary
             }
 
             RaiseErrorsChanged(propertyKey);
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

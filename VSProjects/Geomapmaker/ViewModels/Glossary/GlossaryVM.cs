@@ -19,11 +19,13 @@ namespace Geomapmaker.ViewModels.Glossary
 
         public UndefinedGlossaryVM Undefined { get; set; }
         public CreateGlossaryVM Create { get; set; }
+        public EditGlossaryVM Edit { get; set; }
 
         public GlossaryVM()
         {
             Undefined = new UndefinedGlossaryVM(this);
             Create = new CreateGlossaryVM(this);
+            Edit = new EditGlossaryVM(this);
         }
 
         public void CloseProwindow()
@@ -31,8 +33,8 @@ namespace Geomapmaker.ViewModels.Glossary
             WindowCloseEvent(this, new EventArgs());
         }
 
-        private List<string> _terms { get; set; }
-        public List<string> Terms
+        private List<GlossaryTerm> _terms { get; set; }
+        public List<GlossaryTerm> Terms
         {
             get => _terms;
             set
@@ -44,7 +46,7 @@ namespace Geomapmaker.ViewModels.Glossary
 
         public async void GetGlossaryTermsAndUndefined(bool SetUndefined = true)
         {
-            Tuple<List<string>, List<GlossaryTerm>> tuple = await Data.Glossary.GetUndefinedGlossaryTerms();
+            Tuple<List<GlossaryTerm>, List<GlossaryTerm>> tuple = await Data.Glossary.GetUndefinedGlossaryTerms();
 
             Terms = tuple.Item1;
 
