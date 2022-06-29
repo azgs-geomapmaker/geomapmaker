@@ -60,8 +60,6 @@ namespace Geomapmaker.ViewModels.Glossary
 
                             editOperation.Callback(context =>
                             {
-                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-
                                 using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                                 {
                                     rowBuffer["term"] = Term;

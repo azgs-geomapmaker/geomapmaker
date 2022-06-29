@@ -92,8 +92,6 @@ namespace Geomapmaker.ViewModels.Headings
 
                             editOperation.Callback(context =>
                             {
-                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
-
                                 using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                                 {
                                     rowBuffer["Name"] = Name;
