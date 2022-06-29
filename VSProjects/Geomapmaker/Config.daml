@@ -169,6 +169,11 @@
             Tooltip text<disabledText />
           </tooltip>
         </button>
+        <button id="Geomapmaker_InsertGlossary" caption="Insert Glossary Terms" className="Geomapmaker.RibbonElements.InsertGlossaryTerms" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="todo" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">
+            Tooltip text<disabledText />
+          </tooltip>
+        </button>
       </controls>
       <!-- Dock Panes -->
       <dockPanes></dockPanes>
@@ -176,6 +181,7 @@
         <menu id="Geomapmaker_RibbonElements_Tools" caption="Tools" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png">
           <button refID="Geomapmaker_RebuildRenderers" />
           <button refID="Geomapmaker_PrimaryKeys" />
+          <button refID="Geomapmaker_InsertGlossary" />
         </menu>
       </menus>
     </insertModule>

@@ -208,7 +208,6 @@
     <Compile Include="Data\MapUnitPolys.cs" />
     <Compile Include="Data\OrientationPoints.cs" />
     <Compile Include="Data\PredefinedTerms.cs" />
-    <Compile Include="Data\StandaloneTables.cs" />
     <Compile Include="Data\Stations.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\ReportModel.cs" />

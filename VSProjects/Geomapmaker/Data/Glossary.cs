@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
@@ -232,6 +233,53 @@ namespace Geomapmaker.Data
             undefinedTerms.AddRange(await OrientationPoints.GetTermsUndefinedInGlossaryAsync(terms));
 
             return Tuple.Create(glossaryTerms, undefinedTerms);
+        }
+
+        public static async Task<int> InsertGlossaryTermsAsync(List<GlossaryTerm> terms)
+        {
+            StandaloneTable standalone = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
+
+            if (standalone == null)
+            {
+                return 0;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table enterpriseTable = standalone.GetTable())
+                {
+                    if (enterpriseTable != null)
+                    {
+                        EditOperation editOperation = new EditOperation();
+
+                        editOperation.Callback(context =>
+                        {
+                            foreach (GlossaryTerm term in terms)
+                            {
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    rowBuffer["term"] = term.Term;
+                                    rowBuffer["definition"] = term.Definition;
+                                    rowBuffer["definitionsourceid"] = GeomapmakerModule.DataSourceId;
+                                    rowBuffer["glossary_id"] = Guid.NewGuid().ToString();
+
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                            // To Indicate that the attribute table has to be updated.
+                                            context.Invalidate(row);
+                                    }
+                                }
+                            }
+
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+                    }
+                }
+
+            });
+
+            return terms.Count;
         }
 
         public static async Task<List<GlossaryTerm>> GetGlossaryDictionaryAsync()
