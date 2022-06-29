@@ -245,7 +245,6 @@ namespace Geomapmaker.ViewModels.MapUnits
 
                             editOperation.Callback(context =>
                             {
-                                TableDefinition tableDefinition = enterpriseTable.GetDefinition();
                                 using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                                 {
                                     rowBuffer["MapUnit"] = MapUnit;

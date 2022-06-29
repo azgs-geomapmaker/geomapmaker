@@ -2,65 +2,31 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Framework.Dialogs;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels.DataSources
+namespace Geomapmaker.ViewModels.Glossary
 {
-    public class CreateDataSourceVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class CreateGlossaryVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
+        public ICommand CommandSave => new RelayCommand(() => Save(), () => CanSave());
 
-        public DataSourcesViewModel ParentVM { get; set; }
+        public GlossaryVM ParentVM { get; set; }
 
-        public CreateDataSourceVM(DataSourcesViewModel parentVM)
+        public CreateGlossaryVM(GlossaryVM parentVM)
         {
             ParentVM = parentVM;
-            Id = "";
-            Source = "";
-        }
 
-        private string _id;
-        public string Id
-        {
-            get => _id;
-            set
-            {
-                SetProperty(ref _id, value, () => Id);
-                ValidateId(Id, "Id");
-            }
-        }
-
-        private string _source;
-        public string Source
-        {
-            get => _source;
-            set
-            {
-                SetProperty(ref _source, value, () => Source);
-                ValidateRequiredString(Source, "Source");
-            }
-        }
-
-        private string _url;
-        public string Url
-        {
-            get => _url;
-            set => SetProperty(ref _url, value, () => Url);
-        }
-
-        private string _notes;
-        public string Notes
-        {
-            get => _notes;
-            set => SetProperty(ref _notes, value, () => Notes);
+            // Trigger validation
+            Term = "";
+            Definition = "";
         }
 
         private bool CanSave()
@@ -68,15 +34,15 @@ namespace Geomapmaker.ViewModels.DataSources
             return !HasErrors;
         }
 
-        private async void SaveAsync()
+        public async void Save()
         {
             string errorMessage = null;
 
-            StandaloneTable ds = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DataSources");
+            StandaloneTable standalone = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
 
-            if (ds == null)
+            if (standalone == null)
             {
-                MessageBox.Show("DataSources table not found in active map.", "One or more errors occured.");
+                MessageBox.Show("Glossary table not found in active map.", "One or more errors occured.");
                 return;
             }
 
@@ -84,7 +50,7 @@ namespace Geomapmaker.ViewModels.DataSources
             {
                 try
                 {
-                    using (Table enterpriseTable = ds.GetTable())
+                    using (Table enterpriseTable = standalone.GetTable())
                     {
                         if (enterpriseTable != null)
                         {
@@ -94,10 +60,10 @@ namespace Geomapmaker.ViewModels.DataSources
                             {
                                 using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
                                 {
-                                    rowBuffer["DataSources_ID"] = Id;
-                                    rowBuffer["Source"] = Source;
-                                    rowBuffer["Url"] = Url;
-                                    rowBuffer["Notes"] = Notes;
+                                    rowBuffer["term"] = Term;
+                                    rowBuffer["definition"] = Definition;
+                                    rowBuffer["definitionsourceid"] = DefinitionSourceID;
+                                    rowBuffer["glossary_id"] = Guid.NewGuid().ToString();
 
                                     using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                     {
@@ -133,38 +99,70 @@ namespace Geomapmaker.ViewModels.DataSources
             }
         }
 
-        #region Validation
+        private string _term;
+        public string Term
+        {
+            get => _term;
+            set
+            {
+                SetProperty(ref _term, value, () => Term);
+                ValidateUniqueTerm(Term, "Term");
+            }
+        }
 
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        private string _definition;
+        public string Definition
+        {
+            get => _definition;
+            set
+            {
+                SetProperty(ref _definition, value, () => Definition);
+                ValidateRequiredString(Definition, "Definition");
+            }
+        }
+
+        private string _definitionSourceID = GeomapmakerModule.DataSourceId;
+        public string DefinitionSourceID
+        {
+            get => _definitionSourceID;
+            set
+            {
+                SetProperty(ref _definitionSourceID, value, () => DefinitionSourceID);
+                ValidateRequiredString(DefinitionSourceID, "DefinitionSourceID");
+            }
+        }
+
+        #region Validation
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
-        public bool HasErrors => _validationErrors.Count > 0;
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
-        public IEnumerable GetErrors(string propertyName)
+        public System.Collections.IEnumerable GetErrors(string propertyName)
         {
             // Return null if parameters is null/empty OR there are no errors for that parameter
             // Otherwise, return the errors for that parameter.
             return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
-                null : (IEnumerable)_validationErrors[propertyName];
+                null : (System.Collections.IEnumerable)_validationErrors[propertyName];
         }
 
-        // Validate id
-        private void ValidateId(string name, string propertyKey)
+        public bool HasErrors => _validationErrors.Count > 0;
+
+        private void ValidateUniqueTerm(string text, string propertyKey)
         {
             // Required field
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.DataSources.Any(a => a.DataSource_ID?.ToLower() == Id?.ToLower()))
+            else if (ParentVM.Terms.Any(a => a.Term.ToLower() == text?.ToLower()))
             {
-                _validationErrors[propertyKey] = new List<string>() { "ID is taken." };
+                _validationErrors[propertyKey] = new List<string>() { "Term is taken." };
             }
             else
             {
@@ -174,11 +172,10 @@ namespace Geomapmaker.ViewModels.DataSources
             RaiseErrorsChanged(propertyKey);
         }
 
-        // Validate required field
-        private void ValidateRequiredString(string name, string propertyKey)
+        private void ValidateRequiredString(string text, string propertyKey)
         {
             // Required field
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrEmpty(text))
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }

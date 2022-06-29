@@ -125,21 +125,27 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <param name="definedTerms">List of defined terms in the glossary</param>
         /// <returns>List of missing glossary terms</returns>
-        public static async Task<List<UndefinedTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        public static async Task<List<GlossaryTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
         {
-            List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
+            List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
-            List<string> TypeTerms = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("OrientationPoints", "Type");
+            // Get Type and Symbol value
+            Dictionary<string, string> TypeSymbolDict = await GetTypeAndSymbolsAsync();
 
-            IEnumerable<string> undefinedType = TypeTerms.Except(definedTerms);
+            // Filter out types that have already been defined in the glossary
+            TypeSymbolDict = TypeSymbolDict.Where(a => !definedTerms.Contains(a.Key)).ToDictionary(p => p.Key, p => p.Value);
 
-            foreach (string term in undefinedType)
+            foreach (string key in TypeSymbolDict.Keys)
             {
-                undefinedTerms.Add(new UndefinedTerm()
+                // Get the symbol description 
+                string symbolDef = await AnyStandaloneTable.GetValueFromWhereClauseAsync("Symbology", $"Type = 'Point' AND Key_ = '{TypeSymbolDict[key]}'", "Description");
+
+                undefinedTerms.Add(new GlossaryTerm()
                 {
                     DatasetName = "OrientationPoints",
                     FieldName = "Type",
-                    Term = term
+                    Term = key,
+                    Definition = symbolDef
                 });
             }
 
@@ -149,12 +155,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedIdentityConfidence)
             {
-                undefinedTerms.Add(new UndefinedTerm()
-                {
-                    DatasetName = "OrientationPoints",
-                    FieldName = "IdentityConfidence",
-                    Term = term
-                });
+                undefinedTerms.Add(await PredefinedTerms.GetPrepopulatedDefinitionAsync("OrientationPoints", "IdentityConfidence", term));
             }
 
             return undefinedTerms;
@@ -293,5 +294,52 @@ namespace Geomapmaker.Data
                 layer.SetRenderer(updatedRenderer);
             });
         }
+
+        /// <summary>
+        /// Get a dictionary with all of the OrientationPoints Type and Symbol pairs.
+        /// </summary>
+        /// <returns>Returns a Dictionary<string, string> of Type and Symbol</returns>
+        public static async Task<Dictionary<string, string>> GetTypeAndSymbolsAsync()
+        {
+            Dictionary<string, string> typeDictionary = new Dictionary<string, string>();
+
+            FeatureLayer layer = MapView.Active?.Map.FindLayers("OrientationPoints").FirstOrDefault() as FeatureLayer;
+
+            if (layer != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = layer.GetTable())
+                    {
+                        if (table != null)
+                        {
+                            QueryFilter queryFilter = new QueryFilter
+                            {
+                                WhereClause = "type <> '' AND symbol <> ''",
+                                SubFields = "type, symbol"
+                            };
+
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        string type = row["type"]?.ToString();
+
+                                        string symbol = row["symbol"]?.ToString();
+
+                                        typeDictionary[type] = symbol;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            return typeDictionary;
+        }
+
     }
 }

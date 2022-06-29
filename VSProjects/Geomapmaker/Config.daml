@@ -39,6 +39,7 @@
           <button refID="Geomapmaker_Headings" />
           <button refID="Geomapmaker_MapUnits" />
           <button refID="Geomapmaker_Hierarchy" />
+          <button refID="Geomapmaker_Glossary" />
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts and Faults" keytip="CF">
           <button refID="Geomapmaker_ContactsFaults" />
@@ -158,12 +159,17 @@
             Tooltip text<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_Glossary" caption="Update Glossary" className="Geomapmaker.ViewModels.Glossary.ShowGlossary" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Glossary" caption="Glossary" className="Geomapmaker.ViewModels.Glossary.ShowGlossary" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText />
           </tooltip>
         </button>
         <button id="Geomapmaker_PrimaryKeys" caption="Set Primary Keys" className="Geomapmaker.RibbonElements.SetAllPrimaryKeys" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
+          <tooltip heading="Tooltip Heading">
+            Tooltip text<disabledText />
+          </tooltip>
+        </button>
+        <button id="Geomapmaker_InsertGlossary" caption="Insert Glossary Terms" className="Geomapmaker.RibbonElements.InsertGlossaryTerms" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText />
           </tooltip>
@@ -174,8 +180,8 @@
       <menus>
         <menu id="Geomapmaker_RibbonElements_Tools" caption="Tools" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png">
           <button refID="Geomapmaker_RebuildRenderers" />
-          <button refID="Geomapmaker_Glossary" />
           <button refID="Geomapmaker_PrimaryKeys" />
+          <button refID="Geomapmaker_InsertGlossary" />
         </menu>
       </menus>
     </insertModule>

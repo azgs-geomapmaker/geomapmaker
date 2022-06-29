@@ -313,9 +313,9 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <param name="definedTerms">List of defined terms in the glossary</param>
         /// <returns>List of missing glossary terms</returns>
-        public static async Task<List<UndefinedTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
+        public static async Task<List<GlossaryTerm>> GetTermsUndefinedInGlossaryAsync(List<string> definedTerms)
         {
-            List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
+            List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
             List<string> ParagraphStyleTerms = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "ParagraphStyle");
 
@@ -323,12 +323,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedParagraphStyle)
             {
-                undefinedTerms.Add(new UndefinedTerm()
-                {
-                    DatasetName = "DescriptionOfMapUnits",
-                    FieldName = "ParagraphStyle",
-                    Term = term
-                });
+                undefinedTerms.Add(await PredefinedTerms.GetPrepopulatedDefinitionAsync("DescriptionOfMapUnits", "ParagraphStyle", term));
             }
 
             List<string> GeoMaterialConfidenceTerms = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DescriptionOfMapUnits", "GeoMaterialConfidence");
@@ -337,12 +332,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedGeoMaterialConfidenceTerms)
             {
-                undefinedTerms.Add(new UndefinedTerm()
-                {
-                    DatasetName = "DescriptionOfMapUnits",
-                    FieldName = "GeoMaterialConfidence",
-                    Term = term
-                });
+                undefinedTerms.Add(await PredefinedTerms.GetPrepopulatedDefinitionAsync("DescriptionOfMapUnits", "GeoMaterialConfidence", term));
             }
 
             return undefinedTerms;
@@ -556,7 +546,7 @@ namespace Geomapmaker.Data
             }
 
             // Sort unassigned
-            tmpUnassigned = tmpUnassigned.OrderBy(a => a.ParagraphStyle).ThenBy(a => a.FullName).ToList();
+            tmpUnassigned = tmpUnassigned.OrderBy(a => !string.IsNullOrEmpty(a.MU)).ThenBy(b => b.Name).ToList();
 
             // Combine the lists into a single tuple
             return Tuple.Create(tmpTree, tmpUnassigned);

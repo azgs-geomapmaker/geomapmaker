@@ -1,7 +1,9 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -132,12 +134,16 @@ namespace Geomapmaker.Data
                     }
                 }
 
-                List<UndefinedTerm> undefinedTerms = await GetUndefinedGlossaryTerms();
+                // Find terms
+                Tuple<List<GlossaryTerm>, List<GlossaryTerm>> tuple = await GetUndefinedGlossaryTerms();
+
+                // Get the list of undefined terms from the tuple
+                List<GlossaryTerm> undefinedTerms = tuple.Item2;
 
                 //
                 // Check DescriptionOfMapUnits for missing undefined glossary terms
                 //
-                List<UndefinedTerm> dmuTerms = undefinedTerms.Where(a => a.DatasetName == "DescriptionOfMapUnits").ToList();
+                List<GlossaryTerm> dmuTerms = undefinedTerms.Where(a => a.DatasetName == "DescriptionOfMapUnits").ToList();
                 if (dmuTerms.Count == 0)
                 {
                     results[6].Status = ValidationStatus.Passed;
@@ -145,7 +151,7 @@ namespace Geomapmaker.Data
                 else
                 {
                     results[6].Status = ValidationStatus.Failed;
-                    foreach (UndefinedTerm undefinedTerm in dmuTerms)
+                    foreach (GlossaryTerm undefinedTerm in dmuTerms)
                     {
                         results[6].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
                     }
@@ -154,7 +160,7 @@ namespace Geomapmaker.Data
                 //
                 // Check ContactsAndFaults for missing undefined glossary terms
                 //
-                List<UndefinedTerm> cfTerms = undefinedTerms.Where(a => a.DatasetName == "ContactsAndFaults").ToList();
+                List<GlossaryTerm> cfTerms = undefinedTerms.Where(a => a.DatasetName == "ContactsAndFaults").ToList();
                 if (cfTerms.Count == 0)
                 {
                     results[7].Status = ValidationStatus.Passed;
@@ -162,7 +168,7 @@ namespace Geomapmaker.Data
                 else
                 {
                     results[7].Status = ValidationStatus.Failed;
-                    foreach (UndefinedTerm undefinedTerm in cfTerms)
+                    foreach (GlossaryTerm undefinedTerm in cfTerms)
                     {
                         results[7].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
                     }
@@ -171,7 +177,7 @@ namespace Geomapmaker.Data
                 //
                 // Check MapUnitPolys for missing undefined glossary terms
                 //
-                List<UndefinedTerm> mupTerms = undefinedTerms.Where(a => a.DatasetName == "MapUnitPolys").ToList();
+                List<GlossaryTerm> mupTerms = undefinedTerms.Where(a => a.DatasetName == "MapUnitPolys").ToList();
                 if (mupTerms.Count == 0)
                 {
                     results[8].Status = ValidationStatus.Passed;
@@ -179,7 +185,7 @@ namespace Geomapmaker.Data
                 else
                 {
                     results[8].Status = ValidationStatus.Failed;
-                    foreach (UndefinedTerm undefinedTerm in mupTerms)
+                    foreach (GlossaryTerm undefinedTerm in mupTerms)
                     {
                         results[8].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
                     }
@@ -188,7 +194,7 @@ namespace Geomapmaker.Data
                 //
                 // Check OrientationPoints for missing undefined glossary terms
                 //
-                List<UndefinedTerm> opTerms = undefinedTerms.Where(a => a.DatasetName == "OrientationPoints").ToList();
+                List<GlossaryTerm> opTerms = undefinedTerms.Where(a => a.DatasetName == "OrientationPoints").ToList();
                 if (opTerms.Count == 0)
                 {
                     results[9].Status = ValidationStatus.Passed;
@@ -196,7 +202,7 @@ namespace Geomapmaker.Data
                 else
                 {
                     results[9].Status = ValidationStatus.Failed;
-                    foreach (UndefinedTerm undefinedTerm in opTerms)
+                    foreach (GlossaryTerm undefinedTerm in opTerms)
                     {
                         results[9].Errors.Add($"Missing {undefinedTerm.DatasetName} glossary term in {undefinedTerm.FieldName} field: {undefinedTerm.Term}");
                     }
@@ -206,30 +212,79 @@ namespace Geomapmaker.Data
             return results;
         }
 
-        public static async Task<List<UndefinedTerm>> GetUndefinedGlossaryTerms()
+        public static async Task<Tuple<List<GlossaryTerm>, List<GlossaryTerm>>> GetUndefinedGlossaryTerms()
         {
-            List<UndefinedTerm> undefinedTerms = new List<UndefinedTerm>();
+            List<GlossaryTerm> undefinedTerms = new List<GlossaryTerm>();
 
-            List<string> glossaryTerms = await GetGlossaryTermsAsync();
+            List<GlossaryTerm> glossaryTerms = await GetGlossaryDictionaryAsync();
+
+            List<string> terms = glossaryTerms.Select(a => a.Term).ToList();
 
             // DescriptionOfMapUnits
-            undefinedTerms.AddRange(await DescriptionOfMapUnits.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await DescriptionOfMapUnits.GetTermsUndefinedInGlossaryAsync(terms));
 
             // ContactsAndFaults
-            undefinedTerms.AddRange(await ContactsAndFaults.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await ContactsAndFaults.GetTermsUndefinedInGlossaryAsync(terms));
 
             // MapUnitPolys
-            undefinedTerms.AddRange(await MapUnitPolys.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await MapUnitPolys.GetTermsUndefinedInGlossaryAsync(terms));
 
             // OrientationPoints
-            undefinedTerms.AddRange(await OrientationPoints.GetTermsUndefinedInGlossaryAsync(glossaryTerms));
+            undefinedTerms.AddRange(await OrientationPoints.GetTermsUndefinedInGlossaryAsync(terms));
 
-            return undefinedTerms;
+            return Tuple.Create(glossaryTerms, undefinedTerms);
         }
 
-        public static async Task<List<string>> GetGlossaryTermsAsync()
+        public static async Task<int> InsertGlossaryTermsAsync(List<GlossaryTerm> terms)
         {
-            List<string> terms = new List<string>();
+            StandaloneTable standalone = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
+
+            if (standalone == null)
+            {
+                return 0;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table enterpriseTable = standalone.GetTable())
+                {
+                    if (enterpriseTable != null)
+                    {
+                        EditOperation editOperation = new EditOperation();
+
+                        editOperation.Callback(context =>
+                        {
+                            foreach (GlossaryTerm term in terms)
+                            {
+                                using (RowBuffer rowBuffer = enterpriseTable.CreateRowBuffer())
+                                {
+                                    rowBuffer["term"] = term.Term;
+                                    rowBuffer["definition"] = term.Definition;
+                                    rowBuffer["definitionsourceid"] = GeomapmakerModule.DataSourceId;
+                                    rowBuffer["glossary_id"] = Guid.NewGuid().ToString();
+
+                                    using (Row row = enterpriseTable.CreateRow(rowBuffer))
+                                    {
+                                            // To Indicate that the attribute table has to be updated.
+                                            context.Invalidate(row);
+                                    }
+                                }
+                            }
+
+                        }, enterpriseTable);
+
+                        bool result = editOperation.Execute();
+                    }
+                }
+
+            });
+
+            return terms.Count;
+        }
+
+        public static async Task<List<GlossaryTerm>> GetGlossaryDictionaryAsync()
+        {
+            List<GlossaryTerm> terms = new List<GlossaryTerm>();
 
             StandaloneTable standalone = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
 
@@ -247,18 +302,21 @@ namespace Geomapmaker.Data
                         return;
                     }
 
-                    QueryFilter queryFilter = new QueryFilter
-                    {
-                        SubFields = "Term"
-                    };
-
-                    using (RowCursor rowCursor = table.Search(queryFilter))
+                    using (RowCursor rowCursor = table.Search())
                     {
                         while (rowCursor.MoveNext())
                         {
                             using (Row row = rowCursor.Current)
                             {
-                                terms.Add(row["Term"]?.ToString());
+                                GlossaryTerm term = new GlossaryTerm
+                                {
+                                    ObjectId = long.Parse(row["ObjectId"]?.ToString()),
+                                    Term = row["Term"]?.ToString(),
+                                    Definition = row["Definition"]?.ToString(),
+                                    DefinitionSourceID = row["DefinitionSourceID"]?.ToString(),
+                                };
+
+                                terms.Add(term);
                             }
                         }
                     }

@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="Geomapmaker.Views.Glossary.CreateGlossary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions" 
+             mc:Ignorable="d" 
+             >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+
+
+            <StackPanel Grid.Row="1" Grid.Column="1" >
+                <TextBlock Text="Term" />
+                <TextBox Text="{Binding Create.Term, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Definition" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Create.Definition, UpdateSourceTrigger=PropertyChanged}" MinLines="3" />
+
+            <StackPanel Grid.Row="4" Grid.Column="1" >
+                <TextBlock Text="DefinitionSourceID" />
+                <TextBox Text="{Binding Create.DefinitionSourceID}" IsReadOnly="True" IsEnabled="False" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+                <Button Padding="5" Command="{Binding Create.CommandSave}" Style="{DynamicResource Esri_Button}" >Save</Button>
+            </StackPanel>
+
+        </Grid>
+    </AdornerDecorator>
+
+</UserControl>
