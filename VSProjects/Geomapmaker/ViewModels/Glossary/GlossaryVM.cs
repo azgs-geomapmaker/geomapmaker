@@ -20,12 +20,14 @@ namespace Geomapmaker.ViewModels.Glossary
         public UndefinedGlossaryVM Undefined { get; set; }
         public CreateGlossaryVM Create { get; set; }
         public EditGlossaryVM Edit { get; set; }
+        public DeleteGlossaryVM Delete { get; set; }
 
         public GlossaryVM()
         {
             Undefined = new UndefinedGlossaryVM(this);
             Create = new CreateGlossaryVM(this);
             Edit = new EditGlossaryVM(this);
+            Delete = new DeleteGlossaryVM(this);
         }
 
         public void CloseProwindow()

@@ -31,16 +31,20 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TabControl Grid.Row="0" Grid.Column="0">
-            <TabItem Header="Undefined" >
-                <tabData:UndefinedGlossary />
-            </TabItem>
+        <TabControl Grid.Row="0" Grid.Column="0" >
             <TabItem Header="Create">
                 <tabData:CreateGlossary/>
             </TabItem>
             <TabItem Header="Edit">
                 <tabData:EditGlossary/>
             </TabItem>
+            <TabItem Header="Delete">
+                <tabData:DeleteGlossary/>
+            </TabItem>
+            <TabItem Header="Undefined Terms" >
+                <tabData:UndefinedGlossary />
+            </TabItem>
+
         </TabControl>
     </Grid>
 

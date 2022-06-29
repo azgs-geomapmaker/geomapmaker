@@ -14,9 +14,9 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Glossary
 {
-    public class EditGlossaryVM : PropertyChangedBase, INotifyDataErrorInfo
+    public class DeleteGlossaryVM : PropertyChangedBase, INotifyDataErrorInfo
     {
-        public ICommand CommandUpdate => new RelayCommand(() => Update(), () => CanUpdate());
+        public ICommand CommandDelete => new RelayCommand(() => Delete(), () => CanDelete());
 
         public GlossaryVM ParentVM { get; set; }
 
@@ -27,62 +27,37 @@ namespace Geomapmaker.ViewModels.Glossary
             set
             {
                 SetProperty(ref _selected, value, () => Selected);
+
                 Term = Selected?.Term;
+                NotifyPropertyChanged("Term");
+
                 Definition = Selected?.Definition;
+                NotifyPropertyChanged("Definition");
+
                 DefinitionSourceID = Selected?.DefinitionSourceID;
+                NotifyPropertyChanged("DefinitionSourceID");
+
                 NotifyPropertyChanged("Visibility");
             }
         }
 
         public string Visibility => Selected == null ? "Hidden" : "Visible";
 
-        private string _term;
-        public string Term
-        {
-            get => _term;
-            set
-            {
-                SetProperty(ref _term, value, () => Term);
-                ValidateRequiredString(Term, "Term");
-                ValidateChangeWasMade();
-            }
-        }
+        public string Term { get; set; }
+        public string Definition { get; set; }
+        public string DefinitionSourceID { get; set; }
 
-        private string _definition;
-        public string Definition
-        {
-            get => _definition;
-            set
-            {
-                SetProperty(ref _definition, value, () => Definition);
-                ValidateRequiredString(Definition, "Definition");
-                ValidateChangeWasMade();
-            }
-        }
-
-        private string _definitionSourceID;
-        public string DefinitionSourceID
-        {
-            get => _definitionSourceID;
-            set
-            {
-                SetProperty(ref _definitionSourceID, value, () => DefinitionSourceID);
-                ValidateRequiredString(DefinitionSourceID, "DefinitionSourceID");
-                ValidateChangeWasMade();
-            }
-        }
-
-        public EditGlossaryVM(GlossaryVM parentVM)
+        public DeleteGlossaryVM(GlossaryVM parentVM)
         {
             ParentVM = parentVM;
         }
 
-        private bool CanUpdate()
+        private bool CanDelete()
         {
             return Selected != null && !HasErrors;
         }
 
-        public async void Update()
+        public async void Delete()
         {
             string errorMessage = null;
 
@@ -114,19 +89,9 @@ namespace Geomapmaker.ViewModels.Glossary
                                     {
                                         using (Row row = rowCursor.Current)
                                         {
-                                            // In order to update the Map and/or the attribute table.
-                                            // Has to be called before any changes are made to the row.
                                             context.Invalidate(row);
 
-                                            row["Term"] = Term;
-                                            row["Definition"] = Definition;
-                                            row["DefinitionSourceID"] = DefinitionSourceID;
-
-                                            // After all the changes are done, persist it.
-                                            row.Store();
-
-                                            // Has to be called after the store too.
-                                            context.Invalidate(row);
+                                            row.Delete();
                                         }
                                     }
                                 }
@@ -178,41 +143,6 @@ namespace Geomapmaker.ViewModels.Glossary
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
-
-        private void ValidateRequiredString(string text, string propertyKey)
-        {
-            // Required field
-            if (string.IsNullOrEmpty(text))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
-
-        private void ValidateChangeWasMade()
-        {
-            const string propertyKey = "SilentError";
-
-            if (Selected != null &&
-                Term == Selected.Term &&
-                Definition == Selected.Definition &&
-                DefinitionSourceID == Selected.DefinitionSourceID
-                )
-            {
-                _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
 
         #endregion
     }
