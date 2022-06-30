@@ -69,7 +69,7 @@ namespace Geomapmaker.ViewModels.Export
 
                 CloseProwindow();
 
-                ProgressDialog progDialog = new ProgressDialog("Exporting Geodatabase");
+                ProgressDialog progDialog = new ProgressDialog("Exporting Project");
 
                 progDialog.Show();
 
