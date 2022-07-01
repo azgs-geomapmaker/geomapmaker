@@ -7,8 +7,8 @@
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
         Title="Export"
-        Height="300" 
-        MinHeight="250" 
+        Height="250" 
+        MinHeight="200" 
         Width="300"
         MinWidth="250"
         WindowStartupLocation="CenterOwner"
@@ -30,6 +30,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
@@ -44,22 +45,25 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Geodatabase" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="1" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateGeodatabase, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox Grid.Row="1" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateGeodatabase, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="2" Grid.Column="2" Text="Shapefiles" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="2" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateShapefiles, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox Grid.Row="2" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateShapefiles, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="3" Grid.Column="2" Text="Geopackage" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="3" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateGeopackage, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox Grid.Row="3" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateGeopackage, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
-        <TextBlock Grid.Row="4" Grid.Column="2" Text="Text Tables" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="4" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateTextTables, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="4" Grid.Column="2" Text="KML" HorizontalAlignment="Right" />
+        <CheckBox Grid.Row="4" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateKml, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
-        <TextBlock Grid.Row="5" Grid.Column="2" Text="Report" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="5" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="5" Grid.Column="2" Text="Text Tables" HorizontalAlignment="Right" />
+        <CheckBox Grid.Row="5" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateTextTables, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
-        <Button Grid.Row="7" Grid.Column="2" Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
-        <Button Grid.Row="7" Grid.Column="3" Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
+        <TextBlock Grid.Row="6" Grid.Column="2" Text="Report" HorizontalAlignment="Right" />
+        <CheckBox Grid.Row="6" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+
+        <Button Grid.Row="8" Grid.Column="2" Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+        <Button Grid.Row="8" Grid.Column="3" Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
 
     </Grid>
 
