@@ -272,6 +272,9 @@ namespace Geomapmaker.ViewModels.MapUnits
                     {
                         if (enterpriseTable != null)
                         {
+                            // Get fields for the table
+                            List<Field> tableFields = enterpriseTable.GetDefinition()?.GetFields()?.ToList();
+
                             EditOperation editOperation = new EditOperation();
 
                             editOperation.Callback(context =>
@@ -292,15 +295,23 @@ namespace Geomapmaker.ViewModels.MapUnits
                                             row["Name"] = Name;
                                             row["FullName"] = FullName;
                                             row["Age"] = Age;
-                                            row["RelativeAge"] = RelativeAge;
                                             row["Description"] = Description;
                                             row["Label"] = Label;
                                             row["AreaFillRGB"] = AreaFillRGB;
-                                            row["HexColor"] = HexColor;
                                             row["GeoMaterial"] = GeoMaterial;
                                             row["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                             row["ParagraphStyle"] = "Standard";
                                             row["DescriptionSourceID"] = DescriptionSourceID;
+
+                                            if (tableFields.Any(a => a.Name.ToLower() == "relativeage"))
+                                            {
+                                                row["RelativeAge"] = RelativeAge;
+                                            }
+
+                                            if (tableFields.Any(a => a.Name.ToLower() == "hexcolor"))
+                                            {
+                                                row["HexColor"] = HexColor;
+                                            }
 
                                             // After all the changes are done, persist it.
                                             row.Store();

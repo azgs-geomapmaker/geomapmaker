@@ -241,6 +241,9 @@ namespace Geomapmaker.ViewModels.MapUnits
                     {
                         if (enterpriseTable != null)
                         {
+                            // Get fields for the table
+                            List<Field> tableFields = enterpriseTable.GetDefinition()?.GetFields()?.ToList();
+
                             EditOperation editOperation = new EditOperation();
 
                             editOperation.Callback(context =>
@@ -252,15 +255,23 @@ namespace Geomapmaker.ViewModels.MapUnits
                                     rowBuffer["Name"] = Name;
                                     rowBuffer["FullName"] = FullName;
                                     rowBuffer["Age"] = Age;
-                                    rowBuffer["RelativeAge"] = RelativeAge;
                                     rowBuffer["Description"] = Description;
                                     rowBuffer["Label"] = Label;
                                     rowBuffer["AreaFillRGB"] = AreaFillRGB;
-                                    rowBuffer["HexColor"] = HexColor;
                                     rowBuffer["GeoMaterial"] = GeoMaterial;
                                     rowBuffer["GeoMaterialConfidence"] = GeoMaterialConfidence;
                                     rowBuffer["ParagraphStyle"] = "Standard";
                                     rowBuffer["DescriptionSourceID"] = DescriptionSourceID;
+
+                                    if (tableFields.Any(a => a.Name.ToLower() == "relativeage"))
+                                    {
+                                        rowBuffer["RelativeAge"] = RelativeAge;
+                                    }
+
+                                    if (tableFields.Any(a => a.Name.ToLower() == "hexcolor"))
+                                    {
+                                        rowBuffer["HexColor"] = HexColor;
+                                    }
 
                                     using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                     {
