@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Geomapmaker.Data
@@ -18,8 +19,28 @@ namespace Geomapmaker.Data
         /// <param name="term"></param>
         /// <returns>GlossarTerm with the predefined definition or an empty string if it is not found.</returns>
         public static async Task<GlossaryTerm> GetPrepopulatedDefinitionAsync(string datasetName, string fieldName, string term)
-        {
-            string definition = await AnyStandaloneTable.GetValueFromWhereClauseAsync("PredefinedTerms", $"DatasetName = '{datasetName}' AND FieldName = '{fieldName}' AND Term = '{term}'", "Definition");
+        {   
+            // If term is empty don't bother looking it up
+            if (string.IsNullOrEmpty(term))
+            {
+                return new GlossaryTerm();
+            }
+
+            StringBuilder query = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(datasetName))
+            {
+                query.Append($"DatasetName = '{datasetName}' AND ");
+            }
+
+            if (!string.IsNullOrEmpty(fieldName))
+            {
+                query.Append($"FieldName = '{fieldName}' AND ");
+            }
+
+            query.Append($"Term = '{term}'");
+
+            string definition = await AnyStandaloneTable.GetValueFromWhereClauseAsync("PredefinedTerms", query.ToString(), "Definition");
 
             return new GlossaryTerm { DatasetName = datasetName, FieldName = fieldName, Term = term, Definition = definition };
         }
