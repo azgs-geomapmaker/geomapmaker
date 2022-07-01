@@ -29,6 +29,8 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateShapefiles { get; set; } = true;
 
+        public bool CreateGeopackage { get; set; } = true;
+
         public bool CreateTextTables { get; set; } = true;
 
         public bool CreateReport { get; set; } = true;
@@ -51,61 +53,127 @@ namespace Geomapmaker.ViewModels.Export
                 string projectName = _helpers.Helpers.GetProjectName();
 
                 // Path for the new GDB file
-                string geodatabasePath = exportPath + $"\\{projectName}.gdb";
-
-                // Path for the FeatureDataset (inside the GDB)
-                string featureDatasetPath = geodatabasePath + "\\GeologicMap";
+                string geodatabaseFolder = exportPath + $"\\Geodatabase";
 
                 // Path for shapefiles
-                string shapefilePath = exportPath + "\\Shapefiles";
+                string shapefileFolder = exportPath + "\\Shapefiles";
+
+                // Path for geopackage
+                string geopackageFolder = exportPath + "\\Geopackage";
 
                 // Path for text-tables
-                string tablesPath = exportPath + "\\Tables";
+                string tablesFolder = exportPath + "\\Tables";
 
                 // Path for the report
                 string reportPath = exportPath + "\\Report.html";
 
                 CloseProwindow();
 
-                ProgressDialog progDialog = new ProgressDialog("Exporting Geodatabase");
+                ProgressDialog progDialog = new ProgressDialog("Exporting Project");
 
                 progDialog.Show();
 
                 if (CreateGeodatabase)
                 {
-                    ExportGeodatabase(geodatabasePath, featureDatasetPath);
+                    // Create shapefiles folder
+                    System.IO.Directory.CreateDirectory(geodatabaseFolder);
+
+                    // Path for the .gdb
+                    string gdbPath = $"{geodatabaseFolder}\\{projectName}.gdb";
+
+                    // Path for the FeatureDataset (inside the .gdb)
+                    string featureDatasetPath = gdbPath + "\\GeologicMap";
+
+                    // Get the maps spatial reference or default to WGS84
+                    SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
+
+                    // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
+                    FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(gdbPath));
+
+                    // Create and use the file geodatabase
+                    using (Geodatabase geodatabase = SchemaBuilder.CreateGeodatabase(fileGeodatabaseConnectionPath))
+                    {
+                        SchemaBuilder schemaBuilder = new SchemaBuilder(geodatabase);
+
+                        // Initialize a new FeatureDataset named as 'GeologicMap'
+                        FeatureDatasetDescription geologicMapFeatureDataset = new FeatureDatasetDescription("GeologicMap", spatialReferences);
+
+                        // Create the FeatureDataset
+                        schemaBuilder.Create(geologicMapFeatureDataset);
+
+                        // Build status
+                        schemaBuilder.Build();
+
+                        // FeatureClasses
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "ContactsAndFaults", featureDatasetPath });
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "MapUnitPolys", featureDatasetPath });
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "Stations", featureDatasetPath });
+                        await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "OrientationPoints", featureDatasetPath });
+
+                        // Tables
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DataSources", gdbPath });
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DescriptionOfMapUnits", gdbPath });
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "GeoMaterialDict", gdbPath });
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Glossary", gdbPath });
+                        await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Symbology", gdbPath });
+                    }
                 }
 
                 if (CreateShapefiles)
                 {
                     // Create shapefiles folder
-                    System.IO.Directory.CreateDirectory(shapefilePath);
+                    System.IO.Directory.CreateDirectory(shapefileFolder);
 
                     // FeatureClasses
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", shapefilePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", shapefilePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", shapefilePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", shapefileFolder });
 
                     // Tables
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DataSources", shapefilePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DescriptionOfMapUnits", shapefilePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "GeoMaterialDict", shapefilePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Glossary", shapefilePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Symbology", shapefilePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DataSources", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DescriptionOfMapUnits", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "GeoMaterialDict", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Glossary", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Symbology", shapefileFolder });
+                }
+
+                if (CreateGeopackage)
+                {
+                    // Create geopackage folder
+                    System.IO.Directory.CreateDirectory(geopackageFolder);
+
+                    // Path of the .gpkg file
+                    string geopackagePath = $"{geopackageFolder}\\{projectName}.gpkg";
+
+                    // Create geopackage
+                    await Geoprocessing.ExecuteToolAsync("management.CreateSQLiteDatabase", new List<string> { geopackagePath, "GEOPACKAGE" });
+
+                    // FeatureClasses
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "ContactsAndFaults", geopackagePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "MapUnitPolys", geopackagePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "Stations", geopackagePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "OrientationPoints", geopackagePath });
+
+                    // Tables
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DataSources", geopackagePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DescriptionOfMapUnits", geopackagePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "GeoMaterialDict", geopackagePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Glossary", geopackagePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Symbology", geopackagePath });
                 }
 
                 if (CreateTextTables)
                 {
                     // Create tables folder
-                    System.IO.Directory.CreateDirectory(tablesPath);
+                    System.IO.Directory.CreateDirectory(tablesFolder);
 
                     // Tables
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", tablesPath, "DataSources.psv" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", tablesPath, "DescriptionOfMapUnits.psv" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", tablesPath, "GeoMaterialDict.psv" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", tablesPath, "Glossary.psv" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", tablesPath, "Symbology.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", tablesFolder, "DataSources.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", tablesFolder, "DescriptionOfMapUnits.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", tablesFolder, "GeoMaterialDict.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", tablesFolder, "Glossary.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", tablesFolder, "Symbology.psv" });
                 }
 
                 if (CreateReport)
@@ -119,43 +187,6 @@ namespace Geomapmaker.ViewModels.Export
 
                 progDialog.Hide();
 
-            }
-        }
-
-        private async void ExportGeodatabase(string geodatabasePath, string featureDatasetPath)
-        {
-            // Get the maps spatial reference or default to WGS84
-            SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
-
-            // Create a FileGeodatabaseConnectionPath with the name of the file geodatabase you wish to create
-            FileGeodatabaseConnectionPath fileGeodatabaseConnectionPath = new FileGeodatabaseConnectionPath(new Uri(geodatabasePath));
-
-            // Create and use the file geodatabase
-            using (Geodatabase geodatabase = SchemaBuilder.CreateGeodatabase(fileGeodatabaseConnectionPath))
-            {
-                SchemaBuilder schemaBuilder = new SchemaBuilder(geodatabase);
-
-                // Initialize a new FeatureDataset named as 'GeologicMap'
-                FeatureDatasetDescription geologicMapFeatureDataset = new FeatureDatasetDescription("GeologicMap", spatialReferences);
-
-                // Create the FeatureDataset
-                schemaBuilder.Create(geologicMapFeatureDataset);
-
-                // Build status
-                schemaBuilder.Build();
-
-                // FeatureClasses
-                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "ContactsAndFaults", featureDatasetPath });
-                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "MapUnitPolys", featureDatasetPath });
-                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "Stations", featureDatasetPath });
-                await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "OrientationPoints", featureDatasetPath });
-
-                // Tables
-                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DataSources", geodatabasePath });
-                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "DescriptionOfMapUnits", geodatabasePath });
-                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "GeoMaterialDict", geodatabasePath });
-                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Glossary", geodatabasePath });
-                await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Symbology", geodatabasePath });
             }
         }
 

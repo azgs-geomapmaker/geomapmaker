@@ -239,7 +239,7 @@ namespace Geomapmaker.Data
         {
             StandaloneTable standalone = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "Glossary");
 
-            if (standalone == null)
+            if (standalone == null || terms.Count == 0)
             {
                 return 0;
             }
@@ -265,8 +265,8 @@ namespace Geomapmaker.Data
 
                                     using (Row row = enterpriseTable.CreateRow(rowBuffer))
                                     {
-                                            // To Indicate that the attribute table has to be updated.
-                                            context.Invalidate(row);
+                                        // To Indicate that the attribute table has to be updated.
+                                        context.Invalidate(row);
                                     }
                                 }
                             }
