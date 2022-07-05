@@ -49,7 +49,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                 Color = _helpers.ColorConverter.RGBtoColor(Selected?.AreaFillRGB);
                 GeoMaterial = Selected?.GeoMaterial;
                 GeoMaterialConfidence = Selected?.GeoMaterialConfidence;
-                DescriptionSourceID = Selected?.DescriptionSourceID;
+                DescriptionSourceID = GeomapmakerModule.DataSourceId;
                 NotifyPropertyChanged("Visibility");
             }
         }
