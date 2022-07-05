@@ -46,7 +46,7 @@ namespace Geomapmaker.ViewModels.Stations
                 LocationConfidenceMeters = Selected?.LocationConfidenceMeters;
                 PlotAtScale = Selected?.PlotAtScale;
                 Notes = Selected?.Notes;
-                DataSourceId = Selected?.DataSourceId;
+                DataSourceId = GeomapmakerModule.DataSourceId;
 
                 NotifyPropertyChanged("Visibility");
             }
@@ -366,8 +366,7 @@ namespace Geomapmaker.ViewModels.Stations
                 Selected.LocationMethod == LocationMethod &&
                 Selected.LocationConfidenceMeters == LocationConfidenceMeters &&
                 Selected.PlotAtScale == PlotAtScale &&
-                Selected.Notes == Notes &&
-                Selected.DataSourceId == DataSourceId
+                Selected.Notes == Notes
                 )
             {
                 _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
