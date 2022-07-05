@@ -29,7 +29,7 @@ namespace Geomapmaker.ViewModels.Glossary
                 SetProperty(ref _selected, value, () => Selected);
                 Term = Selected?.Term;
                 Definition = Selected?.Definition;
-                DefinitionSourceID = Selected?.DefinitionSourceID;
+                DefinitionSourceID = GeomapmakerModule.DataSourceId;
                 NotifyPropertyChanged("Visibility");
             }
         }
@@ -200,8 +200,7 @@ namespace Geomapmaker.ViewModels.Glossary
 
             if (Selected != null &&
                 Term == Selected.Term &&
-                Definition == Selected.Definition &&
-                DefinitionSourceID == Selected.DefinitionSourceID
+                Definition == Selected.Definition
                 )
             {
                 _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
