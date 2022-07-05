@@ -32,7 +32,7 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateGeopackage { get; set; } = false;
 
-        public bool CreateKml { get; set; } = true;
+        public bool CreateKml { get; set; } = false;
 
         public bool CreateTextTables { get; set; } = false;
 
@@ -229,21 +229,6 @@ namespace Geomapmaker.ViewModels.Export
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
-
-        private void ValidateRequiredString(string text, string propertyKey)
-        {
-            // Required field
-            if (string.IsNullOrEmpty(text))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
 
         #endregion
 
