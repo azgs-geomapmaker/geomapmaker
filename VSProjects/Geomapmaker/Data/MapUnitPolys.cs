@@ -195,7 +195,7 @@ namespace Geomapmaker.Data
                 // Get all DMUs
                 List<MapUnit> allDMUs = await DescriptionOfMapUnits.GetMapUnitsAsync();
 
-                List<MapUnit> StandardDMUs = allDMUs.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name).ToList();
+                List<MapUnit> StandardDMUs = allDMUs.Where(a => !string.IsNullOrEmpty(a.MU)).OrderBy(a => a.MU).ToList();
 
                 // Remove all existing symbols
                 layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
