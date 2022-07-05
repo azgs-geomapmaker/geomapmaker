@@ -6,6 +6,7 @@ using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -50,7 +51,7 @@ namespace Geomapmaker.ViewModels.Glossary
         {
             Tuple<List<GlossaryTerm>, List<GlossaryTerm>> tuple = await Data.Glossary.GetUndefinedGlossaryTerms();
 
-            Terms = tuple.Item1;
+            Terms = tuple.Item1.OrderBy(a => a.Term).ToList();
 
             if (SetUndefined)
             {
