@@ -3,11 +3,11 @@
 namespace Geomapmaker.Views.Tools
 {
     /// <summary>
-    /// Interaction logic for Symbology.xaml
+    /// Interaction logic for TableTools.xaml
     /// </summary>
-    public partial class SymbologyTools : UserControl
+    public partial class TableTools : UserControl
     {
-        public SymbologyTools()
+        public TableTools()
         {
             InitializeComponent();
         }

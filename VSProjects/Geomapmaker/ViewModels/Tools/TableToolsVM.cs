@@ -1,15 +1,29 @@
-﻿using ArcGIS.Desktop.Framework.Contracts;
+﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Dialogs;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
-namespace Geomapmaker.RibbonElements
+namespace Geomapmaker.ViewModels.Tools
 {
-    internal class SetAllPrimaryKeys : Button
+    public class TableToolsVM
     {
-        protected override async void OnClick()
+        public ICommand CommandSetAllPrimaryKeys => new RelayCommand(() => SetAllPrimaryKeys());
+
+        public ICommand CommandInsertGlossaryTerms => new RelayCommand(() => InsertGlossaryTerms());
+
+        ToolsViewModel ParentVM { get; set; }
+
+        public TableToolsVM(ToolsViewModel parentVM)
         {
+            ParentVM = parentVM;
+        }
+
+        public async void SetAllPrimaryKeys()
+        {
+            ParentVM.CloseProwindow();
+
             int idCount = 0;
 
             // Add primary keys 
@@ -23,12 +37,11 @@ namespace Geomapmaker.RibbonElements
 
             MessageBox.Show($"Created {idCount} Primary Keys", "Set All Primary Keys");
         }
-    }
 
-    internal class InsertGlossaryTerms : Button
-    {
-        protected override async void OnClick()
+        public async void InsertGlossaryTerms()
         {
+            ParentVM.CloseProwindow();
+
             List<GlossaryTerm> predefinedTerms = await Data.PredefinedTerms.GetPredefinedDictionaryAsync();
 
             List<GlossaryTerm> glossaryTerms = await Data.Glossary.GetGlossaryDictionaryAsync();

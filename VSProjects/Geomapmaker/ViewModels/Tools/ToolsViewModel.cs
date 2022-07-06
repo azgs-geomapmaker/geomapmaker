@@ -14,10 +14,13 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
+        public TableToolsVM TableTools { get; set; }
+
         public SymbologyToolsVM SymbologyTools { get; set; }
 
         public ToolsViewModel()
         {
+            TableTools = new TableToolsVM(this);
             SymbologyTools = new SymbologyToolsVM(this);
         }
 

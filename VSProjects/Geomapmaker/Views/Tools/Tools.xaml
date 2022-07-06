@@ -33,6 +33,9 @@
         </Grid.ColumnDefinitions>
 
         <TabControl Grid.Row="0" Grid.Column="0" >
+            <TabItem Header="Tables" >
+                <tabData:TableTools />
+            </TabItem>
             <TabItem Header="Symbology" >
                 <tabData:SymbologyTools />
             </TabItem>

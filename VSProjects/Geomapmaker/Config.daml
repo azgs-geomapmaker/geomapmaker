@@ -53,8 +53,7 @@
           <button refID="Geomapmaker_OrientationPoints_Btn" />
         </group>
         <group id="Geomapmaker_Tools" caption="Tools" keytip="todo">
-          <button refID="Geomapmaker_MultiTools" size="large" />
-          <menu refID="Geomapmaker_RibbonElements_Tools" size="large" />
+          <button refID="Geomapmaker_MultiTools" />
           <button refID="Geomapmaker_Report" />
           <button refID="Geomapmaker_Export_Btn" />
         </group>
@@ -152,14 +151,6 @@
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
-      <!-- Dock Panes -->
-      <dockPanes></dockPanes>
-      <menus>
-        <menu id="Geomapmaker_RibbonElements_Tools" caption="Tools" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png">
-          <button refID="Geomapmaker_PrimaryKeys" />
-          <button refID="Geomapmaker_InsertGlossary" />
-        </menu>
-      </menus>
     </insertModule>
   </modules>
   <!-- Conditions -->

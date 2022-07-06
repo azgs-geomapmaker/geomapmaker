@@ -215,7 +215,6 @@
     <Compile Include="Models\ValidationRule.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />
     <Compile Include="Report\GemsReport.cs" />
-    <Compile Include="RibbonElements\Tools.cs" />
     <Compile Include="TestButton.cs" />
     <Compile Include="ViewModels\Export\ExportVM.cs" />
     <Compile Include="ViewModels\GeneratePolygons\GeneratePolygonsViewModel.cs" />
@@ -227,6 +226,7 @@
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
     <Compile Include="ViewModels\Tools\SymbologyToolsVM.cs" />
+    <Compile Include="ViewModels\Tools\TableToolsVM.cs" />
     <Compile Include="ViewModels\Tools\ToolsViewModel.cs" />
     <Compile Include="Views\Export\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>
@@ -374,6 +374,9 @@
     <Compile Include="Views\Tools\SymbologyTools.xaml.cs">
       <DependentUpon>SymbologyTools.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tools\TableTools.xaml.cs">
+      <DependentUpon>TableTools.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tools\Tools.xaml.cs">
       <DependentUpon>Tools.xaml</DependentUpon>
     </Compile>
@@ -519,6 +522,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tools\SymbologyTools.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\TableTools.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
