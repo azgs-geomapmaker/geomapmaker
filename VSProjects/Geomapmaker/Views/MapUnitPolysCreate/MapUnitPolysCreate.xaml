@@ -134,7 +134,7 @@
 
         <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
-            <Button Padding="5" Command="{Binding CommandCreate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Create</Button>
+            <Button Padding="5" Command="{Binding CommandCreate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Save</Button>
         </StackPanel>
 
     </Grid>

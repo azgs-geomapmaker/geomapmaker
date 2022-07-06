@@ -103,7 +103,7 @@ namespace Geomapmaker.ViewModels.MapUnits
         public async void RefreshMapUnitsAsync()
         {
             MapUnits = await Data.DescriptionOfMapUnits.GetMapUnitsAsync();
-            StandardDMUs = MapUnits.Where(a => a.ParagraphStyle == "Standard").OrderBy(a => a.Name).ToList();
+            StandardDMUs = MapUnits.Where(a => !string.IsNullOrEmpty(a.MU)).OrderBy(a => a.DisplayName).ToList();
         }
 
         #region INotifyPropertyChanged

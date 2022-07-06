@@ -38,7 +38,7 @@ namespace Geomapmaker.ViewModels.Headings
                 SetProperty(ref _selected, value, () => Selected);
                 Name = Selected?.Name;
                 Description = Selected?.Description;
-                DescriptionSourceID = Selected?.DescriptionSourceID;
+                DescriptionSourceID = GeomapmakerModule.DataSourceId;
                 NotifyPropertyChanged("Visibility");
             }
         }
@@ -125,7 +125,7 @@ namespace Geomapmaker.ViewModels.Headings
                                             row["FullName"] = Name;
                                             row["Description"] = Description;
                                             row["ParagraphStyle"] = "Heading";
-                                            row["DescriptionSourceID"] = GeomapmakerModule.DataSourceId;
+                                            row["DescriptionSourceID"] = DescriptionSourceID;
 
                                             // After all the changes are done, persist it.
                                             row.Store();

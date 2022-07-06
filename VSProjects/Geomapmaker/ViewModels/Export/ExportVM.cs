@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Core.Geoprocessing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Controls;
@@ -27,11 +28,13 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateGeodatabase { get; set; } = true;
 
-        public bool CreateShapefiles { get; set; } = true;
+        public bool CreateShapefiles { get; set; } = false;
 
-        public bool CreateGeopackage { get; set; } = true;
+        public bool CreateGeopackage { get; set; } = false;
 
-        public bool CreateTextTables { get; set; } = true;
+        public bool CreateKml { get; set; } = false;
+
+        public bool CreateTextTables { get; set; } = false;
 
         public bool CreateReport { get; set; } = true;
 
@@ -60,6 +63,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 // Path for geopackage
                 string geopackageFolder = exportPath + "\\Geopackage";
+
+                // Path for kml/kmz
+                string kmlFolder = exportPath + "\\KML";
 
                 // Path for text-tables
                 string tablesFolder = exportPath + "\\Tables";
@@ -163,6 +169,19 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("conversion.TableToGeodatabase", new List<string> { "Symbology", geopackagePath });
                 }
 
+                if (CreateKml)
+                {
+                    // Create kml folder
+                    System.IO.Directory.CreateDirectory(kmlFolder);
+
+                    // Path of the .kmz file
+                    string kmzPath = $"{kmlFolder}\\{projectName}.kmz";
+
+                    string mapName = MapView.Active?.Map?.Name;
+
+                    await Geoprocessing.ExecuteToolAsync("conversion.MapToKML", new List<string> { mapName, kmzPath });
+                }
+
                 if (CreateTextTables)
                 {
                     // Create tables folder
@@ -210,21 +229,6 @@ namespace Geomapmaker.ViewModels.Export
         }
 
         public bool HasErrors => _validationErrors.Count > 0;
-
-        private void ValidateRequiredString(string text, string propertyKey)
-        {
-            // Required field
-            if (string.IsNullOrEmpty(text))
-            {
-                _validationErrors[propertyKey] = new List<string>() { "" };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
 
         #endregion
 

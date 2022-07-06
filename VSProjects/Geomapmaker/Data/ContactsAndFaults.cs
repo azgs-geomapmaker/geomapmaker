@@ -246,7 +246,7 @@ namespace Geomapmaker.Data
 
             });
 
-            return contactFaultTemplates;
+            return contactFaultTemplates.OrderBy(a => a.Label).ToList();
         }
 
         /// <summary>
