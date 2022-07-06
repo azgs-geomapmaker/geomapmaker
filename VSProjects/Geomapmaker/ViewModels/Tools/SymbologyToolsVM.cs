@@ -25,37 +25,37 @@ namespace Geomapmaker.ViewModels.Tools
 
         public async void RebuildAll()
         {
+            ParentVM.CloseProwindow();
             await Data.Symbology.RefreshCFSymbolOptionsAsync();
             await Data.Symbology.RefreshOPSymbolOptionsAsync();
             Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             Data.ContactsAndFaults.RebuildContactsFaultsSymbology();
             Data.OrientationPoints.RebuildOrientationPointsSymbology();
-            ParentVM.CloseProwindow();
         }
 
         public async void RebuildCIMSymbols()
         {
+            ParentVM.CloseProwindow();
             await Data.Symbology.RefreshCFSymbolOptionsAsync();
             await Data.Symbology.RefreshOPSymbolOptionsAsync();
-            ParentVM.CloseProwindow();
         }
 
         public void RebuildMUPSymbologyAndTemplates()
         {
-            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
             ParentVM.CloseProwindow();
+            Data.MapUnitPolys.RebuildMUPSymbologyAndTemplates();
         }
 
         public void RebuildContactsFaultsSymbology()
         {
-            ContactsAndFaults.RebuildContactsFaultsSymbology();
             ParentVM.CloseProwindow();
+            ContactsAndFaults.RebuildContactsFaultsSymbology();
         }
 
         public void RebuildOrientationPointsSymbology()
         {
-            Data.OrientationPoints.RebuildOrientationPointsSymbology();
             ParentVM.CloseProwindow();
+            Data.OrientationPoints.RebuildOrientationPointsSymbology();
         }
     }
 }
