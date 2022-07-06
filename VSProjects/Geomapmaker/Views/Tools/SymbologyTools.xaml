@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="Geomapmaker.Views.Tools.SymbologyTools"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <AdornerDecorator>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Grid.Row="1" Command="{Binding SymbologyTools.CommandAll}" Style="{DynamicResource Esri_Button}" Background="#2082D8" Foreground="#FFF" MinHeight="50" >Rebuild All</Button>
+            <Button Grid.Column="1" Grid.Row="2" Command="{Binding SymbologyTools.CommandCIMSymbols}" Style="{DynamicResource Esri_Button}" >Line/Point Symbol Options</Button>
+            <Button Grid.Column="1" Grid.Row="3" Command="{Binding SymbologyTools.CommandMups}" Style="{DynamicResource Esri_Button}" >MapUnitPolys Symbology and Templates</Button>
+            <Button Grid.Column="1" Grid.Row="4" Command="{Binding SymbologyTools.CommandCf}" Style="{DynamicResource Esri_Button}" >Contacts Faults Symbology</Button>
+            <Button Grid.Column="1" Grid.Row="5" Command="{Binding SymbologyTools.CommandOp}" Style="{DynamicResource Esri_Button}" >Orientation Points Symbology</Button>
+
+            <Button Grid.Column="1" Grid.Row="7" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
+        </Grid>
+    </AdornerDecorator>
+
+</UserControl>

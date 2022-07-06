@@ -112,10 +112,6 @@
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_RebuildRenderers" caption="Rebuild Renderers" className="Geomapmaker.ViewModels.RebuildRenderers.ShowRebuildRenderers" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/colorwheel16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/colorwheel32.png" keytip="todo" condition="dataSourceSelectedCondition">
-          <tooltip heading="Tooltip Heading">
-            Tooltip text<disabledText /></tooltip>
-        </button>
         <button id="Geomapmaker_GeneratePolygons_Btn" caption="Generate Polygons" className="Geomapmaker.ViewModels.GeneratePolygons.ShowGeneratePolygons" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
@@ -160,7 +156,6 @@
       <dockPanes></dockPanes>
       <menus>
         <menu id="Geomapmaker_RibbonElements_Tools" caption="Tools" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png">
-          <button refID="Geomapmaker_RebuildRenderers" />
           <button refID="Geomapmaker_PrimaryKeys" />
           <button refID="Geomapmaker_InsertGlossary" />
         </menu>

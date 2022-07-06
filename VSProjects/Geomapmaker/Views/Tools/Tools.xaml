@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+        xmlns:tabData="clr-namespace:Geomapmaker.Views.Tools" 
         mc:Ignorable="d"
         Title="Tools"
                 Height="350" 
@@ -22,20 +23,20 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:ProWindow.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Column="1" Grid.Row="2" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
+
+        <TabControl Grid.Row="0" Grid.Column="0" >
+            <TabItem Header="Symbology" >
+                <tabData:SymbologyTools />
+            </TabItem>
+        </TabControl>
     </Grid>
-    
+
 </controls:ProWindow>

@@ -226,6 +226,7 @@
     <Compile Include="ViewModels\Glossary\GlossaryVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
+    <Compile Include="ViewModels\Tools\SymbologyToolsVM.cs" />
     <Compile Include="ViewModels\Tools\ToolsViewModel.cs" />
     <Compile Include="Views\Export\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>
@@ -256,12 +257,8 @@
     </Compile>
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
-    <Compile Include="Views\RebuildRenderers\RebuildRenderers.xaml.cs">
-      <DependentUpon>RebuildRenderers.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\OrientationPoints\CreateOrientationPointVM.cs" />
     <Compile Include="ViewModels\OrientationPoints\OrientationPointsViewModel.cs" />
-    <Compile Include="ViewModels\RebuildRenderers\RebuildRenderersViewModel.cs" />
     <Compile Include="Views\OrientationPoints\CreateOrientationPoint.xaml.cs">
       <DependentUpon>CreateOrientationPoint.xaml</DependentUpon>
     </Compile>
@@ -374,6 +371,9 @@
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Tools\SymbologyTools.xaml.cs">
+      <DependentUpon>SymbologyTools.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tools\Tools.xaml.cs">
       <DependentUpon>Tools.xaml</DependentUpon>
     </Compile>
@@ -419,10 +419,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GeneratePolygons\GeneratePolygons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RebuildRenderers\RebuildRenderers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -519,6 +515,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GlobalResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\SymbologyTools.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
