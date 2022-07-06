@@ -8,10 +8,10 @@
         xmlns:tabData="clr-namespace:Geomapmaker.Views.Tools" 
         mc:Ignorable="d"
         Title="Tools"
-                Height="350" 
-        MinHeight="300" 
-        Width="500"
-        MinWidth="450" 
+        Height="400" 
+        MinHeight="350" 
+        Width="400"
+        MinWidth="350" 
         WindowStartupLocation="CenterOwner"
     >
     

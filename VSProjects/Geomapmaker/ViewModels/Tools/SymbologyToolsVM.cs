@@ -16,7 +16,7 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandOp => new RelayCommand(() => RebuildOrientationPointsSymbology());
 
-        ToolsViewModel ParentVM { get; set; }
+        public ToolsViewModel ParentVM { get; set; }
 
         public SymbologyToolsVM(ToolsViewModel parentVM)
         {

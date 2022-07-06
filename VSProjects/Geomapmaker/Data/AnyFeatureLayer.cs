@@ -325,10 +325,6 @@ namespace Geomapmaker.Data
             return uniqueValues;
         }
 
-
-
-
-
         public static async Task<int> SetPrimaryKeys(string layerName, string fieldName)
         {
             int count = 0;

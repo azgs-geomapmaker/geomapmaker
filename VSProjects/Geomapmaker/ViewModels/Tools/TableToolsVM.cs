@@ -13,7 +13,7 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandInsertGlossaryTerms => new RelayCommand(() => InsertGlossaryTerms());
 
-        ToolsViewModel ParentVM { get; set; }
+        public ToolsViewModel ParentVM { get; set; }
 
         public TableToolsVM(ToolsViewModel parentVM)
         {
@@ -35,6 +35,10 @@ namespace Geomapmaker.ViewModels.Tools
 
             idCount += await Data.AnyFeatureLayer.SetPrimaryKeys("OrientationPoints", "orientationpoints_id");
 
+            idCount += await Data.AnyStandaloneTable.SetPrimaryKeys("DescriptionOfMapUnits", "descriptionofmapunits_id");
+
+            idCount += await Data.AnyStandaloneTable.SetPrimaryKeys("Glossary", "glossary_id");
+
             MessageBox.Show($"Added {idCount} Primary Key{(idCount == 1 ? "" : "s")}", "Set All Primary Keys");
         }
 
@@ -42,10 +46,13 @@ namespace Geomapmaker.ViewModels.Tools
         {
             ParentVM.CloseProwindow();
 
+            // Get predefined terms from table
             List<GlossaryTerm> predefinedTerms = await Data.PredefinedTerms.GetPredefinedDictionaryAsync();
 
+            // Get terms from the glossary table
             List<GlossaryTerm> glossaryTerms = await Data.Glossary.GetGlossaryDictionaryAsync();
 
+            // List of terms to add
             List<GlossaryTerm> insertTerms = new List<GlossaryTerm>();
 
             foreach (GlossaryTerm predefined in predefinedTerms)

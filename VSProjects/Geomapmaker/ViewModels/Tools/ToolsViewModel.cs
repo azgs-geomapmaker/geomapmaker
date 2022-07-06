@@ -2,13 +2,11 @@
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Tools
 {
-    public class ToolsViewModel : ProWindow, INotifyPropertyChanged
+    public class ToolsViewModel : ProWindow
     {
         public event EventHandler WindowCloseEvent;
 
@@ -28,16 +26,6 @@ namespace Geomapmaker.ViewModels.Tools
         {
             WindowCloseEvent(this, new EventArgs());
         }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 
     internal class ShowTools : Button

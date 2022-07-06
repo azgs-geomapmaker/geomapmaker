@@ -32,16 +32,39 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="1" Grid.Row="1" Command="{Binding SymbologyTools.CommandAll}" Style="{DynamicResource Esri_Button}" Background="#2082D8" Foreground="#FFF" MinHeight="50" >Rebuild All</Button>
-            <Button Grid.Column="1" Grid.Row="2" Command="{Binding SymbologyTools.CommandCIMSymbols}" Style="{DynamicResource Esri_Button}" >Line/Point Symbol Options</Button>
-            <Button Grid.Column="1" Grid.Row="3" Command="{Binding SymbologyTools.CommandMups}" Style="{DynamicResource Esri_Button}" >MapUnitPolys Symbology and Templates</Button>
-            <Button Grid.Column="1" Grid.Row="4" Command="{Binding SymbologyTools.CommandCf}" Style="{DynamicResource Esri_Button}" >Contacts Faults Symbology</Button>
-            <Button Grid.Column="1" Grid.Row="5" Command="{Binding SymbologyTools.CommandOp}" Style="{DynamicResource Esri_Button}" >Orientation Points Symbology</Button>
+            <Expander Grid.Row="1" Grid.Column="1" Header="Line/Point Symbol Options">
+                <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
+                    Blah blah blah blah
+                </TextBlock>
+            </Expander>
+            <Button Grid.Row="1" Grid.Column="2" Command="{Binding SymbologyTools.CommandCIMSymbols}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Rebuild</Button>
 
-            <Button Grid.Column="1" Grid.Row="7" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
+            <Expander Grid.Row="2" Grid.Column="1" Header="MapUnitPolys Symbology and Templates">
+                <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
+                    Blah blah blah blah
+                </TextBlock>
+            </Expander>
+            <Button Grid.Row="2" Grid.Column="2" Command="{Binding SymbologyTools.CommandMups}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Rebuild</Button>
+
+            <Expander Grid.Row="3" Grid.Column="1" Header="Contacts Faults Symbology">
+                <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
+                    Blah blah blah blah
+                </TextBlock>
+            </Expander>
+            <Button Grid.Row="3" Grid.Column="2" Command="{Binding SymbologyTools.CommandCf}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Rebuild</Button>
+
+            <Expander Grid.Row="4" Grid.Column="1" Header="Orientation Points Symbology">
+                <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
+                    Blah blah blah blah
+                </TextBlock>
+            </Expander>
+            <Button Grid.Row="4" Grid.Column="2" Command="{Binding SymbologyTools.CommandOp}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Rebuild</Button>
+
+            <Button Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="7" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
         </Grid>
     </AdornerDecorator>
 
