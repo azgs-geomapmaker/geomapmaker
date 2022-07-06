@@ -35,7 +35,7 @@ namespace Geomapmaker.ViewModels.Tools
 
             idCount += await Data.AnyFeatureLayer.SetPrimaryKeys("OrientationPoints", "orientationpoints_id");
 
-            MessageBox.Show($"Created {idCount} Primary Keys", "Set All Primary Keys");
+            MessageBox.Show($"Added {idCount} Primary Key{(idCount == 1 ? "" : "s")}", "Set All Primary Keys");
         }
 
         public async void InsertGlossaryTerms()
@@ -58,7 +58,7 @@ namespace Geomapmaker.ViewModels.Tools
 
             int count = await Data.Glossary.InsertGlossaryTermsAsync(insertTerms);
 
-            MessageBox.Show($"Inserted {count} Glossary Terms", "Insert Glossary Terms");
+            MessageBox.Show($"Added {count} Glossary Term{(count == 1 ? "" : "s")}", "Insert Glossary Terms");
         }
     }
 }
