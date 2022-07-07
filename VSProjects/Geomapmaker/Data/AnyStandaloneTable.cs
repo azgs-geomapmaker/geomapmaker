@@ -256,7 +256,7 @@ namespace Geomapmaker.Data
                                     using (Row row = rowCursor.Current)
                                     {
                                         // Check if value is empty or null
-                                        if (row[fieldName] != null || !string.IsNullOrEmpty(row[fieldName]?.ToString()))
+                                        if (!string.IsNullOrWhiteSpace(row[fieldName]?.ToString()))
                                         {
                                             // Add field to list
                                             allValues.Add(row[fieldName].ToString());
