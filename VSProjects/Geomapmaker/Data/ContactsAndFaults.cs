@@ -263,13 +263,13 @@ namespace Geomapmaker.Data
             }
 
             // Check if the symbol list has been populated 
-            if (Symbology.ContactsAndFaultsSymbols == null)
+            if (GeomapmakerModule.ContactsAndFaultsSymbols == null)
             {
                 await Symbology.RefreshCFSymbolOptionsAsync();
             }
 
             // Get the CF Symbology Options
-            List<GemsSymbol> SymbolOptions = Symbology.ContactsAndFaultsSymbols;
+            List<GemsSymbol> SymbolOptions = GeomapmakerModule.ContactsAndFaultsSymbols;
 
             if (SymbolOptions == null)
             {

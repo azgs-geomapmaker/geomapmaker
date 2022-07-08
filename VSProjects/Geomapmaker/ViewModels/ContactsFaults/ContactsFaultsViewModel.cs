@@ -60,13 +60,13 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         public async void RefreshCFSymbolsAsync()
         {
             // Get symbology options if the list is null
-            if (Data.Symbology.ContactsAndFaultsSymbols == null)
+            if (GeomapmakerModule.ContactsAndFaultsSymbols == null)
             {
                 await Data.Symbology.RefreshCFSymbolOptionsAsync();
             }
 
             // ParentVM keeps a copy of the master list
-            SymbolOptions = Data.Symbology.ContactsAndFaultsSymbols;
+            SymbolOptions = GeomapmakerModule.ContactsAndFaultsSymbols;
 
             // Push options to create vm
             Create.SymbolOptions = SymbolOptions;

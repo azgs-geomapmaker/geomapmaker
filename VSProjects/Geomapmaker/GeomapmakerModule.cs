@@ -1,5 +1,7 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using Geomapmaker.Models;
+using System.Collections.Generic;
 
 namespace Geomapmaker
 {
@@ -8,6 +10,10 @@ namespace Geomapmaker
         private static GeomapmakerModule _this = null;
 
         public static string DataSourceId { get; set; }
+
+        public static List<GemsSymbol> ContactsAndFaultsSymbols { get; set; }
+
+        public static List<GemsSymbol> OrientationPointSymbols { get; set; }
 
         public const string CF_SketchTemplateName = "Sketch";
 

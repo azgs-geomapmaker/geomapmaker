@@ -13,6 +13,9 @@ namespace Geomapmaker.Data
 {
     public class Symbology
     {
+        // List of OP symbols
+        //public static List<GemsSymbol> OrientationPointSymbols;
+
         /// <summary>
         /// Get validation report for table
         /// </summary>
@@ -112,12 +115,6 @@ namespace Geomapmaker.Data
             return results;
         }
 
-        // List of CF symbols
-        public static List<GemsSymbol> ContactsAndFaultsSymbols;
-
-        // List of OP symbols
-        public static List<GemsSymbol> OrientationPointSymbols;
-
         /// <summary>
         /// Rebuild the CF symbols from the symbology table
         /// </summary>
@@ -131,7 +128,7 @@ namespace Geomapmaker.Data
             // Return an empty list if the cfsymbology table isn null
             if (SymbologyTable == null)
             {
-                ContactsAndFaultsSymbols = cfSymbols;
+                GeomapmakerModule.ContactsAndFaultsSymbols = cfSymbols;
                 return;
             }
 
@@ -189,7 +186,7 @@ namespace Geomapmaker.Data
                 }
             }, ps.Progressor);
 
-            ContactsAndFaultsSymbols = cfSymbols;
+            GeomapmakerModule.ContactsAndFaultsSymbols = cfSymbols;
         }
 
         /// <summary>
@@ -205,7 +202,7 @@ namespace Geomapmaker.Data
             // Check if the table exists
             if (orientationSymbologyTable == null)
             {
-                OrientationPointSymbols = orientationSymbols;
+                GeomapmakerModule.OrientationPointSymbols = orientationSymbols;
                 return;
             }
 
@@ -264,7 +261,7 @@ namespace Geomapmaker.Data
                 }
             }, ps.Progressor);
 
-            OrientationPointSymbols = orientationSymbols;
+            GeomapmakerModule.OrientationPointSymbols = orientationSymbols;
         }
 
         /// <summary>
@@ -276,7 +273,7 @@ namespace Geomapmaker.Data
             List<string> missingSymbol = new List<string>();
 
             // Check if the ContactsAndFaultsSymbols have been processed
-            if (ContactsAndFaultsSymbols == null)
+            if (GeomapmakerModule.ContactsAndFaultsSymbols == null)
             {
                 await RefreshCFSymbolOptionsAsync();
             }
@@ -288,7 +285,7 @@ namespace Geomapmaker.Data
             foreach (string symbol in cfSymbolValues)
             {
                 // Check if symbology exists
-                if (!ContactsAndFaultsSymbols.Any(a => a.Key == symbol))
+                if (!GeomapmakerModule.ContactsAndFaultsSymbols.Any(a => a.Key == symbol))
                 {
                     missingSymbol.Add(symbol);
                 }
@@ -306,7 +303,7 @@ namespace Geomapmaker.Data
             List<string> missingSymbol = new List<string>();
 
             // Check if the OrientationPoints have been processed
-            if (OrientationPointSymbols == null)
+            if (GeomapmakerModule.OrientationPointSymbols == null)
             {
                 await RefreshOPSymbolOptionsAsync();
             }
@@ -318,7 +315,7 @@ namespace Geomapmaker.Data
             foreach (string symbol in opSymbolValues)
             {
                 // Check if symbology exists
-                if (!OrientationPointSymbols.Any(a => a.Key == symbol))
+                if (!GeomapmakerModule.OrientationPointSymbols.Any(a => a.Key == symbol))
                 {
                     missingSymbol.Add(symbol);
                 }
