@@ -202,7 +202,7 @@ namespace Geomapmaker.Data
                         QueryFilter queryFilter = new QueryFilter
                         {
                             SubFields = "shape, mapunit",
-                            WhereClause = "mapunit IS NULL"
+                            //WhereClause = "mapunit IS NULL"
                         };
 
                         EditOperation editOperation = new EditOperation()
