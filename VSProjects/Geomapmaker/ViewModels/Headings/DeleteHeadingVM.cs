@@ -94,7 +94,10 @@ namespace Geomapmaker.ViewModels.Headings
                     {
                         if (enterpriseTable != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Delete Heading"
+                            };
 
                             editOperation.Callback(context =>
                             {

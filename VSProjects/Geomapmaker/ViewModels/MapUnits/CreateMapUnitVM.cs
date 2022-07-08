@@ -244,7 +244,10 @@ namespace Geomapmaker.ViewModels.MapUnits
                             // Get fields for the table
                             List<Field> tableFields = enterpriseTable.GetDefinition()?.GetFields()?.ToList();
 
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Create MapUnit"
+                            };
 
                             editOperation.Callback(context =>
                             {

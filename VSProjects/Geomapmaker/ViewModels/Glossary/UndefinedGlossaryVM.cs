@@ -56,7 +56,10 @@ namespace Geomapmaker.ViewModels.Glossary
                     {
                         if (enterpriseTable != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Create Glossary Term"
+                            };
 
                             editOperation.Callback(context =>
                             {

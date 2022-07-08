@@ -88,7 +88,10 @@ namespace Geomapmaker.ViewModels.DataSources
                     {
                         if (enterpriseTable != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Create Data Source",
+                            };
 
                             editOperation.Callback(context =>
                             {

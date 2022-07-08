@@ -249,7 +249,10 @@ namespace Geomapmaker.ViewModels.Hierarchy
                     {
                         if (enterpriseTable != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Update Hierarchy Keys"
+                            };
 
                             editOperation.Callback(context =>
                             {

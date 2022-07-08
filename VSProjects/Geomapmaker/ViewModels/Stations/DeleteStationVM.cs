@@ -121,7 +121,10 @@ namespace Geomapmaker.ViewModels.Stations
                     {
                         if (enterpriseTable != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Delete Station"
+                            };
 
                             editOperation.Callback(context =>
                             {

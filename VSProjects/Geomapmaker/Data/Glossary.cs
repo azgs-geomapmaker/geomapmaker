@@ -250,7 +250,12 @@ namespace Geomapmaker.Data
                 {
                     if (enterpriseTable != null)
                     {
-                        EditOperation editOperation = new EditOperation();
+                        EditOperation editOperation = new EditOperation()
+                        {
+                            Name = "Insert Glossary Terms",
+                            ProgressMessage = "Inserting Glossary Terms",
+                            ShowProgressor = true
+                        };
 
                         editOperation.Callback(context =>
                         {

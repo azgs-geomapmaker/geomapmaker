@@ -93,7 +93,10 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
                 {
                     if (enterpriseTable != null)
                     {
-                        EditOperation editOperation = new EditOperation();
+                        EditOperation editOperation = new EditOperation()
+                        {
+                            Name = "Edit MapUnitPolys"
+                        };
 
                         // Convert Dictionary Keys to a read-only list for queryFilter
                         ReadOnlyCollection<long> oids = new ReadOnlyCollection<long>(MapUnitPolysOids.Keys.ToList());

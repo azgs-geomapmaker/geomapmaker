@@ -354,7 +354,10 @@ namespace Geomapmaker.Data
                                     SubFields = fieldName
                                 };
 
-                                EditOperation editOperation = new EditOperation();
+                                EditOperation editOperation = new EditOperation()
+                                {
+                                    Name = $"Set Primary Keys for {layerName}"
+                                };
 
                                 editOperation.Callback(context =>
                                 {
