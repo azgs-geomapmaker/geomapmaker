@@ -122,7 +122,10 @@ namespace Geomapmaker.ViewModels.MapUnits
                     {
                         if (enterpriseTable != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Delete MapUnit"
+                            };
 
                             editOperation.Callback(context =>
                             {

@@ -166,19 +166,19 @@
                 IsEditable="True"  
                 />
 
-            <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" Visibility="{Binding Edit.Visibility}" >
-                <TextBlock Text="Concealed " />
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Concealed " Visibility="{Binding Edit.Visibility}" Margin="0,0,0,10" />
+            <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Horizontal" Visibility="{Binding Edit.Visibility}" HorizontalAlignment="Right" Margin="0,0,0,10" >
                 <TextBlock FontWeight="Bold" Text="{Binding Edit.IsConcealed, Converter={StaticResource ConcealedConverter}}" ToolTip="Concealed" Style="{DynamicResource Esri_TextBlockRegular}" />
+                <CheckBox Style="{DynamicResource Esri_CheckboxToggleSwitch}" IsChecked="{Binding Edit.IsConcealed, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            <CheckBox Grid.Row="16" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding Edit.IsConcealed, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="17" Grid.Column="1" Text="Notes" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="18" Grid.Column="1" MinLines="3" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MaxLength="250" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="16" Grid.Column="1" Text="Notes" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="17" Grid.Column="1" MinLines="3" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MaxLength="250" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="19" Grid.Column="1" Text="Data Source" Style="{DynamicResource Esri_TextBlockRegular}" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="20" Grid.Column="1" FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" IsReadOnly="True" IsEnabled="False"/>
+            <TextBlock Grid.Row="18" Grid.Column="1" Text="Data Source" Style="{DynamicResource Esri_TextBlockRegular}" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="19" Grid.Column="1" FontStyle="Italic" Text="{Binding Create.DataSource, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" IsReadOnly="True" IsEnabled="False"/>
 
-            <StackPanel Grid.Row="21" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
+            <StackPanel Grid.Row="20" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
                 <Button Padding="5" Command="{Binding CommandClose}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding Edit.CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update Template</Button>
             </StackPanel>

@@ -1,0 +1,45 @@
+﻿<controls:ProWindow x:Class="Geomapmaker.Views.Tools.Tools"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:controls="clr-namespace:ArcGIS.Desktop.Framework.Controls;assembly=ArcGIS.Desktop.Framework"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+        xmlns:tabData="clr-namespace:Geomapmaker.Views.Tools" 
+        mc:Ignorable="d"
+        Title="Tools"
+        Height="400" 
+        MinHeight="350" 
+        Width="400"
+        MinWidth="350" 
+        WindowStartupLocation="CenterOwner"
+    >
+    
+    <controls:ProWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+                <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </controls:ProWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Row="0" Grid.Column="0" >
+            <TabItem Header="Tables" >
+                <tabData:TableTools />
+            </TabItem>
+            <TabItem Header="Symbology" >
+                <tabData:SymbologyTools />
+            </TabItem>
+        </TabControl>
+    </Grid>
+
+</controls:ProWindow>

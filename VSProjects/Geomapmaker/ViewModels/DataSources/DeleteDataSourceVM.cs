@@ -91,7 +91,10 @@ namespace Geomapmaker.ViewModels.DataSources
                     {
                         if (table != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Delete DataSource",
+                            };
 
                             editOperation.Callback(context =>
                             {

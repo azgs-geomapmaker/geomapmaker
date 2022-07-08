@@ -135,6 +135,8 @@ namespace Geomapmaker.Data
                 return;
             }
 
+            ProgressorSource ps = new ProgressorSource("Rebuilding Line Symbol Options...");
+
             // Process the cfsymbology table
             await QueuedTask.Run(() =>
             {
@@ -185,7 +187,7 @@ namespace Geomapmaker.Data
                         }
                     }
                 }
-            });
+            }, ps.Progressor);
 
             ContactsAndFaultsSymbols = cfSymbols;
         }
@@ -206,6 +208,8 @@ namespace Geomapmaker.Data
                 OrientationPointSymbols = orientationSymbols;
                 return;
             }
+
+            ProgressorSource ps = new ProgressorSource("Rebuilding Point Symbol Options...");
 
             // Process the cfsymbology table
             await QueuedTask.Run(() =>
@@ -258,7 +262,7 @@ namespace Geomapmaker.Data
                         }
                     }
                 }
-            });
+            }, ps.Progressor);
 
             OrientationPointSymbols = orientationSymbols;
         }

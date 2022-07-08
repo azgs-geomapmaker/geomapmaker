@@ -215,7 +215,6 @@
     <Compile Include="Models\ValidationRule.cs" />
     <Compile Include="RibbonElements\ReportButton.cs" />
     <Compile Include="Report\GemsReport.cs" />
-    <Compile Include="RibbonElements\Tools.cs" />
     <Compile Include="TestButton.cs" />
     <Compile Include="ViewModels\Export\ExportVM.cs" />
     <Compile Include="ViewModels\GeneratePolygons\GeneratePolygonsViewModel.cs" />
@@ -226,6 +225,9 @@
     <Compile Include="ViewModels\Glossary\GlossaryVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysCreate\MapUnitPolysCreateVM.cs" />
     <Compile Include="ViewModels\MapUnitPolysEdit\MapUnitPolysEditVM.cs" />
+    <Compile Include="ViewModels\Tools\SymbologyToolsVM.cs" />
+    <Compile Include="ViewModels\Tools\TableToolsVM.cs" />
+    <Compile Include="ViewModels\Tools\ToolsViewModel.cs" />
     <Compile Include="Views\Export\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>
     </Compile>
@@ -255,12 +257,8 @@
     </Compile>
     <Compile Include="MapTools\SelectMapUnitPolysTool.cs" />
     <Compile Include="Models\Station.cs" />
-    <Compile Include="Views\RebuildRenderers\RebuildRenderers.xaml.cs">
-      <DependentUpon>RebuildRenderers.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\OrientationPoints\CreateOrientationPointVM.cs" />
     <Compile Include="ViewModels\OrientationPoints\OrientationPointsViewModel.cs" />
-    <Compile Include="ViewModels\RebuildRenderers\RebuildRenderersViewModel.cs" />
     <Compile Include="Views\OrientationPoints\CreateOrientationPoint.xaml.cs">
       <DependentUpon>CreateOrientationPoint.xaml</DependentUpon>
     </Compile>
@@ -373,6 +371,15 @@
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Tools\SymbologyTools.xaml.cs">
+      <DependentUpon>SymbologyTools.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\TableTools.xaml.cs">
+      <DependentUpon>TableTools.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Tools.xaml.cs">
+      <DependentUpon>Tools.xaml</DependentUpon>
+    </Compile>
     <Compile Include="_helpers\ColorConverter.cs" />
     <Compile Include="_helpers\Helpers.cs" />
     <Compile Include="_helpers\ValueConverters.cs" />
@@ -415,10 +422,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GeneratePolygons\GeneratePolygons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RebuildRenderers\RebuildRenderers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -515,6 +518,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GlobalResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\SymbologyTools.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\TableTools.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Tools.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

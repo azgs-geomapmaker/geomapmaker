@@ -88,7 +88,10 @@ namespace Geomapmaker.ViewModels.Headings
                     {
                         if (enterpriseTable != null)
                         {
-                            EditOperation editOperation = new EditOperation();
+                            EditOperation editOperation = new EditOperation()
+                            {
+                                Name = "Create Heading"
+                            };
 
                             editOperation.Callback(context =>
                             {

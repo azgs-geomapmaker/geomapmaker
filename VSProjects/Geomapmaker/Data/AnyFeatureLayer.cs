@@ -253,7 +253,7 @@ namespace Geomapmaker.Data
                                     using (Row row = rowCursor.Current)
                                     {
                                         // Check if value is empty or null
-                                        if (row[fieldName] != null || !string.IsNullOrEmpty(row[fieldName]?.ToString()))
+                                        if (!string.IsNullOrWhiteSpace(row[fieldName]?.ToString()))
                                         {
                                             // Add field to list
                                             allValues.Add(row[fieldName].ToString());
@@ -325,10 +325,6 @@ namespace Geomapmaker.Data
             return uniqueValues;
         }
 
-
-
-
-
         public static async Task<int> SetPrimaryKeys(string layerName, string fieldName)
         {
             int count = 0;
@@ -358,7 +354,10 @@ namespace Geomapmaker.Data
                                     SubFields = fieldName
                                 };
 
-                                EditOperation editOperation = new EditOperation();
+                                EditOperation editOperation = new EditOperation()
+                                {
+                                    Name = $"Set Primary Keys for {layerName}"
+                                };
 
                                 editOperation.Callback(context =>
                                 {
