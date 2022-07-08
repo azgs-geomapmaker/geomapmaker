@@ -130,7 +130,8 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Edit.SymbolsFilteredMessage}" HorizontalAlignment="Right" FontSize="11" FontWeight="Light"/>
+                        <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Command="{Binding CommandRefreshSymbols}" >Refresh</Button>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Edit.SymbolsFilteredMessage}" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="11" FontWeight="Light"/>
                     </Grid>
                 </AdornerDecorator>
 

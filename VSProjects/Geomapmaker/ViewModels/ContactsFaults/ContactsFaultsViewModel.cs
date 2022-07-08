@@ -18,6 +18,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
         public ICommand CommandClose => new RelayCommand(() => CloseProwindow());
 
+        public ICommand CommandRefreshSymbols => new RelayCommand(() => RefreshSymbolsAsync());
+
         public void CloseProwindow()
         {
             WindowCloseEvent(this, new EventArgs());
@@ -56,8 +58,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             }
         }
 
-        //Update collection of CF symbols
-        public async void RefreshCFSymbolsAsync()
+        // Get collection of CF symbol options
+        public async void GetSymbolsAsync()
         {
             // Get symbology options if the list is null
             if (GeomapmakerModule.ContactsAndFaultsSymbols == null)
@@ -70,7 +72,21 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             // Push options to create vm
             Create.SymbolOptions = SymbolOptions;
-            Create.SymbolsFilteredMessage = $"{SymbolOptions.Count()} symbols";
+        }
+
+        // Rebuild symbol options from table
+        public async void RefreshSymbolsAsync()
+        {
+            // Rebuild the symbology options from the table
+            await Data.Symbology.RefreshCFSymbolOptionsAsync();
+
+            SymbolOptions = GeomapmakerModule.ContactsAndFaultsSymbols;
+
+            // Reset Create Options
+            Create.SymbolOptions = SymbolOptions;
+
+            // Reset Edit Options
+            Edit.SymbolOptions = SymbolOptions;
         }
 
         public async void RefreshTemplates()
@@ -114,7 +130,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             await QueuedTask.Run(() =>
             {
-                _contactsfaults.contactsFaultsVM.RefreshCFSymbolsAsync();
+                _contactsfaults.contactsFaultsVM.GetSymbolsAsync();
                 _contactsfaults.contactsFaultsVM.RefreshTemplates();
             }, ps.Progressor);
 
