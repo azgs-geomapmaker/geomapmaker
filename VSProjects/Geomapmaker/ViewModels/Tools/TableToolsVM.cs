@@ -13,6 +13,8 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandInsertGlossaryTerms => new RelayCommand(() => InsertGlossaryTerms());
 
+        public ICommand CommandSetMapUnit => new RelayCommand(() => SetMapUnit());
+
         public ToolsViewModel ParentVM { get; set; }
 
         public TableToolsVM(ToolsViewModel parentVM)
@@ -66,6 +68,17 @@ namespace Geomapmaker.ViewModels.Tools
             int count = await Data.Glossary.InsertGlossaryTermsAsync(insertTerms);
 
             MessageBox.Show($"Added {count} Glossary Term{(count == 1 ? "" : "s")}", "Insert Glossary Terms");
+        }
+
+        public async void SetMapUnit()
+        {
+            ParentVM.CloseProwindow();
+
+            int stationCount = await Data.Stations.UpdateStationsWithMapUnitIntersectionAsync();
+
+            int opCount = await Data.OrientationPoints.UpdateOrientationPointsWithMapUnitIntersectionAsync();
+
+            MessageBox.Show($"Updated {stationCount} Station{(stationCount == 1 ? "" : "s")} and {opCount} Orientation Point{(opCount == 1 ? "" : "s")}", "Find MapUnitPolys Intersections");
         }
     }
 }

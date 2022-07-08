@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
@@ -172,6 +173,113 @@ namespace Geomapmaker.Data
             });
 
             return StationsList;
+        }
+
+        /// <summary>
+        /// Find Stations that don't have a mapunit value. Find intersection with MapUnitPolys and update mapunit value.
+        /// </summary>
+        /// <returns>Count of rows updated</returns>
+        public static async Task<int> UpdateStationsWithMapUnitIntersectionAsync()
+        {
+            int count = 0;
+
+            FeatureLayer stationsLayer = (FeatureLayer)(MapView.Active?.Map.Layers.FirstOrDefault(a => a.Name == "Stations"));
+
+            FeatureLayer mupLayer = (FeatureLayer)(MapView.Active?.Map.Layers.FirstOrDefault(a => a.Name == "MapUnitPolys"));
+
+            if (stationsLayer == null || mupLayer == null)
+            {
+                return 0;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table stationsTable = stationsLayer.GetTable())
+                using (Table mupTable = mupLayer.GetTable())
+                {
+                    if (stationsTable != null && mupTable != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            SubFields = "shape, mapunit",
+                            WhereClause = "mapunit IS NULL"
+                        };
+
+                        EditOperation editOperation = new EditOperation()
+                        {
+                            Name = "Update MapUnit value for Stations",
+                            ProgressMessage = "Intersecting Stations with MapUnitPolys",
+                            ShowProgressor = true
+                        };
+
+                        editOperation.Callback(context =>
+                        {
+                            using (RowCursor rowCursor = stationsTable.Search(queryFilter, false))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        // Get the geometry for the station
+                                        MapPoint point = (MapPoint)row["SHAPE"];
+
+                                        // Get all of map features that intersect the station
+                                        Dictionary<BasicFeatureLayer, List<long>> features = MapView.Active.GetFeatures(point);
+
+                                        // Filter out only MapUnitPolys and then grab the first Object ID in the list
+                                        long? mupObjectId = features.Where(x => x.Key.Name == "MapUnitPolys").Select(a => a.Value).FirstOrDefault()?.FirstOrDefault();
+
+                                        if (mupObjectId != null)
+                                        {
+                                            string mapunit = "";
+
+                                            QueryFilter innerQueryFilter = new QueryFilter
+                                            {
+                                                SubFields = "mapunit",
+                                                ObjectIDs = new List<long> { (long)mupObjectId }
+                                            };
+
+                                            using (RowCursor innerRowCursor = mupTable.Search(innerQueryFilter))
+                                            {
+                                                while (innerRowCursor.MoveNext())
+                                                {
+                                                    using (Row innerRow = innerRowCursor.Current)
+                                                    {
+                                                        // Grab the mapunit value
+                                                        mapunit = innerRow["mapunit"]?.ToString();
+                                                    }
+                                                }
+                                            }
+
+                                            if (!string.IsNullOrEmpty(mapunit))
+                                            {
+                                                count++;
+
+                                                // In order to update the Map and/or the attribute table.
+                                                // Has to be called before any changes are made to the row.
+                                                context.Invalidate(row);
+
+                                                row["mapunit"] = mapunit;
+
+                                                // After all the changes are done, persist it.
+                                                row.Store();
+
+                                                // Has to be called after the store too.
+                                                context.Invalidate(row);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }, stationsTable);
+
+                        bool result = editOperation.Execute();
+
+                    }
+                }
+            });
+
+            return count;
         }
 
     }
