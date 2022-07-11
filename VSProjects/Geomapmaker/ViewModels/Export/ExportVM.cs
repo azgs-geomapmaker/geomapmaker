@@ -26,7 +26,7 @@ namespace Geomapmaker.ViewModels.Export
 
         public ICommand CommandExport => new RelayCommand(() => Export());
 
-        public bool CreateGeodatabase { get; set; } = true;
+        public bool CreateGeodatabase { get; set; } = false;
 
         public bool CreateShapefiles { get; set; } = false;
 
@@ -36,7 +36,11 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateTextTables { get; set; } = false;
 
-        public bool CreateReport { get; set; } = true;
+        public bool CreateReport { get; set; } = false;
+
+        public bool CreateOpen { get; set; } = false;
+
+        public bool CreateSimple { get; set; } = false;
 
         public void CloseProwindow()
         {
@@ -72,6 +76,10 @@ namespace Geomapmaker.ViewModels.Export
 
                 // Path for the report
                 string reportPath = exportPath + "\\Report.html";
+
+                string openPath = exportPath + "\\Open";
+
+                string simplePath = exportPath + "\\Simple";
 
                 CloseProwindow();
 
@@ -204,8 +212,21 @@ namespace Geomapmaker.ViewModels.Export
                     await report.ExportReportAsync(reportPath);
                 }
 
-                progDialog.Hide();
+                if (CreateOpen)
+                {
+                    // Create open folder
+                    System.IO.Directory.CreateDirectory(openPath);
 
+                }
+
+                if (CreateSimple)
+                {
+                    // Create simple folder
+                    System.IO.Directory.CreateDirectory(simplePath);
+
+                }
+
+                progDialog.Hide();
             }
         }
 
