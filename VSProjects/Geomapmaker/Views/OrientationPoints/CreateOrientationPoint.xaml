@@ -242,7 +242,15 @@
                 />
 
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Orientation Source" />
-                <ComboBox Margin="0,0,0,10" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding DataSourceOptions}" Text="{Binding Create.OrientationSourceID, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" />
+                <ComboBox 
+                Grid.Row="1" 
+                Grid.Column="1" 
+                Margin="0,0,0,10"
+                ItemsSource="{Binding DataSourceOptions}"
+                SelectedValue="{Binding Create.OrientationSourceID, UpdateSourceTrigger=PropertyChanged}"
+                IsReadOnly="True"
+                IsEnabled="False"
+                />
             </Grid>
 
             <StackPanel Grid.Row="19" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
