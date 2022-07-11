@@ -59,8 +59,7 @@
             SelectedValue="{Binding Create.StationFieldId, UpdateSourceTrigger=PropertyChanged}"
             IsReadOnly="False" 
             IsEditable="False" 
-            >
-            </ComboBox>
+            />
 
             <GroupBox Grid.Row="3" Grid.Column="1" >
                 <GroupBox.Header>
@@ -221,21 +220,30 @@
             <TextBlock Grid.Row="14" Grid.Column="1" Text="Notes" />
             <TextBox Grid.Row="15" Grid.Column="1" Text="{Binding Create.Notes, UpdateSourceTrigger=PropertyChanged}" MaxLength="250" />
 
-            <TextBlock Grid.Row="16" Grid.Column="1" Text="Location Source"/>
-            <ComboBox 
-            Grid.Row="17" 
-            Grid.Column="1" 
-            ItemsSource="{Binding DataSourceOptions}"
-            SelectedValue="{Binding Create.LocationSourceID, UpdateSourceTrigger=PropertyChanged}"
-            IsReadOnly="False" 
-            IsEditable="False" 
-            >
-            </ComboBox>
+            <Grid Grid.Row="17" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="18" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="Orientation Source: "/>
-                <TextBlock Text="{Binding Create.OrientationSourceID}" FontStyle="Italic" />
-            </StackPanel>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Location Source" />
+                <ComboBox 
+                Grid.Row="1" 
+                Grid.Column="0" 
+                ItemsSource="{Binding DataSourceOptions}"
+                SelectedValue="{Binding Create.LocationSourceID, UpdateSourceTrigger=PropertyChanged}"
+                IsReadOnly="False" 
+                IsEditable="False"  
+                Margin="0,0,5,10"
+                />
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Orientation Source" />
+                <ComboBox Margin="0,0,0,10" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding DataSourceOptions}" Text="{Binding Create.OrientationSourceID, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" />
+            </Grid>
 
             <StackPanel Grid.Row="19" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
