@@ -38,7 +38,7 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateReport { get; set; } = false;
 
-        public bool CreateOpen { get; set; } = false;
+        public bool CreateOpen { get; set; } = true;
 
         public bool CreateSimple { get; set; } = false;
 
@@ -214,15 +214,48 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateOpen)
                 {
+                    // OPEN-- Consists of shapefiles, additional.dbf files, and pipe-delimited text files.
+                    // Field renaming is documented in output file logfile.txt.
+                    // This package will be a complete transcription of the geodatabase without loss of any information.
+
                     // Create open folder
                     System.IO.Directory.CreateDirectory(openPath);
 
+                    // FeatureClasses shapefiles
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", openPath });
+
+                    // dbf tables
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DataSources", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "DescriptionOfMapUnits", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "GeoMaterialDict", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Glossary", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToDBASE", new List<string> { "Symbology", openPath });
+
+                    // Pipe-delimited tables
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", openPath, "DataSources.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", openPath, "DescriptionOfMapUnits.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", openPath, "GeoMaterialDict.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", openPath, "Glossary.psv" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", openPath, "Symbology.psv" });
                 }
 
                 if (CreateSimple)
                 {
+                    // SIMPLE-- Consists of shapefiles alone. Tables Glossary, DataSources, and DescriptionOfMapUnits are joined to selected feature classes within feature dataset GeologicMap,
+                    // long fields are truncated, and these feature classes are written to shapefiles.
+                    // Field renaming is documented in output file logfile.txt.This package is a partial (incomplete)transcription of the geodatabase, but will be easier to use than the OPEN package. 
+
                     // Create simple folder
                     System.IO.Directory.CreateDirectory(simplePath);
+
+                    // FeatureClasses shapefiles
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", simplePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", simplePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", simplePath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", simplePath });
 
                 }
 
