@@ -7,8 +7,8 @@
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
         Title="Export"
-        Height="250" 
-        MinHeight="200" 
+        Height="300" 
+        MinHeight="250" 
         Width="300"
         MinWidth="250"
         WindowStartupLocation="CenterOwner"
@@ -25,6 +25,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -62,8 +65,16 @@
         <TextBlock Grid.Row="6" Grid.Column="2" Text="Report" HorizontalAlignment="Right" />
         <CheckBox Grid.Row="6" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
-        <Button Grid.Row="8" Grid.Column="2" Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
-        <Button Grid.Row="8" Grid.Column="3" Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
+        <Separator Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" />
+
+        <TextBlock Grid.Row="8" Grid.Column="2" Text="Open" HorizontalAlignment="Right" />
+        <CheckBox Grid.Row="8" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateOpen, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="9" Grid.Column="2" Text="Simple" HorizontalAlignment="Right" />
+        <CheckBox Grid.Row="9" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateSimple, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+
+        <Button Grid.Row="11" Grid.Column="2" Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+        <Button Grid.Row="11" Grid.Column="3" Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
 
     </Grid>
 

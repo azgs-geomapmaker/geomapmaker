@@ -176,7 +176,7 @@ namespace Geomapmaker.Data
             }
 
             // Check if the symbol list has been populated 
-            if (Symbology.OrientationPointSymbols == null)
+            if (GeomapmakerModule.OrientationPointSymbols == null)
             {
                 await Symbology.RefreshOPSymbolOptionsAsync();
             }
@@ -207,7 +207,7 @@ namespace Geomapmaker.Data
                                 {
                                     string cfSymbolKey = row["symbol"]?.ToString();
 
-                                    GemsSymbol Symbol = Symbology.OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
+                                    GemsSymbol Symbol = GeomapmakerModule.OrientationPointSymbols.FirstOrDefault(a => a.Key == cfSymbolKey);
 
                                     if (Symbol != null)
                                     {

@@ -18,6 +18,8 @@ namespace Geomapmaker.ViewModels.OrientationPoints
         public event EventHandler WindowCloseEvent;
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
+        
+        public ICommand CommandRefreshSymbols => new RelayCommand(() => RefreshSymbologyOptions());
 
         public void CloseProwindow()
         {
@@ -64,26 +66,34 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
-        public async void RefreshOptions()
+        public async void GetOptions()
         {
             // Get symbology options if the list is null
-            if (Data.Symbology.OrientationPointSymbols == null)
+            if (GeomapmakerModule.OrientationPointSymbols == null)
             {
-                await Data.Symbology.RefreshOPSymbolOptionsAsync();
+                await Symbology.RefreshOPSymbolOptionsAsync();
             }
 
             // ParentVM keeps a copy of the master list
-            SymbolOptions = Data.Symbology.OrientationPointSymbols;
+            SymbolOptions = GeomapmakerModule.OrientationPointSymbols;
 
             // Push options to create vm
             Create.SymbolOptions = SymbolOptions;
-            Create.SymbolsFilteredMessage = $"{SymbolOptions.Count()} symbols";
 
             // Field ID Options
             StationFieldIdOptions = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("Stations", "fieldid");
 
             // Data Source Options
             DataSourceOptions = await AnyStandaloneTable.GetDistinctValuesForFieldAsync("DataSources", "datasources_id");
+        }
+
+        public async void RefreshSymbologyOptions()
+        {
+            await Symbology.RefreshOPSymbolOptionsAsync();
+
+            SymbolOptions = GeomapmakerModule.OrientationPointSymbols;
+
+            Create.SymbolOptions = SymbolOptions;
         }
 
         #region INotifyPropertyChanged
@@ -121,7 +131,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
 
             await QueuedTask.Run(() =>
             {
-                _orientationpoints.orientationPointsViewModelVM.RefreshOptions();
+                _orientationpoints.orientationPointsViewModelVM.GetOptions();
             }, ps.Progressor);
 
             _orientationpoints.Closed += (o, e) => { _orientationpoints = null; };

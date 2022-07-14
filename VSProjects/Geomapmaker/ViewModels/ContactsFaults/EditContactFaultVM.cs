@@ -229,8 +229,10 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             // Update options
             SymbolOptions = filteredSymbols;
 
+            string plural = totalSymbolsCount == 1 ? "" : "s";
+
             // Update messsage
-            SymbolsFilteredMessage = totalSymbolsCount != filteredSymbolsCount ? $"{filteredSymbolsCount} of {totalSymbolsCount} symbols" : $"{totalSymbolsCount} symbols";
+            SymbolsFilteredMessage = totalSymbolsCount != filteredSymbolsCount ? $"{filteredSymbolsCount} of {totalSymbolsCount} symbol{plural}" : $"{totalSymbolsCount} symbol{plural}";
         }
 
         private string _symbolsFilteredMessage;

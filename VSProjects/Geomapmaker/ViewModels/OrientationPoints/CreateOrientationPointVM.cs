@@ -197,9 +197,6 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             // Start with all the symbols from the parent vm
             List<GemsSymbol> filteredSymbols = ParentVM.SymbolOptions;
 
-            // Count of all symbols
-            int totalSymbolsCount = filteredSymbols.Count();
-
             // Filter by key
             if (!string.IsNullOrEmpty(keyFilter))
             {
@@ -212,14 +209,20 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 filteredSymbols = filteredSymbols.Where(a => a.Description != null && a.Description.ToLower().Contains(DescriptionFilter.ToLower())).ToList();
             }
 
-            // Count of filtered symbols
-            int filteredSymbolsCount = filteredSymbols.Count();
-
             // Update options
             SymbolOptions = filteredSymbols;
+        }
+
+        private void UpdateFilteredMessage()
+        {
+            int totalSymbolsCount = ParentVM.SymbolOptions.Count();
+
+            int filteredSymbolsCount = SymbolOptions.Count();
+
+            string plural = totalSymbolsCount == 1 ? "" : "s";
 
             // Update messsage
-            SymbolsFilteredMessage = totalSymbolsCount != filteredSymbolsCount ? $"{filteredSymbolsCount} of {totalSymbolsCount} symbols" : $"{totalSymbolsCount} symbols";
+            SymbolsFilteredMessage = totalSymbolsCount != filteredSymbolsCount ? $"{filteredSymbolsCount} of {totalSymbolsCount} symbol{plural}" : $"{totalSymbolsCount} symbol{plural}";
         }
 
         private string _symbolsFilteredMessage;
@@ -236,7 +239,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             set
             {
                 SetProperty(ref _symbolOptions, value, () => SymbolOptions);
-                ValidateSymbolOptions(SymbolOptions, "SymbolOptions");
+                UpdateFilteredMessage();
             }
         }
 
@@ -511,21 +514,6 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             else if (!double.TryParse(text, out YCoordinateDouble))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Coordinate must be numerical." };
-            }
-            else
-            {
-                _validationErrors.Remove(propertyKey);
-            }
-
-            RaiseErrorsChanged(propertyKey);
-        }
-
-        // Validate symbol options
-        public void ValidateSymbolOptions(List<GemsSymbol> symbolOptions, string propertyKey)
-        {
-            if (symbolOptions?.Count == 0)
-            {
-                _validationErrors[propertyKey] = new List<string>() { "Symbology table not found." };
             }
             else
             {
