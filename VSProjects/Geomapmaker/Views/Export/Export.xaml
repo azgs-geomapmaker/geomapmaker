@@ -9,8 +9,8 @@
         Title="Export"
         Height="300" 
         MinHeight="250" 
-        Width="300"
-        MinWidth="250"
+        Width="500"
+        MinWidth="450"
         WindowStartupLocation="CenterOwner"
     >
     <controls:ProWindow.Resources>
@@ -21,61 +21,86 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:ProWindow.Resources>
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5"/>
-        </Grid.ColumnDefinitions>
+            <CheckBox Grid.Row="1" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateGeodatabase, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="1" Grid.Column="2" Header="Geodatabase" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save feature classes and tables as a file geodatabase.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="1" Grid.Column="2" Text="Geodatabase" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="1" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateGeodatabase, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <CheckBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateShapefiles, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="2" Grid.Column="2" Header="Shapefile" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save feature classes as shapefiles.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="2" Grid.Column="2" Text="Shapefiles" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="2" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateShapefiles, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <CheckBox Grid.Row="3" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateGeopackage, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="3" Grid.Column="2" Header="Geopackage" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save feature classes and tables as a geopackage.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="3" Grid.Column="2" Text="Geopackage" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="3" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateGeopackage, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <CheckBox Grid.Row="4" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateKml, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="4" Grid.Column="2" Header="KML/KMZ" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save map as a zip-compressed KML file.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="4" Grid.Column="2" Text="KML" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="4" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateKml, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <CheckBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCsv, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="5" Grid.Column="2" Header="CSV" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save tables as CSV files.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="5" Grid.Column="2" Text="CSV" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="5" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateCsv, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <CheckBox Grid.Row="6" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="6" Grid.Column="2" Header="Report" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save an HTML validation report.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="6" Grid.Column="2" Text="Report" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="6" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" />
 
-        <Separator Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" />
+            <CheckBox Grid.Row="8" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateOpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="8" Grid.Column="2" Header="Open" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save project as shapefiles, .dbf files, and pipe-delimited text files.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="8" Grid.Column="2" Text="Open" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="8" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateOpen, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <CheckBox Grid.Row="9" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateSimple, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="9" Grid.Column="2" Header="Simple" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Save project as shapefiles alone. Tables Glossary, DataSources, and DescriptionOfMapUnits are joined to selected feature classes within feature dataset GeologicMap, long fields are truncated, and these feature classes are written to shapefiles.</TextBlock>
+            </Expander>
 
-        <TextBlock Grid.Row="9" Grid.Column="2" Text="Simple" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="9" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateSimple, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+            <StackPanel Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+                <Button Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
+            </StackPanel>
 
-        <Button Grid.Row="11" Grid.Column="2" Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
-        <Button Grid.Row="11" Grid.Column="3" Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
-
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 
 </controls:ProWindow>

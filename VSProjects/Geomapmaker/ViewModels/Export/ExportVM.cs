@@ -70,7 +70,7 @@ namespace Geomapmaker.ViewModels.Export
                 string kmlFolder = exportPath + "\\KML";
 
                 // Path for text-tables
-                string tablesFolder = exportPath + "\\Tables";
+                string csvFolder = exportPath + "\\CSV";
 
                 // Path for the report
                 string reportPath = exportPath + "\\Report.html";
@@ -184,14 +184,14 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateCsv)
                 {
                     // Create tables folder
-                    System.IO.Directory.CreateDirectory(tablesFolder);
+                    System.IO.Directory.CreateDirectory(csvFolder);
 
                     // Tables
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", tablesFolder, "DataSources.csv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", tablesFolder, "DescriptionOfMapUnits.csv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", tablesFolder, "GeoMaterialDict.csv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", tablesFolder, "Glossary.csv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", tablesFolder, "Symbology.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", csvFolder, "DataSources.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", csvFolder, "DescriptionOfMapUnits.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", csvFolder, "GeoMaterialDict.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", csvFolder, "Glossary.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", csvFolder, "Symbology.csv" }, null, null, null, GPExecuteToolFlags.None);
                 }
 
                 if (CreateReport)
