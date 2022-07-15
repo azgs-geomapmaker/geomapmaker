@@ -61,7 +61,7 @@ td:last-child {
 
 .tableHeader {
     background-color: #1E5288;
-    color: white;
+    color: #fff;
 }
 
 .passed {
@@ -75,6 +75,10 @@ td:last-child {
     height: 40px;
     font-size: 1.25em;
     background-color: #b2162c;
+}
+
+a.failedLink:link, a.failedLink:visited  {
+    color: #b2162c;
 }
 
 ";
@@ -150,66 +154,48 @@ td:last-child {
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                new XElement("a", new XAttribute("href", "#SymbologyTable"), "Symbology")
-                            ),
-                            GetValidationResult(SymbologyResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "Symbology"),
+                            GetValidationResult("Symbology", SymbologyResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                new XElement("a", new XAttribute("href", "#DataSourcesTable"), "DataSources")
-                            ),
-                            GetValidationResult(DataSourcesResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "DataSources"),
+                            GetValidationResult("DataSources", DataSourcesResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                 new XElement("a", new XAttribute("href", "#DescriptionOfMapUnitsTable"), "DescriptionOfMapUnits")
-                            ),
-                            GetValidationResult(DescriptionOfMapUnitsResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "DescriptionOfMapUnits"),
+                            GetValidationResult("DescriptionOfMapUnits", DescriptionOfMapUnitsResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                 new XElement("a", new XAttribute("href", "#GlossaryTable"), "Glossary")
-                            ),
-                            GetValidationResult(GlossaryResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "Glossary"),
+                            GetValidationResult("Glossary", GlossaryResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                 new XElement("a", new XAttribute("href", "#GeoMaterialDictTable"), "GeoMaterialDict")
-                            ),
-                            GetValidationResult(GeoMaterialDictResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "GeoMaterialDict"),
+                            GetValidationResult("GeoMaterialDict", GeoMaterialDictResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                 new XElement("a", new XAttribute("href", "#MapUnitPolysTable"), "MapUnitPolys")
-                            ),
-                            GetValidationResult(MapUnitPolysResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "MapUnitPolys"),
+                            GetValidationResult("MapUnitPolys", MapUnitPolysResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                 new XElement("a", new XAttribute("href", "#ContactsAndFaultsTable"), "ContactsAndFaults")
-                            ),
-                            GetValidationResult(ContactsAndFaultsResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "ContactsAndFaults"),
+                            GetValidationResult("ContactsAndFaults", ContactsAndFaultsResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                 new XElement("a", new XAttribute("href", "#StationsTable"), "Stations")
-                            ),
-                            GetValidationResult(StationsResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "Stations"),
+                            GetValidationResult("Stations", StationsResults)
                         ),
 
                         new XElement("tr",
-                            new XElement("td", new XAttribute("style", "text-align: left;"),
-                                 new XElement("a", new XAttribute("href", "#OrientationPointsTable"), "OrientationPoints")
-                            ),
-                            GetValidationResult(OrientationPointsResults)
+                            new XElement("td", new XAttribute("style", "text-align: left;"), "OrientationPoints"),
+                            GetValidationResult("OrientationPoints", OrientationPointsResults)
                         )
                 ),
 
@@ -225,11 +211,13 @@ td:last-child {
             );
         }
 
-        private XElement GetValidationResult(List<ValidationRule> results)
+        private XElement GetValidationResult(string id, List<ValidationRule> results)
         {
             if (results.Any(a => a.Status == ValidationStatus.Failed))
             {
-                return new XElement("td", new XAttribute("style", "text-align: right; color: red;"), "Failed");
+                return new XElement("td", new XAttribute("style", "text-align: right;"),
+                    new XElement("a", new XAttribute("href", $"#{id}Table"), new XAttribute("class", "failedLink"), "Failed")
+                );
             }
             else if (results.All(a => a.Status == ValidationStatus.Skipped))
             {
