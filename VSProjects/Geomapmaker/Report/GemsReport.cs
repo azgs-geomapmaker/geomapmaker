@@ -78,7 +78,7 @@ td:last-child {
 }
 
 a.failedLink:link, a.failedLink:visited  {
-    color: #b2162c;
+    color: red;
 }
 
 ";
