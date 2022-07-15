@@ -26,7 +26,6 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No duplicate layers."},
                 new ValidationRule{ Description="No missing fields."},
                 new ValidationRule{ Description="No empty/null values in required fields."},
-                new ValidationRule{ Description="No duplicate Label values."},
                 new ValidationRule{ Description="No duplicate ContactsAndFaults_ID values."}
             };
 
@@ -93,36 +92,19 @@ namespace Geomapmaker.Data
                 }
 
                 //
-                // Check for duplicate Label values
+                // Check for duplicate ContactsAndFaults_ID values
                 //
-                List<string> duplicateLabels = await AnyFeatureLayer.GetDuplicateValuesInFieldAsync("ContactsAndFaults", "Label");
-                if (duplicateLabels.Count == 0)
+                List<string> duplicateIds = await AnyFeatureLayer.GetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
+                if (duplicateIds.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
                 }
                 else
                 {
                     results[4].Status = ValidationStatus.Failed;
-                    foreach (string label in duplicateLabels)
-                    {
-                        results[4].Errors.Add($"Duplicate Label value: {label}");
-                    }
-                }
-
-                //
-                // Check for duplicate ContactsAndFaults_ID values
-                //
-                List<string> duplicateIds = await AnyFeatureLayer.GetDuplicateValuesInFieldAsync("ContactsAndFaults", "ContactsAndFaults_ID");
-                if (duplicateIds.Count == 0)
-                {
-                    results[5].Status = ValidationStatus.Passed;
-                }
-                else
-                {
-                    results[5].Status = ValidationStatus.Failed;
                     foreach (string id in duplicateIds)
                     {
-                        results[5].Errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
+                        results[4].Errors.Add($"Duplicate ContactsAndFaults_ID value: {id}");
                     }
                 }
 
