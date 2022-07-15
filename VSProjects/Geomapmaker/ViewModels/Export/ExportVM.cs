@@ -1,7 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Core.Geoprocessing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Controls;
@@ -11,7 +10,6 @@ using Geomapmaker.Report;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -316,7 +314,7 @@ namespace Geomapmaker.ViewModels.Export
 
             _export.exportVM.WindowCloseEvent += (s, e) => _export.Close();
 
-            _export.Show();
+            _export.ShowDialog();
         }
     }
 }
