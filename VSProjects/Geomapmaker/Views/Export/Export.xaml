@@ -59,8 +59,8 @@
         <TextBlock Grid.Row="4" Grid.Column="2" Text="KML" HorizontalAlignment="Right" />
         <CheckBox Grid.Row="4" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateKml, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
-        <TextBlock Grid.Row="5" Grid.Column="2" Text="Text Tables" HorizontalAlignment="Right" />
-        <CheckBox Grid.Row="5" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateTextTables, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
+        <TextBlock Grid.Row="5" Grid.Column="2" Text="CSV" HorizontalAlignment="Right" />
+        <CheckBox Grid.Row="5" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateCsv, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="6" Grid.Column="2" Text="Report" HorizontalAlignment="Right" />
         <CheckBox Grid.Row="6" Grid.Column="3" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Left" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5" />

@@ -34,7 +34,7 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateKml { get; set; } = false;
 
-        public bool CreateTextTables { get; set; } = false;
+        public bool CreateCsv { get; set; } = false;
 
         public bool CreateReport { get; set; } = false;
 
@@ -183,7 +183,7 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("conversion.MapToKML", new List<string> { mapName, kmzPath });
                 }
 
-                if (CreateTextTables)
+                if (CreateCsv)
                 {
                     // Create tables folder
                     System.IO.Directory.CreateDirectory(tablesFolder);
