@@ -51,6 +51,12 @@ namespace Geomapmaker.ViewModels.Export
 
             if (folderPrompt.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                await QueuedTask.Run(() =>
+                {
+                    // Clear selections so everything is exported
+                    MapView.Active?.Map?.SetSelection(null);
+                });
+
                 // Export folder path from user
                 string exportPath = folderPrompt.SelectedPath;
 
