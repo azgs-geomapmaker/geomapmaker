@@ -248,11 +248,16 @@ namespace Geomapmaker.ViewModels.Export
                     // Create simple folder
                     System.IO.Directory.CreateDirectory(simplePath);
 
-                    // FeatureClasses shapefiles
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", simplePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", simplePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", simplePath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", simplePath });
+                    // https://community.esri.com/t5/arcgis-pro-ideas/remove-all-joins-programatically/idi-p/974557
+                    // In the 2.9 SDK, calling RemoveJoin without specifying the name of the join  removes the last join added.
+                    // This has supposedly been fixed in 3.0 so we won't have to call RemoveJoin for every join added. 
+                 
+                    // MapUnitPolys
+                    await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "mapunit", "DescriptionOfMapUnits", "mapunit" });
+                    await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "datasourceid", "DataSources", "datasources_id" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", simplePath, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
+                    await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
 
                 }
 
