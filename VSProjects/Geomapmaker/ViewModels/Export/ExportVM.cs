@@ -257,7 +257,10 @@ namespace Geomapmaker.ViewModels.Export
                     // This has supposedly been fixed in 3.0 so we won't have to call RemoveJoin for every join added. 
 
                     // ContactsAndFaults
-
+                    await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "ContactsAndFaults", "datasourceid", "DataSources", "datasources_id" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", simplePath, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("ContactsAndFaults", simplePath);
+                    await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "ContactsAndFaults" });
 
                     // MapUnitPolys
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "mapunit", "DescriptionOfMapUnits", "mapunit" });
@@ -268,6 +271,18 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
+
+                    // OrientationPoints
+                    await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "OrientationPoints", "datasourceid", "DataSources", "datasources_id" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", simplePath, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("OrientationPoints", simplePath);
+                    await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "OrientationPoints" });
+
+                    // Stations
+                    await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "Stations", "datasourceid", "DataSources", "datasources_id" });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", simplePath, "Stations" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("Stations", simplePath);
+                    await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "Stations" });
 
                 }
 
