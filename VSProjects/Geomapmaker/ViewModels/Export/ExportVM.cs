@@ -10,9 +10,13 @@ using Geomapmaker.Report;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using FieldDescription = ArcGIS.Desktop.Mapping.FieldDescription;
 
 namespace Geomapmaker.ViewModels.Export
 {
@@ -36,9 +40,9 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateReport { get; set; } = false;
 
-        public bool CreateOpen { get; set; } = true;
+        public bool CreateOpen { get; set; } = false;
 
-        public bool CreateSimple { get; set; } = false;
+        public bool CreateSimple { get; set; } = true;
 
         public void CloseProwindow()
         {
@@ -260,15 +264,64 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "geomaterial", "GeoMaterialDict", "indentedname" });
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "datasourceid", "DataSources", "datasources_id" });
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", simplePath, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("MapUnitPolys", simplePath);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
-
 
                 }
 
                 progDialog.Hide();
             }
+        }
+
+        private async Task WriteShapefileLog(string datasetName, string exportPath)
+        {
+            // Path of the log file
+            string logFile = $"{exportPath}\\{datasetName}_fields.txt";
+
+            List<FieldDescription> oldFields = new List<FieldDescription>();
+            List<Field> newFields = new List<Field>();
+
+            // Find the original feature class
+            FeatureLayer feature = MapView.Active?.Map.FindLayers(datasetName).FirstOrDefault() as FeatureLayer;
+
+            await QueuedTask.Run(() =>
+            {
+                // Get the original fields
+                oldFields = feature.GetFieldDescriptions();
+
+                // Exporting to shapefile seems to move the shape field to the second position
+                FieldDescription shapeField = oldFields.FirstOrDefault(a => a.Alias.ToLower() == "shape");
+                if (shapeField != null)
+                {
+                    oldFields.Remove(shapeField);
+                    oldFields.Insert(1, shapeField);
+                }
+
+                var fileConnection = new FileSystemConnectionPath(new Uri(exportPath), FileSystemDatastoreType.Shapefile);
+                using (FileSystemDatastore shapefile = new FileSystemDatastore(fileConnection))
+                {
+                    FeatureClassDefinition featureClassDef = shapefile.GetDefinition<FeatureClassDefinition>(datasetName);
+
+                    // Get the new fields
+                    newFields = featureClassDef?.GetFields()?.ToList();
+                }
+            });
+
+            // Header
+            File.WriteAllText(logFile, "Original_Field => Shapefile_Field" + Environment.NewLine + Environment.NewLine);
+
+            using (StreamWriter file = File.AppendText(logFile))
+            {
+                // Loop over both sets of fields
+                for (int i = 0; i < oldFields.Count && i < newFields.Count; i++)
+                {
+                    // Append to textfile
+                    file.WriteLine($"{oldFields[i].Alias} => {newFields[i].Name}");
+                }
+            }
+
         }
 
         #region Validation
