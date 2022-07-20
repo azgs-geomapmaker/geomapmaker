@@ -260,6 +260,12 @@ namespace Geomapmaker.ViewModels.Export
                     // Create simple folder
                     Directory.CreateDirectory(simplePath);
 
+                    string logFile = Path.Combine(simplePath, "logfile.txt");
+
+                    File.WriteAllText(logFile, $"Geomapmaker Simple Export: {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
+
+                    File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
+
                     // https://community.esri.com/t5/arcgis-pro-ideas/remove-all-joins-programatically/idi-p/974557
                     // In the 2.9 SDK, calling RemoveJoin without specifying the name of the join  removes the last join added.
                     // This has supposedly been fixed in 3.0 so we won't have to call RemoveJoin for every join added. 
@@ -267,7 +273,7 @@ namespace Geomapmaker.ViewModels.Export
                     // ContactsAndFaults
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "ContactsAndFaults", "datasourceid", "DataSources", "datasources_id" });
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", simplePath, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("ContactsAndFaults", simplePath);
+                    await WriteShapefileLog("ContactsAndFaults", simplePath, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "ContactsAndFaults" });
 
                     // MapUnitPolys
@@ -275,7 +281,7 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "geomaterial", "GeoMaterialDict", "indentedname" });
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "datasourceid", "DataSources", "datasources_id" });
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", simplePath, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("MapUnitPolys", simplePath);
+                    await WriteShapefileLog("MapUnitPolys", simplePath, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
@@ -283,26 +289,22 @@ namespace Geomapmaker.ViewModels.Export
                     // OrientationPoints
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "OrientationPoints", "datasourceid", "DataSources", "datasources_id" });
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", simplePath, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("OrientationPoints", simplePath);
+                    await WriteShapefileLog("OrientationPoints", simplePath, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "OrientationPoints" });
 
                     // Stations
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "Stations", "datasourceid", "DataSources", "datasources_id" });
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", simplePath, "Stations" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("Stations", simplePath);
+                    await WriteShapefileLog("Stations", simplePath, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "Stations" });
-
                 }
 
                 progDialog.Hide();
             }
         }
 
-        private async Task WriteShapefileLog(string datasetName, string exportPath)
+        private async Task WriteShapefileLog(string datasetName, string exportPath, string logfilePath)
         {
-            // Path of the log file
-            string logFile = Path.Combine(exportPath, $"{datasetName}_fields.txt");
-
             List<FieldDescription> oldFields = new List<FieldDescription>();
             List<Field> newFields = new List<Field>();
 
@@ -314,7 +316,7 @@ namespace Geomapmaker.ViewModels.Export
                 // Get the original fields
                 oldFields = feature.GetFieldDescriptions();
 
-                // Exporting to shapefile seems to move the shape field to the second position
+                // Exporting to shapefile always seems to move the shape field to the second position
                 FieldDescription shapeField = oldFields.FirstOrDefault(a => a.Alias.ToLower() == "shape");
                 if (shapeField != null)
                 {
@@ -322,6 +324,7 @@ namespace Geomapmaker.ViewModels.Export
                     oldFields.Insert(1, shapeField);
                 }
 
+                // Read the shapefile
                 FileSystemConnectionPath fileConnection = new FileSystemConnectionPath(new Uri(exportPath), FileSystemDatastoreType.Shapefile);
                 using (FileSystemDatastore shapefile = new FileSystemDatastore(fileConnection))
                 {
@@ -332,11 +335,10 @@ namespace Geomapmaker.ViewModels.Export
                 }
             });
 
-            // Header
-            File.WriteAllText(logFile, "Original_Field => Shapefile_Field" + Environment.NewLine + Environment.NewLine);
-
-            using (StreamWriter file = File.AppendText(logFile))
+            using (StreamWriter file = File.AppendText(logfilePath))
             {
+                file.WriteLine(Environment.NewLine + datasetName.ToUpper());
+
                 // Loop over both sets of fields
                 for (int i = 0; i < oldFields.Count && i < newFields.Count; i++)
                 {
