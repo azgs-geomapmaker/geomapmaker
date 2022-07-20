@@ -130,11 +130,24 @@ namespace Geomapmaker.ViewModels.Export
                     // Create shapefiles folder
                     Directory.CreateDirectory(shapefileFolder);
 
+                    string logFile = Path.Combine(shapefileFolder, "logfile.txt");
+
+                    File.WriteAllText(logFile, $"Geomapmaker Shapefile Export: {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
+
+                    File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
+
                     // FeatureClasses
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", shapefileFolder });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", shapefileFolder });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", shapefileFolder });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", shapefileFolder });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", shapefileFolder, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("ContactsAndFaults", shapefileFolder, logFile);
+
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", shapefileFolder, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("MapUnitPolys", shapefileFolder, logFile);
+
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", shapefileFolder, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("OrientationPoints", shapefileFolder, logFile);
+
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", shapefileFolder, "Stations" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("Stations", shapefileFolder, logFile);
                 }
 
                 if (CreateGeopackage)
@@ -233,17 +246,17 @@ namespace Geomapmaker.ViewModels.Export
 
                     File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
 
-                    // FeatureClasses shapefiles
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", openPath });
+                    // Feature shapefiles
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", openPath, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
                     await WriteShapefileLog("ContactsAndFaults", openPath, logFile);
 
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", openPath, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
                     await WriteShapefileLog("MapUnitPolys", openPath, logFile);
 
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", openPath, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
                     await WriteShapefileLog("OrientationPoints", openPath, logFile);
 
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", openPath });
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", openPath, "Stations" }, null, null, null, GPExecuteToolFlags.None);
                     await WriteShapefileLog("Stations", openPath, logFile);
 
                     // dbf tables
