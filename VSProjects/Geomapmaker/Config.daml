@@ -24,7 +24,8 @@
           <group refID="Geomapmaker_MUPs" />
           <group refID="Geomapmaker_Points" />
           <group refID="Geomapmaker_Tools" />
-          <!-- Uncoment to see the test button -->
+          
+          <!-- Uncomment to see the test button -->
           <!--<group refID="Geomapmaker_Test" />-->
         </tab>
       </tabs>

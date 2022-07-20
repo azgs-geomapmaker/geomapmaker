@@ -300,12 +300,8 @@ namespace Geomapmaker.Data
                     //
 
                     // load the schema
-                    insp["MapUnit"] = mu.MU;
-                    insp["DataSourceID"] = mu.DescriptionSourceID;
-                    insp["IdentityConfidence"] = null;
-                    insp["Label"] = null;
-                    insp["Symbol"] = null;
-                    insp["Notes"] = null;
+                    insp["mapunit"] = mu.MU;
+                    insp["datasourceid"] = mu.DescriptionSourceID;
 
                     // Create CIM template 
                     layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool, tags, toolFilter);
@@ -389,28 +385,38 @@ namespace Geomapmaker.Data
                     // Get CIMFeatureTemplate
                     CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
-                    // If the template has a mapunit value
-                    if (templateDef.DefaultValues != null && templateDef.DefaultValues.ContainsKey("mapunit") && templateDef.DefaultValues.ContainsKey("datasourceid"))
+                    // Ran into a case-sensitivity problem when accessing the default values by Key/Fieldname
+                    // The casing seems to change based on whether it is a file-gdb or an enterprise gdb
+                    // Accessing the values by index instead
+
+                    List<string> defaultValuesKeys = templateDef?.DefaultValues?.Keys?.ToList();
+
+                    // If the template has values (Unassigned template does not)
+                    if (defaultValuesKeys != null && defaultValuesKeys?.Count == 2)
                     {
-                        string muKey = templateDef.DefaultValues["mapunit"]?.ToString();
-
-                        // Find the matching DMU row
-                        MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
-
-                        // Check if the mapUnt was found
-                        if (mapUnit != null)
+                        if (defaultValuesKeys[0].ToLower() == "mapunit" && defaultValuesKeys[1].ToLower() == "datasourceid")
                         {
-                            MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
-                            {
-                                MapUnit = muKey,
-                                HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
-                                Tooltip = mapUnit.Tooltip,
-                                DataSourceID = templateDef.DefaultValues["datasourceid"]?.ToString(),
-                                Template = template
-                            };
+                            string muKey = templateDef.DefaultValues[defaultValuesKeys[0]]?.ToString();
 
-                            mupTemplates.Add(tmpTemplate);
+                            // Find the matching DMU row
+                            MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
+
+                            // Check if the mapUnt was found
+                            if (mapUnit != null)
+                            {
+                                MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
+                                {
+                                    MapUnit = muKey,
+                                    HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
+                                    Tooltip = mapUnit.Tooltip,
+                                    DataSourceID = templateDef.DefaultValues[defaultValuesKeys[1]]?.ToString(),
+                                    Template = template
+                                };
+
+                                mupTemplates.Add(tmpTemplate);
+                            }
                         }
+
                     }
                 }
             });
