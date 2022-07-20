@@ -67,30 +67,6 @@ namespace Geomapmaker.ViewModels.Export
                 // Get the project name
                 string projectName = _helpers.Helpers.GetProjectName();
 
-                // Path for the new GDB file
-                string geodatabaseFolder = Path.Combine(exportPath, "Geodatabase");
-
-                // Path for shapefiles
-                string shapefileFolder = Path.Combine(exportPath, "Shapefiles");
-
-                // Path for geopackage
-                string geopackageFolder = Path.Combine(exportPath, "Geopackage");
-
-                // Path for kml/kmz
-                string kmlFolder = Path.Combine(exportPath, "KML");
-
-                // Path for text-tables
-                string csvFolder = Path.Combine(exportPath, "CSV");
-
-                // Path for the report
-                string reportPath = Path.Combine(exportPath, "Report.html");
-
-                // Path for "Open" export
-                string openPath = Path.Combine(exportPath, "Open");
-
-                // Path for "Simple" export
-                string simplePath = Path.Combine(exportPath, "Simple");
-
                 CloseProwindow();
 
                 ProgressDialog progDialog = new ProgressDialog("Exporting Project");
@@ -99,6 +75,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateGeodatabase)
                 {
+                    // Path for the new GDB file
+                    string geodatabaseFolder = Path.Combine(exportPath, "Geodatabase");
+
                     // Create shapefiles folder
                     Directory.CreateDirectory(geodatabaseFolder);
 
@@ -145,6 +124,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateShapefiles)
                 {
+                    // Path for shapefiles
+                    string shapefileFolder = Path.Combine(exportPath, "Shapefiles");
+
                     // Create shapefiles folder
                     Directory.CreateDirectory(shapefileFolder);
 
@@ -157,6 +139,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateGeopackage)
                 {
+                    // Path for geopackage
+                    string geopackageFolder = Path.Combine(exportPath, "Geopackage");
+
                     // Create geopackage folder
                     Directory.CreateDirectory(geopackageFolder);
 
@@ -182,6 +167,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateKml)
                 {
+                    // Path for kml/kmz
+                    string kmlFolder = Path.Combine(exportPath, "KML");
+
                     // Create kml folder
                     Directory.CreateDirectory(kmlFolder);
 
@@ -195,6 +183,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateCsv)
                 {
+                    // Path for text-tables
+                    string csvFolder = Path.Combine(exportPath, "CSV");
+
                     // Create tables folder
                     Directory.CreateDirectory(csvFolder);
 
@@ -214,6 +205,9 @@ namespace Geomapmaker.ViewModels.Export
 
                 if (CreateReport)
                 {
+                    // Path for the report
+                    string reportPath = Path.Combine(exportPath, "Report.html");
+
                     GemsReport report = new GemsReport();
 
                     report.BuildReport();
@@ -227,14 +221,30 @@ namespace Geomapmaker.ViewModels.Export
                     // Field renaming is documented in output file logfile.txt.
                     // This package will be a complete transcription of the geodatabase without loss of any information.
 
+                    // Path for "Open" export
+                    string openPath = Path.Combine(exportPath, "Open");
+
                     // Create open folder
                     Directory.CreateDirectory(openPath);
 
+                    string logFile = Path.Combine(openPath, "logfile.txt");
+
+                    File.WriteAllText(logFile, $"Geomapmaker Open Export: {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
+
+                    File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
+
                     // FeatureClasses shapefiles
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", openPath });
+                    await WriteShapefileLog("ContactsAndFaults", openPath, logFile);
+
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "MapUnitPolys", openPath });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", openPath });
+                    await WriteShapefileLog("MapUnitPolys", openPath, logFile);
+
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "OrientationPoints", openPath });
+                    await WriteShapefileLog("OrientationPoints", openPath, logFile);
+
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "Stations", openPath });
+                    await WriteShapefileLog("Stations", openPath, logFile);
 
                     // dbf tables
                     await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", openPath, "DataSources.dbf" }, null, null, null, GPExecuteToolFlags.None);
@@ -256,6 +266,9 @@ namespace Geomapmaker.ViewModels.Export
                     // SIMPLE-- Consists of shapefiles alone. Tables Glossary, DataSources, and DescriptionOfMapUnits are joined to selected feature classes within feature dataset GeologicMap,
                     // long fields are truncated, and these feature classes are written to shapefiles.
                     // Field renaming is documented in output file logfile.txt.This package is a partial (incomplete)transcription of the geodatabase, but will be easier to use than the OPEN package. 
+
+                    // Path for "Simple" export
+                    string simplePath = Path.Combine(exportPath, "Simple");
 
                     // Create simple folder
                     Directory.CreateDirectory(simplePath);
