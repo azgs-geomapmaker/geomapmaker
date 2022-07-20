@@ -98,7 +98,7 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateGeodatabase)
                 {
                     // Create shapefiles folder
-                    System.IO.Directory.CreateDirectory(geodatabaseFolder);
+                    Directory.CreateDirectory(geodatabaseFolder);
 
                     // Path for the .gdb
                     string gdbPath = $"{geodatabaseFolder}\\{projectName}.gdb";
@@ -144,7 +144,7 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateShapefiles)
                 {
                     // Create shapefiles folder
-                    System.IO.Directory.CreateDirectory(shapefileFolder);
+                    Directory.CreateDirectory(shapefileFolder);
 
                     // FeatureClasses
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", shapefileFolder });
@@ -156,7 +156,7 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateGeopackage)
                 {
                     // Create geopackage folder
-                    System.IO.Directory.CreateDirectory(geopackageFolder);
+                    Directory.CreateDirectory(geopackageFolder);
 
                     // Path of the .gpkg file
                     string geopackagePath = $"{geopackageFolder}\\{projectName}.gpkg";
@@ -164,7 +164,7 @@ namespace Geomapmaker.ViewModels.Export
                     // Create geopackage
                     await Geoprocessing.ExecuteToolAsync("management.CreateSQLiteDatabase", new List<string> { geopackagePath, "GEOPACKAGE" });
 
-                    // FeatureClasses
+                    // Features
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "ContactsAndFaults", geopackagePath });
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "MapUnitPolys", geopackagePath });
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToGeodatabase", new List<string> { "Stations", geopackagePath });
@@ -181,7 +181,7 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateKml)
                 {
                     // Create kml folder
-                    System.IO.Directory.CreateDirectory(kmlFolder);
+                    Directory.CreateDirectory(kmlFolder);
 
                     // Path of the .kmz file
                     string kmzPath = $"{kmlFolder}\\{projectName}.kmz";
@@ -194,7 +194,13 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateCsv)
                 {
                     // Create tables folder
-                    System.IO.Directory.CreateDirectory(csvFolder);
+                    Directory.CreateDirectory(csvFolder);
+
+                    // Features 
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "ContactsAndFaults", csvFolder, "ContactsAndFaults.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "MapUnitPolys", csvFolder, "MapUnitPolys.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Stations", csvFolder, "Stations.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "OrientationPoints", csvFolder, "OrientationPoints.csv" }, null, null, null, GPExecuteToolFlags.None);
 
                     // Tables
                     await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", csvFolder, "DataSources.csv" }, null, null, null, GPExecuteToolFlags.None);
@@ -220,7 +226,7 @@ namespace Geomapmaker.ViewModels.Export
                     // This package will be a complete transcription of the geodatabase without loss of any information.
 
                     // Create open folder
-                    System.IO.Directory.CreateDirectory(openPath);
+                    Directory.CreateDirectory(openPath);
 
                     // FeatureClasses shapefiles
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToShapefile", new List<string> { "ContactsAndFaults", openPath });
@@ -250,7 +256,7 @@ namespace Geomapmaker.ViewModels.Export
                     // Field renaming is documented in output file logfile.txt.This package is a partial (incomplete)transcription of the geodatabase, but will be easier to use than the OPEN package. 
 
                     // Create simple folder
-                    System.IO.Directory.CreateDirectory(simplePath);
+                    Directory.CreateDirectory(simplePath);
 
                     // https://community.esri.com/t5/arcgis-pro-ideas/remove-all-joins-programatically/idi-p/974557
                     // In the 2.9 SDK, calling RemoveJoin without specifying the name of the join  removes the last join added.
@@ -314,7 +320,7 @@ namespace Geomapmaker.ViewModels.Export
                     oldFields.Insert(1, shapeField);
                 }
 
-                var fileConnection = new FileSystemConnectionPath(new Uri(exportPath), FileSystemDatastoreType.Shapefile);
+                FileSystemConnectionPath fileConnection = new FileSystemConnectionPath(new Uri(exportPath), FileSystemDatastoreType.Shapefile);
                 using (FileSystemDatastore shapefile = new FileSystemDatastore(fileConnection))
                 {
                     FeatureClassDefinition featureClassDef = shapefile.GetDefinition<FeatureClassDefinition>(datasetName);
