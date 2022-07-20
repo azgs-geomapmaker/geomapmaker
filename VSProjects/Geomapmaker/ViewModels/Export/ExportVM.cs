@@ -68,26 +68,28 @@ namespace Geomapmaker.ViewModels.Export
                 string projectName = _helpers.Helpers.GetProjectName();
 
                 // Path for the new GDB file
-                string geodatabaseFolder = exportPath + $"\\Geodatabase";
+                string geodatabaseFolder = Path.Combine(exportPath, "Geodatabase");
 
                 // Path for shapefiles
-                string shapefileFolder = exportPath + "\\Shapefiles";
+                string shapefileFolder = Path.Combine(exportPath, "Shapefiles");
 
                 // Path for geopackage
-                string geopackageFolder = exportPath + "\\Geopackage";
+                string geopackageFolder = Path.Combine(exportPath, "Geopackage");
 
                 // Path for kml/kmz
-                string kmlFolder = exportPath + "\\KML";
+                string kmlFolder = Path.Combine(exportPath, "KML");
 
                 // Path for text-tables
-                string csvFolder = exportPath + "\\CSV";
+                string csvFolder = Path.Combine(exportPath, "CSV");
 
                 // Path for the report
-                string reportPath = exportPath + "\\Report.html";
+                string reportPath = Path.Combine(exportPath, "Report.html");
 
-                string openPath = exportPath + "\\Open";
+                // Path for "Open" export
+                string openPath = Path.Combine(exportPath, "Open");
 
-                string simplePath = exportPath + "\\Simple";
+                // Path for "Simple" export
+                string simplePath = Path.Combine(exportPath, "Simple");
 
                 CloseProwindow();
 
@@ -101,10 +103,10 @@ namespace Geomapmaker.ViewModels.Export
                     Directory.CreateDirectory(geodatabaseFolder);
 
                     // Path for the .gdb
-                    string gdbPath = $"{geodatabaseFolder}\\{projectName}.gdb";
+                    string gdbPath = Path.Combine(geodatabaseFolder, $"{projectName}.gdb");
 
                     // Path for the FeatureDataset (inside the .gdb)
-                    string featureDatasetPath = gdbPath + "\\GeologicMap";
+                    string featureDatasetPath = Path.Combine(gdbPath, "GeologicMap");
 
                     // Get the maps spatial reference or default to WGS84
                     SpatialReference spatialReferences = MapView.Active?.Map?.SpatialReference ?? SpatialReferences.WGS84;
@@ -159,7 +161,7 @@ namespace Geomapmaker.ViewModels.Export
                     Directory.CreateDirectory(geopackageFolder);
 
                     // Path of the .gpkg file
-                    string geopackagePath = $"{geopackageFolder}\\{projectName}.gpkg";
+                    string geopackagePath = Path.Combine(geopackageFolder, $"{projectName}.gpkg");
 
                     // Create geopackage
                     await Geoprocessing.ExecuteToolAsync("management.CreateSQLiteDatabase", new List<string> { geopackagePath, "GEOPACKAGE" });
@@ -184,7 +186,7 @@ namespace Geomapmaker.ViewModels.Export
                     Directory.CreateDirectory(kmlFolder);
 
                     // Path of the .kmz file
-                    string kmzPath = $"{kmlFolder}\\{projectName}.kmz";
+                    string kmzPath = Path.Combine(kmlFolder, $"{projectName}.kmz");
 
                     string mapName = MapView.Active?.Map?.Name;
 
@@ -299,7 +301,7 @@ namespace Geomapmaker.ViewModels.Export
         private async Task WriteShapefileLog(string datasetName, string exportPath)
         {
             // Path of the log file
-            string logFile = $"{exportPath}\\{datasetName}_fields.txt";
+            string logFile = Path.Combine(exportPath, $"{datasetName}_fields.txt");
 
             List<FieldDescription> oldFields = new List<FieldDescription>();
             List<Field> newFields = new List<Field>();
