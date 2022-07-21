@@ -130,11 +130,7 @@ namespace Geomapmaker.ViewModels.Export
                     // Create shapefiles folder
                     Directory.CreateDirectory(shapefileFolder);
 
-                    string logFile = Path.Combine(shapefileFolder, "logfile.txt");
-
-                    File.WriteAllText(logFile, $"Geomapmaker Shapefile Export: {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
-
-                    File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
+                    string logFile = CreateLogFile(shapefileFolder, "Geomapmaker Shapefile Export");
 
                     // FeatureClasses
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", shapefileFolder, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
@@ -219,13 +215,13 @@ namespace Geomapmaker.ViewModels.Export
                 if (CreateReport)
                 {
                     // Path for the report
-                    string reportPath = Path.Combine(exportPath, "Report.html");
+                    string reportFilePath = Path.Combine(exportPath, "Report.html");
 
                     GemsReport report = new GemsReport();
 
                     report.BuildReport();
 
-                    await report.ExportReportAsync(reportPath);
+                    await report.ExportReportAsync(reportFilePath);
                 }
 
                 if (CreateOpen)
@@ -235,53 +231,39 @@ namespace Geomapmaker.ViewModels.Export
                     // This package will be a complete transcription of the geodatabase without loss of any information.
 
                     // Path for "Open" export
-                    string openPath = Path.Combine(exportPath, "Open");
+                    string openFolder = Path.Combine(exportPath, "Open");
 
                     // Create open folder
-                    Directory.CreateDirectory(openPath);
+                    Directory.CreateDirectory(openFolder);
 
-                    string logFile = Path.Combine(openPath, "logfile.txt");
-
-                    File.WriteAllText(logFile, $"Geomapmaker Open Export: {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
-
-                    string wkid = MapView.Active?.Map?.SpatialReference?.Wkid.ToString();
-
-                    string spatialRefName = MapView.Active?.Map?.SpatialReference?.Name;
-
-                    string unit = MapView.Active?.Map?.SpatialReference?.Unit?.Name;
-
-
-                    string foo = MapView.Active?.Map?.SpatialReference?.ToString();
-
-
-                    File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
+                    string logFile = CreateLogFile(openFolder, "Geomapmaker Open Export");
 
                     // Feature shapefiles
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", openPath, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("ContactsAndFaults", openPath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", openFolder, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("ContactsAndFaults", openFolder, logFile);
 
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", openPath, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("MapUnitPolys", openPath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", openFolder, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("MapUnitPolys", openFolder, logFile);
 
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", openPath, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("OrientationPoints", openPath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", openFolder, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("OrientationPoints", openFolder, logFile);
 
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", openPath, "Stations" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("Stations", openPath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", openFolder, "Stations" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("Stations", openFolder, logFile);
 
                     // dbf tables
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", openPath, "DataSources.dbf" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", openPath, "DescriptionOfMapUnits.dbf" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", openPath, "GeoMaterialDict.dbf" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", openPath, "Glossary.dbf" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", openPath, "Symbology.dbf" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", openFolder, "DataSources.dbf" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", openFolder, "DescriptionOfMapUnits.dbf" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", openFolder, "GeoMaterialDict.dbf" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", openFolder, "Glossary.dbf" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", openFolder, "Symbology.dbf" }, null, null, null, GPExecuteToolFlags.None);
 
                     // Pipe-delimited tables
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", openPath, "DataSources.psv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", openPath, "DescriptionOfMapUnits.psv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", openPath, "GeoMaterialDict.psv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", openPath, "Glossary.psv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", openPath, "Symbology.psv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DataSources", openFolder, "DataSources.psv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "DescriptionOfMapUnits", openFolder, "DescriptionOfMapUnits.psv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "GeoMaterialDict", openFolder, "GeoMaterialDict.psv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Glossary", openFolder, "Glossary.psv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "Symbology", openFolder, "Symbology.psv" }, null, null, null, GPExecuteToolFlags.None);
                 }
 
                 if (CreateSimple)
@@ -291,16 +273,12 @@ namespace Geomapmaker.ViewModels.Export
                     // Field renaming is documented in output file logfile.txt.This package is a partial (incomplete)transcription of the geodatabase, but will be easier to use than the OPEN package. 
 
                     // Path for "Simple" export
-                    string simplePath = Path.Combine(exportPath, "Simple");
+                    string simpleFolder = Path.Combine(exportPath, "Simple");
 
                     // Create simple folder
-                    Directory.CreateDirectory(simplePath);
+                    Directory.CreateDirectory(simpleFolder);
 
-                    string logFile = Path.Combine(simplePath, "logfile.txt");
-
-                    File.WriteAllText(logFile, $"Geomapmaker Simple Export: {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
-
-                    File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
+                    string logFile = CreateLogFile(simpleFolder, "Geomapmaker Simple Export");
 
                     // https://community.esri.com/t5/arcgis-pro-ideas/remove-all-joins-programatically/idi-p/974557
                     // In the 2.9 SDK, calling RemoveJoin without specifying the name of the join  removes the last join added.
@@ -308,35 +286,66 @@ namespace Geomapmaker.ViewModels.Export
 
                     // ContactsAndFaults
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "ContactsAndFaults", "datasourceid", "DataSources", "datasources_id" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", simplePath, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("ContactsAndFaults", simplePath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "ContactsAndFaults", simpleFolder, "ContactsAndFaults" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("ContactsAndFaults", simpleFolder, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "ContactsAndFaults" });
 
                     // MapUnitPolys
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "mapunit", "DescriptionOfMapUnits", "mapunit" });
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "geomaterial", "GeoMaterialDict", "indentedname" });
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "MapUnitPolys", "datasourceid", "DataSources", "datasources_id" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", simplePath, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("MapUnitPolys", simplePath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "MapUnitPolys", simpleFolder, "MapUnitPolys" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("MapUnitPolys", simpleFolder, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "MapUnitPolys" });
 
                     // OrientationPoints
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "OrientationPoints", "datasourceid", "DataSources", "datasources_id" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", simplePath, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("OrientationPoints", simplePath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "OrientationPoints", simpleFolder, "OrientationPoints" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("OrientationPoints", simpleFolder, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "OrientationPoints" });
 
                     // Stations
                     await Geoprocessing.ExecuteToolAsync("management.AddJoin", new List<string> { "Stations", "datasourceid", "DataSources", "datasources_id" });
-                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", simplePath, "Stations" }, null, null, null, GPExecuteToolFlags.None);
-                    await WriteShapefileLog("Stations", simplePath, logFile);
+                    await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", simpleFolder, "Stations" }, null, null, null, GPExecuteToolFlags.None);
+                    await WriteShapefileLog("Stations", simpleFolder, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "Stations" });
                 }
 
                 progDialog.Hide();
             }
+        }
+
+        private string CreateLogFile(string folderPath, string header)
+        {
+            string logFilePath = Path.Combine(folderPath, "logfile.txt");
+
+            File.WriteAllText(logFilePath, $"{header} {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
+
+            string wkid = MapView.Active?.Map?.SpatialReference?.Wkid.ToString();
+
+            string spatialRefName = MapView.Active?.Map?.SpatialReference?.Name;
+
+            string spheroid = MapView.Active?.Map?.SpatialReference?.Datum?.SpheroidName;
+
+            string projected = MapView.Active?.Map?.SpatialReference.IsProjected == true ? "True" : "False";
+
+            string unit = MapView.Active?.Map?.SpatialReference?.Unit?.Name;
+
+            File.AppendAllLines(logFilePath, new string[] {
+                "Spatial Reference",
+                $"WKID: {wkid}",
+                $"Name: {spatialRefName}",
+                $"Spheroid: {spheroid}",
+                $"Projected: {projected}",
+                $"Unit: {unit}",
+                Environment.NewLine,
+                "Field Remapping",
+                "  Original_Field => Shapefile_Field"
+            });
+
+            return logFilePath;
         }
 
         private async Task WriteShapefileLog(string datasetName, string exportPath, string logfilePath)
@@ -350,7 +359,7 @@ namespace Geomapmaker.ViewModels.Export
             await QueuedTask.Run(() =>
             {
                 // Get the original fields
-                oldFields = feature.GetFieldDescriptions();
+                oldFields = feature?.GetFieldDescriptions() ?? new List<FieldDescription>();
 
                 // Exporting to shapefile always seems to move the shape field to the second position
                 FieldDescription shapeField = oldFields.FirstOrDefault(a => a.Alias.ToLower() == "shape");
@@ -364,22 +373,32 @@ namespace Geomapmaker.ViewModels.Export
                 FileSystemConnectionPath fileConnection = new FileSystemConnectionPath(new Uri(exportPath), FileSystemDatastoreType.Shapefile);
                 using (FileSystemDatastore shapefile = new FileSystemDatastore(fileConnection))
                 {
-                    FeatureClassDefinition featureClassDef = shapefile.GetDefinition<FeatureClassDefinition>(datasetName);
+                    try
+                    {
+                        FeatureClassDefinition featureClassDef = shapefile.GetDefinition<FeatureClassDefinition>(datasetName);
 
-                    // Get the new fields
-                    newFields = featureClassDef?.GetFields()?.ToList();
+                        // Get the new fields
+                        newFields = featureClassDef?.GetFields()?.ToList();
+                    }
+                    catch
+                    {
+                        // Table not found
+                    }
                 }
             });
 
-            using (StreamWriter file = File.AppendText(logfilePath))
+            if (oldFields.Count != 0 && newFields.Count != 0)
             {
-                file.WriteLine(Environment.NewLine + datasetName.ToUpper());
-
-                // Loop over both sets of fields
-                for (int i = 0; i < oldFields.Count && i < newFields.Count; i++)
+                using (StreamWriter file = File.AppendText(logfilePath))
                 {
-                    // Append to textfile
-                    file.WriteLine($"{oldFields[i].Alias} => {newFields[i].Name}");
+                    file.WriteLine(Environment.NewLine + datasetName.ToUpper());
+
+                    // Loop over both sets of fields
+                    for (int i = 0; i < oldFields.Count && i < newFields.Count; i++)
+                    {
+                        // Append to textfile
+                        file.WriteLine($"  {oldFields[i].Alias} => {newFields[i].Name}");
+                    }
                 }
             }
 
