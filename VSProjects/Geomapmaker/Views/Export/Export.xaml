@@ -7,8 +7,8 @@
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         mc:Ignorable="d"
         Title="Export"
-        Height="300" 
-        MinHeight="250" 
+        Height="350" 
+        MinHeight="300" 
         Width="500"
         MinWidth="450"
         WindowStartupLocation="CenterOwner"
@@ -48,37 +48,37 @@
             <CheckBox Grid.Row="1" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateGeodatabase, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="1" Grid.Column="2" Header="Geodatabase" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save feature classes and tables as a file geodatabase.</TextBlock>
+                    Export feature classes and tables as a file geodatabase.</TextBlock>
             </Expander>
 
             <CheckBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateShapefiles, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="2" Grid.Column="2" Header="Shapefile" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save feature classes as shapefiles.</TextBlock>
+                    Export feature classes as shapefiles.</TextBlock>
             </Expander>
 
             <CheckBox Grid.Row="3" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateGeopackage, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="3" Grid.Column="2" Header="Geopackage" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save feature classes and tables as a geopackage.</TextBlock>
+                    Export feature classes and tables as a geopackage.</TextBlock>
             </Expander>
 
             <CheckBox Grid.Row="4" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateKml, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="4" Grid.Column="2" Header="KML/KMZ" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save map as a zip-compressed KML file.</TextBlock>
+                    Export map as a zip-compressed KML file.</TextBlock>
             </Expander>
 
             <CheckBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCsv, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="5" Grid.Column="2" Header="CSV" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save feature classes and tables as CSV files.</TextBlock>
+                    Export feature classes and tables as CSV files.</TextBlock>
             </Expander>
 
             <CheckBox Grid.Row="6" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="6" Grid.Column="2" Header="Report" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save an HTML validation report.</TextBlock>
+                    Export an HTML validation report.</TextBlock>
             </Expander>
 
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" />
@@ -86,13 +86,13 @@
             <CheckBox Grid.Row="8" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateOpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="8" Grid.Column="2" Header="Open" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save project as shapefiles, .dbf files, and pipe-delimited text files.</TextBlock>
+                    Export project as shapefiles, .dbf files, and pipe-delimited text files.</TextBlock>
             </Expander>
 
             <CheckBox Grid.Row="9" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateSimple, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="9" Grid.Column="2" Header="Simple" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
-                    Save project as shapefiles alone. Tables Glossary, DataSources, and DescriptionOfMapUnits are joined to selected feature classes within feature dataset GeologicMap, long fields are truncated, and these feature classes are written to shapefiles.</TextBlock>
+                    Export project as shapefiles alone. Tables Glossary, DataSources, and DescriptionOfMapUnits are joined to selected feature classes within feature dataset GeologicMap, long fields are truncated, and these feature classes are written to shapefiles.</TextBlock>
             </Expander>
 
             <StackPanel Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
