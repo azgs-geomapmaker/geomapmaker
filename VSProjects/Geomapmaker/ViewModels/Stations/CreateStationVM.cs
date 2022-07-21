@@ -25,7 +25,7 @@ namespace Geomapmaker.ViewModels.Stations
             ParentVM = parentVM;
 
             // Get the wkid for the current Spatial Reference
-            string currentWkid = MapView.Active?.Map.SpatialReference.Wkid.ToString();
+            string currentWkid = MapView.Active?.Map?.SpatialReference?.Wkid.ToString();
 
             // Set as the current spaital ref
             SpatialReferenceWkid = currentWkid;
