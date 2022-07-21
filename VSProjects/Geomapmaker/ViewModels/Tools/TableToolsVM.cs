@@ -15,6 +15,8 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandSetMapUnit => new RelayCommand(() => SetMapUnit());
 
+        public ICommand CommandZeroPad => new RelayCommand(() => ZeroPadSymbols());
+
         public ToolsViewModel ParentVM { get; set; }
 
         public TableToolsVM(ToolsViewModel parentVM)
@@ -78,7 +80,16 @@ namespace Geomapmaker.ViewModels.Tools
 
             int opCount = await Data.OrientationPoints.UpdateOrientationPointsWithMapUnitIntersectionAsync();
 
-            MessageBox.Show($"Updated {stationCount} Station{(stationCount == 1 ? "" : "s")} and {opCount} Orientation Point{(opCount == 1 ? "" : "s")}", "Find MapUnitPolys Intersections");
+            MessageBox.Show($"Updated {stationCount} Stations row{(stationCount == 1 ? "" : "s")} and {opCount} Orientation Points row{(opCount == 1 ? "" : "s")}", "Find MapUnitPolys Intersections");
+        }
+
+        public async void ZeroPadSymbols()
+        {
+            int cfCount = await Data.ContactsAndFaults.ZeroPadSymbolValues();
+
+            int opCount = await Data.OrientationPoints.ZeroPadSymbolValues();
+
+            MessageBox.Show($"Updated {cfCount} ContactsAndFaults row{(cfCount == 1 ? "" : "s")} and {opCount} Orientation Point row{(opCount == 1 ? "" : "s")}", "Zero Pad Symbols");
         }
     }
 }

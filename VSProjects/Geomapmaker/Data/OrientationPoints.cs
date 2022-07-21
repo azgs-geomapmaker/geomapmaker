@@ -449,6 +449,96 @@ namespace Geomapmaker.Data
             return count;
         }
 
-    }
+        /// <summary>
+        /// Update the symbol values to be zero-padded. Example, 1.1.1 => 001.001.001
+        /// </summary>
+        /// <returns>Number of rows updated</returns>
+        public static async Task<int> ZeroPadSymbolValues()
+        {
+            int count = 0;
 
+            FeatureLayer opLayer = (FeatureLayer)(MapView.Active?.Map.Layers.FirstOrDefault(a => a.Name == "OrientationPoints"));
+
+            if (opLayer == null)
+            {
+                return 0;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table opTable = opLayer.GetTable())
+                {
+                    if (opTable != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            SubFields = "symbol",
+                            WhereClause = "symbol <> ''"
+                        };
+
+                        EditOperation editOperation = new EditOperation()
+                        {
+                            Name = "Zero-Pad OrientationPoints Symbols",
+                            ProgressMessage = "Updating OrientationPoints Symbols",
+                            ShowProgressor = true
+                        };
+
+                        editOperation.Callback(context =>
+                        {
+                            using (RowCursor rowCursor = opTable.Search(queryFilter, false))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        string originalSymbol = row["symbol"]?.ToString();
+
+                                        // Original symbol must be up of only digits and periods
+                                        if (originalSymbol.All(c => char.IsDigit(c) || c == '.'))
+                                        {
+                                            string[] splitSymbols = originalSymbol.Split('.');
+
+                                            for (int i = 0; i < splitSymbols.Length; i++)
+                                            {
+                                                // Parse the int
+                                                if (int.TryParse(splitSymbols[i], out int value))
+                                                {
+                                                    // Zero-pad 
+                                                    splitSymbols[i] = value.ToString("000");
+                                                };
+                                            }
+
+                                            // Combine the zero-padded numbers
+                                            string paddedSymbol = string.Join(".", splitSymbols);
+
+                                            if (originalSymbol != paddedSymbol)
+                                            {
+                                                count++;
+
+                                                // In order to update the Map and/or the attribute table.
+                                                // Has to be called before any changes are made to the row.
+                                                context.Invalidate(row);
+
+                                                row["symbol"] = paddedSymbol;
+
+                                                // After all the changes are done, persist it.
+                                                row.Store();
+
+                                                // Has to be called after the store too.
+                                                context.Invalidate(row);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }, opTable);
+
+                        bool result = editOperation.Execute();
+                    }
+                }
+            });
+
+            return count;
+        }
+    }
 }
