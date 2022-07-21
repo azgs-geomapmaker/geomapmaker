@@ -20,7 +20,7 @@ using FieldDescription = ArcGIS.Desktop.Mapping.FieldDescription;
 
 namespace Geomapmaker.ViewModels.Export
 {
-    public class ExportVM : ProWindow, INotifyPropertyChanged, INotifyDataErrorInfo
+    public class ExportVM : ProWindow
     {
         public event EventHandler WindowCloseEvent;
 
@@ -244,6 +244,16 @@ namespace Geomapmaker.ViewModels.Export
 
                     File.WriteAllText(logFile, $"Geomapmaker Open Export: {DateTime.Today:d}" + Environment.NewLine + Environment.NewLine);
 
+                    string wkid = MapView.Active?.Map?.SpatialReference?.Wkid.ToString();
+
+                    string spatialRefName = MapView.Active?.Map?.SpatialReference?.Name;
+
+                    string unit = MapView.Active?.Map?.SpatialReference?.Unit?.Name;
+
+
+                    string foo = MapView.Active?.Map?.SpatialReference?.ToString();
+
+
                     File.AppendAllLines(logFile, new string[] { "Field Remapping", "Original_Field => Shapefile_Field" });
 
                     // Feature shapefiles
@@ -374,40 +384,6 @@ namespace Geomapmaker.ViewModels.Export
             }
 
         }
-
-        #region Validation
-
-        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        private void RaiseErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        public System.Collections.IEnumerable GetErrors(string propertyName)
-        {
-            // Return null if parameters is null/empty OR there are no errors for that parameter
-            // Otherwise, return the errors for that parameter.
-            return string.IsNullOrEmpty(propertyName) || !_validationErrors.ContainsKey(propertyName) ?
-                null : (System.Collections.IEnumerable)_validationErrors[propertyName];
-        }
-
-        public bool HasErrors => _validationErrors.Count > 0;
-
-        #endregion
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 
     internal class ShowExport : ArcGIS.Desktop.Framework.Contracts.Button
