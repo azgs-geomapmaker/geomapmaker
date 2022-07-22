@@ -1,5 +1,7 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Dialogs;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,8 @@ namespace Geomapmaker.ViewModels.Tools
         public ICommand CommandZeroPadSymbols => new RelayCommand(() => ZeroPadSymbols());
 
         public ICommand CommandZeroPadHierarchyKeys => new RelayCommand(() => ZeroPadHierarchyKeys());
+
+        public ICommand CommandGeopackageRename => new RelayCommand(() => GeopackageRename());
 
         public ToolsViewModel ParentVM { get; set; }
 
@@ -99,6 +103,32 @@ namespace Geomapmaker.ViewModels.Tools
             int count = await Data.DescriptionOfMapUnits.ZeroPadHierarchyKeyValues();
 
             MessageBox.Show($"Updated {count} DescriptionOfMapUnits row{(count == 1 ? "" : "s")}", "Zero Pad Hierarchy Keys");
+        }
+
+        public async void GeopackageRename()
+        {
+            int count = 0;
+
+            IEnumerable<Layer> layers = MapView.Active?.Map?.Layers?.Where(a => a.Name.StartsWith("main."));
+
+            IEnumerable<StandaloneTable> tables = MapView.Active?.Map.GetStandaloneTablesAsFlattenedList().Where(b => b.Name.StartsWith("main."));
+
+            await QueuedTask.Run(() =>
+            {
+                foreach (Layer layer in layers)
+                {
+                    layer.SetName(layer.Name.Remove(0, 5));
+                    count++;
+                }
+
+                foreach (StandaloneTable table in tables)
+                {
+                    table.SetName(table.Name.Remove(0, 5));
+                    count++;
+                }
+            });
+
+            MessageBox.Show($"Updated {count} dataset name{(count == 1 ? "" : "s")}", "Geopackage Rename");
         }
     }
 }
