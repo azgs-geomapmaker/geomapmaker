@@ -54,7 +54,7 @@
             <TextBlock Grid.Row="4" Grid.Column="1" Text="Name" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}"/>
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
 
             <TextBlock Grid.Row="8" Grid.Column="1" Text="Description Source" Visibility="{Binding Edit.Visibility}" />
