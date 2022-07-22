@@ -11,10 +11,20 @@ namespace Geomapmaker.RibbonElements
     /// </summary>
     internal class DataSourceComboBox : ComboBox
     {
+        public DataSourceComboBox()
+        {
+            GeomapmakerModule.DataSourceComboBox = this;
+        }
+
+        public void ClearSelection()
+        {
+            Clear();
+        }
+
         protected override void OnDropDownOpened()
         {
             // Clear existing datasource options
-            Clear();
+            ClearSelection();
 
             QueuedTask.Run(async () =>
             {
