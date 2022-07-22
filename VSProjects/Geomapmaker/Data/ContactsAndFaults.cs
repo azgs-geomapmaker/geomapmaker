@@ -179,7 +179,7 @@ namespace Geomapmaker.Data
             IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
 
             // Find the ContactsFaults layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {
@@ -238,7 +238,7 @@ namespace Geomapmaker.Data
         public static async void RebuildContactsFaultsSymbology()
         {
             // CF Layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {
@@ -312,12 +312,15 @@ namespace Geomapmaker.Data
                     }
                 }
 
-                OperationManager opManager = MapView.Active.Map.OperationManager;
+                OperationManager opManager = MapView.Active?.Map?.OperationManager;
 
-                List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: ContactsAndFaults");
-                foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                if (opManager != null)
                 {
-                    opManager.RemoveUndoOperation(undoOp);
+                    List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: ContactsAndFaults");
+                    foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                    {
+                        opManager.RemoveUndoOperation(undoOp);
+                    }
                 }
 
             }, ps.Progressor);
@@ -331,7 +334,7 @@ namespace Geomapmaker.Data
         public static async void AddSymbolToRenderer(string key, string symbolJson)
         {
             // Find the ContactsFaults layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {

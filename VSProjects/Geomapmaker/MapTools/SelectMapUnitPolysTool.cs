@@ -24,7 +24,7 @@ namespace Geomapmaker.MapTools
 
         protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             IEnumerable<MapUnitPolysEditVM> viewModels = System.Windows.Application.Current.Windows.OfType<MapUnitPolysEditVM>(); ;
 

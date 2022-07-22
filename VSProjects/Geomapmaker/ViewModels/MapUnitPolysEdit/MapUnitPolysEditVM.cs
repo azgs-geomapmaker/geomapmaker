@@ -49,7 +49,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
 
         public MapUnitPolysEditVM()
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             if (layer == null)
             {
@@ -85,7 +85,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
         {
             bool editOperationSucceeded = false;
 
-            FeatureLayer polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+            FeatureLayer polyLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
 
             await QueuedTask.Run(() =>
             {
@@ -173,7 +173,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
 
         private void ClearOids()
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             QueuedTask.Run(() =>
             {
@@ -257,7 +257,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
 
         public async void Set_MUP_Oids(List<long> oids)
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             if (layer == null)
             {

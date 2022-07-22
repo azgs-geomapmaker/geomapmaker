@@ -69,7 +69,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         private async Task CreateSketchAsync()
         {
             // Find the ContactsFaults layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {
@@ -135,7 +135,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
         private async Task CreateTemplateAsync()
         {
             // Find the ContactsFaults layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {

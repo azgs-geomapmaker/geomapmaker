@@ -218,12 +218,15 @@ namespace Geomapmaker.Data
                             }
                         }
 
-                        OperationManager opManager = MapView.Active.Map.OperationManager;
+                        OperationManager opManager = MapView.Active?.Map?.OperationManager;
 
-                        List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer renderer: OrientationPoints");
-                        foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                        if (opManager != null)
                         {
-                            opManager.RemoveUndoOperation(undoOp);
+                            List<Operation> mapUnitPolyLayerUndos = opManager?.FindUndoOperations(a => a.Name == "Update layer renderer: OrientationPoints");
+                            foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                            {
+                                opManager.RemoveUndoOperation(undoOp);
+                            }
                         }
                     }
                 }
@@ -237,7 +240,7 @@ namespace Geomapmaker.Data
         public static async void AddSymbolToRenderer(string key, string symbolJson)
         {
             // Find the OrientationPoints layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "OrientationPoints");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "OrientationPoints");
 
             if (layer == null)
             {

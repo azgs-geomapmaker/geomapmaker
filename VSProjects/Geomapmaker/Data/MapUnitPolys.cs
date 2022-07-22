@@ -181,7 +181,7 @@ namespace Geomapmaker.Data
         /// </summary>
         public static async void RebuildMUPSymbologyAndTemplates()
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             if (layer == null)
             {
@@ -337,18 +337,21 @@ namespace Geomapmaker.Data
 
                 layer.SetRenderer(updatedRenderer);
 
-                OperationManager opManager = MapView.Active.Map.OperationManager;
+                OperationManager opManager = MapView.Active?.Map?.OperationManager;
 
-                List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer definition: MapUnitPolys" || a.Name == "Update layer renderer: MapUnitPolys");
-                foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                if (opManager != null)
                 {
-                    opManager.RemoveUndoOperation(undoOp);
-                }
+                    List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer definition: MapUnitPolys" || a.Name == "Update layer renderer: MapUnitPolys");
+                    foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                    {
+                        opManager.RemoveUndoOperation(undoOp);
+                    }
 
-                List<Operation> templateUndos = opManager.FindUndoOperations(a => a.Name == "New template" || a.Name == "Delete templates");
-                foreach (Operation undoOp in templateUndos)
-                {
-                    opManager.RemoveUndoOperation(undoOp);
+                    List<Operation> templateUndos = opManager.FindUndoOperations(a => a.Name == "New template" || a.Name == "Delete templates");
+                    foreach (Operation undoOp in templateUndos)
+                    {
+                        opManager.RemoveUndoOperation(undoOp);
+                    }
                 }
 
             }, ps.Progressor);
@@ -366,7 +369,7 @@ namespace Geomapmaker.Data
             IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
 
             // Find the MapUnitPolys layer
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "MapUnitPolys");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
             if (layer == null)
             {
