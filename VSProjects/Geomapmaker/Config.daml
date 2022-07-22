@@ -10,9 +10,6 @@
     <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
   </AddInInfo>
-  <Configuration>
-    <ConfigurationManager className="GeomapmakerConfiguration" />
-  </Configuration>
   <modules>
     <insertModule id="Geomapmaker_Module" className="GeomapmakerModule" autoLoad="true" caption="GeomapmakerModule">
       <!-- Tabs -->

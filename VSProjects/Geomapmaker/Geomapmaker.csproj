@@ -366,7 +366,6 @@
     <Compile Include="Models\GemsSymbol.cs" />
     <Compile Include="Models\ContactFaultTemplate.cs" />
     <Compile Include="Models\MapUnitPoly.cs" />
-    <Compile Include="GeomapmakerConfiguration.cs" />
     <!--<Compile Include="Views\LoginDialogProWindow.xaml.cs" />-->
     <Compile Include="GeomapmakerModule.cs" />
     <Compile Include="Models\MapUnit.cs" />
