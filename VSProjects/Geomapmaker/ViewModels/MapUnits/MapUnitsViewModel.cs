@@ -33,50 +33,6 @@ namespace Geomapmaker.ViewModels.MapUnits
             Delete = new DeleteMapUnitVM(this);
         }
 
-        // Tooltips dictionary
-        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
-        {
-            // Dockpane Headings
-            {"CreateHeading", "TODO CreateHeading" },
-            {"EditHeading", "TODO EditHeading" },
-            {"DeleteHeading", "TODO DeleteHeading" },
-
-            // Control Labels
-            {"MapUnit", "TODO MapUnit" },
-            {"Name", "TODO Name" },
-            {"FullName", "TODO FullName" },
-            {"Age", "TODO Age" },
-            {"OlderInterval", "TODO OlderInterval" },
-            {"YoungerInterval", "TODO YoungerInterval" },
-            {"RelativeAge", "TODO RelativeAge" },
-            {"Description", "TODO Description" },
-            {"Label", "TODO Label" },
-            {"Color", "TODO Color" },
-            {"GeoMaterial", "TODO GeoMaterial" },
-            {"GeoMaterialConfidence", "TODO GeoMaterialConfidence" },
-
-            // Map Unit Selection Comboboxes 
-            {"Edit", "TODO Edit" },
-            {"Delete", "TODO Delete" },
-
-            // Buttons
-            {"ClearButton", "TODO ClearButton" },
-            {"SaveButton", "TODO SaveButton" },
-            {"UpdateButton", "TODO UpdateButton" },
-            {"DeleteButton", "TODO DeleteButton" },
-        };
-
-        // Max length of the field's string
-        public Dictionary<string, int> MaxLength => new Dictionary<string, int>
-        {
-            {"MapUnit", 10 },
-            {"Name", 254 },
-            {"FullName", 254 },
-            {"RelativeAge", 254 },
-            {"Description", 3000 },
-            {"Label", 30 },
-        };
-
         private List<MapUnit> _mapUnits { get; set; }
         public List<MapUnit> MapUnits
         {
