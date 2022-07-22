@@ -8,6 +8,7 @@ using Geomapmaker._helpers;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using Nelibur.ObjectMapper;
 using System;
+using ArcGIS.Desktop.Editing;
 
 namespace Geomapmaker.Data
 {
@@ -550,6 +551,104 @@ namespace Geomapmaker.Data
 
             // Combine the lists into a single tuple
             return Tuple.Create(tmpTree, tmpUnassigned);
+        }
+
+        /// <summary>
+        /// Update the HierarchyKey values to be zero-padded. Example, 1.1.1 => 001.001.001
+        /// </summary>
+        /// <returns>Number of rows updated</returns>
+        public static async Task<int> ZeroPadHierarchyKeyValues()
+        {
+            int count = 0;
+
+            StandaloneTable standaloneTable = MapView.Active?.Map.StandaloneTables.FirstOrDefault(a => a.Name == "DescriptionOfMapUnits");
+
+            if (standaloneTable == null)
+            {
+                return 0;
+            }
+
+            await QueuedTask.Run(() =>
+            {
+                using (Table table = standaloneTable.GetTable())
+                {
+                    if (table != null)
+                    {
+                        QueryFilter queryFilter = new QueryFilter
+                        {
+                            SubFields = "hierarchykey",
+                            WhereClause = "hierarchykey <> ''"
+                        };
+
+                        EditOperation editOperation = new EditOperation()
+                        {
+                            Name = "Zero-Pad DescriptionOfMapUnits Hierarchy Key Values",
+                            ProgressMessage = "Updating DescriptionOfMapUnits",
+                            ShowProgressor = true
+                        };
+
+                        editOperation.Callback(context =>
+                        {
+                            using (RowCursor rowCursor = table.Search(queryFilter, false))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        string originalKey = row["hierarchykey"]?.ToString();
+
+                                        // Replace semi-colons
+                                        originalKey = originalKey.Replace(';','.');
+
+                                        // Replace dashes
+                                        originalKey = originalKey.Replace('-', '.');
+
+                                        // Original symbol must be up of only digits and periods
+                                        if (originalKey.All(c => char.IsDigit(c) || c == '.'))
+                                        {
+                                            string[] splitKeys = originalKey.Split('.');
+
+                                            for (int i = 0; i < splitKeys.Length; i++)
+                                            {
+                                                // Parse the int
+                                                if (int.TryParse(splitKeys[i], out int value))
+                                                {
+                                                    // Zero-pad 
+                                                    splitKeys[i] = value.ToString("000");
+                                                };
+                                            }
+
+                                            // Combine the zero-padded numbers
+                                            string paddedKey = string.Join(".", splitKeys);
+
+                                            if (originalKey != paddedKey)
+                                            {
+                                                count++;
+
+                                                // In order to update the Map and/or the attribute table.
+                                                // Has to be called before any changes are made to the row.
+                                                context.Invalidate(row);
+
+                                                row["hierarchykey"] = paddedKey;
+
+                                                // After all the changes are done, persist it.
+                                                row.Store();
+
+                                                // Has to be called after the store too.
+                                                context.Invalidate(row);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }, table);
+
+                        bool result = editOperation.Execute();
+                    }
+                }
+            });
+
+            return count;
         }
     }
 }

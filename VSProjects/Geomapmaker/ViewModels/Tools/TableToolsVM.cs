@@ -15,7 +15,9 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandSetMapUnit => new RelayCommand(() => SetMapUnit());
 
-        public ICommand CommandZeroPad => new RelayCommand(() => ZeroPadSymbols());
+        public ICommand CommandZeroPadSymbols => new RelayCommand(() => ZeroPadSymbols());
+
+        public ICommand CommandZeroPadHierarchyKeys => new RelayCommand(() => ZeroPadHierarchyKeys());
 
         public ToolsViewModel ParentVM { get; set; }
 
@@ -90,6 +92,13 @@ namespace Geomapmaker.ViewModels.Tools
             int opCount = await Data.OrientationPoints.ZeroPadSymbolValues();
 
             MessageBox.Show($"Updated {cfCount} ContactsAndFaults row{(cfCount == 1 ? "" : "s")} and {opCount} Orientation Point row{(opCount == 1 ? "" : "s")}", "Zero Pad Symbols");
+        }
+
+        public async void ZeroPadHierarchyKeys()
+        {
+            int count = await Data.DescriptionOfMapUnits.ZeroPadHierarchyKeyValues();
+
+            MessageBox.Show($"Updated {count} DescriptionOfMapUnits row{(count == 1 ? "" : "s")}", "Zero Pad Hierarchy Keys");
         }
     }
 }
