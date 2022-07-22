@@ -91,6 +91,8 @@ namespace Geomapmaker.ViewModels.Tools
 
         public async void ZeroPadSymbols()
         {
+            ParentVM.CloseProwindow();
+
             int cfCount = await Data.ContactsAndFaults.ZeroPadSymbolValues();
 
             int opCount = await Data.OrientationPoints.ZeroPadSymbolValues();
@@ -100,6 +102,8 @@ namespace Geomapmaker.ViewModels.Tools
 
         public async void ZeroPadHierarchyKeys()
         {
+            ParentVM.CloseProwindow();
+
             int count = await Data.DescriptionOfMapUnits.ZeroPadHierarchyKeyValues();
 
             MessageBox.Show($"Updated {count} DescriptionOfMapUnits row{(count == 1 ? "" : "s")}", "Zero Pad Hierarchy Keys");
@@ -107,11 +111,13 @@ namespace Geomapmaker.ViewModels.Tools
 
         public async void GeopackageRename()
         {
+            ParentVM.CloseProwindow();
+
             int count = 0;
 
-            IEnumerable<Layer> layers = MapView.Active?.Map?.Layers?.Where(a => a.Name.StartsWith("main."));
+            IEnumerable<Layer> layers = MapView.Active?.Map?.Layers?.Where(a => a.Name.StartsWith("main.")) ?? new List<Layer>();
 
-            IEnumerable<StandaloneTable> tables = MapView.Active?.Map.GetStandaloneTablesAsFlattenedList().Where(b => b.Name.StartsWith("main."));
+            IEnumerable<StandaloneTable> tables = MapView.Active?.Map.GetStandaloneTablesAsFlattenedList().Where(b => b.Name.StartsWith("main.")) ?? new List<StandaloneTable>(); ;
 
             await QueuedTask.Run(() =>
             {
