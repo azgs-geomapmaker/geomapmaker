@@ -45,8 +45,8 @@
             <ColumnDefinition Width="5" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" ToolTip="{Binding Tooltips[HierarchyTree]}" />
-        <TreeView Name="Tree" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" ToolTip="{Binding Tooltips[HierarchyTree]}" MinHeight="25">
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Hierarchy Tree" />
+        <TreeView Name="Tree" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tree}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" MinHeight="25">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
@@ -87,8 +87,8 @@
             </Validation.ErrorTemplate>
         </TreeView>
 
-        <TextBlock Grid.Row="3" Grid.Column="1" Text="Unassigned" ToolTip="{Binding Tooltips[Unassigned]}" />
-        <ListBox Name="Unassigned" Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Unassigned}" ToolTip="{Binding Tooltips[Unassigned]}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}">
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Unassigned" />
+        <ListBox Name="Unassigned" Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Unassigned}" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

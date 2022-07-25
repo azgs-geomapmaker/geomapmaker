@@ -51,11 +51,11 @@
 
             <Separator Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" Visibility="{Binding Edit.Visibility}"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Name" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Edit.Name, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}"/>
 
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Description" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" Text="{Binding Edit.Description, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
 
             <TextBlock Grid.Row="8" Grid.Column="1" Text="Description Source" Visibility="{Binding Edit.Visibility}" />
             <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Edit.DescriptionSourceID}" Visibility="{Binding Edit.Visibility}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />

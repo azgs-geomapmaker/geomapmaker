@@ -22,16 +22,6 @@ namespace Geomapmaker.ViewModels.Hierarchy
 {
     public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
     {
-        // Tooltips dictionary
-        public Dictionary<string, string> Tooltips => new Dictionary<string, string>
-        {
-            // Dockpane Headings
-            {"Heading", "TODO Heading" },
-
-            {"HierarchyTree", "TODO HierarchyTree" },
-            {"Unassigned", "TODO Unassigned" },
-        };
-
         public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
 
         private bool CanSave()

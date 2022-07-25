@@ -67,16 +67,16 @@
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Map Unit" ToolTip="{Binding Tooltips[MapUnit]}" />
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.MapUnit, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[MapUnit]}" MaxLength="{Binding MaxLength[MapUnit]}" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Map Unit" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.MapUnit, UpdateSourceTrigger=PropertyChanged }" />
 
-            <TextBlock Grid.Row="3" Grid.Column="1" Text="Name" ToolTip="{Binding Tooltips[Name]}" />
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[Name]}" MaxLength="{Binding MaxLength[Name]}" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="Name" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.Name, UpdateSourceTrigger=PropertyChanged }" />
 
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="Full Name" ToolTip="{Binding Tooltips[FullName]}" />
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.FullName, UpdateSourceTrigger=PropertyChanged }" ToolTip="{Binding Tooltips[FullName]}" MaxLength="{Binding MaxLength[FullName]}" />
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Full Name" />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.FullName, UpdateSourceTrigger=PropertyChanged }" />
 
-            <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="5,0,5,5" ToolTip="{Binding Tooltips[Age]}">
+            <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Header="Age" Margin="5,0,5,5">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -88,7 +88,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" Text="Older Interval" ToolTip="{Binding Tooltips[OlderInterval]}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" Text="Older Interval" />
                     <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Create.OlderIntervalOptions}" SelectedItem="{Binding Create.OlderInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}" >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -102,7 +102,7 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="1" Margin="0" Text="-" VerticalAlignment="Center" />
 
-                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="5,0,0,0" Text="Younger Interval" ToolTip="{Binding Tooltips[YoungerInterval]}" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="5,0,0,0" Text="Younger Interval" />
                     <ComboBox Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding Create.YoungerIntervalOptions}" SelectedItem="{Binding Create.YoungerInterval}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Tooltip}"  >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -116,19 +116,19 @@
                 </Grid>
             </GroupBox>
 
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="Relative Age" ToolTip="{Binding Tooltips[RelativeAge]}" />
-            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Create.RelativeAge, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[RelativeAge]}" MaxLength="{Binding MaxLength[RelativeAge]}" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Relative Age" />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Create.RelativeAge, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="10" Grid.Column="1" Text="Description" ToolTip="{Binding Tooltips[Description]}" />
-            <TextBox Grid.Row="11" Grid.Column="1"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Tooltips[Description]}" MaxLength="{Binding MaxLength[Description]}" />
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="Description" />
+            <TextBox Grid.Row="11" Grid.Column="1"  MinLines="3" Text="{Binding Create.Description, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="12" Grid.Column="1" Text="Label" ToolTip="{Binding Tooltips[Label]}" />
-            <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Create.Label}" ToolTip="{Binding Tooltips[Label]}" FontFamily="FGDCGeoAge" MaxLength="{Binding MaxLength[Label]}" MinHeight="20" />
+            <TextBlock Grid.Row="12" Grid.Column="1" Text="Label" />
+            <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Create.Label}" FontFamily="FGDCGeoAge" MinHeight="20" />
 
-            <TextBlock Grid.Row="14" Grid.Column="1" Text="Color" ToolTip="{Binding Tooltips[Color]}" />
+            <TextBlock Grid.Row="14" Grid.Column="1" Text="Color" />
             <wpftk:ColorPicker Grid.Row="15" Grid.Column="1" SelectedColor="{Binding Create.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" Margin="0,0,0,10" />
 
-            <TextBlock Grid.Row="16" Grid.Column="1" Text="GeoMaterial" ToolTip="{Binding Tooltips[GeoMaterial]}" />
+            <TextBlock Grid.Row="16" Grid.Column="1" Text="GeoMaterial" />
             <ComboBox Grid.Row="17" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -137,8 +137,8 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBlock Grid.Row="18" Grid.Column="1" Text="GeoMaterial Confidence" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" />
-            <ComboBox Grid.Row="19" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" ToolTip="{Binding Tooltips[GeoMaterialConfidence]}" MaxHeight="25" />
+            <TextBlock Grid.Row="18" Grid.Column="1" Text="GeoMaterial Confidence" />
+            <ComboBox Grid.Row="19" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialConfidenceOptions}" SelectedValue="{Binding Create.GeoMaterialConfidence}" MaxHeight="25" />
 
             <TextBlock Grid.Row="20" Grid.Column="1" Text="Description Source"/>
             <TextBox Grid.Row="21" Grid.Column="1" Text="{Binding Create.DescriptionSourceID}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" />
