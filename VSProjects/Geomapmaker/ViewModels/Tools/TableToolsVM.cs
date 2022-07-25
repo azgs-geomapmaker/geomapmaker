@@ -1,5 +1,7 @@
 ﻿using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Dialogs;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,12 @@ namespace Geomapmaker.ViewModels.Tools
         public ICommand CommandInsertGlossaryTerms => new RelayCommand(() => InsertGlossaryTerms());
 
         public ICommand CommandSetMapUnit => new RelayCommand(() => SetMapUnit());
+
+        public ICommand CommandZeroPadSymbols => new RelayCommand(() => ZeroPadSymbols());
+
+        public ICommand CommandZeroPadHierarchyKeys => new RelayCommand(() => ZeroPadHierarchyKeys());
+
+        public ICommand CommandGeopackageRename => new RelayCommand(() => GeopackageRename());
 
         public ToolsViewModel ParentVM { get; set; }
 
@@ -78,7 +86,55 @@ namespace Geomapmaker.ViewModels.Tools
 
             int opCount = await Data.OrientationPoints.UpdateOrientationPointsWithMapUnitIntersectionAsync();
 
-            MessageBox.Show($"Updated {stationCount} Station{(stationCount == 1 ? "" : "s")} and {opCount} Orientation Point{(opCount == 1 ? "" : "s")}", "Find MapUnitPolys Intersections");
+            MessageBox.Show($"Updated {stationCount} Stations row{(stationCount == 1 ? "" : "s")} and {opCount} Orientation Points row{(opCount == 1 ? "" : "s")}", "Find MapUnitPolys Intersections");
+        }
+
+        public async void ZeroPadSymbols()
+        {
+            ParentVM.CloseProwindow();
+
+            int cfCount = await Data.ContactsAndFaults.ZeroPadSymbolValues();
+
+            int opCount = await Data.OrientationPoints.ZeroPadSymbolValues();
+
+            MessageBox.Show($"Updated {cfCount} ContactsAndFaults row{(cfCount == 1 ? "" : "s")} and {opCount} Orientation Point row{(opCount == 1 ? "" : "s")}", "Zero Pad Symbols");
+        }
+
+        public async void ZeroPadHierarchyKeys()
+        {
+            ParentVM.CloseProwindow();
+
+            int count = await Data.DescriptionOfMapUnits.ZeroPadHierarchyKeyValues();
+
+            MessageBox.Show($"Updated {count} DescriptionOfMapUnits row{(count == 1 ? "" : "s")}", "Zero Pad Hierarchy Keys");
+        }
+
+        public async void GeopackageRename()
+        {
+            ParentVM.CloseProwindow();
+
+            int count = 0;
+
+            IEnumerable<Layer> layers = MapView.Active?.Map?.Layers?.Where(a => a.Name.StartsWith("main.")) ?? new List<Layer>();
+
+            IEnumerable<StandaloneTable> tables = MapView.Active?.Map.GetStandaloneTablesAsFlattenedList().Where(b => b.Name.StartsWith("main.")) ?? new List<StandaloneTable>(); ;
+
+            await QueuedTask.Run(() =>
+            {
+                foreach (Layer layer in layers)
+                {
+                    layer.SetName(layer.Name.Remove(0, 5));
+                    count++;
+                }
+
+                foreach (StandaloneTable table in tables)
+                {
+                    table.SetName(table.Name.Remove(0, 5));
+                    count++;
+                }
+            });
+
+            MessageBox.Show($"Updated {count} dataset name{(count == 1 ? "" : "s")}", "Geopackage Rename");
         }
     }
 }

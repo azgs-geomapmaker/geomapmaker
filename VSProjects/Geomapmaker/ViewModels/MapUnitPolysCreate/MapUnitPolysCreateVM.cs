@@ -39,7 +39,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
 
         public MapUnitPolysCreateVM()
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {
@@ -100,7 +100,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
 
         private void ClearOids()
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             QueuedTask.Run(() =>
             {
@@ -122,7 +122,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
             bool ConstructPolygonsSucceeded = false;
 
             // Contacts and Faults layer
-            FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
+            FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
             EditOperation op = new EditOperation
             {
@@ -130,7 +130,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
             };
 
             // Map Unit Poly layer
-            FeatureLayer polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+            FeatureLayer polyLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.First((l) => l.Name == "MapUnitPolys") as FeatureLayer;
 
             await QueuedTask.Run(() =>
             {
@@ -155,13 +155,16 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
 
                 if (ConstructPolygonsSucceeded)
                 {
-                    OperationManager opManager = MapView.Active.Map.OperationManager;
+                    OperationManager opManager = MapView.Active?.Map?.OperationManager;
 
-                    // Remove Undo items we don't want users to be able to undo renderer update
-                    List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer definition: MapUnitPolys" || a.Name == "Update layer renderer: MapUnitPolys");
-                    foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                    if (opManager != null)
                     {
-                        opManager.RemoveUndoOperation(undoOp);
+                        // Remove Undo items we don't want users to be able to undo renderer update
+                        List<Operation> mapUnitPolyLayerUndos = opManager.FindUndoOperations(a => a.Name == "Update layer definition: MapUnitPolys" || a.Name == "Update layer renderer: MapUnitPolys");
+                        foreach (Operation undoOp in mapUnitPolyLayerUndos)
+                        {
+                            opManager.RemoveUndoOperation(undoOp);
+                        }
                     }
 
                     cfLayer.ClearSelection();
@@ -255,7 +258,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
 
         public async void Set_CF_Oids(List<long> oids)
         {
-            FeatureLayer layer = MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>().FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {

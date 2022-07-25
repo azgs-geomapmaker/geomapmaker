@@ -24,10 +24,10 @@ namespace Geomapmaker.ViewModels.GeneratePolygons
         public async void GenerateAllPolygons()
         {
             // Contacts and Faults layer
-            FeatureLayer cfLayer = MapView.Active.Map.GetLayersAsFlattenedList().FirstOrDefault((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
+            FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.FirstOrDefault((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
             // Map Unit Poly layer
-            FeatureLayer polyLayer = MapView.Active.Map.GetLayersAsFlattenedList().FirstOrDefault((l) => l.Name == "MapUnitPolys") as FeatureLayer;
+            FeatureLayer polyLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.FirstOrDefault((l) => l.Name == "MapUnitPolys") as FeatureLayer;
 
             if (cfLayer == null || polyLayer == null)
             {
