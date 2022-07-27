@@ -26,7 +26,7 @@ namespace Geomapmaker.ViewModels.Export
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
 
-        public ICommand CommandExport => new RelayCommand(() => Export());
+        public ICommand CommandExport => new RelayCommand(() => Export(), () => CanExport());
 
         public bool CreateGeodatabase { get; set; } = false;
 
@@ -42,7 +42,12 @@ namespace Geomapmaker.ViewModels.Export
 
         public bool CreateOpen { get; set; } = false;
 
-        public bool CreateSimple { get; set; } = true;
+        public bool CreateSimple { get; set; } = false;
+
+        private bool CanExport()
+        {
+            return CreateGeodatabase || CreateShapefiles || CreateGeopackage || CreateKml || CreateCsv || CreateReport || CreateOpen || CreateSimple;
+        }
 
         public void CloseProwindow()
         {
