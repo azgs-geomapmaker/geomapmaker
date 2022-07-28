@@ -76,7 +76,7 @@
 
                 <Expander Grid.Row="7" Grid.Column="1" Header="Geopackage Dataset Rename">
                     <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
-                    Blah vlah vlah vlah
+                        Removes the SQLite 'main.' prefix from all feature classes and tables.  
                     </TextBlock>
                 </Expander>
                 <Button Grid.Row="7" Grid.Column="2" Command="{Binding TableTools.CommandGeopackageRename}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Go</Button>
