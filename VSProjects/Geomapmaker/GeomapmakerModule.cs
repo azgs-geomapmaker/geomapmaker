@@ -44,8 +44,11 @@ namespace Geomapmaker
         // On active map changes 
         private void MapViewActivateEvent(ActiveMapViewChangedEventArgs obj)
         {
+            // Try to deselect the DatasourceID when a project changes,
+            // but this gets called whenever a table gets opened.
+
             // Clear the Datasource combo
-            DataSourceComboBox?.ClearSelection();
+            //DataSourceComboBox?.ClearSelection();
         }
     }
 }
