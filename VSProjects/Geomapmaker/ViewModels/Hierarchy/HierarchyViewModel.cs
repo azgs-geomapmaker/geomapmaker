@@ -7,7 +7,6 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
-using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,14 +19,9 @@ using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Hierarchy
 {
-    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged, IDropTarget
+    public class HierarchyViewModel : ProWindow, INotifyPropertyChanged
     {
-        public ICommand CommandSave => new RelayCommand(() => SaveAsync(), () => CanSave());
-
-        private bool CanSave()
-        {
-            return hasChanged;
-        }
+        public ICommand CommandSave => new RelayCommand(() => SaveAsync());
 
         public event EventHandler WindowCloseEvent;
 
@@ -36,135 +30,11 @@ namespace Geomapmaker.ViewModels.Hierarchy
             WindowCloseEvent(this, new EventArgs());
         });
 
-        // Track if a change was made
-        private bool hasChanged = false;
-
         // Collection for hkey-assigned map units
         public ObservableCollection<MapUnitTreeItem> Tree { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
 
         // Collection for unassigned map units
         public ObservableCollection<MapUnitTreeItem> Unassigned { get; set; } = new ObservableCollection<MapUnitTreeItem>(new List<MapUnitTreeItem>());
-
-        void IDropTarget.DragEnter(IDropInfo dropInfo)
-        {
-            //throw new NotImplementedException();
-        }
-
-        void IDropTarget.DragOver(IDropInfo dropInfo)
-        {
-            if (dropInfo.Data != null)
-            {
-                MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
-
-                MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
-
-                // Target is a Collection
-                if (targetItem == null)
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                }
-                else if (targetItem.ObjectID == sourceItem.ObjectID)
-                {
-                    // Can't set a node as a child of itself
-                    dropInfo.Effects = DragDropEffects.None;
-                    return;
-                }
-                else if (IsTargetADescendantOfSource(sourceItem, targetItem))
-                {
-                    // Can't set a node as a child of a descendant
-                    dropInfo.Effects = DragDropEffects.None;
-                    return;
-                }
-                // Target is a MapUnitTreeItem
-                else
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                }
-
-                dropInfo.Effects = DragDropEffects.Move;
-            }
-        }
-
-        // Recursively check if the target is a descendant of the Source
-        private bool IsTargetADescendantOfSource(MapUnitTreeItem sourceItem, MapUnitTreeItem targetItem)
-        {
-            // Base case
-            if (sourceItem.Children == null || sourceItem.Children.Count == 0)
-            {
-                return false;
-            }
-            else if (sourceItem.Children.Contains(targetItem))
-            {
-                return true;
-            }
-            else
-            {
-                foreach (var child in sourceItem.Children)
-                {
-                    return (IsTargetADescendantOfSource(child, targetItem));
-                }
-            }
-
-            return false;
-        }
-
-        void IDropTarget.DragLeave(IDropInfo dropInfo)
-        {
-            //throw new NotImplementedException();
-        }
-
-        void IDropTarget.Drop(IDropInfo dropInfo)
-        {
-            // Source
-            MapUnitTreeItem sourceItem = dropInfo.Data as MapUnitTreeItem;
-            ICollection<MapUnitTreeItem> sourceCollection = dropInfo.DragInfo.SourceCollection as ICollection<MapUnitTreeItem>;
-
-            // Target
-            MapUnitTreeItem targetItem = dropInfo.TargetItem as MapUnitTreeItem;
-            ICollection<MapUnitTreeItem> targetCollection = dropInfo.TargetCollection as ICollection<MapUnitTreeItem>;
-            string targetName = ((FrameworkElement)((DropInfo)dropInfo)?.VisualTarget)?.Name;
-
-            sourceCollection.Remove(sourceItem);
-
-            // Check if the target within the Unassigned listbox
-            if (targetName == "Unassigned")
-            {
-                // Flatten descendents and add to unassigned
-                FlattenAndAddToUnassigned(sourceItem);
-            }
-            else if (targetItem != null)
-            {
-                // Add to MapUnit child
-                targetItem.Children.Add(sourceItem);
-            }
-            else
-            {
-                // Add to collection
-                targetCollection.Add(sourceItem);
-            }
-
-            hasChanged = true;
-        }
-
-        // Flatten the tree and add to unassigned
-        private void FlattenAndAddToUnassigned(MapUnitTreeItem mapUnit)
-        {
-            // Check for any children
-            if (mapUnit?.Children?.Count > 0)
-            {
-                foreach (MapUnitTreeItem child in mapUnit?.Children)
-                {
-                    // Call on each child
-                    FlattenAndAddToUnassigned(child);
-                }
-            }
-
-            // Clear out children
-            mapUnit.Children = new ObservableCollection<MapUnitTreeItem>();
-
-            // Add to the flatList
-            Unassigned.Add(mapUnit);
-        }
 
         // Build the tree stucture
         public async void BuildTree()
