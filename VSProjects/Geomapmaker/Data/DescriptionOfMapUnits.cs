@@ -598,15 +598,15 @@ namespace Geomapmaker.Data
                                         string originalKey = row["hierarchykey"]?.ToString();
 
                                         // Replace semi-colons
-                                        originalKey = originalKey.Replace(';','.');
+                                        originalKey = originalKey.Replace(';','-');
 
-                                        // Replace dashes
-                                        originalKey = originalKey.Replace('-', '.');
+                                        // Replace periods
+                                        originalKey = originalKey.Replace('.', '-');
 
-                                        // Original symbol must be up of only digits and periods
-                                        if (originalKey.All(c => char.IsDigit(c) || c == '.'))
+                                        // Original symbol must be up of only digits and dashes
+                                        if (originalKey.All(c => char.IsDigit(c) || c == '-'))
                                         {
-                                            string[] splitKeys = originalKey.Split('.');
+                                            string[] splitKeys = originalKey.Split('-');
 
                                             for (int i = 0; i < splitKeys.Length; i++)
                                             {
@@ -619,7 +619,7 @@ namespace Geomapmaker.Data
                                             }
 
                                             // Combine the zero-padded numbers
-                                            string paddedKey = string.Join(".", splitKeys);
+                                            string paddedKey = string.Join("-", splitKeys);
 
                                             if (originalKey != paddedKey)
                                             {
