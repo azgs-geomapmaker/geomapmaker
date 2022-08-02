@@ -1,16 +1,23 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Core;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.Tools
 {
     public class TableToolsVM
     {
+        private const string symbologyCsvUrl = "https://raw.githubusercontent.com/azgs/geomapmaker/master/SetUp/SourceMaterials/Symbology.csv";
+
         public ICommand CommandSetAllPrimaryKeys => new RelayCommand(() => SetAllPrimaryKeys());
 
         public ICommand CommandInsertGlossaryTerms => new RelayCommand(() => InsertGlossaryTerms());
@@ -22,6 +29,10 @@ namespace Geomapmaker.ViewModels.Tools
         public ICommand CommandZeroPadHierarchyKeys => new RelayCommand(() => ZeroPadHierarchyKeys());
 
         public ICommand CommandGeopackageRename => new RelayCommand(() => GeopackageRename());
+
+        public ICommand CommandGithubLink => new RelayCommand(() => Process.Start(symbologyCsvUrl));
+
+        public ICommand CommandInsertSymbologyTable => new RelayCommand(() => InsertSymbologyTable());
 
         public ToolsViewModel ParentVM { get; set; }
 
@@ -136,5 +147,31 @@ namespace Geomapmaker.ViewModels.Tools
 
             MessageBox.Show($"Updated {count} dataset name{(count == 1 ? "" : "s")}", "Geopackage Rename");
         }
+
+        public async void InsertSymbologyTable()
+        {
+            ParentVM.CloseProwindow();
+
+            string savePath = Path.Combine(Project.Current.HomeFolderPath, "Symbology.csv");
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    await client.DownloadFileTaskAsync(symbologyCsvUrl, savePath);
+                }
+
+                await QueuedTask.Run(() =>
+                {
+                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active.Map, "Symbology");
+                });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Something went wrong.");
+            }
+        }
+
     }
 }

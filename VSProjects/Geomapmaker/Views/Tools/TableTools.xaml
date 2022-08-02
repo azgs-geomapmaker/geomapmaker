@@ -28,6 +28,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="5"/>
@@ -76,12 +77,19 @@
 
                 <Expander Grid.Row="7" Grid.Column="1" Header="Geopackage Dataset Rename">
                     <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
-                        Removes the SQLite 'main.' prefix from all feature classes and tables.  
+                        Removes the SQLite 'main.' prefix from all feature classes and tables.
                     </TextBlock>
                 </Expander>
                 <Button Grid.Row="7" Grid.Column="2" Command="{Binding TableTools.CommandGeopackageRename}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Go</Button>
 
-                <Button Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
+                <Expander Grid.Row="8" Grid.Column="1" Header="Insert Symbology Table">
+                    <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
+                        Download and insert the Symbology table from  <Hyperlink Command="{Binding TableTools.CommandGithubLink}">GitHub</Hyperlink>.
+                    </TextBlock>
+                </Expander>
+                <Button Grid.Row="8" Grid.Column="2" Command="{Binding TableTools.CommandInsertSymbologyTable}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Go</Button>
+
+                <Button Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" MaxWidth="100" >Cancel</Button>
 
             </Grid>
         </ScrollViewer>
