@@ -18,6 +18,8 @@ namespace Geomapmaker.ViewModels.Tools
     {
         private const string symbologyCsvUrl = "https://raw.githubusercontent.com/azgs/geomapmaker/master/SetUp/SourceMaterials/Symbology.csv";
 
+        private const string predefinedTermsCsvUrl = "https://raw.githubusercontent.com/azgs/geomapmaker/master/SetUp/SourceMaterials/PredefinedTerms.csv";
+
         public ICommand CommandSetAllPrimaryKeys => new RelayCommand(() => SetAllPrimaryKeys());
 
         public ICommand CommandInsertGlossaryTerms => new RelayCommand(() => InsertGlossaryTerms());
@@ -30,9 +32,13 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandGeopackageRename => new RelayCommand(() => GeopackageRename());
 
-        public ICommand CommandGithubLink => new RelayCommand(() => Process.Start(symbologyCsvUrl));
+        public ICommand CommandSymbologyGithubLink => new RelayCommand(() => Process.Start(symbologyCsvUrl));
 
         public ICommand CommandInsertSymbologyTable => new RelayCommand(() => InsertSymbologyTable());
+
+        public ICommand CommandPredefinedTermsGithubLink => new RelayCommand(() => Process.Start(predefinedTermsCsvUrl));
+
+        public ICommand CommandInsertPredfinedTermsTable => new RelayCommand(() => InsertPredefinedTermsTable());
 
         public ToolsViewModel ParentVM { get; set; }
 
@@ -173,5 +179,29 @@ namespace Geomapmaker.ViewModels.Tools
             }
         }
 
+        public async void InsertPredefinedTermsTable()
+        {
+            ParentVM.CloseProwindow();
+
+            string savePath = Path.Combine(Project.Current.HomeFolderPath, "PredefinedTerms.csv");
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    await client.DownloadFileTaskAsync(predefinedTermsCsvUrl, savePath);
+                }
+
+                await QueuedTask.Run(() =>
+                {
+                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active.Map, "PredefinedTerms");
+                });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Something went wrong.");
+            }
+        }
     }
 }
