@@ -1,4 +1,5 @@
-﻿using Geomapmaker.Data;
+﻿using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -89,6 +90,11 @@ a.failedLink:link, a.failedLink:visited  {
             {
                 ProjectName = _helpers.Helpers.GetProjectName(),
                 ReportDate = DateTime.Today.ToString("D"),
+                Wkid = MapView.Active?.Map?.SpatialReference?.Wkid.ToString(),
+                SpatialRefName = MapView.Active?.Map?.SpatialReference?.Name,
+                Spheroid = MapView.Active?.Map?.SpatialReference?.Datum?.SpheroidName,
+                Projected = MapView.Active?.Map?.SpatialReference?.IsProjected == true ? "True" : "False",
+                Unit = MapView.Active?.Map?.SpatialReference?.Unit?.Name
             };
         }
 
@@ -126,8 +132,13 @@ a.failedLink:link, a.failedLink:visited  {
         {
             return new XElement("div",
                 new XAttribute("class", "info"),
-                    new XElement("div", "Date: " + report.ReportDate)
-            );
+                    new XElement("div", new XElement("span", new XAttribute("style", "font-weight: bold;"), "Date: "), report.ReportDate),
+                    new XElement("div", new XElement("span", new XAttribute("style", "font-weight: bold;"), "Wkid: "), report.Wkid),
+                    new XElement("div", new XElement("span", new XAttribute("style", "font-weight: bold;"), "Spatial Reference: "), report.SpatialRefName),
+                    new XElement("div", new XElement("span", new XAttribute("style", "font-weight: bold;"), "Spheroid: "), report.Spheroid),
+                    new XElement("div", new XElement("span", new XAttribute("style", "font-weight: bold;"), "Projected: "), report.Projected),
+                    new XElement("div", new XElement("span", new XAttribute("style", "font-weight: bold;"), "Unit: "), report.Unit)
+                );
         }
 
         private async Task<XElement> GetValidationAsync()
