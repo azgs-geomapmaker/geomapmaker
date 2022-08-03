@@ -121,11 +121,11 @@
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_Export_Btn" caption="Export" className="Geomapmaker.ViewModels.Export.ShowExport" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat32.png" keytip="todo" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Export_Btn" caption="Export" className="Geomapmaker.ViewModels.Export.ShowExport" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat32.png" keytip="todo" >
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_Report" caption="Report" className="Geomapmaker.RibbonElements.ReportButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Report" caption="Report" className="Geomapmaker.RibbonElements.ReportButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" >
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
@@ -145,7 +145,7 @@
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>
         </button>
-        <button id="Geomapmaker_MultiTools" caption="Tools" className="Geomapmaker.ViewModels.Tools.ShowTools" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_MultiTools" caption="Tools" className="Geomapmaker.ViewModels.Tools.ShowTools" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="todo" >
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </button>
       </controls>
