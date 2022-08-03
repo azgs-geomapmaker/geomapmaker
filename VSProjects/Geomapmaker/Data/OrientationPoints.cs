@@ -175,7 +175,7 @@ namespace Geomapmaker.Data
                 return;
             }
 
-            // Check if the symbol list has been populated 
+            // Check if the symbol list has already been populated 
             if (GeomapmakerModule.OrientationPointSymbols == null)
             {
                 await Symbology.RefreshOPSymbolOptionsAsync();
@@ -253,17 +253,7 @@ namespace Geomapmaker.Data
                 // Update Renderer
                 //
 
-                CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
-
-                CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
-
-                List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
-
-                // Check if the renderer already has symbology for that key
-                if (listUniqueValueClasses.Any(a => a.Label == key))
-                {
-                    return;
-                }
+                List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
 
                 CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
                         new CIMUniqueValue {
@@ -295,6 +285,21 @@ namespace Geomapmaker.Data
                     Groups = listUniqueValueGroups,
                     Fields = new string[] { "symbol" }
                 };
+
+                // Rotate the symbol based on the Azimuth value
+                var cimExpressionInfoZ = new CIMExpressionInfo { Expression = "$feature.Azimuth" };
+
+                var cimVisualVariableInfoZ = new CIMVisualVariableInfo { VisualVariableInfoType = VisualVariableInfoType.Expression, ValueExpressionInfo = cimExpressionInfoZ };
+
+                var listCIMVisualVariables = new List<CIMVisualVariable>
+                {
+                    new CIMRotationVisualVariable {
+                        VisualVariableInfoZ = cimVisualVariableInfoZ
+                    }
+                };
+
+                //Apply the visual variables to the renderer's VisualVariables property
+                updatedRenderer.VisualVariables = listCIMVisualVariables.ToArray();
 
                 layer.SetRenderer(updatedRenderer);
             });
