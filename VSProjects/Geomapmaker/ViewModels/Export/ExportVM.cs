@@ -334,7 +334,7 @@ namespace Geomapmaker.ViewModels.Export
 
             string spheroid = MapView.Active?.Map?.SpatialReference?.Datum?.SpheroidName;
 
-            string projected = MapView.Active?.Map?.SpatialReference.IsProjected == true ? "True" : "False";
+            string projected = MapView.Active?.Map?.SpatialReference?.IsProjected == true ? "True" : "False";
 
             string unit = MapView.Active?.Map?.SpatialReference?.Unit?.Name;
 
