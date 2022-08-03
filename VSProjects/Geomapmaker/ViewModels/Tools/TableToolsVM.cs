@@ -169,7 +169,7 @@ namespace Geomapmaker.ViewModels.Tools
 
                 await QueuedTask.Run(() =>
                 {
-                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active.Map, "Symbology");
+                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, "Symbology");
                 });
 
             }
@@ -194,7 +194,7 @@ namespace Geomapmaker.ViewModels.Tools
 
                 await QueuedTask.Run(() =>
                 {
-                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active.Map, "PredefinedTerms");
+                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, "PredefinedTerms");
                 });
 
             }
