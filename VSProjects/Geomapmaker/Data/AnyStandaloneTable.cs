@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using System;
@@ -272,7 +273,7 @@ namespace Geomapmaker.Data
             // Return duplicates
             return allValues.GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
         }
-        
+
         /// <summary>
         /// Get dictinct values for a specific field from a standalone table
         /// </summary>
@@ -351,19 +352,25 @@ namespace Geomapmaker.Data
                                 QueryFilter queryFilter = new QueryFilter
                                 {
                                     WhereClause = whereClause,
-                                    //SubFields = $"{returnField}"
                                 };
 
-                                using (RowCursor rowCursor = table.Search(queryFilter))
+                                try
                                 {
-                                    while (rowCursor.MoveNext())
+                                    using (RowCursor rowCursor = table.Search(queryFilter))
                                     {
-                                        using (Row row = rowCursor.Current)
+                                        while (rowCursor.MoveNext())
                                         {
-                                            returnValue = row[returnField]?.ToString();
-                                            return;
+                                            using (Row row = rowCursor.Current)
+                                            {
+                                                returnValue = row[returnField]?.ToString();
+                                                return;
+                                            }
                                         }
                                     }
+                                }
+                                catch(Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message, "Something went wrong.");
                                 }
                             }
                         }
