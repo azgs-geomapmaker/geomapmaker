@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker._helpers;
 using Geomapmaker.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -146,41 +147,49 @@ namespace Geomapmaker.Data
                             WhereClause = "TYPE = 'Line'",
                             PostfixClause = "ORDER BY key"
                         };
-                        using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
+
+                        try
                         {
-                            while (rowCursor.MoveNext())
+                            using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
                             {
-                                using (Row row = rowCursor.Current)
+                                while (rowCursor.MoveNext())
                                 {
-                                    GemsSymbol cfS = new GemsSymbol
+                                    using (Row row = rowCursor.Current)
                                     {
-                                        Key = Helpers.RowValueToString(row["key"]),
-                                        Description = Helpers.RowValueToString(row["description"]),
-                                        SymbolJson = Helpers.RowValueToString(row["symbol"])
-                                    };
-
-                                    try
-                                    {
-                                        // Create the preview image used in the ComboBox
-                                        SymbolStyleItem sSI = new SymbolStyleItem()
+                                        GemsSymbol cfS = new GemsSymbol
                                         {
-                                            Symbol = CIMSymbolReference.FromJson(cfS.SymbolJson).Symbol,
-                                            PatchWidth = 250,
-                                            PatchHeight = 25,
-                                            SymbolPatchType = SymbolPatchType.HorizontalLine
+                                            Key = Helpers.RowValueToString(row["key"]),
+                                            Description = Helpers.RowValueToString(row["description"]),
+                                            SymbolJson = Helpers.RowValueToString(row["symbol"])
                                         };
-                                        cfS.Preview = sSI.PreviewImage;
 
-                                        // Add to list
-                                        cfSymbols.Add(cfS);
-                                    }
-                                    catch
-                                    {
-                                        // Invalid CIM Symbol JSON
-                                        Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                        try
+                                        {
+                                            // Create the preview image used in the ComboBox
+                                            SymbolStyleItem sSI = new SymbolStyleItem()
+                                            {
+                                                Symbol = CIMSymbolReference.FromJson(cfS.SymbolJson).Symbol,
+                                                PatchWidth = 250,
+                                                PatchHeight = 25,
+                                                SymbolPatchType = SymbolPatchType.HorizontalLine
+                                            };
+                                            cfS.Preview = sSI.PreviewImage;
+
+                                            // Add to list
+                                            cfSymbols.Add(cfS);
+                                        }
+                                        catch
+                                        {
+                                            // Invalid CIM Symbol JSON
+                                            Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                        }
                                     }
                                 }
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
                         }
                     }
                 }
@@ -221,41 +230,48 @@ namespace Geomapmaker.Data
                             PostfixClause = "ORDER BY key"
                         };
 
-                        using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
+                        try
                         {
-                            while (rowCursor.MoveNext())
+                            using (RowCursor rowCursor = enterpriseTable.Search(queryFilter))
                             {
-                                using (Row row = rowCursor.Current)
+                                while (rowCursor.MoveNext())
                                 {
-                                    GemsSymbol symbol = new GemsSymbol
+                                    using (Row row = rowCursor.Current)
                                     {
-                                        Key = Helpers.RowValueToString(row["key"]),
-                                        Description = Helpers.RowValueToString(row["description"]),
-                                        SymbolJson = Helpers.RowValueToString(row["symbol"])
-                                    };
-
-                                    try
-                                    {
-                                        // Create the preview image used in the ComboBox
-                                        SymbolStyleItem sSI = new SymbolStyleItem()
+                                        GemsSymbol symbol = new GemsSymbol
                                         {
-                                            Symbol = CIMSymbolReference.FromJson(symbol.SymbolJson).Symbol,
-                                            PatchWidth = 25,
-                                            PatchHeight = 25,
-                                            SymbolPatchType = SymbolPatchType.Default
+                                            Key = Helpers.RowValueToString(row["key"]),
+                                            Description = Helpers.RowValueToString(row["description"]),
+                                            SymbolJson = Helpers.RowValueToString(row["symbol"])
                                         };
-                                        symbol.Preview = sSI.PreviewImage;
 
-                                        // Add to list
-                                        orientationSymbols.Add(symbol);
-                                    }
-                                    catch
-                                    {
-                                        // Invalid CIM Symbol JSON
-                                        Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                        try
+                                        {
+                                            // Create the preview image used in the ComboBox
+                                            SymbolStyleItem sSI = new SymbolStyleItem()
+                                            {
+                                                Symbol = CIMSymbolReference.FromJson(symbol.SymbolJson).Symbol,
+                                                PatchWidth = 25,
+                                                PatchHeight = 25,
+                                                SymbolPatchType = SymbolPatchType.Default
+                                            };
+                                            symbol.Preview = sSI.PreviewImage;
+
+                                            // Add to list
+                                            orientationSymbols.Add(symbol);
+                                        }
+                                        catch
+                                        {
+                                            // Invalid CIM Symbol JSON
+                                            Debug.WriteLine("Error prrocessing CIM Symbol JSON");
+                                        }
                                     }
                                 }
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
                         }
                     }
                 }
@@ -277,7 +293,7 @@ namespace Geomapmaker.Data
             {
                 await RefreshCFSymbolOptionsAsync();
             }
-            
+
             // Get the symbol values from the CF layer
             List<string> cfSymbolValues = await AnyFeatureLayer.GetDistinctValuesForFieldAsync("ContactsAndFaults", "symbol");
 
