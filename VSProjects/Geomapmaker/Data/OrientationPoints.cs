@@ -140,7 +140,7 @@ namespace Geomapmaker.Data
             foreach (string key in TypeSymbolDict.Keys)
             {
                 // Get the symbol description 
-                string symbolDef = await AnyStandaloneTable.GetValueFromWhereClauseAsync("Symbology", $"Type = 'Point' AND Key_ = '{TypeSymbolDict[key]}'", "Description");
+                string symbolDef = await AnyStandaloneTable.GetValueFromWhereClauseAsync("Symbology", $"Type = 'Point' AND Key = '{TypeSymbolDict[key]}'", "Description");
 
                 undefinedTerms.Add(new GlossaryTerm()
                 {
