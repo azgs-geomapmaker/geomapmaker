@@ -1,9 +1,8 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Desktop.Core.Events;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Mapping.Events;
 using Geomapmaker.Models;
 using Geomapmaker.RibbonElements;
-using System;
 using System.Collections.Generic;
 
 namespace Geomapmaker
@@ -36,19 +35,16 @@ namespace Geomapmaker
 
         protected override bool Initialize()
         {
-            // Subscribe to active map changes
-            ActiveMapViewChangedEvent.Subscribe(MapViewActivateEvent);
+            // Subscribe to project closing
+            ProjectClosedEvent.Subscribe(OnProjectClosed);
+
             return true;
         }
 
-        // On active map changes 
-        private void MapViewActivateEvent(ActiveMapViewChangedEventArgs obj)
+        private void OnProjectClosed(ProjectEventArgs args)
         {
-            // Try to deselect the DatasourceID when a project changes,
-            // but this gets called whenever a table gets opened.
-
             // Clear the Datasource combo
-            //DataSourceComboBox?.ClearSelection();
+            DataSourceComboBox?.ClearSelection();
         }
     }
 }
