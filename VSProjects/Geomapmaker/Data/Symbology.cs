@@ -61,7 +61,7 @@ namespace Geomapmaker.Data
                 //
 
                 // List of required fields
-                List<string> symbologyRequiredFields = new List<string>() { "type", "key", "description", "symbol" };
+                List<string> symbologyRequiredFields = new List<string>() { "symbol_id", "symboltype", "key", "description", "symbol" };
 
                 // Get missing fields
                 List<string> missingFields = await AnyStandaloneTable.GetMissingFieldsAsync("Symbology", symbologyRequiredFields);
@@ -144,7 +144,7 @@ namespace Geomapmaker.Data
                     {
                         QueryFilter queryFilter = new QueryFilter
                         {
-                            WhereClause = "TYPE = 'Line'",
+                            WhereClause = "SymbolType = 'Line'",
                             PostfixClause = "ORDER BY key"
                         };
 
@@ -226,7 +226,7 @@ namespace Geomapmaker.Data
                     {
                         QueryFilter queryFilter = new QueryFilter
                         {
-                            WhereClause = "TYPE = 'Point'",
+                            WhereClause = "SymbolType = 'Point'",
                             PostfixClause = "ORDER BY key"
                         };
 
