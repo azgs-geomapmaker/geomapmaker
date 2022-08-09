@@ -1,10 +1,12 @@
-# AZGS GEOMAPMAKER SPECIFICATION v3.0
-This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geologic mapping toolbar for ESRI ArcPro (v2.x). This primary purpose of this toolbar is to seamlessly (and discretely) integrate compliance with the 2020 USGS [Geologic Map Schema](https://pubs.er.usgs.gov/publication/tm11B10) into the map digitization process.
+# AZGS GEOMAPMAKER v1.0 RELEASE
+This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geologic mapping toolbar for ESRI ArcPro (v2.9x). This primary purpose of this toolbar is to seamlessly (and discretely) integrate compliance with the 2020 USGS [Geologic Map Schema](https://pubs.er.usgs.gov/publication/tm11B10) into the map digitization process.
 
-## Critical Broad-Strokes Requirements
-- [x] Toolbar should be compatible with PostgreSQL ArcSDE for versioning support.
-- [ ] Must generate a GeMS validation REPORT that checks topology and other rules
-- [x] Maps must be exportable as a GeMs compliant ESRI File Geodatabase
+## Core Requirements
+The following *minimum* features are required for a functional toolbar. The toolbar may in many cases exceed the capabilities listed below.  
+
+- [x] Toolbar should be compatible with Arc Server Enterprise (ArcSDE) and flat ESRI File Geodatabase workflows.
+- [x] Must generate a GeMS validation REPORT.
+- [x] Maps must be exportable as a GeMs compliant ESRI File Geodatabase.
 - [x] Forms for adding features enforce appropriate constraints and vocabularies.
 - [x] Ability to transfer, select, and view from a pre-made list of symbologies.
 
@@ -17,9 +19,24 @@ This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geo
     4. [MAP UNITS (BUTTON)](#map-units-button)
     5. [HIERARCHY (BUTTON)](#hierarchy-button)
     6. [CONTACTS AND FAULTS (WORKFLOW)](#contacts-and-faults-workflow)
-    7. [CREATE SINGLE POLYGON (WORKFLOW)](#create-single-polygon-workflow)
-    8. [ASSIGN MULTIPLE MAP UNITS](#assign-multiple-map-units-workflow)
-    9. [STATIONS (BUTTON)](#stations-button)
+    7. [MAP UNIT POLYGONS (WORKFLOW)](#map-unit-polygons-workflow)
+        1. CREATE POLYGON(S) FROM CONTACTS
+        2. REASSIGN MAP UNIT OF POLYGON(S)
+    9. [ORIENTATION POINTS AND STATIONS (WORKFLOW)](#orientation-points-and-stations-workflow)
+    10.[GLOSSARY (BUTTON)](#glossary-button)
+    11.[TOOLS (BUTTON)](#tools-button)
+        1. [SET ALL PRIMARY KEYS]
+        2. [INSERT GLOSSARY TERMS]
+        3. [SET MAPUNIT VALUE FOR POINTS]
+        4. [ZERO-PAD SYMBOLS]
+        5. [ZERO-PAD HIERARCHY KEYS]
+        6. [GEOPACKAGE DATASET RENAME]
+        7. [LINE/POINT SYMBOL OPTIONS]
+        8. [MAPUNITPOLYS SYMBOLOGY AND TEMPLATES]
+        9. [CONTACTS FAULTS SYMBOLOGY]
+        10. [ORIENTATION POINTS SYMBOLOGY]
+    12. [REPORT]
+    13. [EXPORT]     
 3. GEMS TABLE DEFINITIONS
     1. [MAP UNIT POLYS](#map-unit-polys)
     2. [CONTACTS AND FAULTS](#contacts-and-faults)
@@ -28,23 +45,25 @@ This is the design specification for the [AZGS](https://azgs.arizona.edu/)'s geo
     5. [GLOSSARY](#glossary)
     6. [STATIONS](#stations)
     7. [ORIENTATION POINTS](#orientation-points)
-4. APPENDIX
-    1. [AGES](#ages)
+4. SUPPORTING TABLES
+    1. [SYMBOLOGY]
+    2. [GEOMATERIALSDICT]
+    3. [GLOSSARY TEMPLATES]
+5. SPECIAL CONSIDERATIONS
+    1. [HANDLING AGES](#ages)
     3. [SYMBOLOGY AND STYLES](#symbology-and-styles)
     4. [LOCATION CONFIDENCE METERS](#location-confidence-meters)
     5. [EXISTING GEMS TOOLS](#existing-gems-tools)
     6. [TOPOLOGY CHECKS](#topology-checks)
-    7. [HIERARCHY KEYS](#hierarchy-keys)
-    8. [AUTOMATED GLOSSARY](#autoamted-glossary)
-    9. [HELP BUTTONS](#help-buttons)
-    10. [UNIT IMPORT](#unit-import)
+    7. [OTHER GEMS TABLES](#other-gems-tables)
+    8. [FUTURE WORK](#future-work)
 
 ## Installation
 A simple demonstration installation is availabe in [/demo_installation](/demo_installation). This demo currently includes only the geomapmaker addin installation file (in [/geomapmaker_addin](/geomapmaker_addin). The addin can be installed by going to the addin-manager in the ArcPro Settings
 
 ![Screenshot 2022-05-27 at 12 39 44 PM](https://user-images.githubusercontent.com/10422595/170779059-11e84426-28e1-40a3-a458-556def262871.png)
 
-The addin manager will automatically work with any tables loaded into the currently active map that follow the GeMS namespace.
+The addin manager will automatically work with any tables loaded into the currently active map that follow the GeMS namespace - though see the (Symbology Table)[#] section for special considerations.
 
 ### Data Source (Dropdown)
 Users must select a data source from the dropdown menu before being able to proceed with other actions (other than creating a new data source user). The list of selectable datasources is drawn from the [DATA SOURCES](#datasources) table.
@@ -82,29 +101,23 @@ Once a template is created will appear in the ESRI ArcGIS Pro CREATE FEATURES pa
 
 Once a template is selected from the CREATE FEATURES pane it can then be used to draw lines on the map. Lines added in this way will automatically write to the [CONTACTS AND FAULTS](#contacts-and-faults) table.
 
-### Create Single Polygon (Workflow)
-Users can create a single mapunit polygon from the CREATE SINGLE POLYGON button. *This button is currently named Map Unit Polys, but will be renamed)*
+### MAP UNIT POLYGONS (WORKFLOW)
+As a method of passively enforcing GeMS topology rules and consistency with the [DESCRIPTION OF MAP UNITS](#description-of-map-units) table, the geomapmaker workflow purposefully discourages the hand-drawing of polygons. Rather, users are encouraged to follow a linear workflow where they 1) draw all of their contacts (and faults) using the [CONTACTS AND FAULTS](#contacts-and-faults-workflow) workflow and 2) also created and attributed all of their map units using the [MAP UNITS (BUTTON)](#map-units-button).
 
-This workflow assumes that users have ALREADY completed two previous actions.
-1. Users have already drawn the borders of the intended polygon using the [CONTACTS AND FAULTS](#contacts-and-faults-workflow) workflow.
-2. Users have already added the desired MAP UNIT to the [DESCRIPTION OF MAP UNITS](#description-of-map-units) table through the [MAP UNITS](#map-units-button) button).
+Once these preliminary steps are completed, users can use the relevant polygon borders and map unit using the CREATE POLYGON(S)FROM CONTACTS button. Simply select the borders surrounding the polygons 
 
-Users then select the relevant polygon borders and map unit using the create single polygon form.
+[INSERT SCREENSHOT AFTER NAME CHANGE IN LATEST VERSION]
 
-![Screenshot 2022-05-24 at 10 45 31 AM](https://user-images.githubusercontent.com/10422595/170099417-fc52690d-12e7-407b-8c21-0064458cbef9.png)
-
-### Assign Multiple Map Units (Workflow)
-*This workflow is currently being revised*
-
-### Create ALL Polygons (Button)
-This button creates all valid polygons based on the intersection of existing linework in the [CONTACTS AND FAULTS](#contacts-and-faults) table. It does not create duplicate polygons. These polygons are automatically assigned to a generic unit type named UNASSIGNED.
 
 ### Stations (Button)
-The Stations button in the toolbar will open a form for creating a new station.
+The Stations button in the toolbar opens a form for creating a new station. 
 
 ![Screenshot 2022-05-27 at 12 19 34 PM](https://user-images.githubusercontent.com/10422595/170776573-7f2ebd0d-ea53-4b67-961f-8ac3c488927d.png)
 
 ### Orientation Points (Workflow)
+The process for creating Orientation Points (pointwork) using geomapmaker consists of 1) line template creation and management and 2) editing the [CONTACTS AND FAULTS](#contacts-and-faults) table.
+
+The Contacts and Faults button in the toolbar will open a form for creating a new TEMPLATE.
 
 ### Validation (Workflow)
 *This workflow is currenlty being revised.)
