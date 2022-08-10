@@ -175,6 +175,8 @@ namespace Geomapmaker.ViewModels.DataSources
                 if (Selected.DataSource_ID != Id)
                 {
                     Data.DataSources.UpdateDataSourceForeignKeys(Selected.DataSource_ID, Id);
+
+                    GeomapmakerModule.DataSourceComboBox.ClearSelection();
                 }
 
                 ParentVM.CloseProwindow();
