@@ -199,7 +199,7 @@ namespace Geomapmaker.ViewModels.Headings
                 return;
             }
 
-            if (Selected.Name == Name && Selected.Description == Description)
+            if (Selected.Name == Name && Selected.Description == Description && Selected.DescriptionSourceID == DescriptionSourceID)
             {
                 _validationErrors[propertyKey] = new List<string>() { "No changes have been made." };
             }
@@ -218,7 +218,7 @@ namespace Geomapmaker.ViewModels.Headings
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (ParentVM.MapUnits.Where(a => a.ObjectID != Selected?.ObjectID).Any(a => a.Name.ToLower() == name?.ToLower()))
+            else if (ParentVM.MapUnits.Where(a => a?.ObjectID != Selected?.ObjectID).Any(a => a.Name?.ToLower() == name?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Name is taken." };
             }
