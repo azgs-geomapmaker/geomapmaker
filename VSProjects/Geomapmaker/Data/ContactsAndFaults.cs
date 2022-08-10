@@ -205,43 +205,51 @@ namespace Geomapmaker.Data
                     // Get CIMFeatureTemplate
                     CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
+                    Dictionary<string, string> defaultValues = new Dictionary<string, string>();
+
+                    // Rebuild the dictionary with lowercase keys to avoid casing-headaches
+                    foreach (KeyValuePair<string, object> row in templateDef.DefaultValues)
+                    {
+                        defaultValues.Add(row.Key?.ToLower(), row.Value?.ToString());
+                    }
+
                     ContactFaultTemplate tmpTemplate = new ContactFaultTemplate();
 
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "label"))
+                    if (defaultValues.ContainsKey("label"))
                     {
-                        tmpTemplate.Label = templateDef.DefaultValues["label"]?.ToString();
+                        tmpTemplate.Label = defaultValues["label"];
 
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "type"))
+                        if (defaultValues.ContainsKey("type"))
                         {
-                            tmpTemplate.Type = templateDef.DefaultValues["type"]?.ToString();
+                            tmpTemplate.Type = defaultValues["type"];
                         }
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "symbol"))
+                        if (defaultValues.ContainsKey("symbol"))
                         {
-                            tmpTemplate.Symbol = templateDef.DefaultValues["symbol"]?.ToString();
+                            tmpTemplate.Symbol = defaultValues["symbol"];
                         }
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "identityconfidence"))
+                        if (defaultValues.ContainsKey("identityconfidence"))
                         {
-                            tmpTemplate.IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString();
+                            tmpTemplate.IdentityConfidence = defaultValues["identityconfidence"];
                         }
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "existenceconfidence"))
+                        if (defaultValues.ContainsKey("existenceconfidence"))
                         {
-                            tmpTemplate.ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString();
+                            tmpTemplate.ExistenceConfidence = defaultValues["existenceconfidence"];
                         }
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "locationconfidencemeters"))
+                        if (defaultValues.ContainsKey("locationconfidencemeters"))
                         {
-                            tmpTemplate.LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString();
+                            tmpTemplate.LocationConfidenceMeters = defaultValues["locationconfidencemeters"];
                         }
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "isconcealed"))
+                        if (defaultValues.ContainsKey("isconcealed"))
                         {
-                            tmpTemplate.IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y";
+                            tmpTemplate.IsConcealed = defaultValues["isconcealed"] == "Y";
                         }
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "datasourceid"))
+                        if (defaultValues.ContainsKey("datasourceid"))
                         {
-                            tmpTemplate.DataSource = templateDef.DefaultValues["datasourceid"]?.ToString();
+                            tmpTemplate.DataSource = defaultValues["datasourceid"];
                         }
-                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "notes"))
+                        if (defaultValues.ContainsKey("notes"))
                         {
-                            tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
+                            tmpTemplate.Notes = defaultValues["notes"];
                         }
 
                         tmpTemplate.Template = template;
@@ -287,11 +295,11 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(async () =>
             {
-                // Get all CF templates except the default
-                List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
+            // Get all CF templates except the default
+            List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
 
-                // Remove existing symbols
-                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
+            // Remove existing symbols
+            layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
@@ -299,8 +307,8 @@ namespace Geomapmaker.Data
 
                     if (Symbol != null)
                     {
-                        // Add symbology for templates
-                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                    // Add symbology for templates
+                    AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
                     }
                 }
 
@@ -327,8 +335,8 @@ namespace Geomapmaker.Data
 
                                     if (Symbol != null)
                                     {
-                                        // Add symbology for existing CF polylines
-                                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                    // Add symbology for existing CF polylines
+                                    AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
                                     }
                                 }
                             }
@@ -367,18 +375,18 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-                //
-                // Update Renderer
-                //
+            //
+            // Update Renderer
+            //
 
-                CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
+            CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
 
                 CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
 
                 List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
 
-                // Check if the renderer already has symbology for that key
-                if (listUniqueValueClasses.Any(a => a.Label == key))
+            // Check if the renderer already has symbology for that key
+            if (listUniqueValueClasses.Any(a => a.Label == key))
                 {
                     return;
                 }
@@ -508,39 +516,39 @@ namespace Geomapmaker.Data
                                     {
                                         string originalSymbol = row["symbol"]?.ToString();
 
-                                        // Original symbol must be up of only digits and periods
-                                        if (originalSymbol.All(c => char.IsDigit(c) || c == '.'))
+                                    // Original symbol must be up of only digits and periods
+                                    if (originalSymbol.All(c => char.IsDigit(c) || c == '.'))
                                         {
                                             string[] splitSymbols = originalSymbol.Split('.');
 
                                             for (int i = 0; i < splitSymbols.Length; i++)
                                             {
-                                                // Parse the int
-                                                if (int.TryParse(splitSymbols[i], out int value))
+                                            // Parse the int
+                                            if (int.TryParse(splitSymbols[i], out int value))
                                                 {
-                                                    // Zero-pad 
-                                                    splitSymbols[i] = value.ToString("000");
+                                                // Zero-pad 
+                                                splitSymbols[i] = value.ToString("000");
                                                 };
                                             }
 
-                                            // Combine the zero-padded numbers
-                                            string paddedSymbol = string.Join(".", splitSymbols);
+                                        // Combine the zero-padded numbers
+                                        string paddedSymbol = string.Join(".", splitSymbols);
 
                                             if (originalSymbol != paddedSymbol)
                                             {
                                                 count++;
 
-                                                // In order to update the Map and/or the attribute table.
-                                                // Has to be called before any changes are made to the row.
-                                                context.Invalidate(row);
+                                            // In order to update the Map and/or the attribute table.
+                                            // Has to be called before any changes are made to the row.
+                                            context.Invalidate(row);
 
                                                 row["symbol"] = paddedSymbol;
 
-                                                // After all the changes are done, persist it.
-                                                row.Store();
+                                            // After all the changes are done, persist it.
+                                            row.Store();
 
-                                                // Has to be called after the store too.
-                                                context.Invalidate(row);
+                                            // Has to be called after the store too.
+                                            context.Invalidate(row);
                                             }
                                         }
                                     }
