@@ -160,7 +160,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedIdentityConfidence)
             {
-                undefinedTerms.Add(await PredefinedTerms .GetPrepopulatedDefinitionAsync("ContactsAndFaults", "IdentityConfidence", term));
+                undefinedTerms.Add(await PredefinedTerms.GetPrepopulatedDefinitionAsync("ContactsAndFaults", "IdentityConfidence", term));
             }
 
             return undefinedTerms;
@@ -205,26 +205,58 @@ namespace Geomapmaker.Data
                     // Get CIMFeatureTemplate
                     CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
-                    ContactFaultTemplate tmpTemplate = new ContactFaultTemplate()
-                    {
-                        Type = templateDef.DefaultValues["type"]?.ToString(),
-                        Label = templateDef.DefaultValues["label"]?.ToString(),
-                        Symbol = templateDef.DefaultValues["symbol"]?.ToString(),
-                        IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString(),
-                        ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString(),
-                        LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString(),
-                        IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y",
-                        DataSource = templateDef.DefaultValues["datasourceid"]?.ToString(),
-                        Template = template
-                    };
+                    Dictionary<string, string> defaultValues = new Dictionary<string, string>();
 
-                    // Notes is an optional field
-                    if (templateDef.DefaultValues.ContainsKey("notes"))
+                    // Rebuild the dictionary with lowercase keys to avoid casing-headaches
+                    foreach (KeyValuePair<string, object> row in templateDef.DefaultValues)
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
+                        defaultValues.Add(row.Key?.ToLower(), row.Value?.ToString());
                     }
 
-                    contactFaultTemplates.Add(tmpTemplate);
+                    ContactFaultTemplate tmpTemplate = new ContactFaultTemplate();
+
+                    if (defaultValues.ContainsKey("label"))
+                    {
+                        tmpTemplate.Label = defaultValues["label"];
+
+                        if (defaultValues.ContainsKey("type"))
+                        {
+                            tmpTemplate.Type = defaultValues["type"];
+                        }
+                        if (defaultValues.ContainsKey("symbol"))
+                        {
+                            tmpTemplate.Symbol = defaultValues["symbol"];
+                        }
+                        if (defaultValues.ContainsKey("identityconfidence"))
+                        {
+                            tmpTemplate.IdentityConfidence = defaultValues["identityconfidence"];
+                        }
+                        if (defaultValues.ContainsKey("existenceconfidence"))
+                        {
+                            tmpTemplate.ExistenceConfidence = defaultValues["existenceconfidence"];
+                        }
+                        if (defaultValues.ContainsKey("locationconfidencemeters"))
+                        {
+                            tmpTemplate.LocationConfidenceMeters = defaultValues["locationconfidencemeters"];
+                        }
+                        if (defaultValues.ContainsKey("isconcealed"))
+                        {
+                            tmpTemplate.IsConcealed = defaultValues["isconcealed"] == "Y";
+                        }
+                        if (defaultValues.ContainsKey("datasourceid"))
+                        {
+                            tmpTemplate.DataSource = defaultValues["datasourceid"];
+                        }
+                        if (defaultValues.ContainsKey("notes"))
+                        {
+                            tmpTemplate.Notes = defaultValues["notes"];
+                        }
+
+                        tmpTemplate.Template = template;
+
+                        contactFaultTemplates.Add(tmpTemplate);
+                    }
+
                 }
 
             });
@@ -263,11 +295,11 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(async () =>
             {
-                // Remove existing symbols
-                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
-
                 // Get all CF templates except the default
                 List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
+
+                // Remove existing symbols
+                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
@@ -367,10 +399,10 @@ namespace Geomapmaker.Data
 
                 CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                 {
-                    Editable = false,
+                    Editable = true,
                     Label = key,
                     Description = key,
-                    Patch = PatchShape.AreaPolygon,
+                    Patch = PatchShape.LineHorizontal,
                     Symbol = CIMSymbolReference.FromJson(symbolJson, null),
                     Visible = true,
                     Values = listUniqueValues,

@@ -434,11 +434,11 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             {
                 _validationErrors[propertyKey] = new List<string>() { "" };
             }
-            else if (Label.ToLower() == GeomapmakerModule.CF_SketchTemplateName.ToLower())
+            else if (Label?.ToLower() == GeomapmakerModule.CF_SketchTemplateName?.ToLower())
             {
                 _validationErrors[propertyKey] = new List<string>() { "Reserved template label." };
             }
-            else if (ParentVM.Templates.Any(a => a.Label.ToLower() == Label.ToLower()))
+            else if (ParentVM.Templates.Any(a => a.Label?.ToLower() == Label?.ToLower()))
             {
                 _validationErrors[propertyKey] = new List<string>() { "Label is taken." };
             }

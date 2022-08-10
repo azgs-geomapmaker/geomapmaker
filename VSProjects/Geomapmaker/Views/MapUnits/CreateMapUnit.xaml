@@ -129,7 +129,7 @@
             <wpftk:ColorPicker Grid.Row="15" Grid.Column="1" SelectedColor="{Binding Create.Color}" DisplayColorAndName="False" ShowDropDownButton="False" UsingAlphaChannel="False" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedColorText}" Margin="0,0,0,10" />
 
             <TextBlock Grid.Row="16" Grid.Column="1" Text="GeoMaterial" />
-            <ComboBox Grid.Row="17" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" SelectedValuePath="IndentedName" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" >
+            <ComboBox Grid.Row="17" Grid.Column="1" ItemsSource="{Binding Create.GeoMaterialOptions}" SelectedValue="{Binding Create.GeoMaterial}" SelectedValuePath="GeoMaterial" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem.Definition}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding IndentedName}" ToolTip="{Binding Definition}" />
