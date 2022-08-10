@@ -295,11 +295,11 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(async () =>
             {
-            // Get all CF templates except the default
-            List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
+                // Get all CF templates except the default
+                List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
 
-            // Remove existing symbols
-            layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
+                // Remove existing symbols
+                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
@@ -307,8 +307,8 @@ namespace Geomapmaker.Data
 
                     if (Symbol != null)
                     {
-                    // Add symbology for templates
-                    AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                        // Add symbology for templates
+                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
                     }
                 }
 
@@ -335,8 +335,8 @@ namespace Geomapmaker.Data
 
                                     if (Symbol != null)
                                     {
-                                    // Add symbology for existing CF polylines
-                                    AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
+                                        // Add symbology for existing CF polylines
+                                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
                                     }
                                 }
                             }
@@ -375,18 +375,18 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(() =>
             {
-            //
-            // Update Renderer
-            //
+                //
+                // Update Renderer
+                //
 
-            CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
+                CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
 
                 CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
 
                 List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
 
-            // Check if the renderer already has symbology for that key
-            if (listUniqueValueClasses.Any(a => a.Label == key))
+                // Check if the renderer already has symbology for that key
+                if (listUniqueValueClasses.Any(a => a.Label == key))
                 {
                     return;
                 }
@@ -399,10 +399,10 @@ namespace Geomapmaker.Data
 
                 CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                 {
-                    Editable = false,
+                    Editable = true,
                     Label = key,
                     Description = key,
-                    Patch = PatchShape.AreaPolygon,
+                    Patch = PatchShape.LineHorizontal,
                     Symbol = CIMSymbolReference.FromJson(symbolJson, null),
                     Visible = true,
                     Values = listUniqueValues,
@@ -516,39 +516,39 @@ namespace Geomapmaker.Data
                                     {
                                         string originalSymbol = row["symbol"]?.ToString();
 
-                                    // Original symbol must be up of only digits and periods
-                                    if (originalSymbol.All(c => char.IsDigit(c) || c == '.'))
+                                        // Original symbol must be up of only digits and periods
+                                        if (originalSymbol.All(c => char.IsDigit(c) || c == '.'))
                                         {
                                             string[] splitSymbols = originalSymbol.Split('.');
 
                                             for (int i = 0; i < splitSymbols.Length; i++)
                                             {
-                                            // Parse the int
-                                            if (int.TryParse(splitSymbols[i], out int value))
+                                                // Parse the int
+                                                if (int.TryParse(splitSymbols[i], out int value))
                                                 {
-                                                // Zero-pad 
-                                                splitSymbols[i] = value.ToString("000");
+                                                    // Zero-pad 
+                                                    splitSymbols[i] = value.ToString("000");
                                                 };
                                             }
 
-                                        // Combine the zero-padded numbers
-                                        string paddedSymbol = string.Join(".", splitSymbols);
+                                            // Combine the zero-padded numbers
+                                            string paddedSymbol = string.Join(".", splitSymbols);
 
                                             if (originalSymbol != paddedSymbol)
                                             {
                                                 count++;
 
-                                            // In order to update the Map and/or the attribute table.
-                                            // Has to be called before any changes are made to the row.
-                                            context.Invalidate(row);
+                                                // In order to update the Map and/or the attribute table.
+                                                // Has to be called before any changes are made to the row.
+                                                context.Invalidate(row);
 
                                                 row["symbol"] = paddedSymbol;
 
-                                            // After all the changes are done, persist it.
-                                            row.Store();
+                                                // After all the changes are done, persist it.
+                                                row.Store();
 
-                                            // Has to be called after the store too.
-                                            context.Invalidate(row);
+                                                // Has to be called after the store too.
+                                                context.Invalidate(row);
                                             }
                                         }
                                     }
