@@ -122,7 +122,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     LocationConfidenceMeters = Selected.LocationConfidenceMeters;
                     IsConcealed = Selected.IsConcealed;
                     Notes = Selected.Notes;
-                    DataSource = Selected.DataSource;
+                    DataSource = GeomapmakerModule.DataSourceId;
 
                     // Find CFSymbol from the key stored in symbol
                     Symbol = ParentVM.SymbolOptions.FirstOrDefault(a => a.Key == Selected.Symbol);
