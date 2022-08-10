@@ -160,7 +160,7 @@ namespace Geomapmaker.Data
 
             foreach (string term in undefinedIdentityConfidence)
             {
-                undefinedTerms.Add(await PredefinedTerms .GetPrepopulatedDefinitionAsync("ContactsAndFaults", "IdentityConfidence", term));
+                undefinedTerms.Add(await PredefinedTerms.GetPrepopulatedDefinitionAsync("ContactsAndFaults", "IdentityConfidence", term));
             }
 
             return undefinedTerms;
@@ -205,24 +205,46 @@ namespace Geomapmaker.Data
                     // Get CIMFeatureTemplate
                     CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
-                    ContactFaultTemplate tmpTemplate = new ContactFaultTemplate()
-                    {
-                        Type = templateDef.DefaultValues["type"]?.ToString(),
-                        Label = templateDef.DefaultValues["label"]?.ToString(),
-                        Symbol = templateDef.DefaultValues["symbol"]?.ToString(),
-                        IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString(),
-                        ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString(),
-                        LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString(),
-                        IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y",
-                        DataSource = templateDef.DefaultValues["datasourceid"]?.ToString(),
-                        Template = template
-                    };
+                    ContactFaultTemplate tmpTemplate = new ContactFaultTemplate();
 
-                    // Notes is an optional field
+                    if (templateDef.DefaultValues.ContainsKey("type"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["type"]?.ToString();
+                    }
+                    if (templateDef.DefaultValues.ContainsKey("label"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["label"]?.ToString();
+                    }
+                    if (templateDef.DefaultValues.ContainsKey("symbol"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["symbol"]?.ToString();
+                    }
+                    if (templateDef.DefaultValues.ContainsKey("identityconfidence"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["identityconfidence"]?.ToString();
+                    }
+                    if (templateDef.DefaultValues.ContainsKey("existenceconfidence"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["existenceconfidence"]?.ToString();
+                    }
+                    if (templateDef.DefaultValues.ContainsKey("locationconfidencemeters"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["locationconfidencemeters"]?.ToString();
+                    }
+                    if (templateDef.DefaultValues.ContainsKey("isconcealed"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["isconcealed"]?.ToString();
+                    }
+                    if (templateDef.DefaultValues.ContainsKey("datasourceid"))
+                    {
+                        tmpTemplate.Notes = templateDef.DefaultValues["datasourceid"]?.ToString();
+                    }
                     if (templateDef.DefaultValues.ContainsKey("notes"))
                     {
                         tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
                     }
+
+                    tmpTemplate.Template = template;
 
                     contactFaultTemplates.Add(tmpTemplate);
                 }
