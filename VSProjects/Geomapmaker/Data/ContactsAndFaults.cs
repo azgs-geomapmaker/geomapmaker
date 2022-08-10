@@ -207,46 +207,48 @@ namespace Geomapmaker.Data
 
                     ContactFaultTemplate tmpTemplate = new ContactFaultTemplate();
 
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "type"))
-                    {
-                        tmpTemplate.Type = templateDef.DefaultValues["type"]?.ToString();
-                    }
                     if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "label"))
                     {
                         tmpTemplate.Label = templateDef.DefaultValues["label"]?.ToString();
-                    }
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "symbol"))
-                    {
-                        tmpTemplate.Symbol = templateDef.DefaultValues["symbol"]?.ToString();
-                    }
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "identityconfidence"))
-                    {
-                        tmpTemplate.IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString();
-                    }
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "existenceconfidence"))
-                    {
-                        tmpTemplate.ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString();
-                    }
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "locationconfidencemeters"))
-                    {
-                        tmpTemplate.LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString();
-                    }
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "isconcealed"))
-                    {
-                        tmpTemplate.IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y";
-                    }
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "datasourceid"))
-                    {
-                        tmpTemplate.DataSource = templateDef.DefaultValues["datasourceid"]?.ToString();
-                    }
-                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "notes"))
-                    {
-                        tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
+
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "type"))
+                        {
+                            tmpTemplate.Type = templateDef.DefaultValues["type"]?.ToString();
+                        }
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "symbol"))
+                        {
+                            tmpTemplate.Symbol = templateDef.DefaultValues["symbol"]?.ToString();
+                        }
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "identityconfidence"))
+                        {
+                            tmpTemplate.IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString();
+                        }
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "existenceconfidence"))
+                        {
+                            tmpTemplate.ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString();
+                        }
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "locationconfidencemeters"))
+                        {
+                            tmpTemplate.LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString();
+                        }
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "isconcealed"))
+                        {
+                            tmpTemplate.IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y";
+                        }
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "datasourceid"))
+                        {
+                            tmpTemplate.DataSource = templateDef.DefaultValues["datasourceid"]?.ToString();
+                        }
+                        if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "notes"))
+                        {
+                            tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
+                        }
+
+                        tmpTemplate.Template = template;
+
+                        contactFaultTemplates.Add(tmpTemplate);
                     }
 
-                    tmpTemplate.Template = template;
-
-                    contactFaultTemplates.Add(tmpTemplate);
                 }
 
             });
