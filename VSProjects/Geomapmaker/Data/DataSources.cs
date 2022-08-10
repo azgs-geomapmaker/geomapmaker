@@ -431,9 +431,8 @@ namespace Geomapmaker.Data
                     {
                         CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
 
-                        if (templateDef.DefaultValues["datasourceid"]?.ToString() == originalDataSourceID)
+                        if ((bool)(templateDef.DefaultValues?.Keys?.Any(a => a?.ToLower() == "datasourceid")))
                         {
-                            // Update datasourceid
                             templateDef.DefaultValues["datasourceid"] = newDataSourceID;
 
                             template.SetDefinition(templateDef);
