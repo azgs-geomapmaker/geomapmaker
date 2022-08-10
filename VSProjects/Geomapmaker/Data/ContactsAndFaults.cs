@@ -207,39 +207,39 @@ namespace Geomapmaker.Data
 
                     ContactFaultTemplate tmpTemplate = new ContactFaultTemplate();
 
-                    if (templateDef.DefaultValues.ContainsKey("type"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "type"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["type"]?.ToString();
+                        tmpTemplate.Type = templateDef.DefaultValues["type"]?.ToString();
                     }
-                    if (templateDef.DefaultValues.ContainsKey("label"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "label"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["label"]?.ToString();
+                        tmpTemplate.Label = templateDef.DefaultValues["label"]?.ToString();
                     }
-                    if (templateDef.DefaultValues.ContainsKey("symbol"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "symbol"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["symbol"]?.ToString();
+                        tmpTemplate.Symbol = templateDef.DefaultValues["symbol"]?.ToString();
                     }
-                    if (templateDef.DefaultValues.ContainsKey("identityconfidence"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "identityconfidence"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["identityconfidence"]?.ToString();
+                        tmpTemplate.IdentityConfidence = templateDef.DefaultValues["identityconfidence"]?.ToString();
                     }
-                    if (templateDef.DefaultValues.ContainsKey("existenceconfidence"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "existenceconfidence"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["existenceconfidence"]?.ToString();
+                        tmpTemplate.ExistenceConfidence = templateDef.DefaultValues["existenceconfidence"]?.ToString();
                     }
-                    if (templateDef.DefaultValues.ContainsKey("locationconfidencemeters"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "locationconfidencemeters"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["locationconfidencemeters"]?.ToString();
+                        tmpTemplate.LocationConfidenceMeters = templateDef.DefaultValues["locationconfidencemeters"]?.ToString();
                     }
-                    if (templateDef.DefaultValues.ContainsKey("isconcealed"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "isconcealed"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["isconcealed"]?.ToString();
+                        tmpTemplate.IsConcealed = templateDef.DefaultValues["isconcealed"]?.ToString() == "Y";
                     }
-                    if (templateDef.DefaultValues.ContainsKey("datasourceid"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "datasourceid"))
                     {
-                        tmpTemplate.Notes = templateDef.DefaultValues["datasourceid"]?.ToString();
+                        tmpTemplate.DataSource = templateDef.DefaultValues["datasourceid"]?.ToString();
                     }
-                    if (templateDef.DefaultValues.ContainsKey("notes"))
+                    if (templateDef.DefaultValues.Any(a => a.Key?.ToLower() == "notes"))
                     {
                         tmpTemplate.Notes = templateDef.DefaultValues["notes"]?.ToString();
                     }
@@ -285,11 +285,11 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(async () =>
             {
-                // Remove existing symbols
-                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
-
                 // Get all CF templates except the default
                 List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
+
+                // Remove existing symbols
+                layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
                 foreach (ContactFaultTemplate template in cfTemplates)
                 {
