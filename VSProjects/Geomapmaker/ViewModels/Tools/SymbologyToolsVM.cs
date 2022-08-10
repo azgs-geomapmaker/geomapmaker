@@ -6,8 +6,6 @@ namespace Geomapmaker.ViewModels.Tools
 {
     public class SymbologyToolsVM
     {
-        public ICommand CommandCIMSymbols => new RelayCommand(() => RebuildCIMSymbols());
-
         public ICommand CommandMups => new RelayCommand(() => RebuildMUPSymbologyAndTemplates());
 
         public ICommand CommandCf => new RelayCommand(() => RebuildContactsFaultsSymbology());
@@ -21,28 +19,23 @@ namespace Geomapmaker.ViewModels.Tools
             ParentVM = parentVM;
         }
 
-        public async void RebuildCIMSymbols()
-        {
-            ParentVM.CloseProwindow();
-            await Symbology.RefreshCFSymbolOptionsAsync();
-            await Symbology.RefreshOPSymbolOptionsAsync();
-        }
-
         public void RebuildMUPSymbologyAndTemplates()
         {
             ParentVM.CloseProwindow();
             MapUnitPolys.RebuildMUPSymbologyAndTemplates();
         }
 
-        public void RebuildContactsFaultsSymbology()
+        public async void RebuildContactsFaultsSymbology()
         {
             ParentVM.CloseProwindow();
+            await Symbology.RefreshCFSymbolOptionsAsync();
             ContactsAndFaults.RebuildContactsFaultsSymbology();
         }
 
-        public void RebuildOrientationPointsSymbology()
+        public async void RebuildOrientationPointsSymbology()
         {
             ParentVM.CloseProwindow();
+            await Symbology.RefreshOPSymbolOptionsAsync();
             Data.OrientationPoints.RebuildOrientationPointsSymbology();
         }
     }
