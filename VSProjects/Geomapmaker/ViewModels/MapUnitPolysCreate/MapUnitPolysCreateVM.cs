@@ -138,8 +138,8 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
 
                 CIMFeatureTemplate templateDef = tmpTemplate.GetDefinition() as CIMFeatureTemplate;
 
-                templateDef.DefaultValues["IdentityConfidence"] = IdentityConfidence;
-                templateDef.DefaultValues["Notes"] = Notes;
+                templateDef.DefaultValues["identityconfidence"] = IdentityConfidence;
+                templateDef.DefaultValues["notes"] = Notes;
 
                 tmpTemplate.SetDefinition(templateDef);
 
