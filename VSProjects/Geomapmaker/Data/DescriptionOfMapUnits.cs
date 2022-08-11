@@ -366,7 +366,7 @@ namespace Geomapmaker.Data
             foreach (string geo in dmuGeoMaterials)
             {
                 // Check GeoMaterialDict for value
-                if (!GeoMaterialDict.GeoMaterialOptions.Any(a => a.IndentedName == geo))
+                if (!GeoMaterialDict.GeoMaterialOptions.Any(a => a.GeoMaterial == geo))
                 {
                     missingGeoMaterial.Add(geo);
                 }
