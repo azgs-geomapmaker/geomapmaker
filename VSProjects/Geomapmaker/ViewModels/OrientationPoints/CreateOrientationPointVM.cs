@@ -44,13 +44,23 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             IdentityConfidence = "";
         }
 
-        private bool _prepopulate;
-        public bool Prepopulate
+        public void PopulateCoordinates(MapPoint mp)
         {
-            get => _prepopulate;
+            SpatialReferenceWkid = mp?.SpatialReference?.Wkid.ToString();
+            XCoordinate = mp?.X.ToString(); ;
+            YCoordinate = mp?.Y.ToString(); ;
+
+            // Turn off the toggle button
+            Populate = false;
+        }
+
+        private bool _populate;
+        public bool Populate
+        {
+            get => _populate;
             set
             {
-                SetProperty(ref _prepopulate, value, () => Prepopulate);
+                SetProperty(ref _populate, value, () => Populate);
 
                 // if the toggle-btn is active
                 if (value)
