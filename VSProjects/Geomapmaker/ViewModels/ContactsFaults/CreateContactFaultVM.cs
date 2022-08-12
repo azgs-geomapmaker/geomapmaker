@@ -89,12 +89,6 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     layer.RemoveTemplate(GeomapmakerModule.CF_SketchTemplateName);
                 }
 
-                if (currentTemplates.Any(a => a.Name == "ContactsAndFaults"))
-                {
-                    // Remove the default template
-                    layer.RemoveTemplate("ContactsAndFaults");
-                }
-
                 //
                 // Create the temp Template
                 //
@@ -148,12 +142,6 @@ namespace Geomapmaker.ViewModels.ContactsFaults
             await QueuedTask.Run(async () =>
             {
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
-
-                if (currentTemplates.Any(a => a.Name == "ContactsAndFaults"))
-                {
-                    // Remove the default template
-                    layer.RemoveTemplate("ContactsAndFaults");
-                }
 
                 //
                 // Create New Contact Fault Template
