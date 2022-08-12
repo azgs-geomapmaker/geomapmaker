@@ -253,7 +253,11 @@ namespace Geomapmaker.Data
                 // Update Renderer
                 //
 
-                List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
+                CIMUniqueValueRenderer layerRenderer = layer.GetRenderer() as CIMUniqueValueRenderer;
+
+                CIMUniqueValueGroup layerGroup = layerRenderer?.Groups?.FirstOrDefault();
+
+                List<CIMUniqueValueClass> listUniqueValueClasses = layerGroup == null ? new List<CIMUniqueValueClass>() : new List<CIMUniqueValueClass>(layerGroup.Classes);
 
                 CIMUniqueValue[] listUniqueValues = new CIMUniqueValue[] {
                         new CIMUniqueValue {

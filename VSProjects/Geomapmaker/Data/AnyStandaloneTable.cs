@@ -370,7 +370,8 @@ namespace Geomapmaker.Data
                                 }
                                 catch(Exception ex)
                                 {
-                                    MessageBox.Show(ex.Message, "Something went wrong.");
+                                    string error = ex.Message + " WhereClause: " + whereClause;
+                                    //MessageBox.Show(error, "Something went wrong.");
                                 }
                             }
                         }
