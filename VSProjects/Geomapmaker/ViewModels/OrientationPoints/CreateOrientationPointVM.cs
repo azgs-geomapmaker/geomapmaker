@@ -44,6 +44,29 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             IdentityConfidence = "";
         }
 
+        private bool _prepopulate;
+        public bool Prepopulate
+        {
+            get => _prepopulate;
+            set
+            {
+                SetProperty(ref _prepopulate, value, () => Prepopulate);
+
+                // if the toggle-btn is active
+                if (value)
+                {
+                    // Active the populate tool
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateOPCoordinate");
+                }
+                else
+                {
+                    // Switch back to map explore tool
+                    FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+                }
+            }
+        }
+
+
         private bool CanSave()
         {
             return !HasErrors;

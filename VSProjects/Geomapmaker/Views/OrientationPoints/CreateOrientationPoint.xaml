@@ -88,7 +88,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <ToggleButton Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Coordinate Tool" IsChecked="{Binding Create.GetCoordinates, UpdateSourceTrigger=PropertyChanged}" >
+                            <ToggleButton Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Coordinate Tool" IsChecked="{Binding Create.Prepopulate, UpdateSourceTrigger=PropertyChanged}" >
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                                         <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
