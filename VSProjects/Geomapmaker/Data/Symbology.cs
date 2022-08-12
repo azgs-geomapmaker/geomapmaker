@@ -61,7 +61,7 @@ namespace Geomapmaker.Data
                 //
 
                 // List of required fields
-                List<string> symbologyRequiredFields = new List<string>() { "symbol_id", "symboltype", "key", "description", "symbol" };
+                List<string> symbologyRequiredFields = new List<string>() { "symbology_id", "symboltype", "key", "description", "symbol" };
 
                 // Get missing fields
                 List<string> missingFields = await AnyStandaloneTable.GetMissingFieldsAsync("Symbology", symbologyRequiredFields);
