@@ -295,6 +295,11 @@ namespace Geomapmaker.Data
 
             await QueuedTask.Run(async () =>
             {
+                // Prevent default templates from generating 
+                CIMBasicFeatureLayer layerDef = layer.GetDefinition() as CIMBasicFeatureLayer;
+                layerDef.AutoGenerateFeatureTemplates = false;
+                layer.SetDefinition(layerDef);
+
                 // Get all CF templates except the default
                 List<ContactFaultTemplate> cfTemplates = await GetContactFaultTemplatesAsync(false);
 
