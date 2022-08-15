@@ -37,21 +37,21 @@
 
                 <Expander Grid.Row="1" Grid.Column="1" Header="MapUnitPolys Symbology and Templates">
                     <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
-
+                        Rebuild the symbology and templates for MapUnitPolys using the DescriptionOfMapUnits table.
                     </TextBlock>
                 </Expander>
                 <Button Grid.Row="1" Grid.Column="2" Command="{Binding SymbologyTools.CommandMups}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Rebuild</Button>
 
                 <Expander Grid.Row="2" Grid.Column="1" Header="Contacts Faults Symbology">
                     <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        Rebuild the symbology for ContactsAndFaults using the Symbology table.
                     </TextBlock>
                 </Expander>
                 <Button Grid.Row="2" Grid.Column="2" Command="{Binding SymbologyTools.CommandCf}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Rebuild</Button>
 
                 <Expander Grid.Row="3" Grid.Column="1" Header="Orientation Points Symbology">
                     <TextBlock Margin="15,0,0,15" TextWrapping="Wrap">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        Rebuild the symbology for OrientationPoints using the Symbology table.
                     </TextBlock>
                 </Expander>
                 <Button Grid.Row="3" Grid.Column="2" Command="{Binding SymbologyTools.CommandOp}" MaxHeight="21" VerticalAlignment="Top" Style="{DynamicResource Esri_Button}" >Rebuild</Button>
