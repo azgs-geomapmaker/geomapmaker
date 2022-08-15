@@ -105,13 +105,13 @@
                             </ToggleButton>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Text="Coordinate System WKID" />
-                            <TextBox Margin="0,0,5,10" Grid.Row="2" Grid.Column="0" Text="{Binding Create.SpatialReferenceWkid, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Create.SpatialReferenceWkid, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,10" />
 
                             <TextBlock Grid.Row="1" Grid.Column="1" Text="Coordinate System" />
                             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Create.SpatialReferenceName, Mode=OneWay}" IsEnabled="False" IsReadOnly="True" />
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Text="X Coordinate" />
-                            <TextBox Margin="0,0,5,10"  Grid.Row="4" Grid.Column="0" Text="{Binding Create.XCoordinate, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding Create.XCoordinate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,10" />
 
                             <TextBlock Grid.Row="3" Grid.Column="1" Text="Y Coordinate" />
                             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Create.YCoordinate, UpdateSourceTrigger=PropertyChanged}" />

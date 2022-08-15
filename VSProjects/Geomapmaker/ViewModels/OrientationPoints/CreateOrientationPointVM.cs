@@ -76,7 +76,6 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
         }
 
-
         private bool CanSave()
         {
             return !HasErrors;
