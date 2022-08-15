@@ -30,7 +30,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TabControl Grid.Row="0" Grid.Column="0">
+        <TabControl Grid.Row="0" Grid.Column="0" SelectedIndex="{Binding SelectedTabIndex}" >
             <TabItem Header="Create" >
                 <tabData:CreateStation />
             </TabItem>

@@ -26,6 +26,9 @@ namespace Geomapmaker.ViewModels.Stations
         public EditStationVM Edit { get; set; }
         public DeleteStationVM Delete { get; set; }
 
+        // Bound to TabControl's selected index
+        public int SelectedTabIndex { get; set; }
+
         public StationsViewModel()
         {
             Create = new CreateStationVM(this);

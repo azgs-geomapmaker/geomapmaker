@@ -94,6 +94,11 @@
             Tooltip text<disabledText />
           </tooltip>
         </tool>
+        <tool id="Geomapmaker_PopulateStationCoordinate" caption="PopulateStationCoordinate" className="Geomapmaker.MapTools.PopulateStationCoordinate" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="todo">
+          <tooltip heading="Tooltip Heading">
+            Tooltip text<disabledText />
+          </tooltip>
+        </tool>
         <tool id="Geomapmaker_SelectContactsFaultsTool" caption="SelectContactsFaultsTool" className="Geomapmaker.MapTools.SelectContactsFaultsTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="todo" condition="esri_mapping_mapPane">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText /></tooltip>

@@ -18,7 +18,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
         public event EventHandler WindowCloseEvent;
 
         public ICommand CommandCancel => new RelayCommand(() => CloseProwindow());
-        
+
         public ICommand CommandRefreshSymbols => new RelayCommand(() => RefreshSymbologyOptions());
 
         public void CloseProwindow()
@@ -134,7 +134,12 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 _orientationpoints.orientationPointsViewModelVM.GetOptions();
             }, ps.Progressor);
 
-            _orientationpoints.Closed += (o, e) => { _orientationpoints = null; };
+            _orientationpoints.Closed += (o, e) =>
+            {
+                // Switch back to map explore tool
+                FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+                _orientationpoints = null;
+            };
 
             _orientationpoints.orientationPointsViewModelVM.WindowCloseEvent += (s, e) => _orientationpoints.Close();
 
