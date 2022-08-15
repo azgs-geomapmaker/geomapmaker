@@ -52,6 +52,38 @@ namespace Geomapmaker.ViewModels.Stations
             }
         }
 
+        public void PopulateCoordinates(MapPoint mp)
+        {
+            SpatialReferenceWkid = mp?.SpatialReference?.Wkid.ToString();
+            XCoordinate = mp?.X.ToString(); ;
+            YCoordinate = mp?.Y.ToString(); ;
+
+            // Turn off the toggle button
+            Populate = false;
+        }
+
+        private bool _populate;
+        public bool Populate
+        {
+            get => _populate;
+            set
+            {
+                SetProperty(ref _populate, value, () => Populate);
+
+                // if the toggle-btn is active
+                if (value)
+                {
+                    // Active the populate tool
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateStationCoordinate");
+                }
+                else
+                {
+                    // Switch back to map explore tool
+                    FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+                }
+            }
+        }
+
         public string Visibility => Selected == null ? "Hidden" : "Visible";
 
         private string _fieldID;
