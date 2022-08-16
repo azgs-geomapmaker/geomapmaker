@@ -194,6 +194,7 @@ namespace Geomapmaker.Data
 
                         QueryFilter queryFilter = new QueryFilter
                         {
+                            WhereClause = "symbol IS NOT NULL",
                             PrefixClause = "DISTINCT",
                             PostfixClause = "ORDER BY symbol",
                             SubFields = "symbol"
