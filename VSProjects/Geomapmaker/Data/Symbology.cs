@@ -29,7 +29,9 @@ namespace Geomapmaker.Data
                 new ValidationRule{ Description="No duplicate tables."},
                 new ValidationRule{ Description="No missing fields."},
                 new ValidationRule{ Description="No missing ContactsAndFaults symbols"},
+                new ValidationRule{ Description="No duplicate ContactsAndFaults symbols"},
                 new ValidationRule{ Description="No missing OrientationPoints symbols"},
+                new ValidationRule{ Description="No duplicate OrientationPoints symbols"}
             };
 
             if (await AnyStandaloneTable.DoesTableExistsAsync("Symbology") == false)
@@ -81,7 +83,7 @@ namespace Geomapmaker.Data
                 //
                 // Check for any missing CF symbols
                 //
-                List<string> missingCFsymbols = await Symbology.GetMissingContactsAndFaultsSymbologyAsync();
+                List<string> missingCFsymbols = await GetMissingContactsAndFaultsSymbologyAsync();
                 if (missingCFsymbols.Count == 0)
                 {
                     results[3].Status = ValidationStatus.Passed;
@@ -96,19 +98,53 @@ namespace Geomapmaker.Data
                 }
 
                 //
-                // Check for any missing OP symbols
+                // Check for any duplicate CF symbols
                 //
-                List<string> missingOPsymbols = await Symbology.GetMissingOrientationPointsSymbologyAsync();
-                if (missingOPsymbols.Count == 0)
+                List<string> duplicateCFsymbols = await GetDuplicateContactsAndFaultsSymbologyAsync();
+                if (duplicateCFsymbols.Count == 0)
                 {
                     results[4].Status = ValidationStatus.Passed;
                 }
                 else
                 {
                     results[4].Status = ValidationStatus.Failed;
+                    foreach (string key in duplicateCFsymbols)
+                    {
+                        results[4].Errors.Add($"Duplicate line symbology: {key}");
+                    }
+                }
+
+                //
+                // Check for any missing OP symbols
+                //
+                List<string> missingOPsymbols = await GetMissingOrientationPointsSymbologyAsync();
+                if (missingOPsymbols.Count == 0)
+                {
+                    results[5].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[5].Status = ValidationStatus.Failed;
                     foreach (string key in missingOPsymbols)
                     {
-                        results[4].Errors.Add($"Missing point symbology: {key}");
+                        results[5].Errors.Add($"Missing point symbology: {key}");
+                    }
+                }
+
+                //
+                // Check for any duplicate OP symbols
+                //
+                List<string> duplicateOPsymbols = await GetDuplicateOrientationPointsSymbologyAsync();
+                if (duplicateOPsymbols.Count == 0)
+                {
+                    results[6].Status = ValidationStatus.Passed;
+                }
+                else
+                {
+                    results[6].Status = ValidationStatus.Failed;
+                    foreach (string key in duplicateOPsymbols)
+                    {
+                        results[6].Errors.Add($"Duplicate point symbology: {key}");
                     }
                 }
             }
@@ -311,6 +347,23 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
+        /// Check for any duplicate line symbols in the symbology table
+        /// </summary>
+        /// <returns>List of duplicate symbology keys</returns>
+        public static async Task<List<string>> GetDuplicateContactsAndFaultsSymbologyAsync()
+        {
+            List<string> duplicateSymbol = new List<string>();
+
+            // Check if the ContactsAndFaultsSymbols have been processed
+            if (GeomapmakerModule.ContactsAndFaultsSymbols == null)
+            {
+                await RefreshCFSymbolOptionsAsync();
+            }
+
+            return GeomapmakerModule.ContactsAndFaultsSymbols.Select(a => a.Key).GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+        }
+
+        /// <summary>
         /// Check for any missing point symbols in the symbology table
         /// </summary>
         /// <returns>List of missing symbology keys</returns>
@@ -338,6 +391,23 @@ namespace Geomapmaker.Data
             }
 
             return missingSymbol;
+        }
+
+        /// <summary>
+        /// Check for any duplicate point symbols in the symbology table
+        /// </summary>
+        /// <returns>List of duplicate symbology keys</returns>
+        public static async Task<List<string>> GetDuplicateOrientationPointsSymbologyAsync()
+        {
+            List<string> duplicateSymbol = new List<string>();
+
+            // Check if the OrientationPoints have been processed
+            if (GeomapmakerModule.OrientationPointSymbols == null)
+            {
+                await RefreshOPSymbolOptionsAsync();
+            }
+
+            return GeomapmakerModule.OrientationPointSymbols.Select(a => a.Key).GroupBy(a => a).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
         }
     }
 }
