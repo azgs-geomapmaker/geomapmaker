@@ -306,23 +306,14 @@ namespace Geomapmaker.Data
                 // Remove existing symbols
                 layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
-                foreach (ContactFaultTemplate template in cfTemplates)
-                {
-                    GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == template.Symbol);
-
-                    if (Symbol != null)
-                    {
-                        // Add symbology for templates
-                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
-                    }
-                }
-
+                // Add renderer for symbol values in the CF table
                 using (Table table = layer.GetTable())
                 {
                     if (table != null)
                     {
                         QueryFilter queryFilter = new QueryFilter
                         {
+                            WhereClause = "symbol IS NOT NULL",
                             PrefixClause = "DISTINCT",
                             PostfixClause = "ORDER BY symbol",
                             SubFields = "symbol"
@@ -346,6 +337,18 @@ namespace Geomapmaker.Data
                                 }
                             }
                         }
+                    }
+                }
+
+                // Add renderer for symbols in the templates
+                foreach (ContactFaultTemplate template in cfTemplates)
+                {
+                    GemsSymbol Symbol = SymbolOptions.FirstOrDefault(a => a.Key == template.Symbol);
+
+                    if (Symbol != null)
+                    {
+                        // Add symbology for templates
+                        AddSymbolToRenderer(Symbol.Key, Symbol.SymbolJson);
                     }
                 }
 
