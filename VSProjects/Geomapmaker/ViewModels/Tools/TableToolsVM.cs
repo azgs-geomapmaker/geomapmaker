@@ -187,16 +187,20 @@ namespace Geomapmaker.ViewModels.Tools
 
             try
             {
+                // Download the csv 
                 using (WebClient client = new WebClient())
                 {
                     await client.DownloadFileTaskAsync(predefinedTermsCsvUrl, savePath);
                 }
 
+                // Import csv into project
                 await QueuedTask.Run(() =>
                 {
                     StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, "PredefinedTerms");
                 });
 
+                // Refresh symbols
+                await Data.Symbology.RefreshOPSymbolOptionsAsync();
             }
             catch (Exception ex)
             {
