@@ -172,6 +172,9 @@ namespace Geomapmaker.ViewModels.Tools
                     StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, "Symbology");
                 });
 
+                // Clear out symbols
+                GeomapmakerModule.ContactsAndFaultsSymbols = null;
+                GeomapmakerModule.OrientationPointSymbols = null;
             }
             catch (Exception ex)
             {
@@ -199,8 +202,6 @@ namespace Geomapmaker.ViewModels.Tools
                     StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, "PredefinedTerms");
                 });
 
-                // Refresh symbols
-                await Data.Symbology.RefreshOPSymbolOptionsAsync();
             }
             catch (Exception ex)
             {

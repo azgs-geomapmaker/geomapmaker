@@ -1,2 +1,8 @@
 ﻿DatasetName,FieldName,Term,Definition
-DescriptionOfMapUnits,ParagraphStyle,Heading,Heading Definition
+DescriptionOfMapUnits,GeoMaterialConfidence,Certain,"Identity of a feature can be determined using relevant observations and scientific judgment; therefore, one can be reasonably confident in the credibility of this interpretation."
+DescriptionOfMapUnits,GeoMaterialConfidence,Questionable,"Identity of a feature cannot be determined using relevant observations and scientific judgment; therefore, one cannot be reasonably confident in the credibility of this interpretation. For example, IdentityConfidence = questionable is appropriate when a geologist reasons “I can see some kind of planar feature that separates map units in this outcrop, but I cannot be certain if it is a contact or a fault.”"
+DescriptionOfMapUnits,ParagraphStyle,Heading,"Used to organize and identify groups of units. Beneath each heading, each map unit is described in order of increasing age; thus, the upper member of a formation would be described before its middle or lower members."
+DescriptionOfMapUnits,ParagraphStyle,Standard,A map unit within the Description of Map Units.
+DescriptionOfMapUnits,GeoMaterialConfidence,High ,"High confidence means that this determination or geologic interpretation is supported by multiple data points, is axiomatic in nature, is the best of all available choices, or is otherwise believed to be true by the authors."
+DescriptionOfMapUnits,GeoMaterialConfidence,Medium,"Medium confidence means that this determination or geologic interpreation is supported by one or more data points, but there may also be data supporting one or more alternative hypotheses."
+DescriptionOfMapUnits,GeoMaterialConfidence,Low,Low confidence means that there is too little information availble to assess the accuracy of this geologic interpretation.
