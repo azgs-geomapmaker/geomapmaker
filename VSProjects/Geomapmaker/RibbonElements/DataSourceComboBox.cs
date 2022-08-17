@@ -41,6 +41,7 @@ namespace Geomapmaker.RibbonElements
         {
             if (string.IsNullOrEmpty(text))
             {
+                GeomapmakerModule.DataSourceId = null;
                 FrameworkApplication.State.Deactivate("datasource_selected");
             }
             else
