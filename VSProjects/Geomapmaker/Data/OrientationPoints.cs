@@ -292,7 +292,7 @@ namespace Geomapmaker.Data
                 };
 
                 // Rotate the symbol based on the Azimuth value
-                var cimExpressionInfoZ = new CIMExpressionInfo { Expression = "$feature.Azimuth" };
+                var cimExpressionInfoZ = new CIMExpressionInfo { Expression = "$feature.Azimuth - 90" };
 
                 var cimVisualVariableInfoZ = new CIMVisualVariableInfo { VisualVariableInfoType = VisualVariableInfoType.Expression, ValueExpressionInfo = cimExpressionInfoZ };
 
