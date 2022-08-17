@@ -71,19 +71,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     insp["notes"] = Notes;
                 }
 
-                // Set up tags
-                string[] tags = new[] { "ContactFault" };
-
-                // Default construction tool - use daml-id
-                string defaultTool = "esri_editing_LineConstructor";
-
-                // TODO remove tools below 
-                // filter - use daml-id
-                List<string> filter = new List<string>();
-                //filter.Add("esri_editing_ConstructPointsAlongLineCommand");
-
                 // Create CIM template 
-                EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp, defaultTool, tags, filter.ToArray());
+                EditingTemplate newTemplate = layer.CreateTemplate(Label, Symbol.Description, insp);
             });
 
             // Add new symbology if needed. Remove old symbology if needed.
