@@ -66,27 +66,27 @@
             Select a Data Source to edit the map.<disabledText />
           </tooltip>
         </comboBox>
-        <button id="Geomapmaker_DataSources" caption="Data Sources" className="Geomapmaker.ViewModels.DataSources.ShowDataSources" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" keytip="">
+        <button id="Geomapmaker_DataSources" caption="Data Sources" className="Geomapmaker.ViewModels.DataSources.ShowDataSources" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableOpen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableOpen32.png" keytip="">
           <tooltip heading="Data Sources">
             Manage Data Sources.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGrey16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGrey32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Headings" caption="Headings" className="Geomapmaker.ViewModels.Headings.ShowHeadings" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableOpen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableOpen32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Headings">
             Manage Headings in the DescriptionOfMapUnits table.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_MapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.ShowMapUnits" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonOrange16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonOrange32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_MapUnits" caption="Map Units" className="Geomapmaker.ViewModels.MapUnits.ShowMapUnits" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableOpen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableOpen32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Map Units">
             Manage Map Units in the DescriptionOfMapUnits table.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_Hierarchy" caption="Hierarchy" className="Geomapmaker.ViewModels.Hierarchy.ShowHierarchy" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Hierarchy" caption="Hierarchy" className="Geomapmaker.ViewModels.Hierarchy.ShowHierarchy" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableSort16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/TableSort32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Hierarchy">
             Set hierarchy for the DescriptionOfMapUnits table.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_ContactsFaults" caption="Contacts and Faults Templates" className="Geomapmaker.ViewModels.ContactsFaults.ShowContactsFaults" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_ContactsFaults" caption="Contacts and Faults Templates" className="Geomapmaker.ViewModels.ContactsFaults.ShowContactsFaults" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Contacts and Faults Templates">
             Manage Contacts and Faults.<disabledText />
           </tooltip>
@@ -116,37 +116,37 @@
             Tooltip text<disabledText />
           </tooltip>
         </tool>
-        <button id="Geomapmaker_Stations_Btn" caption="Stations" className="Geomapmaker.ViewModels.Stations.ShowStations" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlack16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlack32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Stations_Btn" caption="Stations" className="Geomapmaker.ViewModels.Stations.ShowStations" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingScaleTool16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingScaleTool32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Stations">
             Manage Stations.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_OrientationPoints_Btn" caption="Orientation Points" className="Geomapmaker.ViewModels.OrientationPoints.ShowOrientationPoints" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonYellow16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonYellow32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_OrientationPoints_Btn" caption="Orientation Points" className="Geomapmaker.ViewModels.OrientationPoints.ShowOrientationPoints" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingRotateTool16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingRotateTool32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Orientation Points">
             Manage Orientation Points.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_GeneratePolygons_Btn" caption="Generate Polygons" className="Geomapmaker.ViewModels.GeneratePolygons.ShowGeneratePolygons" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_GeneratePolygons_Btn" caption="Generate Polygons" className="Geomapmaker.ViewModels.GeneratePolygons.ShowGeneratePolygons" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingPolygonTool16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingPolygonTool32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Generate Polygons">
             Generate Map Unit Polygons from Contacts and Faults.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_MapUnitPolysCreate_Btn" caption="Create Polygon(s) from Contacts" className="Geomapmaker.ViewModels.MapUnitPolysCreate.ShowMapUnitPolysCreate" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_MapUnitPolysCreate_Btn" caption="Create Polygon(s) from Contacts" className="Geomapmaker.ViewModels.MapUnitPolysCreate.ShowMapUnitPolysCreate" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectionSelectLineTool16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectionSelectLineTool32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Create Polygon(s) from Contacts">
             Create Map Unit Polygon(s) from Contacts and Faults<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_MapUnitPolysEdit_Btn" caption="Edit Map Unit of Polygon(s)" className="Geomapmaker.ViewModels.MapUnitPolysEdit.ShowMapUnitPolysEdit" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_MapUnitPolysEdit_Btn" caption="Edit Map Unit of Polygon(s)" className="Geomapmaker.ViewModels.MapUnitPolysEdit.ShowMapUnitPolysEdit" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditShape16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditShape32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Edit Map Unit of Polygon(s)">
             Edit Map Unit of Polygon(s)<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_Export_Btn" caption="Export" className="Geomapmaker.ViewModels.Export.ShowExport" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MarsCat32.png" keytip="" >
+        <button id="Geomapmaker_Export_Btn" caption="Export" className="Geomapmaker.ViewModels.Export.ShowExport" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ExportFeatures16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ExportFeatures32.png" keytip="" >
           <tooltip heading="Export">
             Export project.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_Report" caption="Report" className="Geomapmaker.RibbonElements.ReportButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonBlue32.png" keytip="" >
+        <button id="Geomapmaker_Report" caption="Report" className="Geomapmaker.RibbonElements.ReportButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/DataReviewerReviewerRule16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/DataReviewerReviewerRule32.png" keytip="" >
           <tooltip heading="Report">
             Generate validation report.<disabledText />
           </tooltip>
@@ -156,12 +156,12 @@
             Tooltip text<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_Glossary" caption="Glossary" className="Geomapmaker.ViewModels.Glossary.ShowGlossary" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonGreen32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Glossary" caption="Glossary" className="Geomapmaker.ViewModels.Glossary.ShowGlossary" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MetadataDocument16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/MetadataDocument32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Glossary">
             Manage Glossary.<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_MultiTools" caption="Tools" className="Geomapmaker.ViewModels.Tools.ShowTools" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonPurple32.png" keytip="" >
+        <button id="Geomapmaker_MultiTools" caption="Tools" className="Geomapmaker.ViewModels.Tools.ShowTools" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GeoprocessingToolbox16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GeoprocessingToolbox32.png" keytip="" >
           <tooltip heading="Tools">
             Geomapmaker tools.<disabledText />
           </tooltip>
