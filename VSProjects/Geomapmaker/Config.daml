@@ -61,7 +61,7 @@
       </groups>
       <!-- Controls -->
       <controls>
-        <comboBox id="Geomapmaker_DataSourceComboBox" caption="Data Source" className="Geomapmaker.RibbonElements.DataSourceComboBox" itemWidth="120" extendedCaption="Extended Caption" isEditable="false" isReadOnly="true" resizable="true" keytip="">
+        <comboBox id="Geomapmaker_DataSourceComboBox" caption="Data Source" className="Geomapmaker.RibbonElements.DataSourceComboBox" itemWidth="250" extendedCaption="Data Source Selection" isEditable="false" isReadOnly="true" resizable="true" keytip="">
           <tooltip heading="Data Source Selection">
             Select a Data Source to edit the map.<disabledText />
           </tooltip>
