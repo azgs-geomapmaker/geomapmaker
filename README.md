@@ -20,21 +20,8 @@ The following *minimum* features are required for a functional toolbar. The tool
     5. [HIERARCHY (BUTTON)](#hierarchy-button)
     6. [CONTACTS AND FAULTS (WORKFLOW)](#contacts-and-faults-workflow)
     7. [MAP UNIT POLYGONS (WORKFLOW)](#map-unit-polygons-workflow)
-        1. CREATE POLYGON(S) FROM CONTACTS
-        2. REASSIGN MAP UNIT OF POLYGON(S)
-    9. [ORIENTATION POINTS AND STATIONS (WORKFLOW)](#orientation-points-and-stations-workflow)
-    10.[GLOSSARY (BUTTON)](#glossary-button)
-    11.[TOOLS (BUTTON)](#tools-button)
-        1. [SET ALL PRIMARY KEYS]
-        2. [INSERT GLOSSARY TERMS]
-        3. [SET MAPUNIT VALUE FOR POINTS]
-        4. [ZERO-PAD SYMBOLS]
-        5. [ZERO-PAD HIERARCHY KEYS]
-        6. [GEOPACKAGE DATASET RENAME]
-        7. [LINE/POINT SYMBOL OPTIONS]
-        8. [MAPUNITPOLYS SYMBOLOGY AND TEMPLATES]
-        9. [CONTACTS FAULTS SYMBOLOGY]
-        10. [ORIENTATION POINTS SYMBOLOGY]
+    8. [ORIENTATION POINTS AND STATIONS (WORKFLOW)](#orientation-points-and-stations-workflow)
+    9. [GLOSSARY (BUTTON)](#glossary-button)
     12. [VALIDATION REPORT](#validation-report)
     13. [EXPORT TOOLS](#export-tools)     
 3. GEMS TABLE DEFINITIONS
@@ -123,11 +110,31 @@ Alternatively, users can bypass the stations field entirely as it is **not** a r
 
 Users wanting to add multiple stations or orientation points at once from an external table such as an excel file or CSV should use the native import tools provided by ArcPro.
 
-### Validation (Workflow)
-*This workflow is currenlty being revised.)
+### Glossary (Button)
+The glossary button provides several different options for managing the [GLOSSARY table](#glossary), which is a required table in the GeMS specification. The most unique of these options is the Undefined Terms tab. Each time the glossary button is activated in the toolbar it will conduct an automatic check of all fields and data values that require a definition according to the GeMS specification. Users will then be prompted to enter a definition for each undefined term. 
 
-### Update Fields (Button)
-*This button is not yet implemented.*
+![Screenshot 2022-08-19 at 12 32 25 PM](https://user-images.githubusercontent.com/10422595/185693908-afac9217-73f7-4d52-8edd-49c3f9f8525a.png)
+
+Many terms will be reused across geologic maps. Users looking to do a bulk edit/upload to the Glossary table can add a table named PredefinedTerms to their ArcPro project that uses the following format.
+
+![Screenshot 2022-08-19 at 12 41 10 PM](https://user-images.githubusercontent.com/10422595/185695214-c9dd0822-0d55-4e22-8171-96b2ffd6bcca.png)
+
+Users can create their own table of PredefinedTerms or they can download a pre-made form used by the Arizona Geological Survey directly through geomapmaker by going to TOOLS -> ADD PREDEFINED TERMS. Once this table (whether user-generated or downloaded through geomapmaker) users can then populate the glossary table using TOOLS -> INSERT GLOSSARY TERMS 
+
+![Screenshot 2022-08-19 at 12 42 27 PM](https://user-images.githubusercontent.com/10422595/185695722-bd954651-a920-43cc-ab99-82979b24866e.png)
+
+### Validation Report (Button)
+The (validation) report button will automatically generate an html report detailing whether the current GeMS geodatabase currently meets the official [Geologic Map Schema](https://pubs.er.usgs.gov/publication/tm11B10). This report is a slightly modified port of the [USGS validation report tool](https://github.com/usgs/gems-tools-pro). The main difference between the two being that the geomapmaker report **does not conduct topology checks**. Geomapmaker will likely add separate tools for topology checking in v1.1. Users are encouraged to use the geompamaker report during their primary quality control phase, butrun the USGS tool as a final step before publication.
+
+Common difficulties encountered during validation include:
+1. Missing ID field values, this can be corrected by going to TOOLS -> SET ALL PRIMARY KEYS
+2. Orientation Points not matched to underlying map unit, this can be corrected by going to TOOLS -> SET MAP UNIT VALUES FOR POINTS
+
+### Export (Button)
+The official [Geologic Map Schema](https://pubs.er.usgs.gov/publication/tm11B10) requires a number of different file types as part of a publication pacakge. While these files can be generated using native tools built in ArcPro and do not require the geomapmaker toolbar, an export interface has been included in the toolbar for convenience. 
+
+![Screenshot 2022-08-19 at 12 55 47 PM](https://user-images.githubusercontent.com/10422595/185697352-50aff863-4a8f-4b5c-8ecc-d2721bf539b0.png)
+
 
 #### Map Unit Polys
 > Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
