@@ -116,7 +116,7 @@
             Tooltip text<disabledText />
           </tooltip>
         </tool>
-        <button id="Geomapmaker_Stations_Btn" caption="Stations" className="Geomapmaker.ViewModels.Stations.ShowStations" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingScaleTool16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingScaleTool32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_Stations_Btn" caption="Stations" className="Geomapmaker.ViewModels.Stations.ShowStations" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/Editing_Background_Grid_Set_OriginRotation16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/Editing_Background_Grid_Set_OriginRotation32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Stations">
             Manage Stations.<disabledText />
           </tooltip>
@@ -141,7 +141,7 @@
             Edit Map Unit of Polygon(s)<disabledText />
           </tooltip>
         </button>
-        <button id="Geomapmaker_Export_Btn" caption="Export" className="Geomapmaker.ViewModels.Export.ShowExport" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ExportFeatures16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ExportFeatures32.png" keytip="" >
+        <button id="Geomapmaker_Export_Btn" caption="Export" className="Geomapmaker.ViewModels.Export.ShowExport" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericExport16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericExport32.png" keytip="" >
           <tooltip heading="Export">
             Export project.<disabledText />
           </tooltip>
