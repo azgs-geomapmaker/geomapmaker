@@ -6,3 +6,97 @@ DescriptionOfMapUnits,ParagraphStyle,Standard,A map unit within the Description 
 DescriptionOfMapUnits,GeoMaterialConfidence,High ,"High confidence means that this determination or geologic interpretation is supported by multiple data points, is axiomatic in nature, is the best of all available choices, or is otherwise believed to be true by the authors."
 DescriptionOfMapUnits,GeoMaterialConfidence,Medium,"Medium confidence means that this determination or geologic interpreation is supported by one or more data points, but there may also be data supporting one or more alternative hypotheses."
 DescriptionOfMapUnits,GeoMaterialConfidence,Low,Low confidence means that there is too little information availble to assess the accuracy of this geologic interpretation.
+ContactsAndFaults,Type,bedding,"Layering produced by stratification; the accumulation of sediment into layers, known as strata, whose characteristics are defined principally by variations in the strength and sediment-carrying (bed load) capacity of the depositing medium."
+ContactsAndFaults,Type,"contact, depositional",A sedimentary rock or lava flow was deposited under an older rock.
+ContactsAndFaults,Type,dike,A sheet-like body of intrusive igneous rock that cuts across bedding or foliation (if present) in host rock. Dike is also a kind of degenerate volume geologic surface.
+ContactsAndFaults,Type,apparent dip,The plunge  of the line created by the intersection of the measured planar feature with a hypothetical vertical plane conicdent with and parallel to the symbol's arrow on the map.
+ContactsAndFaults,Type,earth surface description boundary trace,Genetic boundary trace represents the outcrop of the surface separating two mapped bodies of rock that was formed during the genesis of at least one of the geologic units. Identity of a genetic boundary trace is defined by the two geologic units that are separated. A genetic boundary trace is the 2-D map manifestation of a geologic surface.
+ContactsAndFaults,Type,"bedding, contorted or variable","Layering produced by stratification; the accumulation of sediment into layers, known as strata that are strongly undulatory."
+ContactsAndFaults,Type,"cleavage, parallel to bedding",Composite fabric in which a cleavage is developed parallel to bedding.
+ContactsAndFaults,Type,"contact, intrusive",Contact between a host rock body and a magmatic intrusion.
+ContactsAndFaults,Type,"contact, intrusive, timing unknown",Contact at which an igneous rock has intruded an older rock body; timing relationship across the contact not specified.
+ContactsAndFaults,Type,"contact, depostional, unspecified conformity",Contact at which a sedimentary or volcanic rock has been deposited on another rock body.
+ContactsAndFaults,Type,"dike, felsic",Dike in which the intrusive rock body has a felsic composition.
+ContactsAndFaults,Type,"lineation, directed stretching",Stretching  lineation for which the sense of shear relative to a containing foliation is known.
+ContactsAndFaults,Type,"fault, detachment","A style of low-angle, high extension normal faulting."
+ContactsAndFaults,Type,"cleavage, axial plane",A type of foliation where rock splits parallel to the cleavage surfaces.
+ContactsAndFaults,Type,"fault, high angle","High-angle fault for which hanging wall rocks are at a lower elevation than corresponding footwall rocks. Use when separation is indicated by markers of a nature that do not indicate lateral separation, e.g. a gently "
+ContactsAndFaults,Type,"contact, gradational",A gradual or continuous lithologic change from one geologic map unit to another.
+ContactsAndFaults,Type,fault contact,Line depicting the trace of a mapped fault.
+ContactsAndFaults,Type,fault,A discrete surface tectonic structure across which bodies of rock have been displaced relative to each other.
+ContactsAndFaults,Type,"cleavage, slaty",Schistosity in which the individual grains defining the fabric are too small to be seen by the unaided eye. Continuous planar foliation defined by aligned fine to very-fine grained phyllosilicate mineral grains.
+ContactsAndFaults,Type,"bedding, inclined",Layering produced by stratification that is not parallel to the Earth's surface.
+ContactsAndFaults,Type,compound tectonic foliation,"Foliation defined by parting surfaces (cleavage domains) that  have no apparent thickness, are spaced between 5 cm and 25 cm, and do not crenulate an older foliation. Fabric intermediate between typical cleavage and joints. Parting surfaces are regularly spaced, and penetrative on a 1 to 10 m scale. 5 cm upper limit on spacing of cleavage."
+ContactsAndFaults,Type,close joints,"Foliation defined by parting surfaces (cleavage domains) that  have no apparent thickness, are spaced between 5 cm and 25 cm, and do not crenulate an older foliation. Fabric intermediate between typical cleavage and joints. Parting surfaces are regularly spaced, and penetrative on a 1 to 10 m scale. 5 cm upper limit on spacing of cleavage."
+ContactsAndFaults,Type,"cleavage, crenulation",Cleavage that is overprinted on an older foliation that is folded to some degree in association with development of the  younger cleavage.
+ContactsAndFaults,Type,CW asymmetric fold,Asymmetric fold for which the axial surface makes an acute dihedral angle measured counter clockwise from the imaginary surface that contains the inflection points for the folded surfaces or lines.
+ContactsAndFaults,Type,CCW asymmetric fold,"Asymmetric fold for which the axial surface makes an acute dihedral angle measured clockwise from the imaginary surface that contains the inflection points for the folded surfaces or lines, when viewed in a profile normal to the hinge line of the fold."
+ContactsAndFaults,Type,"foliation, flow","Foliation interpreted to be due to flow in a body of magma or lava. Includes flow banding in lava, and foliation defined by aligned crystals in a phaneritic igneous rock."
+ContactsAndFaults,Type,fold hinge,Linear structure defined by the locus of maximum curvature of a folded surface.
+ContactsAndFaults,Type,"foliation, primary igneous","Penetrative planar fabric interpreted to be the product of igneous processes, formed in the rock while melt was still present."
+ContactsAndFaults,Type,"foliation, protomylonitic, weak","Protomylonite foliation defined by shape of deformed, originally equant grains, in which aspect ratio of deformed grains is generally less than 3 to 1 (longest to shortest axis). Incipient mylonitic foliation, in which the planar aspect of the foliation i"
+ContactsAndFaults,Type,"lineation, tectonic","Fabric defined by aligned elongate (prolate) fabric elements for which the alignment is due to tectonic processes (i.e. post depositional for sedimentary rocks, post crystallization for igneous rocks, or any lineation related to metamorphism)."
+ContactsAndFaults,Type,groove or striae in surface,"Lineation in which fabric elements are grooves or striations in a surface. Fabric elements may be locally penetrative within the surface, but absent in adjacent rock body."
+ContactsAndFaults,Type,joint,"Parting surfaces in rock that occur in crudely parallel orientation, spaced greater than5 cm on average if in a very regular joint set. Spacing is more variable and alignment of surfaces is cruder that cleavage."
+ContactsAndFaults,Type,lithogenetic boundary,A non-faulted contact separating bodies of material in the earth that have different lithologic character or geologic history.
+ContactsAndFaults,Type,"fault, low angle, normal",Low-angle fault with normal separation or slip.
+ContactsAndFaults,Type,map boundary,Delineation of map area
+ContactsAndFaults,Type,"lineation, mineral",Lineation defined by alignment of elongate crystals that have a prismatic crystal habit or of monomineralic grain aggregates.
+ContactsAndFaults,Type,mylonite seam,High-strain seam in which the deformed rock within the seam is mylonitic rock.
+ContactsAndFaults,Type,"orientation, discrete surface",Measurement of orientation of a single surface (discrete structure) at a point location.
+ContactsAndFaults,Type,paleocurrent,Observation result that is vector indicating direction of sediment transport recorded in a sedimentary deposit. Should have accompanying information indicating the reference frame for the orientation.
+ContactsAndFaults,Type,scratch boundary surface,"Boundary with unknown location, that must exist, so location is guessed."
+ContactsAndFaults,Type,slickenline,Refers to the liner scratches which occur on a surface when two rock bodies rub past one another.
+ContactsAndFaults,Type,"lineation, stretching","Lineation defined by elongate (prolate) fabric elements in which the alignment of the fabric elements, and the formation of prolate fabric elements, is interpreted to be the product of crystal plastic deformation processes."
+ContactsAndFaults,Type,surface trace trend,"The azimuth of the surface trace of a geologic surface, essentially a line with apparent dip of 0."
+ContactsAndFaults,Type,"foliation, protomylonitic, well-developed","Protomylonite foliation defined by aligned  tectonically flattened mineral grains, and planar or tabular grains rotated to parallel foliation, as well as cleavage along slip or shear surfaces. "
+ContactsAndFaults,Type,"fault, thrust",Low-angle fault with a hanging wall displaced from a structurally deeper position relative to footwall rocks.
+ContactsAndFaults,Type,"layering, transposed bedding",Layering interpreted to have originated as sedimentary bedding that has been transposed as a result of metamorphism and deformation.
+ContactsAndFaults,Type,vein,Degenerate volume that is a sheet-like body of hydrothermally deposited mineral material.
+ContactsAndFaults,Type,vein mineral fill,Vein formed by a solid mineral fill (like a dike).
+ContactsAndFaults,Type,fault zone,An area where there are several closely spaced faults.
+ContactsAndFaults,Type,"lineation, intersection Sn-Sn+1",Lineation defined by the intersection of two tectonic foliations.
+ContactsAndFaults,Type,error,A mistake.
+ContactsAndFaults,Type,trend of oriented inclusion,Symbol depicting the azimuthal orienation of an elongate inclusion.
+ContactsAndFaults,Type,laminated tectonic layering,"Tectonic layering in which the layers are less than 1 cm thick. See Weiss, L.E. [1972] plate 36 or Borraidaile et al [1982] plate 137A,B (page 331), plate140A (page 337)  for examples."
+ContactsAndFaults,Type,"contact, intrusive, orientation",The orientation of an intrusive contact.
+ContactsAndFaults,Type,foliation,Fabric defined by the planar arrangement of textural or structural features (fabric elements).
+ContactsAndFaults,Type,fold,"Structure consisting of one or more curved layers, surfaces, or lines in a rock body, unified by continuous axial surface, and bounded by inflection points on limbs. "
+ContactsAndFaults,Type,schistosity,"A  fabric defined the parallel, planar arrangement of mineral grains having a platy, lamellar, or tabular crystallographic habit that are oriented in a continuous planar or linear fabric. Note that the structure term schistosity refers to a planar fabric in this vocabulary, while the rock name schist may refer to a rock with well developed schistosity."
+ContactsAndFaults,Type,tectonic layering,Penetrative linear structure in a rock body defined by fabric elements that are the product of tectonic processes.
+ContactsAndFaults,Type,tectonic foliation,Foliation  in a rock body defined by physical components related to deformation subsequent to solidification of the rock.
+ContactsAndFaults,Type,"shear zone, unclassified","A sheet-like zone of distributed deformation, lacking an obvious discrete slip surface, across which bodies of rock have been displaced relative to each other. Boundaries are typically gradational at or near the scale of observation."
+ContactsAndFaults,Type,"foliation, gneissic, inclined",Layering in a geologic rock where the layers are of alternating mineral composition.
+ContactsAndFaults,Type,"fault, normal","A geologic fault in which the hanging wall has moved downward relative to the footwall. Normal faults occur where two blocks of rock are pulled apart, as by tension."
+ContactsAndFaults,Type,vein or dike lithosome,A mass of rock of approximately uniform character penetrated by tongues of rock from adjacent masses with a different lithology.
+ContactsAndFaults,Type,hinge line,A straight or curved line which joins the points of maximum curvature along the hinge of a fold.
+ContactsAndFaults,Type,"foliation, protomylonitic",Mylonitic foliation in which 10 to 50 percent of rock is matrix due to tectonic grain size reduction processes. Planar aspect of fabric may be quite subtle in  weakly deformed rocks.
+ContactsAndFaults,Type,Earth surface geologic surface 3D intersection,The trace of a geological plane's intersection with the earth's surface
+ContactsAndFaults,Type,"foliation, compositional layering",Layering in a geologic rock where the layers are of varying mineral composition.
+ContactsAndFaults,Type,parallel S0 and S1,Strike and dip of composite fabric produced by parallel bedding and foliation.
+ContactsAndFaults,Type,"fault, high-angle, normal",A high-angle fault with normal separation.
+ContactsAndFaults,Type,Z-fold axis,Trend and plunge of axis of the z-shaped minor fold.
+ContactsAndFaults,Type,contact,Very general concept representing any kind of surface separating two geologic units.
+ContactsAndFaults,Type,"bedding, crude or indistinct",Layering produced by stratification.
+ContactsAndFaults,Type,axial surface synform,Axial surface for fold in which the concave side of the folded surfaces is on the top. Facing of folded surface not specified.
+ContactsAndFaults,Type,cleavage,A planar tectonic foliation in a rock characterized by a tendency for the rock to split along a regular set of parallel or sub-parallel closely spaced surfaces.
+ContactsAndFaults,Type,"cleavage, close disjunct","Spaced cleavage in sandstone or phyllosilicate-poor rock, defined by partings of uncertain origin, and does not crenulate an existing cleavage. (sometimes called fracture cleavage)."
+ContactsAndFaults,Type,"bedding, horizontal",Horizontal layering produced by stratification.
+ContactsAndFaults,Type,cumulate layering,Layering in igneous rocks in which layers are characterized by variation in relative proportion of magmatically crystallized minerals. Typically a pattern of mineralogical variation will be repeated many times in a vertical section with layers of relatively consistent thickness.
+ContactsAndFaults,Type,"foliation, eutaxitic",Foliation defined by flattened pumice clasts or glass shards and aligned elongate lithic fragments in a welded tuff. This term denotes interpretation that foliation formed during compaction and welding of tuff.
+ContactsAndFaults,Type,"foliation, mylonitic","A fault rock which is cohesive and characterised by a well-developed schistosity resulting from tectonic reduction of grain size, and commonly containing rounded porphyroclasts and lithic fragments of similar composition to minerals in the matrix."
+ContactsAndFaults,Type,"vein, quartz",Degenerate volume that is a sheet-like body of hydrothermally deposited quartz.
+ContactsAndFaults,Type,not assigned,Not assigned.
+ContactsAndFaults,Type,trend orientation,A symbol depicting the azimuthal orientation of some elongate geological entity.
+ContactsAndFaults,Type,dike orientation,A symbol depicting the azimuthal orientation of a dike.
+ContactsAndFaults,Type,"orientation, depositional contact",A symbol depicting the azimuthal orientation of a depositional contact.
+ContactsAndFaults,Type,"foliation, gneissic, vertical",Layering in a geologic rock where the layers are of alternating mineral composition.
+ContactsAndFaults,Type,fault or vein orientation,The orientation of a fault or a vein.
+ContactsAndFaults,Type,"foliation, axial plane",The axial plane of a foliation.
+ContactsAndFaults,Type,"lineation, crenulation",A lineation defined by the hinges of small folds (crenulations) associated with crenulation cleavage.
+ContactsAndFaults,Type,fracture,"A fracture is any separation in a geologic formation, such as a joint or a fault that divides the rock into two or more pieces."
+ContactsAndFaults,Type,lineation,"A lineation is any linear feature or element in a rock , and can occur as the product of tectonic, mineralogical, sedimentary, or geomorphic processes."
+ContactsAndFaults,Type,schistosity (S2),Strike and dip of second generation schistosity.
+ContactsAndFaults,Type,F2 Axes,Trend and plunge of axis of second phase fold.
+ContactsAndFaults,Type,"lineation, intersection",Lineation produced by the intersection of surfaces of two different generations.
+ContactsAndFaults,Type,"lineation, intersection (L2)",Lineation produced by the intersection of first- and second-generation foliations.
