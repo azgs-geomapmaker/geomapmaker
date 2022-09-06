@@ -292,14 +292,15 @@ namespace Geomapmaker.Data
                 };
 
                 // Rotate the symbol based on the Azimuth value
-                var cimExpressionInfoZ = new CIMExpressionInfo { Expression = "$feature.Azimuth - 90" };
+                CIMExpressionInfo cimExpressionInfoZ = new CIMExpressionInfo { Expression = "$feature.Azimuth" };
 
-                var cimVisualVariableInfoZ = new CIMVisualVariableInfo { VisualVariableInfoType = VisualVariableInfoType.Expression, ValueExpressionInfo = cimExpressionInfoZ };
+                CIMVisualVariableInfo cimVisualVariableInfoZ = new CIMVisualVariableInfo { VisualVariableInfoType = VisualVariableInfoType.Expression, ValueExpressionInfo = cimExpressionInfoZ };
 
-                var listCIMVisualVariables = new List<CIMVisualVariable>
+                List<CIMVisualVariable> listCIMVisualVariables = new List<CIMVisualVariable>
                 {
                     new CIMRotationVisualVariable {
-                        VisualVariableInfoZ = cimVisualVariableInfoZ
+                        VisualVariableInfoZ = cimVisualVariableInfoZ,
+                        RotationTypeZ = SymbolRotationType.Geographic
                     }
                 };
 
