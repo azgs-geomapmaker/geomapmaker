@@ -11,46 +11,47 @@ The following *minimum* features are required for a functional toolbar. The tool
 - [x] Ability to transfer, select, and view from a pre-made list of symbologies.
 
 ## Table of Contents
-1. [Installation](#installation)
-2. Toolbar Actions
-    1. [DATA SOURCE (DROPDOWN)](#data-source-dropdown)
-    2. [DATA SOURCES (BUTTON)](#data-sources-button)
-    3. [HEADINGS (BUTTON)](#headings-button)
-    4. [MAP UNITS (BUTTON)](#map-units-button)
-    5. [HIERARCHY (BUTTON)](#hierarchy-button)
-    6. [CONTACTS AND FAULTS (WORKFLOW)](#contacts-and-faults-workflow)
-    7. [MAP UNIT POLYGONS (WORKFLOW)](#map-unit-polygons-workflow)
-    8. [ORIENTATION POINTS AND STATIONS (WORKFLOW)](#orientation-points-and-stations-workflow)
-    9. [GLOSSARY (BUTTON)](#glossary-button)
-    12. [VALIDATION REPORT](#validation-report)
-    13. [EXPORT TOOLS](#export-tools)     
-3. GEMS TABLE DEFINITIONS
-    1. [MAP UNIT POLYS](#map-unit-polys)
-    2. [CONTACTS AND FAULTS](#contacts-and-faults)
-    3. [DESCRIPTION OF MAP UNITS](#description-of-map-units)
-    4. [DATA SOURCES](#datasources)
-    5. [GLOSSARY](#glossary)
-    6. [STATIONS](#stations)
-    7. [ORIENTATION POINTS](#orientation-points)
-4. SUPPORTING TABLES
-    1. [SYMBOLOGY]
-    2. [GEOMATERIALSDICT]
-    3. [GLOSSARY TEMPLATES]
-5. SPECIAL CONSIDERATIONS
-    1. [HANDLING AGES](#ages)
-    3. [SYMBOLOGY AND STYLES](#symbology-and-styles)
-    4. [LOCATION CONFIDENCE METERS](#location-confidence-meters)
-    5. [EXISTING GEMS TOOLS](#existing-gems-tools)
-    6. [TOPOLOGY CHECKS](#topology-checks)
-    7. [OTHER GEMS TABLES](#other-gems-tables)
-    8. [FUTURE WORK](#future-work)
+- [AZGS GEOMAPMAKER v1.0 RELEASE](#azgs-geomapmaker-v10-release)
+  - [Core Requirements](#core-requirements)
+  - [Table of Contents](#table-of-contents)
+    - [Installation Instructions](#installation-instructions)
+  - [Buttons and Workflow Overview](#buttons-and-workflow-overview)
+    - [Data Source (Dropdown)](#data-source-dropdown)
+    - [Data Sources (Button)](#data-sources-button)
+    - [Headings (Button)](#headings-button)
+    - [Map Units (Button)](#map-units-button)
+    - [Hierarchy (Button)](#hierarchy-button)
+    - [Contacts and Faults (Workflow)](#contacts-and-faults-workflow)
+    - [Map Unit Polygons (Workflow)](#map-unit-polygons-workflow)
+    - [Orientation Points and Stations (Workflow)](#orientation-points-and-stations-workflow)
+    - [Glossary (Button)](#glossary-button)
+    - [Validation Report (Button)](#validation-report-button)
+    - [Export (Button)](#export-button)
+  - [Table Definitions](#table-definitions)
+    - [Map Unit Polys](#map-unit-polys)
+    - [Contacts And Faults](#contacts-and-faults)
+    - [Description Of Map Units](#description-of-map-units)
+    - [DataSources](#datasources)
+    - [Glossary](#glossary)
+  - [Special Considerations](#special-considerations)
+    - [Symbology](#symbology)
+    - [Glossary Template](#glossary-template)
+    - [Handling Ages](#handling-ages)
+    - [Location Confidence Meters](#location-confidence-meters)
+    - [Future Work](#future-work)
 
-## Installation
-A simple demonstration installation is availabe in [/demo_installation](/demo_installation). This demo currently includes only the geomapmaker addin installation file (in [/geomapmaker_addin](/geomapmaker_addin). The addin can be installed by going to the addin-manager in the ArcPro Settings
+### Installation Instructions
+Users can currently download geomapmaker from the [/installation](/installation) fodler in this repository. This folder consists of two subdirectories: [/geomapmaker_addin](/installation/geomapmaker_addin) and [/geomapmaker_geodatabase](/installation/geomapaker_geodatabase). The addin subdirectory holds the actual toolbar and can be installed into your ESRI ArcPRO environment by going to the addin-manager in Settings.
 
 ![Screenshot 2022-05-27 at 12 39 44 PM](https://user-images.githubusercontent.com/10422595/170779059-11e84426-28e1-40a3-a458-556def262871.png)
 
-The addin manager will automatically work with any tables loaded into the currently active map that follow the GeMS namespace - though see the [Symbology Table](#symbology) and [Glossary Templates](#glossary-templates) section for special considerations.
+The addin manager will automatically work with any tables loaded into the currently active map that follow the GeMS namespace (e.g., [ContactsAndFaults](#contacts-and-faults), [MapUnitPolys](#map-unit-polys)) - **though see the [Symbology Table](#symbology) and [Glossary Templates](#glossary-templates) section for special considerations.** 
+
+For convenience, however, we do provide a blank GeMS geodatabase with all the core tables provided as part of the installation in the [/geomapmaker_geodatabase](/installation/geomapaker_geodatabase) subdirectory.
+
+> Please remember that this toolbar will *only* work for ESRI ArcPro 2.9x. 
+
+## Buttons and Workflow Overview
 
 ### Data Source (Dropdown)
 Users must select a data source from the dropdown menu before being able to proceed with other actions (other than creating a new data source user). The list of selectable datasources is drawn directly from the [DATA SOURCES](#datasources) table.
@@ -88,7 +89,7 @@ Once a template is created will appear in the ESRI ArcGIS Pro CREATE FEATURES pa
 
 Once a template is selected from the CREATE FEATURES pane it can then be used to draw lines on the map. Lines added in this way will automatically write to the [CONTACTS AND FAULTS](#contacts-and-faults) table.
 
-### MAP UNIT POLYGONS (WORKFLOW)
+### Map Unit Polygons (Workflow)
 As a method of passively enforcing GeMS topology rules and consistency with the [DESCRIPTION OF MAP UNITS](#description-of-map-units) table, the geomapmaker workflow purposefully discourages the hand-drawing of polygons. Rather, users are encouraged to follow a linear workflow where they 1) draw all of their contacts (and faults) using the [CONTACTS AND FAULTS](#contacts-and-faults-workflow) workflow and 2) also registered and attributed all of their map units using the [MAP UNITS (BUTTON)](#map-units-button).
 
 Once these preliminary steps are completed, users can use the relevant polygon borders and map unit using the CREATE POLYGON(S)FROM CONTACTS button. This will open a form where you can create one or more valid polygons based on selected contacts. The form is rather simple and really only has two major components 1) a SELECT LINES button that will activate the mouse-click select tool so that the lines making the polygon boundary can be selected and 2) a picklist list of valid map units registered in the [DESCRIPTION OF MAP UNITS](#description-of-map-units) table to associate with the created polygon. The tool should not duplicate/overwrite existing polygons, but caution is recommended.
@@ -135,8 +136,9 @@ The official [Geologic Map Schema](https://pubs.er.usgs.gov/publication/tm11B10)
 
 ![Screenshot 2022-08-19 at 12 55 47 PM](https://user-images.githubusercontent.com/10422595/185697352-50aff863-4a8f-4b5c-8ecc-d2721bf539b0.png)
 
+## Table Definitions
 
-#### Map Unit Polys
+### Map Unit Polys
 > Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
 
 ````SQL
@@ -150,7 +152,7 @@ DataSourceID text REFERENCES DataSources(DataSources_ID) NOT NULL
 geom geometry -- Polygon only (multi-polygon not allowed), other checks constraints may be appropriate, see special considerations
 ````
 
-#### Contacts And Faults
+### Contacts And Faults
 > Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
 
 ````SQL
@@ -167,7 +169,7 @@ Notes text
 geom geometry -- line only (multi-line not allowed), other checks constraints may be appropriate, see special considerations
 ````
 
-#### Description Of Map Units
+### Description Of Map Units
 > Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc. Non-spatial tables do not belong to an Arc feature dataset
 
 ````SQL
@@ -189,7 +191,7 @@ GeoMaterial text REFERENCES GeomaterialDict
 GeoMaterialConfidence text REFERENCES Glossary(Term)
 ````
 
-#### DataSources
+### DataSources
 > Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc. Non-spatial tables do not belong to an Arc feature dataset
 
 ````SQL
@@ -199,7 +201,7 @@ Notes text
 URL text
 ````
 
-#### Glossary
+### Glossary
 > Note that GeMS specification is case-sensitive, We use the proper SQL convention of all lowercase for the PostgreSQL backend, but alias to camelCase or PascalCase within Arc.
 
 ````SQL
@@ -209,32 +211,47 @@ Definition text
 DataSourceID text REFERENCES DataSources(DataSources_ID)
 ````
 
-### Ages
-The GeMS specification asks that the [DescriptionOfMapUnits](#description-of-map-units) table have a field `Age`. There are two problems with the way that this is currently specified.
+## Special Considerations
 
-1. The surficial geologists generally do not have precise/absolute ages. They often only know that a particular rock body is <10,000 yrs old or that it is older that Unit A, but younger than Unit B. It is very hard to convey this type of informal, qualitative information in the Ages field as it should be properly defined. Therefore, I have added another field, tentatively titled `RelativeAge`. GeMS does not forbid the inclusion of additional fields, though this field will need to be explained in the [Glossary](#glossary).
-
-2. The current Ages is just an open textbox and tends to have inconsistent formatting. This causes a huge number of headaches. Instead, we want to enforce a consistent structure of "Older Interval - Younger Interval" always. This is now fixed at the form level, where we prompt them with two separate boxes `older interval` and `younger interval`. These entries are then pasted into the format OI - YI format within the data table.
-
-### Symbology and Styles
-The old toolbar and ArcMap system was dependent on [Cartographic Representations](https://desktop.arcgis.com/en/arcmap/latest/map/working-with-layers/introduction-to-the-cartographic-representations-tutorial.htm) for handling styling information. CartoReps are no longer supported in ArcPro and have been superseded by .stylex files (see [stylex files](#stylex-files) in the appendix for a description of how these work). 
+### Symbology
+The previous AZGS workflow was dependent on [Cartographic Representations](https://desktop.arcgis.com/en/arcmap/latest/map/working-with-layers/introduction-to-the-cartographic-representations-tutorial.htm) for handling styling information. CartoReps are no longer supported in ArcPro and have been superseded by .stylex files). 
 
 There are two downsides of .stylex from the perspective of the toolbar.
-1. No robust .stylex exists of FGDC symbology (though several attempts by other surveys can be found at the NGMDB website[(https://ngmdb.usgs.gov).
+1. No robust .stylex exists of FGDC symbology (though several attempts by other surveys can be found at the NGMDB website[(https://ngmdb.usgs.gov) and the quality of these will likely improve over time.
+2. A .stylex is loaded/transferred separately from a geodatabase, which increases the likelihood of data loss.
 
-2. A .stylex has to be loaded separately from a geodatabase, which increases the likelihood of data loss.
+We have solved both of these problems by creating an [ESRI compatible](https://github.com/Esri/cim-spec) symbology table that can be downloaded directly through the geomapmaker toolbar and can be exported as part of the final geodatabase as a standard non-spatial table. This ensures that the symbology information will always travel with the geodatabase. 
 
-We have solved both of these problems by creating an ESRI compatible style table for FGDC symbols that lives within the backend ArcSDE PostgreSQL database. 
+We do also provide an equivalent .stylex file that can be [downloaded manually](/SetUp/SourceMaterials/Geomapmaker.stylx) from this repository, but the *toolbar requires* the aforementioned non-spatial table version to work properly.
 
-### Help Buttons
-It may be desirable to add severall "lookup" buttons to the ribbon.
+### Glossary Template
+We currently provide a CSV of pre-defined terms that commonly require definition according to GeMS rules. Users can download this CSV directly through the toolbar by going to TOOLS -> ADD PREDEFINED TERMS. Our current list of predefined terms is fairly small, but we are working with the [Alaska Department of Natural Resources: Geological & Geophysical Survey](https://dggs.alaska.gov/maps-data/enterprise-db.html) to provide a more comprehensive table of terms in the future.
 
-1. Lookup formation names
-2. Lookup geologic intervals
-3. Lookup FGDC symbology by name rather than number
+![Screenshot 2022-08-19 at 12 42 27 PM](https://user-images.githubusercontent.com/10422595/185695722-bd954651-a920-43cc-ab99-82979b24866e.png)
 
-### Existing GeMS tools
-https://github.com/usgs/gems-tools-pro
-https://pubs.usgs.gov/tm/2006/11A02/ -- FGDC symbology (PDF and Adobe Illustrator Files)
-https://ngmdb.usgs.gov/Info/standards/GeMS/docs/FGDCGeoSym_fonts.zip -- Fonts required for the stylex below
-https://ngmdb.usgs.gov/Info/standards/GeMS/docs/DGGS_Map_Symbolization_ver3_ArcGISPro.zip -- Stylex file
+This step is optional, however, and users can create their own table (following the same structure) or skip this step entirely and fill in the glossary definitions manually using the glossary tool. 
+
+### Handling Ages
+The GeMS specification asks that the [DescriptionOfMapUnits](#description-of-map-units) table have a field `Age`. There are two problems with the way that this is currently specified.
+
+1. The surficial geologists generally do not have precise/absolute ages. They often only know that a particular rock body is <10,000 yrs old or that it is older that Unit A, but younger than Unit B. It is very hard to convey this type of informal, qualitative information in the Ages field as it should be properly defined. Therefore, I have added another field, tentatively titled `RelativeAge`. 
+
+2. The GeMS `Ages` field is just an open textbox and tends to have inconsistent formatting. This causes a huge number of headaches. Instead, we want to enforce a consistent structure of "Older Interval - Younger Interval" always. This is now fixed at the form level, where we prompt them with two separate boxes `older interval` and `younger interval`. These entries are then pasted into the format OI - YI format within the data table to maintain GeMS compliance.
+
+### Location Confidence Meters
+This is the recommended table of values for the LocationConfidenceMeters field given in the GeMS specification document. The mappers don't like using the field because they don't know what to put, but we can now point them to this recommendation by using these as default values. However, the toolbar will accept other numeric values. 
+
+*Note, the template GeMS geodatabase created by the USGS GeMS toolbox enforces these values through the domain.*
+
+Value | Definition
+---- | ----
+10 | Appropriate for well-defined features located by clear-sky GPS, or by inspection of high-resolution topography (e.g., 1m or 2m lidar DEMs), or by inspection of largescale, well-rectified orthophotographs (e.g., NAIP images)
+25 | Reasonable value for locations established by inspection of 1:24,000 scale map, or by digitizing paper source maps of that scale
+50 | May be appropriate for some “approximate” lines on 1:24,000 scale maps. Other “approximate” lines on the same map may have value of 100 meters, or larger
+100 | Appropriate value for features digitized from 1:100,000 scale paper source maps
+250 | You really don’t know where a feature is! Or you captured its location from a 1:250,000 scale source map
+
+### Future Work
+The toolbar in its current form is focused around the core-tables *required* to produce a GeMS geologic map. There are many other *optional* tables associated with the [GeMS specification]() that mapper's may also want to include in their products - e.g., GeologicLines, OverlayPolygons. AZGS has no plans to support these tables *through the toolbar* at this time or in future updates. An important exception to this, however, is our desire to build-in greater support for geologic cross-sections. The exact nature of these cross-section tools and the proposed development time-line have not yet been finalized.
+
+In addition, it is our expectation to conduct the first round of significant maintenance on this toolbar starting March 2023, with a target release of the first *major patch* in September 2023. Hotfixes may still be periodically released prior to this date and users are encouraged to periodically check here for updates. The most significantly update as part of the next patch will be switching the toolbar over to the ESRI ArcPro 3.x API. Please see (or add to) the [issues](/issues) section of this GitHub repository for other enhancements or bug-fixes that will be includedin v.1.1 of this toolbar.
