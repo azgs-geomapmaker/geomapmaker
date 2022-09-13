@@ -189,6 +189,11 @@ namespace Geomapmaker.Data
                 {
                     if (opTable != null)
                     {
+                        // Prevent default templates from generating 
+                        CIMBasicFeatureLayer layerDef = opLayer.GetDefinition() as CIMBasicFeatureLayer;
+                        layerDef.AutoGenerateFeatureTemplates = false;
+                        opLayer.SetDefinition(layerDef);
+
                         // Remove all existing symbols
                         opLayer.SetRenderer(opLayer.CreateRenderer(new SimpleRendererDefinition()));
 
