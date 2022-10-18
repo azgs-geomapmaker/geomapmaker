@@ -395,7 +395,7 @@ namespace Geomapmaker.Data
                     List<string> defaultValuesKeys = templateDef?.DefaultValues?.Keys?.ToList();
 
                     // If the template has values (Unassigned template does not)
-                    if (defaultValuesKeys != null && defaultValuesKeys?.Count == 2)
+                    if (defaultValuesKeys != null && defaultValuesKeys?.Count >= 2)
                     {
                         if (defaultValuesKeys[0].ToLower() == "mapunit" && defaultValuesKeys[1].ToLower() == "datasourceid")
                         {
