@@ -2,6 +2,7 @@
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Templates;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -203,14 +204,23 @@ namespace Geomapmaker.Data
                 foreach (EditingTemplate template in layerTemplates)
                 {
                     // Get CIMFeatureTemplate
-                    CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                    //CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                    // NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
+                    Inspector templateInspector = template.Inspector;
 
                     Dictionary<string, string> defaultValues = new Dictionary<string, string>();
-
+                    
+                    // Get field names from the layer definition instead
+                    IReadOnlyList<Field> layerFields = layer.GetTable().GetDefinition().GetFields();
+                    
                     // Rebuild the dictionary with lowercase keys to avoid casing-headaches
-                    foreach (KeyValuePair<string, object> row in templateDef.DefaultValues)
+                    foreach (Field field in layerFields)
                     {
-                        defaultValues.Add(row.Key?.ToLower(), row.Value?.ToString());
+                        string fieldName = field.Name;
+                        string value = templateInspector[fieldName]?.ToString();
+                        if (value != null) {
+                            defaultValues.Add(fieldName?.ToLower(), value);
+                        }
                     }
 
                     ContactFaultTemplate tmpTemplate = new ContactFaultTemplate();
@@ -256,7 +266,6 @@ namespace Geomapmaker.Data
 
                         contactFaultTemplates.Add(tmpTemplate);
                     }
-
                 }
 
             });

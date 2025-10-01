@@ -429,13 +429,13 @@ namespace Geomapmaker.Data
 
                     foreach (EditingTemplate template in cfTemplates)
                     {
-                        CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                        //CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                        // NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
+                        Inspector templateInspector = template.Inspector;
 
-                        if ((bool)(templateDef.DefaultValues?.Keys?.Any(a => a?.ToLower() == "datasourceid")))
+                        if ((bool)(templateInspector["datasourceid"] != null))
                         {
-                            templateDef.DefaultValues["datasourceid"] = newDataSourceID;
-
-                            template.SetDefinition(templateDef);
+                            templateInspector["datasourceid"] = newDataSourceID;
                         }
                     }
                 }

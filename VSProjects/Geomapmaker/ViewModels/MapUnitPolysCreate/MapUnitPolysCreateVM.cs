@@ -136,17 +136,15 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
             {
                 EditingTemplate tmpTemplate = polyLayer.GetTemplate(Selected.MapUnit);
 
-                CIMFeatureTemplate templateDef = tmpTemplate.GetDefinition() as CIMFeatureTemplate;
+                //CIMFeatureTemplate templateDef = tmpTemplate.GetDefinition() as CIMFeatureTemplate;
+                // NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
+                Inspector templateInspector = tmpTemplate.Inspector;
 
-                templateDef.DefaultValues["identityconfidence"] = IdentityConfidence;
-                templateDef.DefaultValues["notes"] = Notes;
-
-                tmpTemplate.SetDefinition(templateDef);
-
-                EditingTemplate updatedTemplate = polyLayer.GetTemplate(Selected.MapUnit);
+                templateInspector["identityconfidence"] = IdentityConfidence;
+                templateInspector["notes"] = Notes;
 
                 // Contruct polygons from cf lines
-                op.ConstructPolygons(updatedTemplate, cfLayer, ContactFaultOids.Keys, null, true);
+                op.ConstructPolygons(tmpTemplate, cfLayer, ContactFaultOids.Keys, null, true);
 
                 op.Execute();
 

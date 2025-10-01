@@ -386,40 +386,74 @@ namespace Geomapmaker.Data
                 foreach (EditingTemplate template in layerTemplates)
                 {
                     // Get CIMFeatureTemplate
-                    CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                    //CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+                    // NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
+                    Inspector templateInspector = template.Inspector;
 
                     // Ran into a case-sensitivity problem when accessing the default values by Key/Fieldname
                     // The casing seems to change based on whether it is a file-gdb or an enterprise gdb
-                    // Accessing the values by index instead
+                    // Handle case-sensitivity by trying different variations of field names
+                    string muKey = null;
+                    string dataSourceId = null;
 
-                    List<string> defaultValuesKeys = templateDef?.DefaultValues?.Keys?.ToList();
-
-                    // If the template has values (Unassigned template does not)
-                    if (defaultValuesKeys != null && defaultValuesKeys?.Count >= 2)
+                    // Try different case variations for mapunit field
+                    string[] mapUnitVariations = { "mapunit", "MapUnit", "MAPUNIT" };
+                    foreach (string fieldName in mapUnitVariations)
                     {
-                        if (defaultValuesKeys[0].ToLower() == "mapunit" && defaultValuesKeys[1].ToLower() == "datasourceid")
+                        try
                         {
-                            string muKey = templateDef.DefaultValues[defaultValuesKeys[0]]?.ToString();
-
-                            // Find the matching DMU row
-                            MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
-
-                            // Check if the mapUnt was found
-                            if (mapUnit != null)
+                            var value = templateInspector[fieldName];
+                            if (value != null)
                             {
-                                MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
-                                {
-                                    MapUnit = muKey,
-                                    HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
-                                    Tooltip = mapUnit.Tooltip,
-                                    DataSourceID = templateDef.DefaultValues[defaultValuesKeys[1]]?.ToString(),
-                                    Template = template
-                                };
-
-                                mupTemplates.Add(tmpTemplate);
+                                muKey = value.ToString();
+                                break;
                             }
                         }
+                        catch
+                        {
+                            // Continue to next variation if this one fails
+                        }
+                    }
 
+                    // Try different case variations for datasourceid field
+                    string[] dataSourceVariations = { "datasourceid", "DataSourceID", "DATASOURCEID", "DataSourceId" };
+                    foreach (string fieldName in dataSourceVariations)
+                    {
+                        try
+                        {
+                            var value = templateInspector[fieldName];
+                            if (value != null)
+                            {
+                                dataSourceId = value.ToString();
+                                break;
+                            }
+                        }
+                        catch
+                        {
+                            // Continue to next variation if this one fails
+                        }
+                    }
+
+                    // If the template has a mapunit value (Unassigned template may not)
+                    if (!string.IsNullOrEmpty(muKey))
+                    {
+                        // Find the matching DMU row
+                        MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
+
+                        // Check if the mapUnit was found
+                        if (mapUnit != null)
+                        {
+                            MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
+                            {
+                                MapUnit = muKey,
+                                HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
+                                Tooltip = mapUnit.Tooltip,
+                                DataSourceID = dataSourceId,
+                                Template = template
+                            };
+
+                            mupTemplates.Add(tmpTemplate);
+                        }
                     }
                 }
             });
