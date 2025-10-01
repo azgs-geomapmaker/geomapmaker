@@ -216,7 +216,7 @@ namespace Geomapmaker.ViewModels.Stations
                             WhereClause = $"StationsID = '{FieldID}'"
                         };
 
-                        int rowCount = OrientationPointsTable.GetCount(queryFilter);
+                        long rowCount = OrientationPointsTable.GetCount(queryFilter);
 
                         if (rowCount > 0)
                         {

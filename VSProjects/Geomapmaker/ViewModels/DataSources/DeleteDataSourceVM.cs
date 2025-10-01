@@ -195,7 +195,7 @@ namespace Geomapmaker.ViewModels.DataSources
                             WhereClause = $"DescriptionSourceID = '{Id}'"
                         };
 
-                        int rowCount = table.GetCount(queryFilter);
+                        long rowCount = table.GetCount(queryFilter);
 
                         if (rowCount > 0)
                         {
@@ -230,7 +230,7 @@ namespace Geomapmaker.ViewModels.DataSources
                             WhereClause = $"DataSourceID = '{Id}'"
                         };
 
-                        int rowCount = table.GetCount(queryFilter);
+                        long rowCount = table.GetCount(queryFilter);
 
                         if (rowCount > 0)
                         {
@@ -264,7 +264,7 @@ namespace Geomapmaker.ViewModels.DataSources
                             WhereClause = $"DataSourceID = '{Id}'"
                         };
 
-                        int rowCount = table.GetCount(queryFilter);
+                        long rowCount = table.GetCount(queryFilter);
 
                         if (rowCount > 0)
                         {
@@ -298,7 +298,7 @@ namespace Geomapmaker.ViewModels.DataSources
                             WhereClause = $"DataSourceID = '{Id}'"
                         };
 
-                        int rowCount = table.GetCount(queryFilter);
+                        long rowCount = table.GetCount(queryFilter);
 
                         if (rowCount > 0)
                         {
@@ -332,7 +332,7 @@ namespace Geomapmaker.ViewModels.DataSources
                             WhereClause = $"LocationSourceID = '{Id}'"
                         };
 
-                        int rowCount = table.GetCount(queryFilter);
+                        long rowCount = table.GetCount(queryFilter);
 
                         if (rowCount > 0)
                         {

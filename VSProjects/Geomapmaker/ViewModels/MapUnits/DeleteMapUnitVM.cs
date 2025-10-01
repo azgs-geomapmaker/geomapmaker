@@ -222,7 +222,7 @@ namespace Geomapmaker.ViewModels.MapUnits
                             WhereClause = $"mapunit = '{MapUnit}'"
                         };
 
-                        int rowCount = MapUnitPolyTable.GetCount(queryFilter);
+                        long rowCount = MapUnitPolyTable.GetCount(queryFilter);
 
                         if (rowCount > 0)
                         {
