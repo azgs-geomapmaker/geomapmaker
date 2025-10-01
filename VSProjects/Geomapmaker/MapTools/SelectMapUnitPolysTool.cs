@@ -38,19 +38,21 @@ namespace Geomapmaker.MapTools
 
             await QueuedTask.Run(() =>
             {
-                // Get features that intersect the point
+                // Get features that intersect the point - now returns SelectionSet
+                SelectionSet selection = MapView.Active.GetFeatures(geometry);
 
-                Dictionary<BasicFeatureLayer, List<long>> selection = MapView.Active.GetFeatures(geometry);
+                // Get the MapUnitPolys layer from the selection
+                FeatureLayer mupLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
-                // Filter anything not CF
-                FeatureLayer mupLayer = selection.Where(f => f.Key.Name == "MapUnitPolys").FirstOrDefault().Key as FeatureLayer;
-
-                // Select the oids
-                List<long> oidsMUPs = selection[mupLayer];
-
-                if (oidsMUPs.Count > 0)
+                if (mupLayer != null && selection.Contains(mupLayer))
                 {
-                    mapUnitPolysEditVM.Set_MUP_Oids(oidsMUPs);
+                    // Get the ObjectIDs for the MapUnitPolys layer
+                    List<long> oidsMUPs = selection[mupLayer].ToList();
+
+                    if (oidsMUPs.Count > 0)
+                    {
+                        mapUnitPolysEditVM.Set_MUP_Oids(oidsMUPs);
+                    }
                 }
             });
 

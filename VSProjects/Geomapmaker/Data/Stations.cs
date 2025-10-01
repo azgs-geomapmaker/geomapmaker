@@ -224,10 +224,19 @@ namespace Geomapmaker.Data
                                         MapPoint point = (MapPoint)row["SHAPE"];
 
                                         // Get all of map features that intersect the station
-                                        Dictionary<BasicFeatureLayer, List<long>> features = MapView.Active.GetFeatures(point);
+                                        //Dictionary<BasicFeatureLayer, List<long>> features = MapView.Active.GetFeatures(point);
+                                        SelectionSet features = MapView.Active.GetFeatures(point);
 
-                                        // Filter out only MapUnitPolys and then grab the first Object ID in the list
-                                        long? mupObjectId = features.Where(x => x.Key.Name == "MapUnitPolys").Select(a => a.Value).FirstOrDefault()?.FirstOrDefault();
+                                        // Check if MapUnitPolys layer has any selected features and get the first ObjectID
+                                        long? mupObjectId = null;
+                                        if (features.Contains(mupLayer))
+                                        {
+                                            IList<long> mupObjectIds = features[mupLayer];
+                                            if (mupObjectIds.Count > 0)
+                                            {
+                                                mupObjectId = mupObjectIds.First();
+                                            }
+                                        }
 
                                         if (mupObjectId != null)
                                         {

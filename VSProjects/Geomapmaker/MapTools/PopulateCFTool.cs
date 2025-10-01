@@ -59,49 +59,52 @@ namespace Geomapmaker.MapTools
             await QueuedTask.Run(() =>
             {
                 // Get the features that intersect the sketch geometry. 
-                // GetFeatures() returns a dictionary of featurelayer and a list of Object ids for each
-                Dictionary<BasicFeatureLayer, List<long>> features = mv.GetFeatures(geometry);
+                SelectionSet features = mv.GetFeatures(geometry);
 
                 // Flash features on the map
                 MapView.Active.FlashFeature(features);
 
-                // Filter out non-cf features
-                IEnumerable<KeyValuePair<BasicFeatureLayer, List<long>>> cfFeatures = features.Where(x => x.Key.Name == "ContactsAndFaults");
-
-                if (cfFeatures.Count() > 0 && cfFeatures.First().Value.Count() > 0)
+                // Check if the ContactsAndFaults layer has any selected features
+                if (features.Contains(cfFeatureLayer))
                 {
-                    long cfID = cfFeatures.First().Value.First();
+                    // Get the ObjectIDs for the ContactsAndFaults layer
+                    IList<long> cfObjectIDs = features[cfFeatureLayer];
 
-                    using (Table enterpriseTable = cfFeatureLayer.GetTable())
+                    if (cfObjectIDs.Count > 0)
                     {
-                        if (enterpriseTable != null)
-                        {
-                            QueryFilter queryFilter = new QueryFilter
-                            {
-                                ObjectIDs = new List<long> { cfID }
-                            }
-;
-                            using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
-                            {
-                                if (rowCursor.MoveNext())
-                                {
-                                    using (Row row = rowCursor.Current)
-                                    {
-                                        //populate a CF from fields
-                                        ContactFaultTemplate cf = new ContactFaultTemplate
-                                        {
-                                            Label = row["label"]?.ToString(),
-                                            Type = row["type"]?.ToString(),
-                                            Symbol = row["symbol"]?.ToString(),
-                                            IdentityConfidence = row["identityconfidence"]?.ToString(),
-                                            ExistenceConfidence = row["existenceconfidence"]?.ToString(),
-                                            LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
-                                            IsConcealed = row["isconcealed"]?.ToString() == "Y",
-                                            Notes = row["notes"]?.ToString()
-                                        };
+                        long cfID = cfObjectIDs.First();
 
-                                        // Pass values back to the ViewModel to prepop
-                                        cfViewModel.Create.PrepopulateCF(cf);
+                        using (Table enterpriseTable = cfFeatureLayer.GetTable())
+                        {
+                            if (enterpriseTable != null)
+                            {
+                                QueryFilter queryFilter = new QueryFilter
+                                {
+                                    ObjectIDs = new List<long> { cfID }
+                                };
+
+                                using (RowCursor rowCursor = enterpriseTable.Search(queryFilter, false))
+                                {
+                                    if (rowCursor.MoveNext())
+                                    {
+                                        using (Row row = rowCursor.Current)
+                                        {
+                                            //populate a CF from fields
+                                            ContactFaultTemplate cf = new ContactFaultTemplate
+                                            {
+                                                Label = row["label"]?.ToString(),
+                                                Type = row["type"]?.ToString(),
+                                                Symbol = row["symbol"]?.ToString(),
+                                                IdentityConfidence = row["identityconfidence"]?.ToString(),
+                                                ExistenceConfidence = row["existenceconfidence"]?.ToString(),
+                                                LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
+                                                IsConcealed = row["isconcealed"]?.ToString() == "Y",
+                                                Notes = row["notes"]?.ToString()
+                                            };
+
+                                            // Pass values back to the ViewModel to prepop
+                                            cfViewModel.Create.PrepopulateCF(cf);
+                                        }
                                     }
                                 }
                             }

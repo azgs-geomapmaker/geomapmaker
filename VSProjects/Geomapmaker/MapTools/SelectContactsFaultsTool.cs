@@ -55,18 +55,22 @@ namespace Geomapmaker.MapTools
             await QueuedTask.Run(() =>
             {
                 // Get features that intersect the point
-                Dictionary<BasicFeatureLayer, List<long>> selection = MapView.Active.GetFeatures(geometry);
+                SelectionSet selection = MapView.Active.GetFeatures(geometry);
 
-                // Filter anything not CF
-                FeatureLayer cfLayer = selection.Where(f => f.Key.Name == "ContactsAndFaults").FirstOrDefault().Key as FeatureLayer;
+                // Get the MapUnitPolys layer from the selection
+                FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
-                // Select the oids
-                List<long> oidsCF = selection[cfLayer];
-
-                if (oidsCF.Count > 0)
+                if (cfLayer != null && selection.Contains(cfLayer))
                 {
-                    mapUnitPolysCreateVM.Set_CF_Oids(oidsCF);
+                    // Get the ObjectIDs for the MapUnitPolys layer
+                    List<long> oidsCF = selection[cfLayer].ToList();
+
+                    if (oidsCF.Count > 0)
+                    {
+                        mapUnitPolysCreateVM.Set_CF_Oids(oidsCF);
+                    }
                 }
+
             });
 
             return true;
