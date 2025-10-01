@@ -169,7 +169,7 @@ namespace Geomapmaker.ViewModels.Tools
 
                 await QueuedTask.Run(() =>
                 {
-                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, "Symbology");
+                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, -1, "Symbology");
                 });
 
                 // Clear out symbols
@@ -199,7 +199,7 @@ namespace Geomapmaker.ViewModels.Tools
                 // Import csv into project
                 await QueuedTask.Run(() =>
                 {
-                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, "PredefinedTerms");
+                    StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, -1, "PredefinedTerms");
                 });
 
             }
