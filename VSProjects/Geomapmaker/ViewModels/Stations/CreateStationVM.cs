@@ -209,7 +209,7 @@ namespace Geomapmaker.ViewModels.Stations
                         SelectNewFeatures = true
                     };
 
-                    MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+                    MapPointBuilderEx pointBuilder = new MapPointBuilderEx(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
 
                     // Get geometry from point builder
                     Geometry point = pointBuilder.ToGeometry();
@@ -227,7 +227,7 @@ namespace Geomapmaker.ViewModels.Stations
                         { "DataSourceId", DataSourceId },
                    };
 
-                    RowToken token = createFeatures.CreateEx(stationsLayer, point, attributes);
+                    RowToken token = createFeatures.Create(stationsLayer, point, attributes);
 
                     // Execute to execute the operation
                     createFeatures.Execute();

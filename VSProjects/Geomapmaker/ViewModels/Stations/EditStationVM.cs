@@ -249,7 +249,7 @@ namespace Geomapmaker.ViewModels.Stations
                         Name = "Station Edit",
                     };
 
-                    MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+                    MapPointBuilderEx pointBuilder = new MapPointBuilderEx(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
 
                     // Get geometry from point builder
                     Geometry point = pointBuilder.ToGeometry();

@@ -103,7 +103,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                         SelectNewFeatures = true
                     };
 
-                    MapPointBuilder pointBuilder = new MapPointBuilder(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
+                    MapPointBuilderEx pointBuilder = new MapPointBuilderEx(XCoordinateDouble, YCoordinateDouble, StationSpatialRef);
 
                     // Get geometry from point builder
                     Geometry point = pointBuilder.ToGeometry();
@@ -125,7 +125,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                         { "IdentityConfidence", IdentityConfidence },
                     };
 
-                    RowToken token = createFeatures.CreateEx(opLayer, point, attributes);
+                    RowToken token = createFeatures.Create(opLayer, point, attributes);
 
                     // Execute to execute the operation
                     createFeatures.Execute();
