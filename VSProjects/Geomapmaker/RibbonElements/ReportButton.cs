@@ -23,8 +23,9 @@ namespace Geomapmaker.RibbonElements
             await report.ExportReportAsync(tempFilePath);
 
             progDialog.Hide();
-
-            Process.Start(tempFilePath);
+            
+            // Updated to work with .NET Core/.NET 5+
+            Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
         }
     }
 }
