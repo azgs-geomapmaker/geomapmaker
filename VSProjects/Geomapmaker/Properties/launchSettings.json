@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ProAppModule3": {
+    "Geomapmaker": {
       "commandName": "Executable",
       "executablePath": "C:\\Program Files\\ArcGIS\\Pro\\bin\\ArcGISPro.exe"
     }
