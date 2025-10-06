@@ -378,17 +378,18 @@ namespace Geomapmaker.Data
 
             List<MapUnit> dmu = await DescriptionOfMapUnits.GetMapUnitsAsync();
 
-            await QueuedTask.Run(() =>
+            await QueuedTask.Run(async () =>
             {
                 // Get templates from layer
                 layerTemplates = layer.GetTemplates();
 
                 foreach (EditingTemplate template in layerTemplates)
                 {
-                    // Get CIMFeatureTemplate
-                    //CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
-                    // NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
-                    Inspector templateInspector = template.Inspector;
+					// Get CIMFeatureTemplate
+					//CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
+					// NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
+					await template.ActivateDefaultToolAsync(); //Maybe??
+					Inspector templateInspector = template.Inspector;
 
                     // Ran into a case-sensitivity problem when accessing the default values by Key/Fieldname
                     // The casing seems to change based on whether it is a file-gdb or an enterprise gdb
