@@ -30,8 +30,9 @@
   <ItemGroup>
     <PackageReference Include="gong-wpf-dragdrop" Version="3.2.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
-    <PackageReference Include="HtmlRenderer.WPF" Version="1.5.0.6" />
-    <!-- <PackageReference Include="Nelibur" Version="3.1.8" /> -->
+    <PackageReference Include="HtmlRenderer.Core" Version="1.5.0.6" />
+	<PackageReference Include="HtmlRenderer.WPF" Version="1.5.0.6" />
+	  <!-- <PackageReference Include="Nelibur" Version="3.1.8" /> -->
     <PackageReference Include="TinyMapper.Signed" Version="4.0.0" />
   </ItemGroup>
   
