@@ -200,51 +200,32 @@ namespace Geomapmaker.Data
                 // Remove all existing symbols
                 layer.SetRenderer(layer.CreateRenderer(new SimpleRendererDefinition()));
 
-                IEnumerable<EditingTemplate> mupTemplates = layer.GetTemplates();
-
-                // Loop over templates
-                foreach (EditingTemplate temp in mupTemplates)
-                {
-                    // Remove each template
-                    layer.RemoveTemplate(temp);
-                }
-
                 // Init new list of Unique Value CIMs
                 List<CIMUniqueValueClass> listUniqueValueClasses = new List<CIMUniqueValueClass>();
 
-                //
-                // Create Templates
-                //
-
-                // load the schema
-                Inspector insp = new Inspector();
-                insp.LoadSchema(layer);
-
-                // Tags
-                string[] tags = new[] { "MapUnitPoly" };
-
-                // Remove all default tools. Users should be using the geomapmaker tool.
-                string[] toolFilter = new[] {
-                                         "esri_editing_SketchPolygonTool",
-                                         "esri_editing_SketchAutoCompletePolygonTool",
-                                         "esri_editing_SketchRightPolygonTool",
-                                         "esri_editing_SketchCirclePolygonTool",
-                                         "esri_editing_SketchRectanglePolygonTool",
-                                         "esri_editing_SketchRegularPolygonTool",
-                                         "esri_editing_SketchEllipsePolygonTool",
-                                         "esri_editing_SketchFreehandPolygonTool",
-                                         "esri_editing_SketchAutoCompleteFreehandPolygonTool",
-                                         "esri_editing_SketchTracePolygonTool",
-                                         "esri_editing_SketchStreamPolygonTool",
-                                         "esri_editing_SketchParcelSeedTool",
-                                         "esri_defensemapping_createstructures",
-                                         "esri_defensemapping_differencepolygon",
-                };
-
-                string defaultTool = "";
-
-                // No Color for polygon outine
+                // No Color for polygon outline
                 CIMStroke outline = SymbolFactory.Instance.ConstructStroke(CIMColor.NoColor());
+
+                // Create list to hold CIM templates
+                List<CIMEditingTemplate> cimTemplates = new List<CIMEditingTemplate>();
+
+                // Tools to exclude - these are the standard editing tools users should not use
+                string[] excludedTools = new[] {
+                    "esri_editing_SketchPolygonTool",
+                    "esri_editing_SketchAutoCompletePolygonTool",
+                    "esri_editing_SketchRightPolygonTool",
+                    "esri_editing_SketchCirclePolygonTool",
+                    "esri_editing_SketchRectanglePolygonTool",
+                    "esri_editing_SketchRegularPolygonTool",
+                    "esri_editing_SketchEllipsePolygonTool",
+                    "esri_editing_SketchFreehandPolygonTool",
+                    "esri_editing_SketchAutoCompleteFreehandPolygonTool",
+                    "esri_editing_SketchTracePolygonTool",
+                    "esri_editing_SketchStreamPolygonTool",
+                    "esri_editing_SketchParcelSeedTool",
+                    "esri_defensemapping_createstructures",
+                    "esri_defensemapping_differencepolygon"
+                };
 
                 //
                 // LOOP OVER THE STANDARD DMUs
@@ -269,8 +250,8 @@ namespace Geomapmaker.Data
 
                     CIMSymbolLayer[] symbolLayers = new CIMSymbolLayer[]
                     {
-                    outline,
-                    fill
+                        outline,
+                        fill
                     };
 
                     CIMPolygonSymbol polySymbol = new CIMPolygonSymbol()
@@ -296,15 +277,47 @@ namespace Geomapmaker.Data
                     listUniqueValueClasses.Add(uniqueValueClass);
 
                     //
-                    // Create Template
+                    // Create Template via CIM instead of layer.CreateTemplate
                     //
 
-                    // load the schema
-                    insp["mapunit"] = mu.MU;
-                    insp["datasourceid"] = mu.DescriptionSourceID;
+                    try
+                    {
+                        // Create a CIMRowTemplate directly with correct properties
+                        CIMRowTemplate rowTemplate = new CIMRowTemplate
+                        {
+                            Name = mu.MU,
+                            Description = mu.MU,
+                            Tags = "MapUnitPoly",
+                            DefaultValues = new Dictionary<string, object>
+                            {
+                                { "mapunit", mu.MU },
+                                { "datasourceid", mu.DescriptionSourceID }
+                            },
+                            DefaultToolGUID = "", // Empty string means no default tool
+                            ExcludedToolGUIDs = excludedTools // Exclude standard editing tools
+                        };
 
-                    // Create CIM template 
-                    layer.CreateTemplate(mu.MU, mu.MU, insp, defaultTool, tags, toolFilter);
+                        cimTemplates.Add(rowTemplate);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error creating CIM template for {mu.MU}: {ex.Message}");
+                    }
+                }
+
+                // Set the templates on the layer via CIM definition
+                try
+                {
+                    var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                    if (layerDef != null)
+                    {
+                        layerDef.FeatureTemplates = cimTemplates.ToArray();
+                        layer.SetDefinition(layerDef);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error setting templates via definition: {ex.Message}");
                 }
 
                 CIMUniqueValueGroup uvg = new CIMUniqueValueGroup
@@ -366,8 +379,6 @@ namespace Geomapmaker.Data
             // List of templates to return
             List<MapUnitPolyTemplate> mupTemplates = new List<MapUnitPolyTemplate>();
 
-            IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
-
             // Find the MapUnitPolys layer
             FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
 
@@ -378,84 +389,66 @@ namespace Geomapmaker.Data
 
             List<MapUnit> dmu = await DescriptionOfMapUnits.GetMapUnitsAsync();
 
-            await QueuedTask.Run(async () =>
+            await QueuedTask.Run(() =>
             {
-                // Get templates from layer
-                layerTemplates = layer.GetTemplates();
-
-                foreach (EditingTemplate template in layerTemplates)
+                try
                 {
-					// Get CIMFeatureTemplate
-					//CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
-					// NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
-					await template.ActivateDefaultToolAsync(); //Maybe??
-					Inspector templateInspector = template.Inspector;
-
-                    // Ran into a case-sensitivity problem when accessing the default values by Key/Fieldname
-                    // The casing seems to change based on whether it is a file-gdb or an enterprise gdb
-                    // Handle case-sensitivity by trying different variations of field names
-                    string muKey = null;
-                    string dataSourceId = null;
-
-                    // Try different case variations for mapunit field
-                    string[] mapUnitVariations = { "mapunit", "MapUnit", "MAPUNIT" };
-                    foreach (string fieldName in mapUnitVariations)
+                    // Try accessing templates through CIM definition instead of GetTemplates()
+                    var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                    if (layerDef != null && layerDef.FeatureTemplates != null)
                     {
-                        try
+                        foreach (CIMEditingTemplate cimTemplate in layerDef.FeatureTemplates)
                         {
-                            var value = templateInspector[fieldName];
-                            if (value != null)
+                            // Try to get the CIMRowTemplate from the editing template
+                            CIMRowTemplate templateDef = cimTemplate as CIMRowTemplate;
+                            
+                            if (templateDef?.DefaultValues != null)
                             {
-                                muKey = value.ToString();
-                                break;
+                                List<string> defaultValuesKeys = templateDef.DefaultValues.Keys?.ToList();
+
+                                if (defaultValuesKeys != null && defaultValuesKeys.Count >= 2)
+                                {
+                                    if (defaultValuesKeys[0].ToLower() == "mapunit" && defaultValuesKeys[1].ToLower() == "datasourceid")
+                                    {
+                                        string muKey = templateDef.DefaultValues[defaultValuesKeys[0]]?.ToString();
+
+                                        // Find the matching DMU row
+                                        MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
+
+                                        if (mapUnit != null)
+                                        {
+                                            // We need to get the actual EditingTemplate object to populate the Template property
+                                            // Try to find it by name using GetTemplate (singular)
+                                            EditingTemplate editTemplate = null;
+                                            try
+                                            {
+                                                editTemplate = layer.GetTemplate(cimTemplate.Name);
+                                            }
+                                            catch (System.Exception ex)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine($"Error getting template by name: {ex.Message}");
+                                            }
+
+                                            MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
+                                            {
+                                                MapUnit = muKey,
+                                                HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
+                                                Tooltip = mapUnit.Tooltip,
+                                                DataSourceID = templateDef.DefaultValues[defaultValuesKeys[1]]?.ToString(),
+                                                Template = editTemplate
+                                            };
+
+                                            mupTemplates.Add(tmpTemplate);
+                                        }
+                                    }
+                                }
                             }
                         }
-                        catch
-                        {
-                            // Continue to next variation if this one fails
-                        }
                     }
-
-                    // Try different case variations for datasourceid field
-                    string[] dataSourceVariations = { "datasourceid", "DataSourceID", "DATASOURCEID", "DataSourceId" };
-                    foreach (string fieldName in dataSourceVariations)
-                    {
-                        try
-                        {
-                            var value = templateInspector[fieldName];
-                            if (value != null)
-                            {
-                                dataSourceId = value.ToString();
-                                break;
-                            }
-                        }
-                        catch
-                        {
-                            // Continue to next variation if this one fails
-                        }
-                    }
-
-                    // If the template has a mapunit value (Unassigned template may not)
-                    if (!string.IsNullOrEmpty(muKey))
-                    {
-                        // Find the matching DMU row
-                        MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == muKey);
-
-                        // Check if the mapUnit was found
-                        if (mapUnit != null)
-                        {
-                            MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate()
-                            {
-                                MapUnit = muKey,
-                                HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
-                                Tooltip = mapUnit.Tooltip,
-                                DataSourceID = dataSourceId,
-                                Template = template
-                            };
-
-                            mupTemplates.Add(tmpTemplate);
-                        }
-                    }
+                }
+                catch (System.Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error in GetMapUnitPolyTemplatesAsync: {ex.Message}");
                 }
             });
 
