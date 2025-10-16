@@ -204,9 +204,10 @@ namespace Geomapmaker.Data
                 foreach (EditingTemplate template in layerTemplates)
                 {
                     // Get CIMFeatureTemplate
-                    //CIMFeatureTemplate templateDef = template.GetDefinition() as CIMFeatureTemplate;
-                    // NEW in ArcGIS 3.5 - Use built-in Inspector to get template default values:
-                    Inspector templateInspector = template.Inspector;
+                    CIMBasicRowTemplate templateDef = template.GetDefinition() as CIMBasicRowTemplate;
+                    
+                    if (templateDef == null || templateDef.DefaultValues == null)
+                        continue;
 
                     Dictionary<string, string> defaultValues = new Dictionary<string, string>();
                     
@@ -217,9 +218,13 @@ namespace Geomapmaker.Data
                     foreach (Field field in layerFields)
                     {
                         string fieldName = field.Name;
-                        string value = templateInspector[fieldName]?.ToString();
-                        if (value != null) {
-                            defaultValues.Add(fieldName?.ToLower(), value);
+                        if (templateDef.DefaultValues.ContainsKey(fieldName))
+                        {
+                            string value = templateDef.DefaultValues[fieldName]?.ToString();
+                            if (value != null)
+                            {
+                                defaultValues.Add(fieldName?.ToLower(), value);
+                            }
                         }
                     }
 
