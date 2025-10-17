@@ -11,6 +11,8 @@ using Geomapmaker.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xceed.Wpf.Toolkit.Primitives;
+using ArcGIS.Desktop.Internal.Mapping.Symbology;
 
 namespace Geomapmaker.Data
 {
@@ -283,6 +285,8 @@ namespace Geomapmaker.Data
         /// </summary>
         public static async void RebuildContactsFaultsSymbology()
         {
+            Dictionary<string, Dictionary<string, string>> TypeSymbolDictx = await GenerateTemplatesAsync();
+
             // CF Layer
             FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
@@ -493,6 +497,102 @@ namespace Geomapmaker.Data
 
             return typeDictionary;
         }
+
+        /// <summary>
+        /// Get a dictionary with all of the ContactsAndFaults Type and Symbol pairs.
+        /// </summary>
+        /// <returns>Returns a Dictionary<string, string> of Type and Symbol</returns>
+        public static async Task<Dictionary<string, Dictionary<string, string>>> GenerateTemplatesAsync()
+        {
+            Dictionary<string, Dictionary<string, string>> typeDictionary = new Dictionary<string, Dictionary<string, string>>();
+
+            FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+            
+            var newCIMEditingTemplates = new List<CIMEditingTemplate>();
+            var newCIMRowTemplates = new List<CIMBasicRowTemplate>();
+
+            if (layer != null)
+            {
+                await QueuedTask.Run(() =>
+                {
+                    using (Table table = layer.GetTable())
+                    {
+                        if (table != null)
+                        {
+                            QueryFilter queryFilter = new QueryFilter
+                            {
+                                WhereClause = "type <> '' AND symbol <> ''",
+                                SubFields = "type, symbol, isconcealed, locationconfidencemeters, existenceconfidence, identityconfidence, label, notes",
+                                PostfixClause = "ORDER BY type"
+                            };
+
+                            using (RowCursor rowCursor = table.Search(queryFilter))
+                            {
+                                while (rowCursor.MoveNext())
+                                {
+                                    using (Row row = rowCursor.Current)
+                                    {
+                                        Dictionary<string, string> rowDictionary = new Dictionary<string, string>();
+                                        string type = row["type"]?.ToString();
+
+                                        rowDictionary["symbol"] = row["symbol"]?.ToString();
+                                        rowDictionary["isconcealed"] = row["isconcealed"]?.ToString();
+                                        rowDictionary["locationconfidencemeters"] = row["locationconfidencemeters"]?.ToString();
+                                        rowDictionary["identityconfidence"] = row["identityconfidence"]?.ToString();
+                                        rowDictionary["existenceconfidence"] = row["existenceconfidence"]?.ToString();
+                                        rowDictionary["label"] = row["label"]?.ToString();
+                                        rowDictionary["notes"] = row["notes"]?.ToString();
+                                        
+                                        try {
+                                            //typeDictionary.Add(type, rowDictionary);
+                                            typeDictionary[type] = rowDictionary;
+                                        } catch {
+                                            // Skip duplicates
+                                        }
+
+                                     }
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (var type in typeDictionary.Keys) {
+                        var rowDictionary = typeDictionary[type];
+                        newCIMRowTemplates.Add(new CIMRowTemplate() {
+                            Name = type,
+                            DefaultValues = rowDictionary.ToDictionary(entry => entry.Key, entry => (object)entry.Value)
+                        });
+                    }
+
+                    var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                    layerDef.FeatureTemplates = newCIMRowTemplates.ToArray();
+                    layer.SetDefinition(layerDef);
+
+
+                    /*
+                     *early experiments with editing templates. ignore
+                    var editTemplates = layer.GetTemplates();
+
+                    foreach (var et in editTemplates) {
+                        //initialize template by activating default tool
+                        et.ActivateDefaultToolAsync();
+                        var cimEditTemplate = et.GetDefinition();
+                        newCIMEditingTemplates.Add(cimEditTemplate);
+                    }
+
+                    var cimFeatureLayer = layer.GetDefinition() as CIMFeatureLayer;
+                    foreach (CIMBasicRowTemplate template in cimFeatureLayer.FeatureTemplates) {
+                        var tmp = template.DefaultValues;
+                        var x = 1;
+                    }
+                    */
+                });
+            }
+
+
+            return typeDictionary;
+        }
+
 
         /// <summary>
         /// Update the symbol values to be zero-padded. Example, 1.1.1 => 001.001.001
