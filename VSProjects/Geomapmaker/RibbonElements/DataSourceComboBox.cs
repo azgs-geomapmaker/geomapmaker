@@ -48,6 +48,7 @@ namespace Geomapmaker.RibbonElements
             {
                 GeomapmakerModule.DataSourceId = text;
                 FrameworkApplication.State.Activate("datasource_selected");
+                FrameworkApplication.State.Deactivate("cfsymbols_generated");
             }
         }
 
