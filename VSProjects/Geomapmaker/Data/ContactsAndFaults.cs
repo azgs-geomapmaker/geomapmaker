@@ -499,16 +499,17 @@ namespace Geomapmaker.Data
         }
 
         /// <summary>
-        /// Get a dictionary with all of the ContactsAndFaults Type and Symbol pairs.
+        /// Generate templates for  all of the ContactsAndFaults Types based on current content of that layer.
         /// </summary>
         /// <returns>Returns a Dictionary<string, string> of Type and Symbol</returns>
+        /// //TODO: Returns nothing?
         public static async Task<Dictionary<string, Dictionary<string, string>>> GenerateTemplatesAsync()
         {
             Dictionary<string, Dictionary<string, string>> typeDictionary = new Dictionary<string, Dictionary<string, string>>();
 
             FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
             
-            var newCIMEditingTemplates = new List<CIMEditingTemplate>();
+            //var newCIMEditingTemplates = new List<CIMEditingTemplate>();
             var newCIMRowTemplates = new List<CIMBasicRowTemplate>();
 
             if (layer != null)
@@ -528,6 +529,7 @@ namespace Geomapmaker.Data
 
                             using (RowCursor rowCursor = table.Search(queryFilter))
                             {
+                                //walk the results, collecting attribute values into dictionary for row
                                 while (rowCursor.MoveNext())
                                 {
                                     using (Row row = rowCursor.Current)
@@ -535,6 +537,7 @@ namespace Geomapmaker.Data
                                         Dictionary<string, string> rowDictionary = new Dictionary<string, string>();
                                         string type = row["type"]?.ToString();
 
+                                        rowDictionary["type"] = type;
                                         rowDictionary["symbol"] = row["symbol"]?.ToString();
                                         rowDictionary["isconcealed"] = row["isconcealed"]?.ToString();
                                         rowDictionary["locationconfidencemeters"] = row["locationconfidencemeters"]?.ToString();
@@ -542,11 +545,14 @@ namespace Geomapmaker.Data
                                         rowDictionary["existenceconfidence"] = row["existenceconfidence"]?.ToString();
                                         rowDictionary["label"] = row["label"]?.ToString();
                                         rowDictionary["notes"] = row["notes"]?.ToString();
-                                        
+                                        rowDictionary["datasourceid"] = GeomapmakerModule.DataSourceId ?? "Geomapmaker Default";
+
+                                        //add row dictionary to type dictionary once for each type
+                                        //typeDictionary[type] = rowDictionary; //for last value
+                                        //for first value
                                         try {
-                                            //typeDictionary.Add(type, rowDictionary);
-                                            typeDictionary[type] = rowDictionary;
-                                        } catch {
+                                            typeDictionary.Add(type, rowDictionary);
+                                         } catch {
                                             // Skip duplicates
                                         }
 
@@ -556,6 +562,7 @@ namespace Geomapmaker.Data
                         }
                     }
 
+                    //build new CIMRowTemplates from type dictionary
                     foreach (var type in typeDictionary.Keys) {
                         var rowDictionary = typeDictionary[type];
                         newCIMRowTemplates.Add(new CIMRowTemplate() {
