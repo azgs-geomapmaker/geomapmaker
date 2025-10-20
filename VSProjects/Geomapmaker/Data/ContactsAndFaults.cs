@@ -285,7 +285,6 @@ namespace Geomapmaker.Data
         /// </summary>
         public static async void RebuildContactsFaultsSymbology()
         {
-            Dictionary<string, Dictionary<string, string>> TypeSymbolDictx = await GenerateTemplatesAsync();
 
             // CF Layer
             FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
@@ -382,6 +381,7 @@ namespace Geomapmaker.Data
                 }
 
             }, ps.Progressor);
+            FrameworkApplication.State.Activate("cfsymbols_generated");
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <returns>Returns a Dictionary<string, string> of Type and Symbol</returns>
         /// //TODO: Returns nothing?
-        public static async Task<Dictionary<string, Dictionary<string, string>>> GenerateTemplatesAsync()
+        public static async Task/*<Dictionary<string, Dictionary<string, string>>>*/ GenerateTemplatesAsync()
         {
             Dictionary<string, Dictionary<string, string>> typeDictionary = new Dictionary<string, Dictionary<string, string>>();
 
@@ -523,6 +523,7 @@ namespace Geomapmaker.Data
                             QueryFilter queryFilter = new QueryFilter
                             {
                                 WhereClause = "type <> '' AND symbol <> ''",
+                                PrefixClause = "DISTINCT",
                                 SubFields = "type, symbol, isconcealed, locationconfidencemeters, existenceconfidence, identityconfidence, label, notes",
                                 PostfixClause = "ORDER BY type"
                             };
@@ -549,16 +550,21 @@ namespace Geomapmaker.Data
 
                                         //add row dictionary to type dictionary once for each type
                                         //typeDictionary[type] = rowDictionary; //for last value
-                                        //for first value
-                                        try {
-                                            typeDictionary.Add(type, rowDictionary);
-                                         } catch {
-                                            // Skip duplicates
+                                        //typeDictionary.Add(type, rowDictionary);//for first value
+                                        //handle duplicate type names by appending (1), (2), etc.
+                                        int x = 1;
+                                        while (x > 0) {
+                                            try {
+                                                typeDictionary.Add(x == 1 ? type : type + "(" + x.ToString() + ")", rowDictionary);
+                                                x = 0;
+                                            } catch {
+                                                x++;
+                                            }
                                         }
 
-                                     }
+                                    }
                                 }
-                            }
+                             }
                         }
                     }
 
@@ -595,9 +601,6 @@ namespace Geomapmaker.Data
                     */
                 });
             }
-
-
-            return typeDictionary;
         }
 
 
