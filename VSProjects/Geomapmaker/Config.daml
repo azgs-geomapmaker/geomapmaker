@@ -3,13 +3,13 @@
         xmlns="http://schemas.esri.com/DADF/Registry" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-  <AddInInfo id="{d2f8a816-8ba3-469e-914b-03839626077b}" version="1.0" desktopVersion="3.5">
+  <AddInInfo id="{d2f8a816-8ba3-469e-914b-03839626077b}" version="1.1" desktopVersion="3.5">
     <Name>Geomapmaker</Name>
     <Description>Geomapmaker</Description>
     <Image>Images\AddinDesktop32.png</Image>
-    <Author>Douglas, Michael Camp</Author>
+    <Author>Andrew Zaffos, Douglas Meredith, Michael Camp</Author>
     <Company>Arizona Geological Survey</Company>
-    <Date>8/10/2020 4:07:25 PM</Date>
+    <Date>10/22/2025 14:25:00 PM</Date>
     <Subject>Map Authoring</Subject>
     <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
