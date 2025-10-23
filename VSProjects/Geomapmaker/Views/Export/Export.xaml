@@ -34,7 +34,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
@@ -95,7 +97,15 @@
                     Export project as shapefiles alone. Tables Glossary, DataSources, and DescriptionOfMapUnits are joined to selected feature classes within feature dataset GeologicMap, long fields are truncated, and these feature classes are written to shapefiles.</TextBlock>
             </Expander>
 
-            <StackPanel Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Separator Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"  />
+
+            <CheckBox Grid.Row="11" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCFTemplatesCSV, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="11" Grid.Column="2" Header="Templates" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+                <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
+                    Export Contacts and Faults templates to CSV.</TextBlock>
+            </Expander>
+
+            <StackPanel Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
             </StackPanel>

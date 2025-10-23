@@ -43,10 +43,11 @@ namespace Geomapmaker.ViewModels.Export
         public bool CreateOpen { get; set; } = false;
 
         public bool CreateSimple { get; set; } = false;
+        public bool CreateCFTemplatesCSV { get; set; } = false;
 
         private bool CanExport()
         {
-            return CreateGeodatabase || CreateShapefiles || CreateGeopackage || CreateKml || CreateCsv || CreateReport || CreateOpen || CreateSimple;
+            return CreateGeodatabase || CreateShapefiles || CreateGeopackage || CreateKml || CreateCsv || CreateReport || CreateOpen || CreateSimple || CreateCFTemplatesCSV;
         }
 
         public void CloseProwindow()
@@ -316,6 +317,33 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("conversion.FeatureClassToFeatureClass", new List<string> { "Stations", simpleFolder, "Stations" }, null, null, null, GPExecuteToolFlags.None);
                     await WriteShapefileLog("Stations", simpleFolder, logFile);
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "Stations" });
+                }
+
+                if (CreateCFTemplatesCSV)
+                {
+                    // Export the Contact and Fault Symbol templates to CSV
+                    // Path for CF Templates CSV
+                    string cfTemplateFolder = Path.Combine(exportPath, "CF_Templates_CSV");
+                    // Create folder
+                    Directory.CreateDirectory(cfTemplateFolder);
+                    // Export CSV
+                    //await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "CF_Sketch_Templates", cfTemplateFolder, "CF_Sketch_Templates.csv" }, null, null, null, GPExecuteToolFlags.None);
+                    await Task.Delay(TimeSpan.FromSeconds(5)); // Wait for 5 seconds
+                    /*
+                     * Probably something like (inside QuedTask.Run):
+                       FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+                       var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                       var templates = layerDef.FeatureTemplates 
+                       foreach (var template as CIMRowTemplate in templates)
+                       {
+                           // extract info and write to CSV
+                            var defaultValues = template.DefaultValues;
+                            foreach (var kvp in defaultValues)
+                            {
+                                // write to csv
+                            }
+                       }
+
                 }
 
                 progDialog.Hide();
