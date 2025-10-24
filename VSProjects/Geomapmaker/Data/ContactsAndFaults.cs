@@ -1,18 +1,19 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Editing.Attributes;
+using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Internal.Mapping.Symbology;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit.Primitives;
-using ArcGIS.Desktop.Internal.Mapping.Symbology;
 
 namespace Geomapmaker.Data
 {
@@ -516,13 +517,12 @@ namespace Geomapmaker.Data
         /// </summary>
         /// <returns>Returns a Dictionary<string, string> of Type and Symbol</returns>
         /// //TODO: Returns nothing?
-        public static async Task/*<Dictionary<string, Dictionary<string, string>>>*/ GenerateTemplatesAsync()
+        public static async Task GenerateTemplatesAsync()
         {
-            Dictionary<string, Dictionary<string, string>> typeDictionary = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, CFTemplateRow> typeDictionary = new Dictionary<string, CFTemplateRow>();
 
             FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
             
-            //var newCIMEditingTemplates = new List<CIMEditingTemplate>();
             var newCIMRowTemplates = new List<CIMBasicRowTemplate>();
 
             if (layer != null)
@@ -543,34 +543,31 @@ namespace Geomapmaker.Data
 
                             using (RowCursor rowCursor = table.Search(queryFilter))
                             {
-                                //walk the results, collecting attribute values into dictionary for row
+                                //walk the results, collecting attribute values into CFTemplateRow objects
                                 while (rowCursor.MoveNext())
                                 {
                                     using (Row row = rowCursor.Current)
                                     {
-                                        Dictionary<string, string> rowDictionary = new Dictionary<string, string>();
                                         string type = row["type"]?.ToString();
+                                        CFTemplateRow cfRow = new CFTemplateRow()
+                                        {
+                                            type = row["type"]?.ToString(),
+                                            symbol = row["symbol"]?.ToString(),
+                                            isconcealed = row["isconcealed"]?.ToString(),
+                                            locationconfidencemeters = row["locationconfidencemeters"]?.ToString(),
+                                            identityconfidence = row["identityconfidence"]?.ToString(),
+                                            existenceconfidence = row["existenceconfidence"]?.ToString(),
+                                            label = row["label"]?.ToString(),
+                                            notes = row["notes"]?.ToString(),
+                                            datasourceid = GeomapmakerModule.DataSourceId ?? "Geomapmaker Default"
+                                        };
 
-                                        rowDictionary["type"] = type;
-                                        rowDictionary["symbol"] = row["symbol"]?.ToString();
-                                        rowDictionary["isconcealed"] = row["isconcealed"]?.ToString();
-                                        rowDictionary["locationconfidencemeters"] = row["locationconfidencemeters"]?.ToString();
-                                        rowDictionary["identityconfidence"] = row["identityconfidence"]?.ToString();
-                                        rowDictionary["existenceconfidence"] = row["existenceconfidence"]?.ToString();
-                                        rowDictionary["label"] = row["label"]?.ToString();
-                                        rowDictionary["notes"] = row["notes"]?.ToString();
-                                        rowDictionary["datasourceid"] = GeomapmakerModule.DataSourceId ?? "Geomapmaker Default";
-
-                                        //add row dictionary to type dictionary once for each type
-                                        //typeDictionary[type] = rowDictionary; //for last value
-                                        //typeDictionary.Add(type, rowDictionary);//for first value
-                                        //handle duplicate type names by appending (1), (2), etc.
+                                        //Add to typeDictionay, ensuring unique type names by appending (2), (3), etc. as needed
                                         int x = 1;
                                         while (x > 0) {
                                             try {
-                                                type = x == 1 ? type : type + "(" + x.ToString() + ")";
-                                                rowDictionary["type"] = type;
-                                                typeDictionary.Add(type /*x == 1 ? type : type + "(" + x.ToString() + ")"*/, rowDictionary);
+                                                cfRow.type = x == 1 ? type : type + "(" + x.ToString() + ")";
+                                                typeDictionary.Add(cfRow.type /*x == 1 ? type : type + "(" + x.ToString() + ")"*/, cfRow);
                                                 x = 0;
                                             } catch {
                                                 x++;
@@ -585,10 +582,11 @@ namespace Geomapmaker.Data
 
                     //build new CIMRowTemplates from type dictionary
                     foreach (var type in typeDictionary.Keys) {
-                        var rowDictionary = typeDictionary[type];
+                        var json = JsonConvert.SerializeObject(typeDictionary[type]);
+                        var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                         newCIMRowTemplates.Add(new CIMRowTemplate() {
                             Name = type,
-                            DefaultValues = rowDictionary.ToDictionary(entry => entry.Key, entry => (object)entry.Value)
+                            DefaultValues = dictionary.ToDictionary(entry => entry.Key, entry => (object)entry.Value)
                         });
                     }
 
@@ -596,24 +594,6 @@ namespace Geomapmaker.Data
                     layerDef.FeatureTemplates = newCIMRowTemplates.ToArray();
                     layer.SetDefinition(layerDef);
 
-
-                    /*
-                     *early experiments with editing templates. ignore
-                    var editTemplates = layer.GetTemplates();
-
-                    foreach (var et in editTemplates) {
-                        //initialize template by activating default tool
-                        et.ActivateDefaultToolAsync();
-                        var cimEditTemplate = et.GetDefinition();
-                        newCIMEditingTemplates.Add(cimEditTemplate);
-                    }
-
-                    var cimFeatureLayer = layer.GetDefinition() as CIMFeatureLayer;
-                    foreach (CIMBasicRowTemplate template in cimFeatureLayer.FeatureTemplates) {
-                        var tmp = template.DefaultValues;
-                        var x = 1;
-                    }
-                    */
                 });
             }
         }
