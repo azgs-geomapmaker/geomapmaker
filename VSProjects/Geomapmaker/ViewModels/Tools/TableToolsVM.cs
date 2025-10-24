@@ -1,17 +1,22 @@
-﻿using ArcGIS.Desktop.Core;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using CsvHelper;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace Geomapmaker.ViewModels.Tools {
     public class TableToolsVM {
@@ -190,37 +195,54 @@ namespace Geomapmaker.ViewModels.Tools {
             ParentVM.CloseProwindow();
 
             //FolderBrowserDialog to get file path
-            string filePath = "";
-            string fileContent = "";
             using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog()) {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 2;
+
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                openFileDialog.Filter = "csv files (*.csv)|*.csv";
+                //openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+
+                    ProgressDialog progDialog = new ProgressDialog("Loading Templates");
+                    progDialog.Show();
+
                     //Get the path of specified file
-                    filePath = openFileDialog.FileName;
+                    string filePath = openFileDialog.FileName;
 
-                    //Read the contents of the file into a stream
-                    var fileStream = openFileDialog.OpenFile();
+                    var newCIMRowTemplates = new List<CIMBasicRowTemplate>();
 
-                    using (StreamReader reader = new StreamReader(fileStream)) {
-                        fileContent = reader.ReadToEnd();
-                    }
-                }
+                    await QueuedTask.Run(() => {
+
+                        
+                        using (var reader = new StreamReader(filePath))
+                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
+                            
+                            //Read templates from CSV file
+                            var cfTemplates = csv.GetRecords<ContactsAndFaults.CFTemplateRow>();
+
+                            //convert each CFTemplate to CIMRowTemplate and add to list
+                            foreach (var t in cfTemplates) {
+                                var json = JsonConvert.SerializeObject(t);
+                                var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                                newCIMRowTemplates.Add(new CIMRowTemplate() {
+                                    Name = dictionary["type"],
+                                    DefaultValues = dictionary.ToDictionary(entry => entry.Key, entry => (object)entry.Value)
+                                });
+                            }
+                        }
+
+                        //Add new templates to ContactsAndFaults layer
+                        FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+                        var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                        layerDef.FeatureTemplates = newCIMRowTemplates.ToArray();
+                        layer.SetDefinition(layerDef);
+                    });
+
+                    progDialog.Hide();
+
+                 }
             }
-
-            MessageBox.Show(fileContent, "File Content at path: " + filePath);
-            ProgressDialog progDialog = new ProgressDialog("Loading Templates");
-
-            progDialog.Show();
-            await QueuedTask.Run(async () => {
-                await Task.Delay(5000);
-            });
-
-            progDialog.Hide();
-
         }
     }
 }
