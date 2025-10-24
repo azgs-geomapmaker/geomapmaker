@@ -34,6 +34,7 @@
 	<PackageReference Include="HtmlRenderer.WPF" Version="1.5.0.6" />
 	  <!-- <PackageReference Include="Nelibur" Version="3.1.8" /> -->
     <PackageReference Include="TinyMapper.Signed" Version="4.0.0" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
   </ItemGroup>
   
   <ItemGroup>
