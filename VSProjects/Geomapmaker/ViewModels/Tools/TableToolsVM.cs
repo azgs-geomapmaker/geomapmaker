@@ -190,7 +190,28 @@ namespace Geomapmaker.ViewModels.Tools {
             ParentVM.CloseProwindow();
 
             //FolderBrowserDialog to get file path
+            string filePath = "";
+            string fileContent = "";
+            using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog()) {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
 
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                    //Get the path of specified file
+                    filePath = openFileDialog.FileName;
+
+                    //Read the contents of the file into a stream
+                    var fileStream = openFileDialog.OpenFile();
+
+                    using (StreamReader reader = new StreamReader(fileStream)) {
+                        fileContent = reader.ReadToEnd();
+                    }
+                }
+            }
+
+            MessageBox.Show(fileContent, "File Content at path: " + filePath);
             ProgressDialog progDialog = new ProgressDialog("Loading Templates");
 
             progDialog.Show();
