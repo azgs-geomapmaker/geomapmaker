@@ -35,6 +35,7 @@
 	  <!-- <PackageReference Include="Nelibur" Version="3.1.8" /> -->
     <PackageReference Include="TinyMapper.Signed" Version="4.0.0" />
     <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   
   <ItemGroup>
