@@ -1,4 +1,5 @@
-﻿using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Core.Geoprocessing;
@@ -6,10 +7,12 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using CsvHelper;
 using Geomapmaker.Report;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,6 +20,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using FieldDescription = ArcGIS.Desktop.Mapping.FieldDescription;
+using Geomapmaker.Data;
 
 namespace Geomapmaker.ViewModels.Export
 {
@@ -319,33 +323,45 @@ namespace Geomapmaker.ViewModels.Export
                     await Geoprocessing.ExecuteToolAsync("management.RemoveJoin", new List<string> { "Stations" });
                 }
 
-                if (CreateCFTemplatesCSV)
-                {
+                if (CreateCFTemplatesCSV) {
                     // Export the Contact and Fault Symbol templates to CSV
                     // Path for CF Templates CSV
                     string cfTemplateFolder = Path.Combine(exportPath, "CF_Templates_CSV");
                     // Create folder
                     Directory.CreateDirectory(cfTemplateFolder);
-                    // Export CSV
-                    //await Geoprocessing.ExecuteToolAsync("conversion.TableToTable", new List<string> { "CF_Sketch_Templates", cfTemplateFolder, "CF_Sketch_Templates.csv" }, null, null, null, GPExecuteToolFlags.None);
-                    await Task.Delay(TimeSpan.FromSeconds(5)); // Wait for 5 seconds
-                    /*
-                     * Probably something like (inside QuedTask.Run):
-                       FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
-                       var layerDef = layer.GetDefinition() as CIMFeatureLayer;
-                       var templates = layerDef.FeatureTemplates 
-                       foreach (var template as CIMRowTemplate in templates)
-                       {
-                           // extract info and write to CSV
-                            var defaultValues = template.DefaultValues;
-                            foreach (var kvp in defaultValues)
-                            {
-                                // write to csv
+
+                    FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+                    if (layer != null) {
+
+                        await QueuedTask.Run(() => {
+                            var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                            var templates = layerDef.FeatureTemplates;
+                            using (var writer = new StreamWriter(cfTemplateFolder + "/CFtemplates.csv"))
+                            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+                                var templateList = new List<ContactsAndFaults.CFTemplateRow>();
+                                foreach (var t in templates) {
+                                    var template = t as CIMRowTemplate;
+                                    // extract info and write to CSV
+                                    var defaultValues = template.DefaultValues;
+                                    templateList.Add(new ContactsAndFaults.CFTemplateRow {
+                                        type = defaultValues.ContainsKey("type") ? defaultValues["type"]?.ToString() : "",
+                                        symbol = defaultValues.ContainsKey("symbol") ? defaultValues["symbol"]?.ToString() : "",
+                                        isconcealed = defaultValues.ContainsKey("isconcealed") ? defaultValues["isconcealed"]?.ToString() : "",
+                                        locationconfidencemeters = defaultValues.ContainsKey("locationconfidencemeters") ? defaultValues["locationconfidencemeters"]?.ToString() : "",
+                                        identityconfidence = defaultValues.ContainsKey("identityconfidence") ? defaultValues["identityconfidence"]?.ToString() : "",
+                                        existenceconfidence = defaultValues.ContainsKey("existenceconfidence") ? defaultValues["existenceconfidence"]?.ToString() : "",
+                                        label = defaultValues.ContainsKey("label") ? defaultValues["label"]?.ToString() : "",
+                                        notes = defaultValues.ContainsKey("notes") ? defaultValues["notes"]?.ToString() : "",
+                                        datasourceid = defaultValues.ContainsKey("datasourceid") ? defaultValues["datasourceid"]?.ToString() : ""
+                                    });
+                                }
+                                csv.WriteRecords<ContactsAndFaults.CFTemplateRow>(templateList);
+                                csv.Flush();
                             }
-                       }
-
+                        });
+                    }
                 }
-
+        
                 progDialog.Hide();
             }
         }

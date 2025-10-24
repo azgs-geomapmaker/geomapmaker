@@ -10,12 +10,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Geomapmaker.ViewModels.Tools
-{
-    public class TableToolsVM
-    {
+namespace Geomapmaker.ViewModels.Tools {
+    public class TableToolsVM {
         private const string symbologyCsvUrl = "https://raw.githubusercontent.com/azgs/geomapmaker/master/SetUp/SourceMaterials/Symbology.csv";
 
         private const string predefinedTermsCsvUrl = "https://raw.githubusercontent.com/azgs/geomapmaker/master/SetUp/SourceMaterials/PredefinedTerms.csv";
@@ -40,15 +39,15 @@ namespace Geomapmaker.ViewModels.Tools
 
         public ICommand CommandInsertPredfinedTermsTable => new RelayCommand(() => InsertPredefinedTermsTable());
 
+        public ICommand CommandLoadCFTemplatesFromFile => new RelayCommand(() => LoadCFTemplatesFromFile());
+
         public ToolsViewModel ParentVM { get; set; }
 
-        public TableToolsVM(ToolsViewModel parentVM)
-        {
+        public TableToolsVM(ToolsViewModel parentVM) {
             ParentVM = parentVM;
         }
 
-        public async void SetAllPrimaryKeys()
-        {
+        public async void SetAllPrimaryKeys() {
             ParentVM.CloseProwindow();
 
             int idCount = 0;
@@ -69,8 +68,7 @@ namespace Geomapmaker.ViewModels.Tools
             MessageBox.Show($"Added {idCount} Primary Key{(idCount == 1 ? "" : "s")}", "Set All Primary Keys");
         }
 
-        public async void InsertGlossaryTerms()
-        {
+        public async void InsertGlossaryTerms() {
             ParentVM.CloseProwindow();
 
             // Get predefined terms from table
@@ -82,10 +80,8 @@ namespace Geomapmaker.ViewModels.Tools
             // List of terms to add
             List<GlossaryTerm> insertTerms = new List<GlossaryTerm>();
 
-            foreach (GlossaryTerm predefined in predefinedTerms)
-            {
-                if (!glossaryTerms.Any(a => a.Term == predefined.Term))
-                {
+            foreach (GlossaryTerm predefined in predefinedTerms) {
+                if (!glossaryTerms.Any(a => a.Term == predefined.Term)) {
                     insertTerms.Add(predefined);
                 }
             }
@@ -95,8 +91,7 @@ namespace Geomapmaker.ViewModels.Tools
             MessageBox.Show($"Added {count} Glossary Term{(count == 1 ? "" : "s")}", "Insert Glossary Terms");
         }
 
-        public async void SetMapUnit()
-        {
+        public async void SetMapUnit() {
             ParentVM.CloseProwindow();
 
             int stationCount = await Data.Stations.UpdateStationsWithMapUnitIntersectionAsync();
@@ -106,8 +101,7 @@ namespace Geomapmaker.ViewModels.Tools
             MessageBox.Show($"Updated {stationCount} Stations row{(stationCount == 1 ? "" : "s")} and {opCount} Orientation Points row{(opCount == 1 ? "" : "s")}", "Find MapUnitPolys Intersections");
         }
 
-        public async void ZeroPadSymbols()
-        {
+        public async void ZeroPadSymbols() {
             ParentVM.CloseProwindow();
 
             int cfCount = await Data.ContactsAndFaults.ZeroPadSymbolValues();
@@ -117,8 +111,7 @@ namespace Geomapmaker.ViewModels.Tools
             MessageBox.Show($"Updated {cfCount} ContactsAndFaults row{(cfCount == 1 ? "" : "s")} and {opCount} Orientation Point row{(opCount == 1 ? "" : "s")}", "Zero Pad Symbols");
         }
 
-        public async void ZeroPadHierarchyKeys()
-        {
+        public async void ZeroPadHierarchyKeys() {
             ParentVM.CloseProwindow();
 
             int count = await Data.DescriptionOfMapUnits.ZeroPadHierarchyKeyValues();
@@ -126,8 +119,7 @@ namespace Geomapmaker.ViewModels.Tools
             MessageBox.Show($"Updated {count} DescriptionOfMapUnits row{(count == 1 ? "" : "s")}", "Zero Pad Hierarchy Keys");
         }
 
-        public async void GeopackageRename()
-        {
+        public async void GeopackageRename() {
             ParentVM.CloseProwindow();
 
             int count = 0;
@@ -136,16 +128,13 @@ namespace Geomapmaker.ViewModels.Tools
 
             IEnumerable<StandaloneTable> tables = MapView.Active?.Map.GetStandaloneTablesAsFlattenedList().Where(b => b.Name.StartsWith("main.")) ?? new List<StandaloneTable>(); ;
 
-            await QueuedTask.Run(() =>
-            {
-                foreach (Layer layer in layers)
-                {
+            await QueuedTask.Run(() => {
+                foreach (Layer layer in layers) {
                     layer.SetName(layer.Name.Remove(0, 5));
                     count++;
                 }
 
-                foreach (StandaloneTable table in tables)
-                {
+                foreach (StandaloneTable table in tables) {
                     table.SetName(table.Name.Remove(0, 5));
                     count++;
                 }
@@ -154,59 +143,63 @@ namespace Geomapmaker.ViewModels.Tools
             MessageBox.Show($"Updated {count} dataset name{(count == 1 ? "" : "s")}", "Geopackage Rename");
         }
 
-        public async void InsertSymbologyTable()
-        {
+        public async void InsertSymbologyTable() {
             ParentVM.CloseProwindow();
 
             string savePath = Path.Combine(Project.Current.HomeFolderPath, "Symbology.csv");
 
-            try
-            {
-                using (WebClient client = new WebClient())
-                {
+            try {
+                using (WebClient client = new WebClient()) {
                     await client.DownloadFileTaskAsync(symbologyCsvUrl, savePath);
                 }
 
-                await QueuedTask.Run(() =>
-                {
+                await QueuedTask.Run(() => {
                     StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, -1, "Symbology");
                 });
 
                 // Clear out symbols
                 GeomapmakerModule.ContactsAndFaultsSymbols = null;
                 GeomapmakerModule.OrientationPointSymbols = null;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "Something went wrong.");
             }
         }
 
-        public async void InsertPredefinedTermsTable()
-        {
+        public async void InsertPredefinedTermsTable() {
             ParentVM.CloseProwindow();
 
             string savePath = Path.Combine(Project.Current.HomeFolderPath, "PredefinedTerms.csv");
 
-            try
-            {
+            try {
                 // Download the csv 
-                using (WebClient client = new WebClient())
-                {
+                using (WebClient client = new WebClient()) {
                     await client.DownloadFileTaskAsync(predefinedTermsCsvUrl, savePath);
                 }
 
                 // Import csv into project
-                await QueuedTask.Run(() =>
-                {
+                await QueuedTask.Run(() => {
                     StandaloneTableFactory.Instance.CreateStandaloneTable(new Uri(savePath), MapView.Active?.Map, -1, "PredefinedTerms");
                 });
 
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "Something went wrong.");
             }
+        }
+
+        public async void LoadCFTemplatesFromFile() {
+            ParentVM.CloseProwindow();
+
+            //FolderBrowserDialog to get file path
+
+            ProgressDialog progDialog = new ProgressDialog("Loading Templates");
+
+            progDialog.Show();
+            await QueuedTask.Run(async () => {
+                await Task.Delay(5000);
+            });
+
+            progDialog.Hide();
+
         }
     }
 }
