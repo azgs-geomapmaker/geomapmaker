@@ -498,6 +498,19 @@ namespace Geomapmaker.Data
             return typeDictionary;
         }
 
+        public class CFTemplateRow {
+            public string type { get; set; }
+            public string symbol { get; set; }
+            public string isconcealed { get; set; }
+            public string locationconfidencemeters { get; set; }
+            public string identityconfidence { get; set; }
+            public string existenceconfidence { get; set; }
+            public string label { get; set; }
+            public string notes { get; set; }
+            public string datasourceid { get; set; }
+        }
+
+
         /// <summary>
         /// Generate templates for  all of the ContactsAndFaults Types based on current content of that layer.
         /// </summary>
@@ -555,7 +568,9 @@ namespace Geomapmaker.Data
                                         int x = 1;
                                         while (x > 0) {
                                             try {
-                                                typeDictionary.Add(x == 1 ? type : type + "(" + x.ToString() + ")", rowDictionary);
+                                                type = x == 1 ? type : type + "(" + x.ToString() + ")";
+                                                rowDictionary["type"] = type;
+                                                typeDictionary.Add(type /*x == 1 ? type : type + "(" + x.ToString() + ")"*/, rowDictionary);
                                                 x = 0;
                                             } catch {
                                                 x++;
