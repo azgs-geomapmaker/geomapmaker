@@ -225,6 +225,8 @@ namespace Geomapmaker.ViewModels.Tools {
                             foreach (var t in cfTemplates) {
                                 var json = JsonConvert.SerializeObject(t);
                                 var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                                dictionary["datasourceid"] = GeomapmakerModule.DataSourceId;
+
                                 newCIMRowTemplates.Add(new CIMRowTemplate() {
                                     Name = dictionary["type"],
                                     DefaultValues = dictionary.ToDictionary(entry => entry.Key, entry => (object)entry.Value)
