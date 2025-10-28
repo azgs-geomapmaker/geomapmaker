@@ -511,6 +511,35 @@ namespace Geomapmaker.Data
             public string datasourceid { get; set; }
         }
 
+        public static async Task RefreshCFTemplates() {
+
+            FeatureLayer layer = MapView.Active?.Map.FindLayers("ContactsAndFaults").FirstOrDefault() as FeatureLayer;
+            if (layer != null) {
+
+                var newCIMRowTemplates = new List<CIMBasicRowTemplate>();
+
+                await QueuedTask.Run(() => {
+                    var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                    var templates = layerDef.FeatureTemplates;
+                    foreach (var t in templates) {
+                        var template = t as CIMRowTemplate;
+                        var defaultValues = template.DefaultValues;
+                        try {
+                            defaultValues["datasourceid"] = GeomapmakerModule.DataSourceId;
+                            newCIMRowTemplates.Add(new CIMRowTemplate() {
+                                Name = defaultValues["type"].ToString(),
+                                DefaultValues = defaultValues
+                            });
+                        } catch { }
+                    }
+                    layerDef.FeatureTemplates = newCIMRowTemplates.ToArray();
+                    layer.SetDefinition(layerDef);
+                });
+
+            }
+        }
+
+
 
         /// <summary>
         /// Generate templates for  all of the ContactsAndFaults Types based on current content of that layer.
