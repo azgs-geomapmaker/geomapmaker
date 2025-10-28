@@ -1,8 +1,17 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
+using CsvHelper;
 using Geomapmaker.Data;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Geomapmaker.RibbonElements
 {
@@ -37,7 +46,7 @@ namespace Geomapmaker.RibbonElements
             });
         }
 
-        protected override void OnTextChange(string text)
+        protected override async void OnTextChange(string text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -47,6 +56,13 @@ namespace Geomapmaker.RibbonElements
             else
             {
                 GeomapmakerModule.DataSourceId = text;
+
+                ProgressDialog progDialog = new ProgressDialog("Refreshing templates");
+                progDialog.Show();
+                //await Templates.RefreshCFTemplates();
+                await ContactsAndFaults.RefreshCFTemplates();
+                progDialog.Hide();
+
                 FrameworkApplication.State.Activate("datasource_selected");
                 FrameworkApplication.State.Deactivate("cfsymbols_generated");
             }
