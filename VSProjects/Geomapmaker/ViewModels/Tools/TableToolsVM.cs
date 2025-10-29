@@ -241,9 +241,11 @@ namespace Geomapmaker.ViewModels.Tools {
                         layer.SetDefinition(layerDef);
                     });
 
+                    FrameworkApplication.State.Activate("cftemplates_available");
+
                     progDialog.Hide();
 
-                 }
+                }
             }
         }
     }
