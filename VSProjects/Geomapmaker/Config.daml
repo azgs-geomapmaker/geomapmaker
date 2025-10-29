@@ -45,7 +45,8 @@
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts and Faults" keytip="CF">
             <button refID="Geomapmaker_ContactsFaults" />
 		    <button refID="Geomapmaker_TemplatesfromTable" />
-        </group>
+			<button refID="Geomapmaker_ChangeTemplateOfFeature" />
+		</group>
         <group id="Geomapmaker_MUPs" caption="Map Unit Polys" keytip="MUP">
           <button refID="Geomapmaker_MapUnitPolysCreate_Btn" />
           <button refID="Geomapmaker_MapUnitPolysEdit_Btn" />
@@ -101,7 +102,12 @@
             Generate Contacts and Faults templates from the Contacts and Faults table.<disabledText>Rebuild Contacts and Faults Symbology (in Tools) to enable</disabledText>
           </tooltip>
         </button>
-        <tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="">
+		<button id="Geomapmaker_ChangeTemplateOfFeature" caption="Change Feature Template" className="Geomapmaker.RibbonElements.CFTemplatesButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ChangeParcelType16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ChangeParcelType32.png" keytip="" condition="cfTemplatesAvailable">
+			<tooltip heading="Change Feature Template">
+				Apply a different template to a specific Contacts and Faults feature.<disabledText>Rebuild Contacts and Faults Symbology (in Tools) to enable</disabledText>
+			</tooltip>
+		</button>
+		<tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText>Select a Data Source to edit the map.</disabledText>
           </tooltip>
@@ -181,15 +187,20 @@
   </modules>
   <!-- Conditions -->
   <conditions>
-    <insertCondition id="dataSourceSelectedCondition">
-      <and>
-        <state id="datasource_selected" />
-      </and>
-    </insertCondition>
-	  <insertCondition id="cfSymbolsGeneratedCondition">
-		  <and>
-			  <state id="cfsymbols_generated" />
-		  </and>
-	  </insertCondition>
+        <insertCondition id="dataSourceSelectedCondition">
+          <and>
+            <state id="datasource_selected" />
+          </and>
+        </insertCondition>
+	    <insertCondition id="cfSymbolsGeneratedCondition">
+		    <and>
+			    <state id="cfsymbols_generated" />
+		    </and>
+	    </insertCondition>
+	    <insertCondition id="cfTemplatesAvailable">
+		    <and>
+			    <state id="cftemplates_available" />
+		    </and>
+	    </insertCondition>
   </conditions>
 </ArcGIS>
