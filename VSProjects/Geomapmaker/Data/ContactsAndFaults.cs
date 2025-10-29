@@ -220,7 +220,7 @@ namespace Geomapmaker.Data
                     // Rebuild the dictionary with lowercase keys to avoid casing-headaches
                     foreach (Field field in layerFields)
                     {
-                        string fieldName = field.Name;
+                        string fieldName = field.Name.ToLower();
                         if (templateDef.DefaultValues.ContainsKey(fieldName))
                         {
                             string value = templateDef.DefaultValues[fieldName]?.ToString();
@@ -624,6 +624,8 @@ namespace Geomapmaker.Data
                     layer.SetDefinition(layerDef);
 
                 });
+                FrameworkApplication.State.Activate("cftemplates_available");
+
             }
         }
 
