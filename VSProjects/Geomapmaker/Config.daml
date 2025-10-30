@@ -43,9 +43,10 @@
           <button refID="Geomapmaker_Glossary" />
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts and Faults" keytip="CF">
-            <button refID="Geomapmaker_ContactsFaults" />
-		    <button refID="Geomapmaker_TemplatesfromTable" />
-			<button refID="Geomapmaker_ChangeTemplateOfFeature" />
+          <button refID="Geomapmaker_ContactsFaults" />
+          <button refID="Geomapmaker_TemplatesfromTable" />
+          <button refID="Geomapmaker_ChangeTemplateOfFeature" />
+		  <tool refID="Geomapmaker_ApplyCFTemplateTool" size="large" />
 		</group>
         <group id="Geomapmaker_MUPs" caption="Map Unit Polys" keytip="MUP">
           <button refID="Geomapmaker_MapUnitPolysCreate_Btn" />
@@ -102,11 +103,11 @@
             Generate Contacts and Faults templates from the Contacts and Faults table.<disabledText>Rebuild Contacts and Faults Symbology (in Tools) to enable</disabledText>
           </tooltip>
         </button>
-		<button id="Geomapmaker_ChangeTemplateOfFeature" caption="Change Feature Template" className="Geomapmaker.RibbonElements.CFTemplatesButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ChangeParcelType16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ChangeParcelType32.png" keytip="" condition="cfTemplatesAvailable">
-			<tooltip heading="Change Feature Template">
-				Apply a different template to a specific Contacts and Faults feature.<disabledText>Rebuild Contacts and Faults Symbology (in Tools) to enable</disabledText>
+		<tool id="Geomapmaker_ApplyCFTemplateTool" caption="Apply Template Tool" className="Geomapmaker.MapTools.ApplyCFTemplateTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ChangeParcelType16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ChangeParcelType32.png" condition="cfTemplatesAvailable">
+			<tooltip heading="Tooltip Heading">
+				Apply a different template to an existing Contacts and Faults feature.<disabledText>Load Contacts and Faults templates to enable</disabledText>
 			</tooltip>
-		</button>
+		</tool>
 		<tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText>Select a Data Source to edit the map.</disabledText>
@@ -187,20 +188,20 @@
   </modules>
   <!-- Conditions -->
   <conditions>
-        <insertCondition id="dataSourceSelectedCondition">
-          <and>
-            <state id="datasource_selected" />
-          </and>
-        </insertCondition>
-	    <insertCondition id="cfSymbolsGeneratedCondition">
-		    <and>
-			    <state id="cfsymbols_generated" />
-		    </and>
-	    </insertCondition>
-	    <insertCondition id="cfTemplatesAvailable">
-		    <and>
-			    <state id="cftemplates_available" />
-		    </and>
-	    </insertCondition>
+    <insertCondition id="dataSourceSelectedCondition">
+      <and>
+        <state id="datasource_selected" />
+      </and>
+    </insertCondition>
+    <insertCondition id="cfSymbolsGeneratedCondition">
+      <and>
+        <state id="cfsymbols_generated" />
+      </and>
+    </insertCondition>
+    <insertCondition id="cfTemplatesAvailable">
+      <and>
+        <state id="cftemplates_available" />
+      </and>
+    </insertCondition>
   </conditions>
 </ArcGIS>
