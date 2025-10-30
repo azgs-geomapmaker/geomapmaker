@@ -344,15 +344,15 @@ namespace Geomapmaker.ViewModels.Export
                                     // extract info and write to CSV
                                     var defaultValues = template.DefaultValues;
                                     templateList.Add(new ContactsAndFaults.CFTemplateRow {
-                                        type = defaultValues.ContainsKey("type") ? defaultValues["type"]?.ToString() : "",
-                                        symbol = defaultValues.ContainsKey("symbol") ? defaultValues["symbol"]?.ToString() : "",
-                                        isconcealed = defaultValues.ContainsKey("isconcealed") ? defaultValues["isconcealed"]?.ToString() : "",
-                                        locationconfidencemeters = defaultValues.ContainsKey("locationconfidencemeters") ? defaultValues["locationconfidencemeters"]?.ToString() : "",
-                                        identityconfidence = defaultValues.ContainsKey("identityconfidence") ? defaultValues["identityconfidence"]?.ToString() : "",
-                                        existenceconfidence = defaultValues.ContainsKey("existenceconfidence") ? defaultValues["existenceconfidence"]?.ToString() : "",
-                                        label = defaultValues.ContainsKey("label") ? defaultValues["label"]?.ToString() : "",
-                                        notes = defaultValues.ContainsKey("notes") ? defaultValues["notes"]?.ToString() : "",
-                                        datasourceid = defaultValues.ContainsKey("datasourceid") ? defaultValues["datasourceid"]?.ToString() : ""
+                                        Type = defaultValues.ContainsKey("Type") ? defaultValues["Type"]?.ToString() : "",
+                                        Symbol = defaultValues.ContainsKey("Symbol") ? defaultValues["Symbol"]?.ToString() : "",
+                                        IsConcealed = defaultValues.ContainsKey("IsConcealed") ? defaultValues["IsConcealed"]?.ToString() : "",
+                                        LocationConfidenceMeters = defaultValues.ContainsKey("LocationConfidenceMeters") ? defaultValues["LocationConfidenceMeters"]?.ToString() : "",
+                                        IdentityConfidence = defaultValues.ContainsKey("IdentityConfidence") ? defaultValues["IdentityConfidence"]?.ToString() : "",
+                                        ExistenceConfidence = defaultValues.ContainsKey("ExistenceConfidence") ? defaultValues["ExistenceConfidence"]?.ToString() : "",
+                                        Label = defaultValues.ContainsKey("Label") ? defaultValues["Label"]?.ToString() : "",
+                                        Notes = defaultValues.ContainsKey("Notes") ? defaultValues["Notes"]?.ToString() : "",
+                                        DataSourceId = defaultValues.ContainsKey("DataSourceId") ? defaultValues["DataSourceId"]?.ToString() : ""
                                     });
                                 }
                                 csv.WriteRecords<ContactsAndFaults.CFTemplateRow>(templateList);

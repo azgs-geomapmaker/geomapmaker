@@ -220,7 +220,7 @@ namespace Geomapmaker.Data
                     // Rebuild the dictionary with lowercase keys to avoid casing-headaches
                     foreach (Field field in layerFields)
                     {
-                        string fieldName = field.Name.ToLower();
+                        string fieldName = field.Name/*.ToLower()*/;
                         if (templateDef.DefaultValues.ContainsKey(fieldName))
                         {
                             string value = templateDef.DefaultValues[fieldName]?.ToString();
@@ -500,15 +500,15 @@ namespace Geomapmaker.Data
         }
 
         public class CFTemplateRow {
-            public string type { get; set; }
-            public string symbol { get; set; }
-            public string isconcealed { get; set; }
-            public string locationconfidencemeters { get; set; }
-            public string identityconfidence { get; set; }
-            public string existenceconfidence { get; set; }
-            public string label { get; set; }
-            public string notes { get; set; }
-            public string datasourceid { get; set; }
+            public string Type { get; set; }
+            public string Symbol { get; set; }
+            public string IsConcealed { get; set; }
+            public string LocationConfidenceMeters { get; set; }
+            public string IdentityConfidence { get; set; }
+            public string ExistenceConfidence { get; set; }
+            public string Label { get; set; }
+            public string Notes { get; set; }
+            public string DataSourceId { get; set; }
         }
 
         public static async Task RefreshCFTemplates() {
@@ -580,23 +580,23 @@ namespace Geomapmaker.Data
                                         string type = row["type"]?.ToString();
                                         CFTemplateRow cfRow = new CFTemplateRow()
                                         {
-                                            type = row["type"]?.ToString(),
-                                            symbol = row["symbol"]?.ToString(),
-                                            isconcealed = row["isconcealed"]?.ToString(),
-                                            locationconfidencemeters = row["locationconfidencemeters"]?.ToString(),
-                                            identityconfidence = row["identityconfidence"]?.ToString(),
-                                            existenceconfidence = row["existenceconfidence"]?.ToString(),
-                                            label = row["label"]?.ToString(),
-                                            notes = row["notes"]?.ToString(),
-                                            datasourceid = GeomapmakerModule.DataSourceId ?? "Geomapmaker Default"
+                                            Type = row["type"]?.ToString(),
+                                            Symbol = row["symbol"]?.ToString(),
+                                            IsConcealed = row["isconcealed"]?.ToString(),
+                                            LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
+                                            IdentityConfidence = row["identityconfidence"]?.ToString(),
+                                            ExistenceConfidence = row["existenceconfidence"]?.ToString(),
+                                            Label = row["label"]?.ToString(),
+                                            Notes = row["notes"]?.ToString(),
+                                            DataSourceId = GeomapmakerModule.DataSourceId ?? "Geomapmaker Default"
                                         };
 
                                         //Add to typeDictionay, ensuring unique type names by appending (2), (3), etc. as needed
                                         int x = 1;
                                         while (x > 0) {
                                             try {
-                                                cfRow.type = x == 1 ? type : type + "(" + x.ToString() + ")";
-                                                typeDictionary.Add(cfRow.type /*x == 1 ? type : type + "(" + x.ToString() + ")"*/, cfRow);
+                                                cfRow.Type = x == 1 ? type : type + "(" + x.ToString() + ")";
+                                                typeDictionary.Add(cfRow.Type /*x == 1 ? type : type + "(" + x.ToString() + ")"*/, cfRow);
                                                 x = 0;
                                             } catch {
                                                 x++;
