@@ -525,9 +525,9 @@ namespace Geomapmaker.Data
                         var template = t as CIMRowTemplate;
                         var defaultValues = template.DefaultValues;
                         try {
-                            defaultValues["datasourceid"] = GeomapmakerModule.DataSourceId;
+                            defaultValues["DataSourceId"] = GeomapmakerModule.DataSourceId;
                             newCIMRowTemplates.Add(new CIMRowTemplate() {
-                                Name = defaultValues["type"].ToString(),
+                                Name = defaultValues["Type"].ToString(),
                                 DefaultValues = defaultValues
                             });
                         } catch { }
