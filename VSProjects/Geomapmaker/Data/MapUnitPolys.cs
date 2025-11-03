@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
@@ -376,6 +377,71 @@ namespace Geomapmaker.Data
         /// <returns>List of MapUnitPolys template</returns>
         public static async Task<List<MapUnitPolyTemplate>> GetMapUnitPolyTemplatesAsync()
         {
+
+            // List of templates to return
+            List<MapUnitPolyTemplate> mupTemplates = new List<MapUnitPolyTemplate>();
+
+            IEnumerable<EditingTemplate> layerTemplates = new List<EditingTemplate>();
+
+            // Find the MapUnitPolys layer
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
+
+            if (layer == null) {
+                return mupTemplates;
+            }
+
+            List<MapUnit> dmu = await DescriptionOfMapUnits.GetMapUnitsAsync();
+
+
+            await QueuedTask.Run(() => {
+                // Get templates from CF layer
+                layerTemplates = layer.GetTemplates();
+
+                // Skip the default template
+                layerTemplates = layerTemplates.Where(a => a.Name != "MapUnitPolys");
+
+                foreach (EditingTemplate template in layerTemplates) {
+                    // Get CIMFeatureTemplate
+                    CIMBasicRowTemplate templateDef = template.GetDefinition() as CIMBasicRowTemplate;
+
+                    if (templateDef == null || templateDef.DefaultValues == null)
+                        continue;
+
+                    Dictionary<string, string> defaultValues = new Dictionary<string, string>();
+
+                    // Get field names from the layer definition instead
+                    IReadOnlyList<Field> layerFields = layer.GetTable().GetDefinition().GetFields();
+
+                    // Rebuild the dictionary with lowercase keys to avoid casing-headaches
+                    foreach (Field field in layerFields) {
+                        string fieldName = field.Name.ToUpper();
+                        if (templateDef.DefaultValues.ContainsKey(fieldName)) {
+                            string value = templateDef.DefaultValues[fieldName]?.ToString();
+                            if (value != null) {
+                                defaultValues.Add(fieldName?.ToLower(), value);
+                            }
+                        }
+                    }
+
+                    // Find the matching DMU row
+                    MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == defaultValues["mapunit"]);
+
+                    if (mapUnit != null) {
+                        MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate() {
+                            MapUnit = defaultValues["mapunit"],
+                            HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
+                            Tooltip = mapUnit.Tooltip,
+                            DataSourceID = mapUnit.DescriptionSourceID,
+                            Template = template
+                        };
+
+                        mupTemplates.Add(tmpTemplate);
+                    }
+                }
+            });
+
+
+            /*
             // List of templates to return
             List<MapUnitPolyTemplate> mupTemplates = new List<MapUnitPolyTemplate>();
 
@@ -451,6 +517,7 @@ namespace Geomapmaker.Data
                     System.Diagnostics.Debug.WriteLine($"Error in GetMapUnitPolyTemplatesAsync: {ex.Message}");
                 }
             });
+            */
 
             return mupTemplates;
         }
