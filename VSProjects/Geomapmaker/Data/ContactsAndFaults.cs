@@ -272,6 +272,8 @@ namespace Geomapmaker.Data
 
                         tmpTemplate.Template = template;
 
+                        tmpTemplate.SymbolObject = GeomapmakerModule.ContactsAndFaultsSymbols?.FirstOrDefault(s => s.Key == tmpTemplate.Symbol);
+
                         contactFaultTemplates.Add(tmpTemplate);
                     }
                 }

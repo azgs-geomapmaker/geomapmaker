@@ -25,5 +25,8 @@ namespace Geomapmaker.Models
         public string DataSource { get; set; }
 
         public EditingTemplate Template { get; set; }
+
+        // Add this property to hold the full GemsSymbol object
+        public GemsSymbol SymbolObject { get; set; }
     }
 }
