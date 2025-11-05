@@ -116,7 +116,14 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <!--<Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" /> -->
+                            <Image Source="{Binding SymbolObject.Preview}" Width="150" Height="25" Margin="0,0,5,0" VerticalAlignment="Center" />
+                            <!--
+                            <Image Source="{Binding SymbolObject.Preview}" Width="125" Height="20" Stretch="None" Margin="0,0,5,0" VerticalAlignment="Center">
+                                <Image.Clip>
+                                    <RectangleGeometry Rect="0,0,125,20" />
+                                </Image.Clip>
+                            </Image>
+                            -->
                             <TextBlock Text="{Binding Label}" ToolTip="{Binding Tooltip}" />
                         </StackPanel>
                     </DataTemplate>
