@@ -75,7 +75,7 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
             //IdentityConfidence = IdentityConfidence;
         }
 
-        // Update Map Unit Polygons
+        // Update Contacts and Faults
         public ICommand CommandUpdate => new RelayCommand(() => UpdateAsync(), () => CanUpdate());
 
         // Reset Object ids
