@@ -1,19 +1,22 @@
-﻿using ArcGIS.Desktop.Framework;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Internal.CIM;
+using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Editing.Attributes;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Editing.Attributes;
-using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Mapping;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Windows.Input;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Geomapmaker.ViewModels.ContactsFaultsEdit
 {
@@ -25,8 +28,10 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
 
         public ICommand CommandRefreshCFTemplates => new RelayCommand(() => RefreshCFTemplates());
 
-        public void CloseProwindow()
+        public async void CloseProwindow()
         {
+            ClearOids();
+
             WindowCloseEvent(this, new EventArgs());
         }
 
@@ -83,13 +88,18 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
 
         private async void UpdateAsync()
         {
+            ProgressDialog progDialog = new ProgressDialog("Getting selected template");
+
+            progDialog.Show();
+
+
             bool editOperationSucceeded = false;
 
-            FeatureLayer polyLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
+            FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.First((l) => l.Name == "ContactsAndFaults") as FeatureLayer;
 
             await QueuedTask.Run(() =>
             {
-                using (Table enterpriseTable = polyLayer.GetTable())
+                using (Table enterpriseTable = cfLayer.GetTable())
                 {
                     if (enterpriseTable != null)
                     {
@@ -103,7 +113,7 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
 
                         editOperation.Callback(context =>
                         {
-                            QueryFilter queryFilter = new QueryFilter
+                            ArcGIS.Core.Data.QueryFilter queryFilter = new ArcGIS.Core.Data.QueryFilter
                             {
                                 ObjectIDs = oids
                             };
@@ -118,12 +128,16 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
                                         // Has to be called before any changes are made to the row.
                                         context.Invalidate(row);
 
-                                        //row["MapUnit"] = Selected.MapUnit;
-                                        //row["IdentityConfidence"] = IdentityConfidence;
-                                        row["Label"] = null;
-                                        row["Symbol"] = null;
-                                        row["Notes"] = Notes;
-                                        row["DataSourceID"] = DataSource;
+                                        row["Label"] = Selected.Label;
+                                        row["Type"] = Selected.Type;
+                                        row["Symbol"] = Selected.Symbol;
+                                        row["IsConcealed"] = Selected.IsConcealed;
+                                        row["LocationConfidenceMeters"] = Selected.LocationConfidenceMeters;
+                                        row["IdentityConfidence"] = Selected.IdentityConfidence;
+                                        row["ExistenceConfidence"] = Selected.ExistenceConfidence;
+                                        row["Notes"] = Notes != null ? Notes : Selected.Notes;
+                                        row["DataSourceId"] = DataSource;
+
 
                                         // After all the changes are done, persist it.
                                         row.Store();
@@ -141,12 +155,16 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
                     }
                 }
 
+                if (editOperationSucceeded) {
+                    //MapView.Active?.Map?.ClearSelection();
+                    //ContactsFaultsOids = new Dictionary<long, string>();
+                    //CloseProwindow();
+                }
+
             });
 
-            if (editOperationSucceeded)
-            {
-                CloseProwindow();
-            }
+            progDialog.Hide();
+
         }
 
         private bool _toggleCFTool;
@@ -173,7 +191,7 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
 
         private void ClearOids()
         {
-            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "MapUnitPolys");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             QueuedTask.Run(() =>
             {
@@ -245,7 +263,7 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
 
         public async void Set_CF_Oids(List<long> oids)
         {
-            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactAndFaults");
+            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
             if (layer == null)
             {
@@ -283,7 +301,7 @@ namespace Geomapmaker.ViewModels.ContactsFaultsEdit
             }
             else
             {
-                QueryFilter queryFilter = new QueryFilter
+                ArcGIS.Core.Data.QueryFilter queryFilter = new ArcGIS.Core.Data.QueryFilter
                 {
                     ObjectIDs = ContactsFaultsOids.Keys.ToList()
                 };
