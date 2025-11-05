@@ -44,7 +44,8 @@ namespace Geomapmaker.ViewModels.Tools {
 
         public ICommand CommandInsertPredfinedTermsTable => new RelayCommand(() => InsertPredefinedTermsTable());
 
-        public ICommand CommandLoadCFTemplatesFromFile => new RelayCommand(() => LoadCFTemplatesFromFile());
+        public ICommand CommandLoadCFTemplatesFromFile => new RelayCommand(() => LoadCFTemplatesFromFile(), () => SymbolsAvailable());
+        public ICommand CommandDeriveCFTemplatesFromTable => new RelayCommand(() => DeriveCFTemplatesFromTable(), () => SymbolsAvailable());
 
         public ToolsViewModel ParentVM { get; set; }
 
@@ -189,6 +190,22 @@ namespace Geomapmaker.ViewModels.Tools {
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "Something went wrong.");
             }
+        }
+
+        public async void DeriveCFTemplatesFromTable() {
+            ParentVM.CloseProwindow();
+
+            ProgressDialog progDialog = new ProgressDialog("Building Templates");
+
+            progDialog.Show();
+
+            //await Task.Run(() => ContactsAndFaults.RebuildContactsFaultsSymbology());
+            await ContactsAndFaults.GenerateTemplatesAsync();
+
+            progDialog.Hide();
+        }
+        public bool SymbolsAvailable() {
+            return GeomapmakerModule.ContactsAndFaultsSymbols != null && GeomapmakerModule.ContactsAndFaultsSymbols.Count > 0;
         }
 
         public async void LoadCFTemplatesFromFile() {
