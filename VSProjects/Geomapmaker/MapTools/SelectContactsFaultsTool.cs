@@ -17,7 +17,8 @@ namespace Geomapmaker.MapTools
         public SelectContactsFaultsTool()
         {
             IsSketchTool = true;
-            SketchType = SketchGeometryType.Point;
+            //SketchType = SketchGeometryType.Point;
+            SketchType = SketchGeometryType.Rectangle;
             SketchOutputMode = SketchOutputMode.Map;
 
             // Reflection
