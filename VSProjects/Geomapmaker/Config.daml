@@ -44,9 +44,9 @@
         </group>
         <group id="Geomapmaker_ContactsAndFaults" caption="Contacts and Faults" keytip="CF">
           <button refID="Geomapmaker_ContactsFaults" />
-          <button refID="Geomapmaker_TemplatesfromTable" />
+		  <!--<button refID="Geomapmaker_TemplatesfromTable" />
           <button refID="Geomapmaker_ChangeTemplateOfFeature" />
-		  <tool refID="Geomapmaker_ApplyCFTemplateTool" size="large" />
+		  <tool refID="Geomapmaker_ApplyCFTemplateTool" size="large" />-->
 	      <tool refID="Geomapmaker_EditContactsFaultsFeatures" size="large" />
 		</group>
         <group id="Geomapmaker_MUPs" caption="Map Unit Polys" keytip="MUP">
@@ -94,11 +94,12 @@
             Set hierarchy for the DescriptionOfMapUnits table.<disabledText>Select a Data Source to edit the map.</disabledText>
           </tooltip>
         </button>
-        <button id="Geomapmaker_ContactsFaults" caption="Contacts and Faults Templates" className="Geomapmaker.ViewModels.ContactsFaults.ShowContactsFaults" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine32.png" keytip="" condition="dataSourceSelectedCondition">
+        <button id="Geomapmaker_ContactsFaults" caption="Contacts and Faults Templates" className="Geomapmaker.ViewModels.ContactsFaults.ShowContactsFaults" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingCreateFeaturesWindowShow16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingCreateFeaturesWindowShow32.png" keytip="" condition="dataSourceSelectedCondition">
           <tooltip heading="Contacts and Faults Templates">
             Manage Contacts and Faults.<disabledText>Select a Data Source to edit the map.</disabledText>
           </tooltip>
         </button>
+		<!--
         <button id="Geomapmaker_TemplatesfromTable" caption="Templates from Table" className="Geomapmaker.RibbonElements.CFTemplatesButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingNewTemplatesForLayer16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingNewTemplatesForLayer32.png" keytip="" condition="cfSymbolsGeneratedCondition">
           <tooltip heading="Templates from Table">
             Generate Contacts and Faults templates from the Contacts and Faults table.<disabledText>Rebuild Contacts and Faults Symbology (in Tools) to enable</disabledText>
@@ -109,7 +110,8 @@
 				Apply a different template to an existing Contacts and Faults feature.<disabledText>Load Contacts and Faults templates to enable</disabledText>
 			</tooltip>
 		</tool>
-		<button id="Geomapmaker_EditContactsFaultsFeatures" caption="Edit Contacts and Faults Features" className="Geomapmaker.ViewModels.ContactsFaultsEdit.ShowContactsFaultsEdit" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine32.png" keytip="" condition="dataSourceSelectedCondition">
+		-->
+		<button id="Geomapmaker_EditContactsFaultsFeatures" caption="Contacts and Faults Features" className="Geomapmaker.ViewModels.ContactsFaultsEdit.ShowContactsFaultsEdit" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingToolBarShow16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingToolBarShow32.png" keytip="" condition="dataSourceSelectedCondition">
 			<tooltip heading="Contacts and Faults Features">
 			    Apply templates to Contacts and Faults features.<disabledText>Rebuild symbology to enable.</disabledText>
 			</tooltip>
