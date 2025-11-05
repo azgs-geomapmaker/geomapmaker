@@ -110,8 +110,8 @@
 			</tooltip>
 		</tool>
 		<button id="Geomapmaker_EditContactsFaultsFeatures" caption="Edit Contacts and Faults Features" className="Geomapmaker.ViewModels.ContactsFaultsEdit.ShowContactsFaultsEdit" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EditingEditLine32.png" keytip="" condition="dataSourceSelectedCondition">
-			<tooltip heading="Contacts and Faults Templates">
-			    Manage Contacts and Faults.<disabledText>Select a Data Source to edit the map.</disabledText>
+			<tooltip heading="Contacts and Faults Features">
+			    Apply templates to Contacts and Faults features.<disabledText>Rebuild symbology to enable.</disabledText>
 			</tooltip>
 		</button>
 		<tool id="Geomapmaker_PopulateCFTool" caption="PopulateCFTool" className="Geomapmaker.MapTools.PopulateCFTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="">
