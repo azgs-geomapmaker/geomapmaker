@@ -2,7 +2,7 @@
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
-using Geomapmaker.ViewModels.MapUnitPolysCreate;
+using Geomapmaker.ViewModels.ContactsFaultsEdit;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,12 +42,12 @@ namespace Geomapmaker.MapTools
         {
             FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
-            IEnumerable<MapUnitPolysCreateVM> viewModels = System.Windows.Application.Current.Windows.OfType<MapUnitPolysCreateVM>(); ;
+            IEnumerable<ContactsFaultsEditVM> viewModels = System.Windows.Application.Current.Windows.OfType<ContactsFaultsEditVM>(); ;
 
             // Get the most recent window. GC takes some time to clean up the closed prowindows.
-            MapUnitPolysCreateVM mapUnitPolysCreateVM = viewModels.LastOrDefault();
+            ContactsFaultsEditVM contactsFaultsEditVM = viewModels.LastOrDefault();
 
-            if (mapUnitPolysCreateVM == null)
+            if (contactsFaultsEditVM == null)
             {
                 return false;
             }
@@ -57,7 +57,7 @@ namespace Geomapmaker.MapTools
                 // Get features that intersect the point
                 SelectionSet selection = MapView.Active.GetFeatures(geometry);
 
-                // Get the MapUnitPolys layer from the selection
+                // Get the CF layer from the selection
                 FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
                 if (cfLayer != null && selection.Contains(cfLayer))
@@ -67,7 +67,7 @@ namespace Geomapmaker.MapTools
 
                     if (oidsCF.Count > 0)
                     {
-                        mapUnitPolysCreateVM.Set_CF_Oids(oidsCF);
+                        contactsFaultsEditVM.Set_CF_Oids(oidsCF);
                     }
                 }
 
