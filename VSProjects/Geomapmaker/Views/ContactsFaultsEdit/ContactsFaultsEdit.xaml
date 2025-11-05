@@ -8,8 +8,8 @@
         xmlns:data="clr-namespace:Geomapmaker.Data" 
         mc:Ignorable="d"
         Title="Edit Contacts and Faults"
-        Height="600" 
-        MinHeight="550" 
+        Height="380" 
+        MinHeight="380" 
         Width="500"
         MinWidth="450"             
         WindowStartupLocation="CenterOwner"
@@ -30,10 +30,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -75,7 +71,7 @@
                         </ToggleButton.Template>
                     </ToggleButton>
 
-                    <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding OidsListBox}" SelectedItem="{Binding SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" MinHeight="50" MaxHeight="100" >
+                    <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding OidsListBox}" SelectedItem="{Binding SelectedOid, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" MinHeight="100" MaxHeight="100" >
                         <Validation.ErrorTemplate>
                             <ControlTemplate>
                                 <StackPanel>
@@ -100,7 +96,7 @@
             </AdornerDecorator>
         </GroupBox>
 
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="Contact and Fault Templates" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="Contacts and Faults Templates" />
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -116,7 +112,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding SymbolObject.Preview}" Width="150" Height="25" Margin="0,0,5,0" VerticalAlignment="Center" />
+                            <Image Source="{Binding SymbolObject.Preview}" Width="150" Height="20" Margin="0,0,5,0" VerticalAlignment="Center" />
                             <!--
                             <Image Source="{Binding SymbolObject.Preview}" Width="125" Height="20" Stretch="None" Margin="0,0,5,0" VerticalAlignment="Center">
                                 <Image.Clip>
@@ -131,17 +127,11 @@
             </ComboBox>
         </Grid>
 
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="Identity Confidence" />
-        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Path=(data:Confidence.ConfidenceOptions)}" SelectedValue="{Binding IdentityConfidence, UpdateSourceTrigger=PropertyChanged}" />
-
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Notes"/>
-        <TextBox Grid.Row="7" Grid.Column="1" MinLines="3" MinHeight="50" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" />
-
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="Data Source"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" />
-
-        <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="Data Source"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding DataSource}" IsReadOnly="True" IsEnabled="False" />
+        
+        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Close</Button>
             <Button Padding="5" Command="{Binding CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150">Update</Button>
         </StackPanel>
 
