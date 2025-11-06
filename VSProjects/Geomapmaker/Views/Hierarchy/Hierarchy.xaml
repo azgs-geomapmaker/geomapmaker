@@ -56,7 +56,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type models:MapUnitTreeItem}" ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal" Margin="0,2.5,0,2.5">
                         <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" Visibility="{Binding ColorVisibility}" />
-                        <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}">
+                        <TextBlock Text="{Binding DisplayName}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="FontWeight" Value="Normal" />
@@ -93,7 +93,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" Visibility="{Binding ColorVisibility}" />
-                        <TextBlock Text="{Binding Name}" ToolTip="{Binding Tooltip}">
+                        <TextBlock Text="{Binding DisplayName}" ToolTip="{Binding Tooltip}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="FontWeight" Value="Normal" />
