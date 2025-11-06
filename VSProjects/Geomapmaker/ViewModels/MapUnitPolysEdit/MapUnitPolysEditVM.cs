@@ -142,11 +142,6 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
                 }
 
             });
-
-            if (editOperationSucceeded)
-            {
-                CloseProwindow();
-            }
         }
 
         private bool _toggleMupTool;
