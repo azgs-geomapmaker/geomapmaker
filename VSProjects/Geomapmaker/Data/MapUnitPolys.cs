@@ -7,9 +7,12 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Geomapmaker.Data
 {
@@ -407,28 +410,37 @@ namespace Geomapmaker.Data
                     if (templateDef == null || templateDef.DefaultValues == null)
                         continue;
 
-                    Dictionary<string, string> defaultValues = new Dictionary<string, string>();
+                    Dictionary<string, string> defaultValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
                     // Get field names from the layer definition instead
                     IReadOnlyList<Field> layerFields = layer.GetTable().GetDefinition().GetFields();
 
-                    // Rebuild the dictionary with lowercase keys to avoid casing-headaches
+                    /*
+                    // Rebuild the dictionary with to ignore case
                     foreach (Field field in layerFields) {
-                        string fieldName = field.Name.ToUpper();
-                        if (templateDef.DefaultValues.ContainsKey(fieldName)) {
-                            string value = templateDef.DefaultValues[fieldName]?.ToString();
+                        var keys = templateDef.DefaultValues.Keys.Where(k => string.Equals(k, field.Name, StringComparison.OrdinalIgnoreCase));
+                        if (keys != null && keys.Any()) { 
+                            string key = keys.First();
+                            string value = templateDef.DefaultValues[key]?.ToString();
                             if (value != null) {
-                                defaultValues.Add(fieldName?.ToLower(), value);
+                                defaultValues.Add(key, value);
                             }
                         }
                     }
+                    */
 
                     // Find the matching DMU row
-                    MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == defaultValues["mapunit"]);
+                    //MapUnit mapUnit = dmu.FirstOrDefault(a => a.MU == defaultValues["mapunit"]);
+                    MapUnit mapUnit = null;
+                    var keys = templateDef.DefaultValues.Keys.Where(k => string.Equals(k, "mapunit", StringComparison.OrdinalIgnoreCase));
+                    if (keys != null && keys.Any()) {
+                        mapUnit = dmu.FirstOrDefault(a => a.MU == templateDef.DefaultValues[keys.First()].ToString());
+                    }
+                    
 
                     if (mapUnit != null) {
                         MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate() {
-                            MapUnit = defaultValues["mapunit"],
+                            MapUnit = templateDef.DefaultValues["mapunit"].ToString(),//templateDef.DefaultValues[keys.First()].ToString(),
                             HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
                             Tooltip = mapUnit.Tooltip,
                             DataSourceID = mapUnit.DescriptionSourceID,
