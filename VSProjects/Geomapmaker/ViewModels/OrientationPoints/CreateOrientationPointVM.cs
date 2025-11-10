@@ -54,6 +54,33 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             Populate = false;
         }
 
+        public void PopulateAzimuth(double azimuth) {
+            Azimuth = azimuth.ToString();
+
+            // Turn off the toggle button
+            PopulateAZ = false;
+        }
+
+        private bool _populateaz;
+        public bool PopulateAZ {
+            get => _populateaz;
+            set {
+                SetProperty(ref _populateaz, value, () => PopulateAZ);
+
+                // if the toggle-btn is active
+                if (value) {
+                    SetProperty(ref _populate, false, () => Populate);
+                    // Active the populate tool
+                    FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateAzimuth");
+                    //FrameworkApplication.SetCurrentToolAsync("esri_editing_measureAngleTool");
+                } else {
+                    // Switch back to map explore tool
+                    FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
+                }
+            }
+        }
+
+
         private bool _populate;
         public bool Populate
         {
@@ -65,10 +92,10 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                 // if the toggle-btn is active
                 if (value)
                 {
+                    SetProperty(ref _populateaz, false, () => PopulateAZ);
                     // Active the populate tool
                     FrameworkApplication.SetCurrentToolAsync("Geomapmaker_PopulateOPCoordinate");
-                }
-                else
+                } else
                 {
                     // Switch back to map explore tool
                     FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");

@@ -125,6 +125,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -134,6 +135,21 @@
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Azimuth" />
                 <TextBox Margin="0,0,5,10" Grid.Row="1" Grid.Column="0" Text="{Binding Create.Azimuth, UpdateSourceTrigger=PropertyChanged}" />
+                <ToggleButton Grid.Row="2" Grid.Column="0" Width="100" HorizontalAlignment="Left" Content="Get Azimuth" IsChecked="{Binding Create.PopulateAZ, UpdateSourceTrigger=PropertyChanged}" >
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
+                                <ContentPresenter Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="#2082D8" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
 
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Inclination" />
                 <TextBox Margin="0,0,0,10" Grid.Row="1" Grid.Column="1" Text="{Binding Create.Inclination, UpdateSourceTrigger=PropertyChanged}" />

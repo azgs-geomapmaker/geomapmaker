@@ -126,7 +126,13 @@
             Tooltip text<disabledText>Select a Data Source to edit the map.</disabledText>
           </tooltip>
         </tool>
-        <tool id="Geomapmaker_PopulateStationCoordinate" caption="PopulateStationCoordinate" className="Geomapmaker.MapTools.PopulateStationCoordinate" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="">
+		  <tool id="Geomapmaker_PopulateAzimuth" caption="PopulateAzimuth" className="Geomapmaker.MapTools.AzimuthMeasureTool" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="">
+			  <tooltip heading="Tooltip Heading">
+				  Tooltip text<disabledText>Select a Data Source to edit the map.</disabledText>
+			  </tooltip>
+		  </tool>
+
+		 <tool id="Geomapmaker_PopulateStationCoordinate" caption="PopulateStationCoordinate" className="Geomapmaker.MapTools.PopulateStationCoordinate" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed16.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/GenericButtonRed32.png" keytip="">
           <tooltip heading="Tooltip Heading">
             Tooltip text<disabledText>Select a Data Source to edit the map.</disabledText>
           </tooltip>
