@@ -100,7 +100,7 @@
             <Separator Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"  />
 
             <CheckBox Grid.Row="11" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCFTemplatesCSV, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
-            <Expander Grid.Row="11" Grid.Column="2" Header="Templates" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+            <Expander Grid.Row="11" Grid.Column="2" Header="Contacts and Faults Templates" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
                     Export Contacts and Faults templates to CSV.</TextBlock>
             </Expander>
