@@ -1,6 +1,5 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
-using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
@@ -11,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace Geomapmaker.Data
 {
@@ -310,7 +307,7 @@ namespace Geomapmaker.Data
                 }
 
                 // Set the templates on the layer via CIM definition
-                try
+                try 
                 {
                     var layerDef = layer.GetDefinition() as CIMFeatureLayer;
                     if (layerDef != null)
@@ -440,7 +437,7 @@ namespace Geomapmaker.Data
 
                     if (mapUnit != null) {
                         MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate() {
-                            MapUnit = templateDef.DefaultValues["mapunit"].ToString(),//templateDef.DefaultValues[keys.First()].ToString(),
+                            MapUnit = templateDef.DefaultValues[keys.First()].ToString(),
                             HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
                             Tooltip = mapUnit.Tooltip,
                             DataSourceID = mapUnit.DescriptionSourceID,
