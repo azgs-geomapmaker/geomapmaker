@@ -17,7 +17,6 @@ namespace Geomapmaker.MapTools
         public SelectContactsFaultsTool()
         {
             IsSketchTool = true;
-            //SketchType = SketchGeometryType.Point;
             SketchType = SketchGeometryType.Rectangle;
             SketchOutputMode = SketchOutputMode.Map;
 
@@ -43,7 +42,7 @@ namespace Geomapmaker.MapTools
         {
             FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
-            IEnumerable<ContactsFaultsEditVM> viewModels = System.Windows.Application.Current.Windows.OfType<ContactsFaultsEditVM>(); ;
+            IEnumerable<ContactsFaultsEditVM> viewModels = System.Windows.Application.Current.Windows.OfType<ContactsFaultsEditVM>();
 
             // Get the most recent window. GC takes some time to clean up the closed prowindows.
             ContactsFaultsEditVM contactsFaultsEditVM = viewModels.LastOrDefault();
