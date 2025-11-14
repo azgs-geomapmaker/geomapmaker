@@ -1,11 +1,13 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using Geomapmaker.Views.MapUnits;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -447,6 +449,37 @@ namespace Geomapmaker.Data
                         mupTemplates.Add(tmpTemplate);
                     }
                 }
+
+                //We need to add a template for unassigned polygons, if not already present
+                string unassignedMUPTemplateName = GeomapmakerModule.MUP_UnassignedTemplateName;
+
+                //First, use an inspector to build a new EditingTemplate
+                Inspector insp = new Inspector();
+                insp.LoadSchema(layer);
+
+                insp["MapUnit"] = unassignedMUPTemplateName;
+                insp["DataSourceID"] = unassignedMUPTemplateName;
+                insp["IdentityConfidence"] = unassignedMUPTemplateName;
+                insp["Label"] = null;
+                insp["Symbol"] = null;
+                insp["Notes"] = unassignedMUPTemplateName;
+
+                // Get or Create an MUP EditingTemplate 
+                EditingTemplate MUPEditingTemplate = layer.GetTemplate(unassignedMUPTemplateName);
+                if (MUPEditingTemplate == null) {
+                    MUPEditingTemplate = layer.CreateTemplate(unassignedMUPTemplateName, unassignedMUPTemplateName, insp);
+                }
+
+                //Now, use that EditingTemplate in a new MapUnitPolyTemplate
+                MapUnitPolyTemplate unassignedTemplate = new MapUnitPolyTemplate() {
+                    MapUnit = GeomapmakerModule.MUP_UnassignedTemplateName,
+                    Template = MUPEditingTemplate
+                };
+
+                //Add it to the list
+                mupTemplates.Add(unassignedTemplate);
+
+
             });
 
 
