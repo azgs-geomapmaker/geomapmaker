@@ -522,7 +522,7 @@ namespace Geomapmaker.Data
 
                 await QueuedTask.Run(() => {
                     var layerDef = layer.GetDefinition() as CIMFeatureLayer;
-                    var templates = layerDef.FeatureTemplates;
+                    var templates = layerDef.FeatureTemplates ?? [];
                     foreach (var t in templates) {
                         var template = t as CIMRowTemplate;
                         var defaultValues = template.DefaultValues;
