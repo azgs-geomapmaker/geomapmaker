@@ -3,6 +3,7 @@ using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.ViewModels.ContactsFaultsEdit;
+using Geomapmaker.ViewModels.MapUnitPolysCreate;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,8 @@ namespace Geomapmaker.MapTools
 {
     internal class SelectContactsFaultsTool : MapTool
     {
+        public static string Mode { get; set; }
+
         public SelectContactsFaultsTool()
         {
             IsSketchTool = true;
@@ -40,38 +43,67 @@ namespace Geomapmaker.MapTools
 
         protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
-            FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
+            if ("CF" == Mode) {
+                FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
 
-            IEnumerable<ContactsFaultsEditVM> viewModels = System.Windows.Application.Current.Windows.OfType<ContactsFaultsEditVM>();
+                IEnumerable<ContactsFaultsEditVM> viewModels = System.Windows.Application.Current.Windows.OfType<ContactsFaultsEditVM>();
 
-            // Get the most recent window. GC takes some time to clean up the closed prowindows.
-            ContactsFaultsEditVM contactsFaultsEditVM = viewModels.LastOrDefault();
+                // Get the most recent window. GC takes some time to clean up the closed prowindows.
+                ContactsFaultsEditVM contactsFaultsEditVM = viewModels.LastOrDefault();
 
-            if (contactsFaultsEditVM == null)
-            {
-                return false;
-            }
-
-            await QueuedTask.Run(() =>
-            {
-                // Get features that intersect the point
-                SelectionSet selection = MapView.Active.GetFeatures(geometry);
-
-                // Get the CF layer from the selection
-                FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
-
-                if (cfLayer != null && selection.Contains(cfLayer))
-                {
-                    // Get the ObjectIDs for the MapUnitPolys layer
-                    List<long> oidsCF = selection[cfLayer].ToList();
-
-                    if (oidsCF.Count > 0)
-                    {
-                        contactsFaultsEditVM.Set_CF_Oids(oidsCF);
-                    }
+                if (contactsFaultsEditVM == null) {
+                    return false;
                 }
 
-            });
+                await QueuedTask.Run(() => {
+                    // Get features that intersect the point
+                    SelectionSet selection = MapView.Active.GetFeatures(geometry);
+
+                    // Get the CF layer from the selection
+                    FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+                    if (cfLayer != null && selection.Contains(cfLayer)) {
+                        // Get the ObjectIDs for the MapUnitPolys layer
+                        List<long> oidsCF = selection[cfLayer].ToList();
+
+                        if (oidsCF.Count > 0) {
+                            contactsFaultsEditVM.Set_CF_Oids(oidsCF);
+                        }
+                    }
+
+                });
+            } else if ("MUP" == Mode) {
+                FeatureLayer layer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+                IEnumerable<MapUnitPolysCreateVM> viewModels = System.Windows.Application.Current.Windows.OfType<MapUnitPolysCreateVM>(); ;
+
+                // Get the most recent window. GC takes some time to clean up the closed prowindows.
+                MapUnitPolysCreateVM mapUnitPolysCreateVM = viewModels.LastOrDefault();
+
+                if (mapUnitPolysCreateVM == null) {
+                    return false;
+                }
+
+                await QueuedTask.Run(() =>
+                {
+                    // Get features that intersect the point
+                    SelectionSet selection = MapView.Active.GetFeatures(geometry);
+
+                    // Get the MapUnitPolys layer from the selection
+                    FeatureLayer cfLayer = MapView.Active?.Map?.GetLayersAsFlattenedList()?.OfType<FeatureLayer>()?.FirstOrDefault(l => l.Name == "ContactsAndFaults");
+
+                    if (cfLayer != null && selection.Contains(cfLayer)) {
+                        // Get the ObjectIDs for the MapUnitPolys layer
+                        List<long> oidsCF = selection[cfLayer].ToList();
+
+                        if (oidsCF.Count > 0) {
+                            mapUnitPolysCreateVM.Set_CF_Oids(oidsCF);
+                        }
+                    }
+
+                });
+
+            }
 
             return true;
         }

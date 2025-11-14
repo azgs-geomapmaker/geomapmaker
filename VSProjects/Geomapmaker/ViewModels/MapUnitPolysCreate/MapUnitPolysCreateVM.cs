@@ -8,6 +8,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Controls;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.MapTools;
 using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
@@ -91,6 +92,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
                 if (value)
                 {
                     // Active the cf tool
+                    SelectContactsFaultsTool.Mode = "MUP";
                     FrameworkApplication.SetCurrentToolAsync("Geomapmaker_SelectContactsFaultsTool");
                 }
                 else
