@@ -12,8 +12,11 @@ using Geomapmaker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Geomapmaker.ViewModels.MapUnitPolysCreate
@@ -424,4 +427,20 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
             });
         }
     }
+
+    //TODO: This is duplicated in MapUnitPolysEditVM.cs - refactor to a common location. Maybe _helpers?
+    public class SwatchVisibilityConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            string name = value as string;
+            if (name.Equals("unassigned", StringComparison.InvariantCultureIgnoreCase)) {
+                return Visibility.Collapsed;
+            }
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            throw new NotImplementedException();
+        }
+    }
+
 }

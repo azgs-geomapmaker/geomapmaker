@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
         xmlns:data="clr-namespace:Geomapmaker.Data" 
+        xmlns:local="clr-namespace:Geomapmaker.ViewModels.MapUnitPolysCreate"
         mc:Ignorable="d"
         Title="Create Map Unit Polys" 
         Height="600" 
@@ -20,6 +21,7 @@
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
                 <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <local:SwatchVisibilityConverter x:Key="SwatchVisibilityConverter" />
         </ResourceDictionary>
     </controls:ProWindow.Resources>
 
@@ -115,7 +117,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+                            <Ellipse Visibility="{Binding MapUnit, Converter={StaticResource SwatchVisibilityConverter}}" Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" />
                             <TextBlock Text="{Binding MapUnit}" ToolTip="{Binding Tooltip}" />
                         </StackPanel>
                     </DataTemplate>

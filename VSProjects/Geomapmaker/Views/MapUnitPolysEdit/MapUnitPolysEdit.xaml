@@ -5,7 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
-        xmlns:data="clr-namespace:Geomapmaker.Data" 
+        xmlns:data="clr-namespace:Geomapmaker.Data"
+        xmlns:local="clr-namespace:Geomapmaker.ViewModels.MapUnitPolysEdit"
         mc:Ignorable="d"
         Title="Edit Map Unit Polys"
         Height="600" 
@@ -21,9 +22,10 @@
                 <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
                 <ResourceDictionary Source="/Geomapmaker;component/Views/GlobalResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+             <local:SwatchVisibilityConverter x:Key="SwatchVisibilityConverter" />
         </ResourceDictionary>
     </controls:ProWindow.Resources>
-
+        
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
@@ -116,7 +118,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+                            <Ellipse Visibility="{Binding MapUnit, Converter={StaticResource SwatchVisibilityConverter}}" Width="10" Height="10" Fill="{Binding HexColor}" Stroke="Black" Margin="0,0,5,0" VerticalAlignment="Stretch" />
                             <TextBlock Text="{Binding MapUnit}" ToolTip="{Binding Tooltip}" />
                         </StackPanel>
                     </DataTemplate>
