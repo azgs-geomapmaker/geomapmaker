@@ -46,6 +46,7 @@ namespace Geomapmaker.ViewModels.Stations
                 LocationConfidenceMeters = Selected?.LocationConfidenceMeters;
                 PlotAtScale = Selected?.PlotAtScale;
                 Notes = Selected?.Notes;
+                Label = Selected?.Label;
                 DataSourceId = GeomapmakerModule.DataSourceId;
 
                 NotifyPropertyChanged("Visibility");
@@ -201,6 +202,15 @@ namespace Geomapmaker.ViewModels.Stations
         }
         private int PlotAtScaleInt;
 
+        private string _label;
+        public string Label {
+            get => _label;
+            set {
+                SetProperty(ref _label, value, () => Label);
+                ValidateChangeWasMade();
+            }
+        }
+
         private string _notes;
         public string Notes
         {
@@ -267,6 +277,7 @@ namespace Geomapmaker.ViewModels.Stations
                     { "LocationMethod", LocationMethod },
                     { "LocationConfidenceMeters", LocationConfidenceMeters },
                     { "PlotAtScale", PlotAtScale },
+                    { "Label", Label },
                     { "Notes", Notes },
                     { "DataSourceId", DataSourceId },
                 };
@@ -398,6 +409,7 @@ namespace Geomapmaker.ViewModels.Stations
                 Selected.LocationMethod == LocationMethod &&
                 Selected.LocationConfidenceMeters == LocationConfidenceMeters &&
                 Selected.PlotAtScale == PlotAtScale &&
+                Selected.Label == Label &&
                 Selected.Notes == Notes
                 )
             {

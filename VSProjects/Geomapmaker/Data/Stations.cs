@@ -156,6 +156,7 @@ namespace Geomapmaker.Data
                                         LocationMethod = Helpers.RowValueToString(row["LocationMethod"]),
                                         LocationConfidenceMeters = Helpers.RowValueToString(row["LocationConfidenceMeters"]),
                                         PlotAtScale = Helpers.RowValueToString(row["PlotAtScale"]),
+                                        Label = Helpers.RowValueToString(row["Label"]),
                                         Notes = Helpers.RowValueToString(row["Notes"]),
                                         DataSourceId = Helpers.RowValueToString(row["DataSourceId"]),
 

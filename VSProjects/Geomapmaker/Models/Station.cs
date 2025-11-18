@@ -22,6 +22,8 @@ namespace Geomapmaker.Models
         // Optional field
         public string Notes { get; set; }
 
+        public string Label { get; set; }
+
         public string DataSourceId { get; set; }
 
         public string SpatialReferenceWkid { get; set; }

@@ -168,6 +168,13 @@ namespace Geomapmaker.ViewModels.Stations
         // Holds the converted int value 
         private int PlotAtScaleInt;
 
+        private string _label;
+        public string Label
+        {
+            get => _label;
+            set => SetProperty(ref _label, value, () => Label);
+        }
+
         private string _notes;
         public string Notes
         {
@@ -220,9 +227,9 @@ namespace Geomapmaker.ViewModels.Stations
                         { "FieldID", FieldID },
                         { "TimeDate", TimeDate },
                         { "Observer", Observer },
-                        { "LocationMethod", LocationMethod },
                         { "LocationConfidenceMeters", LocationConfidenceMeters },
                         { "PlotAtScale", PlotAtScale },
+                        { "Label", Label },
                         { "Notes", Notes },
                         { "DataSourceId", DataSourceId },
                    };

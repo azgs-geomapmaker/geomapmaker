@@ -38,6 +38,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -145,16 +147,19 @@
             >
             </ComboBox>
 
-            <TextBlock Grid.Row="15" Grid.Column="1" Text="Plot At Scale" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding Edit.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="15" Grid.Column="1" Text="Label" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding Edit.Label, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="17" Grid.Column="1" Text="Notes" Visibility="{Binding Edit.Visibility}" />
-            <TextBox Grid.Row="18" Grid.Column="1" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="17" Grid.Column="1" Text="Plot At Scale" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="18" Grid.Column="1" Text="{Binding Edit.PlotAtScale, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Edit.Visibility}" />
 
-            <TextBlock Grid.Row="19" Grid.Column="1" Text="Data Source" Visibility="{Binding Edit.Visibility}"/>
-            <TextBox Grid.Row="20" Grid.Column="1" Text="{Binding Edit.DataSourceId}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" Visibility="{Binding Edit.Visibility}" />
+            <TextBlock Grid.Row="19" Grid.Column="1" Text="Notes" Visibility="{Binding Edit.Visibility}" />
+            <TextBox Grid.Row="20" Grid.Column="1" Text="{Binding Edit.Notes, UpdateSourceTrigger=PropertyChanged}" MinLines="3" Visibility="{Binding Edit.Visibility}" />
 
-            <StackPanel Grid.Row="21" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
+            <TextBlock Grid.Row="21" Grid.Column="1" Text="Data Source" Visibility="{Binding Edit.Visibility}"/>
+            <TextBox Grid.Row="22" Grid.Column="1" Text="{Binding Edit.DataSourceId}" FontStyle="Italic" IsReadOnly="True" IsEnabled="False" Visibility="{Binding Edit.Visibility}" />
+
+            <StackPanel Grid.Row="23" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Edit.Visibility}" >
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding Edit.CommandUpdate}" Style="{DynamicResource Esri_Button}" MinWidth="150" >Update</Button>
             </StackPanel>

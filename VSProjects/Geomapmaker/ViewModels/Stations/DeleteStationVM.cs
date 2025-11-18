@@ -62,6 +62,9 @@ namespace Geomapmaker.ViewModels.Stations
                 PlotAtScale = Selected?.PlotAtScale;
                 NotifyPropertyChanged("PlotAtScale");
 
+                Label = Selected?.Label;
+                NotifyPropertyChanged("Label");
+
                 Notes = Selected?.Notes;
                 NotifyPropertyChanged("Notes");
 
@@ -86,6 +89,7 @@ namespace Geomapmaker.ViewModels.Stations
         public string LocationMethod { get; set; }
         public string LocationConfidenceMeters { get; set; }
         public string PlotAtScale { get; set; }
+        public string Label { get; set; }
         public string Notes { get; set; }
         public string DataSourceId { get; set; }
 
