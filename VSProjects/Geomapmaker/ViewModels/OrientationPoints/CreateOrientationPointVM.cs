@@ -35,6 +35,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             Azimuth = "";
             Inclination = "";
             Type = "";
+            Label = "";
             Symbol = null;
             XCoordinate = "";
             YCoordinate = "";
@@ -142,6 +143,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
                         { "Azimuth", Azimuth },
                         { "Inclination", Inclination },
                         { "Type", Type },
+                        { "Label", Label },
                         { "Symbol", Symbol.Key },
                         { "LocationConfidenceMeters", LocationConfidenceMeters },
                         { "OrientationConfidenceDegrees", OrientationConfidenceDegrees },
@@ -360,6 +362,15 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             {
                 SetProperty(ref _type, value, () => Type);
                 ValidateRequiredString(Type, "Type");
+            }
+        }
+
+        private string _label;
+        public string Label {
+            get => _label;
+            set {
+                SetProperty(ref _label, value, () => Label);
+                //ValidateRequiredString(Label, "Label");
             }
         }
 

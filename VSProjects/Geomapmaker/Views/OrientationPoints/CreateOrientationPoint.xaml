@@ -155,8 +155,23 @@
                 <TextBox Margin="0,0,0,10" Grid.Row="1" Grid.Column="1" Text="{Binding Create.Inclination, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="Type" />
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Grid.Row="5" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Type" />
+                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Create.Type, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,10"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Label" />
+                <TextBox Margin="0,0,0,10" Grid.Row="1" Grid.Column="1" Text="{Binding Create.Label, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
 
             <GroupBox Grid.Row="7" Grid.Column="1" >
                 <GroupBox.Header>
