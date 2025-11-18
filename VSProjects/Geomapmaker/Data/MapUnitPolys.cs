@@ -270,7 +270,7 @@ namespace Geomapmaker.Data
                     CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                     {
                         Editable = false,
-                        Label = key,
+                        Label = mu.Label,
                         Description = key,
                         Patch = PatchShape.AreaPolygon,
                         Symbol = symbolRef,
@@ -441,6 +441,8 @@ namespace Geomapmaker.Data
                         MapUnitPolyTemplate tmpTemplate = new MapUnitPolyTemplate() {
                             MapUnit = templateDef.DefaultValues[keys.First()].ToString(),
                             HexColor = _helpers.ColorConverter.RGBtoHex(mapUnit.AreaFillRGB),
+                            Label = mapUnit.Label,
+                            Symbol = mapUnit.Symbol,
                             Tooltip = mapUnit.Tooltip,
                             DataSourceID = mapUnit.DescriptionSourceID,
                             Template = template
