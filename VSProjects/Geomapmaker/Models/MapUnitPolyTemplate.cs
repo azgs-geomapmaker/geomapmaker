@@ -8,6 +8,10 @@ namespace Geomapmaker.Models
 
         public string DataSourceID { get; set; }
 
+        public string Label { get; set; }
+
+        public string Symbol { get; set; }
+
         public string HexColor { get; set; }
 
         public string Tooltip { get; set; }
