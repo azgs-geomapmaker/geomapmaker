@@ -415,7 +415,7 @@ namespace Geomapmaker.Data
                                         Description = Helpers.RowValueToString(row["Description"]),
                                         HierarchyKey = Helpers.RowValueToString(row["HierarchyKey"]),
                                         ParagraphStyle = Helpers.RowValueToString(row["ParagraphStyle"]),
-                                        Label = Helpers.RowValueToString(row["Label"]),
+                                        Label = row["Label"]?.ToString() ?? null,//Helpers.RowValueToString(row["Label"]),
                                         AreaFillRGB = Helpers.RowValueToString(row["AreaFillRGB"]),
                                         GeoMaterial = Helpers.RowValueToString(row["GeoMaterial"]),
                                         GeoMaterialConfidence = Helpers.RowValueToString(row["GeoMaterialConfidence"]),
