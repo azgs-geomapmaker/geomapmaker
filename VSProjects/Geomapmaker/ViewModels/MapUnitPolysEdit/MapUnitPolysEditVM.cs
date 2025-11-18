@@ -123,7 +123,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
 
                                         row["MapUnit"] = Selected.MapUnit;
                                         row["IdentityConfidence"] = IdentityConfidence;
-                                        row["Label"] = null;
+                                        row["Label"] = Selected.MapUnit;
                                         row["Symbol"] = null;
                                         row["Notes"] = Notes;
                                         row["DataSourceID"] = DataSource;
