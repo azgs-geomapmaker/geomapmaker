@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
+using ArcGIS.Desktop.Core.Utilities;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
@@ -9,7 +10,10 @@ using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Internal.Mapping.Symbology;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using Geomapmaker.Views.MapUnits;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -212,22 +216,16 @@ namespace Geomapmaker.Data
                     if (templateDef == null || templateDef.DefaultValues == null)
                         continue;
 
-                    Dictionary<string, string> defaultValues = new Dictionary<string, string>();
-                    
+                    Dictionary<string, string> defaultValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
                     // Get field names from the layer definition instead
                     IReadOnlyList<Field> layerFields = layer.GetTable().GetDefinition().GetFields();
                     
-                    // Rebuild the dictionary with lowercase keys to avoid casing-headaches
-                    foreach (Field field in layerFields)
-                    {
-                        string fieldName = field.Name/*.ToLower()*/;
-                        if (templateDef.DefaultValues.ContainsKey(fieldName))
-                        {
-                            string value = templateDef.DefaultValues[fieldName]?.ToString();
-                            if (value != null)
-                            {
-                                defaultValues.Add(fieldName?.ToLower(), value);
-                            }
+                    foreach (Field field in layerFields) {
+                        var keys = templateDef.DefaultValues.Keys.Where(k => string.Equals(k, field.Name, StringComparison.OrdinalIgnoreCase));
+                        if (keys != null && keys.Any()) {
+                            string value = templateDef.DefaultValues[keys.First()]?.ToString();
+                            defaultValues.Add(keys.First(), value);
                         }
                     }
 
