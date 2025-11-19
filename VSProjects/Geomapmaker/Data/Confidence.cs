@@ -4,11 +4,15 @@ namespace Geomapmaker.Data
 {
     public class Confidence
     {
+        public static string MappedConfidence(string option)
+        {
+            return (option == "High" || option == "certain") ? "certain" : "questionable";
+        }
+
         public static ObservableCollection<string> ConfidenceOptions => new ObservableCollection<string>()
         {
-            "High",
-            "Medium",
-            "Low"
+            "certain",
+            "questionable"
         };
 
         public static ObservableCollection<string> LocationConfidenceMeters => new ObservableCollection<string>() {
