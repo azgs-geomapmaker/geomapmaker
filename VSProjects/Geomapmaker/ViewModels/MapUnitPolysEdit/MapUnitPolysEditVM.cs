@@ -219,7 +219,7 @@ namespace Geomapmaker.ViewModels.MapUnitPolysEdit
             }
         }
 
-        private string _identityConfidence = "High";
+        private string _identityConfidence = "certain";
         public string IdentityConfidence
         {
             get => _identityConfidence;
