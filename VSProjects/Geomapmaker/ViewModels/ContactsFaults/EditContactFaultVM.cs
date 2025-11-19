@@ -5,6 +5,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Geomapmaker.Models;
+using Geomapmaker.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,8 +50,7 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                 IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
 
                 // Remove the old template
-                layer.RemoveTemplate(OriginalValues.Label);
-
+                layer.RemoveTemplate(OriginalValues.Type);
                 // load the schema
                 Inspector insp = new Inspector();
                 insp.LoadSchema(layer);
@@ -106,8 +106,8 @@ namespace Geomapmaker.ViewModels.ContactsFaults
                     // Set values from template for edit
                     Type = Selected.Type;
                     Label = Selected.Label;
-                    IdentityConfidence = Selected.IdentityConfidence;
-                    ExistenceConfidence = Selected.ExistenceConfidence;
+                    IdentityConfidence = Confidence.MappedConfidence(Selected.IdentityConfidence);
+                    ExistenceConfidence = Confidence.MappedConfidence(Selected.ExistenceConfidence);
                     LocationConfidenceMeters = Selected.LocationConfidenceMeters;
                     IsConcealed = Selected.IsConcealed;
                     Notes = Selected.Notes;
