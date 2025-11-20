@@ -187,6 +187,7 @@ namespace Geomapmaker.ViewModels.OrientationPoints
             }
             else
             {
+                //We have to rebuild symbology here in case the user chose a symbol that has not been used yet.
                 Data.OrientationPoints.RebuildOrientationPointsSymbology();
                 ParentVM.CloseProwindow();
             }
