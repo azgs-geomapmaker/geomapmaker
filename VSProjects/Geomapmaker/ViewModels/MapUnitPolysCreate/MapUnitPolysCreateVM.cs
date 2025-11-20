@@ -147,7 +147,10 @@ namespace Geomapmaker.ViewModels.MapUnitPolysCreate
 
                 templateInspector["identityconfidence"] = IdentityConfidence;
                 templateInspector["notes"] = Notes;
-
+                templateInspector["label"] = Selected.Label;
+                templateInspector["symbol"] = Selected.Symbol;
+                templateInspector["datasourceid"] = DataSource;
+                
                 // Contruct polygons from cf lines
                 op.ConstructPolygons(tmpTemplate, cfLayer, ContactFaultOids.Keys, null, true);
 
