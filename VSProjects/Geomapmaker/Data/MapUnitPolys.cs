@@ -270,7 +270,7 @@ namespace Geomapmaker.Data
                     CIMUniqueValueClass uniqueValueClass = new CIMUniqueValueClass
                     {
                         Editable = false,
-                        Label = mu.Label,
+                        Label = mu.Label ?? key, //TODO: This is not the same label as in the DMU and MUP. This is the name of the unique value class and is what appears in the Create pane. What should we set it to?
                         Description = key,
                         Patch = PatchShape.AreaPolygon,
                         Symbol = symbolRef,
@@ -294,7 +294,8 @@ namespace Geomapmaker.Data
                             DefaultValues = new Dictionary<string, object>
                             {
                                 { "mapunit", mu.MU },
-                                { "datasourceid", mu.DescriptionSourceID }
+                                { "datasourceid", mu.DescriptionSourceID },
+                                { "label", mu.Label }
                             },
                             DefaultToolGUID = "", // Empty string means no default tool
                             ExcludedToolGUIDs = excludedTools // Exclude standard editing tools
