@@ -30,11 +30,11 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <!--<RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>-->
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -65,24 +65,27 @@
                     Export feature classes and tables as a geopackage.</TextBlock>
             </Expander>
 
+            <!--
             <CheckBox Grid.Row="4" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateKml, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
             <Expander Grid.Row="4" Grid.Column="2" Header="KML/KMZ" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
                     Export map as a zip-compressed KML file.</TextBlock>
             </Expander>
+            -->
 
-            <CheckBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCsv, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
-            <Expander Grid.Row="5" Grid.Column="2" Header="CSV" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+            <CheckBox Grid.Row="4" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCsv, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="4" Grid.Column="2" Header="CSV" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
                     Export feature classes and tables as CSV files.</TextBlock>
             </Expander>
 
-            <CheckBox Grid.Row="6" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
-            <Expander Grid.Row="6" Grid.Column="2" Header="Report" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+            <CheckBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateReport, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="5" Grid.Column="2" Header="Report" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
                     Export an HTML validation report.</TextBlock>
             </Expander>
 
+            <!--
             <Separator Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" />
 
             <CheckBox Grid.Row="8" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateOpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
@@ -98,14 +101,15 @@
             </Expander>
 
             <Separator Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"  />
+            -->
 
-            <CheckBox Grid.Row="11" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCFTemplatesCSV, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
-            <Expander Grid.Row="11" Grid.Column="2" Header="Contacts and Faults Templates" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+            <CheckBox Grid.Row="6" Grid.Column="1" Style="{DynamicResource Esri_CheckboxToggleSwitch}" HorizontalAlignment="Right" IsChecked="{Binding CreateCFTemplatesCSV, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="0,3,0,5" />
+            <Expander Grid.Row="6" Grid.Column="2" Header="Contacts and Faults Templates" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
                 <TextBlock Margin="5,0,0,5" TextWrapping="Wrap">
                     Export Contacts and Faults templates to CSV.</TextBlock>
             </Expander>
 
-            <StackPanel Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Padding="5" Command="{Binding CommandCancel}" Style="{DynamicResource Esri_Button}" >Cancel</Button>
                 <Button Padding="5" Command="{Binding CommandExport}" Style="{DynamicResource Esri_Button}" >Export</Button>
             </StackPanel>
