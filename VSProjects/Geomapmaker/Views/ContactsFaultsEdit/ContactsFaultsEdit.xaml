@@ -120,7 +120,7 @@
                                 </Image.Clip>
                             </Image>
                             -->
-                            <TextBlock Text="{Binding Label}" ToolTip="{Binding Tooltip}" />
+                            <TextBlock Text="{Binding Type}" ToolTip="{Binding Tooltip}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
