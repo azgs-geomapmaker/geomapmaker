@@ -523,7 +523,13 @@ namespace Geomapmaker.Data
                     var templates = layerDef.FeatureTemplates ?? [];
                     foreach (var t in templates) {
                         var template = t as CIMRowTemplate;
-                        var defaultValues = template.DefaultValues;
+                        if (template?.DefaultValues == null || template.DefaultValues.Count == 0)
+                            continue;
+
+                        //var defaultValues = template.DefaultValues;
+                        // Create a case-insensitive wrapper dictionary
+                        var defaultValues = new Dictionary<string, object>(template.DefaultValues, StringComparer.OrdinalIgnoreCase);
+
                         try {
                             defaultValues["DataSourceId"] = GeomapmakerModule.DataSourceId;
                             newCIMRowTemplates.Add(new CIMRowTemplate() {
