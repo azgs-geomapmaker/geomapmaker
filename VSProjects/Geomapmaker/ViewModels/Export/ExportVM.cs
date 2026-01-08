@@ -341,8 +341,12 @@ namespace Geomapmaker.ViewModels.Export
                                 var templateList = new List<ContactsAndFaults.CFTemplateRow>();
                                 foreach (var t in templates) {
                                     var template = t as CIMRowTemplate;
+                                    
+                                    //var defaultValues = template.DefaultValues;
+                                    // Create a case-insensitive wrapper dictionary
+                                    var defaultValues = new Dictionary<string, object>(template.DefaultValues, StringComparer.OrdinalIgnoreCase);
+
                                     // extract info and write to CSV
-                                    var defaultValues = template.DefaultValues;
                                     templateList.Add(new ContactsAndFaults.CFTemplateRow {
                                         Type = defaultValues.ContainsKey("Type") ? defaultValues["Type"]?.ToString() : "",
                                         Symbol = defaultValues.ContainsKey("Symbol") ? defaultValues["Symbol"]?.ToString() : "",
