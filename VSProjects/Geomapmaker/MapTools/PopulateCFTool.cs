@@ -3,6 +3,7 @@ using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Geomapmaker.Data;
 using Geomapmaker.Models;
 using Geomapmaker.ViewModels.ContactsFaults;
 using System;
@@ -95,8 +96,8 @@ namespace Geomapmaker.MapTools
                                                 Label = row["label"]?.ToString(),
                                                 Type = row["type"]?.ToString(),
                                                 Symbol = row["symbol"]?.ToString(),
-                                                IdentityConfidence = row["identityconfidence"]?.ToString(),
-                                                ExistenceConfidence = row["existenceconfidence"]?.ToString(),
+                                                IdentityConfidence = Confidence.MappedConfidence(row["identityconfidence"]?.ToString()),
+                                                ExistenceConfidence = Confidence.MappedConfidence(row["existenceconfidence"]?.ToString()),
                                                 LocationConfidenceMeters = row["locationconfidencemeters"]?.ToString(),
                                                 IsConcealed = row["isconcealed"]?.ToString() == "Y",
                                                 Notes = row["notes"]?.ToString()
