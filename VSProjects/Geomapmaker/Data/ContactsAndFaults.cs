@@ -533,7 +533,7 @@ namespace Geomapmaker.Data
                         try {
                             defaultValues["DataSourceId"] = GeomapmakerModule.DataSourceId;
                             newCIMRowTemplates.Add(new CIMRowTemplate() {
-                                Name = defaultValues["Type"].ToString(),
+                                Name = defaultValues["Label"].ToString(),
                                 DefaultValues = defaultValues
                             });
                         } catch { }
@@ -583,7 +583,7 @@ namespace Geomapmaker.Data
                                 {
                                     using (Row row = rowCursor.Current)
                                     {
-                                        string type = row["type"]?.ToString();
+                                        string label = row["label"]?.ToString();
                                         CFTemplateRow cfRow = new CFTemplateRow()
                                         {
                                             Type = row["type"]?.ToString(),
@@ -597,12 +597,12 @@ namespace Geomapmaker.Data
                                             DataSourceId = GeomapmakerModule.DataSourceId ?? "Geomapmaker Default"
                                         };
 
-                                        //Add to typeDictionay, ensuring unique type names by appending (2), (3), etc. as needed
+                                        //Add to typeDictionay, ensuring unique label names by appending (2), (3), etc. as needed
                                         int x = 1;
                                         while (x > 0) {
                                             try {
-                                                cfRow.Type = x == 1 ? type : type + "(" + x.ToString() + ")";
-                                                typeDictionary.Add(cfRow.Type /*x == 1 ? type : type + "(" + x.ToString() + ")"*/, cfRow);
+                                                cfRow.Label = x == 1 ? label : label + "(" + x.ToString() + ")";
+                                                typeDictionary.Add(cfRow.Label, cfRow);
                                                 x = 0;
                                             } catch {
                                                 x++;

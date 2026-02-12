@@ -245,7 +245,7 @@ namespace Geomapmaker.ViewModels.Tools {
                                 dictionary["datasourceid"] = GeomapmakerModule.DataSourceId;
 
                                 newCIMRowTemplates.Add(new CIMRowTemplate() {
-                                    Name = dictionary["Type"],
+                                    Name = dictionary["Label"],
                                     DefaultValues = dictionary.ToDictionary(entry => entry.Key, entry => (object)entry.Value)
                                 });
                             }
