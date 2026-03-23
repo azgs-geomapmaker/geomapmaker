@@ -1,4 +1,5 @@
-﻿using ArcGIS.Desktop.Editing.Attributes;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Editing.Templates;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
@@ -47,10 +48,20 @@ namespace Geomapmaker.ViewModels.ContactsFaults
 
             await QueuedTask.Run(() =>
             {
-                IEnumerable<EditingTemplate> currentTemplates = layer.GetTemplates();
-
+ 
                 // Remove the old template
-                layer.RemoveTemplate(OriginalValues.Type);
+                //layer.RemoveTemplate(OriginalValues.Label);
+                // Remove template via CIM definition (this takes effect immediately)
+                var layerDef = layer.GetDefinition() as CIMFeatureLayer;
+                if (layerDef?.FeatureTemplates != null) {
+                    // Filter out the template we want to remove
+                    layerDef.FeatureTemplates = layerDef.FeatureTemplates
+                        .Where(t => !string.Equals(t.Name, OriginalValues.Label, StringComparison.OrdinalIgnoreCase))
+                        .ToArray();
+                    layer.SetDefinition(layerDef);
+                }
+
+
                 // load the schema
                 Inspector insp = new Inspector();
                 insp.LoadSchema(layer);
